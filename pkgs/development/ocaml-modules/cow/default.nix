@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ xmlm uri ezjsonm omd ];
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

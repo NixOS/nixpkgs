@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbmc";
-  version = "5.69.1";
+  version = "5.74.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-1HwR+MM2AUrx07knBDJg+xCm0/cyGzYGQ2LvJUxXEyE=";
+    sha256 = "sha256-n4a/0Ak2psHDCXykVSPYavuIl22uq2ZP7LUcdSzg1ow=";
   };
 
   nativeBuildInputs = [
@@ -78,5 +78,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
+    # https://github.com/diffblue/cbmc/issues/7423
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

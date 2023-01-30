@@ -14,7 +14,7 @@ buildDunePackage {
     sha256 = "1sh6nafi3i9773j5mlwwz3kxfzdjzsfqj2qibxhigawy5vazahfv";
   };
 
-  checkInputs = [ ounit qtest ];
+  nativeCheckInputs = [ ounit qtest ];
   inherit doCheck;
 
   meta = {

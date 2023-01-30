@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, lsp, xdg, re, fiber, makeWrapper, dot-merlin-reader, spawn }:
+{ lib, buildDunePackage, lsp, xdg, re, fiber, makeWrapper, dot-merlin-reader, spawn, ocamlc-loc }:
 
 buildDunePackage rec {
   pname = "ocaml-lsp-server";
@@ -7,7 +7,8 @@ buildDunePackage rec {
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
   ++ lib.optional (lib.versionAtLeast version "1.9") spawn
-  ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ];
+  ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
+  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc;
 
   nativeBuildInputs = [ makeWrapper ];
 

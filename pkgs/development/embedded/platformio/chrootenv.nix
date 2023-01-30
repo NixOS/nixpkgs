@@ -3,11 +3,8 @@
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python3.override {
-        packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { inherit version src; };
-        };
-      };
+      python = pkgs.python3;
+      platformio = python.pkgs.callPackage ./core.nix { inherit version src; };
     in
     (with pkgs; [
       zlib
@@ -41,7 +38,7 @@ buildFHSUserEnv {
     mkdir -p $out/lib/udev/rules.d
 
     ln -s $out/bin/platformio $out/bin/pio
-    ln -s ${src}/scripts/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
+    ln -s ${src}/platformio/assets/system/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
   runScript = "platformio";

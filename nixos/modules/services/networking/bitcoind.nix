@@ -95,7 +95,7 @@ let
             }
           '';
           type = types.attrsOf (types.submodule rpcUserOpts);
-          description = lib.mdDoc "RPC user information for JSON-RPC connnections.";
+          description = lib.mdDoc "RPC user information for JSON-RPC connections.";
         };
       };
 

@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
 
+  cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-DCARES_SHARED=OFF"
+    "-DCARES_STATIC=ON"
+  ];
+
   enableParallelBuilding = true;
 
   passthru.tests = {

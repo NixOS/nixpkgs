@@ -15,7 +15,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ seq ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ qcheck-alcotest ];
+  nativeCheckInputs = [ qcheck-alcotest ];
 
   meta = {
     description = "Functional Priority Search Queues for OCaml";

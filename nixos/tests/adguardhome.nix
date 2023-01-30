@@ -2,6 +2,15 @@
   name = "adguardhome";
 
   nodes = {
+    nullConf = { ... }: { services.adguardhome = { enable = true; }; };
+
+    emptyConf = { lib, ... }: {
+      services.adguardhome = {
+        enable = true;
+        settings = {};
+      };
+    };
+
     declarativeConf = { ... }: {
       services.adguardhome = {
         enable = true;
@@ -34,6 +43,13 @@
   };
 
   testScript = ''
+    with subtest("Minimal (settings = null) config test"):
+        nullConf.wait_for_unit("adguardhome.service")
+
+    with subtest("Default config test"):
+        emptyConf.wait_for_unit("adguardhome.service")
+        emptyConf.wait_for_open_port(3000)
+
     with subtest("Declarative config test, DNS will be reachable"):
         declarativeConf.wait_for_unit("adguardhome.service")
         declarativeConf.wait_for_open_port(53)

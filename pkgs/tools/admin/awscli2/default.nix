@@ -4,20 +4,13 @@
 , less
 , fetchFromGitHub
 , nix-update-script
+, testers
+, awscli2
 }:
 
 let
   py = python3.override {
     packageOverrides = self: super: {
-      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.14.0";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-MGLTFcsWVC/gTdgjny6LwyOO6QRc1QcLkVzy677Lqqw=";
-        };
-      });
-
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.28";
         src = self.fetchPypi {
@@ -32,14 +25,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.8.9"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.9.18"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-7So0zPknO5rIiWY7o82HXl+Iw2+fQmhYvrfrFMCDdDE=";
+    hash = "sha256-WE0fBw6rBMDK+BHmZT1OXr4nu3G8y0AmdimSRi2RaPs=";
   };
 
   nativeBuildInputs = [
@@ -59,24 +52,22 @@ with py.pkgs; buildPythonApplication rec {
     pyyaml
     rsa
     ruamel-yaml
-    wcwidth
     python-dateutil
     jmespath
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "distro>=1.5.0,<1.6.0" "distro" \
-      --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "wcwidth<0.2.0" "wcwidth"
+    sed -i pyproject.toml \
+      -e 's/colorama.*/colorama",/' \
+      -e 's/cryptography.*/cryptography",/' \
+      -e 's/distro.*/distro",/'
   '';
 
   postInstall = ''
@@ -119,7 +110,13 @@ with py.pkgs; buildPythonApplication rec {
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
-      attrPath = pname;
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(2\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      version = version;
     };
   };
 
@@ -129,5 +126,6 @@ with py.pkgs; buildPythonApplication rec {
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    mainProgram = "aws";
   };
 }

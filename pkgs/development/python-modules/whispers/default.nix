@@ -2,42 +2,44 @@
 , astroid
 , beautifulsoup4
 , buildPythonPackage
+, crossplane
 , fetchFromGitHub
+, jellyfish
 , jproperties
 , luhn
 , lxml
 , pytest-mock
 , pytestCheckHook
-, python-Levenshtein
 , pythonOlder
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "1.5.3";
+  version = "2.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Skyscanner";
+    owner = "adeptex";
     repo = pname;
     rev = version;
-    hash = "sha256-jruUGyoZCyMu015QKtlvfx5WRMfxo/eYUue9wUIWb6o=";
+    hash = "sha256-vY8ruemRYJ05YtJAYX3TFlp+pRwF7Tkp7eft9e+HrgA=";
   };
 
   propagatedBuildInputs = [
     astroid
     beautifulsoup4
+    crossplane
+    jellyfish
     jproperties
     luhn
     lxml
-    python-Levenshtein
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

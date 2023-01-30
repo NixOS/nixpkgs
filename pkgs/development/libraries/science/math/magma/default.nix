@@ -1,68 +1,75 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, gfortran
+, libpthreadstubs
+, lapack
+, blas
+, cudaPackages
+, hip
+, hipblas
+, hipsparse
+, openmp
+, useCUDA ? true
+, useROCM ? false
+, gpuTargets ? [ ]
+}:
 
 let
-  inherit (cudaPackages) cudatoolkit;
-in
-
-assert let majorIs = lib.versions.major cudatoolkit.version;
-       in majorIs == "9" || majorIs == "10" || majorIs == "11";
-
-let
+  inherit (cudaPackages) cudatoolkit cudaFlags;
+in stdenv.mkDerivation (finalAttrs: {
+  pname = "magma";
   version = "2.6.2";
 
-  # We define a specific set of CUDA compute capabilities here,
-  # because CUDA 11 does not support compute capability 3.0. Also,
-  # we use it to enable newer capabilities that are not enabled
-  # by magma by default. The list of supported architectures
-  # can be found in magma's top-level CMakeLists.txt.
-  cudaCapabilities = rec {
-    cuda9 = [
-      "Kepler"  # 3.0, 3.5
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-    ];
-
-    cuda10 = [
-      "Turing"  # 7.5
-    ] ++ cuda9;
-
-    cuda11 = [
-      "sm_35"   # sm_30 is not supported by CUDA 11
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-      "Turing"  # 7.5
-      "Ampere"  # 8.0
-    ];
-  };
-
-  capabilityString = lib.strings.concatStringsSep ","
-    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
-
-in stdenv.mkDerivation {
-  pname = "magma";
-  inherit version;
   src = fetchurl {
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
+    name = "magma-${finalAttrs.version}.tar.gz";
+    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${finalAttrs.version}.tar.gz";
     hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
-    name = "magma-${version}.tar.gz";
   };
 
-  nativeBuildInputs = [ gfortran cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    gfortran
+  ];
 
-  buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
+  buildInputs = [
+    libpthreadstubs
+    lapack
+    blas
+  ] ++ lib.optionals useCUDA [
+    cudatoolkit
+  ] ++ lib.optionals useROCM [
+    hip
+    hipblas
+    hipsparse
+    openmp
+  ];
 
-  cmakeFlags = [ "-DGPU_TARGET=${capabilityString}" ];
+  cmakeFlags = lib.optionals useCUDA [
+    "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/g++"
+    "-DMAGMA_ENABLE_CUDA=ON"
+    "-DGPU_TARGET=${builtins.concatStringsSep "," cudaFlags.cudaRealArchs}"
+  ] ++ lib.optionals useROCM [
+    "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
+    "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
+    "-DMAGMA_ENABLE_HIP=ON"
+    "-DGPU_TARGET=${builtins.concatStringsSep "," (if gpuTargets == [ ] then hip.gpuTargets else gpuTargets)}"
+  ];
+
+  buildFlags = [
+    "magma"
+    "magma_sparse"
+  ];
 
   doCheck = false;
 
-  preConfigure = ''
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
-  '';
-
-  enableParallelBuilding=true;
-  buildFlags = [ "magma" "magma_sparse" ];
+  passthru = {
+    inherit cudatoolkit;
+  };
 
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
@@ -70,7 +77,7 @@ in stdenv.mkDerivation {
     homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
     maintainers = with maintainers; [ tbenst ];
+    # CUDA and ROCm are mutually exclusive
+    broken = useCUDA && useROCM || useCUDA && versionOlder cudatoolkit.version "9";
   };
-
-  passthru.cudatoolkit = cudatoolkit;
-}
+})

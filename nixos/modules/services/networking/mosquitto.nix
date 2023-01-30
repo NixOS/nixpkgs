@@ -479,7 +479,7 @@ let
         Directories to be scanned for further config files to include.
         Directories will processed in the order given,
         `*.conf` files in the directory will be
-        read in case-sensistive alphabetical order.
+        read in case-sensitive alphabetical order.
       '';
       default = [];
     };
@@ -671,8 +671,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc mosquitto.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > mosquitto.xml`
     doc = ./mosquitto.xml;
   };
 }

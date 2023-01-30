@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl libtool ];
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LIBTOOL=${libtool}/bin/libtool"
+    "PREFIX=$(out)"
+  ];
 
   enableParallelBuilding = true;
 

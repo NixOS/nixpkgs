@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, qtbase
+, ninja
 , wrapQtAppsHook
 , wayland
 , wayland-protocols
@@ -20,8 +20,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-j5HjGcIqq93Ca9OBqEgSotoSXyw+q6Fqxa3hKk1ctwQ=";
   };
 
+  postPatch = ''
+    # Avoid blanket -Werror as it triggers on any minor compiler
+    # warnings like deprecated functions or invalid indentat8ion.
+    # Leave fixing these problems to upstream.
+    substituteInPlace CMakeLists.txt --replace ';-Werror;' ';'
+  '';
+
   nativeBuildInputs = [
     cmake
+    ninja
     wrapQtAppsHook
   ];
 
@@ -31,15 +39,17 @@ stdenv.mkDerivation rec {
     qtwayland
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=misleading-indentation"
-  ];
-
   meta = with lib; {
     description = "GUI Firewall Management Application";
-    homepage    = "https://github.com/fwbuilder/fwbuilder";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    longDescription = ''
+      Firewall Builder is a GUI firewall management application for iptables,
+      PF, Cisco ASA/PIX/FWSM, Cisco router ACL and more. Firewall configuration
+      data is stored in a central file that can scale to hundreds of firewalls
+      managed from a single UI.
+    '';
+    homepage = "https://github.com/fwbuilder/fwbuilder";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
     maintainers = [ maintainers.elatov ];
   };
 }

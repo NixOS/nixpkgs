@@ -11,7 +11,11 @@ let
 
   mkExcludeFile = cfg:
     # Write each exclude pattern to a new line
-    pkgs.writeText "excludefile" (concatStringsSep "\n" cfg.exclude);
+    pkgs.writeText "excludefile" (concatMapStrings (s: s + "\n") cfg.exclude);
+
+  mkPatternsFile = cfg:
+    # Write each pattern to a new line
+    pkgs.writeText "patternsfile" (concatMapStrings (s: s + "\n") cfg.patterns);
 
   mkKeepArgs = cfg:
     # If cfg.prune.keep e.g. has a yearly attribute,
@@ -19,7 +23,8 @@ let
     concatStringsSep " "
       (mapAttrsToList (x: y: "--keep-${x}=${toString y}") cfg.prune.keep);
 
-  mkBackupScript = cfg: ''
+  mkBackupScript = name: cfg: pkgs.writeShellScript "${name}-script" (''
+    set -e
     on_exit()
     {
       exitStatus=$?
@@ -46,6 +51,7 @@ let
       borg create $extraArgs \
         --compression ${cfg.compression} \
         --exclude-from ${mkExcludeFile cfg} \
+        --patterns-from ${mkPatternsFile cfg} \
         $extraCreateArgs \
         "::$archiveName$archiveSuffix" \
         ${if cfg.paths == null then "-" else escapeShellArgs cfg.paths}
@@ -58,10 +64,10 @@ let
   '' + optionalString (cfg.prune.keep != { }) ''
     borg prune $extraArgs \
       ${mkKeepArgs cfg} \
-      ${optionalString (cfg.prune.prefix != null) "--prefix ${escapeShellArg cfg.prune.prefix} \\"}
+      ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
     ${cfg.postPrune}
-  '';
+  '');
 
   mkPassEnv = cfg: with cfg.encryption;
     if passCommand != null then
@@ -73,12 +79,19 @@ let
   mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
-    in nameValuePair "borgbackup-job-${name}" {
+      backupJobName = "borgbackup-job-${name}";
+      backupScript = mkBackupScript backupJobName cfg;
+    in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
         borgbackup openssh
       ];
-      script = mkBackupScript cfg;
+      script = "exec " + optionalString cfg.inhibitsSleep ''\
+        ${pkgs.systemd}/bin/systemd-inhibit \
+            --who="borgbackup" \
+            --what="sleep" \
+            --why="Scheduled backup" \
+        '' + backupScript;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -137,8 +150,9 @@ let
         # Ensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
         cd "${config.users.users.${cfg.user}.home}"
-        ${install} -d .config/borg
-        ${install} -d .cache/borg
+        # Create each directory separately to prevent root owned parent dirs
+        ${install} -d .config .config/borg
+        ${install} -d .cache .cache/borg
       '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
         ${install} -d ${escapeShellArg cfg.repo}
       ''));
@@ -341,6 +355,15 @@ in {
             '';
           };
 
+          inhibitsSleep = mkOption {
+            default = false;
+            type = types.bool;
+            example = true;
+            description = lib.mdDoc ''
+              Prevents the system from sleeping while backing up.
+            '';
+          };
+
           user = mkOption {
             type = types.str;
             description = lib.mdDoc ''
@@ -421,6 +444,21 @@ in {
             example = [
               "/home/*/.cache"
               "/nix"
+            ];
+          };
+
+          patterns = mkOption {
+            type = with types; listOf str;
+            description = lib.mdDoc ''
+              Include/exclude paths matching the given patterns. The first
+              matching patterns is used, so if an include pattern (prefix `+`)
+              matches before an exclude pattern (prefix `-`), the file is
+              backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
+            '';
+            default = [ ];
+            example = [
+              "+ /home/susan"
+              "- /home/*"
             ];
           };
 

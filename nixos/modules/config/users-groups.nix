@@ -35,7 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password run `mkpasswd -m sha-512`.
+    To generate a hashed password run `mkpasswd`.
 
     If set to an empty string (`""`), this user will
     be able to log in without being asked for a password (but not via remote
@@ -101,16 +101,13 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Indicates whether this is an account for a “real” user. This
-          automatically sets {option}`group` to
-          `users`, {option}`createHome` to
-          `true`, {option}`home` to
-          {file}`/home/«username»`,
+          Indicates whether this is an account for a “real” user.
+          This automatically sets {option}`group` to `users`,
+          {option}`createHome` to `true`,
+          {option}`home` to {file}`/home/«username»`,
           {option}`useDefaultShell` to `true`,
-          and {option}`isSystemUser` to
-          `false`.
-          Exactly one of `isNormalUser` and
-          `isSystemUser` must be true.
+          and {option}`isSystemUser` to `false`.
+          Exactly one of `isNormalUser` and `isSystemUser` must be true.
         '';
       };
 
@@ -447,8 +444,8 @@ let
 
 in {
   imports = [
-    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
@@ -592,13 +589,33 @@ in {
       '';
     };
 
+    # Warn about user accounts with deprecated password hashing schemes
+    system.activationScripts.hashes = {
+      deps = [ "users" ];
+      text = ''
+        users=()
+        while IFS=: read -r user hash tail; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+            users+=("$user")
+          fi
+        done </etc/shadow
+
+        if (( "''${#users[@]}" )); then
+          echo "
+        WARNING: The following user accounts rely on password hashes that will
+        be removed in NixOS 23.05. They should be renewed as soon as possible."
+          printf ' - %s\n' "''${users[@]}"
+        fi
+      '';
+    };
+
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
+    environment.etc = mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";
@@ -606,7 +623,7 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    }) (filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
       "$HOME/.nix-profile"

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # install check instead, when those paths will have been created.
   doInstallCheck = true;
   preInstallCheck = ''
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
   '';
   installCheckTarget = "check";

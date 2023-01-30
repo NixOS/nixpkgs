@@ -7,12 +7,13 @@ buildDunePackage rec {
   pname = "irmin-graphql";
 
   inherit (irmin) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cohttp-lwt cohttp-lwt-unix graphql-cohttp graphql-lwt irmin git-unix ];
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     alcotest-lwt
     logs

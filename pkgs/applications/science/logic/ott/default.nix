@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ocaml, opaline }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ocamlPackages, opaline }:
 
 stdenv.mkDerivation rec {
   pname = "ott";
-  version = "0.32";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "sha256-vdDsfsIi1gRW1Sowf29VyQ4C5UKyQZaVgS2uTb8VeW4=";
+    hash = "sha256-GzeEiok5kigcmfqf/K/UxvlKkl55zy0vOyiRZ2HyMiE=";
   };
 
   nativeBuildInputs = [ pkg-config opaline ];
-  buildInputs = [ ocaml ];
+  buildInputs = with ocamlPackages; [ ocaml findlib ocamlgraph ];
 
   installTargets = "ott.install";
 

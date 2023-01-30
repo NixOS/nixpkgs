@@ -10,7 +10,7 @@ buildDunePackage {
     ocplib-endian
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     crowbar
     alcotest
   ];

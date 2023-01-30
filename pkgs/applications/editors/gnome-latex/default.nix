@@ -21,12 +21,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.41.2";
+  version = "3.44.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "8xDwoUUEmfDP92y5+cXWaZGpUGH6s9bmcMSlZHOF1jM=";
+    sha256 = "iL1TQL0ox+0Bx5ZqOgBzK72QJ3PfWsZZvmrRGAap50Q=";
   };
 
   nativeBuildInputs = [

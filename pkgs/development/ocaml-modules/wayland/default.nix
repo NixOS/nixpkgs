@@ -33,7 +33,7 @@ buildDunePackage rec {
     xmlm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest-lwt
   ];
   doCheck = true;

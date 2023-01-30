@@ -157,6 +157,62 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 ## Tool specific instructions {#javascript-tool-specific}
 
+### buildNpmPackage {#javascript-buildNpmPackage}
+
+`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+
+```nix
+{ lib, buildNpmPackage, fetchFromGitHub }:
+
+buildNpmPackage rec {
+  pname = "flood";
+  version = "4.7.0";
+
+  src = fetchFromGitHub {
+    owner = "jesec";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
+  };
+
+  npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
+
+  # The prepack script runs the build script, which we'd rather do in the build phase.
+  npmPackFlags = [ "--ignore-scripts" ];
+
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
+  meta = with lib; {
+    description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
+    homepage = "https://flood.js.org";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ winter ];
+  };
+}
+```
+
+#### Arguments {#javascript-buildNpmPackage-arguments}
+
+* `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
+* `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
+* `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmFlags`: Flags to pass to all npm commands.
+* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
+* `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
+* `npmPackFlags`: Flags to pass to `npm pack`.
+
+#### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
+
+`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+
+```console
+$ ls
+package.json package-lock.json index.js
+$ prefetch-npm-deps package-lock.json
+...
+sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+```
+
 ### node2nix {#javascript-node2nix}
 
 #### Preparation {#javascript-node2nix-preparation}
@@ -187,7 +243,7 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 ```nix
 offlineCache = fetchYarnDeps {
   yarnLock = src + "/yarn.lock";
-  sha256 = "....";
+  hash = "....";
 };
 ```
 
@@ -275,13 +331,16 @@ mkYarnPackage rec {
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 
-## Outside of nixpkgs {#javascript-outside-nixpkgs}
+## Outside Nixpkgs {#javascript-outside-nixpkgs}
 
-There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
+There are some other tools available, which are written in the Nix language.
+These that can't be used inside Nixpkgs because they require [Import From Derivation](#ssec-import-from-derivation), which is not allowed in Nixpkgs.
+
+If you are packaging something outside Nixpkgs, consider the following:
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
-[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might be subject to change.
+[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might be subject to change.
 
 #### Pitfalls {#javascript-npmlock2nix-pitfalls}
 
@@ -289,7 +348,7 @@ There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issue
 
 ### nix-npm-buildpackage {#javascript-nix-npm-buildpackage}
 
-[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might change. It supports both package-lock.json and yarn.lock.
+[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might change. It supports both `package-lock.json` and yarn.lock.
 
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 

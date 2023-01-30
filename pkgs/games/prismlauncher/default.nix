@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , jdk8
-, jdk
+, jdk17
 , zlib
 , file
 , wrapQtAppsHook
@@ -11,6 +11,7 @@
 , libpulseaudio
 , qtbase
 , qtsvg
+, qtwayland
 , libGL
 , quazip
 , glfw
@@ -19,9 +20,9 @@
 , tomlplusplus
 , ghc_filesystem
 , msaClientID ? ""
-, jdks ? [ jdk jdk8 ]
-,
+, jdks ? [ jdk17 jdk8 ]
 }:
+
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
@@ -30,19 +31,27 @@ let
     sha256 = "sha256-TvVOjkUobYJD9itQYueELJX3wmecvEdCbJ0FinW2mL4=";
   };
 in
+
 stdenv.mkDerivation rec {
   pname = "prismlauncher";
-  version = "5.1";
+  version = "6.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-CZH2vINHoQy1hVfKloRrcoCDdXPQRnIylpClQJdOUrk=";
+    sha256 = "sha256-aIBaenSnssv0/r2+UT5R4nBwo2QBGZ1Zp0CWOeiaeDE=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ghc_filesystem cmake file jdk wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg zlib quazip tomlplusplus ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    zlib
+    quazip
+    ghc_filesystem
+    tomlplusplus
+  ] ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];

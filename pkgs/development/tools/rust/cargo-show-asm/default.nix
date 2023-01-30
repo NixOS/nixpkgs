@@ -32,9 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
     tests = lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
       test-basic-x86_64 = callPackage ./test-basic-x86_64.nix { };
     };

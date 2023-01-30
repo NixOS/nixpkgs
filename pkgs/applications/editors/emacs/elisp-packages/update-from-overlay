@@ -23,14 +23,20 @@ commit_change() {
         git commit -m "${MESSAGE}: updated $(date --iso) (from overlay)" -- "${FILENAME}"
 }
 
+test_packageset(){
+    local PKGSET="$1"
+
+    nix-instantiate --show-trace ../../../../../ -A "emacs.pkgs.$PKGSET"
+}
+
 download_change "elpa/elpa-generated.nix"
 download_change "melpa/recipes-archive-melpa.json"
 download_change "nongnu/nongnu-generated.nix"
 
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.nongnuPackages
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.elpaPackages
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
+test_packageset "nongnuPackages"
+test_packageset "elpaPackages"
+test_packageset "melpaStablePackages"
+test_packageset "melpaPackages"
 
 commit_change "elpa-packages" "elpa-generated.nix"
 commit_change "melpa-packages" "recipes-archive-melpa.json"

@@ -12,7 +12,7 @@ let
   cfg = config.programs.bash;
 
   bashAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+    mapAttrsFlatten (k: v: "alias -- ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 

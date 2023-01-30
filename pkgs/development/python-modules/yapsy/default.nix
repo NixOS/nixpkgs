@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "http://yapsy.sourceforge.net/";
+    homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = licenses.bsd0;
     # tests fail and are not using pytest to easily disable them

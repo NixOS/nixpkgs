@@ -3,21 +3,21 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
-  version = "20210511";
+  minimalOCamlVersion = "4.08";
+  version = "20221222";
   pname = "imagelib";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
-    sha256 = "1cb94ea3731dc994c205940c9434543ce3f2470cdcb2e93a3e02ed793e80d480";
+    hash = "sha256-BQ2TVxGlpc6temteK84TKXpx0MtHZSykL/TjKN9xGP0=";
   };
 
   propagatedBuildInputs = [ decompress stdlib-shims ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ alcotest ];
+  doCheck = true;
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";

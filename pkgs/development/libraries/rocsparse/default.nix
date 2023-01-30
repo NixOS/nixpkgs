@@ -1,38 +1,24 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchzip
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocprim
 , hip
 , gfortran
 , git
-, fetchzip ? null
-, gtest ? null
-, boost ? null
-, python3Packages ? null
+, gtest
+, boost
+, python3Packages
 , buildTests ? false
 , buildBenchmarks ? false # Seems to depend on tests
 }:
 
-assert (buildTests || buildBenchmarks) -> fetchzip != null;
-assert (buildTests || buildBenchmarks) -> gtest != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> python3Packages != null;
-
-let
-  matrices = lib.optionalAttrs (buildTests || buildBenchmarks) import ./deps.nix {
-    inherit fetchzip;
-    mirror1 = "https://sparse.tamu.edu/MM";
-    mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  rocmVersion = "5.3.1";
-  version = "2.3.2-${rocmVersion}";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -45,8 +31,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocSPARSE";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-1069oBrIpZ4M9CAkzoQ9a5j3WlCXErirTbgTUZuT6b0=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-paibzXYvRnd+4yYvteLf7EYmqeqWDc7BoDByfSMrhYo=";
   };
 
   nativeBuildInputs = [
@@ -57,9 +43,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocprim
     git
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
@@ -88,30 +71,30 @@ in stdenv.mkDerivation rec {
   postPatch = lib.optionalString (buildTests || buildBenchmarks) ''
     mkdir -p matrices
 
-    ln -s ${matrices.matrix-01}/*.mtx matrices
-    ln -s ${matrices.matrix-02}/*.mtx matrices
-    ln -s ${matrices.matrix-03}/*.mtx matrices
-    ln -s ${matrices.matrix-04}/*.mtx matrices
-    ln -s ${matrices.matrix-05}/*.mtx matrices
-    ln -s ${matrices.matrix-06}/*.mtx matrices
-    ln -s ${matrices.matrix-07}/*.mtx matrices
-    ln -s ${matrices.matrix-08}/*.mtx matrices
-    ln -s ${matrices.matrix-09}/*.mtx matrices
-    ln -s ${matrices.matrix-10}/*.mtx matrices
-    ln -s ${matrices.matrix-11}/*.mtx matrices
-    ln -s ${matrices.matrix-12}/*.mtx matrices
-    ln -s ${matrices.matrix-13}/*.mtx matrices
-    ln -s ${matrices.matrix-14}/*.mtx matrices
-    ln -s ${matrices.matrix-15}/*.mtx matrices
-    ln -s ${matrices.matrix-16}/*.mtx matrices
-    ln -s ${matrices.matrix-17}/*.mtx matrices
-    ln -s ${matrices.matrix-18}/*.mtx matrices
-    ln -s ${matrices.matrix-19}/*.mtx matrices
-    ln -s ${matrices.matrix-20}/*.mtx matrices
-    ln -s ${matrices.matrix-21}/*.mtx matrices
-    ln -s ${matrices.matrix-22}/*.mtx matrices
-    ln -s ${matrices.matrix-23}/*.mtx matrices
-    ln -s ${matrices.matrix-24}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-01}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-02}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-03}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-04}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-05}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-06}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-07}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-08}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-09}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-10}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-11}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-12}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-13}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-14}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-15}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-16}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-17}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-18}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-19}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-20}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-21}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-22}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-23}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-24}/*.mtx matrices
 
     # Not used by the original cmake, causes an error
     rm matrices/*_b.mtx
@@ -138,11 +121,26 @@ in stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru = {
+    matrices = import ./deps.nix {
+      inherit fetchzip;
+      mirror1 = "https://sparse.tamu.edu/MM";
+      mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
+    };
+
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      owner = finalAttrs.src.owner;
+      repo = finalAttrs.src.repo;
+    };
+  };
+
   meta = with lib; {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
-}
+})

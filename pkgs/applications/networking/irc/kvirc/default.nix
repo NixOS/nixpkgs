@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "kvirc";
-  version = "5.0.0";
+  version = "2022-06-29";
 
   src = fetchFromGitHub {
     owner = "kvirc";
     repo = "KVIrc";
-    rev = version;
-    sha256 = "1dq7v6djw0gz56rvghs4r5gfhzx4sfg60rnv6b9zprw0vlvcxbn4";
+    rev = "eb3fdd6b1d824f148fd6e582852dcba77fc9a271";
+    sha256 = "sha256-RT5UobpMt/vBLgWur1TkodS3dMyIWQkDPiBYCYx/FI4=";
   };
 
   buildInputs = [

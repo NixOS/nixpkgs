@@ -8,7 +8,6 @@
 , libffi
 , makeWrapper
 , pkg-config
-, protobuf
 , python3
 , readline
 , symlinkJoin
@@ -72,13 +71,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.22";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "${pname}-${version}";
-    hash  = "sha256-us4GiulqkzcwD2iuNXB5eTd3iqgUdvj9Nd2p/9TJerQ=";
+    hash  = "sha256-hOuuKvT6ZM7G0HTGtVeEHHfJWqwUinD+DxT3r0CQZH0=";
   };
 
   enableParallelBuilding = true;
@@ -87,14 +86,13 @@ in stdenv.mkDerivation rec {
     tcl
     readline
     libffi
-    protobuf
     zlib
     (python3.withPackages (pp: with pp; [
       click
     ]))
   ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "PREFIX=${placeholder "out"}"];
 
   patches = [
     ./plugin-search-dirs.patch
@@ -116,9 +114,6 @@ in stdenv.mkDerivation rec {
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
-    # we have to do this ourselves for some reason...
-    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
-
     if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
       echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
       exit 1
@@ -132,7 +127,7 @@ in stdenv.mkDerivation rec {
 
   checkTarget = "test";
   doCheck = true;
-  checkInputs = [ verilog ];
+  nativeCheckInputs = [ verilog ];
 
   # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
   # But other tools (like mcy or symbiyosys) can't know how yosys was built, so

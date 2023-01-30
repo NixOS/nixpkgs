@@ -14,12 +14,15 @@ let
     generic = [ av ];
     google_translate = [ mutagen ];
     google_sheets = [ oauth2client ];
-    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
+    govee_ble = [ ibeacon-ble ];
+    hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
+    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
     raspberry_pi = [ rpi-bad-power ];
+    shelly = [ pyswitchbot ];
     tilt_ble = [ govee-ble ibeacon-ble ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
@@ -70,6 +73,10 @@ let
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+    unifiprotect = [
+      # "TypeError: object Mock can't be used in 'await' expression
+      "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
+    ];
     skybell = [
       # Sandbox network limitations: Cannot connect to host cloud.myskybell.com:443
       "--deselect tests/components/skybell/test_config_flow.py::test_flow_user_unknown_error"
@@ -93,7 +100,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontBuild = true;
     dontInstall = true;
 
-    checkInputs = old.checkInputs
+    nativeCheckInputs = old.nativeCheckInputs
       ++ home-assistant.getPackages component home-assistant.python.pkgs
       ++ extraCheckInputs.${component} or [ ];
 
@@ -114,6 +121,9 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
+         # all tests are skipped
+         # https://github.com/home-assistant/core/blob/dev/tests/components/homeassistant_hardware/test_silabs_multiprotocol_addon.py#L23
+        "homeassistant_hardware"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

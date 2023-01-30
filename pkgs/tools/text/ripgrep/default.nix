@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1kfdgh8dra4jxgcdb0lln5wwrimz0dpp33bq3h7jgs8ngaq2a9wp";
 
+  auditable = true; # TODO: remove when this is the default
+
   nativeBuildInputs = [ asciidoctor installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2

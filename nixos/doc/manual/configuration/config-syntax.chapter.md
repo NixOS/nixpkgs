@@ -15,5 +15,4 @@ NixOS configuration files.
 <xi:include href="config-file.section.xml" />
 <xi:include href="abstractions.section.xml" />
 <xi:include href="modularity.section.xml" />
-<xi:include href="summary.section.xml" />
 ```

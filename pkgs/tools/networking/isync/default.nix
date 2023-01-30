@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1zq0wwvmqsl9y71546dr0aygzn9gjjfiw19hlcq87s929y4p6ckw";
   };
 
+  patches = [
+    # Fixes "Fatal: buffer too small" error
+    ./0001-Increase-imap_vprintf-buffer-size.patch
+    # Fix #202595: SSL error "Socket error: ... unexpected eof while reading"
+    # Source: https://sourceforge.net/p/isync/isync/ci/b6c36624f04cd388873785c0631df3f2f9ac4bf0/
+    ./work-around-unexpected-EOF-error-messages-at-end-of-SSL-connections.patch
+  ];
+
   nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ openssl db cyrus_sasl zlib ]
     ++ lib.optionals stdenv.isDarwin [ Security ];

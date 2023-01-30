@@ -45,7 +45,7 @@ buildPythonPackage rec {
     cp -r 'src/humanize/locale' "$out/lib/"*'/site-packages/humanize/'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

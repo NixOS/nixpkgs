@@ -10,17 +10,20 @@
 , libGL
 , libXrandr
 , libusb1
+, libXdmcp
 , libXext
 , openal
 , udev
 , libevdev
+, cubeb
 , curl
 , alsa-lib
 , miniupnpc
 , enet
-, mbedtls
+, mbedtls_2
 , soundtouch
 , sfml
+, minizip-ng
 , xz
 , hidapi
 , fmt_8
@@ -50,13 +53,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-17269";
+  version = "5.0-17995";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "48c9c224cf9f82f0f9f2690b7cc6283d7448480c";
-    sha256 = "sha256-WC3jukRygZigLx987CzRmOmJ7DeS1atXrMzU98sRzEg=";
+    rev = "8bad821019721b9b72701b495da95656ace5fea5";
+    sha256 = "sha256-uxHzn+tXRBr11OPpZ4ELBw7DTJH4mnqUBOeyPlXNAh8=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cubeb
     curl
     ffmpeg
     pugixml
@@ -83,12 +87,14 @@ stdenv.mkDerivation rec {
     libusb1
     libiconv
     libpng
+    libXdmcp
     hidapi
     miniupnpc
     enet
-    mbedtls
+    mbedtls_2
     soundtouch
     sfml
+    minizip-ng
     xz
     qtbase
     fmt_8
@@ -127,11 +133,16 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
     "--set QT_QPA_PLATFORM xcb"
+    # https://bugs.dolphin-emu.org/issues/12913
+    "--set QT_XCB_NO_XI2 1"
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   # Use nix-provided libraries instead of submodules
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -169,7 +180,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    mainProgram = "Dolphin";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu";
     branch = "master";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
@@ -179,5 +190,7 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
+    # Requires both LLVM and SDK bump
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

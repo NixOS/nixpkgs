@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.20";
+  version = "0.20.1";
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-QyZwXxRbcMushxh/Ypy+v4FOTM4H1u5b7IZMSVgLyEs=";
+    hash = "sha256-plhWG9mE9DoTMg7mWCvFLAgtBx01LAgJ0gQ/mqBU3yc=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pytest-mock

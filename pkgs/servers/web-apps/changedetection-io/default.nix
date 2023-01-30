@@ -31,55 +31,59 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.39.20.4";
+  version = "0.39.22.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    sha256 = "sha256-XhCByQbGWAwWe71jsitpYJnQ2xRIdmhc9mY6Smxmp3w=";
+    sha256 = "sha256-qK44m64/skmeoBgHToTyOpeWUF2kgks10OHoAoLim+k=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "bs4" "beautifulsoup4" \
-      --replace "cryptography ~= 3.4" "cryptography" \
-      --replace "selenium ~= 4.1.0" "selenium"
+      --replace "cryptography~=3.4" "cryptography" \
+      --replace "selenium~=4.1.0" "selenium"
   '';
 
   propagatedBuildInputs = with py.pkgs; [
-    flask
-    flask-wtf
+    apprise
+    beautifulsoup4
+    brotli
+    chardet
+    cryptography
     eventlet
-    validators
-    timeago
-    inscriptis
     feedgen
+    flask
     flask-login
     flask-restful
-    pytz
-    brotli
-    requests
-    urllib3
-    chardet
-    wtforms
+    flask-wtf
+    inscriptis
+    jinja2
+    jinja2-time
     jsonpath-ng
     jq
-    apprise
-    paho-mqtt
-    cryptography
-    beautifulsoup4
     lxml
-    selenium
-    werkzeug
+    paho-mqtt
+    pillow
     playwright
+    pytz
+    requests
+    selenium
+    setuptools
+    timeago
+    urllib3
+    validators
+    werkzeug
+    wtforms
   ] ++ requests.optional-dependencies.socks;
 
   # tests can currently not be run in one pytest invocation and without docker
   doCheck = false;
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytest-flask
     pytestCheckHook
   ];

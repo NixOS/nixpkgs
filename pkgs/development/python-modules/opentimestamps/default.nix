@@ -3,15 +3,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , git
-, GitPython
-, pysha3
+, gitpython
+, pycryptodomex
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "opentimestamps";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,17 +20,16 @@ buildPythonPackage rec {
     owner = "opentimestamps";
     repo = "python-opentimestamps";
     rev = "python-opentimestamps-v${version}";
-    hash = "sha256-RRCAxDYWySmnG1sEQWurUDQsu+vPx9Npbr6BaoNGm1U=";
+    hash = "sha256-ZTZ7D3NGhO18IxKqTMFBe6pDvqtGR+9w0cgs6VAHtwg=";
   };
 
   propagatedBuildInputs = [
     bitcoinlib
-    GitPython
-    pysha3
+    gitpython
+    pycryptodomex
   ];
 
-  checkInputs = [
-    git
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -47,7 +46,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/python-opentimestamps";
+    changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

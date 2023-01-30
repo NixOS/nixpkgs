@@ -4,6 +4,7 @@
   # Packages that provide multiple executables where one is clearly the `mainProgram`.
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
+  "@microsoft/rush" = "rush";
   "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
@@ -57,6 +58,7 @@
   kaput-cli = "kaput";
   leetcode-cli = "leetcode";
   less = "lessc";
+  localtunnel = "lt";
   lua-fmt = "luafmt";
   markdownlint-cli = "markdownlint";
   near-cli = "near";

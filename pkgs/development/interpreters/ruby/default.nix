@@ -187,11 +187,24 @@ let
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
+
+          # Allow to override compiler. This is important for cross compiling as
+          # we need to set a compiler that is different from the build one.
+          awk -i inplace -F' = ' \
+            ' # operate on the line starting with
+              /^  CONFIG\["CC"\]/ {
+                # replace the right hand side
+                sub($2, "ENV[\"CC\"] || \"1\"")
+              }; { print }' "$rbConfig"
+          # test that the line isn't mangled in case upstream made the above unnecessary
+          grep -qx '  CONFIG\["CC"\] = ENV\["CC"\] || "1"' "$rbConfig"
+
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
+          find "$out/${passthru.gemPath}" -name gem_make.out -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -247,7 +260,7 @@ let
             inherit lib stdenv makeWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
-          }) withPackages gems;
+          }) withPackages buildGems gems;
 
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;

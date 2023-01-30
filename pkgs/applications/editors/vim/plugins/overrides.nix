@@ -10,7 +10,6 @@
 , substituteAll
 
   # Language dependencies
-, python2
 , python3
 , rustPlatform
 
@@ -69,6 +68,9 @@
   # nvim-treesitter dependencies
 , callPackage
 
+  # sg.nvim dependencies
+, darwin
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -113,6 +115,20 @@
 }:
 
 self: super: {
+
+  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
+    meta = {
+      description = "A VS Code like winbar for Neovim";
+      homepage = "https://github.com/utilyre/barbecue.nvim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ lightquantum ];
+    };
+  });
+
+  ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
+  });
 
   clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
@@ -300,7 +316,21 @@ self: super: {
   });
 
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
-    buildInputs = [ python2 ];
+    # drop Python 2 patches
+    # https://github.com/JazzCore/ctrlp-cmatcher/pull/44
+    patches = [
+      (fetchpatch {
+        name = "drop_python2_pt1.patch";
+        url = "https://github.com/JazzCore/ctrlp-cmatcher/commit/3abad6ea155a7f6e138e1de3ac5428177bfb0254.patch";
+        sha256 = "sha256-fn2puqYeJdPTdlTT4JjwVz7b3A+Xcuj/xtP6TETlB1U=";
+      })
+      (fetchpatch {
+        name = "drop_python2_pt2.patch";
+        url = "https://github.com/JazzCore/ctrlp-cmatcher/commit/385c8d02398dbb328b1a943a94e7109fe6473a08.patch";
+        sha256 = "sha256-yXKCq8sqO0Db/sZREuSeqKwKO71cmTsAvWftoOQehZo=";
+      })
+    ];
+    buildInputs = with python3.pkgs; [ python3 setuptools ];
     buildPhase = ''
       patchShebangs .
       ./install.sh
@@ -364,7 +394,7 @@ self: super: {
   });
 
   forms = super.forms.overrideAttrs (old: {
-    dependencies = with self; [ self.self ];
+    dependencies = [ self.self ];
   });
 
   fruzzy =
@@ -457,24 +487,14 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
-  himalaya-vim = buildVimPluginFrom2Nix {
-    pname = "himalaya-vim";
-    inherit (himalaya) src version;
-    dependencies = with self; [ himalaya ];
-    configurePhase = ''
-      cd vim
+  himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
+    postPatch = ''
       substituteInPlace plugin/himalaya.vim \
-        --replace 'if !executable("himalaya")' 'if v:false'
+        --replace "if !executable('himalaya')" "if v:false"
+      substituteInPlace autoload/himalaya/request.vim \
+        --replace "'himalaya" "'${himalaya}/bin/himalaya"
     '';
-    postFixup = ''
-      mkdir -p $out/bin
-      ln -s ${himalaya}/bin/himalaya $out/bin/himalaya
-    '';
-  };
+  });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
@@ -483,6 +503,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = lib.licenses.mit;
     };
+  });
+
+  jellybeans-nvim = super.jellybeans-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   LanguageClient-neovim =
@@ -577,6 +601,14 @@ self: super: {
     '';
   });
 
+  mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim nvim-lspconfig ];
+  });
+
+  mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim ];
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
@@ -648,8 +680,20 @@ self: super: {
     dontBuild = true;
   });
 
+  vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
+    passthru.python3Dependencies = [ python3.pkgs.mwclient ];
+  });
+
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  nvim-teal-maker = super.nvim-teal-maker.overrideAttrs (old: {
+    postPatch = ''
+      substituteInPlace lua/tealmaker/init.lua \
+        --replace cyan ${luaPackages.cyan}/bin/cyan
+    '';
+    vimCommandCheck = "TealBuild";
   });
 
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
@@ -664,7 +708,18 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  orgmode = super.orgmode.overrideAttrs (old: {
+    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
+  });
+
   inherit parinfer-rust;
+
+  playground = super.playground.overrideAttrs (old: {
+    dependencies = with self; [
+      # we need the 'query' grammer to make
+      (nvim-treesitter.withPlugins (p: [ p.query ]))
+    ];
+  });
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''
@@ -686,8 +741,39 @@ self: super: {
 
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
+    ];
   });
+
+  sg-nvim = super.sg-nvim.overrideAttrs (old:
+    let
+      sg-nvim-rust = rustPlatform.buildRustPackage {
+        pname = "sg-nvim-rust";
+        inherit (old) version src;
+
+        cargoHash = "sha256-lrVwmJqfERq/tj4u+kRJ0kgbPQaFNAR6M3d4GqIJJyU=";
+
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
+
+        cargoBuildFlags = [ "--workspace" ];
+
+        # tests are broken
+        doCheck = false;
+      };
+    in
+    {
+      dependencies = with self; [ plenary-nvim ];
+      postInstall = ''
+        mkdir -p $out/target/debug
+        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
+      '';
+    });
 
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
@@ -696,23 +782,23 @@ self: super: {
   };
 
   skim-vim = super.skim-vim.overrideAttrs (old: {
-    dependencies = with self; [ skim ];
+    dependencies = [ self.skim ];
   });
 
   sniprun =
     let
-      version = "1.1.2";
+      version = "1.2.8";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        sha256 = "sha256-WL0eXwiPhcndI74wtFox2tSnZn1siE86x2MLkfpxxT4=";
+        sha256 = "sha256-iPZ0DPAErkMJIn85t1FIiGhLcMZlL06iNKLqmRu7gXI=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-1WbgnsjoFdvko6VRKY+IjafMNqvJvyIZCDk8I9GV3GM=";
+        cargoSha256 = "sha256-HZEh6jtuRqsyjyDbDIV38x2N1unbSu24D8vrPZ17ktE=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -743,6 +829,10 @@ self: super: {
       substituteInPlace lua/sqlite/defs.lua \
         --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
     '';
+  });
+
+  ssr = super.ssr-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter ];
   });
 
   statix = buildVimPluginFrom2Nix rec {
@@ -993,7 +1083,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-MzacdTuCaBIAyWxH+Uza1KToGZgGPcwMCe5JtQ+68/M=";
+          cargoSha256 = "sha256-fPVLVJXvC5blIjZ3Qyc/lxq+V+qoGrIKrXEzwdNpdHc=";
         };
       in
       ''
@@ -1015,6 +1105,10 @@ self: super: {
         rm $out/colors/darkBlue.vim
       '';
     });
+  });
+
+  vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs (old: {
+    dependencies = with self; [ vim-dadbod ];
   });
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
@@ -1126,6 +1220,8 @@ self: super: {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
         cargoSha256 = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
+        # tests require network access
+        doCheck = false;
       };
     in
     super.vim-markdown-composer.overrideAttrs (old: {
@@ -1170,7 +1266,7 @@ self: super: {
   });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
-    buildInputs = [ python2 ];
+    buildInputs = [ python3 ];
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
@@ -1239,6 +1335,10 @@ self: super: {
     dependencies = with self; [ vimproc-vim ];
   });
 
+  vim-zettel = super.vim-zettel.overrideAttrs (old: {
+    dependencies = with self; [ vimwiki fzf-vim ];
+  });
+
   YankRing-vim = super.YankRing-vim.overrideAttrs (old: {
     sourceRoot = ".";
   });
@@ -1293,6 +1393,7 @@ self: super: {
       "coc-jest"
       "coc-json"
       "coc-lists"
+      "coc-ltex"
       "coc-markdownlint"
       "coc-metals"
       "coc-pairs"
@@ -1306,6 +1407,7 @@ self: super: {
       "coc-smartf"
       "coc-snippets"
       "coc-solargraph"
+      "coc-spell-checker"
       "coc-sqlfluff"
       "coc-stylelint"
       "coc-sumneko-lua"

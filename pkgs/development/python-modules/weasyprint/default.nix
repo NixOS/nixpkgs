@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "57.0";
+  version = "57.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-e29cwTgZ6afYdIwdvw6NJET3pIGKmDOfgtzKqCK/kRs=";
+    hash = "sha256-uOnvLcvPvILpkhWs/Wj5R7K18ZmbWxVtt1+r44C6fpo=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tinycss2
   ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];
@@ -78,6 +78,11 @@ buildPythonPackage rec {
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  makeWrapperArgs = [
+    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

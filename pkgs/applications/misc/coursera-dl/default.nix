@@ -20,7 +20,7 @@ in pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 configargparse keyring pyasn1 requests six urllib3 ];
 
-  checkInputs = with pythonPackages; [ pytest mock ];
+  nativeCheckInputs = with pythonPackages; [ pytest mock ];
 
   postPatch = ''
     substituteInPlace requirements.txt \

@@ -21,7 +21,7 @@ buildPythonPackage rec {
       --replace "--pep8 --cov" ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test_base36.py" ];
   pythonImportsCheck = [ "base36" ];

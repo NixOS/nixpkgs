@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     gtksourceview5
   ];
 
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace "1.2.0" "${libadwaita.version}"
+  '';
+
   postInstall = ''
     ln -s $out/bin/io.posidon.Paper $out/bin/paper
   '';

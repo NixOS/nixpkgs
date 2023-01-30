@@ -1,6 +1,7 @@
 { lib
+, buildNpmPackage
 , copyDesktopItems
-, electron_18
+, electron_22
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -8,9 +9,9 @@
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
-, nodePackages
 , noto-fonts-emoji
 , pkg-config
+, python3
 , roboto
 , rustPlatform
 , sqlcipher
@@ -20,52 +21,56 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.86.0";
+    version = "1.106.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-VLS93Ffeit2rVmXxYkXcnf8eDA3DC2/wKYZTh56QCk0=";
+      hash = "sha256-S53ghVFb1qDI7MVNbc2ZlHqDN4VRBFQJCJg2J+w0erc=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
+      hash = "sha256-k4j814Ao7FAyd0w1nH2fuX1cJKjBkhPw0CVZqNU7Hqs=";
     };
-    patches = [
-      (fetchpatch {
-        name = "turn-off-hard-errors-for-lints.patch";
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/7598c50dbaa2abcbd417d96a02743269f666597b.patch";
-        hash = "sha256-Xss44v6Wf6mL3FK9hH+oFYZ0fBA9rSh4wDrr7nSUibQ=";
-      })
-    ];
   });
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.12.29";
+      version = "0.14.54";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
       };
-      vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
-in nodePackages.deltachat-desktop.override rec {
+in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.30.1";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-gZjZbXiqhFVfThZOsvL/nKkf6MX+E3KB5ldEAIuzBYA=";
+    hash = "sha256-XOGfKa0eGVZKKKC0Pm2kw48XWWcrxCyDdYzCSKp+wco=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-electron-to-22.1.0.patch";
+      url = "https://github.com/deltachat/deltachat-desktop/commit/944d2735cda6cd5a95cb83c57484fbaf16720a9c.patch";
+      hash = "sha256-kaKi32eFQ3hGLZLjiXmH9qs4GXezcDQ7zTdT2+D8NcQ=";
+    })
+  ];
+
+  npmDepsHash = "sha256-J3/S/jYQvO/U8StDtYI+jozon0d4VCdeqFX6x1hHzMo=";
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    python3
   ] ++ lib.optionals stdenv.isLinux [
     copyDesktopItems
   ];
@@ -81,20 +86,25 @@ in nodePackages.deltachat-desktop.override rec {
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  postRebuild = ''
+  preBuild = ''
     rm -r node_modules/deltachat-node/node/prebuilds
-
-    npm run build4production
   '';
 
-  postInstall = ''
+  npmBuildScript = "build4production";
+
+  installPhase = ''
+    runHook preInstall
+
     npm prune --production
 
-    install -D $out/lib/node_modules/deltachat-desktop/build/icon.png \
-      $out/share/icons/hicolor/scalable/apps/deltachat.png
+    mkdir -p $out/lib/node_modules/deltachat-desktop
+    cp -r . $out/lib/node_modules/deltachat-desktop
 
     awk '!/^#/ && NF' build/packageignore_list \
-      | xargs -I {} sh -c "rm -rf {}" || true
+      | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
+
+    install -D build/icon.png \
+      $out/share/icons/hicolor/scalable/apps/deltachat.png
 
     ln -sf ${noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
       $out/lib/node_modules/deltachat-desktop/html-dist/fonts/noto/emoji
@@ -103,9 +113,11 @@ in nodePackages.deltachat-desktop.override rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
+
+    runHook postInstall
   '';
 
   desktopItems = lib.singleton (makeDesktopItem {
@@ -117,7 +129,12 @@ in nodePackages.deltachat-desktop.override rec {
     comment = meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
     startupWMClass = "DeltaChat";
-    mimeTypes = [ "x-scheme-handler/openpgp4fpr" "x-scheme-handler/mailto" ];
+    mimeTypes = [
+      "x-scheme-handler/openpgp4fpr"
+      "x-scheme-handler/dcaccount"
+      "x-scheme-handler/dclogin"
+      "x-scheme-handler/mailto"
+    ];
   });
 
   passthru.updateScript = ./update.sh;

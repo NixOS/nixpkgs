@@ -256,7 +256,7 @@ $ sudo -i
       </para>
       <para>
         On the minimal installer, NetworkManager is not available, so
-        configuration must be perfomed manually. To configure the wifi,
+        configuration must be performed manually. To configure the wifi,
         first start wpa_supplicant with
         <literal>sudo systemctl start wpa_supplicant</literal>, then run
         <literal>wpa_cli</literal>. For most home networks, you need to
@@ -345,12 +345,12 @@ OK
           <!-- legacy anchor -->
         </para>
         <para>
-          Here's an example partition scheme for UEFI, using
+          Here’s an example partition scheme for UEFI, using
           <literal>/dev/sda</literal> as the device.
         </para>
         <note>
           <para>
-            You can safely ignore <literal>parted</literal>'s
+            You can safely ignore <literal>parted</literal>’s
             informational message about needing to update /etc/fstab.
           </para>
         </note>
@@ -415,12 +415,12 @@ OK
           <!-- legacy anchor -->
         </para>
         <para>
-          Here's an example partition scheme for Legacy Boot, using
+          Here’s an example partition scheme for Legacy Boot, using
           <literal>/dev/sda</literal> as the device.
         </para>
         <note>
           <para>
-            You can safely ignore <literal>parted</literal>'s
+            You can safely ignore <literal>parted</literal>’s
             informational message about needing to update /etc/fstab.
           </para>
         </note>
@@ -455,8 +455,8 @@ OK
           <listitem>
             <para>
               Finally, add a <emphasis>swap</emphasis> partition. The
-              size required will vary according to needs, here a 8GiB
-              one is created.
+              size required will vary according to needs, here a 8GB one
+              is created.
             </para>
             <programlisting>
 # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
@@ -814,8 +814,8 @@ $ passwd eelco
       </para>
       <programlisting>
 # parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary 1MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 </programlisting>
       <anchor xml:id="ex-partition-scheme-UEFI" />
       <para>
@@ -824,9 +824,9 @@ $ passwd eelco
       </para>
       <programlisting>
 # parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+# parted /dev/sda -- mkpart primary 512MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 </programlisting>
       <anchor xml:id="ex-install-sequence" />

@@ -26,8 +26,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    # until macOS SDK supports Qt 5.15, 2.3.2 is the highest version of qca-qt5
-    # that works on darwin
-    broken = stdenv.isDarwin;
   };
 }

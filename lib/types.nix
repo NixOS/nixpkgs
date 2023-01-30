@@ -54,7 +54,7 @@ let
     concatStringsSep
     escapeNixString
     hasInfix
-    isCoercibleToString
+    isStringLike
     ;
   inherit (lib.trivial)
     boolToString
@@ -227,7 +227,7 @@ rec {
       merge = loc: defs:
         let
           getType = value:
-            if isAttrs value && isCoercibleToString value
+            if isAttrs value && isStringLike value
             then "stringCoercibleSet"
             else builtins.typeOf value;
 
@@ -478,7 +478,8 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+      descriptionClass = "noun";
+      check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
 
@@ -557,7 +558,7 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    # TODO: drop this in the future:
+    # TODO: deprecate this in the future:
     loaOf = elemType: types.attrsOf elemType // {
       name = "loaOf";
       deprecationMessage = "Mixing lists with attribute values is no longer"

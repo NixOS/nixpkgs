@@ -171,14 +171,13 @@ in
       port = mkOption {
         description = lib.mdDoc "Kubernetes kubelet healthz port.";
         default = 10248;
-        type = int;
+        type = port;
       };
     };
 
     hostname = mkOption {
       description = lib.mdDoc "Kubernetes kubelet hostname override.";
-      default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = literalExpression "config.networking.fqdnOrHostName";
       type = str;
     };
 
@@ -205,7 +204,7 @@ in
     port = mkOption {
       description = lib.mdDoc "Kubernetes kubelet info server listening port.";
       default = 10250;
-      type = int;
+      type = port;
     };
 
     seedDockerImages = mkOption {
@@ -349,8 +348,8 @@ in
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 
-      services.kubernetes.kubelet.hostname = with config.networking;
-        mkDefault (hostName + optionalString (domain != null) ".${domain}");
+      services.kubernetes.kubelet.hostname =
+        mkDefault config.networking.fqdnOrHostName;
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

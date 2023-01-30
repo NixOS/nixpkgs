@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   name = "libfoo-1.2.3";
   src = fetchurl {
     url = "http://example.org/libfoo-1.2.3.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+    hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
 }
 ```
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "1.2.3";
   src = fetchurl {
     url = "http://example.org/libfoo-source-${version}.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+    hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
 }
 ```
@@ -626,7 +626,7 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 ### The check phase {#ssec-check-phase}
 
-The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make check`, but only if the `doCheck` variable is enabled.
+The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the `doCheck` variable is enabled (see below).
 
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
@@ -646,7 +646,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 
 ##### `checkTarget` {#var-stdenv-checkTarget}
 
-The make target that runs the tests. Defaults to `check`.
+The make target that runs the tests. Defaults to `check` if it exists, otherwise `test`; if neither is found, do nothing.
 
 ##### `checkFlags` / `checkFlagsArray` {#var-stdenv-checkFlags}
 
@@ -654,7 +654,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `checkInputs` {#var-stdenv-checkInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doCheck` is set.
+
+##### `nativeCheckInputs` {#var-stdenv-nativeCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doCheck` is set.
 
 ##### `preCheck` {#var-stdenv-preCheck}
 
@@ -719,11 +723,11 @@ If set, libraries and executables are not stripped. By default, they are.
 
 ##### `dontStripHost` {#var-stdenv-dontStripHost}
 
-Like `dontStrip`, but only affects the `strip` command targetting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the package’s host platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontStripTarget` {#var-stdenv-dontStripTarget}
 
-Like `dontStrip`, but only affects the `strip` command targetting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
+Like `dontStrip`, but only affects the `strip` command targeting the packages’ target platform. Useful when supporting cross compilation, but otherwise feel free to ignore.
 
 ##### `dontMoveSbin` {#var-stdenv-dontMoveSbin}
 
@@ -821,7 +825,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `installCheckInputs` {#var-stdenv-installCheckInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doInstallCheck` is set.
+
+##### `nativeInstallCheckInputs` {#var-stdenv-nativeInstallCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
 
 ##### `preInstallCheck` {#var-stdenv-preInstallCheck}
 
@@ -836,6 +844,10 @@ Hook executed at the end of the installCheck phase.
 The distribution phase is intended to produce a source distribution of the package. The default `distPhase` first calls `make dist`, then it copies the resulting source tarballs to `$out/tarballs/`. This phase is only executed if the attribute `doDist` is set.
 
 #### Variables controlling the distribution phase {#variables-controlling-the-distribution-phase}
+
+##### `doDist` {#var-stdenv-doDist}
+
+If set, the distribution phase is executed.
 
 ##### `distTarget` {#var-stdenv-distTarget}
 
@@ -887,7 +899,7 @@ Packages may expect or require other utilities to be available at runtime.
 
 Use `--prefix` to explicitly set dependencies in `PATH`.
 
-:::{note}
+::: {.note}
 `--prefix` essentially hard-codes dependencies into the wrapper.
 They cannot be overridden without rebuilding the package.
 :::
@@ -989,6 +1001,32 @@ someVar=$(stripHash $name)
 Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
+
+### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
+
+Prepend elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-dependency-tracking --enable-foo --disable-static
+```
+
+### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
+
+Append elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-static --disable-dependency-tracking --enable-foo
+```
 
 ## Package setup hooks {#ssec-setup-hooks}
 
@@ -1139,6 +1177,13 @@ Here are some more packages that provide a setup hook. Since the list of hooks i
 
 Many other packages provide hooks, that are not part of `stdenv`. You can find
 these in the [Hooks Reference](#chap-hooks).
+
+### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
+
+If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
+These hooks allow a user to inject code into the wrappers.
+As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.
 
 ## Purity in Nixpkgs {#sec-purity-in-nixpkgs}
 

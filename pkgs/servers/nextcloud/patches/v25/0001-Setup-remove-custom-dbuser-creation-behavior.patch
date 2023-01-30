@@ -1,0 +1,146 @@
+From fc3e14155b3c4300b691ab46579830e725457a54 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sat, 10 Sep 2022 15:18:05 +0200
+Subject: [PATCH] Setup: remove custom dbuser creation behavior
+
+Both PostgreSQL and MySQL can be authenticated against from Nextcloud by
+supplying a database password. Now, during setup the following things
+happen:
+
+* When using postgres and the db user has elevated permissions, a new
+  unprivileged db user is created and the settings `dbuser`/`dbpass` are
+  altered in `config.php`.
+
+* When using MySQL, the password is **always** regenerated since
+  24.0.5/23.0.9[1].
+
+I consider both cases problematic: the reason why people do configuration
+management is to have it as single source of truth! So, IMHO any
+application that silently alters config and thus causes deployed
+nodes to diverge from the configuration is harmful for that.
+
+I guess it was sheer luck that it worked for so long in NixOS because
+nobody has apparently used password authentication with a privileged
+user to operate Nextcloud (which is a good thing in fact).
+
+[1] https://github.com/nextcloud/server/pull/33513
+---
+ lib/private/Setup/MySQL.php      | 53 --------------------------------
+ lib/private/Setup/PostgreSQL.php | 37 ----------------------
+ 2 files changed, 90 deletions(-)
+
+diff --git a/lib/private/Setup/MySQL.php b/lib/private/Setup/MySQL.php
+index e3004c269bc..bc958e84e44 100644
+--- a/lib/private/Setup/MySQL.php
++++ b/lib/private/Setup/MySQL.php
+@@ -141,59 +141,6 @@ class MySQL extends AbstractDatabase {
+ 		$rootUser = $this->dbUser;
+ 		$rootPassword = $this->dbPassword;
+ 
+-		//create a random password so we don't need to store the admin password in the config file
+-		$saveSymbols = str_replace(['\"', '\\', '\'', '`'], '', ISecureRandom::CHAR_SYMBOLS);
+-		$password = $this->random->generate(22, ISecureRandom::CHAR_ALPHANUMERIC . $saveSymbols)
+-			. $this->random->generate(2, ISecureRandom::CHAR_UPPER)
+-			. $this->random->generate(2, ISecureRandom::CHAR_LOWER)
+-			. $this->random->generate(2, ISecureRandom::CHAR_DIGITS)
+-			. $this->random->generate(2, $saveSymbols)
+-		;
+-		$this->dbPassword = str_shuffle($password);
+-
+-		try {
+-			//user already specified in config
+-			$oldUser = $this->config->getValue('dbuser', false);
+-
+-			//we don't have a dbuser specified in config
+-			if ($this->dbUser !== $oldUser) {
+-				//add prefix to the admin username to prevent collisions
+-				$adminUser = substr('oc_' . $username, 0, 16);
+-
+-				$i = 1;
+-				while (true) {
+-					//this should be enough to check for admin rights in mysql
+-					$query = 'SELECT user FROM mysql.user WHERE user=?';
+-					$result = $connection->executeQuery($query, [$adminUser]);
+-
+-					//current dbuser has admin rights
+-					$data = $result->fetchAll();
+-					$result->closeCursor();
+-					//new dbuser does not exist
+-					if (count($data) === 0) {
+-						//use the admin login data for the new database user
+-						$this->dbUser = $adminUser;
+-						$this->createDBUser($connection);
+-
+-						break;
+-					} else {
+-						//repeat with different username
+-						$length = strlen((string)$i);
+-						$adminUser = substr('oc_' . $username, 0, 16 - $length) . $i;
+-						$i++;
+-					}
+-				}
+-			}
+-		} catch (\Exception $ex) {
+-			$this->logger->info('Can not create a new MySQL user, will continue with the provided user.', [
+-				'exception' => $ex,
+-				'app' => 'mysql.setup',
+-			]);
+-			// Restore the original credentials
+-			$this->dbUser = $rootUser;
+-			$this->dbPassword = $rootPassword;
+-		}
+-
+ 		$this->config->setValues([
+ 			'dbuser' => $this->dbUser,
+ 			'dbpassword' => $this->dbPassword,
+diff --git a/lib/private/Setup/PostgreSQL.php b/lib/private/Setup/PostgreSQL.php
+index af816c7ad04..e49e5508e15 100644
+--- a/lib/private/Setup/PostgreSQL.php
++++ b/lib/private/Setup/PostgreSQL.php
+@@ -45,43 +45,6 @@ class PostgreSQL extends AbstractDatabase {
+ 			$connection = $this->connect([
+ 				'dbname' => 'postgres'
+ 			]);
+-			//check for roles creation rights in postgresql
+-			$builder = $connection->getQueryBuilder();
+-			$builder->automaticTablePrefix(false);
+-			$query = $builder
+-				->select('rolname')
+-				->from('pg_roles')
+-				->where($builder->expr()->eq('rolcreaterole', new Literal('TRUE')))
+-				->andWhere($builder->expr()->eq('rolname', $builder->createNamedParameter($this->dbUser)));
+-
+-			try {
+-				$result = $query->execute();
+-				$canCreateRoles = $result->rowCount() > 0;
+-			} catch (DatabaseException $e) {
+-				$canCreateRoles = false;
+-			}
+-
+-			if ($canCreateRoles) {
+-				$connectionMainDatabase = $this->connect();
+-				//use the admin login data for the new database user
+-
+-				//add prefix to the postgresql user name to prevent collisions
+-				$this->dbUser = 'oc_' . strtolower($username);
+-				//create a new password so we don't need to store the admin config in the config file
+-				$this->dbPassword = \OC::$server->getSecureRandom()->generate(30, ISecureRandom::CHAR_ALPHANUMERIC);
+-
+-				$this->createDBUser($connection);
+-
+-				// Go to the main database and grant create on the public schema
+-				// The code below is implemented to make installing possible with PostgreSQL version 15:
+-				// https://www.postgresql.org/docs/release/15.0/
+-				// From the release notes: For new databases having no need to defend against insider threats, granting CREATE permission will yield the behavior of prior releases
+-				// Therefore we assume that the database is only used by one user/service which is Nextcloud
+-				// Additional services should get installed in a separate database in order to stay secure
+-				// Also see https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PATTERNS
+-				$connectionMainDatabase->executeQuery('GRANT CREATE ON SCHEMA public TO ' . addslashes($this->dbUser));
+-				$connectionMainDatabase->close();
+-			}
+ 
+ 			$this->config->setValues([
+ 				'dbuser' => $this->dbUser,
+-- 
+2.38.1
+

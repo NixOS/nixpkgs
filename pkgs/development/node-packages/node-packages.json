@@ -1,6 +1,5 @@
 [
   "@angular/cli"
-, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
@@ -12,6 +11,7 @@
 , "@forge/cli"
 , "@google/clasp"
 , "@medable/mdctl-cli"
+, "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
@@ -85,6 +85,7 @@
 , "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
+, "coc-spell-checker"
 , "coc-stylelint"
 , "coc-sumneko-lua"
 , "coc-sqlfluff"
@@ -116,7 +117,6 @@
 , "csslint"
 , "dat"
 , "degit"
-, {"deltachat-desktop": "../../applications/networking/instant-messengers/deltachat-desktop"}
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
@@ -124,6 +124,7 @@
 , "@electron-forge/cli"
 , "eas-cli"
 , "elm-oracle"
+, "elm-test"
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
@@ -208,6 +209,7 @@
 , "less-plugin-clean-css"
 , "live-server"
 , "livedown"
+, "localtunnel"
 , "lodash"
 , "lua-fmt"
 , "lv_font_conv"
@@ -247,7 +249,6 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
-, {"photoprism-frontend": "../../servers/photoprism"}
 , "pkg"
 , "pm2"
 , "pnpm"

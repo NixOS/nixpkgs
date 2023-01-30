@@ -2,18 +2,21 @@
 
 let
   generic = {
-    version, sha256,
+    version, hash,
     eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
+  }: let
+    major = lib.versions.major version;
+    prerelease = builtins.length (lib.versions.splitVersion version) > 3;
+  in stdenv.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
     src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      url = "https://download.nextcloud.com/server/${if prerelease then "prereleases" else "release"}/${pname}-${version}.tar.bz2";
+      inherit hash;
     };
 
-    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
+    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -44,19 +47,24 @@ in {
     in your NixOS config.
 
     WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
   nextcloud24 = generic {
-    version = "24.0.7";
-    sha256 = "a1c7344a4eb27260a9f6f6e6f586bdc4fb35e1e9330e1a6e8d46c05634db6384";
+    version = "24.0.9";
+    hash = "sha256-WAozhMnAmu+46bQVU9IabiAAF5lUnb0lsx3qIR2X3R4=";
   };
 
   nextcloud25 = generic {
-    version = "25.0.1";
-    sha256 = "72d4076924caf19139c40178597af6211799e20440ce196fb43b9c4e47d77515";
+    version = "25.0.3";
+    hash = "sha256-SysUI3Nu+SRpCW/iT2HCTK2Ho04HwceoGzhdPqJcAOw=";
   };
 
-  # tip: get the sha with:
-  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
+  nextcloud26 = generic {
+    version = "26.0.0beta1";
+    hash = "sha256-EfSfn0KjQzciHa3VcrDhGC/aZUw/KDjihXs+qVIcYX0=";
+  };
+
+  # tip: get hash with:
+  # nix hash to-sri --type sha256 $(curl https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256 | cut -d' ' -f1)
 }

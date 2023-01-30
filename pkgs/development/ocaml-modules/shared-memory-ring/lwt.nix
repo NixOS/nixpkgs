@@ -27,7 +27,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     ounit
   ];
 

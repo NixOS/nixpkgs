@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.7";
+  version = "5.15.8";
   overrides = {};
 
   mk = name: args:
@@ -22,6 +22,19 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
+  qt3d = {
+    inherit version;
+    src = fetchgit {
+      url = "https://invent.kde.org/qt/qt/qt3d.git";
+      rev = "c3c7e6ebc29cce466d954f72f340a257d76b5ec2";
+      sha256 = "sha256-KMWZ4N2OO7TBVpcgvQf/gweZRT62i9XABOnq0x94PY4=";
+      fetchLFS = false;
+      fetchSubmodules = true;
+      deepClone = false;
+      leaveDotGit = false;
+    };
+  };
+
   # qtwebkit does not have an official release tarball on the qt mirror and is
   # mostly maintained by the community.
   qtwebkit = rec {
@@ -32,6 +45,12 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
       sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
     };
     version = "5.212.0-alpha4";
+  };
+
+  catapult = fetchgit {
+    url = "https://chromium.googlesource.com/catapult";
+    rev = "5eedfe23148a234211ba477f76fc2ea2e8529189";
+    hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
   };
 
   qtwebengine =

@@ -60,7 +60,7 @@ in rec {
         `asDropin` creates a drop-in file named `overrides.conf`.
         Mainly needed to define instances for systemd template units (e.g. `systemd-nspawn@mycontainer.service`).
 
-        See also systemd.unit(1).
+        See also {manpage}`systemd.unit(5)`.
       '';
     };
 
@@ -86,7 +86,7 @@ in rec {
 
         This option creates a `.wants` symlink in the given target that exists
         statelessly without the need for running `systemctl enable`.
-        The in systemd.unit(5) manpage described `[Install]` section however is
+        The `[Install]` section described in {manpage}`systemd.unit(5)` however is
         not supported because it is a stateful process that does not fit well
         into the NixOS design.
       '';
@@ -324,7 +324,11 @@ in rec {
       scriptArgs = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Arguments passed to the main process script.";
+        example = "%i";
+        description = lib.mdDoc ''
+          Arguments passed to the main process script.
+          Can contain specifiers (`%` placeholders expanded by systemd, see {manpage}`systemd.unit(5)`).
+        '';
       };
 
       preStart = mkOption {

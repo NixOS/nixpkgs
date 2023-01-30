@@ -6,10 +6,12 @@
 , bison
 , flex
 , pkg-config
-, xlibsWrapper
+, libXext
 , libXmu
 , libXpm
 , libXp
+, libXt
+, xorgproto
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
   };
   dontUseImakeConfigure = true;
   nativeBuildInputs = [ pkg-config bison flex imake gccmakedep ];
-  buildInputs = [ libXpm libXp ];
-  propagatedBuildInputs = [ xlibsWrapper libXmu ];
+  buildInputs = [ libXext libXpm libXp ];
+  propagatedBuildInputs = [ libXmu libXt xorgproto ];
 
   meta = with lib; {
     description = "3D widget set based on the Athena Widget set";

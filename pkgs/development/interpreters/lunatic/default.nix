@@ -1,19 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, cmake, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
-  version = "0.10.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MQ10WwvUdqU4w9uA4H1+VRM29HXVtLMwfGvbM6VqS90=";
+    sha256 = "sha256-7fxccufM5tunbutABEtsa6++OLTsS72oA219zvf+KN8=";
   };
 
-  cargoSha256 = "sha256-tNYA3YruI7VENmLbd3rmZr7BkqHp1HNOfzPTkIiixqA=";
-
-  nativeBuildInputs = [ cmake ];
+  cargoSha256 = "sha256-sHSQUvHTwyqMrGmwpblqpS4HfFiWGb+70a1uloDu2wY=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

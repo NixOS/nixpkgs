@@ -6,10 +6,10 @@
 , numpy, tensorboard, absl-py
 , packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator-bin
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl
+, git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
@@ -22,8 +22,6 @@
 , tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
-# Default from ./configure script
-, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
@@ -32,7 +30,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
 assert cudaSupport -> cudatoolkit != null
@@ -76,7 +74,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.0";
+  version = "2.11.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -100,7 +98,7 @@ let
       six
       tblib
       tensorboard
-      tensorflow-estimator
+      tensorflow-estimator-bin
       termcolor
       typing-extensions
       wheel
@@ -168,7 +166,7 @@ let
     '';
   };
   bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
-    bazelBuildFlags = prev.bazelBuildFlags ++ [
+    bazelFlags = prev.bazelFlags ++ [
       "--override_repository=rules_cc=${rules_cc_darwin_patched}"
       "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
     ];
@@ -189,8 +187,8 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "v${version}";
-      hash = "sha256-Y6cujiMoQXKQlsLBr7d0T278ltdd00IfsTRycJbRVN4=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-OYh61/83yv+ycivylfdS8yFUIUAk8euAPvmfjPzldGs=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -235,6 +233,8 @@ let
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
+
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
@@ -303,11 +303,14 @@ let
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
     GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArchs;
 
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
+      patchShebangs .
+    '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+      cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
     '' + lib.optionalString (!withTensorboard) ''
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
@@ -367,15 +370,14 @@ let
     dontAddBazelOpts = true;
 
     fetchAttrs = {
-      # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      sha256 = if cudaSupport then
-        "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
-      else
-        if stdenv.isDarwin then
-          # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
-        else
-          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
+      sha256 = {
+      x86_64-linux = if cudaSupport
+        then "sha256-/wB9EpaDPg3TrD9qggdA4vPgzvmaKc6dDnLjoYTJC5o="
+        else "sha256-QgOaUaq0V5HG9BOv9nEw8OTSlzINNFvbnyP8Vx+r9Xw=";
+      aarch64-linux = "sha256-zjnRtTG1j9cZTbP0Xnk2o/zWTNsP8T0n4Ai8IiAT3PE=";
+      x86_64-darwin = "sha256-RBLox9rzBKcZMm4NwnT7vQ/EjapWQJkqxuQ0LIdaM1E=";
+      aarch64-darwin = "sha256-BRzh79lYvMHsUMk8BEYDLHTpnmeZ9+0lrDtj4XI1YY4=";
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
     buildAttrs = {
@@ -417,6 +419,7 @@ let
     };
 
     meta = with lib; {
+      changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
@@ -436,11 +439,13 @@ in buildPythonPackage {
   src = bazel-build.python;
 
   # Adjust dependency requirements:
+  # - Drop tensorflow-io dependency until we get it to build
   # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
+      -e '/tensorflow-io-gcs-filesystem/,+1d' \
       -e "s/'flatbuffers[^']*',/'flatbuffers',/" \
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
@@ -474,7 +479,7 @@ in buildPythonPackage {
     packaging
     protobuf-python
     six
-    tensorflow-estimator
+    tensorflow-estimator-bin
     termcolor
     typing-extensions
     wrapt
@@ -497,7 +502,7 @@ in buildPythonPackage {
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     keras
     portpicker

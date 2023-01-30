@@ -5,20 +5,22 @@
 , pkg-config
 , igraph
 , texttable
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.9.11";
+  version = "0.10.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    hash = "sha256-tvkV5ve9X+LXx3LOdHIPljQKZc1v6yts0juo4SwDmfY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DR4D12J/BKFpF4hMHfitNmwDZ7UEo+pI0tvEa1T5GTY=";
   };
 
   postPatch = ''
@@ -42,9 +44,9 @@ buildPythonPackage rec {
   # told to do it. ~ C.
   setupPyGlobalFlags = [ "--use-pkg-config" ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "igraph" ];
 

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
+    changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
   };
 }
 

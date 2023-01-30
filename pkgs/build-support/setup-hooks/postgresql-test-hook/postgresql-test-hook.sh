@@ -50,7 +50,7 @@ EOF
   fi
 
   if ! type initdb >/dev/null; then
-    echo >&2 'initdb not found. Did you add postgresql to the checkInputs?'
+    echo >&2 'initdb not found. Did you add postgresql to the nativeCheckInputs?'
     false
   fi
   header 'initializing postgresql'
@@ -70,6 +70,8 @@ EOF
 
   header 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
+
+  runHook postgresqlTestSetupPost
 
 }
 

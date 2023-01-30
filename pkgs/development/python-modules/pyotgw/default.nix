@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.1.1";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,21 +17,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = pname;
-    rev = version;
-    hash = "sha256-gMrLoITDBO7T9JtY4O43aMKF88zhwnJ/rlw8U3yvG8k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XIwBGjvIulKLmYZIorKIJwoHTNOIYYX8US2Na8MZ2LA=";
   };
 
   propagatedBuildInputs = [
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact the OpenTherm Gateway";
     homepage = "https://github.com/mvn23/pyotgw";
+    changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

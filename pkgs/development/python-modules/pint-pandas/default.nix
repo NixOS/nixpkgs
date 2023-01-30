@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

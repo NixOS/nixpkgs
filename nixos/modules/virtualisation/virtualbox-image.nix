@@ -41,7 +41,7 @@ in {
       };
       vmName = mkOption {
         type = types.str;
-        default = "NixOS ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
+        default = "${config.system.nixos.distroName} ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
         description = lib.mdDoc ''
           The name of the VirtualBox appliance.
         '';

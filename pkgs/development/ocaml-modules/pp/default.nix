@@ -16,7 +16,7 @@ buildDunePackage rec {
   useDune2 = true;
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [ ppx_expect ];
+  nativeCheckInputs = [ ppx_expect ];
   doCheck = true;
 
   meta = with lib; {

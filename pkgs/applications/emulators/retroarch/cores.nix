@@ -6,7 +6,6 @@
 , cmake
 , curl
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , fluidsynth
 , gettext
@@ -50,7 +49,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2022-10-18"
+    , version ? "unstable-2022-12-20"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -796,11 +795,6 @@ in
   puae = mkLibretroCore {
     core = "puae";
     makefile = "Makefile";
-    # https://github.com/libretro/libretro-uae/pull/529
-    patches = fetchpatch {
-      url = "https://github.com/libretro/libretro-uae/commit/90ba4c9bb940e566781c3590553270ad69cf212e.patch";
-      sha256 = "sha256-9xkRravvyFZc0xsIj0OSm2ux5BqYogfQ1TDnH9l6jKw=";
-    };
     meta = {
       description = "Amiga emulator based on WinUAE";
       license = lib.licenses.gpl2Only;

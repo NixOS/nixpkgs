@@ -1,24 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocm-smi
 , hip
 , gtest
-, chrpath ? null
+, chrpath
 , buildTests ? false
 }:
 
-assert buildTests -> chrpath != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  rocmVersion = "5.3.1";
-  version = "2.12.10-${rocmVersion}";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -29,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-whRXGD8oINDYhFs8+hEWKWoGNqacGlyy7xi8peA8Qsk=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-hQTzaiPMo5FAVScmxV0iNhy80uJ1xvx/kzlbfwROOs4=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +35,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocm-smi
     gtest
   ] ++ lib.optionals buildTests [
@@ -74,11 +66,18 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
     license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
-}
+})

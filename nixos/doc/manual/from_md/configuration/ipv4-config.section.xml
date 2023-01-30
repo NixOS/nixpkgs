@@ -6,7 +6,7 @@
     interfaces. However, you can configure an interface manually as
     follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.interfaces.eth0.ipv4.addresses = [ {
   address = &quot;192.168.1.2&quot;;
   prefixLength = 24;
@@ -16,7 +16,7 @@ networking.interfaces.eth0.ipv4.addresses = [ {
     Typically you’ll also want to set a default gateway and set of name
     servers:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.defaultGateway = &quot;192.168.1.1&quot;;
 networking.nameservers = [ &quot;8.8.8.8&quot; ];
 </programlisting>
@@ -32,7 +32,7 @@ networking.nameservers = [ &quot;8.8.8.8&quot; ];
     The host name is set using
     <xref linkend="opt-networking.hostName" />:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.hostName = &quot;cartman&quot;;
 </programlisting>
   <para>

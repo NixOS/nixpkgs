@@ -30,7 +30,7 @@ buildGoModule rec {
     make build/man/holo-build.8 VERSION=${version}
   '';
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
 
   checkPhase = ''
     ln -s ../../go/bin/holo-build build/holo-build

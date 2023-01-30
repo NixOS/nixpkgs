@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "whois";
-  version = "0.9.17";
+  version = "0.9.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "DannyCork";
     repo = "python-whois";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-r77M0IxZ72Sl5c6rA7z8EdZ6rYS/oMrdvdt/E/Pw7nQ=";
+    hash = "sha256-h4s0cJbzc5uorT9yPtXIgVDwUExUe3cNMSHCWRhN1Q4=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module/library for retrieving WHOIS information";
     homepage = "https://github.com/DannyCork/python-whois/";
+    changelog = "https://github.com/DannyCork/python-whois/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

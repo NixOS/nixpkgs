@@ -1,9 +1,11 @@
 { lib
 , python-dateutil
 , buildPythonPackage
+, emoji
 , fetchFromGitHub
 , freezegun
 , tzdata
+, py
 , pyparsing
 , pydantic
 , pytest-asyncio
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.1.1";
+  version = "4.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,23 +26,28 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yPFFOhAscLvhKo7sgXtH1HwcDYq8kWKHzrr3ep857Io=";
+    hash = "sha256-p1cvs+xLin2WK2zyqQFd1vWKzt+LU2mpDSieOgA7Qf8=";
   };
 
   propagatedBuildInputs = [
+    emoji
     python-dateutil
     tzdata
     pydantic
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
+    py
     pytest-asyncio
     pytest-benchmark
     pytest-golden
     pytestCheckHook
   ];
+
+  # https://github.com/allenporter/ical/issues/136
+  disabledTests = [ "test_all_zoneinfo" ];
 
   pythonImportsCheck = [
     "ical"

@@ -15,7 +15,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
     crowbar
     hxd

@@ -94,7 +94,7 @@ in {
       port = mkOption {
         description = lib.mdDoc "Graphite web frontend port.";
         default = 8080;
-        type = types.int;
+        type = types.port;
       };
 
       extraConfig = mkOption {
@@ -154,14 +154,14 @@ in {
       };
 
       blacklist = mkOption {
-        description = lib.mdDoc "Any metrics received which match one of the experssions will be dropped.";
+        description = lib.mdDoc "Any metrics received which match one of the expressions will be dropped.";
         default = null;
         type = types.nullOr types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {
-        description = lib.mdDoc "Only metrics received which match one of the experssions will be persisted.";
+        description = lib.mdDoc "Only metrics received which match one of the expressions will be persisted.";
         default = null;
         type = types.nullOr types.str;
         example = ".*";
@@ -225,7 +225,7 @@ in {
       port = mkOption {
         description = lib.mdDoc "Seyren listening port.";
         default = 8081;
-        type = types.int;
+        type = types.port;
       };
 
       seyrenUrl = mkOption {

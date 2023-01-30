@@ -105,6 +105,10 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
+    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace "-Wl,-fatal_warnings" ""
+    ''}
     touch build/config/gclient_args.gni
   '';
 

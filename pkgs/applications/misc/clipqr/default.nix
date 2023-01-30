@@ -12,6 +12,7 @@
 , makeDesktopItem
 , mesa
 , pkg-config
+, stdenv
 }:
 
 buildGoModule rec {
@@ -66,5 +67,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
+    broken = stdenv.isDarwin;
   };
 }

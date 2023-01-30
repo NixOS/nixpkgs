@@ -23,7 +23,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mypy
   ];

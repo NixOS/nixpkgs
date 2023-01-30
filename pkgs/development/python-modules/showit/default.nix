@@ -22,7 +22,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

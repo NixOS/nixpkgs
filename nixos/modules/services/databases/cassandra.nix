@@ -19,6 +19,10 @@ let
 
   cfg = config.services.cassandra;
 
+  atLeast3 = versionAtLeast cfg.package.version "3";
+  atLeast3_11 = versionAtLeast cfg.package.version "3.11";
+  atLeast4 = versionAtLeast cfg.package.version "4";
+
   defaultUser = "cassandra";
 
   cassandraConfig = flip recursiveUpdate cfg.extraConfig (
@@ -39,7 +43,7 @@ let
           parameters = [{ seeds = concatStringsSep "," cfg.seedAddresses; }];
         }
       ];
-    } // optionalAttrs (versionAtLeast cfg.package.version "3") {
+    } // optionalAttrs atLeast3 {
       hints_directory = "${cfg.homeDir}/hints";
     }
   );
@@ -62,7 +66,7 @@ let
     cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
 
     passAsFile = [ "extraEnvSh" ];
-    inherit (cfg) extraEnvSh;
+    inherit (cfg) extraEnvSh package;
 
     buildCommand = ''
       mkdir -p "$out"
@@ -80,6 +84,10 @@ let
 
       # Delete default password file
       sed -i '/-Dcom.sun.management.jmxremote.password.file=\/etc\/cassandra\/jmxremote.password/d' "$out/cassandra-env.sh"
+
+      ${lib.optionalString atLeast4 ''
+        cp $package/conf/jvm*.options $out/
+      ''}
     '';
   };
 
@@ -95,7 +103,19 @@ let
       "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
     ] ++ optionals cfg.remoteJmx [
       "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
+    ] ++ optionals atLeast4 [
+      # Historically, we don't use a log dir, whereas the upstream scripts do
+      # expect this. We override those by providing our own -Xlog:gc flag.
+      "-Xlog:gc=warning,heap*=warning,age*=warning,safepoint=warning,promotion*=warning"
     ];
+
+  commonEnv = {
+    # Sufficient for cassandra 2.x, 3.x
+    CASSANDRA_CONF = "${cassandraEtc}";
+
+    # Required since cassandra 4
+    CASSANDRA_LOGBACK_CONF = "${cassandraEtc}/logback.xml";
+  };
 
 in
 {
@@ -435,7 +455,7 @@ in
     jmxRolesFile = mkOption {
       type = types.nullOr types.path;
       default =
-        if versionAtLeast cfg.package.version "3.11"
+        if atLeast3_11
         then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
         else null;
       defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
@@ -486,8 +506,7 @@ in
     systemd.services.cassandra = {
       description = "Apache Cassandra service";
       after = [ "network.target" ];
-      environment = {
-        CASSANDRA_CONF = "${cassandraEtc}";
+      environment = commonEnv // {
         JVM_OPTS = builtins.concatStringsSep " " fullJvmOptions;
         MAX_HEAP_SIZE = toString cfg.maxHeapSize;
         HEAP_NEWSIZE = toString cfg.heapNewSize;
@@ -508,6 +527,7 @@ in
       description = "Perform a full repair on this Cassandra node";
       after = [ "cassandra.service" ];
       requires = [ "cassandra.service" ];
+      environment = commonEnv;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -536,6 +556,7 @@ in
       description = "Perform an incremental repair on this cassandra node.";
       after = [ "cassandra.service" ];
       requires = [ "cassandra.service" ];
+      environment = commonEnv;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

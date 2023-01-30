@@ -21,7 +21,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
   propagatedBuildInputs = [ async base64 camlzip cfstream core rresult uri xmlm ];
 
   meta = with lib; {

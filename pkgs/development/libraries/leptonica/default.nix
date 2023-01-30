@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
   enableParallelBuilding = true;
 
-  checkInputs = [ which gnuplot ];
+  nativeCheckInputs = [ which gnuplot ];
 
   # Fails on pngio_reg for unknown reason
   doCheck = false; # !stdenv.isDarwin;

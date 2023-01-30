@@ -31,7 +31,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     cmdliner
     ounit
   ];

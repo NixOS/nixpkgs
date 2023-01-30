@@ -3,8 +3,8 @@
   <para>
     Modules that are imported can also be disabled. The option
     declarations, config implementation and the imports of a disabled
-    module will be ignored, allowing another to take it's place. This
-    can be used to import a set of modules from another channel while
+    module will be ignored, allowing another to take its place. This can
+    be used to import a set of modules from another channel while
     keeping the rest of the system on a stable release.
   </para>
   <para>
@@ -19,10 +19,10 @@
     This example will replace the existing postgresql module with the
     version defined in the nixos-unstable channel while keeping the rest
     of the modules and packages from the original nixos channel. This
-    only overrides the module definition, this won't use postgresql from
+    only overrides the module definition, this won’t use postgresql from
     nixos-unstable unless explicitly configured to do so.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, lib, pkgs, ... }:
 
 {
@@ -40,9 +40,9 @@
   <para>
     This example shows how to define a custom module as a replacement
     for an existing module. Importing this module will disable the
-    original module without having to know it's implementation details.
+    original module without having to know its implementation details.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, lib, pkgs, ... }:
 
 with lib;

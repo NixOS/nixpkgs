@@ -15,7 +15,7 @@ For other versions such as daily builds (beta and nightly),
 use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
 or use a community maintained [Rust overlay](#using-community-rust-overlays).
 
-## Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
+## `buildRustPackage`: Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
 
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+    hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
   };
 
-  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
+  cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
   meta = with lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
@@ -97,10 +97,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1mqaynrqaas82f5957lx31x80v74zwmwmjxxlbywajb61vh00d38";
+    sha256 = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  cargoHash = "sha256-JmBZcDVYJaK1cK05cxx5BrnGWp4t8ca6FLUbvIot67s=";
+  cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
   cargoDepsName = pname;
 
   # ...
@@ -185,6 +185,23 @@ the package will fail and inform you of which crate needs to be
 added. To find the correct hash, you can first use `lib.fakeSha256` or
 `lib.fakeHash` as a stub hash. Building the package (and thus the
 vendored dependencies) will then inform you of the correct hash.
+
+For usage outside nixpkgs, `allowBuiltinFetchGit` could be used to
+avoid having to specify `outputHashes`. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    allowBuiltinFetchGit = true;
+  };
+
+  # ...
+}
+```
 
 ### Cargo features {#cargo-features}
 
@@ -319,7 +336,7 @@ The above are just guidelines, and exceptions may be granted on a case-by-case b
 However, please check if it's possible to disable a problematic subset of the
 test suite and leave a comment explaining your reasoning.
 
-This can be achived with `--skip` in `checkFlags`:
+This can be achieved with `--skip` in `checkFlags`:
 
 ```nix
 rustPlatform.buildRustPackage {
@@ -328,6 +345,20 @@ rustPlatform.buildRustPackage {
     # reason for disabling test
     "--skip=example::tests:example_test"
   ];
+}
+```
+
+#### Using `cargo-nextest` {#using-cargo-nextest}
+
+Tests can be run with [cargo-nextest](https://github.com/nextest-rs/nextest)
+by setting `useNextest = true`. The same options still apply, but nextest
+accepts a different set of arguments and the settings might need to be
+adapted to be compatible with cargo-nextest.
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  useNextest = true;
 }
 ```
 
@@ -403,8 +434,8 @@ cargoDeps = rustPlatform.fetchCargoTarball {
 ```
 
 The `src` attribute is required, as well as a hash specified through
-one of the `sha256` or `hash` attributes. The following optional
-attributes can also be used:
+one of the `hash` attribute. The following optional attributes can
+also be used:
 
 * `name`: the name that is used for the dependencies tarball.  If
   `name` is not specified, then the name `cargo-deps` will be used.
@@ -474,6 +505,9 @@ you of the correct hash.
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.
+* `cargoNextestHook`: run tests using
+  [cargo-nextest](https://github.com/nextest-rs/nextest). The same
+  options for `cargoCheckHook` also applies to `cargoNextestHook`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
 * `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
@@ -514,7 +548,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+    hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
   sourceRoot = "source/bindings/python";
@@ -551,7 +585,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i1mx5y9hkyfi9jrrkcw804hmkcglxi6rmf7vin7jfnbr2bf4q64";
+    hash = "sha256-xGDilsjLOnls3MfVbGKnj80KCUCczZxlis5PmHzpNcQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -591,7 +625,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
+    hash = "sha256-11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -607,227 +641,6 @@ buildPythonPackage rec {
   # ...
 }
 ```
-
-## Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
-
-### Simple operation {#simple-operation}
-
-When run, `cargo build` produces a file called `Cargo.lock`,
-containing pinned versions of all dependencies. Nixpkgs contains a
-tool called `carnix` (`nix-env -iA nixos.carnix`), which can be used
-to turn a `Cargo.lock` into a Nix expression.
-
-That Nix expression calls `rustc` directly (hence bypassing Cargo),
-and can be used to compile a crate and all its dependencies. Here is
-an example for a minimal `hello` crate:
-
-```ShellSession
-$ cargo new hello
-$ cd hello
-$ cargo build
-     Compiling hello v0.1.0 (file:///tmp/hello)
-     Finished dev [unoptimized + debuginfo] target(s) in 0.20 secs
-$ carnix -o hello.nix --src ./. Cargo.lock --standalone
-$ nix-build hello.nix -A hello_0_1_0
-```
-
-Now, the file produced by the call to `carnix`, called `hello.nix`, looks like:
-
-```nix
-# Generated by carnix 0.6.5: carnix -o hello.nix --src ./. Cargo.lock --standalone
-{ stdenv, buildRustCrate, fetchgit }:
-let kernel = stdenv.buildPlatform.parsed.kernel.name;
-    # ... (content skipped)
-in
-rec {
-  hello = f: hello_0_1_0 { features = hello_0_1_0_features { hello_0_1_0 = f; }; };
-  hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-    crateName = "hello";
-    version = "0.1.0";
-    authors = [ "pe@pijul.org <pe@pijul.org>" ];
-    src = ./.;
-    inherit dependencies buildDependencies features;
-  };
-  hello_0_1_0 = { features?(hello_0_1_0_features {}) }: hello_0_1_0_ {};
-  hello_0_1_0_features = f: updateFeatures f (rec {
-        hello_0_1_0.default = (f.hello_0_1_0.default or true);
-    }) [ ];
-}
-```
-
-In particular, note that the argument given as `--src` is copied
-verbatim to the source. If we look at a more complicated
-dependencies, for instance by adding a single line `libc="*"` to our
-`Cargo.toml`, we first need to run `cargo build` to update the
-`Cargo.lock`. Then, `carnix` needs to be run again, and produces the
-following nix file:
-
-```nix
-# Generated by carnix 0.6.5: carnix -o hello.nix --src ./. Cargo.lock --standalone
-{ stdenv, buildRustCrate, fetchgit }:
-let kernel = stdenv.buildPlatform.parsed.kernel.name;
-    # ... (content skipped)
-in
-rec {
-  hello = f: hello_0_1_0 { features = hello_0_1_0_features { hello_0_1_0 = f; }; };
-  hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-    crateName = "hello";
-    version = "0.1.0";
-    authors = [ "pe@pijul.org <pe@pijul.org>" ];
-    src = ./.;
-    inherit dependencies buildDependencies features;
-  };
-  libc_0_2_36_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-    crateName = "libc";
-    version = "0.2.36";
-    authors = [ "The Rust Project Developers" ];
-    sha256 = "01633h4yfqm0s302fm0dlba469bx8y6cs4nqc8bqrmjqxfxn515l";
-    inherit dependencies buildDependencies features;
-  };
-  hello_0_1_0 = { features?(hello_0_1_0_features {}) }: hello_0_1_0_ {
-    dependencies = mapFeatures features ([ libc_0_2_36 ]);
-  };
-  hello_0_1_0_features = f: updateFeatures f (rec {
-    hello_0_1_0.default = (f.hello_0_1_0.default or true);
-    libc_0_2_36.default = true;
-  }) [ libc_0_2_36_features ];
-  libc_0_2_36 = { features?(libc_0_2_36_features {}) }: libc_0_2_36_ {
-    features = mkFeatures (features.libc_0_2_36 or {});
-  };
-  libc_0_2_36_features = f: updateFeatures f (rec {
-    libc_0_2_36.default = (f.libc_0_2_36.default or true);
-    libc_0_2_36.use_std =
-      (f.libc_0_2_36.use_std or false) ||
-      (f.libc_0_2_36.default or false) ||
-      (libc_0_2_36.default or false);
-  }) [];
-}
-```
-
-Here, the `libc` crate has no `src` attribute, so `buildRustCrate`
-will fetch it from [crates.io](https://crates.io). A `sha256`
-attribute is still needed for Nix purity.
-
-### Handling external dependencies {#handling-external-dependencies}
-
-Some crates require external libraries. For crates from
-[crates.io](https://crates.io), such libraries can be specified in
-`defaultCrateOverrides` package in nixpkgs itself.
-
-Starting from that file, one can add more overrides, to add features
-or build inputs by overriding the hello crate in a separate file.
-
-```nix
-with import <nixpkgs> {};
-((import ./hello.nix).hello {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    hello = attrs: { buildInputs = [ openssl ]; };
-  };
-}
-```
-
-Here, `crateOverrides` is expected to be a attribute set, where the
-key is the crate name without version number and the value a function.
-The function gets all attributes passed to `buildRustCrate` as first
-argument and returns a set that contains all attribute that should be
-overwritten.
-
-For more complicated cases, such as when parts of the crate's
-derivation depend on the crate's version, the `attrs` argument of
-the override above can be read, as in the following example, which
-patches the derivation:
-
-```nix
-with import <nixpkgs> {};
-((import ./hello.nix).hello {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
-      postPatch = ''
-        substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-      '';
-    };
-  };
-}
-```
-
-Another situation is when we want to override a nested
-dependency. This actually works in the exact same way, since the
-`crateOverrides` parameter is forwarded to the crate's
-dependencies. For instance, to override the build inputs for crate
-`libc` in the example above, where `libc` is a dependency of the main
-crate, we could do:
-
-```nix
-with import <nixpkgs> {};
-((import hello.nix).hello {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    libc = attrs: { buildInputs = []; };
-  };
-}
-```
-
-### Options and phases configuration {#options-and-phases-configuration}
-
-Actually, the overrides introduced in the previous section are more
-general. A number of other parameters can be overridden:
-
-- The version of `rustc` used to compile the crate:
-
-  ```nix
-  (hello {}).override { rust = pkgs.rust; };
-  ```
-
-- Whether to build in release mode or debug mode (release mode by
-  default):
-
-  ```nix
-  (hello {}).override { release = false; };
-  ```
-
-- Whether to print the commands sent to `rustc` when building
-  (equivalent to `--verbose` in cargo:
-
-  ```nix
-  (hello {}).override { verbose = false; };
-  ```
-
-- Extra arguments to be passed to `rustc`:
-
-  ```nix
-  (hello {}).override { extraRustcOpts = "-Z debuginfo=2"; };
-  ```
-
-- Phases, just like in any other derivation, can be specified using
-  the following attributes: `preUnpack`, `postUnpack`, `prePatch`,
-  `patches`, `postPatch`, `preConfigure` (in the case of a Rust crate,
-  this is run before calling the "build" script), `postConfigure`
-  (after the "build" script),`preBuild`, `postBuild`, `preInstall` and
-  `postInstall`. As an example, here is how to create a new module
-  before running the build script:
-
-  ```nix
-  (hello {}).override {
-    preConfigure = ''
-       echo "pub const PATH=\"${hi.out}\";" >> src/path.rs"
-    '';
-  };
-  ```
-
-### Features {#features}
-
-One can also supply features switches. For example, if we want to
-compile `diesel_cli` only with the `postgres` feature, and no default
-features, we would write:
-
-```nix
-(callPackage ./diesel.nix {}).diesel {
-  default = false;
-  postgres = true;
-}
-```
-
-Where `diesel.nix` is the file generated by Carnix, as explained above.
 
 ## Setting Up `nix-shell` {#setting-up-nix-shell}
 
@@ -886,7 +699,7 @@ let src = fetchFromGitHub {
       repo = "nixpkgs-mozilla";
       # commit from: 2019-05-15
       rev = "9f35c4b09fd44a77227e79ff0c1b4b6a69dff533";
-      sha256 = "18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0";
+      hash = "sha256-18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0=";
    };
 in
 with import "${src.out}/rust-overlay.nix" pkgs pkgs;
@@ -977,7 +790,7 @@ rustPlatform.buildRustPackage rec {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+    hash = "sha256-1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps=";
   };
 
   cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";

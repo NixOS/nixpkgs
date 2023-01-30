@@ -12,18 +12,24 @@ buildGoModule rec {
   };
 
   patches = [
+    # Needed so that the subsequent patch applies.
+    (fetchpatch {
+      name = "use-shorter-uuids.patch";
+      url = "https://github.com/aaronjanse/3mux/commit/6dd36694586f96e3c82ef7db1a0e7917ceb05794.patch";
+      hash = "sha256-FnFupOIIQi66mvjshn3EQ6XRzC4cLx3vGTeTUM1HOwM=";
+    })
     # Fix the build for Darwin when building with Go 1.18.
     # https://github.com/aaronjanse/3mux/pull/127
     (fetchpatch {
       name = "darwin-go-1.18-fix.patch";
-      url = "https://github.com/aaronjanse/3mux/commit/91aed826c50f75a5175b63c72a1fb6a4ad57a008.patch";
-      sha256 = "sha256-MOPAyWAYYWrlCCgw1rBaNmHZO9oTIpIQwLJcs0aY/m8=";
+      url = "https://github.com/aaronjanse/3mux/commit/f2c26c1037927896d6e9a17ea038f8260620fbd4.patch";
+      hash = "sha256-RC3p30r0PGUKrxo8uOLL02oyfLqLfhNjBYy6E+OQ2f0=";
     })
   ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "sha256-qt8MYnvbZMuU1VwdSij6+x4N0r10c1R5Gcm+jDt76uc=";
+  vendorHash = "sha256-KMcl6mj+cEgvdZMzBxUtGJsgwPdFuXrY3yjmkB3CS4o=";
 
   # This is a package used for internally testing 3mux. It's meant for
   # use by 3mux maintainers/contributors only.

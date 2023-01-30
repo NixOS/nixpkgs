@@ -1,9 +1,10 @@
 { lib
 , fetchpatch
 , kernel
-, commitDate ? "2022-10-31"
-, currentCommit ? "77c27f28aa58e9d9037eb68c87d3283f68c371f7"
-, diffHash ? "sha256-TUpI9z0ac3rjn2oT5Z7oQXevDKbGwTVjyigS5/aGwgQ="
+, commitDate ? "2022-12-29"
+, currentCommit ? "8f064a4cb5c7cce289b83d7a459e6d8620188b37"
+, diffHash ? "sha256-RnlM7uOSWhFHG1aj5BOjrfRtoZfbx+tqQw1V49nW5vw="
+
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
 , ...

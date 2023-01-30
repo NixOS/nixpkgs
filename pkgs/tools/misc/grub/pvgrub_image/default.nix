@@ -1,6 +1,5 @@
 { lib, stdenv, grub2_xen }:
 
-with lib;
 let
   efiSystemsBuild = {
     i686-linux.target = "i386";

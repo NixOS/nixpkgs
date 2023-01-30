@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fsspec
 , funcy
-, GitPython
+, gitpython
 , pathspec
 , pygit2
 , pygtrie
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.1.3";
+  version = "0.1.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YivsP5c0fnpm/0VCFfyH054LYAQbyEdH+wZTRxsCAY4=";
+    hash = "sha256-F+t/3Nfcw+LG9Kh0Je2JwPWUWBNsZXTEaQOKaTT5ig0=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     dulwich
     fsspec
     funcy
-    GitPython
+    gitpython
     pathspec
     pygit2
     pygtrie
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

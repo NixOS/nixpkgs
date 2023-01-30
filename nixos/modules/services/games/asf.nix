@@ -35,7 +35,7 @@ in
       description = lib.mdDoc ''
         If enabled, starts the ArchisSteamFarm service.
         For configuring the SteamGuard token you will need to use the web-ui, which is enabled by default over on 127.0.0.1:1242.
-        You cannot configure ASF in any way outside of nix, since all the config files get wiped on restart and replaced with the programatically set ones by nix.
+        You cannot configure ASF in any way outside of nix, since all the config files get wiped on restart and replaced with the programnatically set ones by nix.
       '';
       default = false;
     };
@@ -43,12 +43,14 @@ in
     web-ui = mkOption {
       type = types.submodule {
         options = {
-          enable = mkEnableOption
-            (lib.mdDoc "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token");
+          enable = mkEnableOption "" // {
+            description = lib.mdDoc "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
+          };
 
           package = mkOption {
             type = types.package;
             default = pkgs.ArchiSteamFarm.ui;
+            defaultText = lib.literalExpression "pkgs.ArchiSteamFarm.ui";
             description =
               lib.mdDoc "Web-UI package to use. Contents must be in lib/dist.";
           };
@@ -56,7 +58,6 @@ in
       };
       default = {
         enable = true;
-        package = pkgs.ArchiSteamFarm.ui;
       };
       example = {
         enable = false;
@@ -67,6 +68,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.ArchiSteamFarm;
+      defaultText = lib.literalExpression "pkgs.ArchiSteamFarm";
       description =
         lib.mdDoc "Package to use. Should always be the latest version, for security reasons, since this module uses very new features and to not get out of sync with the Steam API.";
     };
@@ -96,7 +98,7 @@ in
     ipcPasswordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc "Path to a file containig the password. The file must be readable by the `asf` user/group.";
+      description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
     };
 
     ipcSettings = mkOption {
@@ -127,7 +129,7 @@ in
           };
           passwordFile = mkOption {
             type = types.path;
-            description = lib.mdDoc "Path to a file containig the password. The file must be readable by the `asf` user/group.";
+            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
           };
           enabled = mkOption {
             type = types.bool;

@@ -42,6 +42,10 @@ buildPythonApplication rec {
     hash = "sha256-dXpgm9S++jtBhuzX9db8Pm5LF6Qb4isXx5uyOGdWGUc=";
   };
 
+  patches = [
+    ./flake8-compat-5.x.patch
+  ];
+
   nativeBuildInputs = with py.pkgs; [
     pythonRelaxDepsHook
     setuptools-scm
@@ -66,7 +70,7 @@ buildPythonApplication rec {
     dockerfile-parse
     dpath
     flake8
-    GitPython
+    gitpython
     jmespath
     jsonpath-ng
     jsonschema
@@ -85,7 +89,7 @@ buildPythonApplication rec {
     update_checker
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     aioresponses
     mock
     pytest-asyncio
@@ -136,6 +140,10 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "checkov"
   ];
+
+  postInstall = ''
+    chmod +x $out/bin/checkov
+  '';
 
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";

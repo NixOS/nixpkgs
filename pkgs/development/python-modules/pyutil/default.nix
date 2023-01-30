@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  checkInputs = [ mock twisted ];
+  nativeCheckInputs = [ mock twisted ];
 
   prePatch = lib.optionalString isPyPy ''
     grep -rl 'utf-8-with-signature-unix' ./ | xargs sed -i -e "s|utf-8-with-signature-unix|utf-8|g"

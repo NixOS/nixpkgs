@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

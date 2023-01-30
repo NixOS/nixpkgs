@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Extended module player";
-    homepage    = "http://xmp.sourceforge.net/";
+    homepage    = "https://xmp.sourceforge.net/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
   };

@@ -16,7 +16,7 @@ with lib;
       package = mkOption {
         type = types.package;
         default = pkgs.clickhouse;
-        defaultText = "pkgs.clickhouse";
+        defaultText = lib.literalExpression "pkgs.clickhouse";
         description = lib.mdDoc ''
           ClickHouse package to use.
         '';

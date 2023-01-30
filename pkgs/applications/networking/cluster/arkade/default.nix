@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.8.50";
+  version = "0.8.59";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    sha256 = "sha256-DPBQ+MisNgVh2DpaIF//fjIzGvfpNYRS4zpYeUVqLwg=";
+    sha256 = "sha256-uvvxlU5c5MNYVqu0btL4xpjyvb/fDbFPGWkIzru84Z8=";
   };
 
   CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "sha256-Kr6m1qhVTiXllm5xaxXKsWAtWbnsDwbwWH0iqc0sKfM=";
+  vendorHash = "sha256-WQsnBBx05wXKDS7h3bhipTqZTQLxRjVLObuMNUfAiTk=";
 
   # Exclude pkg/get: tests downloading of binaries which fail when sandbox=true
   subPackages = [

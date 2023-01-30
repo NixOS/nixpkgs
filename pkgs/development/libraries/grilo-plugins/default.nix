@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     description = "A collection of plugins for the Grilo framework";
     maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

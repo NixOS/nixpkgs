@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     ./update_hack.patch
   ];
 
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   # disable test that fail (networking, etc)
   disabledTests = [

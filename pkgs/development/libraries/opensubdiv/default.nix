@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
-    rev = "v${lib.replaceChars ["."] ["_"] version}";
+    rev = "v${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "sha256-ejxQ5mGIIrEa/rAfkTrRbIRerrAvEPoWn7e0lIqS1JQ=";
   };
 

@@ -22,7 +22,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];
 
-  checkInputs = [ tox checkpolicy ];
+  nativeCheckInputs = [ tox checkpolicy ];
   preCheck = ''
     export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
   '';

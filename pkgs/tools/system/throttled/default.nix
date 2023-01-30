@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "throttled";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4aDa6REDHO7gr1czIv6NlepeMVJI93agxJjE2vHiEmk=";
+    sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
   };
 
   nativeBuildInputs = [ python3Packages.wrapPython ];
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   ];
 
   # The upstream unit both assumes the install location, and tries to run in a virtualenv
-  postPatch = ''sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/lenovo_fix.py|' -i systemd/lenovo_fix.service'';
+  postPatch = ''sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service'';
 
   installPhase = ''
     runHook preInstall
-    install -D -m755 -t $out/bin lenovo_fix.py
-    install -D -t $out/bin lenovo_fix.py mmio.py
+    install -D -m755 -t $out/bin throttled.py
+    install -D -t $out/bin throttled.py mmio.py
     install -D -m644 -t $out/etc etc/*
     install -D -m644 -t $out/lib/systemd/system systemd/*
     runHook postInstall

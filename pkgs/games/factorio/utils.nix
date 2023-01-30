@@ -3,7 +3,7 @@
 { lib, stdenv }:
 with lib;
 {
-  mkModDirDrv = mods: # a list of mod derivations
+  mkModDirDrv = mods: modsDatFile: # a list of mod derivations
     let
       recursiveDeps = modDrv: [modDrv] ++ map recursiveDeps modDrv.deps;
       modDrvs = unique (flatten (map recursiveDeps mods));
@@ -18,7 +18,9 @@ with lib;
           # NB: there will only ever be a single zip file in each mod derivation's output dir
           ln -s $modDrv/*.zip $out
         done
-      '';
+      '' + (lib.optionalString (modsDatFile != null) ''
+       cp ${modsDatFile} $out/mod-settings.dat
+      '');
     };
 
     modDrv = { allRecommendedMods, allOptionalMods }:

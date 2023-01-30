@@ -27,7 +27,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [ alcotest bppsuite ];
+  nativeCheckInputs = [ alcotest bppsuite ];
   buildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix
@@ -40,6 +40,11 @@ buildDunePackage rec {
     printbox-text
   ];
 
+  checkPhase = ''
+    runHook preCheck
+    dune build @app/fulltest
+    runHook postCheck
+  '';
   doCheck = true;
 
   meta = with lib; {

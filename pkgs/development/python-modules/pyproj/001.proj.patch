@@ -1,5 +1,5 @@
 diff --git a/pyproj/datadir.py b/pyproj/datadir.py
-index 9ca1d25..4198490 100644
+index df625fee..a2beb06c 100644
 --- a/pyproj/datadir.py
 +++ b/pyproj/datadir.py
 @@ -70,7 +70,7 @@ def get_data_dir() -> str:
@@ -8,23 +8,23 @@ index 9ca1d25..4198490 100644
          return _VALIDATED_PROJ_DATA
 -    internal_datadir = Path(__file__).absolute().parent / "proj_dir" / "share" / "proj"
 +    internal_datadir = Path("@proj@/share/proj")
-     proj_lib_dirs = os.environ.get("PROJ_LIB", "")
+     proj_lib_dirs = os.environ.get("PROJ_DATA", os.environ.get("PROJ_LIB", ""))
      prefix_datadir = Path(sys.prefix, "share", "proj")
- 
+     conda_windows_prefix_datadir = Path(sys.prefix, "Library", "share", "proj")
 diff --git a/setup.py b/setup.py
-index 6bb0c6c..b3d0321 100644
+index 71fb52cd..7984a68a 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -12,7 +12,7 @@ from setuptools import Extension, setup
- PROJ_MIN_VERSION = parse_version("7.2.0")
+@@ -13,7 +13,7 @@ from setuptools import Extension, setup
+ PROJ_MIN_VERSION = parse_version("8.2.0")
  CURRENT_FILE_PATH = Path(__file__).absolute().parent
  BASE_INTERNAL_PROJ_DIR = Path("proj_dir")
 -INTERNAL_PROJ_DIR = CURRENT_FILE_PATH / "pyproj" / BASE_INTERNAL_PROJ_DIR
 +INTERNAL_PROJ_DIR = Path("@proj@")
+ PROJ_VERSION_SEARCH = re.compile(r".*Rel\.\s+(?P<version>\d+\.\d+\.\d+).*")
  
  
- def get_proj_version(proj_dir: Path) -> str:
-@@ -155,7 +155,7 @@ def get_extension_modules():
+@@ -163,7 +163,7 @@ def get_extension_modules():
      # By default we'll try to get options PROJ_DIR or the local version of proj
      proj_dir = get_proj_dir()
      library_dirs = get_proj_libdirs(proj_dir)
@@ -34,7 +34,7 @@ index 6bb0c6c..b3d0321 100644
      proj_version = get_proj_version(proj_dir)
      check_proj_version(proj_version)
 diff --git a/test/test_cli.py b/test/test_cli.py
-index 7a696de..1b9b777 100644
+index 7a696de7..1b9b777b 100644
 --- a/test/test_cli.py
 +++ b/test/test_cli.py
 @@ -14,7 +14,7 @@ from pyproj.sync import _load_grid_geojson

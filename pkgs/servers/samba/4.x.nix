@@ -7,7 +7,6 @@
 , flex
 , perl
 , libxslt
-, heimdal
 , docbook_xsl
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
@@ -19,16 +18,18 @@
 , zlib
 , liburing
 , gnutls
-, libunwind
 , systemd
+, samba
 , jansson
 , libtasn1
 , tdb
+, libxcrypt
 , cmocka
 , rpcsvc-proto
 , bash
 , python3Packages
 , nixosTests
+, libiconv
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -39,6 +40,7 @@
 , enableCephFS ? false, ceph
 , enableGlusterFS ? false, glusterfs, libuuid
 , enableAcl ? (!stdenv.isDarwin), acl
+, enableLibunwind ? (!stdenv.isDarwin), libunwind
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
@@ -46,11 +48,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.9";
+  version = "4.17.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-loKixxwv8lOqJ8uwEmDqyJf/YlzznbIO4yBz5Thv4hk=";
+    hash = "sha256-wFEgedtMrHB8zqTBiuu9ay6zrPbpBzXn9kWjJr4fRTc=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -71,16 +73,20 @@ stdenv.mkDerivation rec {
     flex
     perl
     perl.pkgs.ParseYapp
+    perl.pkgs.JSON
     libxslt
-    buildPackages.stdenv.cc
-    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isLinux [
+    buildPackages.stdenv.cc
+  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
+
+  wafPath = "buildtools/bin/waf";
 
   buildInputs = [
     bash
@@ -93,11 +99,12 @@ stdenv.mkDerivation rec {
     libbsd
     libarchive
     zlib
-    libunwind
     gnutls
     libtasn1
     tdb
+    libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
+    ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
@@ -106,9 +113,8 @@ stdenv.mkDerivation rec {
     ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
+    ++ optional enableLibunwind libunwind
     ++ optional enablePam pam;
-
-  wafPath = "buildtools/bin/waf";
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -122,6 +128,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
   '';
 
   wafConfigureFlags = [
@@ -136,7 +143,8 @@ stdenv.mkDerivation rec {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
-  ] ++ optional enableProfiling "--with-profiling-data"
+  ] ++ optional enableLibunwind "--with-libunwind"
+    ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -157,20 +165,36 @@ stdenv.mkDerivation rec {
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
 
+  # Save asn1_compile and compile_et so they are available to run on the build
+  # platform when cross-compiling
+  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$dev/bin"
+    cp bin/asn1_compile bin/compile_et "$dev/bin"
+  '';
+
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
   # Looks like a bug in installer scripts.
   postFixup = ''
-    export SAMBA_LIBS="$(find $out -type f -regex '.*\.so\(\..*\)?' -exec dirname {} \; | sort | uniq)"
+    export SAMBA_LIBS="$(find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec dirname {} \; | sort | uniq)"
     read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
     BIN='{}';
+  '' + lib.optionalString stdenv.isLinux ''
     OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
     ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id \$BIN \$BIN
+    for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
+      new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)
+      install_name_tool -change \$old_rpath \$new_rpath \$BIN
+    done
+  '' + ''
     EOF
-    find $out -type f -regex '.*\.so\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
+    find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
+    find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
@@ -195,8 +219,7 @@ stdenv.mkDerivation rec {
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    # N.B. enableGlusterFS does not build
-    broken = stdenv.isDarwin || enableGlusterFS;
+    broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };
 }

@@ -6,11 +6,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "ablog";
-  version = "0.10.29";
+  version = "0.10.33";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-q2zoXCmnzzjXSBGFKzondOQRz7CjZp0wCiXxbgpXHIA=";
+    sha256 = "sha256-vCkLX64aPAem0QvKI1iUNAHWEJZlAOIb1DA9U7xPJkU=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

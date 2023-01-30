@@ -9,6 +9,7 @@
 , ffmpeg
 , vlc
 , xdg-utils
+, xdotool
 , which
 
 , jackSupport ? true
@@ -22,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.66";
+  version = "6.73";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
-      x86_64-linux = "sha256-kMXHHd+uIc5tKlDlxKjphZsfNMYvvV/4Zx84eRwPGcs=";
-      aarch64-linux = "sha256-pB3qj9CJbI5iWBNKNX2niIfHrpSz9+qotX/zKGYDwYo=";
+      x86_64-linux = "sha256-omQ2XdL4C78BQRuYKy90QlMko2XYHoVhd4X0C+Zyp8E=";
+      aarch64-linux = "sha256-XHohznrfFMHHgif4iFrpXb0FNddYiBb0gB7ZznlU834=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc xdotool ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/

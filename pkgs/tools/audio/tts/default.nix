@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , espeak-ng
 }:
 
@@ -24,7 +25,7 @@ let
         src = super.fetchPypi {
           pname = "librosa";
           inherit version;
-          sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
+          hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
         };
       });
     };
@@ -32,15 +33,28 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.10.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
-    rev = "v${version}";
-    sha256 = "sha256-A48L1JGXckSEaZra00ZOBVxcYJMvhpQqzE8nABaP0TY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IcuRhsURgEYIuS7ldZtxAy4Z/XNDehTGsOfYW+DhScg=";
   };
+
+  patches = [
+    # Use packaging.version for version comparisons
+    (fetchpatch {
+      url = "https://github.com/coqui-ai/TTS/commit/77a9ef8ac97ea1b0f7f8d8287dba69a74fdf22ce.patch";
+      hash = "sha256-zWJmINyxw2efhR9KIVkDPHao5703zlpCKwdzOh/1APY=";
+    })
+    # Fix espeak version detection logic
+    (fetchpatch {
+      url = "https://github.com/coqui-ai/TTS/commit/0031df0143b069d7db59ba04d1adfafcc1a92f47.patch";
+      hash = "sha256-6cL9YqWrB+0QomINpA9BxdYmEDpXF03udGEchydQmBA=";
+    })
+  ];
 
   postPatch = let
     relaxedConstraints = [
@@ -53,7 +67,6 @@ python.pkgs.buildPythonApplication rec {
       "numpy"
       "umap-learn"
       "unidic-lite"
-      "pyworld"
     ];
   in ''
     sed -r -i \
@@ -61,37 +74,40 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
-    sed -i '/tensorboardX/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
     cython
+    packaging
   ];
 
   propagatedBuildInputs = with python.pkgs; [
     anyascii
     coqpit
-    coqui-trainer
     flask
     fsspec
+    g2pkk
     gdown
     gruut
     inflect
+    jamo
     jieba
     librosa
     matplotlib
     mecab-python3
+    nltk
     numba
+    packaging
     pandas
     pypinyin
     pysbd
-    pyworld
     scipy
     soundfile
     tensorflow
     torch-bin
     torchaudio-bin
     tqdm
+    trainer
     umap-learn
     unidic-lite
     webrtcvad
@@ -106,7 +122,7 @@ python.pkgs.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     espeak-ng
     pytestCheckHook
   ];
@@ -127,15 +143,19 @@ python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # Requires network acccess to download models
-    "test_synthesize"
+    "test_korean_text_to_phonemes"
+    "test_models_offset_0_step_3"
+    "test_models_offset_1_step_3"
+    "test_models_offset_2_step_3"
     "test_run_all_models"
+    "test_synthesize"
+    "test_voice_conversion"
+    "test_multi_speaker_multi_lingual_model"
+    "test_single_speaker_model"
     # Mismatch between phonemes
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
     "test_parametrized_wavernn_dataset"
-
-    # requires network
-    "test_voice_conversion"
   ];
 
   disabledTestPaths = [
@@ -149,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_glow_tts_d-vectors_train.py"
     "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
     "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests/test_overflow_train.py"
     "tests/tts_tests/test_speedy_speech_train.py"
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"

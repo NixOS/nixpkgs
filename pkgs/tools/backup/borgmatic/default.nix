@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-0o2tKg7BfhkNt/k8XdZ1agaSJxKO5OxB5aaRgV9IPeU=";
   };
 
-  checkInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless

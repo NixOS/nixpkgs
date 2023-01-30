@@ -33,7 +33,7 @@ buildDunePackage rec {
     bindlib camlp-streams cmdliner pratter sedlex stdlib-shims timed why3 yojson
   ];
 
-  checkInputs = [ alcotest dedukti ];
+  nativeCheckInputs = [ alcotest dedukti ];
   doCheck = false;  # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
 
   meta = with lib; {

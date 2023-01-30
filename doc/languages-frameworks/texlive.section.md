@@ -55,11 +55,11 @@ let
     srcs = [
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.dtx";
-        sha256 = "07frz0krpz7kkcwlayrwrj2a2pixmv0icbngyw92srp9fp23cqpz";
+        hash = "sha256-/2I2xHXpZi0S988uFsGuPV6hhMw8e0U5m/P8myf42R0=";
       })
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.ins";
-        sha256 = "09wkyidxk3n3zvqxfs61wlypmbhi1pxmjdi1kns9n2ky8ykbff99";
+        hash = "sha256-KTm3pkd+Cpu0nSE2WfsNEa56PeXBaNfx/sOO2Vv0kyc=";
       })
     ];
 

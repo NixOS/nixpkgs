@@ -9,8 +9,6 @@
 # TODO: aptxSupport
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
   version = "4.0.0";
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
     alsa-lib bluez glib sbc dbus
     readline libbsd ncurses
   ]
-  ++ optional aacSupport fdk_aac;
+  ++ lib.optional aacSupport fdk_aac;
 
   configureFlags = [
     "--with-alsaplugindir=${placeholder "out"}/lib/alsa-lib"
@@ -36,9 +34,9 @@ stdenv.mkDerivation rec {
     "--enable-rfcomm"
     "--enable-hcitop"
   ]
-  ++ optional aacSupport "--enable-aac";
+  ++ lib.optional aacSupport "--enable-aac";
 
-  meta = {
+  meta = with lib; {
     description = "Bluez 5 Bluetooth Audio ALSA Backend";
     longDescription = ''
       Bluez-ALSA (BlueALSA) is an ALSA backend for Bluez 5 audio interface.

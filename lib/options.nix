@@ -104,8 +104,6 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
-
      The package is specified as a list of strings representing its attribute path in nixpkgs.
 
      Because of this, you need to pass nixpkgs itself as the first argument.
@@ -116,6 +114,8 @@ rec {
 
      You can omit the default path if the name of the option is also attribute path in nixpkgs.
 
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
+
      Example:
        mkPackageOption pkgs "hello" { }
        => { _type = "option"; default = «derivation /nix/store/3r2vg51hlxj3cx5vscp0vkv60bqxkaq0-hello-2.10.drv»; defaultText = { ... }; description = "The hello package to use."; type = { ... }; }
@@ -123,7 +123,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -136,13 +136,18 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "The ${name} package to use.";
+        description = "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = args: name: extra:
+    let option = mkPackageOption args name extra;
+    in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -218,12 +223,13 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-  optionAttrSetToDocList' = prefix: options:
+  optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
+        name = showOption opt.loc;
         docOption = rec {
           loc = opt.loc;
-          name = showOption opt.loc;
+          inherit name;
           description = opt.description or null;
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
@@ -234,9 +240,18 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? example) {
+          example =
+            builtins.addErrorContext "while evaluating the example of option `${name}`" (
+              renderOptionValue opt.example
+            );
+        }
+        // optionalAttrs (opt ? default) {
+          default =
+            builtins.addErrorContext "while evaluating the default value of option `${name}`" (
+              renderOptionValue (opt.defaultText or opt.default)
+            );
+        }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
@@ -256,6 +271,9 @@ rec {
      efficient: the XML representation of derivations is very large
      (on the order of megabytes) and is not actually used by the
      manual generator.
+
+     This function was made obsolete by renderOptionValue and is kept for
+     compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -263,6 +281,17 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
+
+
+  /* Ensures that the given option value (default or example) is a `_type`d string
+     by rendering Nix values to `literalExpression`s.
+  */
+  renderOptionValue = v:
+    if v ? _type && v ? text then v
+    else literalExpression (lib.generators.toPretty {
+      multiline = true;
+      allowPrettyValues = true;
+    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the

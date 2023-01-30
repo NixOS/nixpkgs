@@ -19,7 +19,7 @@
 , libcap
 , dqlite
 , raft-canonical
-, sqlite-replication
+, sqlite
 , udev
 , writeShellScriptBin
 , apparmor-profiles
@@ -32,14 +32,14 @@
 
 buildGoModule rec {
   pname = "lxd";
-  version = "5.7";
+  version = "5.10";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    sha256 = "sha256-TZeF/VPrP4qRAVezJwQWtfypsxBJpnTrST0uDdw3WVI=";
+    hash = "sha256-sYJkPr/tE22xJEjKX7fMjOLQ9zBDm52UjqbVLrm39zU=";
   };
 
   vendorSha256 = null;
@@ -58,7 +58,7 @@ buildGoModule rec {
     libcap
     dqlite.dev
     raft-canonical.dev
-    sqlite-replication
+    sqlite
     udev.dev
   ];
 
@@ -104,7 +104,7 @@ buildGoModule rec {
     homepage = "https://linuxcontainers.org/lxd/";
     changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
   };
 }

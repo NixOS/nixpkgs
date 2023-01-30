@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     ${topkg.run} test
     runHook postCheck
   '';
-  checkInputs = [ uucd ];
+  nativeCheckInputs = [ uucd ];
 
   meta = with lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";

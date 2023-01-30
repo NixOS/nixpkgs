@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ qcheck-alcotest ];
+  nativeCheckInputs = [ qcheck-alcotest ];
 
   meta = {
     description = "Name pattern combinators";

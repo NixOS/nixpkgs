@@ -1,9 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, dav1d, rav1e, libde265, x265, libpng,
-  libjpeg, libaom }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, dav1d
+, rav1e
+, libde265
+, x265
+, libpng
+, libjpeg
+, libaom
+
+# for passthru.tests
+, gimp
+, imagemagick
+, imlib2Full
+, imv
+, vips
+}:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.13.0";
+  version = "1.14.2";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -11,13 +29,17 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "sha256-/w/I6dgyiAscUqVpPjw2z6LbZJ6IBTeE5lawLg0awTM=";
+    sha256 = "sha256-JwPeSNUc++z6RfMe0qAuXdekzLWR/MCmsT+Ykvp9a/s=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ dav1d rav1e libde265 x265 libpng libjpeg libaom ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit gimp imagemagick imlib2Full imv vips;
+  };
 
   meta = {
     homepage = "http://www.libheif.org/";

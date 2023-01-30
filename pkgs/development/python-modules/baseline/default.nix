@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0qjg46ipyfjflvjqzqr5p7iylwwqn2mhhrq952d01vi8wvfds10d";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Easy String Baseline";

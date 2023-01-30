@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     kubernetes
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
   ];

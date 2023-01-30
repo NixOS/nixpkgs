@@ -1,0 +1,55 @@
+From 54ae822ce968f49a4d5a10e30c5d75e76c887fe4 Mon Sep 17 00:00:00 2001
+From: deedy5 <65482418+deedy5@users.noreply.github.com>
+Date: Thu, 20 Oct 2022 18:26:18 +0000
+Subject: [PATCH] Allow charset normalizer >=2 and <4 (#6261)
+
+---
+ requests/__init__.py | 4 ++--
+ setup.cfg            | 2 +-
+ setup.py             | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/requests/__init__.py b/requests/__init__.py
+index 7ac8e29..22db3c1 100644
+--- a/requests/__init__.py
++++ b/requests/__init__.py
+@@ -80,8 +80,8 @@ def check_compatibility(urllib3_version, chardet_version, charset_normalizer_ver
+     elif charset_normalizer_version:
+         major, minor, patch = charset_normalizer_version.split(".")[:3]
+         major, minor, patch = int(major), int(minor), int(patch)
+-        # charset_normalizer >= 2.0.0 < 3.0.0
+-        assert (2, 0, 0) <= (major, minor, patch) < (3, 0, 0)
++        # charset_normalizer >= 2.0.0 < 4.0.0
++        assert (2, 0, 0) <= (major, minor, patch) < (4, 0, 0)
+     else:
+         raise Exception("You need either charset_normalizer or chardet installed")
+ 
+diff --git a/setup.cfg b/setup.cfg
+index 93d1f99..ea45aaf 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -5,7 +5,7 @@ provides-extra =
+ 	use_chardet_on_py3
+ requires-dist = 
+ 	certifi>=2017.4.17
+-	charset_normalizer>=2,<3
++	charset_normalizer>=2,<4
+ 	idna>=2.5,<4
+ 	urllib3>=1.21.1,<1.27
+ 
+diff --git a/setup.py b/setup.py
+index 23977ed..092b40d 100755
+--- a/setup.py
++++ b/setup.py
+@@ -59,7 +59,7 @@ if sys.argv[-1] == "publish":
+     sys.exit()
+ 
+ requires = [
+-    "charset_normalizer>=2,<3",
++    "charset_normalizer>=2,<4",
+     "idna>=2.5,<4",
+     "urllib3>=1.21.1,<1.27",
+     "certifi>=2017.4.17",
+-- 
+2.38.1
+

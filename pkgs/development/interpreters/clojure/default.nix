@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.11.1.1189";
+  version = "1.11.1.1208";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "sha256-wg5iN5/UT6jb68vF98mgSl21fLG9BdEcXH0EEmvnEOs=";
+    sha256 = "sha256-bn9uNM46oYc0wxJJ8HMGbE8/2mnYxm/p9S6MhYfhcQM=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     # `jq -r '.[0].name'` results in `v0.0`
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp maxminddb requests urllib3 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mocket
     requests-mock
     pytestCheckHook

@@ -30,6 +30,7 @@
 , vmTools
 , writeReferencesToFile
 , writeScript
+, writeShellScriptBin
 , writeText
 , writeTextDir
 , writePython3
@@ -73,12 +74,12 @@ let
   # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
   # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
   # mapping from the go package.
-  defaultArch = go.GOARCH;
+  defaultArchitecture = go.GOARCH;
 
 in
 rec {
   examples = callPackage ./examples.nix {
-    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
+    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb streamNixShellImage;
   };
 
   tests = {
@@ -100,8 +101,8 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? defaultArch
-
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      arch ? defaultArchitecture
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
@@ -485,7 +486,7 @@ rec {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nT > $out";
+      } "${stream} | pigz -nTR > $out";
 
   # 1. extract the base image
   # 2. create the layer
@@ -513,6 +514,8 @@ rec {
       keepContentsDirlinks ? false
     , # Docker config; e.g. what command to run on the container.
       config ? null
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArchitecture
     , # Optional bash script to run on the files prior to fixturizing the layer.
       extraCommands ? ""
     , uid ? 0
@@ -545,12 +548,15 @@ rec {
       baseJson =
         let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
-            inherit created config;
-            architecture = defaultArch;
+            inherit created config architecture;
+            preferLocalBuild = true;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
-            { nativeBuildInputs = [ jq ]; }
+            {
+              nativeBuildInputs = [ jq ];
+              preferLocalBuild = true;
+            }
             ''
               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
             '';
@@ -729,7 +735,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
 
         echo "Finished."
       '';
@@ -769,7 +775,7 @@ rec {
     mv repositories image/repositories
     mv manifest.json image/manifest.json
     # Create tarball and gzip
-    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nT > $out
+    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
   '';
 
 
@@ -833,6 +839,8 @@ rec {
       contents ? [ ]
     , # Docker config; e.g. what command to run on the container.
       config ? { }
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArchitecture
     , # Time of creation of the image. Passing "now" will make the
       # created date be the time of building.
       created ? "1970-01-01T00:00:01Z"
@@ -864,15 +872,14 @@ rec {
 
         streamScript = writePython3 "stream" { } ./stream_layered_image.py;
         baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
-          inherit config;
-          architecture = defaultArch;
+          inherit config architecture;
           os = "linux";
         });
 
         contentsList = if builtins.isList contents then contents else [ contents ];
 
         # We store the customisation layer as a tarball, to make sure that
-        # things like permissions set on 'extraCommands' are not overriden
+        # things like permissions set on 'extraCommands' are not overridden
         # by Nix. Then we precompute the sha256 for performance.
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
@@ -925,6 +932,7 @@ rec {
           {
             inherit fromImage maxLayers created;
             imageName = lib.toLower name;
+            preferLocalBuild = true;
             passthru.imageTag =
               if tag != null
               then tag
@@ -1015,6 +1023,7 @@ rec {
         result = runCommand "stream-${baseName}"
           {
             inherit (conf) imageName;
+            preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
 
@@ -1028,4 +1037,188 @@ rec {
         '';
       in
       result;
+
+  # This function streams a docker image that behaves like a nix-shell for a derivation
+  streamNixShellImage =
+    { # The derivation whose environment this docker image should be based on
+      drv
+    , # Image Name
+      name ? drv.name + "-env"
+    , # Image tag, the Nix's output hash will be used if null
+      tag ? null
+    , # User id to run the container as. Defaults to 1000, because many
+      # binaries don't like to be run as root
+      uid ? 1000
+    , # Group id to run the container as, see also uid
+      gid ? 1000
+    , # The home directory of the user
+      homeDirectory ? "/build"
+    , # The path to the bash binary to use as the shell. See `NIX_BUILD_SHELL` in `man nix-shell`
+      shell ? bashInteractive + "/bin/bash"
+    , # Run this command in the environment of the derivation, in an interactive shell. See `--command` in `man nix-shell`
+      command ? null
+    , # Same as `command`, but runs the command in a non-interactive shell instead. See `--run` in `man nix-shell`
+      run ? null
+    }:
+      assert lib.assertMsg (! (drv.drvAttrs.__structuredAttrs or false))
+        "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
+      assert lib.assertMsg (command == null || run == null)
+        "streamNixShellImage: Can't specify both command and run";
+      let
+
+        # A binary that calls the command to build the derivation
+        builder = writeShellScriptBin "buildDerivation" ''
+          exec ${lib.escapeShellArg (stringValue drv.drvAttrs.builder)} ${lib.escapeShellArgs (map stringValue drv.drvAttrs.args)}
+        '';
+
+        staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
+
+        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L493-L526
+        rcfile = writeText "nix-shell-rc" ''
+          unset PATH
+          dontAddDisableDepTrack=1
+          # TODO: https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L506
+          [ -e $stdenv/setup ] && source $stdenv/setup
+          PATH=${staticPath}:"$PATH"
+          SHELL=${lib.escapeShellArg shell}
+          BASH=${lib.escapeShellArg shell}
+          set +e
+          [ -n "$PS1" -a -z "$NIX_SHELL_PRESERVE_PROMPT" ] && PS1='\n\[\033[1;32m\][nix-shell:\w]\$\[\033[0m\] '
+          if [ "$(type -t runHook)" = function ]; then
+            runHook shellHook
+          fi
+          unset NIX_ENFORCE_PURITY
+          shopt -u nullglob
+          shopt -s execfail
+          ${optionalString (command != null || run != null) ''
+            ${optionalString (command != null) command}
+            ${optionalString (run != null) run}
+            exit
+          ''}
+        '';
+
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
+        sandboxBuildDir = "/build";
+
+        # This function closely mirrors what this Nix code does:
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1102
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/eval.cc#L1981-L2036
+        stringValue = value:
+          # We can't just use `toString` on all derivation attributes because that
+          # would not put path literals in the closure. So we explicitly copy
+          # those into the store here
+          if builtins.typeOf value == "path" then "${value}"
+          else if builtins.typeOf value == "list" then toString (map stringValue value)
+          else toString value;
+
+        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
+        drvEnv = lib.mapAttrs' (name: value:
+          let str = stringValue value;
+          in if lib.elem name (drv.drvAttrs.passAsFile or [])
+          then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
+          else lib.nameValuePair name str
+        ) drv.drvAttrs //
+          # A mapping from output name to the nix store path where they should end up
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1253
+          lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+
+        # Environment variables set in the image
+        envVars = {
+
+          # Root certificates for internet access
+          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
+          # PATH = "/path-not-set";
+          # Allows calling bash and `buildDerivation` as the Cmd
+          PATH = staticPath;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
+          HOME = homeDirectory;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
+          NIX_STORE = storeDir;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
+          # TODO: Make configurable?
+          NIX_BUILD_CORES = "1";
+
+        } // drvEnv // {
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
+          NIX_BUILD_TOP = sandboxBuildDir;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
+          TMPDIR = sandboxBuildDir;
+          TEMPDIR = sandboxBuildDir;
+          TMP = sandboxBuildDir;
+          TEMP = sandboxBuildDir;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
+          PWD = sandboxBuildDir;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
+          # We don't set it here because the output here isn't handled in any special way
+          # NIX_LOG_FD = "2";
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
+          TERM = "xterm-256color";
+        };
+
+
+      in streamLayeredImage {
+        inherit name tag;
+        contents = [
+          binSh
+          usrBinEnv
+          (fakeNss.override {
+            # Allows programs to look up the build user's home directory
+            # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910
+            # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
+            # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
+            extraPasswdLines = [
+              "nixbld:x:${toString uid}:${toString gid}:Build user:${homeDirectory}:/noshell"
+            ];
+            extraGroupLines = [
+              "nixbld:!:${toString gid}:"
+            ];
+          })
+        ];
+
+        fakeRootCommands = ''
+          # Effectively a single-user installation of Nix, giving the user full
+          # control over the Nix store. Needed for building the derivation this
+          # shell is for, but also in case one wants to use Nix inside the
+          # image
+          mkdir -p ./nix/{store,var/nix} ./etc/nix
+          chown -R ${toString uid}:${toString gid} ./nix ./etc/nix
+
+          # Gives the user control over the build directory
+          mkdir -p .${sandboxBuildDir}
+          chown -R ${toString uid}:${toString gid} .${sandboxBuildDir}
+        '';
+
+        # Run this image as the given uid/gid
+        config.User = "${toString uid}:${toString gid}";
+        config.Cmd =
+          # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L185-L186
+          # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L534-L536
+          if run == null
+          then [ shell "--rcfile" rcfile ]
+          else [ shell rcfile ];
+        config.WorkingDir = sandboxBuildDir;
+        config.Env = lib.mapAttrsToList (name: value: "${name}=${value}") envVars;
+      };
+
+  # Wrapper around streamNixShellImage to build an image from the result
+  buildNixShellImage = { drv, ... }@args:
+    let
+      stream = streamNixShellImage args;
+    in
+    runCommand "${drv.name}-env.tar.gz"
+      {
+        inherit (stream) imageName;
+        passthru = { inherit (stream) imageTag; };
+        nativeBuildInputs = [ pigz ];
+      } "${stream} | pigz -nTR > $out";
 }

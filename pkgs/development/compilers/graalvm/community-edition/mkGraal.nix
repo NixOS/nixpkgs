@@ -16,7 +16,7 @@
   #   };
   # }
   config
-  # GraalVM version that will be used unless overriden by `config.<platform>.version`
+  # GraalVM version that will be used unless overridden by `config.<platform>.version`
 , defaultVersion
   # Java version used by GraalVM
 , javaVersion
@@ -319,6 +319,8 @@ let
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      mainProgram = "java";
       maintainers = with maintainers; [
         bandresen
         hlolli

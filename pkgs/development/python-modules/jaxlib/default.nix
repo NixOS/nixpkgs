@@ -41,7 +41,6 @@
 , zlib
 
   # CUDA flags:
-, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
 , cudaPackages ? {}
 
@@ -50,7 +49,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
   version = "0.3.22";
@@ -165,7 +164,7 @@ let
       build --action_env TF_CUDA_PATHS="${cudatoolkit_joined},${cudnn},${nccl}"
       build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudatoolkit.version}"
       build --action_env TF_CUDNN_VERSION="${lib.versions.major cudnn.version}"
-      build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${lib.concatStringsSep "," cudaCapabilities}"
+      build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${cudaFlags.cudaRealCapabilitiesCommaString}"
     '' + ''
       CFG
     '';
@@ -235,11 +234,13 @@ let
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "sha256-Z9GDWGv+1YFyJjudyshZfeRJsKShoA1kIbNR3h3GxPQ="
-        else if stdenv.isDarwin then
-          "sha256-i3wiJHD4+pgTvDMhnYiQo9pdxxKItgYnc4/4wGt2NXM="
-        else
-          "sha256-liRxmjwm0OmVMfgoGXx+nGBdW2fzzP/d4zmK6A59HAM=";
+          "sha256-n8wo+hD9ZYO1SsJKgyJzUmjRlsz45WT6tt5ZLleGvGY="
+        else {
+          x86_64-linux = "sha256-A0A18kxgGNGHNQ67ZPUzh3Yq2LEcRV7CqR9EfP80NQk=";
+          aarch64-linux = "sha256-mU2jzuDu89jVmaG/M5bA3jSd7n7lDi+h8sdhs1z8p1A=";
+          x86_64-darwin = "sha256-9nNTpetvjyipD/l8vKlregl1j/OnZKAcOCoZQeRBvts=";
+          aarch64-darwin = "sha256-dOGUsdFImeOLcZ3VtgrNnd8A/HgIs/LYuH9GQV7A+78=";
+        }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     };
 
     buildAttrs = {

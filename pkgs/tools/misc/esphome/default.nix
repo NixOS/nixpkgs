@@ -1,8 +1,9 @@
 { lib
+, callPackage
 , python3
 , fetchFromGitHub
 , platformio
-, esptool
+, esptool_3
 , git
 }:
 
@@ -13,16 +14,16 @@ let
     };
   };
 in
-with python.pkgs; buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.10.2";
+  version = "2022.12.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f6t5Q9jK6ovcIFVw1hYyhtiy/iDaq7cmfn5ywAeEaT8=";
+    hash = "sha256-VKxCdejQGWLYeNOxa1PCwhdrLilnsYD9UBqj8Sen+OM=";
   };
 
   postPatch = ''
@@ -42,7 +43,7 @@ with python.pkgs; buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
     click
     colorama
@@ -52,6 +53,7 @@ with python.pkgs; buildPythonApplication rec {
     kconfiglib
     paho-mqtt
     pillow
+    platformio
     protobuf
     pyserial
     pyyaml
@@ -66,16 +68,15 @@ with python.pkgs; buildPythonApplication rec {
     # platformio is used in esphomeyaml/platformio_api.py
     # esptool is used in esphomeyaml/__main__.py
     # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool_3 git ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python.pkgs; [
     hypothesis
     mock
     pytest-asyncio
     pytest-mock
-    pytest-sugar
     pytestCheckHook
   ];
 
@@ -91,7 +92,7 @@ with python.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    dashboard = esphome-dashboard;
+    dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix {};
   };
 

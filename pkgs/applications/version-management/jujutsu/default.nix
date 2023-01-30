@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-ITYpdCUh+WzP2RrAkSep3DsQ7dztvOMuwESKimn8JBQ=";
+    sha256 = "sha256-ajBL2o5i4UmclL/s9eEVtn/p51/F4gsClmcYBrAZ+1o=";
   };
 
-  cargoSha256 = "sha256-eH8/R4dwQ08Q7Dyw8CnE+DGjneAmtTdsRben2cxpG8Q=";
+  cargoSha256 = "sha256-RgF2StIMfFzbp0azG4yRPvzrZ4kczWtOWVd+KTTPbRw=";
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;

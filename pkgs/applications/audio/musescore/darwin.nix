@@ -5,17 +5,15 @@ let
   appName = "MuseScore ${builtins.head versionComponents}";
 in
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "musescore-darwin";
-  version = concatStringsSep "." versionComponents;
+  version = lib.concatStringsSep "." versionComponents;
 
   # The disk image contains the .app and a symlink to /Applications.
   sourceRoot = "${appName}.app";
 
   src = fetchurl {
-    url =  "https://github.com/musescore/MuseScore/releases/download/v${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
+    url = "https://github.com/musescore/MuseScore/releases/download/v${lib.concatStringsSep "." (lib.take 3 versionComponents)}/MuseScore-${version}.dmg";
     sha256 = "sha256-lHckfhTTrDzaGwlbnZ5w0O1gMPbRmrmgATIGMY517l0=";
   };
 

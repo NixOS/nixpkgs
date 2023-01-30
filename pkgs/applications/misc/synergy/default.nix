@@ -14,7 +14,8 @@
 , gdk-pixbuf
 , libnotify
 , qttools
-, xlibsWrapper
+, libICE
+, libSM
 , libX11
 , libxkbfile
 , libXi
@@ -84,7 +85,8 @@ stdenv.mkDerivation rec {
     util-linux
     libselinux
     libsepol
-    xlibsWrapper
+    libICE
+    libSM
     libX11
     libXi
     libXtst

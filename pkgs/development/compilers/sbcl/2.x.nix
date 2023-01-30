@@ -53,6 +53,18 @@ let
     "2.2.9" = {
       sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
     };
+
+    "2.2.10" = {
+      sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
+    };
+
+    "2.2.11" = {
+      sha256 = "sha256-NgfWgBZzGICEXO1dXVXGBUzEnxkSGhUCfmxWB66Elt8=";
+    };
+
+    "2.3.0" = {
+      sha256 = "sha256-v3Q5SXEq4Cy3ST87i1fOJBlIv2ETHjaGDdszTaFDnJc=";
+    };
   };
 
 in with versionMap.${version};
@@ -98,6 +110,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/sbcl/sbcl/commit/f88989694200a5192fb68047d43d0500b2165f7b.patch";
       sha256 = "sha256-MXEsK46RARPmB2WBPcrmZk6ArliU8DgHw73x9+/QAmk=";
+    })
+  ] ++ lib.optionals (version == "2.2.10") [
+    # hard-coded /bin/cat to just ‘cat’, trusting the PATH
+    (fetchpatch {
+      url = "https://github.com/sbcl/sbcl/commit/8ed662fbfeb5dde35eb265f390b55b01f79f70c1.patch";
+      sha256 = "sha256-2aqb13AFdw9KMf8KQ9yj1HVxgoFWZ9xWmnoDdbRSLy4=";
     })
   ];
 
@@ -159,7 +177,9 @@ stdenv.mkDerivation rec {
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
     # Should be fixed past 2.1.10 release.
     "-fcommon"
-  ];
+  ]
+    # Fails to find `O_LARGEFILE` otherwise.
+    ++ [ "-D_GNU_SOURCE" ];
 
   buildPhase = ''
     runHook preBuild

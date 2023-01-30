@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       utillinux = util-linux;
     })
-  ] ++ lib.optionals espeak.mbrolaSupport [
+  ] ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
     # Replace FHS paths.
     (substituteAll {
       src = ./fix-mbrola-paths.patch;

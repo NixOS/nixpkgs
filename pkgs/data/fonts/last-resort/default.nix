@@ -1,7 +1,7 @@
 { lib, fetchurl }:
 
 let
-  version = "14.000";
+  version = "15.000";
 in fetchurl {
   name = "last-resort-${version}";
 
@@ -13,7 +13,7 @@ in fetchurl {
   '';
 
   recursiveHash = true;
-  sha256 = "sha256-rb69V4oExSFx4GpedpyVvGuS6o+MxmxTCSZhoe9kUhI=";
+  sha256 = "sha256-mkRIA6Hajl5e9j/qb3WSKaIaHmekjl5wGUSszWMfmjw=";
 
   meta = with lib; {
     description = "Fallback font of last resort";

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"

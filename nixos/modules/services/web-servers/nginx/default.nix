@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  certs = config.security.acme.certs;
+  inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
@@ -27,7 +27,44 @@ let
                               else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
-  enableIPv6 = config.networking.enableIPv6;
+  inherit (config.networking) enableIPv6;
+
+  # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
+  # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  compressMimeTypes = [
+    "application/atom+xml"
+    "application/geo+json"
+    "application/json"
+    "application/ld+json"
+    "application/manifest+json"
+    "application/rdf+xml"
+    "application/vnd.ms-fontobject"
+    "application/wasm"
+    "application/x-rss+xml"
+    "application/x-web-app-manifest+json"
+    "application/xhtml+xml"
+    "application/xliff+xml"
+    "application/xml"
+    "font/collection"
+    "font/otf"
+    "font/ttf"
+    "image/bmp"
+    "image/svg+xml"
+    "image/vnd.microsoft.icon"
+    "text/cache-manifest"
+    "text/calendar"
+    "text/css"
+    "text/csv"
+    "text/html"
+    "text/javascript"
+    "text/markdown"
+    "text/plain"
+    "text/vcard"
+    "text/vnd.rim.location.xloc"
+    "text/vtt"
+    "text/x-component"
+    "text/xml"
+  ];
 
   defaultFastcgiParams = {
     SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
@@ -112,7 +149,7 @@ let
       ''}
       ${upstreamConfig}
 
-      ${optionalString (cfg.recommendedOptimisation) ''
+      ${optionalString cfg.recommendedOptimisation ''
         # optimisation
         sendfile on;
         tcp_nopush on;
@@ -124,7 +161,7 @@ let
       ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ${optionalString (cfg.recommendedTlsSettings) ''
+      ${optionalString cfg.recommendedTlsSettings ''
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
         ssl_session_timeout 1d;
@@ -140,7 +177,17 @@ let
         ssl_stapling_verify on;
       ''}
 
-      ${optionalString (cfg.recommendedGzipSettings) ''
+      ${optionalString cfg.recommendedBrotliSettings ''
+        brotli on;
+        brotli_static on;
+        brotli_comp_level 5;
+        brotli_window 512k;
+        brotli_min_length 256;
+        brotli_types ${lib.concatStringsSep " " compressMimeTypes};
+        brotli_buffers 32 8k;
+      ''}
+
+      ${optionalString cfg.recommendedGzipSettings ''
         gzip on;
         gzip_proxied any;
         gzip_comp_level 5;
@@ -158,7 +205,7 @@ let
         gzip_vary on;
       ''}
 
-      ${optionalString (cfg.recommendedProxySettings) ''
+      ${optionalString cfg.recommendedProxySettings ''
         proxy_redirect          off;
         proxy_connect_timeout   ${cfg.proxyTimeout};
         proxy_send_timeout      ${cfg.proxyTimeout};
@@ -192,14 +239,22 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
+      ${optionalString cfg.proxyCache.enable ''
+        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
+                                          levels=${cfg.proxyCache.levels}
+                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
+                                          inactive=${cfg.proxyCache.inactive}
+                                          max_size=${cfg.proxyCache.maxSize};
+      ''}
+
       ${cfg.commonHttpConfig}
 
       ${vhosts}
 
       ${optionalString cfg.statusPage ''
         server {
-          listen 80;
-          ${optionalString enableIPv6 "listen [::]:80;" }
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
 
           server_name localhost;
 
@@ -246,8 +301,8 @@ let
           if vhost.listen != [] then vhost.listen
           else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -310,7 +365,9 @@ let
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            location / {
+              return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -414,6 +471,16 @@ in
         '';
       };
 
+      recommendedBrotliSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+
+          This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
+        '';
+      };
+
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
@@ -449,12 +516,30 @@ in
         '';
       };
 
+      defaultHTTPListenPort = mkOption {
+        type = types.port;
+        default = 80;
+        example = 8080;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for HTTP by default.
+        '';
+      };
+
+      defaultSSLListenPort = mkOption {
+        type = types.port;
+        default = 443;
+        example = 8443;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for SSL by default.
+        '';
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
         defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
         apply = p: p.override {
-          modules = p.modules ++ cfg.additionalModules;
+          modules = lib.unique (p.modules ++ cfg.additionalModules);
         };
         description = lib.mdDoc ''
           Nginx package to use. This defaults to the stable version. Note
@@ -466,11 +551,10 @@ in
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExpression "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.echo ]";
         description = lib.mdDoc ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
-          to install. Packaged modules are available in
-          `pkgs.nginxModules`.
+          to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
       };
 
@@ -689,6 +773,72 @@ in
           '';
       };
 
+      proxyCache = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+
+            keysZoneName = mkOption {
+              type = types.str;
+              default = "cache";
+              example = "my_cache";
+              description = lib.mdDoc "Set name to shared memory zone.";
+            };
+
+            keysZoneSize = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "32m";
+              description = lib.mdDoc "Set size to shared memory zone.";
+            };
+
+            levels = mkOption {
+              type = types.str;
+              default = "1:2";
+              example = "1:2:2";
+              description = lib.mdDoc ''
+                The levels parameter defines structure of subdirectories in cache: from
+                1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                1 and 2 in these formats: x, x:x and x:x:x.
+              '';
+            };
+
+            useTempPath = mkOption {
+              type = types.bool;
+              default = false;
+              example = true;
+              description = lib.mdDoc ''
+                Nginx first writes files that are destined for the cache to a temporary
+                storage area, and the use_temp_path=off directive instructs Nginx to
+                write them to the same directories where they will be cached. Recommended
+                that you set this parameter to off to avoid unnecessary copying of data
+                between file systems.
+              '';
+            };
+
+            inactive = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "1d";
+              description = lib.mdDoc ''
+                Cached data that has not been accessed for the time specified by
+                the inactive parameter is removed from the cache, regardless of
+                its freshness.
+              '';
+            };
+
+            maxSize = mkOption {
+              type = types.str;
+              default = "1g";
+              example = "2048m";
+              description = lib.mdDoc "Set maximum cache size";
+            };
+          };
+        };
+        default = {};
+        description = lib.mdDoc "Configure proxy cache";
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -800,8 +950,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    # TODO: test user supplied config file pases syntax test
-
     warnings =
     let
       deprecatedSSL = name: config: optional config.enableSSL
@@ -861,6 +1009,8 @@ in
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
     }) dependentCertNames;
+
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
@@ -947,14 +1097,14 @@ in
       sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
     in mkIf (cfg.enableReload || sslServices != []) {
-      wants = optionals (cfg.enableReload) [ "nginx.service" ];
+      wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ configFile ];
+      restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);

@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  checkInputs = [ bison ];
+  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 

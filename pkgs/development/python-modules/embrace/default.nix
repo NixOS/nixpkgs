@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "embrace";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "~olly";
     repo = "embrace-sql";
     rev = "v${version}-release";
-    hash = "sha256-R6Ug4f8KFZNzaNWqWZkLvOwtsawCuerzvHlysr7bd6M=";
+    hash = "sha256-otzpDMtC229qMXon+ydS39SBoMiXJmxn48/TQXjqu5U=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

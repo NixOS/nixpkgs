@@ -1,6 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 
-{
+rec {
   name = "wordpress";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
@@ -10,17 +10,22 @@ import ./make-test-python.nix ({ pkgs, ... }:
     ];
   };
 
-  nodes = {
-    wp_httpd = { ... }: {
+  nodes = lib.foldl (a: version: let
+    package = pkgs."wordpress${version}";
+  in a // {
+    "wp${version}_httpd" = _: {
       services.httpd.adminAddr = "webmaster@site.local";
       services.httpd.logPerVirtualHost = true;
 
+      services.wordpress.webserver = "httpd";
       services.wordpress.sites = {
         "site1.local" = {
           database.tablePrefix = "site1_";
+          inherit package;
         };
         "site2.local" = {
           database.tablePrefix = "site2_";
+          inherit package;
         };
       };
 
@@ -28,14 +33,16 @@ import ./make-test-python.nix ({ pkgs, ... }:
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
 
-    wp_nginx = { ... }: {
+    "wp${version}_nginx" = _: {
       services.wordpress.webserver = "nginx";
       services.wordpress.sites = {
         "site1.local" = {
           database.tablePrefix = "site1_";
+          inherit package;
         };
         "site2.local" = {
           database.tablePrefix = "site2_";
+          inherit package;
         };
       };
 
@@ -43,34 +50,38 @@ import ./make-test-python.nix ({ pkgs, ... }:
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
 
-    wp_caddy = { ... }: {
+    "wp${version}_caddy" = _: {
       services.wordpress.webserver = "caddy";
       services.wordpress.sites = {
         "site1.local" = {
           database.tablePrefix = "site1_";
+          inherit package;
         };
         "site2.local" = {
           database.tablePrefix = "site2_";
+          inherit package;
         };
       };
 
       networking.firewall.allowedTCPPorts = [ 80 ];
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
-  };
+  }) {} [
+    "6_1"
+  ];
 
   testScript = ''
     import re
 
     start_all()
 
-    wp_httpd.wait_for_unit("httpd")
-    wp_nginx.wait_for_unit("nginx")
-    wp_caddy.wait_for_unit("caddy")
+    ${lib.concatStrings (lib.mapAttrsToList (name: value: ''
+      ${name}.wait_for_unit("${(value null).services.wordpress.webserver}")
+    '') nodes)}
 
     site_names = ["site1.local", "site2.local"]
 
-    for machine in (wp_httpd, wp_nginx, wp_caddy):
+    for machine in (${lib.concatStringsSep ", " (builtins.attrNames nodes)}):
         for site_name in site_names:
             machine.wait_for_unit(f"phpfpm-wordpress-{site_name}")
 

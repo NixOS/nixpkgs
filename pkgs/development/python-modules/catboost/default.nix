@@ -1,22 +1,22 @@
 { buildPythonPackage, fetchFromGitHub, lib, pythonOlder
-, clang_12, python2, python
+, clang_12, python
 , graphviz, matplotlib, numpy, pandas, plotly, scipy, six
 , withCuda ? false, cudatoolkit }:
 
 buildPythonPackage rec {
   pname = "catboost";
-  version = "1.0.5";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
-    rev = "v${version}";
-    sha256 = "ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
   };
 
-  nativeBuildInputs = [ clang_12 python2 ];
+  nativeBuildInputs = [ clang_12 ];
 
   propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
     ++ lib.optionals withCuda [ cudatoolkit ];

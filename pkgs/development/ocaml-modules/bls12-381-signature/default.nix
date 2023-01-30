@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ bls12-381 ];
 
-  checkInputs = [alcotest bisect_ppx integers_stubs_js];
+  nativeCheckInputs = [alcotest bisect_ppx integers_stubs_js];
 
   doCheck = true;
 

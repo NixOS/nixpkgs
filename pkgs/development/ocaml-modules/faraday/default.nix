@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "sha256-wR4kDocR1t3OLRuudXH8IccYde552O6Gvo5BHNxRbAI=";
   };
 
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
   propagatedBuildInputs = [ bigstringaf ];
   doCheck = true;
 

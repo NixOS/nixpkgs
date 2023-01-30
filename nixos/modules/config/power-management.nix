@@ -94,7 +94,7 @@ in
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
         script =
           ''
-            /run/current-system/systemd/bin/systemctl try-restart post-resume.target
+            /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
             ${cfg.resumeCommands}
             ${cfg.powerUpCommands}
           '';

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.5.2";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "sha256-d8DDyEsK35WK7c0udZI5HxQLO+mbod8hlbSoa3IWWS0=";
+    hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   postInstall = ''
      # fix recursive cycle:

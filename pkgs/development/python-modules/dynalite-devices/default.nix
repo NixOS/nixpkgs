@@ -21,14 +21,14 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' setup.cfg
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytest-asyncio
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   pythonImportsCheck = [ "dynalite_devices_lib" ];

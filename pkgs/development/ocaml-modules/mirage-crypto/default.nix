@@ -15,7 +15,7 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator  ];

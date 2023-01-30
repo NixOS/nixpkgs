@@ -10,15 +10,14 @@
 , glibcLocales
 , gnupg
 , gpgme
-, mock
-, urllib3
 , paramiko
 , pytestCheckHook
 , pythonOlder
+, urllib3
 }:
 
 buildPythonPackage rec {
-  version = "0.20.50";
+  version = "0.21.0";
   pname = "dulwich";
   format = "setuptools";
 
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UKlBeWssZ1vjm+co1UDBa1t853654bP4VWUOzmgy0r4=";
+    hash = "sha256-wizAXwIKlq012U1lIPgHAnC+4KN7V1aG0JwCeYsl7YY=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -36,18 +35,28 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
-    fastimport
+  passthru.optional-dependencies = {
+    fastimport = [
+      fastimport
+    ];
+    pgp = [
+      gpgme
+      gnupg
+    ];
+    paramiko = [
+      paramiko
+    ];
+  };
+
+  nativeCheckInputs = [
     gevent
     geventhttpclient
     git
     glibcLocales
-    gpgme
-    gnupg
-    mock
-    paramiko
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.fastimport
+  ++ passthru.optional-dependencies.pgp
+  ++ passthru.optional-dependencies.paramiko;
 
   doCheck = !stdenv.isDarwin;
 
@@ -70,7 +79,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple Python implementation of the Git file formats and protocols";
+    description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
       does not depend on Git itself. All functionality is available in pure Python.

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0qf9lwj7r2hjjp4bd4vc7nayrhblfm4qcqs4dbd43a6p4bj2jv5p";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://pyvcf.readthedocs.io/en/latest/index.html";

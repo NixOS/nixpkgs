@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gcc
     alcotest
     fmt

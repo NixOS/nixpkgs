@@ -1,6 +1,5 @@
 { lib
-, buildPythonApplication
-, fetchPypi
+, python3
 , alsa-utils
 , gobject-introspection
 , libappindicator-gtk3
@@ -10,21 +9,17 @@
 , xprintidle
 , xprop
 , wrapGAppsHook
-, babel
-, psutil
-, xlib
-, pygobject3
-, dbus-python
-, croniter
 }:
+
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b5w887hivmdrkm1ydbar4nmnks6grpbbpvxgf9j9s46msj03c9x";
+    sha256 = "sha256-IjFDhkqtMitdcQORerRqwty3ZMP8jamPtb9oMHdre4I=";
   };
 
   nativeBuildInputs = [

@@ -34,7 +34,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator stdio R ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  nativeCheckInputs = [ alcotest ];
 
   meta = {
     # This has been broken by the update to R 4.2.0 (#171597)

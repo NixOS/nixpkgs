@@ -6,6 +6,7 @@
 , chardet
 , charset-normalizer
 , fetchPypi
+, fetchpatch
 , idna
 , pysocks
 , pytest-mock
@@ -18,6 +19,7 @@
 buildPythonPackage rec {
   pname = "requests";
   version = "2.28.1";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
@@ -28,8 +30,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Use the default NixOS CA bundle from the certifi package
-    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
+    ./relax-charset-normalizer.patch
   ];
 
   propagatedBuildInputs = [
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytest-xdist
     pytestCheckHook

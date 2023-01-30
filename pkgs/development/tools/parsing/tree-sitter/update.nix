@@ -31,8 +31,6 @@ let
     "tree-sitter-scala"
     "tree-sitter-ocaml"
     "tree-sitter-julia"
-    "tree-sitter-agda"
-    "tree-sitter-fluent"
     "tree-sitter-html"
     "tree-sitter-haskell"
     "tree-sitter-regex"
@@ -73,6 +71,10 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # abandoned
+    "tree-sitter-agda"
+    # abandoned
+    "tree-sitter-fluent"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -137,7 +139,7 @@ let
       repo = "tree-sitter-svelte";
     };
     "tree-sitter-sql" = {
-      orga = "m-novikov";
+      orga = "derekstride";
       repo = "tree-sitter-sql";
     };
     "tree-sitter-vim" = {
@@ -373,19 +375,7 @@ let
           knownTreeSitterOrgGrammarRepos);
 
     in
-    mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
-
-  # TODO: move to lib
-  mergeAttrsUnique = left: right:
-    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
-    assert
-    lib.assertMsg (intersect == [ ])
-      (lib.concatStringsSep "\n" [
-        "mergeAttrsUnique: keys in attrset overlapping:"
-        "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-        "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-      ]);
-    left // right;
+    lib.attrsets.unionOfDisjoint otherGrammars treeSitterOrgaGrammars;
 
 
 

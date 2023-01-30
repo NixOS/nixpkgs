@@ -22,11 +22,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "sha256-kXpGaGp9OWdDa1q3hx7nrD1ZeKH5CKlTgZbyuNZ05/8=";
+    hash = "sha256-3D87Ou/842WqbaUiJV1hRZFVkZzQ12GXCpRc8F3rKPQ=";
   };
 
   buildInputs = [
@@ -56,13 +56,13 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb-run dbus.daemon ];
+  nativeCheckInputs = [ xvfb-run dbus ];
 
   checkPhase = ''
     xvfb-run dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gtk -v
-    ${python3.interpreter} -m unittest discover -s test/no_gui -v
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      ${python3.interpreter} -m unittest discover -s test/gui -v
+    ${python3.interpreter} -m unittest discover -s test/common -v
   '';
 
   # necessary for wrapGAppsHook

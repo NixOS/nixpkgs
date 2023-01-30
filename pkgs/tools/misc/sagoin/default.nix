@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sagoin";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cp3sdck48kz7ssv9q0glz1m0awxis2n3lw8f8kvqm42zxa50ixm";
+    sha256 = "sha256-BCsNsBD+ZkxhIy1yC+N0AqbEsQ2ElfWLtnBOG+0hHXk=";
   };
 
-  cargoSha256 = "sha256-hPj1sj64JoIGEoHMIm2bE+G+ivokckvChhrxNoaUTo8=";
+  cargoSha256 = "sha256-B8P92utlmZlxNfzBidNUaGw7BhgkOPwD0yahtKZ2yto=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   GEN_ARTIFACTS = "artifacts";
 
   meta = with lib; {
-    description = "A command-line submission tool for the UMD CS Submission Server";
+    description = "A command-line submission tool for the UMD CS Submit Server";
     homepage = "https://github.com/figsoda/sagoin";
     changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Plus;

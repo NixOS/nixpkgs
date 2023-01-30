@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i '/--cov/d' pytest.ini
+    sed -i '/--mypy/d' pytest.ini
   '';
 
   passthru.optional-dependencies = {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mypy
     pytestCheckHook
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "43.0";
+  version = "43.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fvG9N6HuuO8BMH8MJRquMSe1oEPNmX/pzsJX5yzs1CY=";
+    hash = "sha256-gHlhbQGtdIjKLMAkTxfc2QOjvNUPGKKL+OK8/vm0Oac=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     sofia_sip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS=${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
   '';

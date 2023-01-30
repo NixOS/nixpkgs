@@ -1,0 +1,29 @@
+diff --git a/cmake/DependenciesConfig.cmake b/cmake/DependenciesConfig.cmake
+index 1bdf93c..4773fca 100644
+--- a/cmake/DependenciesConfig.cmake
++++ b/cmake/DependenciesConfig.cmake
+@@ -187,10 +187,8 @@ endmacro(importLib)
+ 
+ ELSEIF(UNIX)
+    find_package(PkgConfig)
+-   PKG_CHECK_MODULES  (GTK gtk+-2.0 REQUIRED)
+-   PKG_CHECK_MODULES  (GTK_PIXBUF gdk-pixbuf-2.0 REQUIRED)
++   PKG_CHECK_MODULES  (GTK gtk+-3.0 REQUIRED)
+    include_directories(${GTK_INCLUDE_DIRS})
+-   include_directories(${GTK_PIXBUF_INCLUDE_DIRS})
+ 
+    # Ogre basics
+    PKG_CHECK_MODULES  (Ogre OGRE REQUIRED)
+diff --git a/source/configurator/CMakeLists.txt b/source/configurator/CMakeLists.txt
+index 51cc350..7f723b6 100644
+--- a/source/configurator/CMakeLists.txt
++++ b/source/configurator/CMakeLists.txt
+@@ -56,7 +56,7 @@ IF(WIN32)
+    endif(ROR_USE_OPENCL)
+ ELSEIF(UNIX)
+    find_package(PkgConfig)
+-   PKG_CHECK_MODULES  (GTK gtk+-2.0 REQUIRED)
++   PKG_CHECK_MODULES  (GTK gtk+-3.0 REQUIRED)
+    INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIRS})
+ 
+    PKG_CHECK_MODULES  (Ogre OGRE REQUIRED)

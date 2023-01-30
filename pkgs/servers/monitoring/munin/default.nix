@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetSSLeay
     perlPackages.NetServer
     perlPackages.LogLog4perl
-    perlPackages.IOSocketInet6
+    perlPackages.IOSocketINET6
     perlPackages.Socket6
     perlPackages.URI
     perlPackages.DBFile
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   # needs to find a local perl module during build
-  PERL_USE_UNSAFE_INC = "1";
+  env.PERL_USE_UNSAFE_INC = "1";
 
   # TODO: tests are failing https://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketINET6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
                 ]}"

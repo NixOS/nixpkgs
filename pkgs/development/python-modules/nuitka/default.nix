@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "0wgcl860acbxnq8q9hck147yhxz8pcbqhv9glracfnrsd2qkpgpp";
   };
 
-  checkInputs = [ vmprof pyqt4 ];
+  nativeCheckInputs = [ vmprof pyqt4 ];
   nativeBuildInputs = [ scons ];
   propagatedBuildInputs = [ chrpath ];
 

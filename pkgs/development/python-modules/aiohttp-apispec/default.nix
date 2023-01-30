@@ -35,7 +35,7 @@ buildPythonPackage rec {
     webargs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

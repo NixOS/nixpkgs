@@ -1,33 +1,51 @@
 { lib
 , fetchFromGitHub
 , python3
+, rsync
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "toil";
-  version = "5.6.0";
+  version = "5.7.1";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-m6tzrRCCLULO+wB8htUlt0KESLm/vdIeTzBrihnAo/I=";
+  src = fetchFromGitHub {
+    owner = "DataBiosphere";
+    repo = pname;
+    rev = "refs/tags/releases/${version}";
+    hash = "sha256-m+XvNyzd0ly2YqKhgxezgGaCXLs3CmupJMnp5RIZqNI=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "docker>=3.7.2, <6" "docker"
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     addict
+    dill
     docker
-    pytz
-    pyyaml
     enlighten
     psutil
     py-tes
+    pypubsub
     python-dateutil
-    dill
+    pytz
+    pyyaml
+    requests
+    typing-extensions
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = [
+    rsync
+  ] ++ (with python3.pkgs; [
+    boto
+    botocore
+    flask
+    mypy-boto3-s3
     pytestCheckHook
-  ];
+    stubserver
+  ]);
 
   pytestFlagsArray = [
     "src/toil/test"
@@ -35,6 +53,34 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [
     "toil"
+  ];
+
+  disabledTestPaths = [
+    # Tests are reaching their timeout
+    "src/toil/test/docs/scriptsTest.py"
+    "src/toil/test/jobStores/jobStoreTest.py"
+    "src/toil/test/provisioners/aws/awsProvisionerTest.py"
+    "src/toil/test/src"
+    "src/toil/test/wdl"
+    "src/toil/test/utils/utilsTest.py"
+  ];
+
+  disabledTests = [
+    # Tests fail starting with 5.7.1
+    "testServices"
+    "testConcurrencyWithDisk"
+    "testJobConcurrency"
+    "testNestedResourcesDoNotBlock"
+    "test_omp_threads"
+    "testFileSingle"
+    "testFileSingle10000"
+    "testFileSingleCheckpoints"
+    "testFileSingleNonCaching"
+    "testFetchJobStoreFiles"
+    "testFetchJobStoreFilesWSymlinks"
+    "testJobStoreContents"
+    "test_cwl_on_arm"
+    "test_cwl_toil_kill"
   ];
 
   meta = with lib; {

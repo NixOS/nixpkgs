@@ -2,17 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , kernel
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "apfs";
-  version = "unstable-2022-08-15-${kernel.version}";
+  version = "unstable-2022-10-20-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "e4bf2d51d3fe8485ad2b28a89c157ada32ee3d77";
-    sha256 = "sha256-zvl1H9AIExgt6t2A2w7zDwXmRsmLY8y3P6EfbBuFdh8=";
+    rev = "e6eb67c92d425d395eac1c4403629391bdd5064d";
+    sha256 = "sha256-6rv5qZCjOqt0FaNFhA3tYg6/SdssvoT8kPVhalajgOo=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -23,6 +24,8 @@ stdenv.mkDerivation {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
+
+  passthru.tests.test = nixosTests.apfs;
 
   meta = with lib; {
     description = "APFS module for linux";

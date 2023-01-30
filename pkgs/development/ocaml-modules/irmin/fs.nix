@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ irmin astring logs lwt ];
 
-  checkInputs = [ alcotest irmin-test irmin-watcher ];
+  nativeCheckInputs = [ alcotest irmin-test irmin-watcher ];
 
   doCheck = true;
 

@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     toml
   ];

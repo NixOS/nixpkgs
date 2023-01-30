@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-snap7";
-  version = "1.2";
+  version = "1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "gijzelaerr";
     repo = "python-snap7";
     rev = "refs/tags/${version}";
-    hash = "sha256-xkkJE3wTqS6spwEmQ+HBY1Szao1VFoqmQ041vnAYuqQ=";
+    hash = "sha256-90WwgqPHsHbuQUY49cSQblN1jfoLydiG0dm1aMF/NCA=";
   };
 
   propagatedBuildInputs = [

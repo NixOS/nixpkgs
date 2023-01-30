@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , fftw ? null
 , gettext
 , libintl
@@ -18,6 +19,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-aExTXXtW03UKMuMjTMx1k/MUpcRMh1PdSPkDGH+Od70=";
   };
+
+  patches = [
+    # Pull upstream fix for missing <unistd.h>
+    #   https://github.com/folkertvanheusden/HTTPing/pull/8
+    (fetchpatch {
+      name = "add-unistd.patch";
+      url = "https://github.com/folkertvanheusden/HTTPing/commit/aad3c275686344fe9a235faeac4ee3832f3aa8d5.patch";
+      hash = "sha256-bz3AMQTSfSTwUyf9WbkAFWVmFo06ei+Qd55x+RRDREY=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext

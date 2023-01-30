@@ -1,32 +1,52 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, requests
+{ lib
+, buildPythonPackage
 , click
-, lib
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, pythonOlder
+, requests
+, testers
+, cve
 }:
 
 buildPythonPackage rec {
   pname = "cvelib";
-  version = "1.0.0";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
     rev = "tags/${version}";
-    sha256 = "sha256-KUj9Cnvl7r8NMmZvVj5CB0uZvLNK5aHcLc+NzxFrv0I=";
+    hash = "sha256-8qlXwEbgLRZ1qYtBJ1c0nv6qfIOW5zAK9eOS+n+afWQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
-  propagatedBuildInputs = [ requests click ];
+
+  propagatedBuildInputs = [
+    click
+    jsonschema
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "cvelib"
   ];
 
+  passthru.tests.version = testers.testVersion { package = cve; };
+
   meta = with lib; {
-    description = "A library and a command line interface for the CVE Services API";
+    description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
     license = licenses.mit;
     maintainers = with maintainers; [ raboof ];
+    mainProgram = "cve";
   };
 }

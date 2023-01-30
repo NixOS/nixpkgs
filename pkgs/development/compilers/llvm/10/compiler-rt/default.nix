@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi, libxcrypt }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi, libxcrypt
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+}:
 
 let
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-  ] ++ lib.optionals (haveLibc && !isMusl) [
+  ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.isGnu) [
     "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
@@ -99,6 +101,8 @@ stdenv.mkDerivation {
     for f in $out/lib/*/*builtins-i?86*; do
       ln -s "$f" $(echo "$f" | sed -e 's/builtins-i.86/builtins-i386/')
     done
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {

@@ -10,6 +10,7 @@
 , kdbusaddons
 , ki18n
 , kio
+, kirigami-addons
 , kirigami2
 , knotifications
 , kpeople
@@ -44,6 +45,7 @@ mkDerivation rec {
     kdbusaddons
     ki18n
     kio
+    kirigami-addons
     kirigami2
     knotifications
     kpeople

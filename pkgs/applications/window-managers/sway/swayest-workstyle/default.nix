@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swayest-workstyle";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Lyr-7D1h";
     repo = "swayest_workstyle";
     rev = version;
-    sha256 = "sha256-LciTrYbmJV0y0H6QH88vTBXbDdDSx6FQtO4J/CFLjtY=";
+    sha256 = "sha256-C2Nz6fBwaj+cOxIfoBu+9T+CoJ5Spc1TAJcQWdIF/+I=";
   };
 
-  cargoSha256 = "sha256-34Ij3Hd1JI6d1vhv1XomFc9SFoB/6pbS39upLk+NeQM=";
+  cargoHash = "sha256-6pAlJmpyv2a1XCZQLOYilxJAGPbPmkEz1ynTLa0RjE0=";
 
   doCheck = false; # No tests
 

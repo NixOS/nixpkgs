@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
       Fpart also includes a live mode, which allows it to crawl very large
       filesystems and produce partitions in live. Hooks are available to act on
-      those partitions (e.g. immediatly start a transfer using rsync(1))
+      those partitions (e.g. immediately start a transfer using rsync(1))
       without having to wait for the filesystem traversal job to be finished.
       Used this way, fpart can be seen as a powerful data migration tool.
     '';

@@ -12,30 +12,58 @@
 , libXrandr
 , libXi
 , libXcursor
+, udev
+, alsa-lib
+, stdenv
+, libxcb
 , pkg-config
 , makeWrapper
+, writeShellScript
+, patchelf
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "0.10.0";
+  # Patch for airshipper to install veloren
+  patch = let
+    runtimeLibs = [
+      udev
+      alsa-lib
+      stdenv.cc.cc.lib
+      libxkbcommon
+      libxcb
+      libX11
+      libXcursor
+      libXrandr
+      libXi
+      vulkan-loader
+      libGL
+    ];
+  in
+    writeShellScript "patch" ''
+      echo "making binaries executable"
+      chmod +x {veloren-voxygen,veloren-server-cli}
+      echo "patching dynamic linkers"
+      ${patchelf}/bin/patchelf \
+        --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
+        veloren-server-cli
+      ${patchelf}/bin/patchelf \
+        --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
+        --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
+        veloren-voxygen
+  '';
+in
+rustPlatform.buildRustPackage {
   pname = "airshipper";
-  version = "0.7.0";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
     rev = "v${version}";
-    sha256 = "sha256-nOE9ZNHxLEAnMkuBSpxmeq3DxkRIlcoase6AxU+eFug=";
+    sha256 = "sha256-5zP1Ye1fJNQp8eWKwdxLqBr4qzBfWEEBsJ9s7+8idL4=";
   };
 
-  patches = [
-    # this *should* be merged in time for the release following 0.7.0
-    (fetchpatch {
-      url = "https://github.com/veloren/Airshipper/commit/97fc986ab4cbf59f2c764f647710f19db86031b4.patch";
-      hash = "sha256-Sg5et+yP6Z44wV/t9zqKLpg1C0cq6rV+3WrzAH4Za3U=";
-    })
-  ];
-
-  cargoSha256 = "sha256-s3seKVEhXyOVlt3a8cubzRWoB4SVQpdCmq12y0FpDUw=";
+  cargoSha256 = "sha256-oksJYuuHdfP5mMQ+zYHH5SgD6YUK+zE3+AY90ZzHRUU=";
 
   buildInputs = [
     openssl
@@ -49,9 +77,11 @@ rustPlatform.buildRustPackage rec {
   ];
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
+  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+
   postInstall = ''
     install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"
-    install -Dm444    "client/assets/logo.ico"  "$out/share/icons/net.veloren.airshipper.ico"
+    install -Dm444    "client/assets/net.veloren.airshipper.png"  "$out/share/icons/net.veloren.airshipper.png"
   '';
 
   postFixup =
@@ -70,6 +100,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
+      wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
     '';
 
   doCheck = false;

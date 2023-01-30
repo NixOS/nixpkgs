@@ -47,7 +47,7 @@ in
         Whether to run the Avahi daemon, which allows Avahi clients
         to use Avahi's service discovery facilities and also allows
         the local machine to advertise its presence and services
-        (through the mDNS responder implemented by `avahi-daemon').
+        (through the mDNS responder implemented by `avahi-daemon`).
       '';
     };
 
@@ -106,13 +106,14 @@ in
       default = true;
       description = lib.mdDoc ''
         Whether to open the firewall for UDP port 5353.
+        Disabling this setting also disables discovering of network devices.
       '';
     };
 
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= lib.mdDoc ''
+      description = lib.mdDoc ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.
@@ -204,7 +205,7 @@ in
       default = false;
       description = lib.mdDoc ''
         Whether to enable the mDNS NSS (Name Service Switch) plug-in.
-        Enabling it allows applications to resolve names in the `.local'
+        Enabling it allows applications to resolve names in the `.local`
         domain by transparently querying the Avahi daemon.
       '';
     };

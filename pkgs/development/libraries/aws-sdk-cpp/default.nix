@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    substituteInPlace cmake/compiler_settings.cmake \
+      --replace '"-Werror"' ' '
+
     # Missing includes for GCC11
     sed '5i#include <thread>' -i \
       aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
@@ -64,7 +69,6 @@ stdenv.mkDerivation rec {
     rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
     rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # TestRandomURLMultiThreaded fails
     rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
   '' + lib.optionalString stdenv.isi686 ''
@@ -87,6 +91,8 @@ stdenv.mkDerivation rec {
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];
+  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"

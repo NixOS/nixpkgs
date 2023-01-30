@@ -28,11 +28,11 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.25.76"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.27.40"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PSr0zZEGXFxcFSN7QQ5Ux0Z4aCwwm9na+2hIv/gR6+s=";
+    hash = "sha256-xP+ugapi6KJE+UokGKmG67ze5dH6nJuJk7BjIr6dtTE=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
@@ -82,6 +82,7 @@ with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
+    changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     mainProgram = "aws";

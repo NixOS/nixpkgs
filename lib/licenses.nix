@@ -154,6 +154,11 @@ in mkLicense lset) ({
     fullName = "BSD-2-Clause Plus Patent License";
   };
 
+  bsd2WithViews = {
+    spdxId = "BSD-2-Clause-Views";
+    fullName = "BSD 2-Clause with views sentence";
+  };
+
   bsd3 = {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
@@ -553,6 +558,12 @@ in mkLicense lset) ({
     redistributable = false;
   };
 
+  fair = {
+    fullName = "Fair License";
+    spdxId = "Fair";
+    free = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
@@ -704,7 +715,12 @@ in mkLicense lset) ({
 
   ncsa = {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  nlpl = {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
   };
 
   nposl3 = {
@@ -837,6 +853,12 @@ in mkLicense lset) ({
     fullName = "SGI Free Software License B v2.0";
   };
 
+  # Gentoo seems to treat it as a license:
+  # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
+  sgmlug = {
+    fullName = "SGML UG SGML Parser Materials license";
+  };
+
   sleepycat = {
     spdxId = "Sleepycat";
     fullName = "Sleepycat License";
@@ -964,6 +986,11 @@ in mkLicense lset) ({
     fullName = "wxWindows Library Licence, Version 3.1";
   };
 
+  x11 = {
+    spdxId = "X11";
+    fullName = "X11 License";
+  };
+
   xfig = {
     fullName = "xfig";
     url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
@@ -988,21 +1015,6 @@ in mkLicense lset) ({
   agpl3 = {
     spdxId = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
-  fdl11 = {
-    spdxId = "GFDL-1.1";
-    fullName = "GNU Free Documentation License v1.1";
-    deprecated = true;
-  };
-  fdl12 = {
-    spdxId = "GFDL-1.2";
-    fullName = "GNU Free Documentation License v1.2";
-    deprecated = true;
-  };
-  fdl13 = {
-    spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.3";
     deprecated = true;
   };
   gpl2 = {

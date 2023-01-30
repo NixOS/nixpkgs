@@ -94,12 +94,6 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
-  patches = [
-    # fixes consistent crashing in github on 6.4.0, can probably remove when there is a patch release
-    # https://codereview.qt-project.org/c/qt/qtwebengine/+/436316
-    ../patches/qtwebengine-fix.patch
-  ];
-
   postPatch = ''
     # Patch Chromium build tools
     (
@@ -239,7 +233,6 @@ qtModule {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

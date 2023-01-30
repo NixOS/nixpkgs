@@ -9,51 +9,76 @@
 , qttools
 , radare2
 , wrapQtAppsHook
-, nix-update-script
 }:
-
-# TODO MacOS support.
-# TODO Build and install translations.
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.7.6";
+  version = "5.8.0";
 
-  src = fetchFromGitHub {
-    owner = "radareorg";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-PnIOoWPYLK30lMmLVctihCs7GBo0rTN8yetWAr21h9w=";
-  };
-
-  nativeBuildInputs = [ meson ninja pkg-config python3 qttools wrapQtAppsHook ];
-
-  buildInputs = [ radare2 qtbase ];
+  srcs = [
+    (fetchFromGitHub rec {
+      owner = "radareorg";
+      repo = "iaito";
+      rev = version;
+      hash = "sha256-LqJu30Bp+JgB+y3MDyPVuFmEoXTpfA7K2pxv1ZCABx0=";
+      name = repo;
+    })
+    (fetchFromGitHub rec {
+      owner = "radareorg";
+      repo = "iaito-translations";
+      rev = "e66b3a962a7fc7dfd730764180011ecffbb206bf";
+      hash = "sha256-6NRTZ/ydypsB5TwbivvwOH9TEMAff/LH69hCXTvMPp8=";
+      name = repo;
+    })
+  ];
+  sourceRoot = "iaito/src";
 
   postUnpack = ''
-    sourceRoot=$sourceRoot/src
+    chmod -R u+w iaito-translations
   '';
 
-  # TODO Fix version checking and version information for r2.
-  # Version checking always fails due to values being empty strings for some
-  # reason. Meanwhile, we can safely assume that radare2's runtime and
-  # compile-time implementations are the same and remove this check.
-  patches = [ ./remove-broken-version-check.patch ];
+  postPatch = ''
+    substituteInPlace common/ResourcePaths.cpp \
+      --replace "/app/share/iaito/translations" "$out/share/iaito/translations"
+  '';
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    qttools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtbase
+    radare2
+  ];
+
+  # the radare2 binary package seems to not install all necessary headers.
+  NIX_CFLAGS_COMPILE = [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
+
+  postBuild = ''
+    pushd ../../../iaito-translations
+    make build PREFIX=$out
+    popd
+  '';
 
   installPhase = ''
     runHook preInstall
 
     install -m755 -Dt $out/bin iaito
-    install -m644 -Dt $out/share/metainfo $src/src/org.radare.iaito.appdata.xml
-    install -m644 -Dt $out/share/applications $src/src/org.radare.iaito.desktop
-    install -m644 -Dt $out/share/pixmaps $src/src/img/iaito-o.svg
+    install -m644 -Dt $out/share/metainfo ../org.radare.iaito.appdata.xml
+    install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
+    install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
+
+    pushd ../../../iaito-translations
+    make install PREFIX=$out -j$NIX_BUILD_CORES
+    popd
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
 
   meta = with lib; {
     description = "An official graphical interface of radare2";
@@ -62,7 +87,7 @@ stdenv.mkDerivation rec {
       continuation of Cutter for radare2 after the Rizin fork.
     '';
     homepage = "https://radare.org/n/iaito.html";
-    changelog = "https://github.com/radareorg/iaito/releases/tag/${src.rev}";
+    changelog = "https://github.com/radareorg/iaito/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;

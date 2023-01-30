@@ -4,7 +4,7 @@
 , lib
 , pkg-config
 , stdenv
-, ffmpeg
+, ffmpeg-headless
 , taglib
 , zlib
 , makeWrapper
@@ -54,7 +54,7 @@ buildGoModule {
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   passthru = {

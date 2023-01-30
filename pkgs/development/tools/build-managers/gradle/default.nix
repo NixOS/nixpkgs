@@ -127,32 +127,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.5";
-    nativeVersion = "0.22-milestone-23";
-    sha256 = "1hjifd98dif0qy6vkqp56v9z7id5cf2bfkdd71ld8nsqqlig51yb";
+    version = "7.6";
+    nativeVersion = "0.22-milestone-24";
+    sha256 = "0jwycvzv8a5v2bhg5d8zccr2csr3sf9y5mrr9d2ap44p09a8r9kv";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
-    version = "6.9.2";
+    version = "6.9.3";
     nativeVersion = "0.22-milestone-20";
-    sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
+    sha256 = "0p83zgszmrwa26a4q8nvzva2af5lfzy6xvcs57y9588smsw51wyw";
     defaultJava = jdk11;
-  };
-
-  # NOTE: No GitHub Release for the following versions. `update.sh` will not work.
-
-  gradle_5 = gen {
-    version = "5.6.4";
-    nativeVersion = "0.18";
-    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
-    defaultJava = jdk11;
-  };
-
-  gradle_4 = gen {
-    version = "4.10.3";
-    nativeVersion = "0.14";
-    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    defaultJava = jdk8;
   };
 }

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
-, SDL_compat
+, SDL
 , SDL_net
 , SDL_sound
 , copyDesktopItems
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL_compat
+    SDL
     SDL_net
     SDL_sound
     libGL

@@ -19,7 +19,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ astring ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.04";
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   meta = {
     description = "Process strings into sets of command-line arguments";

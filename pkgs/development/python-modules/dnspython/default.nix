@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "0gk00m8zxjghxnzafhars51k5ahd6wfhf123nrc1j5gzlsj6jx8g";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.optionals stdenv.isDarwin [
     cacert

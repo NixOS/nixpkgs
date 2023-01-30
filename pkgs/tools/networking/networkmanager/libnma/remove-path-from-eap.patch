@@ -1,0 +1,32 @@
+From 0ab5c1e39e94e158650da847f8512ab5e2b03593 Mon Sep 17 00:00:00 2001
+From: "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
+Date: Wed, 9 Nov 2022 08:00:19 +0000
+Subject: [PATCH] gschema: Remove path from eap schema
+
+This one needs to be relocatable, otherwise creating a new VPN
+connection will fail with:
+
+    settings object created with schema 'org.gnome.nm-applet.eap'
+    and path '/org/gnome/nm-applet/eap/<uuid>/',
+    but path '/org/gnome/nm-applet/eap/' is specified by schema
+
+Fixes: https://bugs.archlinux.org/task/76490
+---
+ org.gnome.nm-applet.eap.gschema.xml.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/org.gnome.nm-applet.eap.gschema.xml.in b/org.gnome.nm-applet.eap.gschema.xml.in
+index 0fc3ca9f..f4a56ea6 100644
+--- a/org.gnome.nm-applet.eap.gschema.xml.in
++++ b/org.gnome.nm-applet.eap.gschema.xml.in
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <schemalist>
+-  <schema id="org.gnome.nm-applet.eap" path="/org/gnome/nm-applet/eap/" gettext-domain="nm-applet">
++  <schema id="org.gnome.nm-applet.eap" gettext-domain="nm-applet">
+     <key name="ignore-ca-cert" type="b">
+       <default>false</default>
+       <summary>Ignore CA certificate</summary>
+-- 
+GitLab
+

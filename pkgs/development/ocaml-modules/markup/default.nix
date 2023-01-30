@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ uchar uutf ];
 
-  checkInputs = [ ounit2 ];
+  nativeCheckInputs = [ ounit2 ];
   doCheck = lib.versionAtLeast ocaml.version "4.04";
 
   meta = with lib; {

@@ -31,7 +31,7 @@ buildDunePackage rec {
     ke
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ptime
     alcotest
     jsonm

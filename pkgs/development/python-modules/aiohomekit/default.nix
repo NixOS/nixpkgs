@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "2.2.17";
+  version = "2.4.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-eqLWHa7qUZ6UzNr9onwF2xmntKwdbNMWt2KvwG3kQjc=";
+    hash = "sha256-a7i8xBlTM3DZDZBzLe/sbMR4CNx7XMxNQ6tiMI6MoTg=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
@@ -69,6 +69,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

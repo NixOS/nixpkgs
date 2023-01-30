@@ -13,7 +13,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , gnatboot ? null
@@ -37,7 +37,7 @@ assert langGo -> langCC;
 assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -47,13 +47,7 @@ with lib;
 with builtins;
 
 let majorVersion = "11";
-    # The patch below for aarch64-darwin does not apply to 11.3.0 and an
-    # updated version is not available. Keep aarch64-darwin on 11.2.0 so the
-    # large body of packages which depend on gfortran are still functional
-    # until GCC 12 is the default.
-    # On x86_64-darwin, building libgcc suffers from some different issues with 11.3.0.
-    version = if stdenv.isDarwin then
-      "${majorVersion}.2.0" else "${majorVersion}.3.0";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -70,13 +64,19 @@ let majorVersion = "11";
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
-      ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.2.0...gcc-11.2.0-arm-20211201.diff";
-        sha256 = "sha256-z62s/cXuH9Kgq/oD/OiiZ8LWnX1xl1D43sONnwaEW1w=";
-      })
+      ++ optionals stdenv.isDarwin [
+        (fetchpatch {
+          # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
+          # 2d280e7 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.3.0
+          url = "https://github.com/iains/gcc-11-branch/compare/2d280e7eafc086e9df85f50ed1a6526d6a3a204d..gcc-11.3-darwin-r2.diff";
+          sha256 = "sha256-LFAXUEoYD7YeCG8V9mWanygyQOI7U5OhCRIKOVCCDAg=";
+        })
+      ]
+      # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
+      ++ optional (stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -93,9 +93,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = if stdenv.isDarwin
-      then "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os="
-      else "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
+    sha256 = "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
   };
 
   inherit patches;
@@ -187,13 +185,13 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ;
 
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != {} && threadsCross.package != null) threadsCross.package;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
   }) + ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
@@ -207,10 +205,10 @@ stdenv.mkDerivation ({
       lib
       stdenv
       targetPackages
-      crossStageStatic libcCross
+      crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib

@@ -1,13 +1,13 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , ncurses
 , pkg-config
+, fetchpatch
 
   # `ps` with systemd support is able to properly report different
   # attributes like unit name, so we want to have it on linux.
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 
   # procps is mostly Linux-only. Most commands require a running Linux
@@ -19,19 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "procps";
-  version = "3.3.16";
+  version = "3.3.17";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
-    sha256 = "1br0g93ysqhlv13i1k4lfbimsgxnpy5rgs4lxfc9rkzdbpbaqplj";
+    sha256 = "sha256-RRiz56r9NOwH0AY9JQ/UdJmbILIAIYw65W9dIRPxQbQ=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # NOTE: Starting from 4.x we will not need a patch anymore, but need to add
+    # "--disable-w" to configureFlags instead to prevent the utmp errors
     (fetchpatch {
-      url = "https://gitlab.com/procps-ng/procps/-/commit/bb96fc42956c9ed926a1b958ab715f8b4a663dec.diff";
-      sha256 = "0fzsb6ns3fvrszyzsz28qvbmcn135ilr4nwh2z1a0vlpl2fw961z";
-      name = "sysconf-argmax-sanity.patch";
+      name = "musl-fix-includes.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/procps/musl-fixes.patch?id=37cb5b6ef194db66d9ed07c8ecab59bca3b91215";
+      sha256 = "sha256-DphAvESmVg1U3bJABU95R++QD34odStCl82EF0vmht0=";
     })
   ];
 

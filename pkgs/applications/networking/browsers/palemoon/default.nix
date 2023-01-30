@@ -45,7 +45,7 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "31.3.0.1";
+  version = "32.0.0";
 
   src = fetchFromGitea {
     domain = "repo.palemoon.org";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     repo = "Pale-Moon";
     rev = "${version}_Release";
     fetchSubmodules = true;
-    sha256 = "sha256-qspzTlhK9MRJBsXxmYzl5K6in09LZPvaVc+ibovJAD8=";
+    sha256 = "sha256-0N63Xo8cRIHwEXkT8eeot0DgZU7aPirmVq/iHJjlGRw=";
   };
 
   nativeBuildInputs = [

@@ -1,14 +1,14 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2022-02-04";
+  version = "unstable-2022-04-25";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "2c6eb0a447bfc9f1a07c61956c92a55c874baf16";
-    hash = "sha256-JuRRlvqlqneqUdgezKGl2yg7wFYGCCo51q9CBwrxTBY=";
+    rev = "b359d888fd3fcccf1252f5f1dc390299e701493e";
+    hash = "sha256-FHErXetGN4n0TbrLQ5cN7V2IgO96ekHxiHLd0diRFAY=";
   };
 
   nativeBuildInputs = [
@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # GNOME 43 compatibility
+    (fetchpatch {
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/754/commits/3b3a617f78c5e9bbce0aa2864b3989335edb37b7.patch";
+      hash = "sha256-BAD0ExQYmTg6i02Gg7jcF0vf1zp232vXRjGCn+rBYXE=";
+    })
+    (fetchpatch {
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/754/commits/0815ed9da5056542730838fbf6c600506cf7a76f.patch";
+      hash = "sha256-pavjlPV9BxXoqb0YrlP2bXT7tkNQaBkTy1pMrI9MLnk=";
+    })
     (substituteAll {
       src = ./paths_and_nonexisting_dirs.patch;
       clutter_path = gnome.mutter.libdir; # only needed for GNOME < 40.

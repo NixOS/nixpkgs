@@ -1,82 +1,12 @@
---- a/src/pass/test.rs
-+++ a/src/pass/test.rs
-@@ -83,6 +83,7 @@
+diff --git a/src/tests/test_helpers.rs b/src/tests/test_helpers.rs
+index 73e4175..d2ed70b 100644
+--- a/src/tests/test_helpers.rs
++++ b/src/tests/test_helpers.rs
+@@ -53,6 +53,7 @@ fn get_testres_path() -> PathBuf {
      base_path.pop();
      base_path.pop();
      base_path.pop();
 +    base_path.pop();
      base_path.push("testres");
  
-     let home: PathBuf = base_path.clone();
-@@ -114,6 +115,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -144,6 +146,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -185,6 +188,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -220,6 +224,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -267,6 +272,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -298,6 +304,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -337,6 +344,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -828,6 +836,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.push("testres");
- 
-     let home: PathBuf = base_path.clone();
-@@ -860,6 +869,7 @@
-     base_path.pop();
-     base_path.pop();
-     base_path.pop();
-+    base_path.pop();
-     base_path.pop();
-     base_path.push("testres");
- 
+     base_path

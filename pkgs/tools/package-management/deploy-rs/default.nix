@@ -1,24 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, CoreServices, SystemConfiguration }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "deploy-rs";
-  version = "unstable-2022-08-05";
+  version = "unstable-2022-11-18";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "41f15759dd8b638e7b4f299730d94d5aa46ab7eb";
-    sha256 = "sha256-1ZxuK67TL29YLw88vQ18Y2Y6iYg8Jb7I6/HVzmNB6nM=";
+    rev = "2a3c5f70eee04a465aa534d8bd4fcc9bb3c4a8ce";
+    hash = "sha256-0w6iD3GSSQbIeSFVDzAAQZB+hDq670ZTms3d9XI+BtM=";
   };
 
-  cargoHash = "sha256-IXmcpYcWmTGBVNwNCk1TMDOcLxkZytlEIILknUle3Rg=";
+  cargoHash = "sha256-Ki9/mYNLUq74v3u+e3aM139+06CTrvPLJv0O+qHL9dA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    SystemConfiguration
+  ];
 
   meta = with lib; {
-    description = " A simple multi-profile Nix-flake deploy tool. ";
+    description = "Multi-profile Nix-flake deploy tool";
     homepage = "https://github.com/serokell/deploy-rs";
     license = licenses.mpl20;
-    maintainers = [ maintainers.teutat3s ];
+    maintainers = with maintainers; [ teutat3s ];
   };
 }

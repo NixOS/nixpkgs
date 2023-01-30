@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, electron
+, git
+}:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.8.10";
+  version = "0.8.16";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "sha256-n6uRMkV/+U2M0/FjQJx0LIDGgeIX6TY58j2sweSmlbc=";
+    sha256 = "sha256-0tIDoNQoqSn1nYm+YdgzXh34aH1e5N8wl9lqGbQoOeU=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -52,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
+    changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ weihua ];
     platforms = [ "x86_64-linux" ];

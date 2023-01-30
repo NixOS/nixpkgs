@@ -6,14 +6,14 @@
 , ipython_genutils
 , jinja2
 , jupyter-client
-, jupyter_core
-, jupyter_server
+, jupyter-core
+, jupyter-server
 , nbconvert
 , nbformat
 , nest-asyncio
-, notebook
 , notebook-shim
 , prometheus-client
+, pytest-jupyter
 , pytest-tornasync
 , pytestCheckHook
 , pythonOlder
@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.4.7";
+  version = "0.4.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HgRwWDtVCJxCeUDtMbioZv/vfMqxAUlOQJ7+Wse6mJc=";
+    hash = "sha256-x02KUA+OBY1GtXakHlvGQHEeEDLPdUHd5fc+pJSX4oM=";
   };
 
   propagatedBuildInputs = [
@@ -42,12 +42,11 @@ buildPythonPackage rec {
     ipython_genutils
     jinja2
     jupyter-client
-    jupyter_core
-    jupyter_server
+    jupyter-core
+    jupyter-server
     nbconvert
     nbformat
     nest-asyncio
-    notebook
     notebook-shim
     prometheus-client
     pyzmq
@@ -57,7 +56,8 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-jupyter
     pytest-tornasync
     pytestCheckHook
   ];

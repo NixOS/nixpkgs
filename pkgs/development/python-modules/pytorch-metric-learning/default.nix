@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "1.6.2";
+  version = "1.7.2";
 
   disabled = isPy27;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-y/KqMqxSzTGsjwtbhHbFK+S4CX6yHC6tR6jdPWUzeGg=";
+    sha256 = "sha256-f+k7WuZRgSDGbWp/TvmDkDzT02WeycwDCd/1WhR3VD8=";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [
+  nativeCheckInputs = [
     faiss
     pytestCheckHook
   ];

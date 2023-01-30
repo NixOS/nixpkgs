@@ -69,9 +69,16 @@
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
+  # Note: llvmPackages is explicitly taken from buildPackages instead of relying
+  # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
+  # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
+  # take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
+  # around this is important, because systemd is in the dependency closure of
+  # GHC via emscripten and jdk.
 , bpftools
 , libbpf
-, llvmPackages
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -79,13 +86,14 @@
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi
+, withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
 , withFido2 ? true
-, withHomed ? false
+, withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
+, withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -122,13 +130,13 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.5";
+  version = "252.4";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1653143108";
+  releaseTimestamp = "1667246393";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -139,7 +147,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
+    hash = "sha256-8ejSEt3QyCSARGGVbXWac2dB9jdUpC4eX2rN0iENQX0=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -169,8 +177,8 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86a33f98a7c0d6f2c2b51d02ba9e01b63062cf98.tar.bz2";
-        sha256 = "081j01sw21hl405l7g9z4bavvq0q0k4g80365677m0ykhiqlx3am";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
+        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
@@ -194,6 +202,7 @@ stdenv.mkDerivation {
       (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
+      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
     ]
   );
 
@@ -243,12 +252,14 @@ stdenv.mkDerivation {
           opt = condition: pkg: if condition then pkg else null;
         in
         [
-          # bpf compilation support
-          { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+          # bpf compilation support. We use libbpf 1 now.
+          { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
+          { name = "libbpf.so.0"; pkg = null; }
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
           { name = "libqrencode.so.4"; pkg = null; }
+          { name = "libqrencode.so.3"; pkg = null; }
 
           # We did not provide libpwquality before so it is safe to disable it for
           # now.
@@ -353,8 +364,8 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withLibBPF [
       bpftools
-      llvmPackages.clang
-      llvmPackages.libllvm
+      buildPackages.llvmPackages.clang
+      buildPackages.llvmPackages.libllvm
     ]
   ;
 
@@ -404,6 +415,7 @@ stdenv.mkDerivation {
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     "-Dtime-epoch=${releaseTimestamp}"
 
+    "-Dmode=release"
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
@@ -508,7 +520,7 @@ stdenv.mkDerivation {
   ];
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd exectuables, tests and libraries are referencing in their source code, scripts and unit files.
+      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
       # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
       binaryReplacements = [
         { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
@@ -562,7 +574,7 @@ stdenv.mkDerivation {
             "src/import/import-tar.c"
           ];
           ignore = [
-            # occurences here refer to the tar sub command
+            # occurrences here refer to the tar sub command
             "src/sysupdate/sysupdate-resource.c"
             "src/sysupdate/sysupdate-transfer.c"
             "src/import/pull.c"
@@ -702,6 +714,7 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    badPlatforms = [ (plat: plat.isStatic) ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;

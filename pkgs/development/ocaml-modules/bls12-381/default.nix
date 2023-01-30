@@ -23,7 +23,7 @@ buildDunePackage rec {
     hex
   ];
 
-  checkInputs = [ alcotest ff-pbt ];
+  nativeCheckInputs = [ alcotest ff-pbt ];
 
   doCheck = true;
 

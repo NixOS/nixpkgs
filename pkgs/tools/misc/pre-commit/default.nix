@@ -43,13 +43,14 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cargo
     dotnet-sdk
     git
     go
     nodejs
     pytest-env
+    pytest-forked
     pytest-xdist
     pytestCheckHook
     re-assert

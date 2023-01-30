@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix, libpgf, freeimage, doxygen }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "pgf";
   version = "6.14.12";

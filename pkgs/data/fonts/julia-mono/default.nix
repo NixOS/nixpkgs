@@ -1,17 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "0.044";
+stdenvNoCC.mkDerivation rec {
+  pname = "JuliaMono-ttf";
+  version = "0.047";
 
-in
-fetchzip {
-  name = "JuliaMono-ttf-${version}";
-  url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
-  sha256 = "sha256-KCU1eOSEWjYh6kPda/iCtZUIWIq5lK79uUCLl2w7SEg=";
+  src = fetchzip {
+    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-tCZo48SBGdhcsP1wgaWkfWr3L3Yz+p/iqesLmarSWbk=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    tar xf $downloadedFile -C $out/share/fonts/truetype
+    mv *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

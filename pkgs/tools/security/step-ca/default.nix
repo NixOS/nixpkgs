@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.22.1";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = "sha256-iWThTFH36NNjO9Acx5QyxJrUzKFl7vD/seWF/Rz05CU=";
+    sha256 = "sha256-zIF7R0zIoqQx0epTJAVdesT6IOoNek7Blt7W3Ulng4A=";
   };
 
-  vendorSha256 = "sha256-AcjICy991WPQyXp/9j6rgedg4FTYXilH7O4dy8gGYq8=";
+  vendorHash = "sha256-JX5jUIMwd+eCYRytaf+EXV/xHh6CCS2Ia0K+UQZxG7E=";
 
   ldflags = [ "-buildid=" ];
 
@@ -46,6 +46,9 @@ buildGoModule rec {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+  # Tests need to run in a reproducible order, otherwise they run unreliably on
+  # (at least) x86_64-linux.
+  checkFlags = [ "-p 1" ];
 
   passthru.tests.step-ca = nixosTests.step-ca;
 

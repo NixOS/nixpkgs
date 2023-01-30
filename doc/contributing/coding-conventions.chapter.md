@@ -260,6 +260,10 @@ When in doubt, consider refactoring the `pkgs/` tree, e.g. creating new categori
 
     - `development/tools/build-managers` (e.g. `gnumake`)
 
+  - **If it’s a _language server_:**
+
+    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
+
   - **Else:**
 
     - `development/tools/misc` (e.g. `binutils`)
@@ -426,9 +430,10 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
+    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -438,7 +443,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   src = fetchgit {
     url = "https://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -449,14 +454,14 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1i2yxndxb6yc9l6c99pypbd92lfq5aac4klq7y2v93c9qvx2cgpc";
+    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=;
   }
   ```
 
 When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
 It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
-Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
+Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -486,12 +491,12 @@ Preferred source hash type is sha256. There are several ways to get it.
    - `lib.fakeHash`
    - `lib.fakeSha256`
    - `lib.fakeSha512`
-   
+
    in the package expression, attempt build and extract correct hash from error messages.
 
-   :::{.warning}
+   ::: {.warning}
    You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   
+
    See [](#sec-source-hashes-security).
    :::
 
@@ -519,7 +524,7 @@ patches = [
   (fetchpatch {
     name = "fix-check-for-using-shared-freetype-lib.patch";
     url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
   })
 ];
 ```
@@ -669,3 +674,18 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+### Import From Derivation {#ssec-import-from-derivation}
+
+Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
+
+[Hydra]: https://github.com/NixOS/hydra
+
+Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
+
+<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
+
+See also [NixOS Wiki: Import From Derivation].
+
+[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation

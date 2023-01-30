@@ -35,7 +35,7 @@ buildPythonPackage rec {
     zope_interface
   ] ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [ pytestCheckHook mock lsof GeoIP ];
+  nativeCheckInputs = [ pytestCheckHook mock lsof GeoIP ];
 
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 

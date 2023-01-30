@@ -9,7 +9,7 @@ Check for any minor version changes.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl
+, bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
 , buildPackages
@@ -30,16 +30,6 @@ let
     qtbase = lib.optionals stdenv.isDarwin [
       ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
 
-      # Downgrade minimal required SDK to 10.12
-      ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0001-Revert-QCocoaDrag-set-image-only-on-the-first-drag-i.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0002-Revert-QCocoaDrag-drag-make-sure-clipboard-is-ours-a.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0003-Revert-QCocoaDrag-maybeDragMultipleItems-fix-erroneo.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0004-Revert-QCocoaDrag-avoid-using-the-deprecated-API-if-.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0005-Revert-macOS-Fix-use-of-deprecated-NSOffState.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v5.15.0-src-plugins-platforms-cocoa-qco.patch
-      ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
-
       # Patch framework detection to support X.framework/X.tbd,
       # extending the current support for X.framework/X.
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
@@ -56,12 +46,28 @@ let
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
     ];
-    qtdeclarative = [ ./qtdeclarative.patch ];
+    qtdeclarative = [
+      ./qtdeclarative.patch
+      # prevent headaches from stale qmlcache data
+      ./qtdeclarative-default-disable-qmlcache.patch
+    ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = lib.optionals stdenv.isDarwin [
+    qtwebengine = [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a6f16c6daea3b5a1f7bc9f175d1645922c131563/qt5/qt5-webengine-python3.patch";
+        hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-chromium-python3.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+        hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
+      })
+    ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
+      ./qtwebengine-darwin-checks.patch
     ];
     qtwebkit = [
       (fetchpatch {
@@ -121,9 +127,10 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
-        inherit (darwin) libobjc;
+        libobjc = darwin.apple_sdk_11_0.objc4;
+        xcbuild = darwin.apple_sdk_11_0.xcodebuild;
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
@@ -132,7 +139,7 @@ let
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgamepad = callPackage ../modules/qtgamepad.nix {
-        inherit (darwin.apple_sdk.frameworks) GameController;
+        inherit (darwin.apple_sdk_11_0.frameworks) GameController;
       };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
@@ -160,19 +167,28 @@ let
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
         inherit (srcs.qtwebengine) version;
-        inherit (darwin) cctools libobjc libunwind xnu;
-        inherit (darwin.apple_sdk.libs) sandbox;
-        inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
+        python = python3;
+        postPatch = ''
+          # update catapult for python3 compatibility
+          rm -r src/3rdparty/chromium/third_party/catapult
+          cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
+        '';
+        inherit (darwin) cctools xnu;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0.libs) sandbox;
+        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
+          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
+          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML;
+        libobjc = darwin.apple_sdk_11_0.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
-        inherit (darwin.apple_sdk.frameworks) OpenGL;
+        inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
       };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
       qtwebview = callPackage ../modules/qtwebview.nix {
-        inherit (darwin.apple_sdk.frameworks) CoreFoundation WebKit;
+        inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation WebKit;
       };
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};

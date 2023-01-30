@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, xlibsWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU  }:
 
 stdenv.mkDerivation rec {
   pname = "glbinding";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU xlibsWrapper ];
+  buildInputs = [ libGLU ];
 
   meta = with lib; {
     homepage = "https://github.com/cginternals/glbinding/";

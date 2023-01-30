@@ -6,7 +6,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
   ];
 

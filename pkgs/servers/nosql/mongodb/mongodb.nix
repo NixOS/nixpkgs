@@ -41,22 +41,7 @@ let
         pymongo
       ]);
 
-      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    } else if versionAtLeast version "4.2" then rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-      ]);
-
-      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
@@ -64,14 +49,17 @@ let
     } else rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
-        typing
-        cheetah
+        cheetah3
+        psutil
+        setuptools
       ]);
 
       scons = sconsPackages.scons_3_1_2;
-      mozjsVersion = "45";
-      mozjsReplace = "defined(HAVE_SINCOS)";
-   };
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    };
 
   system-libraries = [
     "boost"
@@ -121,14 +109,14 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-   '' + lib.optionalString (versionAtLeast version "4.4" && versionOlder version "4.6") ''
+   '' + lib.optionalString (versionAtLeast version "4.4") ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
     substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
@@ -197,9 +185,6 @@ in stdenv.mkDerivation rec {
     inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = subtractLists systems.doubles.i686 (
-      if (versionAtLeast version "6.0") then systems.doubles.linux
-      else systems.doubles.unix
-    );
+    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }

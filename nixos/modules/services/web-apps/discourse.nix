@@ -19,9 +19,9 @@ let
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = (cfg.enableACME
+  tlsEnabled = cfg.enableACME
                 || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null);
+                || cfg.sslCertificateKey != null;
 in
 {
   options = {
@@ -42,11 +42,8 @@ in
 
       hostname = lib.mkOption {
         type = lib.types.str;
-        default = if config.networking.domain != null then
-                    config.networking.fqdn
-                  else
-                    config.networking.hostName;
-        defaultText = lib.literalExpression "config.networking.fqdn";
+        default = config.networking.fqdnOrHostName;
+        defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
         example = "discourse.example.com";
         description = lib.mdDoc ''
           The hostname to serve Discourse on.
@@ -823,10 +820,10 @@ in
 
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.brotli ];
 
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 

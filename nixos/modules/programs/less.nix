@@ -103,7 +103,8 @@ in
         type = types.nullOr types.str;
         default = null;
         description = lib.mdDoc ''
-          When less closes a file opened in such a way, it will call another program, called the input postprocessor, which may  perform  any  desired  clean-up  action (such  as deleting the replacement file created by LESSOPEN).
+          When less closes a file opened in such a way, it will call another program, called the input postprocessor,
+          which may perform any desired clean-up action (such as deleting the replacement file created by LESSOPEN).
         '';
       };
     };

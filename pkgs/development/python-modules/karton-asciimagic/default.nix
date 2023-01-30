@@ -20,7 +20,7 @@ buildPythonPackage rec {
     karton-core
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "karton.asciimagic" ];
 

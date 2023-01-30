@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.72.0";
+  version = "1.84.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7KsikrHfk0EGtLOzO8qGyU8ZzqNshijDJgnDLn16Eis=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AdfrzN7ufvy77tKjnHPNo+jHoHRw9fXtdUdYvdnMAjs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -89,9 +89,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v${version}";
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

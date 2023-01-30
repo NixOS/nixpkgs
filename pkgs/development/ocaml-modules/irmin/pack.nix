@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ index irmin optint fmt logs lwt mtime cmdliner ];
 
-  checkInputs = [ astring alcotest alcotest-lwt irmin-test ];
+  nativeCheckInputs = [ astring alcotest alcotest-lwt irmin-test ];
 
   doCheck = true;
 

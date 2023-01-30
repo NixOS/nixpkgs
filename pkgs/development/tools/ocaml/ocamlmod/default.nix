@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   installPhase   = "ocaml setup.ml -install";
 
   inherit doCheck;
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   checkPhase = "ocaml setup.ml -test";
 

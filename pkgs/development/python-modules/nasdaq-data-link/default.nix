@@ -41,7 +41,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory_boy
     httpretty
     jsondate

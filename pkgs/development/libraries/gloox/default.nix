@@ -4,7 +4,6 @@
 , idnSupport ? true, libidn
 }:
 
-with lib;
 
 stdenv.mkDerivation rec{
   pname = "gloox";
@@ -16,11 +15,11 @@ stdenv.mkDerivation rec{
   };
 
   buildInputs = [ ]
-    ++ optional zlibSupport zlib
-    ++ optional sslSupport openssl
-    ++ optional idnSupport libidn;
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional idnSupport libidn;
 
-  meta = {
+  meta = with lib; {
     description = "A portable high-level Jabber/XMPP library for C++";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;

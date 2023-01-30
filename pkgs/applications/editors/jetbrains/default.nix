@@ -5,10 +5,11 @@
 , maven
 , autoPatchelfHook
 , libdbusmenu
+, patchelf
+, openssl
+, expat
 , vmopts ? null
 }:
-
-with lib;
 
 let
   platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
@@ -16,7 +17,7 @@ let
 
   inherit (stdenv.hostPlatform) system;
 
-  versions = builtins.fromJSON (readFile (./versions.json));
+  versions = builtins.fromJSON (lib.readFile (./versions.json));
   versionKey = if stdenv.isLinux then "linux" else system;
   products = versions.${versionKey} or (throw "Unsupported system: ${system}");
 
@@ -39,17 +40,19 @@ let
         maintainers = with maintainers; [ edwtjo mic92 ];
       };
     }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
+      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ lib.optionals (stdenv.isLinux) [
         autoPatchelfHook
+        patchelf
       ];
-      buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
+      buildInputs = (attrs.buildInputs or []) ++ lib.optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
-        lldb
+        openssl.out
+        expat
       ];
       dontAutoPatchelf = true;
-      postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
+      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
         (
           cd $out/clion
           # bundled cmake does not find libc
@@ -58,9 +61,11 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
-          # bundled lldb does not find libssl
-          rm -rf bin/lldb/linux
-          ln -s ${lldb} bin/lldb/linux
+
+          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
 
@@ -86,10 +91,10 @@ let
       };
     });
 
-  buildGateway = { pname, version, src, license, description, wmClass, ... }:
+  buildGateway = { pname, version, src, license, description, wmClass, product, ... }:
     (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "Gateway";
+      inherit pname version src wmClass jdk product;
+      productShort = "Gateway";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/remote-development/gateway/";
         inherit description license platforms;
@@ -120,9 +125,9 @@ let
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
+        patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
 
-        chmod +x $out/goland*/plugins/go/lib/dlv/linux/dlv
+        chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
 
         # fortify source breaks build since delve compiles with -O0
         wrapProgram $out/bin/goland \
@@ -210,7 +215,7 @@ let
         '';
         maintainers = with maintainers; [ ];
       };
-    }).overrideAttrs (finalAttrs: previousAttrs: optionalAttrs cythonSpeedup {
+    }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
       buildInputs = with python3.pkgs; [ python3 setuptools ];
       preInstall = ''
       echo "compiling cython debug speedups"
@@ -245,7 +250,9 @@ let
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp lib/ReSharperHost/linux-x64/Rider.Backend
+        patchelf --set-interpreter $interp \
+          lib/ReSharperHost/linux-x64/Rider.Backend \
+          plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
 
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
@@ -278,12 +285,6 @@ let
         '';
         maintainers = with maintainers; [ abaldeau ];
       };
-    }).overrideAttrs (attrs: {
-      postPatch = (attrs.postPatch or "") + optionalString (stdenv.isLinux) ''
-        # Webstorm tries to use bundled jre if available.
-        # Lets prevent this for the moment
-        rm -r jbr
-      '';
     });
 
 in
@@ -319,6 +320,7 @@ in
 
   gateway = buildGateway rec {
     pname = "gateway";
+    product = "JetBrains Gateway";
     version = products.gateway.version;
     description = "Your single entry point to all remote development environments";
     license = lib.licenses.unfree;

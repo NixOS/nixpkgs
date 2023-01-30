@@ -12,21 +12,20 @@
 
 buildPythonPackage rec {
   pname = "scikit-fuzzy";
-  version = "unstable-2021-03-31";
+  version = "unstable-2022-11-07";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "92ad3c382ac19707086204ac6cdf6e81353345a7";
-    sha256 = "0q89p385nsg3lymlsqm3mw6y45vgrk6w9p30igbm59b7r9mkgdj8";
+    rev = "d8c45c259d62955004379592e45bc64c8e002fc3";
+    hash = "sha256-kS48aHC719wUdc2WcJa9geoMUcLHSj7ZsoRZYAhF2a0=";
   };
 
   propagatedBuildInputs = [ networkx numpy scipy ];
-  checkInputs = [ matplotlib nose pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
 
-  # test error: "ValueError: could not convert string to float: '2.6.2'"
-  disabledTestPaths = [ "skfuzzy/control/tests/test_controlsystem.py" ];
+  pythonImportsCheck = [ "skfuzzy" ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-fuzzy/scikit-fuzzy";

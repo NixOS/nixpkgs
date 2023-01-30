@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "4.3.2";
+  version = "4.3.4";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,7 +37,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-z2/UamKmBq/5a0PTbHdAqGK617Lc8xRhHRpbCc7jeZo=";
+    sha256 = "sha256-0xYGTCk+Sk7LP+E9r2Y7UJZsfbobLe6Yb+x5ZRCN40Y=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-vTZArTwbKcf6/vPQOvjubPecsg+h+QlZ6rdbl6qNfs0=";
+    sha256 = "sha256-+Z4NZK/unFN6mxCuMleHBxAoD+U1PzVk3/ZnZRmOOxo=";
   };
 
   postUnpack = ''
@@ -117,7 +117,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
 
@@ -141,7 +141,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   meta = with lib; {
-    description = "A lightweight Bitcoin wallet";
+    description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct-lwt logs mirage-block rresult uri ];
 
   doCheck = true;
-  checkInputs = [ diet ounit2 ];
+  nativeCheckInputs = [ diet ounit2 ];
 
   meta = with lib; {
     description = "MirageOS disk block driver for Unix";

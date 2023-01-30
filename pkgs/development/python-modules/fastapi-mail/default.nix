@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.2.0";
+  version = "1.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,13 +28,16 @@ buildPythonPackage rec {
     owner = "sabuhish";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-RAUxc7spJL1QECAO0uZcCVAR/LaFIxFu61LD4RV9nEI=";
+    hash = "sha256-6Iwgl15adc6wK7i8sFLeSf2HSvMo/Sx/BI44qboNnRM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'fastapi = "^0.75.0"' 'fastapi = "*"' \
-      --replace 'httpx = "^0.22.0"' 'httpx = "*"'
+      --replace 'version = "1.2.2"' 'version = "${version}"' \
+      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
+      --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
+      --replace 'starlette = "^0.22.0"' 'starlette = "*"' \
+      --replace 'black = "^22.12.0"' ""
   '';
 
   nativeBuildInputs = [
@@ -54,7 +57,7 @@ buildPythonPackage rec {
     python-multipart
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -72,6 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
+    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

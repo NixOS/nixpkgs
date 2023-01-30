@@ -262,11 +262,12 @@ rec {
           ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
         '';
 
-        binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
+        binutils-unwrapped = bootstrapTools // {
+          name = "bootstrap-stage0-binutils";
+        };
 
-        cctools = {
+        cctools = bootstrapTools // {
           name = "bootstrap-stage0-cctools";
-          outPath = bootstrapTools;
           targetPrefix = "";
         };
 
@@ -338,6 +339,7 @@ rec {
           '';
           passthru = {
             isLLVM = true;
+            cxxabi = self."${finalLlvmPackages}".libcxxabi;
           };
         };
 
@@ -347,6 +349,9 @@ rec {
             mkdir -p $out/lib
             ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
           '';
+          passthru = {
+            libName = "c++abi";
+          };
         };
 
         compiler-rt = stdenv.mkDerivation {
@@ -581,7 +586,7 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
+          gnumake gzip gnused bzip2 ed xz patch bash python3
           ncurses libffi zlib gmp pcre gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
 

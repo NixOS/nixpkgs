@@ -1,29 +1,26 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, nodejs, electron, python3, ... }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
 
-let
-  nodeComposition = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-in
-
-nodeComposition.package.override rec {
+buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.18.3";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-AXdPxTauy2rMRMdfUjkfTjbNDgOKmoiGUeeLak0wu84=";
+    hash = "sha256-6tRd8boVwWc8qGlklYqA/Kp76VOMvtUJlu/G/InvHkA=";
   };
 
-  strictDeps = true;
+  # Remove some Electron stuff from package.json
+  postPatch = ''
+    sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
+  '';
+
+  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    nodejs
     python3
   ];
 
@@ -33,14 +30,16 @@ nodeComposition.package.override rec {
 
   doInstallCheck = true;
 
-  preRebuild = ''
-    # remove electron to prevent building since nixpkgs electron is used instead
-    rm -r node_modules/electron
-  '';
+  makeCacheWritable = true;
+  npmFlags = [ "--legacy-peer-deps" ];
 
-  postInstall = ''
-    # build assets
-    npm run build
+  # Override installPhase so we can copy the only directory that matters (app)
+  installPhase = ''
+    runHook preInstall
+
+    # copy built app and node_modules directories
+    mkdir -p $out/lib/node_modules/open-stage-control
+    cp -r app $out/lib/node_modules/open-stage-control/
 
     # copy icon
     install -Dm644 resources/images/logo.png $out/share/icons/hicolor/256x256/apps/open-stage-control.png
@@ -52,6 +51,8 @@ nodeComposition.package.override rec {
       --add-flags $out/lib/node_modules/open-stage-control/app \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : '${lib.makeBinPath [ python3 ]}'
+
+    runHook postInstall
   '';
 
   installCheckPhase = ''

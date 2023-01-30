@@ -38,6 +38,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-IlrfqwNyaSHE9Ct0mn7MUxEg7p1Ku34eOMYelEAYFW8=";
   };
 
+  patches = [
+    # based on https://github.com/rustdesk/rustdesk/pull/1900
+    ./fix-for-rust-1.65.diff
+  ];
+
   cargoSha256 = "sha256-1OMWEk+DerltF7kwdo4d04rbgIFLHBRq3vZaL7jtrdE=";
 
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";

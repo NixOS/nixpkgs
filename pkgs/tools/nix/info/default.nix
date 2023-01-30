@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   inherit doCheck;
-  checkInputs = [ shellcheck ];
+  nativeCheckInputs = [ shellcheck ];
 
   checkPhase = ''
     shellcheck ./nix-info

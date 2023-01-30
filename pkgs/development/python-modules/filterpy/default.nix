@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "4f2a4d39e4ea601b9ab42b2db08b5918a9538c168cff1c6895ae26646f3d73b1";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib ];
 
   # single test fails (even on master branch of repository)

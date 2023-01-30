@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , fetchpatch
@@ -10,12 +11,12 @@
 , automat
 , bcrypt
 , constantly
-, contextvars
 , cryptography
 , git
 , glibcLocales
 , h2
 , hyperlink
+, hypothesis
 , idna
 , incremental
 , priority
@@ -45,7 +46,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.8.0";
+  version = "22.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -54,14 +55,23 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    hash = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
+    hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
   };
 
   patches = [
     (fetchpatch {
-      name = "fix-test_openFileDescriptors.patch";
-      url = "https://github.com/twisted/twisted/commit/47f47634940141466177261b20bb43c300531e38.patch";
-      hash = "sha256-wacnF166PnZHXJEqTlPZUdDILJIVHOcnC2a34SQumvs=";
+      url = "https://github.com/twisted/twisted/pull/11787.diff";
+      hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
+    })
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/pull/11734.diff";
+      excludes = [ ".github/workflows/*" ];
+      hash = "sha256-Td08pDxHwl7fPLCA6rUySuXpy8YmZfvXPHGsBpdcmSo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/commit/00bf5be704bee022ba4d9b24eb6c2c768b4a1921.patch";
+      hash = "sha256-fnBzczm3OlhbjRcePIQ7dSX6uldlCZ9DJTS+UFO2nAQ=";
     })
   ];
 
@@ -116,6 +126,11 @@ buildPythonPackage rec {
   '' + lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) ''
     echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
     echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
+
+    echo 'PosixReactorBaseTests.test_removeAllSkipsInternalReaders.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
+    echo 'PosixReactorBaseTests.test_wakerIsInternalReader.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
+
+    echo 'TCPPortTests.test_connectionLostFailed.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See
@@ -125,9 +140,10 @@ buildPythonPackage rec {
     $out/bin/twistd --help > /dev/null
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     glibcLocales
+    hypothesis
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch
@@ -145,7 +161,6 @@ buildPythonPackage rec {
     optional-dependencies = rec {
       conch = [ appdirs bcrypt cryptography pyasn1 ];
       conch_nacl = conch ++ [ pynacl ];
-      contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
       http2 = [ h2 priority ];
       serial = [ pyserial ];
       tls = [ idna pyopenssl service-identity ];
@@ -169,11 +184,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/twisted/twisted";
-    description = "Twisted, an event-driven networking engine written in Python";
-    longDescription = ''
-      Twisted is an event-driven networking engine written in Python
-      and licensed under the MIT license.
-    '';
+    description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

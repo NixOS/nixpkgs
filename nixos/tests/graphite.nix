@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... } :
             '';
           };
           carbon.enableCache = true;
-          seyren.enable = false;  # Implicitely requires openssl-1.0.2u which is marked insecure
+          seyren.enable = false;  # Implicitly requires openssl-1.0.2u which is marked insecure
         };
       };
   };

@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "jackett";
-  version = "0.20.2175";
+  version = "0.20.2732";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "MkMEsD8hU23RPvLJvEN2IT5BiuE1ySuVRLmPK2Yqsa0=";
+    hash = "sha512-h9vQ4OFXt3Fb7+2QSsXJh/uqy9glRFAZfZ8fdBqqna/59PV8GtItYWSJi7FhGVeFMX+WMQnsxG0/8Hq1z7akMA==";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
@@ -28,7 +28,7 @@ buildDotnetModule rec {
   runtimeDeps = [ openssl ];
 
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
-  checkInputs = [ mono ];
+  nativeCheckInputs = [ mono ];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";
 
   postFixup = ''

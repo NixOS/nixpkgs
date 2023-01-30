@@ -96,6 +96,9 @@ let
         # to pass in java explicitly.
         "-DCONNECT_WITH_JDBC=OFF"
         "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+      ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
+        # workaround for https://jira.mariadb.org/browse/MDEV-29925
+        "-Dhave_C__Wl___as_needed="
       ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
         # revisit this if nixpkgs supports any architecture whose stack grows upwards
         "-DSTACK_DIRECTION=-1"
@@ -238,36 +241,36 @@ in
   self: {
     mariadb_104 = self.callPackage generic {
       # Supported until 2024-06-18
-      version = "10.4.26";
-      hash = "sha256-cVrH4jr8O4pVnGzJmM2xlz2Q9iGyvddgPixuU4YLLd8=";
+      version = "10.4.27";
+      hash = "sha256-SKHyIMoYuwxGN513/pjrdQvMcFLnPxDjJ26ipcUbirI=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.17";
-      hash = "sha256-hJyEC3b0hWUDtD7zqEH8lx6LUYjI3zaQkTv1aZaRt2E=";
+      version = "10.5.18";
+      hash = "sha256-NZOw3MDy6A6YF3AZ9dz6XMjBQXLOFhpvpQ+AhPLO90k=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07
-      version = "10.6.10";
-      hash = "sha256-atn6hvDIXI7q+tJkNUnV/13ShyAClk51R1LekYY6o7c=";
+      version = "10.6.11";
+      hash = "sha256-V4S6TF2Hk7rbpYNIV2gk2YSewVLpy+5HoXZRYdhAyUo=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_108 = self.callPackage generic {
       # Supported until 2023-05
-      version = "10.8.5";
-      hash = "sha256-z37TjDYTTNgYP93WTLPlD1ROgmS6dCAlXbEpcJfgjos=";
+      version = "10.8.6";
+      hash = "sha256-qal8eZtpnhDJOWW71wQ0U/eiDhQL0inSCaoWFvKfv20=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_109 = self.callPackage generic {
       # Supported until 2023-08
-      version = "10.9.3";
-      hash = "sha256-mh4imXL8zMgnDmM/aNP7gk2hUdz09T2h342UesqHa+4=";
+      version = "10.9.4";
+      hash = "sha256-Hf8IoPN+pc+PAMvRLUDoB1n659cxhMz1a1tRrP3PwFQ=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

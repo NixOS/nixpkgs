@@ -19,7 +19,7 @@ buildPythonPackage rec {
     urwid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
   ];

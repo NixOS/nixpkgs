@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.4.12";
+  version = "5.6.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-uyQZXri3V3dKnowB97QlPWboZz1neblyvCuSacsPROg=";
+    hash = "sha256-oBD9jpZSOB7R3bbMv1qOQkkQyFTKkNnNagJ1INeA0s4=";
   };
 
   patches = [
@@ -136,7 +136,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  # use locales from cinnamon-translations (not using --localedir because datadir is used)
+  # Use locales from cinnamon-translations.
+  # FIXME: Upstream does not respect localedir option from Meson currently.
+  # https://github.com/linuxmint/cinnamon/pull/11244#issuecomment-1305855783
   postInstall = ''
     ln -s ${cinnamon-translations}/share/locale $out/share/locale
   '';
@@ -149,26 +151,18 @@ stdenv.mkDerivation rec {
 
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
-    sed "s|/usr/bin/upload-system-info|${xapp}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-    sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
 
-    sed "s|/usr/bin/cinnamon-control-center|${cinnamon-control-center}/bin/cinnamon-control-center|g" -i ./files/usr/bin/cinnamon-settings
+    sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
 
     sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
       -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
 
-    # this one really IS optional
-    sed "s|/usr/bin/gnome-control-center|/run/current-system/sw/bin/gnome-control-center|g" -i ./files/usr/bin/cinnamon-settings
-
     sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
-
-    # another bunch of optional stuff
-    sed "s|/usr/bin|/run/current-system/sw/bin|g" -i ./files/usr/bin/cinnamon-launcher
 
     sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
-    sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop ./files/usr/share/applications/cinnamon2d.desktop
 
     sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-W3OfYNVendYOrwN/WGeAkNAnZctvlssZ3Bvp5caPZao=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7bQgMDmvEAvnEoHZxZ9JzYsx1JR9W5eYuvcVUmYM/dw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-sugar
     pytest-timeout
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   pythonImportsCheck = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module o control Lutron Caseta devices";
     homepage = "https://github.com/gurumitts/pylutron-caseta";
+    changelog = "https://github.com/gurumitts/pylutron-caseta/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

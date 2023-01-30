@@ -17,7 +17,8 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
+  useGccGoBootstrap = stdenv.buildPlatform.isMusl || stdenv.buildPlatform.isRiscV;
+  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap116.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo118Module; };
 
@@ -45,11 +46,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.18.8";
+  version = "1.18.10";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-H3mAIwUBVHnnfYxkFTC8VOyZRlfVxSceAXLrcRg0ahI=";
+    sha256 = "sha256-nO3MpYhF3wyUdK4AJ0xEqVyd+u+xMvxZkhwox8EG+OY=";
   };
 
   strictDeps = true;
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
 
   postPatch = ''
     patchShebangs .
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild

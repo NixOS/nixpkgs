@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-dataclass";
-  version = "8.5.9";
+  version = "8.5.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
-    rev = "v${version}";
-    sha256 = "sha256-gA5GxE2as/P5yT3ymvXmLQfG2GyZE7Fj+zBaT88O4vY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P2eJLNI+G0km2HWZII4tx/uJ+6lvyxtap/qPh13LLmA=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     typing-inspect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     marshmallow-enum
     pytestCheckHook
     typeguard
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatic generation of marshmallow schemas from dataclasses";
     homepage = "https://github.com/lovasoa/marshmallow_dataclass";
+    changelog = "https://github.com/lovasoa/marshmallow_dataclass/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

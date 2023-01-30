@@ -37,7 +37,7 @@ buildPythonPackage rec {
     csvw
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     postgresql
     pytestCheckHook

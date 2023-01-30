@@ -8,24 +8,16 @@
 }:
 buildGoModule rec {
   pname = "zrepl";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zrepl";
     repo = "zrepl";
     rev = "v${version}";
-    sha256 = "4q/wwlF11HPDS2lTXUizJ3RFQ9sX5qNnWZUKAgnvDiE=";
+    sha256 = "sha256-XazwuaAzgTuKITF1mYihsNwkIKi5fvZrCvlCDKwxj4U=";
   };
 
-  patches = [
-    # fix build with go 1.18
-    (fetchpatch {
-      url = "https://github.com/zrepl/zrepl/commit/19b2deb2cfe5e63b944fa83d12f474b11946ca3f.patch";
-      sha256 = "sha256-/SQhU1LnN2n4nwgWF6mq7sW2u52y8mwr6yntakAvSuk=";
-    })
-  ];
-
-  vendorSha256 = "sha256-xToq9pKAxxknh4kE8S3uUg5ySPMbJkLftkMhofNxotc=";
+  vendorSha256 = "sha256-75fGejR7eiECsm1j3yIU1lAWaW9GrorrVnv8JEzkAtU=";
 
   subPackages = [ "." ];
 

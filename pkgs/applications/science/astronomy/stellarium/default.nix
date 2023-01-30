@@ -3,13 +3,15 @@
 , fetchFromGitHub
 , cmake
 , perl
+, wrapGAppsHook
 , wrapQtAppsHook
 , qtbase
 , qtcharts
-, qtlocation
+, qtpositioning
 , qtmultimedia
-, qtscript
 , qtserialport
+, qttranslations
+, qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
@@ -19,28 +21,30 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-6EAykJ0yWeU1EBR5+7JjWGUVBE1DKW+W8yJOt0smkaE=";
+    sha256 = "sha256-0/ZSe6QfM2zVsqcbyqefl9hiuex72KPxJvVMRNCnpZg=";
   };
 
   nativeBuildInputs = [
     cmake
     perl
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
     qtcharts
-    qtlocation
+    qtpositioning
     qtmultimedia
-    qtscript
     qtserialport
+    qttranslations
+    qtwayland
     qtwebengine
     calcmysky
     qxlsx
@@ -54,11 +58,17 @@ stdenv.mkDerivation rec {
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Free open-source planetarium";
     homepage = "https://stellarium.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

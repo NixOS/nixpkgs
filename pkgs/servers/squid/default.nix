@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--enable-linux-netfilter";
 
   doCheck = true;
-  checkInputs = [ cppunit ];
+  nativeCheckInputs = [ cppunit ];
   preCheck = ''
     # tests attempt to copy around "/bin/true" to make some things
     # no-ops but this doesn't work if our "true" is a multi-call

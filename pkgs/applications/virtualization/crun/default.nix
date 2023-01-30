@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.6";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JO07bF2Xucz8lSvj7om17a/NT0I7Vru1vayZhPDFLIw=";
+    sha256 = "sha256-SNNy/oI3ZcMeRLEMS2nSCS/rRaen5WsDfhdlHQCdtP4=";
     fetchSubmodules = true;
   };
 
@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   strictDeps = true;
+
+  NIX_LDFLAGS = "-lcriu";
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values

@@ -10,8 +10,6 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "apr-util";
   version = "1.6.1";
@@ -22,21 +20,21 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./fix-libxcrypt-build.patch ]
-    ++ optional stdenv.isFreeBSD ./include-static-dependencies.patch;
+    ++ lib.optional stdenv.isFreeBSD ./include-static-dependencies.patch;
 
   NIX_CFLAGS_LINK = [ "-lcrypt" ];
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ makeWrapper ] ++ optional stdenv.isFreeBSD autoreconfHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
-    ++ optional (!stdenv.isCygwin) "--with-crypto"
-    ++ optional sslSupport "--with-openssl=${openssl.dev}"
-    ++ optional bdbSupport "--with-berkeley-db=${db.dev}"
-    ++ optional ldapSupport "--with-ldap=ldap"
-    ++ optionals stdenv.isCygwin
+    ++ lib.optional (!stdenv.isCygwin) "--with-crypto"
+    ++ lib.optional sslSupport "--with-openssl=${openssl.dev}"
+    ++ lib.optional bdbSupport "--with-berkeley-db=${db.dev}"
+    ++ lib.optional ldapSupport "--with-ldap=ldap"
+    ++ lib.optionals stdenv.isCygwin
       [ "--without-pgsql" "--without-sqlite2" "--without-sqlite3"
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
@@ -53,10 +51,10 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ apr expat libiconv libxcrypt ]
-    ++ optional sslSupport openssl
-    ++ optional bdbSupport db
-    ++ optional ldapSupport openldap
-    ++ optional stdenv.isFreeBSD cyrus_sasl;
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional bdbSupport db
+    ++ lib.optional ldapSupport openldap
+    ++ lib.optional stdenv.isFreeBSD cyrus_sasl;
 
   postInstall = ''
     for f in $out/lib/*.la $out/lib/apr-util-1/*.la $dev/bin/apu-1-config; do

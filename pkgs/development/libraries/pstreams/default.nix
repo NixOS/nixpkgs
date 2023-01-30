@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       POSIX.2 functions popen(3) and pclose(3), using C++ iostreams instead of
       C's stdio library.
     '';
-    homepage = "http://pstreams.sourceforge.net/";
-    downloadPage = "http://pstreams.sourceforge.net/download/";
+    homepage = "https://pstreams.sourceforge.net/";
+    downloadPage = "https://pstreams.sourceforge.net/download/";
     maintainers = with maintainers; [ arthur ];
     license = licenses.boost;
     platforms = platforms.all;

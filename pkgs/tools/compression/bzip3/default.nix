@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bzip3";
-  version = "1.1.8";
+  version = "1.2.2";
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = version;
-    hash = "sha256-ok5LwarXVe2gwwfIWVSfHHY0lt1IfGtkLPlVo757G6g=";
+    hash = "sha256-B59Z7+5SFjt/UgppNtdUtzw96y+EVglHoKzq9Il9ud8=";
   };
 
   postPatch = ''
     echo -n "${version}" > .tarball-version
     patchShebangs build-aux
+
+    # build-aux/ax_subst_man_date.m4 calls git if the file exists
+    rm .gitignore
   '';
 
   nativeBuildInputs = [

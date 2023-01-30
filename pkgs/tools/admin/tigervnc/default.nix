@@ -23,8 +23,6 @@
 , nixosTests
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "1.12.0";
   pname = "tigervnc";

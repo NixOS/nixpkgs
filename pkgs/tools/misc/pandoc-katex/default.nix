@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pandoc-katex";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "xu-cheng";
     repo = pname;
     rev = version;
-    hash = "sha256-Sd+f1a3Y4XwSj5BupAH35UK6gQxzLy5jJCtc77R9wnM=";
+    hash = "sha256-TGilWr/Q8K+YP6FYfZqJOwtTAFiY+YX7AAole4TiSoE=";
   };
 
-  cargoSha256 = "sha256-PVEQTzkkD6V9DqcIHznfnO1wOARSxutLApaO9dlokTQ=";
+  cargoSha256 = "sha256-CEyS7dMG+5e/LwEKdYlHFVCBm2FPKVjJlrMFB+QGm+Y=";
 
   meta = with lib; {
     description = "Pandoc filter to render math equations using KaTeX";

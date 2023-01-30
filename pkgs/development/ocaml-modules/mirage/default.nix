@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   # Tests need opam-monorepo
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     alcotest
   ];
 

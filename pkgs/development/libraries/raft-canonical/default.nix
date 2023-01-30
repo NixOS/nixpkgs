@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.11.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
-    rev = "v${version}";
-    sha256 = "050dwy34jh8dihfwfm0r1by2i3sy9crapipp9idw32idm79y4izb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qDLAEhknY+BB83OC6tfi7w/ZY/K492J5ZglLNUoBwbc=";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Ignore broken test, likely not causing huge breakage
-  # (https://github.com/canonical/raft/issues/292)
-  postPatch = ''
-    substituteInPlace test/integration/test_uv_tcp_connect.c --replace \
-      "TEST(tcp_connect, closeDuringHandshake, setUp, tearDownDeps, 0, NULL)" \
-      "TEST(tcp_connect, closeDuringHandshake, setUp, tearDownDeps, MUNIT_TEST_OPTION_TODO, NULL)"
-  '';
+  patches = [
+    # network tests either hang indefinitely, or fail outright
+    ./disable-net-tests.patch
+
+    # missing dir check is flaky
+    ./disable-missing-dir-test.patch
+  ];
 
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/ " "
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [ wucke13 adamcstephens ];
   };
 }

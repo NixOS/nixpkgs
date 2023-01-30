@@ -8,19 +8,20 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.5.2";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    sha256 = "sha256-8wYrDGykob1YLvtscQdL867vuRv8J83DC7AzvQVXVr8=";
+    hash = "sha256-PdrU3kKuoT4MP5N2t4E1PIKZOMu8D0ZbUyMTIi/KZ7g=";
   };
 
-  vendorSha256 = "sha256-Y4eivDchnN2rtQWjFY3cFiJXRfj48UfVUKM/OLuWXGA=";
+  vendorHash = "sha256-Y4eivDchnN2rtQWjFY3cFiJXRfj48UfVUKM/OLuWXGA=";
 
   ldflags = [
-    "-s -w"
+    "-s"
+    "-w"
     "-X k8c.io/kubeone/pkg/cmd.version=${version}"
     "-X k8c.io/kubeone/pkg/cmd.date=unknown"
   ];
@@ -40,10 +41,11 @@ buildGoModule rec {
     command = "kubeone version";
   };
 
-  meta = {
-    description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";
+  meta = with lib; {
+    description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments";
     homepage = "https://kubeone.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lblasc ];
+    changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lblasc ];
   };
 }

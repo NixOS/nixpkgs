@@ -20,21 +20,24 @@
 , pugixml
 , rapidjson
 , vulkan-headers
+, wayland
 , wxGTK32
 , zarchive
 
 , vulkan-loader
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-13";
+  version = "2.0-22";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-0yomEJoXMKZV2PAjINegSvtDB6gbYxQ6XcXA60/ZkEM=";
+    hash = "sha256-ZQfJHQnT5mV6GC3dO6QV1fGsnyZMYqXiVdBSsimL5yU=";
   };
 
   patches = [
@@ -68,6 +71,7 @@ stdenv.mkDerivation rec {
     pugixml
     rapidjson
     vulkan-headers
+    wayland
     wxGTK32
     zarchive
   ];
@@ -106,8 +110,12 @@ stdenv.mkDerivation rec {
   preFixup = let
     libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
   in ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}")
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+    )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cemu is a Wii U emulator";

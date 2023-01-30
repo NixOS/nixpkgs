@@ -1,16 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles }:
 
 buildGoModule rec {
   pname = "age";
-  version = "1.0.0";
-  vendorSha256 = "sha256-Hdsd+epcLFLkeHzJ2CUu4ss1qOd0+lTjhfs9MhI5Weg=";
+  version = "1.1.1";
+  vendorSha256 = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     rev = "v${version}";
-    sha256 = "sha256-MfyW8Yv8swKqA7Hl45l5Zn4wZrQmE661eHsKIywy36U=";
+    sha256 = "sha256-LRxxJQLQkzoCNYGS/XBixVmYXoZ1mPHKvFicPGXYLcw=";
   };
+
+  # Worked with the upstream to change the way test vectors were sourced from
+  # another repo at test run time, so we can run test without network access.
+  # https://github.com/FiloSottile/age/pull/476
+  #
+  # Changes landed after v1.1.1, so we'll patch this one until next release.
+  patches = [
+    # Revert "all: temporarily disable testscript tests"
+    (fetchpatch {
+      name = "0001-revert-temporarily-disabled-testscript-tests.patch";
+      url = "https://github.com/FiloSottile/age/commit/5471e05672de168766f5f11453fd324c53c264e5.patch";
+      sha256 = "sha256-F3oDhRWJqqcF9MDDWPeO9V/wUGXkmUXY87wgokUIoOk=";
+    })
+
+    # age: depend on c2sp.org/CCTV/age for TestVectors
+    (fetchpatch {
+      name = "0002-depend-on-c2sp_cctv_age__TestVectors.patch";
+      url = "https://github.com/FiloSottile/age/commit/edf7388f7731b274b055dcab3ec4006cc4961b68.patch";
+      sha256 = "sha256-CloCj/uF3cqTeCfRkV6TeYiovuDQXm1ZIklREWAot1E=";
+    })
+  ];
 
   ldflags = [
     "-s" "-w" "-X main.Version=${version}"
