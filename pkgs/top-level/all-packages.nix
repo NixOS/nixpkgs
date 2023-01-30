@@ -314,6 +314,8 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
 
+  bibtex-tidy = nodePackages.bibtex-tidy;
+
   binbloom = callPackage ../tools/security/binbloom {};
 
   bingo = callPackage ../development/tools/bingo {};
