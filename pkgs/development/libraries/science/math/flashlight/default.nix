@@ -9,19 +9,26 @@
 , oneDNN
 , mkl
 , mpi
-, cudaPackages
-, opencl ? null # opencl requires special hardware
+, cudaPackages # optional cuda backend
+, opencl ? null # optional opencl backend. opencl requires special hardware
 }:
 
 stdenv.mkDerivation rec {
   pname = "flashlight";
-  version = "0.4.0";
+  /*
+  /nix/store/178vvank67pg2ckr5ic5gmdkm3ri72f3-binutils-2.39/bin/ld: ../../../libflashlight.a(ArrayFireTensor.cpp.o): in function
+  `fl::ArrayFireTensor::ArrayFireTensor(af::array&&, unsigned int)':
+  ArrayFireTensor.cpp:(.text+0x1943): undefined reference to `af::array::array(af::array&&)'
+  */
+  #version = "0.4.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "flashlight";
     repo = "flashlight";
     rev = "v${version}";
-    sha256 = "sha256-1RgEBA59SydmwSoNlkaO5lwAwcHlgzI4viSkji8I1U8=";
+    #sha256 = "sha256-1RgEBA59SydmwSoNlkaO5lwAwcHlgzI4viSkji8I1U8="; # 0.4.0
+    sha256 = "sha256-wyMvpL9M7jv2B3K3NYGkgEM31nAPLdT7O955Xf8V3mI=";
   };
 
   nativeBuildInputs = [
