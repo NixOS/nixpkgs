@@ -2149,6 +2149,7 @@ with pkgs;
 
   ppsspp-qt = ppsspp.override {
     inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
+    enableQt = true;
     enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
   };
 
