@@ -17,7 +17,7 @@ in
 {
 
   meta = {
-    doc = ./pantheon.xml;
+    doc = ./pantheon.md;
     maintainers = teams.pantheon.members;
   };
 

@@ -59,5 +59,5 @@ in
       };
   };
 
-  meta.doc = ./weechat.xml;
+  meta.doc = ./weechat.md;
 }
