@@ -31288,8 +31288,6 @@ with pkgs;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
-  mps-youtube = callPackage ../applications/misc/mps-youtube { };
-
   mplayer = callPackage ../applications/video/mplayer ({
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
@@ -34097,6 +34095,8 @@ with pkgs;
   inherit (gnome) yelp;
 
   yelp-tools = callPackage ../development/misc/yelp-tools { };
+
+  yewtube = callPackage ../applications/misc/yewtube { };
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi {};
 
