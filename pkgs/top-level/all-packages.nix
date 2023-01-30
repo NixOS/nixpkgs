@@ -12215,7 +12215,7 @@ with pkgs;
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
 
-  talon-bin = callPackage ../applications/accessibility/talon/talon-bin.nix { };
+  talon = callPackage ../applications/accessibility/talon/default.nix { };
 
   tandoor-recipes = callPackage ../applications/misc/tandoor-recipes { };
 
