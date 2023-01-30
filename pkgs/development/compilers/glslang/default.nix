@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/KhronosGroup/glslang/commit/7627bd89583c5aafb8b38c81c15494019271fabf.patch";
       hash = "sha256-1Dwhn78PG4gAGgEwTXpC+mkZRyvy8sTIsEvihXFeNaQ=";
     })
+    # Upstream tries to detect the Darwin linker by checking for AppleClang, but it’s just Clang in nixpkgs.
+    # Revert the commit to allow the build to work on Darwin with the nixpkg Darwin Clang toolchain.
+    (fetchpatch {
+      name = "Fix-Darwin-linker-error.patch";
+      url = "https://github.com/KhronosGroup/glslang/commit/586baa35a47b3aa6ad3fa829a27f0f4206400668.patch";
+      hash = "sha256-paAl4E8GzogcxDEzn/XuhNH6XObp+i7WfArqAiuH4Mk=";
+      revert = true;
+    })
   ];
 
   postPatch = ''
