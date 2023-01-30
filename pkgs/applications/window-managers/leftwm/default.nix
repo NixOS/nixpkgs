@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mschneider ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
   };
 }

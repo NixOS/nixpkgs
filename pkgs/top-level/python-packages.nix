@@ -7689,6 +7689,8 @@ self: super: with self; {
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
 
+  pyarmor = callPackage ../development/python-modules/pyarmor { };
+
   pyarr = callPackage ../development/python-modules/pyarr { };
 
   pyarrow = callPackage ../development/python-modules/pyarrow {

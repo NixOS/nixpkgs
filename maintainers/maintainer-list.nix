@@ -9974,6 +9974,10 @@
     githubId = 839693;
     name = "Ingolf Wanger";
   };
+  mschneider = {
+    email = "markus.schneider.sic+nix@gmail.com";
+    name = "Markus Schneider";
+  };
   mschristiansen = {
     email = "mikkel@rheosystems.com";
     github = "mschristiansen";
