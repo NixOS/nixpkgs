@@ -50,6 +50,7 @@ CMakeLists.txt:      COMPONENT cereal
 , bzip2
 , zlib
 , libsndfile
+, libogg
 , kenlm
 , cudaSupport ? false # GPU backend
 , cudnnSupport ? false # GPU backend
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
     bzip2 # for FL_BUILD_LIB_TEXT
     zlib # for FL_BUILD_LIB_TEXT
     libsndfile # for FL_BUILD_PKG_SPEECH
+    libogg # for FL_BUILD_LIB_AUDIO
     kenlm # for what?
 
 /*
