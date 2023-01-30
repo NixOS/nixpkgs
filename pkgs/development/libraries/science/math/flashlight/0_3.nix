@@ -12,22 +12,18 @@
 , mpi
 , cudaPackages
 , cudatoolkit
-, glog
-, gflags
 , dnnl
 #, gloo
 , cudaSupport ? false # GPU backend
 , cudnnSupport ? false # GPU backend
-, ncclSupport ? false # GPU distributed training
 , mklSupport ? false # CPU backend
 , oneDNNSupport ? false # CPU backend
 #, glooSupport ? false # CPU distributed training
 , backendOption ? "CPU" # CUDA, CPU, OPENCL
-#, distributedOption ? false
+, distributedOption ? true # needed for wav2letter
 }:
 
 let
-  distributedOption = ncclSupport; # || glooSupport;
   # TODO validate backendOption: assert ...
 in
 
@@ -68,7 +64,7 @@ stdenv.mkDerivation rec {
     cudatoolkit
   ]) ++ (lib.optionals (backendOption == "GPU" && cudnnSupport) [
     cudaPackages.cudnn
-  ]) ++ (lib.optionals (backendOption == "GPU" && ncclSupport) [
+  ]) ++ (lib.optionals (backendOption == "GPU" && distributedOption) [
     cudaPackages.nccl
   ]) ++ (lib.optionals (backendOption == "CPU" && mklSupport) [
     mkl
@@ -76,7 +72,7 @@ stdenv.mkDerivation rec {
     dnnl
   ]) ++ (lib.optionals (backendOption == "CPU" && oneDNNSupport) [
     oneDNN
-  ])/* ++ (lib.optionals (backendOption == "CPU" && glooSupport) [
+  ])/* TODO? ++ (lib.optionals (backendOption == "CPU" && distributedOption) [
     gloo
   ])*/;
 
