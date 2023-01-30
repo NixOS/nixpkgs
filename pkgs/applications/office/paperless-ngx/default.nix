@@ -266,6 +266,11 @@ python.pkgs.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
+  postFixup = ''
+    # Remove tests with samples (~14M)
+    find $out/lib/paperless-ngx -type d -name tests -exec rm -rv {} +
+  '';
+
   nativeCheckInputs = with python.pkgs; [
     factory_boy
     imagehash
