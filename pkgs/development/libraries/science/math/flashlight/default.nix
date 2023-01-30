@@ -10,6 +10,7 @@
 , mkl
 , mpi
 , opencl
+, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     mkl
     mpi
     opencl
+    cudaPackages.cudnn
   ];
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
