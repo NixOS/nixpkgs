@@ -68,6 +68,9 @@
   # nvim-treesitter dependencies
 , callPackage
 
+  # sg.nvim dependencies
+, darwin
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -484,10 +487,6 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace plugin/himalaya.vim \
@@ -747,6 +746,34 @@ self: super: {
       (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
     ];
   });
+
+  sg-nvim = super.sg-nvim.overrideAttrs (old:
+    let
+      sg-nvim-rust = rustPlatform.buildRustPackage {
+        pname = "sg-nvim-rust";
+        inherit (old) version src;
+
+        cargoHash = "sha256-lrVwmJqfERq/tj4u+kRJ0kgbPQaFNAR6M3d4GqIJJyU=";
+
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
+
+        cargoBuildFlags = [ "--workspace" ];
+
+        # tests are broken
+        doCheck = false;
+      };
+    in
+    {
+      dependencies = with self; [ plenary-nvim ];
+      postInstall = ''
+        mkdir -p $out/target/debug
+        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
+      '';
+    });
 
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
@@ -1056,7 +1083,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-v9RXW5RSPMotRVR/9ljBJ9VNbrLnSkU3zlEU79Xem28=";
+          cargoSha256 = "sha256-fPVLVJXvC5blIjZ3Qyc/lxq+V+qoGrIKrXEzwdNpdHc=";
         };
       in
       ''
