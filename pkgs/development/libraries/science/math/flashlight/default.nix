@@ -9,7 +9,7 @@
 , oneDNN
 , mkl
 , mpi
-, opencl
+, opencl-clang
 , cudaPackages
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     oneDNN
     mkl
     mpi
-    opencl
+    opencl-clang
     cudaPackages.cudnn
   ];
 
