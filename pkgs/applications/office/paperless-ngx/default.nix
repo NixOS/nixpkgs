@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.11.3";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d1O8bAXB7NPymibagWUgMDZ9LAZ6QpawmT5D5yw4j+w=";
+    hash = "sha256-1QufnRD2Nbc4twRZ4Yrf3ae1BRGves8tJ/M7coWnRPI=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -93,7 +93,7 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-ZjIWU8i2Riz4KmC1Woi0uaJ+uNyuU27XwFqvo4bCC5k=";
+    npmDepsHash = "sha256-fp0Gy3018u2y6jaUM9bmXU0SVjyEJdsvkBqbmb8S10Y=";
 
     nativeBuildInputs = [
       python3
@@ -130,21 +130,25 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python.pkgs; [
     aioredis
-    arrow
+    amqp
+    anyio
     asgiref
     async-timeout
     attrs
     autobahn
     automat
+    billiard
     bleach
-    blessed
     celery
     certifi
     cffi
     channels-redis
     channels
-    chardet
+    charset-normalizer
     click
+    click-didyoumean
+    click-plugins
+    click-repl
     coloredlogs
     concurrent-log-handler
     constantly
@@ -155,18 +159,16 @@ python.pkgs.buildPythonApplication rec {
     django-cors-headers
     django-extensions
     django-filter
-    django-picklefield
     django
     djangorestframework
     filelock
-    fuzzywuzzy
     gunicorn
     h11
     hiredis
     httptools
     humanfriendly
+    humanize
     hyperlink
-    imagehash
     idna
     imap-tools
     img2pdf
@@ -177,9 +179,11 @@ python.pkgs.buildPythonApplication rec {
     langdetect
     lxml
     msgpack
+    mysqlclient
     nltk
     numpy
     ocrmypdf
+    packaging
     pathvalidate
     pdf2image
     pdfminer-six
@@ -187,6 +191,7 @@ python.pkgs.buildPythonApplication rec {
     pillow
     pluggy
     portalocker
+    prompt-toolkit
     psycopg2
     pyasn1-modules
     pyasn1
@@ -195,7 +200,6 @@ python.pkgs.buildPythonApplication rec {
     python-dateutil
     python-dotenv
     python-gnupg
-    levenshtein
     python-magic
     pytz
     pyyaml
@@ -208,27 +212,34 @@ python.pkgs.buildPythonApplication rec {
     scikit-learn
     scipy
     service-identity
-    six
-    sortedcontainers
+    setproctitle
+    sniffio
     sqlparse
     threadpoolctl
     tika
+    tornado
     tqdm
-    twisted.optional-dependencies.tls
+    twisted
     txaio
+    tzdata
     tzlocal
     urllib3
     uvicorn
     uvloop
+    vine
     watchdog
-    watchgod
+    watchfiles
     wcwidth
+    webencodings
     websockets
     whitenoise
     whoosh
+    zipp
     zope_interface
-  ];
-
+  ]
+  ++ redis.optional-dependencies.hiredis
+  ++ twisted.optional-dependencies.tls
+  ++ uvicorn.optional-dependencies.standard;
 
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
@@ -255,12 +266,12 @@ python.pkgs.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  nativeCheckInputs = with python.pkgs.pythonPackages; [
+  nativeCheckInputs = with python.pkgs; [
+    factory_boy
+    imagehash
     pytest-django
     pytest-env
-    pytest-sugar
     pytest-xdist
-    factory_boy
     pytestCheckHook
   ];
 
@@ -302,6 +313,7 @@ python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://paperless-ngx.readthedocs.io/";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lukegb gador erikarvstedt ];
   };
