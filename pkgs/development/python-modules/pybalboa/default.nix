@@ -1,13 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "0.13";
-  format = "setuptools";
+  version = "1.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -15,18 +18,32 @@ buildPythonPackage rec {
     owner = "garbled1";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "0aw5jxpsvzyx05y1mg8d63lxx1i607yb6x19n9jil5wfis95m8pd";
+    hash = "sha256-08FMNRArzmfmLH6y5Z8QPcRVZJIvU3VIOvdTry3iBGI=";
   };
 
-  # Project has no tests
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+  ];
 
   pythonImportsCheck = [
     "pybalboa"
   ];
 
+  disabledTestPaths = [
+    # Test requires server instance
+    "tests/test_client.py"
+  ];
+
   meta = with lib; {
-    description = " Python module to interface with a Balboa Spa";
+    description = "Module to interface with a Balboa Spa";
     homepage = "https://github.com/garbled1/pybalboa";
     changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
     license = licenses.asl20;
