@@ -11,6 +11,7 @@ buildDunePackage {
   pname = "carton-lwt";
 
   inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton
