@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev"; # fftw-wisdom
 
   nativeBuildInputs = [
