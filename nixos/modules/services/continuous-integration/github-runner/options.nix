@@ -58,11 +58,13 @@ with lib;
 
   name = let
     # Same pattern as for `networking.hostName`
-    baseType = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
+    baseType = types.str;
   in mkOption {
     type = if includeNameDefault then baseType else types.nullOr baseType;
     description = lib.mdDoc ''
-      Name of the runner to configure. Defaults to the hostname.
+      Name of the runner to configure. Defaults to the hostname. This is not
+      shell escaped, so can run shell code or reference environment variables
+      for example, to generate unique names.
 
       Changing this option triggers a new runner registration.
     '';

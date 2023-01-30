@@ -134,7 +134,7 @@ in
                 --work "$WORK_DIRECTORY"
                 --url ${escapeShellArg cfg.url}
                 --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)}
-                --name ${escapeShellArg cfg.name}
+                ${optionalString (cfg.name != null) "--name ${cfg.name}"}
                 ${optionalString cfg.replace "--replace"}
                 ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
                 ${optionalString cfg.ephemeral "--ephemeral"}

@@ -12,9 +12,7 @@ in
 
 {
   options.services.github-runner = import ./github-runner/options.nix (args // {
-    # Users don't need to specify options.services.github-runner.name; it will default
-    # to the hostname.
-    includeNameDefault = true;
+    includeNameDefault = false;
   });
 
   config = mkIf cfg.enable {
