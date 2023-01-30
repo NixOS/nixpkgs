@@ -42,7 +42,7 @@ in {
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-bridge}/start.sh";
+        ExecStart = "${pkgs.roon-bridge}/bin/RoonBridge";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
