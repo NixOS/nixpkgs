@@ -8,6 +8,7 @@
 , oneDNN
 , mkl
 , mpi
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     oneDNN
     mkl
     mpi
+    pkg-config
   ];
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/213585
