@@ -4713,6 +4713,8 @@ with pkgs;
 
   glock = callPackage ../development/tools/glock { };
 
+  gloo = callPackage ../development/libraries/science/math/gloo { };
+
   glslviewer = callPackage ../development/tools/glslviewer {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
