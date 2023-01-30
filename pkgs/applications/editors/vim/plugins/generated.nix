@@ -5673,6 +5673,18 @@ final: prev:
     meta.homepage = "https://github.com/ChristianChiarulli/nvcode-color-schemes.vim/";
   };
 
+  nvim-FeMaco-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-FeMaco.lua";
+    version = "2022-10-10";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-FeMaco.lua";
+      rev = "469465fc1adf8bddc2c9bbe549d38304de95e9f7";
+      sha256 = "1rv3ppjfndi27dbg7dsapxacbal1mj2a9dx2vq0yvi2v1gb97b3x";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-FeMaco.lua/";
+  };
+
   nvim-ale-diagnostic = buildVimPluginFrom2Nix {
     pname = "nvim-ale-diagnostic";
     version = "2021-11-06";
