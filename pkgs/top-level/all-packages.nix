@@ -18023,6 +18023,8 @@ with pkgs;
 
   litestream = callPackage ../development/tools/database/litestream {};
 
+  ls-lint = callPackage ../development/tools/ls-lint { };
+
   lsof = callPackage ../development/tools/misc/lsof { };
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
