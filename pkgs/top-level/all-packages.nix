@@ -38887,5 +38887,5 @@ with pkgs;
 
   oversteer = callPackage ../applications/misc/oversteer { };
 
-  concord = callPackage ../development/development/concord { };
+  concord = callPackage ../development/libraries/concord { };
 }
