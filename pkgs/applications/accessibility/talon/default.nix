@@ -43,11 +43,73 @@
 , callPackage
 , useBinaryWav2letter ? true # large dependency
 , useBinarySkiaSharp ? true # large dependency
+, pkgs
 }:
 
 let
   inherit (lib.importJSON ./src.json) version sha256 url mirrorUrls contentLength lastModified;
+  # TODO verify: we need talon's custom python3 interpreter to run *.py4 files
+  /*
   python3 = python39;
+  extraPythonPackages = {
+    talon = python3.pkgs.buildPythonPackage {
+      pname = "talon";
+      inherit (pkgs.talon) version;
+      # NOTE: closed source. this has only *.py4 and *.pyi files
+      # https://github.com/zrax/pycdc/issues/316
+      # py4 looks like talon's custom obfuscation of python *.pyc files
+      # the *.py4 files have entropy of 98% = encrypted or compressed
+      # see also: dropbox obfuscation
+      # https://github.com/kholia/dedrop
+      # https://news.ycombinator.com/item?id=13848035
+      src = pkgs.talon.src + "/resources/python/lib/python3.9/site-packages/talon";
+      dontUnpack = true;
+    };
+  };
+  python3WithPackages = python3.withPackages (pp: with pp; [
+    #encodings
+    # resources/python/lib/python3.9/site-packages/
+    aiohttp
+    aiosignal
+    #async_timeout
+    async-timeout
+    attr
+    attrs
+    bsdiff4
+    bson
+    certifi
+    cffi
+    charset-normalizer
+    dbus-next
+    #distutils-precedence.pth
+    frozenlist
+    idna
+    iniconfig
+    lark
+    multidict
+    numpy
+    #numpy.libs
+    packaging
+    pip
+    #pkg_resources
+    pluggy
+    py
+    pycparser
+    pyparsing
+    pytest
+    requests
+    setuptools
+    #sitecustomize.py
+    extraPythonPackages.talon
+    toml
+    tomli
+    urllib3
+    wheel
+    xcffib
+    pyyaml # yaml
+    yarl
+  ]);
+  */
   w2ldecode = callPackage ./w2ldecode.nix { };
   # TODO try latest version of wav2letter in https://github.com/flashlight/flashlight/tree/main/flashlight/app/asr
   # TODO fix build: flashlight, wav2letter, ...
@@ -172,7 +234,7 @@ stdenv.mkDerivation rec {
     libusb
     qt5.qtsvg
     qt5.qtgamepad
-    python3
+    #python3WithPackages
     w2ldecode
   ] /*++ (lib.optionals !useBinaryWav2letter [
     # TODO fix build
@@ -207,8 +269,7 @@ stdenv.mkDerivation rec {
       --replace-needed libssl.so.1.1 libssl.so \
       --replace-needed libcrypto.so.1.1 libcrypto.so
 
-    # TODO copy some? dont copy all python
-    rm -rf resources/python
+    #rm -rf resources/python
     cp -r resources $out/opt/talon/resources
 
     # based on run.sh
@@ -220,7 +281,6 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "$out/opt/talon/resources/python/lib/python3.9/site-packages/numpy.libs:$out/lib:$out/opt/talon/resources/python/lib:$out/opt/talon/resources/pypy/lib:${libPath}" \
       --set QT_DEBUG_PLUGINS 1
 
-    if false; then
     # fix the talon repl
     patchelf \
       --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
@@ -228,18 +288,14 @@ stdenv.mkDerivation rec {
     # TODO remove?
     wrapProgram "$out/opt/talon/resources/python/bin/python3" \
       --set LD_LIBRARY_PATH ${libPath}
-    fi
     #rm -rf $out/opt/talon/resources/python
-    ln -v -s ${python3} $out/opt/talon/resources/python
+    #ln -v -s $ {python3WithPackages} $out/opt/talon/resources/python
 
-    # TODO remove?
-    if false; then
     (
       cd $out/lib
       ln -s ${bzip2.out}/lib/libbz2.so.1 libbz2.so.1.0
       ln -s ${gdbm}/lib/libgdbm.so libgdbm.so.5
     )
-    fi
 
     cat >$out/share/applications/talon.desktop <<EOF
     [Desktop Entry]
