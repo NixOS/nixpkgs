@@ -258,16 +258,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     mkdir -p $out/opt/talon
 
+    # openssl.out provides: libcrypto.so  libcrypto.so.3  libssl.so  libssl.so.3
+    # but talon requires: libssl.so.1.1  libcrypto.so.1.1
+    for f in \
+      talon \
+      resources/python/lib/python3.9/lib-dynload/*.so
+    do
+      patchelf $f \
+        --replace-needed libssl.so.1.1 libssl.so \
+        --replace-needed libcrypto.so.1.1 libcrypto.so
+    done
+
     # copy binaries
     cp talon $out/bin
     ${if useBinarySkiaSharp then "cp lib/libSkiaSharp.so $out/lib" else ""}
     ${if useBinaryWav2letter then "cp lib/libw2l-o.so $out/lib" else ""}
-
-    # openssl.out provides: libcrypto.so  libcrypto.so.3  libssl.so  libssl.so.3
-    # but talon requires: libssl.so.1.1  libcrypto.so.1.1
-    patchelf $out/bin/talon \
-      --replace-needed libssl.so.1.1 libssl.so \
-      --replace-needed libcrypto.so.1.1 libcrypto.so
 
     #rm -rf resources/python
     cp -r resources $out/opt/talon/resources
