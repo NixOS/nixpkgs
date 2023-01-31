@@ -64,7 +64,7 @@
         "state": {
           "checkoutState": {
             "branch": "release/5.7",
-            "revision": "afc0938503bac012f76ceb619d031f63edc4c5f7"
+            "revision": "286b48b1d73388e1d49b2bb33aabf995838104e3"
           },
           "name": "sourceControlCheckout"
         },
