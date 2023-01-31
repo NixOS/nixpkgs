@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyct";
-  version = "0.4.8";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23d7525b5a1567535c093aea4b9c33809415aa5f018dd77f6eb738b1226df6f7";
+    sha256 = "sha256-3Z9KxcvY43w1LAQDYGLTxfZ+/sdtQEdh7xawy/JqpqA=";
   };
 
   propagatedBuildInputs = [
