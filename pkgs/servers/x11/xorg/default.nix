@@ -178,11 +178,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontalias = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "font-alias";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2";
-      sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
+      url = "mirror://xorg/individual/font/font-alias-1.0.4.tar.bz2";
+      sha256 = "0xjjjindczv3g7m1597l0x19zz75xy70wh5garghz61fpzl1l4gk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
