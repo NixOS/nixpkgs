@@ -62,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   # the file should be executable but it isn't so our wrapper doesn't run
   preFixup = ''
     chmod 555 $out/bin/puddletag
+    wrapQtApp $out/bin/puddletag
   '';
 
   doCheck = false; # there are no tests
