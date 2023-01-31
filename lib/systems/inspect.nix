@@ -7,6 +7,7 @@ let abis_ = abis; in
 let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
 
 rec {
+  # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {
     isi686         = { cpu = cpuTypes.i686; };
     isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
@@ -82,7 +83,7 @@ rec {
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })
-                       [ "x86" "arm" "aarch64" "riscv" ];
+                       [ "x86" "arm" "riscv" ];
   };
 
   matchAnyAttrs = patterns:
@@ -90,4 +91,13 @@ rec {
     else matchAttrs patterns;
 
   predicates = mapAttrs (_: matchAnyAttrs) patterns;
+
+  # these patterns are to be matched against the entire
+  # {host,build,target}Platform structure; they include a `parsed={}` marker so
+  # that `lib.meta.availableOn` can distinguish them from the patterns which
+  # apply only to the `parsed` field.
+
+  platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
+    isStatic = { isStatic = true; };
+  };
 }

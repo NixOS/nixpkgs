@@ -704,6 +704,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.nginx.recommendedProxySettings</literal> now
+          removes the <literal>Connection</literal> header preventing
+          clients from closing backend connections.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Resilio sync secret keys can now be provided using a secrets
           file at runtime, preventing these secrets from ending up in
           the Nix store.
@@ -764,15 +771,6 @@
           The option
           <literal>services.nomad.extraSettingsPlugins</literal> has
           been fixed to allow more than one plugin in the path.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          A new option was added to the virtualisation module that
-          enables specifying explicitly named network interfaces in QEMU
-          VMs. The existing <literal>virtualisation.vlans</literal> is
-          still supported for cases where the name of the network
-          interface is irrelevant.
         </para>
       </listitem>
     </itemizedlist>

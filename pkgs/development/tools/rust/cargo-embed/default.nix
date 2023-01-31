@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-embed";
-  version = "0.14.2";
+  version = "0.16.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-rSixQ9ZGO5iqreW+WKdHx0vlwacJzJ2L7qPWVjT3Xls=";
+    sha256 = "sha256-YAeE3pDw5xqSn4rAv3lxJtKQHki1bf97CJHBEK8JoiA=";
   };
 
-  cargoSha256 = "sha256-O/vMXWyNUdMyH2Pb6DK2AbqOMagmsMNgp5OyIyAiiqg=";
+  cargoSha256 = "sha256-p6d8vdiAVkufTQv3FliKCBgF5ZXM24UnG96EzlpyfZE=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
 

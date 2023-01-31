@@ -671,6 +671,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    doc = ./mosquitto.xml;
+    doc = ./mosquitto.md;
   };
 }

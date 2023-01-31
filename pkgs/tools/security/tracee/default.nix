@@ -19,15 +19,15 @@ let
 in
 buildGoModule rec {
   pname = "tracee";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w/x7KhopkADKvpDc5TE5Kf34pRY6HP3kX1Lqujnl0b8=";
+    sha256 = "sha256-TSzvuPE4to6aN52fmcwC6mVBOWUFQSyWHDgNs8emPq4=";
   };
-  vendorSha256 = "sha256-5RXNRNoMydFcemNGgyfqcUPtfMVgMYdiyWo/sZi8GQw=";
+  vendorSha256 = "sha256-HGJ7Gtug+nSg+mAQH4jcNkeikWQW10cgAIoAqeAf9r4=";
 
   patches = [
     ./use-our-libbpf.patch
@@ -64,11 +64,10 @@ buildGoModule rec {
 
     mkdir -p $out/{bin,share/tracee}
 
-    cp ./dist/tracee-ebpf $out/bin
-    cp ./dist/tracee-rules $out/bin
+    mv ./dist/tracee-{ebpf,rules} $out/bin/
 
-    cp -r ./dist/rules $out/share/tracee/
-    cp -r ./cmd/tracee-rules/templates $out/share/tracee/
+    mv ./dist/rules $out/share/tracee/
+    mv ./cmd/tracee-rules/templates $out/share/tracee/
 
     runHook postInstall
   '';
@@ -105,7 +104,12 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
-    license = licenses.asl20;
+    license = with licenses; [
+      # general license
+      asl20
+      # pkg/ebpf/c/*
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" ];
   };

@@ -1,20 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "samim-fonts";
   version = "4.0.4";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "rastikerdar";
-  repo = "samim-font";
-  rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "samim-font";
+    rev = "v${version}";
+    hash = "sha256-erT8iV5YHbEN47nEE5p5CbQYUgm8daOjymLAWF4fpVk=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/samim-fonts {} \;
+
+    runHook postInstall
   '';
-  sha256 = "sha256-WYSJ2mAzAe5H0EaMYU3qNVcQ0lRuHsjZ11YmLnZ2FCo=";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/samim-font";

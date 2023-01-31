@@ -753,7 +753,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-lrVwmJqfERq/tj4u+kRJ0kgbPQaFNAR6M3d4GqIJJyU=";
+        cargoHash = "sha256-nm9muH4RC92HdUiytmcW0WNyMQJcIH6dgwjUrwcqq4I=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1083,7 +1083,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-fPVLVJXvC5blIjZ3Qyc/lxq+V+qoGrIKrXEzwdNpdHc=";
+          cargoSha256 = "sha256-jpO26OXaYcWirQ5tTKIwlva7dHIfdmnruF4WdwSq0nI=";
         };
       in
       ''
