@@ -34,6 +34,8 @@ let
     nix = nativePlatforms;
     nixUnstable = nativePlatforms;
     mesa = nativePlatforms;
+    rustc = nativePlatforms;
+    cargo = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
