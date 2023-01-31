@@ -21,17 +21,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.106.0";
+    version = "1.107.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-S53ghVFb1qDI7MVNbc2ZlHqDN4VRBFQJCJg2J+w0erc=";
+      hash = "sha256-fjiS7GZy1BLgmxu4LFOWgucORcVx+9KleQcga+hRkSY=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-k4j814Ao7FAyd0w1nH2fuX1cJKjBkhPw0CVZqNU7Hqs=";
+      hash = "sha256-7XhSI/C0GEmsaL0UupvufB1bfPGbzSQJH720Y4/Do3o=";
     };
   });
   esbuild' = esbuild.override {
@@ -48,24 +48,16 @@ let
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.2";
+  version = "1.34.3";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-XOGfKa0eGVZKKKC0Pm2kw48XWWcrxCyDdYzCSKp+wco=";
+    hash = "sha256-6WZJD8lMsk1WNguMkXygBCTVpOzNkNuVZJ3Ygv6VBkM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "bump-electron-to-22.1.0.patch";
-      url = "https://github.com/deltachat/deltachat-desktop/commit/944d2735cda6cd5a95cb83c57484fbaf16720a9c.patch";
-      hash = "sha256-kaKi32eFQ3hGLZLjiXmH9qs4GXezcDQ7zTdT2+D8NcQ=";
-    })
-  ];
-
-  npmDepsHash = "sha256-J3/S/jYQvO/U8StDtYI+jozon0d4VCdeqFX6x1hHzMo=";
+  npmDepsHash = "sha256-B91yQ/xi8+uyOllqYR7lZTfLBpJvZat1cIIJk9TkM/c=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -136,8 +128,6 @@ in buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

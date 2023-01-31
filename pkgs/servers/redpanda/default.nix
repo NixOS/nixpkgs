@@ -1,14 +1,14 @@
 { lib, stdenv, fetchzip }:
 
 let
-  version = "22.3.5";
+  version = "22.3.11";
   platform = if stdenv.isLinux then "linux" else "darwin";
   arch = if stdenv.isAarch64 then "arm" else "amd";
   sha256s = {
-    darwin.amd = "sha256-AXk3aP1SGiHTfHTCBRTagX0DAVmdcVVIkxWaTnZxB8g=";
-    darwin.arm = "sha256-pvOVvNc8lZ2d2fVZVYWvumVWYpnLORNY/3o1t4BN2N4=";
-    linux.amd = "sha256-wsUuSCstYucjMpFsqssPGEhm3zCrAdE9Mldtkypbthg=";
-    linux.arm = "sha256-WHjYAbytiu747jFqN0KZ/CkIwAVI7fb32ywtRiQOBm8=";
+    darwin.amd = "sha256-kwAKxFg7BSNInvsQvFqgtpq8EEwSnmDeDyaF5b8L8SQ=";
+    darwin.arm = "sha256-kH5Ii672SeAIiRcWuAO3oVJVSBWp+r78RmTiR3BaDbg=";
+    linux.amd = "sha256-EKgkRKBrM4+X2YGoP2LpWRHL+fdHu44LYwCZ+O+c5ZY=";
+    linux.arm = "sha256-9b4oerRXjUVUYoswJWtnMBJSQDoCKClf673VjDQFUAw=";
   };
 in stdenv.mkDerivation rec {
   pname = "redpanda";

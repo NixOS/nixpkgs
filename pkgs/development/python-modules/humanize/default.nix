@@ -11,8 +11,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.4.0";
   pname = "humanize";
+  version = "4.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = pname;
-    rev = version;
-    hash = "sha256-XxlmOs3sfHOLTkrKGsHRiBWpuCIPJua2VkKxDmjOeWE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vTfK45sZ9m7TUQJwZpQWhOXgZzO46CwCsnNP+PI1YfA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
+    changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo Luflosi ];
   };
