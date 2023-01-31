@@ -25,7 +25,9 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
-, isGNU ? bintools.isGNU or false, isLLVM ? bintools.isLLVM or false
+, isGNU ? bintools.isGNU or false
+, isLLVM ? bintools.isLLVM or false
+, isCCTools ? bintools.isCCTools or false
 , buildPackages ? {}
 , targetPackages ? {}
 , useMacosReexportHack ? false
@@ -140,6 +142,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isCCTools then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
