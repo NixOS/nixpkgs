@@ -2189,6 +2189,8 @@ with pkgs;
 
   punes = libsForQt5.callPackage ../applications/emulators/punes { };
 
+  punes-qt6 = qt6Packages.callPackage ../applications/emulators/punes { };
+
   py65 = python3Packages.callPackage ../applications/emulators/py65 { };
 
   resim = callPackage ../applications/emulators/resim {};
