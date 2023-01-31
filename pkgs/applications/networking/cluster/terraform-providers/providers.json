@@ -843,11 +843,11 @@
     "vendorHash": null
   },
   "opennebula": {
-    "hash": "sha256-+EbEVwgo2HWmVhff7u5ohSJW8wuxK1kvWfvRWRwIP4o=",
+    "hash": "sha256-r8z5rpSvjNSDuvcRLtnOUFnBFFNAlcvfCbmW6LLHP5E=",
     "homepage": "https://registry.terraform.io/providers/OpenNebula/opennebula",
     "owner": "OpenNebula",
     "repo": "terraform-provider-opennebula",
-    "rev": "v1.1.0",
+    "rev": "v1.1.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-zKtBDnvlQHe+q0OZUMUGu1gNsx2wIrIoArtJrt0VaBk="
   },
