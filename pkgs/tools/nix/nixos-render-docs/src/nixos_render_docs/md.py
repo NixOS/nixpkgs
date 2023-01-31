@@ -391,7 +391,7 @@ class Converter(ABC):
         tokens = self._md.parse(src, env if env is not None else {})
         return self._post_parse(tokens)
 
-    def _render(self, src: str) -> str:
-        env: dict[str, Any] = {}
+    def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
+        env = {} if env is None else env
         tokens = self._parse(src, env)
         return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]
