@@ -1,36 +1,42 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, installShellFiles
+, libX11
 , libinput
 , libxcb
 , libxkbcommon
 , pixman
 , pkg-config
+, substituteAll
 , wayland
 , wayland-protocols
-, wlroots
+, wlroots_0_16
 , writeText
-, enable-xwayland ? true, xwayland, libX11
+, xcbutilwm
+, xwayland
+, enableXWayland ? true
 , conf ? null
-, patches ? [ ]
 }:
 
 let
-  totalPatches = patches ++ [ ];
+  wlroots = wlroots_0_16;
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "dwl";
-  version = "0.3.1";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "djpohly";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VHxBjjnzJNmtJxrm3ywJzvt2bNHGk/Cx8TICw6SaoiQ=";
+    repo = "dwl";
+    rev = "v${self.version}";
+    hash = "sha256-OW7K7yMYSzqZWpQ9Vmpy8EgdWvyv3q1uh8A40f6AQF4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     libinput
@@ -40,18 +46,13 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wlroots
-  ] ++ lib.optionals enable-xwayland [
+  ] ++ lib.optionals enableXWayland [
     libX11
+    xcbutilwm
     xwayland
   ];
 
-  # Allow users to set their own list of patches
-  patches = totalPatches;
-
-  # Last line of config.mk enables XWayland
-  prePatch = lib.optionalString enable-xwayland ''
-    sed -i -e '$ s|^#||' config.mk
-  '';
+  outputs = [ "out" "man" ];
 
   # Allow users to set an alternative config.def.h
   postPatch = let
@@ -60,21 +61,19 @@ stdenv.mkDerivation rec {
                  else writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
-  NIX_CFLAGS_COMPILE = [
-    # https://github.com/djpohly/dwl/issues/186
-    "-Wno-error=unused-result"
-  ];
-
-  dontConfigure = true;
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/bin
-    install -m755 dwl $out/bin
-    runHook postInstall
+  preBuild = ''
+    makeFlagsArray+=(
+      XWAYLAND=${if enableXWayland then "-DXWAYLAND" else ""}
+      XLIBS=${if enableXWayland then "xcb\\ xcb-icccm" else ""}
+    )
   '';
 
-  meta = with lib; {
+  installFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=$(man)/share/man/man1"
+  ];
+
+  meta = {
     homepage = "https://github.com/djpohly/dwl/";
     description = "Dynamic window manager for Wayland";
     longDescription = ''
@@ -88,9 +87,10 @@ stdenv.mkDerivation rec {
       - Limited to 2000 SLOC to promote hackability
       - Tied to as few external dependencies as possible
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    changelog = "https://github.com/djpohly/dwl/releases/tag/v${self.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
-}
+})
 # TODO: custom patches from upstream website

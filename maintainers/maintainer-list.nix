@@ -14124,6 +14124,15 @@
     githubId = 5991987;
     name = "Alexander Sosedkin";
   };
+  t4ccer = {
+    email = "t4ccer@gmail.com";
+    github = "t4ccer";
+    githubId = 64430288;
+    name = "Tomasz Maciosowski";
+    keys = [{
+      fingerprint = "6866 981C 4992 4D64 D154  E1AC 19E5 A2D8 B1E4 3F19";
+    }];
+  };
   tadeokondrak = {
     email = "me@tadeo.ca";
     github = "tadeokondrak";
