@@ -3291,6 +3291,8 @@ with pkgs;
 
   itch = callPackage ../games/itch {};
 
+  itchiodl = callPackage ../games/itchiodl { };
+
   itd = callPackage ../applications/misc/itd { };
 
   kord = callPackage ../applications/misc/kord { };
