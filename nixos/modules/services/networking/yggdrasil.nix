@@ -46,7 +46,7 @@ in
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
-          each time the service is started, this is the default.
+          each time the service is started. This is the default.
 
           If both {option}`configFile` and {option}`settings`
           are supplied, they will be combined, with values from
@@ -83,14 +83,14 @@ in
         type = bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to open the UDP port used for multicast peer
-          discovery. The NixOS firewall blocks link-local
-          communication, so in order to make local peering work you
-          will also need to set `LinkLocalTCPPort` in your
-          yggdrasil configuration ({option}`settings` or
-          {option}`configFile`) to a port number other than 0,
-          and then add that port to
-          {option}`networking.firewall.allowedTCPPorts`.
+          Whether to open the UDP port used for multicast peer discovery. The
+          NixOS firewall blocks link-local communication, so in order to make
+          incoming local peering work you will also need to configure
+          `MulticastInterfaces` in your Yggdrasil configuration
+          ({option}`settings` or {option}`configFile`). You will then have to
+          add the ports that you configure there to your firewall configuration
+          ({option}`networking.firewall.allowedTCPPorts` or
+          {option}`networking.firewall.interfaces.<name>.allowedTCPPorts`).
         '';
       };
 
