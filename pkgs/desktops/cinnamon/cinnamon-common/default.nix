@@ -7,6 +7,7 @@
 , cinnamon-session
 , cinnamon-translations
 , cjs
+, evolution-data-server
 , fetchFromGitHub
 , gdk-pixbuf
 , gettext
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
     cinnamon-menus
     cjs
     dbus
+    evolution-data-server # for calendar-server
     gdk-pixbuf
     glib
     gsound
