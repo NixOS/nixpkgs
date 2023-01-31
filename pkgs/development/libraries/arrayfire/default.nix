@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
-  version = "3.8.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ByXc9BoayT2URMbThLjMovYUkghumawbrtOPMnnUW6w=";
+    sha256 = "0gcbg6b6gs38xhks5pp0vkcqs89zl7rh9982jqlzsd0h724qddw0";
     fetchSubmodules = true;
   };
 
