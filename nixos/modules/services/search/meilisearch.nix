@@ -9,7 +9,7 @@ in
 {
 
   meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
-  meta.doc = ./meilisearch.xml;
+  meta.doc = ./meilisearch.md;
 
   ###### interface
 

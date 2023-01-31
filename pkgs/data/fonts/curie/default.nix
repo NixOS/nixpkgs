@@ -1,22 +1,23 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "curie";
   version = "1.0";
-in fetchurl rec {
-  name = "curie-${version}";
 
-  url = "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";
+  src = fetchurl {
+    url = "https://github.com/NerdyPepper/curie/releases/download/v${version}/curie-v${version}.tar.gz";
+    hash = "sha256-B89GNbOmm3lY/cRWQJEFu/5morCM/WrRQb/m6covbt8=";
+  };
 
-  downloadToTemp = true;
+  sourceRoot = ".";
 
-  recursiveHash = true;
+  installPhase = ''
+    runHook preInstall
 
-  sha256 = "sha256-twPAzsbTveYW0rQd7FYZz5AMZgvPbNmn5c7Nfzn7B0A=";
-
-  postFetch = ''
-    tar xzf $downloadedFile
     mkdir -p $out/share/fonts/misc
     install *.otb $out/share/fonts/misc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

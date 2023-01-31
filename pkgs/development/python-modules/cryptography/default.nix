@@ -62,7 +62,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography-vectors
-    hypothesis
+    # "hypothesis" indirectly depends on cryptography to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     iso8601
     pretend
     py

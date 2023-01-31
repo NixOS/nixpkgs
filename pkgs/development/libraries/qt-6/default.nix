@@ -140,10 +140,12 @@ let
       };
 
       wrapQtAppsHook = makeSetupHook {
+        name = "wrap-qt6-apps-hook";
           deps = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
       qmake = makeSetupHook {
+        name = "qmake6-hook";
         deps = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;

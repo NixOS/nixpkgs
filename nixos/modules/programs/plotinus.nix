@@ -8,7 +8,7 @@ in
 {
   meta = {
     maintainers = pkgs.plotinus.meta.maintainers;
-    doc = ./plotinus.xml;
+    doc = ./plotinus.md;
   };
 
   ###### interface

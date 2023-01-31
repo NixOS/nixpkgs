@@ -222,8 +222,8 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    # error: 'path' is unavailable: introduced in macOS 10.15
-    "-DQT_FEATURE_cxx17_filesystem=OFF"
+    # build as a set of dynamic libraries
+    "-DFEATURE_framework=OFF"
   ];
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
@@ -271,7 +271,8 @@ stdenv.mkDerivation rec {
     # fixup .pc file (where to find 'moc' etc.)
     if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
       sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-        -e "/^bindir=/ c bindir=$dev/bin"
+        -e "/^bindir=/ c bindir=$dev/bin" \
+        -e "/^libexecdir=/ c libexecdir=$dev/libexec"
     fi
 
     patchShebangs $out $dev

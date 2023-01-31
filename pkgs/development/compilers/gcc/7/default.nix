@@ -56,6 +56,13 @@ let majorVersion = "7";
         ./gcc8-asan-glibc-2.34.patch
 
         ./0001-Fix-build-for-glibc-2.31.patch
+
+        # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
+        (fetchurl {
+          name = "fix-bug-80431.patch";
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
+          sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
+        })
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [
@@ -226,6 +233,7 @@ stdenv.mkDerivation ({
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

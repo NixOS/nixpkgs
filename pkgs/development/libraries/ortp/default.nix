@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ortp";
-  version = "5.1.55";
+  version = "5.2.16";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FsPbpKkC1qhsZ4QBRzyV64H+lo/802qlaggDGCgbPlw=";
+    hash = "sha256-zGguzrWXSjjrJdFnlAeC6U6w10BucXjeUg7/2D4OxM4=";
   };
 
   # Do not build static libraries

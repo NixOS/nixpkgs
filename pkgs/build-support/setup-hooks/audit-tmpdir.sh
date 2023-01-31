@@ -13,7 +13,7 @@ auditTmpdir() {
     local dir="$1"
     [ -e "$dir" ] || return 0
 
-    header "checking for references to $TMPDIR/ in $dir..."
+    echo "checking for references to $TMPDIR/ in $dir..."
 
     local i
     find "$dir" -type f -print0 | while IFS= read -r -d $'\0' i; do
@@ -36,6 +36,4 @@ auditTmpdir() {
         fi
 
     done
-
-    stopNest
 }

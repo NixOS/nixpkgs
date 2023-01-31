@@ -16,20 +16,20 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.8.2";
+  version = "3.8.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
     rev = version;
-    hash = "sha256-jiyYCjZ6c62zmm4Ge9KbEI8/PtPunu79HVODyoHFdSg=";
+    hash = "sha256-XQBiE8hmLC/AIRt0eJri/ilPHUEYiOxd0onRBQsx+pM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-z1B0oSp37OGJ21Q57UUfmSRfUWLftiiBayN9y6yKNyg=";
+    hash = "sha256-O2W9zO7qHWG+78T+uECICAmecaSIbTTJPktJIPZYElE=";
   };
 
   format = "pyproject";
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
+    changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ misuzu ];

@@ -1146,5 +1146,5 @@ in {
     }
   ]);
 
-  meta.doc = ./nextcloud.xml;
+  meta.doc = ./nextcloud.md;
 }

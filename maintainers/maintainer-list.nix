@@ -2530,6 +2530,12 @@
     githubId = 89596;
     name = "Florian Friesdorf";
   };
+  ChaosAttractor = {
+    email = "lostattractor@gmail.com";
+    github = "LostAttractor";
+    githubId = 46527539;
+    name = "ChaosAttractor";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
@@ -4236,6 +4242,12 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  eliandoran = {
+    email = "contact@eliandoran.me";
+    name = "Elian Doran";
+    github = "eliandoran";
+    githubId = 21236836;
+  };
   elizagamedev = {
     email = "eliza@eliza.sh";
     github = "elizagamedev";
@@ -5338,6 +5350,12 @@
     github = "GKasparov";
     githubId = 60962839;
     name = "Mazen Zahr";
+  };
+  gkleen = {
+    name = "Gregor Kleen";
+    email = "xpnfr@bouncy.email";
+    github = "gkleen";
+    githubId = 20089782;
   };
   gleber = {
     email = "gleber.p@gmail.com";
@@ -13990,6 +14008,13 @@
     githubId = 2666479;
     name = "Y Nguyen";
   };
+  superherointj = {
+    name = "Sérgio Marcelo";
+    email = "sergiomarcelo+nixpkgs@ya.ru";
+    matrix = "@superherointj:matrix.org";
+    github = "superherointj";
+    githubId = 5861043;
+  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     matrix = "@sandro:supersandro.de";
@@ -14123,6 +14148,15 @@
     github = "t184256";
     githubId = 5991987;
     name = "Alexander Sosedkin";
+  };
+  t4ccer = {
+    email = "t4ccer@gmail.com";
+    github = "t4ccer";
+    githubId = 64430288;
+    name = "Tomasz Maciosowski";
+    keys = [{
+      fingerprint = "6866 981C 4992 4D64 D154  E1AC 19E5 A2D8 B1E4 3F19";
+    }];
   };
   tadeokondrak = {
     email = "me@tadeo.ca";

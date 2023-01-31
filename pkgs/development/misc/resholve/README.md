@@ -252,8 +252,23 @@ with some rules (internal to resholve) for locating sub-executions in
 some of the more common commands.
 
 - "execer" lore identifies whether an executable can, cannot,
-  or might execute its arguments. Every "can" or "might" verdict requires
-  either built-in rules for finding the executable, or human triage.
+  or might execute its arguments. Every "can" or "might" verdict requires:
+  - an update to the matching rules in [binlore](https://github.com/abathur/binlore)
+    if there's absolutely no exec in the executable and binlore just lacks
+    rules for understanding this
+  - an override in [binlore](https://github.com/abathur/binlore) if there is
+    exec but it isn't actually under user control
+  - a parser in [resholve](https://github.com/abathur/resholve) capable of
+    isolating the exec'd words if the command does have exec under user
+    control
+  - overriding the execer lore for the executable if manual triage indicates
+    that all of the invocations in the current package don't include any
+    commands that the executable would exec
+  - if manual triage turns up any commands that would be exec'd, use some
+    non-resholve tool to patch/substitute/replace them before or after you
+    run resholve on them (if before, you may need to also add keep directives
+    for these absolute paths)
+
 - "wrapper" lore maps shell exec wrappers to the programs they exec so
   that resholve can substitute an executable's verdict for its wrapper's.
 

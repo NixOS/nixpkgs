@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "reportengine";
-  version = "0.30.dev0";
+  version = "0.31";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb612994b7f364e872301b4569b544648e95e587d803284ddb5610efc8f2170f";
+    sha256 = "sha256-jrt+ml8o1PUidV1bY0hCyNgcPaVTBloW574/i5Pl7iE=";
   };
 
   nativeBuildInputs = [ flit ];

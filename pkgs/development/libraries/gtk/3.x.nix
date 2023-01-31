@@ -2,7 +2,6 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch2
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -61,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.35";
+  version = "3.24.36";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -73,22 +72,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-7BD+bXEu8LPGO1+TJjnJ0a6Z/OlPUA9vBpZWKf72C9E=";
+    sha256 = "sha256-J6bvFXdDNQyAf/6lm6odcCJtvt6CpelT/9WOpgWf5pE=";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
-
-    # Add accidentally non-dist’d build file.
-    # https://gitlab.gnome.org/GNOME/gtk/-/commit/b2ad8d2abafbd94c7e58e5e1b98c92e6b6fa6d9a
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/66a199806ceb3daa5e2c7d3a5b45a86007cec46a.patch";
-      includes = [
-        "gdk/wayland/cursor/meson.build"
-      ];
-      sha256 = "cOOcSB3yphff2+7l7YpFbGSswWjV8lJ2tk+Vjgl1ras=";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
@@ -121,7 +110,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
