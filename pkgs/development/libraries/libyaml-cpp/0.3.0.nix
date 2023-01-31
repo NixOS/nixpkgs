@@ -1,32 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
 stdenv.mkDerivation rec {
-  pname = "libyaml-cpp";
+  pname = "yaml-cpp";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "jbeder";
     repo = "yaml-cpp";
     rev = "release-${version}";
-    sha256 = "sha256-pmgcULTXhl83+Wc8ZsGebnJ1t0XybHhUEJxDnEZE5x8=";
+    hash = "sha256-pmgcULTXhl83+Wc8ZsGebnJ1t0XybHhUEJxDnEZE5x8=";
   };
 
-  # implement https://github.com/jbeder/yaml-cpp/commit/52a1378e48e15d42a0b755af7146394c6eff998c
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'option(YAML_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)' \
-                'option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ''${BUILD_SHARED_LIBS})'
-  '';
+  strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DYAML_CPP_BUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DYAML_CPP_BUILD_TOOLS=${lib.boolToString doCheck}"
+    "-DBUILD_SHARED_LIBS=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "A YAML parser and emitter for C++";
+    homepage = "https://github.com/jbeder/yaml-cpp";
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 }
