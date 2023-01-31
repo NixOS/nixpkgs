@@ -6,7 +6,6 @@
 
 # for passthru.tests
 , imagemagick
-, imagemagick6
 , libheif
 , imlib2Full
 , gst_all_1
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit imagemagick imagemagick6 libheif imlib2Full;
+    inherit imagemagick libheif imlib2Full;
     inherit (gst_all_1) gst-plugins-bad;
   };
 

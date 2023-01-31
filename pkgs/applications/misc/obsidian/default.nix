@@ -2,7 +2,7 @@
 , fetchurl
 , lib
 , makeWrapper
-, electron_18
+, electron_21
 , makeDesktopItem
 , graphicsmagick
 , writeScript
@@ -50,7 +50,7 @@ let
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_18}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron_21}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
