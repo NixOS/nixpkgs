@@ -740,6 +740,8 @@ self: super: with self; {
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
+  attr = callPackage ../development/python-modules/attr { };
+
   attrs = callPackage ../development/python-modules/attrs { };
 
   aubio = callPackage ../development/python-modules/aubio { };
