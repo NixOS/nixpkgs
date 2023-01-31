@@ -4,7 +4,7 @@ stdenvNoCC.mkDerivation {
     pname = "steam-devices";
     version = "2021.08.25";
 
-    src = fetchFromGitHub{
+    src = fetchFromGitHub {
         owner = "ValveSoftware";
         repo = "steam-devices";
         rev = "d87ef558408c5e7a1a793d738db4c9dc2cb5f8fa";
