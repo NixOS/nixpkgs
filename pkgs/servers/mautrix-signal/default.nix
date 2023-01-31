@@ -11,6 +11,20 @@ python3.pkgs.buildPythonPackage rec {
     sha256 = "sha256-UbetU1n9zD/mVFaJc9FECDq/Zell1TI/aYPsGXGB8Js=";
   };
 
+  postPatch = ''
+    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
+    substituteInPlace setup.py \
+      --replace 'version=version' 'version="${version}"'
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "mautrix"
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     CommonMark
     aiohttp
@@ -30,12 +44,6 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
-      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
-  '';
 
   postInstall = ''
     mkdir -p $out/bin
