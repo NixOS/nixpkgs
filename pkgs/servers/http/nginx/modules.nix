@@ -29,6 +29,7 @@
 , which
 , yajl
 , zlib
+, zstd
 }:
 
 let
@@ -665,6 +666,19 @@ let self = {
       rev = "v0.2.1";
       sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
     };
+  };
+
+  zstd = {
+    name = "zstd";
+    src = fetchFromGitHub {
+      name = "zstd";
+      owner = "tokers";
+      repo = "zstd-nginx-module";
+      rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
+      sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+    };
+
+    inputs = [ zstd ];
   };
 }; in self // lib.optionalAttrs config.allowAliases {
   # deprecated or renamed packages
