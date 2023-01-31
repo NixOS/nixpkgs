@@ -55,7 +55,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "talon-bin";
+  pname = "talon";
   inherit version;
 
   # the original url is mutable.
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     qt5.qtbase
     qt5.qtspeech
     qt5.qtx11extras
-    openssl
+    openssl.out # default output is openssl.bin
     libusb
     qt5.qtsvg
     qt5.qtgamepad
