@@ -53,6 +53,14 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lcrypt";
 
+  # This can probably be removed if version > 2.4.9, as IPX support
+  # has been removed upstream[1].  Just check whether pkgsMusl.ppp
+  # still builds.
+  #
+  # [1]: https://github.com/ppp-project/ppp/commit/c2881a6b71a36d28a89166e82820dc5e711fd775
+  NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.hostPlatform.isMusl "-UIPX_CHANGE";
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
