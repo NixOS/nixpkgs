@@ -183,10 +183,6 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # racy test
-    "test_sched"
-    "test_sched_error"
   ];
 
   disabledTestPaths = [
@@ -199,7 +195,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$TMPDIR"
+    "-o" "cache_dir=$TMPDIR"
+    "-m" "'not timing'"
   ];
 
   postCheck = ''
