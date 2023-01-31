@@ -546,8 +546,8 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.14.2";
-          sha256 = "RZyAY2d3imnLhm1mLur+wTx/quxrNWYR9PCjC+co1FE=";
+          version = "1.17.4";
+          sha256 = "sha256-jJnALJJc8G4/0L7WMmKSZ7I+7Usmyj+WhufBdSzcEK0=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -624,8 +624,8 @@ let
         mktplcRef = {
           name = "catppuccin-vsc";
           publisher = "catppuccin";
-          version = "2.2.1";
-          sha256 = "sha256-vS+hz3RxG71F5QoO4LQOgOgFh6GQ8QX/+4mMD0KC1kA=";
+          version = "2.5.0";
+          sha256 = "sha256-+dM6MKIjzPdYoRe1DYJ08A+nHHlkTsm+I6CYmnmSRj4=";
         };
         meta = with lib; {
           description = "Soothing pastel theme for VSCode";
@@ -1351,8 +1351,8 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.33.1";
-          sha256 = "0dsjxs04dchw1dbzf45ryhxsb5xhalqwy40xw6cngxkp69lhf91g";
+          version = "0.37.1";
+          sha256 = "sha256-xOiMVUkcgwkMjYfNzFB3Qhfg26jf5nssaTfw0U+sAX0=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1504,8 +1504,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.4.4";
-          sha256 = "sha256-EA3OABn80GciNecXwLcorWP7K3+jI+wgujpmvvFcNOA=";
+          version = "9.5.0";
+          sha256 = "sha256-Av4RYnCh0gXQ+uRByl3Can+hvYD8Pc3x0Ec2jDcP6Fk=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1520,8 +1520,8 @@ let
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.5.1";
-          sha256 = "sha256-0ghB0E+Wa9W2bNFFiH2Q3pUJ9HV5+JfKohX4cRyevC8=";
+          version = "1.8.0";
+          sha256 = "sha256-P4FbbcRcKWbnC86TSnzQaGn2gHWkDM9I4hj4GiHNPS4=";
         };
         meta = with lib; {
           description = "Gruvbox Theme";
@@ -1790,8 +1790,8 @@ let
         mktplcRef = {
           name = "marp-vscode";
           publisher = "marp-team";
-          version = "1.5.0";
-          sha256 = "0wqsj8rp58vl3nafkjvyw394h5j4jd7d24ra6hkvfpnlzrgv4yhs";
+          version = "2.4.1";
+          sha256 = "sha256-h59OmFreja9IdFzH2zZaXXh+pnODirL2fPkUmvAgDyA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2941,8 +2941,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.24.1";
-          sha256 = "00gq6mqqwqipc6d7di2x9mmi1lya11vhkkww9563avchavczb9sv";
+          version = "1.24.3";
+          sha256 = "sha256-4fPoRBttWVE8Z3e4O6Yrkf04iOu9ElspQFP57HOPVAk=";
         };
         meta = {
           license = lib.licenses.mit;

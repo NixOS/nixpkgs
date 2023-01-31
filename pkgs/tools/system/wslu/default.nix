@@ -14,6 +14,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-yhugh836BoSISbTu19ubLOrz5X31Opu5QtCR0DXrbWc=";
   };
 
+  patches = [
+    ./fallback-conf-nix-store.diff
+  ];
+
+  postPatch = ''
+    substituteInPlace src/wslu-header \
+      --subst-var out
+  '';
+
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="

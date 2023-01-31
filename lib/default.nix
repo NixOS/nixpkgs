@@ -94,7 +94,7 @@ let
       subtractLists mutuallyExclusive groupBy groupBy';
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
-      concatImapStringsSep makeSearchPath makeSearchPathOutput
+      concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs

@@ -146,6 +146,9 @@ in
     systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
     systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
 
+    # Prevent Plymouth taking over the screen during system updates.
+    systemd.services.plymouth-start.restartIfChanged = false;
+
     boot.initrd.systemd = {
       extraBin.plymouth = "${plymouth}/bin/plymouth"; # for the recovery shell
       storePaths = [
