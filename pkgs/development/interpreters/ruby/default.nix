@@ -181,8 +181,10 @@ let
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
-              ${removeReferencesTo}/bin/remove-references-to \
-                -t ${stdenv.cc} \
+              # Get rid of the CC runtime dependency without adding bogus
+              # paths.
+              sed -i -e '/^  CONFIG\["MJIT_CC"\]/d' \
+                -e '/^  CONFIG\["LDFLAGS"\]/s|-L${stdenv.cc}/resource-root/lib ||' \
                 $rbConfig
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
@@ -230,6 +232,7 @@ let
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
         '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
+          sed -i '/^  CONFIG\["LDFLAGS"]/s|-L${baseRuby}/lib ||' $rbConfig
           ${removeReferencesTo}/bin/remove-references-to \
             -t ${baseRuby} \
             $rbConfig $out/lib/libruby*
