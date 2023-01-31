@@ -17,16 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "hashlink";
-  version = "1.12";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "AiUGhTxz4Pkrks4oE+SAuAQPMuC5T2B6jo3Jd3sNrkQ=";
+    sha256 = "lpHW0JWxbLtOBns3By56ZBn47CZsDzwOFBuW9MlERrE=";
   };
-
-  patches = [ ./hashlink.patch ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
