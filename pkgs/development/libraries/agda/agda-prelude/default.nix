@@ -1,14 +1,14 @@
 { lib, mkDerivation, fetchFromGitHub }:
 
 mkDerivation rec {
-  version = "compat-2.6.2";
+  version = "unstable-2022-01-14";
   pname = "agda-prelude";
 
   src = fetchFromGitHub {
     owner = "UlfNorell";
     repo = "agda-prelude";
-    rev = version;
-    sha256 = "0j2nip5fbn61fpkm3qz4dlazl4mzdv7qlgw9zm15bkcvaila0h14";
+    rev = "3d143d6d0a3f75966602480665623e87233ff93e";
+    hash = "sha256-ILhXDq788vrceMp5mCiQUMrJxeLPtS4yGtvMHMYxzg8=";
   };
 
   preConfigure = ''

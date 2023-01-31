@@ -38,7 +38,6 @@ default-package-overrides:
   - aeson-value-parser ==0.19.7
   - aeson-yak ==0.1.1.3
   - aeson-yaml ==1.1.0.1
-  - Agda ==2.6.2.2
   - agda2lagda ==0.2021.6.1
   - airship ==0.9.5
   - al ==0.1.4.2
