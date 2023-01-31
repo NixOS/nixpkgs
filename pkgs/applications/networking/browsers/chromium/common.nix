@@ -260,8 +260,6 @@ let
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
-      # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -295,12 +293,15 @@ let
       chrome_pgo_phase = 0;
       clang_base_path = "${llvmPackages.clang}";
       use_qt = false;
+    } // lib.optionalAttrs (!chromiumVersionAtLeast "110") {
       # The default has changed to false. We'll build with libwayland from
       # Nixpkgs for now but might want to eventually use the bundled libwayland
       # as well to avoid incompatibilities (if this continues to be a problem
       # from time to time):
       use_system_libwayland = true;
-    } // optionalAttrs proprietaryCodecs {
+      # The default value is hardcoded instead of using pkg-config:
+      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
+    } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
