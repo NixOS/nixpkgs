@@ -2462,6 +2462,11 @@
     githubId = 543423;
     name = "Alex Wied";
   };
+  ceres = {
+    github = "cerealiss";
+    githubId = 102366750;
+    name = "Alissa Ceres";
+  };
   cfhammill = {
     email = "cfhammill@gmail.com";
     github = "cfhammill";
