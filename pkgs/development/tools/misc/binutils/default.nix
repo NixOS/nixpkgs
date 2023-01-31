@@ -246,7 +246,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Having --enable-plugins is not enough, system has to support
     # dlopen() or equivalent. See config/plugins.m4 and configure.ac
     # (around PLUGINS) for cases that support or not support plugins.
-    hasPluginAPI = enableGold && !stdenv.isDarwin;
+    # No platform specific filters yet here.
+    hasPluginAPI = enableGold;
   };
 
   meta = with lib; {
