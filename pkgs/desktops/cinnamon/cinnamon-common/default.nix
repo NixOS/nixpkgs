@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
       pycairo
       python3.pkgs.xapp # The scope prefix is required
       pillow
+      pyinotify # for looking-glass
       pytz
       tinycss2
       python-pam
