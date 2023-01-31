@@ -19,15 +19,16 @@ let
 in
 buildGoModule rec {
   pname = "tracee";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w/x7KhopkADKvpDc5TE5Kf34pRY6HP3kX1Lqujnl0b8=";
+    hash = "sha256-TSzvuPE4to6aN52fmcwC6mVBOWUFQSyWHDgNs8emPq4=";
   };
-  vendorSha256 = "sha256-5RXNRNoMydFcemNGgyfqcUPtfMVgMYdiyWo/sZi8GQw=";
+
+  vendorHash = "sha256-HGJ7Gtug+nSg+mAQH4jcNkeikWQW10cgAIoAqeAf9r4=";
 
   patches = [
     ./use-our-libbpf.patch
