@@ -8,7 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1gbrg03z1b6rlrvjyc6d41bc8j1bsr7rm8206gb1apscyii5bnii";
   };
 
-  patches = lib.optional stdenv.hostPlatform.isDarwin
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-28506.patch";
+      url = "https://src.fedoraproject.org/rpms/giflib/raw/2e9917bf13df114354163f0c0211eccc00943596/f/CVE-2022-28506.patch";
+      sha256 = "sha256-TBemEXkuox8FdS9RvjnWcTWPaHRo4crcwSR9czrUwBY=";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin
     (fetchpatch {
       # https://sourceforge.net/p/giflib/bugs/133/
       name = "darwin-soname.patch";

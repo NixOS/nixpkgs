@@ -16,7 +16,7 @@
 
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
   version = "5.2.1";
 
@@ -31,13 +31,19 @@ stdenv.mkDerivation (rec {
     ./darwin-no-pma.patch
   ];
 
+  # PIE is incompatible with the "persistent malloc" ("pma") feature.
+  # While build system attempts to pass -no-pie to gcc. nixpkgs' `ld`
+  # wrapped still passes `-pie` flag to linker and breaks linkage.
+  # Let's disable "pie" until `ld` is fixed to do the right thing.
+  hardeningDisable = [ "pie" ];
+
   # When we do build separate interactive version, it makes sense to always include man.
   outputs = [ "out" "info" ]
     ++ lib.optional (!interactive) "man";
 
-  nativeBuildInputs = lib.optional (doCheck && stdenv.isLinux) glibcLocales
-    # no-pma fix
-    ++ [ autoreconfHook ];
+  # no-pma fix
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optional (doCheck && stdenv.isLinux) glibcLocales;
 
   buildInputs = lib.optional withSigsegv libsigsegv
     ++ lib.optional interactive readline
@@ -83,8 +89,4 @@ stdenv.mkDerivation (rec {
     platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
   };
-} // lib.optionalAttrs stdenv.hostPlatform.isMusl {
-  # PIE is incompatible with the "persistent malloc" ("pma") feature.
-  # FIXME: make unconditional in staging (added to avoid rebuilds in staging-next)
-  hardeningDisable = [ "pie" ];
-})
+}

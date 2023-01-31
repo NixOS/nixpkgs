@@ -6,7 +6,7 @@
 if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
-header "exporting $url (rev $rev) into $out"
+echo "exporting $url (rev $rev) into $out"
 
 $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
@@ -18,4 +18,3 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch
-stopNest
