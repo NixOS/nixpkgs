@@ -9968,6 +9968,12 @@
     github = "MrTarantoga";
     githubId = 53876219;
   };
+  mrtuxa = {
+    email = "mrtuxa@leipzig.freifunk.net";
+    name = "mrtuxa";
+    github = "mrtuxa";
+    githubId = 69870860;
+  };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
     github = "mrVanDalo";

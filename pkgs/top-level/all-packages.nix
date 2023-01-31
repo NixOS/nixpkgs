@@ -38886,4 +38886,6 @@ with pkgs;
   resgate = callPackage ../servers/resgate { };
 
   oversteer = callPackage ../applications/misc/oversteer { };
+
+  concord = callPackage ../development/development/concord { };
 }
