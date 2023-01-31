@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A command driven spotify player";
     homepage = "https://github.com/aome510/spotify-player";
+    mainProgram = "spotify_player";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
   };
