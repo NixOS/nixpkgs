@@ -215,7 +215,6 @@ in
       programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
