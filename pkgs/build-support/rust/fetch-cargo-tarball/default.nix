@@ -73,6 +73,9 @@ in stdenv.mkDerivation ({
 
     ${cargoUpdateHook}
 
+    # Override the `http.cainfo` option usually specified in `.cargo/config`.
+    export CARGO_HTTP_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
+
     cargo vendor $name --respect-source-config | cargo-vendor-normalise > $CARGO_CONFIG
 
     # Create an empty vendor directory when there is no dependency to vendor
