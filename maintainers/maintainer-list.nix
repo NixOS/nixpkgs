@@ -9620,6 +9620,12 @@
     githubId = 5378535;
     name = "Milo Gertjejansen";
   };
+  milran = {
+    email = "milranmike@protonmail.com";
+    github = "milran";
+    githubId = 93639059;
+    name = "Milran Mike";
+  };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
     github = "mimame";
