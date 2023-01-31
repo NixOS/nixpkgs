@@ -24,9 +24,8 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake makeWrapper which python3 ];
   buildInputs = [ libxml2 z3 ];
 
-  # Sandbox disallows network access, so disabling problematic networking tests
+  __darwinAllowLocalNetworking = true;
   patches = [
-    ./disable-tests.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchFromGitHub {
