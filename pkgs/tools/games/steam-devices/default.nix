@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation {
     pname = "steam-devices";
-    version = "20210825";
+    version = "2021.08.25";
 
     src = fetchFromGitHub{
         owner = "ValveSoftware";
