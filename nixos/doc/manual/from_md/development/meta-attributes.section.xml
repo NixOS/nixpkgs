@@ -28,7 +28,7 @@
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
     buildDocsInSandbox = true;
   };
 }
@@ -42,35 +42,16 @@
     </listitem>
     <listitem>
       <para>
-        <literal>doc</literal> points to a valid DocBook file containing
-        the module documentation. Its contents is automatically added to
+        <literal>doc</literal> points to a valid
+        <link xlink:href="https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup">Nixpkgs-flavored
+        CommonMark</link> file containing the module documentation. Its
+        contents is automatically added to
         <xref linkend="ch-configuration" />. Changes to a module
         documentation have to be checked to not break building the NixOS
         manual:
       </para>
       <programlisting>
 $ nix-build nixos/release.nix -A manual.x86_64-linux
-</programlisting>
-      <para>
-        This file should <emphasis>not</emphasis> usually be written by
-        hand. Instead it is preferred to write documentation using
-        CommonMark and converting it to CommonMark using pandoc. The
-        simplest documentation can be converted using just
-      </para>
-      <programlisting>
-$ pandoc doc.md -t docbook --top-level-division=chapter -f markdown+smart &gt; doc.xml
-</programlisting>
-      <para>
-        More elaborate documentation may wish to add one or more of the
-        pandoc filters used to build the remainder of the manual, for
-        example the GNOME desktop uses
-      </para>
-      <programlisting>
-$ pandoc gnome.md -t docbook --top-level-division=chapter \
-    --extract-media=media -f markdown+smart \
-    --lua-filter ../../../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua \
-    --lua-filter ../../../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua \
-    &gt; gnome.xml
 </programlisting>
     </listitem>
     <listitem>

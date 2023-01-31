@@ -905,5 +905,5 @@ in
 
   };
 
-  meta.doc = ./prosody.xml;
+  meta.doc = ./prosody.md;
 }

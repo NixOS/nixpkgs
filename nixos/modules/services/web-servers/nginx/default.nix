@@ -211,6 +211,8 @@ let
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
+        # don't let clients close the keep-alive connection to upstream
+        proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}
 

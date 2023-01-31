@@ -93,6 +93,7 @@
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
@@ -715,7 +716,7 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [ (plat: plat.isStatic) ];
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
