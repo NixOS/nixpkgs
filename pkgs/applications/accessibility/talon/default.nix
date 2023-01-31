@@ -43,7 +43,7 @@
 , callPackage
 , useBinaryWav2letter ? true # large dependency
 , useBinarySkiaSharp ? true # large dependency
-, useBinaryOpenssl ? true # old version
+, useBinaryOpenssl ? true # old version (openssl 1.1)
 , pkgs
 }:
 
@@ -186,8 +186,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    autoPatchelfHook
-    qt5.wrapQtAppsHook
+    #autoPatchelfHook
+    /*
+    FIXME autoPatchelfHook breaks python
+    Fatal Python error: init_fs_encoding: failed to get the Python codec of the filesystem encoding
+    Python runtime state: core initialized
+    ModuleNotFoundError: No module named 'encodings'
+    */
+    #qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -228,6 +234,7 @@ stdenv.mkDerivation rec {
     libinput
     libxml2
     speechd
+    /*
     qt5.qtbase
     qt5.qtspeech
     qt5.qtx11extras
@@ -237,6 +244,8 @@ stdenv.mkDerivation rec {
     qt5.qtgamepad
     #python3WithPackages
     w2ldecode
+    */
+    qt5.qtsvg
   ] /*++ (lib.optionals !useBinaryWav2letter [
     # TODO fix build
     wav2letter
@@ -253,8 +262,10 @@ stdenv.mkDerivation rec {
   installPhase =  let libPath = lib.makeLibraryPath buildInputs; in ''
     runHook preInstall
 
+    set -x
+
     mkdir -p $out/bin
-    mkdir -p $out/lib
+    #mkdir -p $out/lib
     mkdir -p $out/etc/udev/rules.d
     mkdir -p $out/share/applications
     mkdir -p $out/opt/talon
@@ -274,12 +285,23 @@ stdenv.mkDerivation rec {
 
     # copy binaries
     cp talon $out/bin
+    if false; then
     ${if useBinarySkiaSharp then "cp lib/libSkiaSharp.so $out/lib" else ""}
     ${if useBinaryWav2letter then "cp lib/libw2l-o.so $out/lib" else ""}
     ${if useBinaryOpenssl then "cp lib/libssl.so.1.1 lib/libcrypto.so.1.1 $out/lib" else ""}
+    else
+    cp -r lib $out/lib
+    # libraries should not be executable
+    find $out/lib -type f | xargs chmod -x
+    fi
 
+    cp -r resources $out/bin/resources
     #rm -rf resources/python
-    cp -r resources $out/opt/talon/resources
+    #cp -r resources $out/opt/talon/resources
+
+    patchelf \
+      --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      $out/bin/talon
 
     # based on run.sh
     wrapProgram $out/bin/talon \
@@ -287,18 +309,18 @@ stdenv.mkDerivation rec {
       --unset QT_SCALE_FACTOR \
       --set LC_NUMERIC C \
       --set QT_PLUGIN_PATH "$out/lib/plugins" \
-      --set LD_LIBRARY_PATH "$out/opt/talon/resources/python/lib/python3.9/site-packages/numpy.libs:$out/lib:$out/opt/talon/resources/python/lib:$out/opt/talon/resources/pypy/lib:${libPath}" \
+      --set LD_LIBRARY_PATH "$out/bin/resources/python/lib/python3.9/site-packages/numpy.libs:$out/lib:$out/bin/resources/python/lib:$out/bin/resources/pypy/lib:${libPath}" \
       --set QT_DEBUG_PLUGINS 1
 
     # fix the talon repl
     patchelf \
       --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/opt/talon/resources/python/bin/python3
+      $out/bin/resources/python/bin/python3
     # TODO remove?
-    wrapProgram "$out/opt/talon/resources/python/bin/python3" \
+    wrapProgram "$out/bin/resources/python/bin/python3" \
       --set LD_LIBRARY_PATH ${libPath}
-    #rm -rf $out/opt/talon/resources/python
-    #ln -v -s $ {python3WithPackages} $out/opt/talon/resources/python
+    #rm -rf $out/bin/resources/python
+    #ln -v -s $ {python3WithPackages} $out/bin/resources/python
 
     (
       cd $out/lib
@@ -319,6 +341,8 @@ stdenv.mkDerivation rec {
     # Remove udev compatibility hack using plugdev for older debian/ubuntu
     # This breaks NixOS usage of these rules (see https://github.com/NixOS/nixpkgs/issues/76482)
     substituteInPlace $out/etc/udev/rules.d/10-talon.rules --replace 'GROUP="plugdev",' ""
+
+    set +x
 
     runHook postInstall
   '';
