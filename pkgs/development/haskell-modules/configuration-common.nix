@@ -2035,9 +2035,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # https://github.com/peti/hopenssl/issues/5
-  hopenssl = super.hopenssl.override { openssl = pkgs.openssl_1_1; };
-
   # Fixes compilation with GHC 9.0 and above
   # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3
   regex-compat-tdfa = appendPatches [
