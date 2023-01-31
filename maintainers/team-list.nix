@@ -699,8 +699,11 @@ with lib.maintainers; {
   rust = {
     members = [
       andir
+      figsoda
       lnl7
       mic92
+      tjni
+      winter
       zowoq
     ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
