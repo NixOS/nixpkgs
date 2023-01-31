@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    hidredis = [
+    hiredis = [
       hiredis
     ];
     ocsp = [
