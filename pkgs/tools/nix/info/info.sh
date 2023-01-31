@@ -69,14 +69,8 @@ nixev() {
     nix-instantiate --eval --strict -E "$1"
 }
 
-# use `nix eval` command
-nixev2() {
-    nix eval --raw "$1"
-}
-
 desc_system() {
-    nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system' 2>/dev/null ||
-        nixev2 'nixpkgs#stdenv.hostPlatform.system'
+    nixev 'builtins.currentSystem'
 }
 
 desc_host_os() {
