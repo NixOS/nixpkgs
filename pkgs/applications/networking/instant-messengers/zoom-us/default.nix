@@ -30,6 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -47,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.12.3.11845";
-  versions.x86_64-darwin = "5.12.3.11845";
-  versions.x86_64-linux = "5.12.2.4816";
+  versions.aarch64-darwin = "5.13.6.14918";
+  versions.x86_64-darwin = "5.13.6.14918";
+  versions.x86_64-linux = "5.13.5.431";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-iDLxqG7/cdo60V0mFE3tX/Msi0rRUjoM8X9yq2rlvf0=";
+      hash = "sha256-QY9z1bTKtL32HE4XWnBIvCNmDF+3x5N9BdfqJA+24fA=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-+YOtdoh8S50+GHRLb6TPYCqDtry7SnnNqo7USzkDc7c=";
+      hash = "sha256-eSPKzxDPXCbME0eTTDlfsI5KM5qRm79JTtnGJvpiS98=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-kgjooMqeZurzqIn3ADcgFjlqaC58dQNuIAHLx4M0S9I=";
+      hash = "sha256-R0IMV/+R7AGFy/ZvNyyvIBv10t1x1U1X6jdHoo6UHKY=";
     };
   };
 
@@ -102,10 +103,13 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
