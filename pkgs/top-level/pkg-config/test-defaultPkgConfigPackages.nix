@@ -42,4 +42,4 @@ let
     else testers.hasPkgConfigModule { inherit moduleName; package = pkg; };
 
 in
-  allTests // { inherit tests-combined; }
+  lib.recurseIntoAttrs allTests // { inherit tests-combined; }
