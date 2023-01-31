@@ -699,6 +699,36 @@
       </listitem>
       <listitem>
         <para>
+          Updated recommended settings in
+          <literal>services.nginx.recommendedGzipSettings</literal>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Enables gzip compression for only certain proxied
+              requests.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Allow checking and loading of precompressed files.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Updated gzip mime-types.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Increased the minimum length of a response that will be
+              gzipped.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
           version is based on
           <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>,
