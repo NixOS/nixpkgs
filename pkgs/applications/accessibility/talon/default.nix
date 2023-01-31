@@ -201,6 +201,12 @@ stdenv.mkDerivation rec {
     ${if useBinarySkiaSharp then "cp lib/libSkiaSharp.so $out/lib" else ""}
     ${if useBinaryWav2letter then "cp lib/libw2l-o.so $out/lib" else ""}
 
+    # openssl.out provides: libcrypto.so  libcrypto.so.3  libssl.so  libssl.so.3
+    # but talon requires: libssl.so.1.1  libcrypto.so.1.1
+    patchelf $out/bin/talon \
+      --replace-needed libssl.so.1.1 libssl.so \
+      --replace-needed libcrypto.so.1.1 libcrypto.so
+
     # TODO copy some? dont copy all python
     rm -rf resources/python
     cp -r resources $out/opt/talon/resources
