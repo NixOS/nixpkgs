@@ -21477,6 +21477,8 @@ with pkgs;
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
 
+  liboqs = callPackage ../development/libraries/liboqs { };
+
   libosinfo = callPackage ../development/libraries/libosinfo { };
 
   libosip = callPackage ../development/libraries/osip {};
@@ -26330,6 +26332,8 @@ with pkgs;
   pcstat = callPackage ../tools/system/pcstat { };
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
+
+  picoprobe-udev-rules = callPackage ../os-specific/linux/picoprobe-udev-rules { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
 
@@ -37304,6 +37308,8 @@ with pkgs;
   dump = callPackage ../tools/backup/dump { };
 
   dxvk = callPackage ../misc/dxvk { };
+  dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
+  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "2.1"; };
 
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
@@ -38872,6 +38878,8 @@ with pkgs;
   xsos = callPackage ../os-specific/linux/xsos { };
 
   xmcp = callPackage ../tools/X11/xmcp { };
+
+  yesplaymusic = callPackage ../applications/audio/yesplaymusic { };
 
   ymuse = callPackage ../applications/audio/ymuse { };
 
