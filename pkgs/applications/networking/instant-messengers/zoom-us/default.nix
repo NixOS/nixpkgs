@@ -103,6 +103,8 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
