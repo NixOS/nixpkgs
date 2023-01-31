@@ -7,9 +7,11 @@
 , eigen
 , fetchFromGitHub
 , glfw
+, gmp
 , libjpeg
 , libpng
 , libtiff
+, mpfr
 , opencv
 , openmp
 , pkg-config
@@ -47,9 +49,11 @@ stdenv.mkDerivation rec {
     cgal
     eigen
     glfw
+    gmp
     libjpeg
     libpng
     libtiff
+    mpfr
     opencv
     openmp
     vcg
