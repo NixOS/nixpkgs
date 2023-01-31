@@ -2,13 +2,16 @@ import argparse
 import json
 
 from abc import abstractmethod
-from collections.abc import MutableMapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from markdown_it.utils import OptionsDict
 from markdown_it.token import Token
 from typing import Any, Optional
 from xml.sax.saxutils import escape, quoteattr
 
+import markdown_it
+
 from .docbook import DocBookRenderer, make_xml_id
+from .manpage import ManpageRenderer, man_escape
 from .md import Converter, md_escape
 from .types import OptionLoc, Option, RenderedOption
 
@@ -28,16 +31,10 @@ class BaseConverter(Converter):
 
     def __init__(self, manpage_urls: dict[str, str],
                  revision: str,
-                 document_type: str,
-                 varlist_id: str,
-                 id_prefix: str,
                  markdown_by_default: bool):
         super().__init__(manpage_urls)
         self._options = {}
         self._revision = revision
-        self._document_type = document_type
-        self._varlist_id = varlist_id
-        self._id_prefix = id_prefix
         self._markdown_by_default = markdown_by_default
 
     def _sorted_options(self) -> list[tuple[str, RenderedOption]]:
@@ -183,6 +180,17 @@ class DocBookConverter(BaseConverter):
     __renderer__ = OptionsDocBookRenderer
     __option_block_separator__ = ""
 
+    def __init__(self, manpage_urls: dict[str, str],
+                 revision: str,
+                 markdown_by_default: bool,
+                 document_type: str,
+                 varlist_id: str,
+                 id_prefix: str):
+        super().__init__(manpage_urls, revision, markdown_by_default)
+        self._document_type = document_type
+        self._varlist_id = varlist_id
+        self._id_prefix = id_prefix
+
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
         if lit := option_is(option, key, 'literalDocBook'):
             return [ f"<para><emphasis>{key.capitalize()}:</emphasis> {lit['text']}</para>" ]
@@ -258,6 +266,101 @@ class DocBookConverter(BaseConverter):
 
         return "\n".join(result)
 
+class OptionsManpageRenderer(ManpageRenderer):
+    pass
+
+class ManpageConverter(BaseConverter):
+    def __renderer__(self, manpage_urls: Mapping[str, str],
+                     parser: Optional[markdown_it.MarkdownIt] = None) -> OptionsManpageRenderer:
+        return OptionsManpageRenderer(manpage_urls, self._options_by_id, parser)
+
+    __option_block_separator__ = ".sp"
+
+    _options_by_id: dict[str, str]
+
+    def __init__(self, revision: str, markdown_by_default: bool):
+        self._options_by_id = {}
+        super().__init__({}, revision, markdown_by_default)
+
+    def add_options(self, options: dict[str, Any]) -> None:
+        for (k, v) in options.items():
+            self._options_by_id[f'#{make_xml_id(f"opt-{k}")}'] = k
+        return super().add_options(options)
+
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            raise RuntimeError("can't render manpages in the presence of docbook")
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            raise RuntimeError("can't render manpages in the presence of docbook")
+        else:
+            return super()._render_description(desc)
+
+    def _related_packages_header(self) -> list[str]:
+        return [
+            '\\fIRelated packages:\\fP',
+            '.sp',
+        ]
+
+    def _decl_def_header(self, header: str) -> list[str]:
+        return [
+            f'\\fI{man_escape(header)}:\\fP',
+        ]
+
+    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
+        return [
+            '.RS 4',
+            f'\\fB{man_escape(name)}\\fP',
+            '.RE'
+        ]
+
+    def _decl_def_footer(self) -> list[str]:
+        return []
+
+    def finalize(self) -> str:
+        result = []
+
+        result += [
+            r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
+            r'''.\" disable hyphenation''',
+            r'''.nh''',
+            r'''.\" disable justification (adjust text to left margin only)''',
+            r'''.ad l''',
+            r'''.\" enable line breaks after slashes''',
+            r'''.cflags 4 /''',
+            r'''.SH "NAME"''',
+            self._render('{file}`configuration.nix` - NixOS system configuration specification'),
+            r'''.SH "DESCRIPTION"''',
+            r'''.PP''',
+            self._render('The file {file}`/etc/nixos/configuration.nix` contains the '
+                        'declarative specification of your NixOS system configuration. '
+                        'The command {command}`nixos-rebuild` takes this file and '
+                        'realises the system configuration specified therein.'),
+            r'''.SH "OPTIONS"''',
+            r'''.PP''',
+            self._render('You can use the following options in {file}`configuration.nix`.'),
+        ]
+
+        for (name, opt) in self._sorted_options():
+            result += [
+                ".PP",
+                f"\\fB{man_escape(name)}\\fR",
+                ".RS 4",
+            ]
+            result += opt.lines
+            result.append(".RE")
+
+        result += [
+            r'''.SH "AUTHORS"''',
+            r'''.PP''',
+            r'''Eelco Dolstra and the Nixpkgs/NixOS contributors''',
+        ]
+
+        return "\n".join(result)
+
 def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
@@ -268,27 +371,47 @@ def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument("infile")
     p.add_argument("outfile")
 
+def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
+    p.add_argument('--revision', required=True)
+    p.add_argument("infile")
+    p.add_argument("outfile")
+
 def _run_cli_db(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
         md = DocBookConverter(
             json.load(manpage_urls),
             revision = args.revision,
+            markdown_by_default = args.markdown_by_default,
             document_type = args.document_type,
             varlist_id = args.varlist_id,
-            id_prefix = args.id_prefix,
-            markdown_by_default = args.markdown_by_default)
+            id_prefix = args.id_prefix)
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))
         with open(args.outfile, 'w') as f:
             f.write(md.finalize())
 
+def _run_cli_manpage(args: argparse.Namespace) -> None:
+    md = ManpageConverter(
+        revision = args.revision,
+        # manpage rendering only works if there's no docbook, so we can
+        # also set markdown_by_default with no ill effects.
+        markdown_by_default = True)
+
+    with open(args.infile, 'r') as f:
+        md.add_options(json.load(f))
+    with open(args.outfile, 'w') as f:
+        f.write(md.finalize())
+
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
     _build_cli_db(formats.add_parser('docbook'))
+    _build_cli_manpage(formats.add_parser('manpage'))
 
 def run_cli(args: argparse.Namespace) -> None:
     if args.format == 'docbook':
         _run_cli_db(args)
+    elif args.format == 'manpage':
+        _run_cli_manpage(args)
     else:
         raise RuntimeError('format not hooked up', args)
