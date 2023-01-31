@@ -13257,6 +13257,12 @@
     githubId = 3521180;
     name = "Tom Sydney Kerckhove";
   };
+  nosewings = {
+    name = "Nicholas Coltharp";
+    email = "coltharpnicholas@gmail.com";
+    github = "nosewings";
+    githubId = 24929858;
+  };
   NotAShelf = {
     name = "NotAShelf";
     email = "raf@notashelf.dev";
