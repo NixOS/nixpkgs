@@ -28586,6 +28586,8 @@ with pkgs;
 
   complete-alias = callPackage ../tools/misc/complete-alias { };
 
+  completely = callPackage ../tools/misc/completely { };
+
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
