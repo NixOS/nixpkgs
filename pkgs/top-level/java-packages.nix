@@ -110,6 +110,7 @@ in {
     openjdk13-bootstrap = mkBootstrap adoptopenjdk-13
       ../development/compilers/openjdk/12.nix
       (bootstrapArgs // {
+        inherit openjdk11-bootstrap;
         /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
         stdenv = gcc8Stdenv;
       });
