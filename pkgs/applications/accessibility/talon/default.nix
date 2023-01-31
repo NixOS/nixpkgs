@@ -184,6 +184,8 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
+  dontWrapQtApps = true;
+
   nativeBuildInputs = [
     makeWrapper
     #autoPatchelfHook
