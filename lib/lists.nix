@@ -306,7 +306,7 @@ rec {
   /* Splits the elements of a list in two lists, `right` and
      `wrong`, depending on the evaluation of a predicate.
 
-     Type: (a -> bool) -> [a] -> { right :: [a], wrong :: [a] }
+     Type: (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
 
      Example:
        partition (x: x > 2) [ 5 1 2 3 4 ]
@@ -374,7 +374,7 @@ rec {
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
 
-     Type: zipLists :: [a] -> [b] -> [{ fst :: a, snd :: b}]
+     Type: zipLists :: [a] -> [b] -> [{ fst :: a; snd :: b; }]
 
      Example:
        zipLists [ 1 2 ] [ "a" "b" ]
