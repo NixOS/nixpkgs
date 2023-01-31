@@ -12,7 +12,7 @@
 , enableFma ? stdenv.hostPlatform.fmaSupport
 , enableMpi ? false
 , mpi
-, withDoc ? stdenv.cc.isGNU
+, enableFortran ? stdenv.cc.isGNU # generate Fortran wrapper with hardcoded gcc
 }:
 
 with lib;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" ];
-  outputBin = "dev"; # fftw-wisdom
+  #outputBin = "dev"; # fftw-wisdom # not in cmake
 
   nativeBuildInputs = [
     gfortran
@@ -51,22 +51,32 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ] ++ optional enableMpi mpi;
 
-  configureFlags =
-    [ "--enable-shared"
-      "--enable-threads"
+  cmakeFlags =
+    let
+      # all x86_64 have sse2
+      # however, not all float sizes fit
+      enableSse2 = (stdenv.isx86_64 && (precision == "single" || precision == "double"));
+      enableSse = enableSse2;
+    in
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      #"-DBUILD_TESTS=ON" # default ON
+      "-DENABLE_OPENMP=ON" # Use OpenMP for multithreading
+      "-DENABLE_THREADS=ON" # Use pthread for multithreading
     ]
-    ++ optional (precision != "double") "--enable-${precision}"
-    # all x86_64 have sse2
-    # however, not all float sizes fit
-    ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional enableAvx "--enable-avx"
-    ++ optional enableAvx2 "--enable-avx2"
-    ++ optional enableAvx512 "--enable-avx512"
-    ++ optional enableFma "--enable-fma"
-    ++ [ "--enable-openmp" ]
-    ++ optional enableMpi "--enable-mpi"
-    # doc generation causes Fortran wrapper generation which hard-codes gcc
-    ++ optional (!withDoc) "--disable-doc";
+    # default precision is double
+    ++ optional (precision == "single") "-DENABLE_FLOAT=ON"
+    ++ optional (precision == "long-double") "-DENABLE_LONG_DOUBLE=ON"
+    ++ optional (precision == "quad-precision") "-DENABLE_QUAD_PRECISION=ON"
+    ++ optional enableSse "-DENABLE_SSE=ON"
+    ++ optional enableSse2 "-DENABLE_SSE2=ON"
+    ++ optional enableAvx "-DENABLE_AVX=ON"
+    ++ optional enableAvx2 "-DENABLE_AVX2=ON"
+    #++ optional enableAvx512 "-DENABLE_AVX512=ON" # missing in cmake
+    #++ optional enableFma "-DENABLE_FMA=ON" # missing in cmake
+    #++ optional enableMpi "-DENABLE_MPI=ON" # missing in cmake
+    ++ optional (!enableFortran) "-DDISABLE_FORTRAN=ON"
+  ;
 
   enableParallelBuilding = true;
 
