@@ -1,19 +1,21 @@
 { lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
-# TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
-# This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
+# TODO: Since be1392dbd9debfe1d9a72b6aeb01a7a3c625623f, this package uses JDK11 because there have
+# been issues with JDK16 at that time. The issue that caused the program to crash at startup:
 # https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
-# If you're updating this derivation, check the link above to see if it's been fixed upstream
-# and try replacing all occurrences of jdk11 with jre and test whether it works.
+# This seems to have been resolved but code generation to EWARM and MDK-ARM failed with JDK19 which
+# was the newest JDK then..Therefore, JDK11 was kept.
+# If you're updating this derivation, check if all issues with the newest JDK have been resolved by
+# replacing all occurrences of jdk11 with jdk. If so, keep that change.
 let
   iconame = "STM32CubeMX";
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
-  version = "6.6.1";
+  version = "6.7.0";
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-    sha256 = "sha256-NfJMXHQ7JXzRSdOAYfx2t0xsi/w2S5FK3NovcsDOi+E=";
+    sha256 = "sha256-PX8Fw8XK4WXAs9oRDYS5exUTP74Bdkt7dA9sP8VpLzM=";
     stripRoot = false;
   };
 
