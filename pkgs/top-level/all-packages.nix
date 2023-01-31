@@ -38905,6 +38905,8 @@ with pkgs;
 
   xmcp = callPackage ../tools/X11/xmcp { };
 
+  yesplaymusic = callPackage ../applications/audio/yesplaymusic { };
+
   ymuse = callPackage ../applications/audio/ymuse { };
 
   zk = callPackage ../applications/office/zk {};
