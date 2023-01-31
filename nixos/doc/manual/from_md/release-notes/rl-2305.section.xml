@@ -211,6 +211,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.kubo.settings</literal> option is now no
+          longer stateful. If you changed any of the options in
+          <literal>services.kubo.settings</literal> in the past and then
+          removed them from your NixOS configuration again, those
+          changes are still in your Kubo configuration file but will now
+          be reset to the default. If you’re unsure, you may want to
+          make a backup of your configuration file (probably
+          /var/lib/ipfs/config) and compare after the update.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module no longer fetches instance metadata in
           stage-1. This results in a significantly smaller initramfs,
           since network drivers no longer need to be included, and
