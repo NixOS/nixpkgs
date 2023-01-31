@@ -64,6 +64,11 @@ in
         description = lib.mdDoc ''
           A file which contains JSON configuration for yggdrasil.
           See the {option}`settings` option for more information.
+
+          Note: This file must not be larger than 1 MB because it is passed to
+          the yggdrasil process via systemd‘s LoadCredential mechanism. For
+          details, see <https://systemd.io/CREDENTIALS/> and `man 5
+          systemd.exec`.
         '';
       };
 
@@ -145,21 +150,38 @@ in
         before = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        preStart =
-          (if settingsProvided || configFileProvided || cfg.persistentKeys then
+        # This script first prepares the config file, then it starts Yggdrasil.
+        # The preparation could also be done in ExecStartPre/preStart but only
+        # systemd versions >= v252 support reading credentials in ExecStartPre. As
+        # of February 2023, systemd v252 is not yet in the stable branch of NixOS.
+        #
+        # This could be changed in the future once systemd version v252 has
+        # reached NixOS but it does not have to be. Config file preparation is
+        # fast enough, it does not need elevated privileges, and `set -euo
+        # pipefail` should make sure that the service is not started if the
+        # preparation fails. Therefore, it is not necessary to move the
+        # preparation to ExecStartPre.
+        script = ''
+          set -euo pipefail
+
+          # prepare config file
+          ${(if settingsProvided || configFileProvided || cfg.persistentKeys then
             "echo "
 
             + (lib.optionalString settingsProvided
               "'${builtins.toJSON cfg.settings}'")
-            + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
+            + (lib.optionalString configFileProvided
+              "$(cat \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
             + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
             + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
           else
-            "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
+            "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
+
+          # start yggdrasil
+          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf
+        '';
 
         serviceConfig = {
-          ExecStart =
-            "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "always";
 
@@ -167,9 +189,9 @@ in
           StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
-            ++ lib.optional cfg.persistentKeys keysPath;
-          ReadWritePaths = "/run/yggdrasil";
+          BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
+          LoadCredential =
+            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
