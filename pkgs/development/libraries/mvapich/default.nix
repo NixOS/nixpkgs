@@ -14,11 +14,11 @@ assert builtins.elem network [ "ethernet" "infiniband" "omnipath" ];
 
 stdenv.mkDerivation rec {
   pname = "mvapich";
-  version = "2.3.6";
+  version = "3.0a";
 
   src = fetchurl {
     url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
-    sha256 = "0jd28vy9ivl3rcpkxmhw73b6krzm0pd9jps8asw92wa00lm2z9mk";
+    sha256 = "sha256-cfZZO/v+mp9vXHUJBEYfAHv3S+xHlUTk2jdbfUpWsqw=";
   };
 
   nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
