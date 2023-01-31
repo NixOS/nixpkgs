@@ -3319,6 +3319,8 @@ with pkgs;
 
   itch = callPackage ../games/itch {};
 
+  itchiodl = callPackage ../games/itchiodl { };
+
   itd = callPackage ../applications/misc/itd { };
 
   kord = callPackage ../applications/misc/kord { };
@@ -12730,6 +12732,8 @@ with pkgs;
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
+  twspace-crawler = callPackage ../tools/misc/twspace-crawler { };
+
   twspace-dl = callPackage ../tools/misc/twspace-dl { };
 
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
@@ -13006,6 +13010,8 @@ with pkgs;
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
+
+  wakapi = callPackage ../tools/misc/wakapi { };
 
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
@@ -29056,6 +29062,8 @@ with pkgs;
 
   go-motion = callPackage ../development/tools/go-motion { };
 
+  go-musicfox = callPackage ../applications/audio/go-musicfox { };
+
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
   greenfoot = callPackage ../applications/editors/greenfoot {
@@ -29426,6 +29434,8 @@ with pkgs;
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   w_scan = callPackage ../applications/video/w_scan { };
+
+  w_scan2 = callPackage ../applications/video/w_scan2 { };
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
