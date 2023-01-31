@@ -12700,6 +12700,8 @@ with pkgs;
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
+  twspace-crawler = callPackage ../tools/misc/twspace-crawler { };
+
   twspace-dl = callPackage ../tools/misc/twspace-dl { };
 
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
