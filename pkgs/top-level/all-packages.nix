@@ -30013,6 +30013,8 @@ with pkgs;
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans { };
 
+  quivira = callPackage ../data/fonts/quivira { };
+
   raleway = callPackage ../data/fonts/raleway { };
 
   recursive = callPackage ../data/fonts/recursive { };
