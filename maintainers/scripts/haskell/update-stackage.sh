@@ -63,11 +63,13 @@ sed -r \
     -e '/ lsp-test /d' \
     -e '/ hie-bios /d' \
     -e '/ ShellCheck /d' \
+    -e '/ Agda /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.
 # lsp, lsp-types, lsp-test, hie-bios: These are tightly coupled to hls which is not in stackage. They have no rdeps in stackage.
 # ShellCheck: latest version of command-line dev tool.
+# Agda: The Agda community is fast-moving; we strive to always include the newest versions of Agda and the Agda packages in nixpkgs.
 
 if [[ "${1:-}" == "--do-commit" ]]; then
 git add $stackage_config
