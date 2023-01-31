@@ -15,6 +15,7 @@ let
     , stdenvNoCC
     , zlib
     , withAda ? true
+    , withIasl ? true
     }:
 
     stdenvNoCC.mkDerivation rec {
@@ -54,10 +55,15 @@ let
         patchShebangs util/genbuild_h/genbuild_h.sh
       '';
 
-      buildPhase = ''
+      preBuild = ''
         export CROSSGCC_VERSION=$(cat .crossgcc_version)
-        make crossgcc-${arch} CPUS=$NIX_BUILD_CORES DEST=$out
       '';
+
+      makeFlags = [
+        "crossgcc-${arch}"
+        "CPUS=$(NIX_BUILD_CORES)"
+        "DEST=$(out)"
+      ] ++ (lib.optionals withIasl [ "iasl" ]);
 
       meta = with lib; {
         homepage = "https://www.coreboot.org";
