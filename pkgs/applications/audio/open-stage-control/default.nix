@@ -2,13 +2,13 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-6tRd8boVwWc8qGlklYqA/Kp76VOMvtUJlu/G/InvHkA=";
+    hash = "sha256-tfWimJ9eEFBUxPRVNjgbu8tQNokPbXOxOXO64mFuMfM=";
   };
 
   # Remove some Electron stuff from package.json
