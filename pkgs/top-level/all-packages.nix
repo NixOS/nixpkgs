@@ -29393,6 +29393,8 @@ with pkgs;
 
   w_scan = callPackage ../applications/video/w_scan { };
 
+  w_scan2 = callPackage ../applications/video/w_scan2 { };
+
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
