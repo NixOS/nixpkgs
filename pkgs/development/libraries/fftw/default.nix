@@ -31,12 +31,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
 
+  # fix package version in cmake files
+  # https://github.com/FFTW/fftw3/issues/130#issuecomment-1409884653
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "set (FFTW_VERSION 3.3.9)" "set (FFTW_VERSION 3.3.10)"
+  '';
+
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # fftw-wisdom
 
   nativeBuildInputs = [
     gfortran
-    # build with cmake to generate FFTW3LibraryDepends.cmake https://github.com/FFTW/fftw3/issues/130
     cmake
   ];
 
