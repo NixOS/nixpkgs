@@ -38,6 +38,7 @@ let
     propagatedBuildInputs = [ Foundation ];
     patches = [
       ./patches/cmake-disable-rpath.patch
+      ./patches/disable-index-store.patch
       ./patches/disable-sandbox.patch
       ./patches/fix-clang-cxx.patch
       (substituteAll {
