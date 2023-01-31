@@ -41,6 +41,8 @@
 , openssl
 , libusb
 , callPackage
+, useBinaryWav2letter ? true # large dependency
+, useBinarySkiaSharp ? true # large dependency
 }:
 
 let
@@ -48,7 +50,7 @@ let
   python3 = python39;
   w2ldecode = callPackage ./w2ldecode.nix { };
   # TODO try latest version of wav2letter in https://github.com/flashlight/flashlight/tree/main/flashlight/app/asr
-  # flashlight is not in nixpkgs
+  # TODO fix build: flashlight, wav2letter, ...
   wav2letter = callPackage ./wav2letter_0_2.nix { };
 in
 
@@ -171,9 +173,14 @@ stdenv.mkDerivation rec {
     qt5.qtsvg
     qt5.qtgamepad
     python3
-    wav2letter
     w2ldecode
-  ];
+  ] /*++ (lib.optionals !useBinaryWav2letter [
+    # TODO fix build
+    wav2letter
+  ])*/ /*++ (lib.optionals !useBinarySkiaSharp [
+    # TODO add to nixpkgs
+    SkiaSharp
+  ])*/;
 
   dontBuild = true;
   dontConfigure = true;
@@ -189,10 +196,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     mkdir -p $out/opt/talon
 
+    # copy binaries
     cp talon $out/bin
-
-    # TODO build from https://github.com/mono/SkiaSharp
-    cp lib/libSkiaSharp.so $out/lib
+    ${if useBinarySkiaSharp then "cp lib/libSkiaSharp.so $out/lib" else ""}
+    ${if useBinaryWav2letter then "cp lib/libw2l-o.so $out/lib" else ""}
 
     # TODO copy some? dont copy all python
     rm -rf resources/python
