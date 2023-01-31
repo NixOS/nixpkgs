@@ -34,7 +34,7 @@ in {
       package = if stdenv.isLinux
         then package-linux
         else package-darwin;
-    in rec {
+    in {
       inherit package-linux package-darwin;
 
       jdk-hotspot = callPackage package.jdk-hotspot {};
@@ -66,11 +66,7 @@ in {
       headless = openjdk.override { headless = true; };
     };
 
-    openjdkDarwinMissing = version:
-      abort "OpenJDK ${builtins.toString version} is currently not supported on Darwin by nixpkgs.";
-
   in rec {
-
     adoptopenjdk-8 = mkAdoptopenjdk
       ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix;
