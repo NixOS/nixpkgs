@@ -1,6 +1,6 @@
 {stdenvNoCC, fetchFromGitHub, ...}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
     pname = "steam-devices";
     version = "20210825";
 
