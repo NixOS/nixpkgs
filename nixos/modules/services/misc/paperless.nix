@@ -226,9 +226,26 @@ in
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkg} ]]; then
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${pkg.version} ]]; then
           ${pkg}/bin/paperless-ngx migrate
-          echo ${pkg} > "$versionFile"
+
+          # Parse old version string format for backwards compatibility
+          version=$(echo "$version" | grep -ohP '[^-]+$')
+
+          versionLessThan() {
+            target=$1
+            [[ $({ echo "$version"; echo "$target"; } | sort -V | head -1) != "$target" ]]
+          }
+
+          if versionLessThan 1.12.0; then
+            # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
+            echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
+            ${pkg}/bin/paperless-ngx document_index reindex
+          fi
+
+          echo ${pkg.version} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
