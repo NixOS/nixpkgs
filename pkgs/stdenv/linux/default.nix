@@ -403,7 +403,6 @@ in
         perl gnum4 bison;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
 
-    } // lib.optionalAttrs (!enableGccExternalBootstrapForStdenv) {
       # We need libidn2 and its dependency libunistring as glibc dependency.
       # To avoid the cycle, we build against bootstrap libc, nuke references,
       # and use the result as input for our final glibc.  We also pass this pair
@@ -423,7 +422,6 @@ in
             "$out"/lib/lib*.so.*.*
         '';
       });
-    } // {
 
       # This also contains the full, dynamically linked, final Glibc.
       binutils = prevStage.binutils.override {
