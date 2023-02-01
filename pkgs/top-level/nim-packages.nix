@@ -104,6 +104,8 @@ lib.makeScope newScope (self:
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
+    syndicate = callPackage ../development/nim-packages/syndicate { };
+
     taps = callPackage ../development/nim-packages/taps { };
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
