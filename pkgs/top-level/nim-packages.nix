@@ -67,6 +67,8 @@ lib.makeScope newScope (self:
 
     pixie = callPackage ../development/nim-packages/pixie { };
 
+    preserves = callPackage ../development/nim-packages/preserves { };
+
     redis = callPackage ../development/nim-packages/redis { };
 
     redpool = callPackage ../development/nim-packages/redpool { };
