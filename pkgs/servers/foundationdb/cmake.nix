@@ -11,8 +11,7 @@
 let
   stdenv = if useClang then llvmPackages.libcxxStdenv else gccStdenv;
 
-  tests = with builtins;
-    builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
+  tests = builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
 
   makeFdb =
     { version
