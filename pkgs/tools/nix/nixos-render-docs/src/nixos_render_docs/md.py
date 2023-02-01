@@ -1,7 +1,7 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Callable, cast, Optional
+from typing import Any, Callable, cast, Iterable, Optional
 
 import re
 
@@ -79,6 +79,11 @@ class Renderer(markdown_it.renderer.RendererProtocol):
         }
         self._admonition_stack = []
 
+    def _join_block(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+    def _join_inline(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+
     def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
         tag = token.info.strip()
@@ -98,7 +103,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_block(map(lambda arg: do_one(*arg), enumerate(tokens)))
     def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         def do_one(i: int, token: Token) -> str:
@@ -106,7 +111,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_inline(map(lambda arg: do_one(*arg), enumerate(tokens)))
 
     def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
              env: MutableMapping[str, Any]) -> str:
