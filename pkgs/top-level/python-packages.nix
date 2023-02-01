@@ -3065,6 +3065,8 @@ self: super: with self; {
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
+  esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
+
   esprima = callPackage ../development/python-modules/esprima { };
 
   escapism = callPackage ../development/python-modules/escapism { };
