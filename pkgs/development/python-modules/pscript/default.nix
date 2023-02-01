@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pscript";
-  version = "0.7.6";
+  version = "0.7.7";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "flexxui";
     repo = pname;
     rev = "v${version}";
-    sha256 = "169px5n4jjnpdn9y86f28qwd95bwf1q1rz0a1h3lb5nn5c6ym8c4";
+    sha256 = "sha256-AhVI+7FiWyH+DfAXnau4aAHJAJtsWEpmnU90ey2z35o=";
   };
 
   checkInputs = [
