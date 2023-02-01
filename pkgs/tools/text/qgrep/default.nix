@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices CoreFoundation ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=mismatched-new-delete"
+  ];
+
   postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace Makefile \
       --replace "-msse2" "" --replace "-DUSE_SSE2" ""

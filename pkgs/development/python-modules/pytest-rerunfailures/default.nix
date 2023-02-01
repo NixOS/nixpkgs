@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools
+, packaging
+, pytest
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "10.3";
+  version = "11.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2CRNeZ+Jpu215XMB3a6ztvENZpFjjVHoCzcTEVkuKMY=";
+    hash = "sha256-zuWeTm8Nc65j+6CZhlMUupuRW3GTSVQREPoBL/tu+xM=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   buildInputs = [ pytest ];
+  propagatedBuildInputs = [ packaging ];
 
-  nativeCheckInputs = [ mock pytest ];
-
-  checkPhase = ''
-    py.test test_pytest_rerunfailures.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";

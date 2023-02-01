@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "newt";
-  version = "0.52.21";
+  version = "0.52.23";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
+    sha256 = "sha256-yqNykHsU7Oz+KY8NUSpi9B0zspBhAkSliu0Hu8WtoSo=";
   };
 
   postPatch = ''

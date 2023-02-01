@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline libmysqlclient postgresql sqlite ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-std=c++14"
+  ];
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Extremely lightweight but extensible database access library written in C";

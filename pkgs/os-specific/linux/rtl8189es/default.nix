@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
     substituteInPlace ./Makefile --replace /sbin/depmod \#
     substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

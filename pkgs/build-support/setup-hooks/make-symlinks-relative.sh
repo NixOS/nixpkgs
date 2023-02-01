@@ -1,4 +1,6 @@
-postFixupHooks+=(_makeSymlinksRelative)
+# symlinks are often created in postFixup
+# don't use fixupOutputHooks, it is before postFixup
+postFixupHooks+=(_makeSymlinksRelativeInAllOutputs)
 
 # For every symlink in $output that refers to another file in $output
 # ensure that the symlink is relative. This removes references to the output
@@ -25,4 +27,11 @@ _makeSymlinksRelative() {
         ln -snrf "$symlinkTarget" "$f"
 
     done < <(find $prefix -type l -print0)
+}
+
+_makeSymlinksRelativeInAllOutputs() {
+  local output
+  for output in $(getAllOutputNames); do
+    prefix="${!output}" _makeSymlinksRelative
+  done
 }

@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-std=c++14"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp iDSK $out/bin

@@ -31,12 +31,12 @@ assert enableGold -> withGold stdenv.targetPlatform;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.39";
+  version = "2.40";
 
   srcs = {
     normal = fetchurl {
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-      sha256 = "sha256-2iSoT+8iAQLdJAQt8G/eqFHCYUpTd/hu/6KPM7exYUg=";
+      hash = "sha256-+CmOsVOks30RLpRapcsoUAQLzyaj6mW1pxXIOv4F5Io=";
     };
     vc4-none = fetchFromGitHub {
       owner = "itszor";
@@ -84,12 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     # cross-compiling.
     ./always-search-rpath.patch
 
-    # Upstream backport of https://sourceware.org/PR29451:
-    # Don't emit 0-sized debug entries for objects without size.
-    # Without the change elfutils on i686-linux fail dwarf validity test:
-    #    https://sourceware.org/PR29450
-    # Remove once 2.40 releases.
-    ./gas-dwarf-zero-PR29451.patch
+    # Avoid `lib -> out -> lib` reference. Normally `bfd-plugins` does
+    # not need to know binutils' BINDIR at all. It's an absolute path
+    # where libraries are stored.
+    ./plugins-no-BINDIR.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
@@ -105,7 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
       else ./mips64-default-n64.patch)
   ;
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" "info" "man" "dev" ]
+  # Ideally we would like to always install 'lib' into a separate
+  # target. Unfortunately cross-compiled binutils installs libraries
+  # across both `$lib/lib/` and `$out/$target/lib` with a reference
+  # from $out to $lib. Probably a binutils bug: all libraries should go
+  # to $lib as binutils does not build target libraries. Let's make our
+  # life slightly simpler by installing everything into $out for
+  # cross-binutils.
+  ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -196,8 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Unconditionally disable:
     # - musl target needs porting: https://sourceware.org/PR29477
-    # - all targets rely on javac: https://sourceware.org/PR29479
     "--disable-gprofng"
+
+    # By default binutils searches $libdir for libraries. This brings in
+    # libbfd and libopcodes into a default visibility. Drop default lib
+    # path to force users to declare their use of these libraries.
+    "--with-lib-path=:"
   ]
   ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
   ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
@@ -218,10 +228,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # For the same reason we don't split "lib" output we undo the $target/
+  # prefix for installed headers and libraries we link:
+  #   $out/$host/$target/lib/*     to $out/lib/
+  #   $out/$host/$target/include/* to $dev/include/*
+  # TODO(trofi): fix installation paths upstream so we could remove this
+  # code and have "lib" output unconditionally.
+  postInstall = lib.optionalString (hostPlatform != targetPlatform) ''
+    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+  '';
+
   passthru = {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
+    # Having --enable-plugins is not enough, system has to support
+    # dlopen() or equivalent. See config/plugins.m4 and configure.ac
+    # (around PLUGINS) for cases that support or not support plugins.
+    # No platform specific filters yet here.
+    hasPluginAPI = enableGold;
   };
 
   meta = with lib; {

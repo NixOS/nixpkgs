@@ -97,7 +97,7 @@ let
   # patches are required for subtitle timing to work correctly. See:
   # https://github.com/HandBrake/HandBrake/issues/4029
   ffmpeg-version = "4.4.1";
-  ffmpeg-hb = ffmpeg-full.overrideAttrs (old: {
+  ffmpeg-hb = (ffmpeg-full.override { withSdl2 = false; }).overrideAttrs (old: {
     version = ffmpeg-version;
     src = fetchurl {
       url = "https://www.ffmpeg.org/releases/ffmpeg-${ffmpeg-version}.tar.bz2";

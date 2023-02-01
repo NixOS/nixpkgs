@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , python
+, pythonAtLeast
 , pythonOlder
 , arrow-cpp
 , cffi
@@ -109,6 +110,9 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
     "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
     "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Repr output is printing number instead of enum name so these tests fail
+    "--deselect=pyarrow/tests/test_fs.py::test_get_file_info"
   ];
 
   dontUseSetuptoolsCheck = true;

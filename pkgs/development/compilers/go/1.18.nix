@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , tzdata
 , substituteAll
@@ -87,6 +88,12 @@ stdenv.mkDerivation rec {
     })
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.16.patch
+
+    # runtime: support riscv64 SV57 mode
+    (fetchpatch {
+      url = "https://github.com/golang/go/commit/1e3c19f3fee12e5e2b7802a54908a4d4d03960da.patch";
+      sha256 = "sha256-mk/9gXwQEcAkiRemF6GiNU0c0fhDR29/YcKgQR7ONTA=";
+    })
   ];
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;

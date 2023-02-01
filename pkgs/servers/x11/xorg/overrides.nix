@@ -184,6 +184,7 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
   });
 
@@ -884,6 +885,11 @@ self: super:
           "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
+        ];
+
+        NIX_CFLAGS_COMPILE = [
+          # Needed with GCC 12
+          "-Wno-error=array-bounds"
         ];
 
         postInstall = ''

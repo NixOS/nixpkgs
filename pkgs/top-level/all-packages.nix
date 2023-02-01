@@ -7715,11 +7715,11 @@ with pkgs;
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
-  gnupg23 = callPackage ../tools/security/gnupg/23.nix {
+  gnupg24 = callPackage ../tools/security/gnupg/24.nix {
     guiSupport = stdenv.isDarwin;
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
   };
-  gnupg = gnupg23;
+  gnupg = gnupg24;
 
   gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
 
@@ -14259,7 +14259,7 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isLinux) then 9
-        else 11;
+        else 12;
       numS = toString num;
     in {
       gcc = pkgs.${"gcc${numS}"};
@@ -15629,13 +15629,13 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_66 = callPackage ../development/compilers/rust/1_66.nix {
+  rust_1_67 = callPackage ../development/compilers/rust/1_67.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
-    llvm_14 = llvmPackages_14.libllvm;
+    llvm_15 = llvmPackages_15.libllvm;
     # https://github.com/NixOS/nixpkgs/issues/201254
     stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
   };
-  rust = rust_1_66;
+  rust = rust_1_67;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -15644,8 +15644,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_66 = rust_1_66.packages.stable;
-  rustPackages = rustPackages_1_66;
+  rustPackages_1_67 = rust_1_67.packages.stable;
+  rustPackages = rustPackages_1_67;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -17185,13 +17185,9 @@ with pkgs;
     libc = preLibcCrossHeaders;
   };
 
-  libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix { };
 
-  libopcodes = callPackage ../development/tools/misc/binutils/libopcodes.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  libopcodes = callPackage ../development/tools/misc/binutils/libopcodes.nix { };
 
   # Held back 2.38 release. Remove once all dependencies are ported to 2.39.
   binutils-unwrapped_2_38 = callPackage ../development/tools/misc/binutils/2.38 {
@@ -19533,30 +19529,28 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
-  ffmpeg_4-headless = callPackage ../development/libraries/ffmpeg/4.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
-
-    sdlSupport = false;
-    vdpauSupport = false;
-    pulseaudioSupport = false;
-    libva = libva-minimal;
-  };
-
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
+      VideoDecodeAcceleration VideoToolbox;
   };
-
-  ffmpeg_5-headless = callPackage ../development/libraries/ffmpeg/5.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
-
-    sdlSupport = false;
-    vdpauSupport = false;
-    pulseaudioSupport = false;
-    libva = libva-minimal;
+  ffmpeg_4-headless = ffmpeg_4.override {
+    ffmpegVariant = "headless";
+  };
+  ffmpeg_4-full = ffmpeg.override {
+    ffmpegVariant = "full";
   };
 
   ffmpeg_5 = callPackage ../development/libraries/ffmpeg/5.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
+      VideoDecodeAcceleration VideoToolbox;
+  };
+  ffmpeg_5-headless = ffmpeg_5.override {
+    ffmpegVariant = "headless";
+  };
+  ffmpeg_5-full = ffmpeg_5.override {
+    ffmpegVariant = "full";
   };
 
   # Aliases
@@ -19565,26 +19559,8 @@ with pkgs;
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
   ffmpeg = ffmpeg_4;
-
   ffmpeg-headless = ffmpeg_4-headless;
-
-  ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
-    svt-av1 = if stdenv.isAarch64 then null else svt-av1;
-    rtmpdump = null; # Prefer the built-in RTMP implementation
-    # The following need to be fixed on Darwin
-    libjack2 = if stdenv.isDarwin then null else libjack2;
-    libmodplug = if stdenv.isDarwin then null else libmodplug;
-    libmfx = if stdenv.isDarwin then null else intel-media-sdk;
-    libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    samba = if stdenv.isDarwin then null else samba;
-    inherit (darwin.apple_sdk.frameworks)
-      Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
-      VideoDecodeAcceleration VideoToolbox;
-  };
-
-  ffmpeg_5-full = ffmpeg-full.override {
-    ffmpeg = ffmpeg_5;
-  };
+  ffmpeg-full = ffmpeg_4-full;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
@@ -19644,7 +19620,6 @@ with pkgs;
 
   freeimage = callPackage ../development/libraries/freeimage {
     inherit (darwin) autoSignDarwinBinariesHook;
-    libraw = libraw_unstable;
   };
 
   freetts = callPackage ../development/libraries/freetts {
@@ -23587,7 +23562,10 @@ with pkgs;
 
   vte = callPackage ../development/libraries/vte {
     # Needs GCC ≥10 but aarch64 defaults to GCC 9.
-    stdenv = clangStdenv;
+    stdenv =
+      if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU
+      then clangStdenv
+      else stdenv;
   };
 
   vte-gtk4 = vte.override {
@@ -26056,7 +26034,6 @@ with pkgs;
   };
 
   libraw = callPackage ../development/libraries/libraw { };
-  libraw_unstable = callPackage ../development/libraries/libraw/unstable.nix { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
@@ -26564,7 +26541,7 @@ with pkgs;
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
-    gnupg = callPackage ../tools/security/gnupg/23.nix {
+    gnupg = gnupg.override {
       enableMinimal = true;
       guiSupport = false;
     };

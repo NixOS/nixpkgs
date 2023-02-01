@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
-  version = "4.99.1";
+  version = "4.99.3";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ebNphfsnAxRmGNh8Ss3j4Gi5HFU/uT8CGjN/F1/RDr4=";
+    url = "http://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+    sha256 = "sha256-rXWm7T3A2XMpRbLlSDy0Hci0tSihaTFeSZxoYZUuc7M=";
   };
 
   postPatch = ''
@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  configureFlags = lib.optional
-    (stdenv.hostPlatform != stdenv.buildPlatform)
-    "ac_cv_linux_vers=2";
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
 
   meta = with lib; {
     description = "Network sniffer";

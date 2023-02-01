@@ -9,7 +9,7 @@
 , python3
 , qttools # for translations
 , wrapQtAppsHook
-, ffmpeg-jami
+, ffmpeg_5
 , jami-daemon
 , libnotify
 , qt5compat
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ffmpeg-jami
+    ffmpeg_5
     jami-daemon
     libnotify
     networkmanager

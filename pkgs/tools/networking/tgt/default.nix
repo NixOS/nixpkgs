@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     "SD_NOTIFY=1"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
   ];

@@ -89,7 +89,6 @@ stdenv.mkDerivation {
     )
   '' + optionalString withTsm ''
     export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
-    export XBSA_XLIBS="-ldl"
   '';
 
   buildFlags = [ "all_nolibafs" ];

@@ -175,7 +175,7 @@ stdenv.mkDerivation ({
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross.package;
 
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
@@ -212,7 +212,6 @@ stdenv.mkDerivation ({
   };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
-  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

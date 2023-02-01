@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
                    -L${sqlite.out}/lib";
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=use-after-free"
+  ];
+
   # Be sure to keep the statically linked libraries
   dontDisableStatic = true;
 

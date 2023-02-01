@@ -11,11 +11,11 @@ assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.3.7";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-7hY6X7nsmf/BsY5l+u+NCGgAxXE9FaZyq1fTeZ2oNmk=";
+    sha256 = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -29,19 +29,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
-    ./allow-import-of-previously-known-keys-even-without-UI.patch
+    # TODO: Refresh patch? Doesn't apply on 2.4.0
+    #./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
 
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
 
-    # Fix regression when using YubiKey devices as smart cards.
-    # See https://dev.gnupg.org/T6070 for details.
-    # Committed upstream, remove this patch when updating to the next release.
-    (fetchpatch {
-      url = "https://dev.gnupg.org/rGf34b9147eb3070bce80d53febaa564164cd6c977?diff=1";
-      sha256 = "sha256-J/PLSz8yiEgtGv+r3BTGTHrikV70AbbHQPo9xbjaHFE=";
-    })
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1

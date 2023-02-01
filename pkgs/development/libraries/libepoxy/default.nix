@@ -50,8 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dtests=${if doCheck then "true" else "false"}"
+    "-Degl=${if x11Support then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
+    "-Dtests=${lib.boolToString doCheck}"
+    "-Dx11=${lib.boolToString x11Support}"
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString x11Support ''-DLIBGL_PATH="${getLib libGL}/lib"'';

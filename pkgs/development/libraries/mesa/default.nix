@@ -326,10 +326,6 @@ self = stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
-
-    # Work around regression from https://github.com/NixOS/nixpkgs/pull/210004
-    # TODO(trofi): remove
-    "--sysroot=/"
   ];
 
   passthru = {

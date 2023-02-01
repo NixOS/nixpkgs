@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
       ${lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
         s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -lm -lpthread -lz:
         s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient.dev}/include/mysql/:
       ''}
       ${lib.optionalString enableAuthDovecot ''
