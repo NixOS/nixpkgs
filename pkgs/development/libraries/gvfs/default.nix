@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -44,12 +45,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.50.2";
+  version = "1.50.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "A9crjBXvQ4EQ8M9Fe1ZVJmyLUV0EErMPTVXPoNoGrF4=";
+    sha256 = "aJcRnpe7FgKdJ3jhpaVKamWSYx+LLzoqHepO8rAYA/0=";
   };
+
+  patches = [
+    # Hardcode the ssh path again.
+    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
+      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     # patchShebangs requires executable file
