@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchpatch
 , installShellFiles
 , ninja
@@ -7,6 +8,10 @@
 , zlib
 , coreutils
 , substituteAll
+, Foundation
+, OpenGL
+, AppKit
+, Cocoa
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -70,12 +75,19 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
       hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
     })
-  ];
+  ]
+    # Nixpkgs cctools does not have bitcode support.
+    ++ lib.optional stdenv.isDarwin ./disable-bitcode.patch;
+
+  postPatch = if stdenv.isDarwin then ''
+    rm -r 'test cases/osx/7 bitcode'
+  '' else null;
 
   setupHook = ./setup-hook.sh;
 
   nativeCheckInputs = [ ninja pkg-config ];
-  checkInputs = [ zlib ];
+  checkInputs = [ zlib ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation OpenGL AppKit Cocoa ];
   checkPhase = ''
     patchShebangs "test cases"
     substituteInPlace "test cases/native/8 external program shebang parsing/script.int.in" \
