@@ -107,9 +107,9 @@ class BaseConverter(Converter):
 
     def _render_description(self, desc: str | dict[str, str]) -> list[str]:
         if isinstance(desc, str) and self._markdown_by_default:
-            return [ self._render(desc) ]
+            return [ self._render(desc) ] if desc else []
         elif isinstance(desc, dict) and desc.get('_type') == 'mdDoc':
-            return [ self._render(desc['text']) ]
+            return [ self._render(desc['text']) ] if desc['text'] else []
         else:
             raise Exception("description has unrecognized type", desc)
 
