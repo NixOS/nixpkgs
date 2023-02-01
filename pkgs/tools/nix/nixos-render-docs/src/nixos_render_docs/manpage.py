@@ -263,10 +263,10 @@ class ManpageRenderer(Renderer):
         return self._admonition_close()
     def dl_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                 env: MutableMapping[str, Any]) -> str:
-        return ""
+        return ".RS 4"
     def dl_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                  env: MutableMapping[str, Any]) -> str:
-        return ""
+        return ".RE"
     def dt_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                 env: MutableMapping[str, Any]) -> str:
         return ".PP"
