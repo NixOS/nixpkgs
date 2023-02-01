@@ -312,7 +312,11 @@ rec {
     You must accept the following licenses:
     ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-    by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+    a)
+      by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+    b)
+      by an environment variable for a single invocation of the nix tools.
+        $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
     inherit deployAndroidPackage os cmdLineToolsVersion;
 
