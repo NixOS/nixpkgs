@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libunistring
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
@@ -21,20 +21,23 @@
 , zsh
 , fish
 , nixosTests
+, go
+, buildGoModule
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.26.5";
+  version = "0.27.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UloBlV26HnkvbzP/NynlPI77z09MBEVgtrg5SeTmwB4=";
+    hash = "sha256-742RB5ijCEYgjGgGyb6ZZ34GfMHm8253d3cNLQQzL38=";
   };
+  vendorHash = "sha256-0hylttMwkmhpydKY7cpOoHrKmaGF4ediI8uwtcT3x4I=";
 
   buildInputs = [
     harfbuzz
@@ -67,6 +70,7 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
+    go
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
@@ -75,13 +79,6 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    # Fix clone-in-kitty not working on bash >= 5.2
-    # TODO: Removed on kitty release > 0.26.5
-    (fetchpatch {
-      url = "https://github.com/kovidgoyal/kitty/commit/51bba9110e9920afbefeb981e43d0c1728051b5e.patch";
-      sha256 = "sha256-1aSU4aU6j1/om0LsceGfhH1Hdzp+pPaNeWAi7U6VcP4=";
-    })
-
     # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
     ./fix-test_ssh_env_vars.patch
 
@@ -99,7 +96,17 @@ buildPythonApplication rec {
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  dontConfigure = true;
+  configurePhase = let
+    goModules = (buildGoModule {
+      pname = "kitty-go-modules";
+      inherit src vendorHash version;
+    }).go-modules;
+  in ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    export GOPROXY=off
+    cp -r --reflink=auto ${goModules} vendor
+  '';
 
   buildPhase = let
     commonOptions = ''
@@ -114,17 +121,17 @@ buildPythonApplication rec {
     runHook preBuild
     ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
-      ${python.interpreter} setup.py build ${darwinOptions}
+      ${python.pythonForBuild.interpreter} setup.py build ${darwinOptions}
       make docs
-      ${python.interpreter} setup.py kitty.app ${darwinOptions}
+      ${python.pythonForBuild.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
-      ${python.interpreter} setup.py build-launcher
-      ${python.interpreter} setup.py linux-package \
+      ${python.pythonForBuild.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
       --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
+      ${python.pythonForBuild.interpreter} setup.py build-launcher
     ''}
     runHook postBuild
   '';
