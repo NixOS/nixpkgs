@@ -13,9 +13,10 @@ def test_list_wide(ordered: bool) -> None:
         ("ordered", "ol", ".", "1.", "2.", "1", "2") if ordered else ("bullet", "ul", "-", "-", "-", "", "")
     )
     c = Converter({})
+    meta = { 'end': int(e2[:-1]) } if ordered else {}
     assert c._parse(f"{e1} a\n\n{e2} b") == [
         Token(type=f'{t}_list_open', tag=tag, nesting=1, attrs={'compact': False}, map=[0, 3], level=0,
-              children=None, content='', markup=m, info='', meta={}, block=True, hidden=False),
+              children=None, content='', markup=m, info='', meta=meta, block=True, hidden=False),
         Token(type='list_item_open', tag='li', nesting=1, attrs={}, map=[0, 2], level=1, children=None,
               content='', markup=m, info=i1, meta={}, block=True, hidden=False),
         Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=2, children=None,
@@ -54,9 +55,10 @@ def test_list_narrow(ordered: bool) -> None:
         ("ordered", "ol", ".", "1.", "2.", "1", "2") if ordered else ("bullet", "ul", "-", "-", "-", "", "")
     )
     c = Converter({})
+    meta = { 'end': int(e2[:-1]) } if ordered else {}
     assert c._parse(f"{e1} a\n{e2} b") == [
         Token(type=f'{t}_list_open', tag=tag, nesting=1, attrs={'compact': True}, map=[0, 2], level=0,
-              children=None, content='', markup=m, info='', meta={}, block=True, hidden=False),
+              children=None, content='', markup=m, info='', meta=meta, block=True, hidden=False),
         Token(type='list_item_open', tag='li', nesting=1, attrs={}, map=[0, 1], level=1, children=None,
               content='', markup=m, info=i1, meta={}, block=True, hidden=False),
         Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=2, children=None,
@@ -90,7 +92,7 @@ def test_list_narrow(ordered: bool) -> None:
     ]
     assert c._parse(f"{e1} - a\n{e2} b") == [
         Token(type=f'{t}_list_open', tag=tag, nesting=1, attrs={'compact': True}, map=[0, 2], level=0,
-              children=None, content='', markup=m, info='', meta={}, block=True, hidden=False),
+              children=None, content='', markup=m, info='', meta=meta, block=True, hidden=False),
         Token(type='list_item_open', tag='li', nesting=1, attrs={}, map=[0, 1], level=1, children=None,
               content='', markup=m, info=i1, meta={}, block=True, hidden=False),
         Token(type='bullet_list_open', tag='ul', nesting=1, attrs={'compact': True}, map=[0, 1], level=2,
@@ -132,7 +134,7 @@ def test_list_narrow(ordered: bool) -> None:
     ]
     assert c._parse(f"{e1} - a\n{e2} - b") == [
         Token(type=f'{t}_list_open', tag=tag, nesting=1, attrs={'compact': True}, map=[0, 2], level=0,
-              children=None, content='', markup=m, info='', meta={}, block=True, hidden=False),
+              children=None, content='', markup=m, info='', meta=meta, block=True, hidden=False),
         Token(type='list_item_open', tag='li', nesting=1, attrs={}, map=[0, 1], level=1, children=None,
               content='', markup=m, info=i1, meta={}, block=True, hidden=False),
         Token(type='bullet_list_open', tag='ul', nesting=1, attrs={'compact': True}, map=[0, 1], level=2,

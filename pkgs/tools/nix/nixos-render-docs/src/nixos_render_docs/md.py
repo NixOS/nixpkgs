@@ -1,7 +1,7 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Callable, Optional
+from typing import Any, Callable, cast, Optional
 
 import re
 
@@ -364,14 +364,21 @@ class Converter(ABC):
         # of each item to hidden. this is not useful for our stylesheets, which
         # signify this with a special css class on list elements instead.
         wide_stack = []
+        end_stack = []
         for i in range(0, len(tokens)):
             if tokens[i].type in [ 'bullet_list_open', 'ordered_list_open' ]:
                 wide_stack.append([i, True])
+                end_stack.append([i, cast(int, tokens[i].attrs.get('start', 1))])
             elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
                 (idx, compact) = wide_stack.pop()
                 tokens[idx].attrs['compact'] = compact
+                (idx, end) = end_stack.pop()
+                if tokens[i].type == 'ordered_list_close':
+                    tokens[idx].meta['end'] = end - 1
             elif len(wide_stack) > 0 and tokens[i].type == 'paragraph_open' and not tokens[i].hidden:
                 wide_stack[-1][1] = False
+            elif tokens[i].type == 'list_item_open':
+                end_stack[-1][1] += 1
 
         return tokens
 
