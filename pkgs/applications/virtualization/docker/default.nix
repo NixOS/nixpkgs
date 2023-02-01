@@ -2,11 +2,12 @@
 
 rec {
   dockerGen = {
-      version, rev, sha256
-      , moby-src
-      , runcRev, runcSha256
-      , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
+      version
+      , cliRev, cliHash
+      , mobyRev, mobyHash
+      , runcRev, runcHash
+      , containerdRev, containerdHash
+      , tiniRev, tiniHash, buildxSupport ? true, composeSupport ? true
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
@@ -29,7 +30,7 @@ rec {
         owner = "opencontainers";
         repo = "runc";
         rev = runcRev;
-        sha256 = runcSha256;
+        hash = runcHash;
       };
 
       # docker/runc already include these patches / are not applicable
@@ -44,7 +45,7 @@ rec {
         owner = "containerd";
         repo = "containerd";
         rev = containerdRev;
-        sha256 = containerdSha256;
+        hash = containerdHash;
       };
 
       buildInputs = oldAttrs.buildInputs
@@ -59,7 +60,7 @@ rec {
         owner = "krallin";
         repo = "tini";
         rev = tiniRev;
-        sha256 = tiniSha256;
+        hash = tiniHash;
       };
 
       # Do not remove static from make files as we want a static binary
@@ -69,6 +70,13 @@ rec {
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
+
+    moby-src = fetchFromGitHub {
+      owner = "moby";
+      repo = "moby";
+      rev = mobyRev;
+      hash = mobyHash;
+    };
 
     moby = buildGoPackage (lib.optionalAttrs stdenv.isLinux rec {
       pname = "moby";
@@ -95,7 +103,7 @@ rec {
         (fetchpatch {
           name = "buildkit-zfs.patch";
           url = "https://github.com/moby/moby/pull/43136.patch";
-          sha256 = "1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
+          hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
       ];
 
@@ -108,7 +116,7 @@ rec {
         # build engine
         cd ./go/src/${goPackagePath}
         export AUTO_GOPATH=1
-        export DOCKER_GITCOMMIT="${rev}"
+        export DOCKER_GITCOMMIT="${cliRev}"
         export VERSION="${version}"
         ./hack/make.sh dynbinary
         cd -
@@ -159,8 +167,8 @@ rec {
     src = fetchFromGitHub {
       owner = "docker";
       repo = "cli";
-      rev = "v${version}";
-      sha256 = sha256;
+      rev = cliRev;
+      hash = cliHash;
     };
 
     goPackagePath = "github.com/docker/cli";
@@ -192,7 +200,7 @@ rec {
       mkdir -p .gopath/src/github.com/docker/
       ln -sf $PWD .gopath/src/github.com/docker/cli
       export GOPATH="$PWD/.gopath:$GOPATH"
-      export GITCOMMIT="${rev}"
+      export GITCOMMIT="${cliRev}"
       export VERSION="${version}"
       export BUILDTIME="1970-01-01T00:00:00Z"
       source ./scripts/build/.variables
@@ -254,20 +262,16 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.21";
-    rev = "v${version}";
-    sha256 = "sha256-hPQ1t7L2fqoFWoinqIrDwFQ1bo9TzMb4l3HmAotIUS8=";
-    moby-src = fetchFromGitHub {
-      owner = "moby";
-      repo = "moby";
-      rev = "v${version}";
-      sha256 = "sha256-BcYDh/UEmmURt7hWLWdPTKVu/Nzoeq/shE+HnUoh8b4=";
-    };
+    version = "20.10.23";
+    cliRev = "v${version}";
+    cliHash = "sha256-fNaRpstyG90Jzq3+U2A42Jj+ixb+m7tXLioIcsegPbQ=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-nBPw/M4VC9XeZ9S33HWdWSjY2J2mYpI/TPOzvLjSmJM=";
     runcRev = "v1.1.4";
-    runcSha256 = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
-    containerdRev = "v1.6.9";
-    containerdSha256 = "sha256-KvQdYQLzgt/MKPsA/mO5un6nE3/xcvVYwIveNn/uDnU=";
+    runcHash = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
+    containerdRev = "v1.6.15";
+    containerdHash = "sha256-Vlftq//mLYZPoT2R/lHJA6wLnqiuC+Cpy4lGQC8jCPA=";
     tiniRev = "v0.19.0";
-    tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 }
