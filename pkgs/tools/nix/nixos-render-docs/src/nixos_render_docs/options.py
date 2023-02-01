@@ -22,6 +22,8 @@ def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
     return option[key] # type: ignore[return-value]
 
 class BaseConverter(Converter):
+    __option_block_separator__: str
+
     _options: dict[str, RenderedOption]
 
     def __init__(self, manpage_urls: dict[str, str],
@@ -117,26 +119,31 @@ class BaseConverter(Converter):
     def _related_packages_header(self) -> list[str]: raise NotImplementedError()
 
     def _convert_one(self, option: dict[str, Any]) -> list[str]:
-        result = []
+        blocks: list[list[str]] = []
 
         if desc := option.get('description'):
-            result += self._render_description(desc)
+            blocks.append(self._render_description(desc))
         if typ := option.get('type'):
             ro = " *(read only)*" if option.get('readOnly', False) else ""
-            result.append(self._render(f"*Type:* {md_escape(typ)}{ro}"))
+            blocks.append([ self._render(f"*Type:*\n{md_escape(typ)}{ro}") ])
 
-        result += self._render_code(option, 'default')
-        result += self._render_code(option, 'example')
+        if option.get('default'):
+            blocks.append(self._render_code(option, 'default'))
+        if option.get('example'):
+            blocks.append(self._render_code(option, 'example'))
 
         if related := option.get('relatedPackages'):
-            result += self._related_packages_header()
-            result.append(self._render(related))
+            blocks.append(self._related_packages_header())
+            blocks[-1].append(self._render(related))
         if decl := option.get('declarations'):
-            result += self._render_decl_def("Declared by", decl)
+            blocks.append(self._render_decl_def("Declared by", decl))
         if defs := option.get('definitions'):
-            result += self._render_decl_def("Defined by", defs)
+            blocks.append(self._render_decl_def("Defined by", defs))
 
-        return result
+        for part in [ p for p in blocks[0:-1] if p ]:
+            part.append(self.__option_block_separator__)
+
+        return [ l for part in blocks for l in part ]
 
     def add_options(self, options: dict[str, Any]) -> None:
         for (name, option) in options.items():
@@ -168,6 +175,7 @@ class OptionsDocBookRenderer(DocBookRenderer):
 
 class DocBookConverter(BaseConverter):
     __renderer__ = OptionsDocBookRenderer
+    __option_block_separator__ = ""
 
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
         if lit := option_is(option, key, 'literalDocBook'):
