@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.5.0";
+  version = "2.6.0";
 
   outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.5/${pname}-${version}.tar.xz";
-    sha256 = "sha256-kYSm672c5+shEVLn90GmyC8tHMDiSoTsnFKTnu4PBUI=";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.6/${pname}-${version}.tar.xz";
+    sha256 = "sha256-RDl7p251qc3lsCF3vGPNevQop4V4jjpwZ3M+d2GEJzU=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ melling ];
     platforms = with lib.platforms; linux;
   };
 }
