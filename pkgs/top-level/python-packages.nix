@@ -3079,7 +3079,6 @@ self: super: with self; {
 
   etebase = callPackage ../development/python-modules/etebase {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-    openssl = pkgs.openssl_1_1;
   };
 
   etebase-server = callPackage ../servers/etebase { };
@@ -7065,6 +7064,8 @@ self: super: with self; {
   phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
 
   pi1wire = callPackage ../development/python-modules/pi1wire { };
+
+  piano-transcription-inference = callPackage ../development/python-modules/piano-transcription-inference { };
 
   piccata = callPackage ../development/python-modules/piccata { };
 
@@ -11527,6 +11528,8 @@ self: super: with self; {
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
 
   torchinfo = callPackage ../development/python-modules/torchinfo { };
+
+  torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 

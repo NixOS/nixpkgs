@@ -22,25 +22,25 @@
 , systemd
 }:
 let
-  pname = "YesPlayMusic";
-  version = "0.4.5";
+  pname = "yesplaymusic";
+  version = "0.4.7";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version}_amd64.deb";
-      hash = "sha256-igd2MzIjwDSOLP0Xi2mSJnEPGWendggPC/MwTDCDui0=";
+      hash = "sha256-nnnHE2OgIqoz3dC+G0219FVBhvnWivLW1BX6+NYo6Ng=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version}_arm64.deb";
-      hash = "sha256-6MZrAJGXuEJ9HMUje3ppTz2rdaBydwoQKBk6af81pT0=";
+      hash = "sha256-+rrhY5iDDt/nYs0Vz5/Ef0sgpsdBKMtb1aVfCZLgRgg=";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version}-x64.dmg";
-      hash = "sha256-mvmaSrDoIDeOVylkJCVY97yRUHfEI8CysmKrgBUrFGM=";
+      hash = "sha256-z8CASZRWKlj1g3mhxTMMeR4klTvQ2ReSrL7Rt18qQbM=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version}-arm64.dmg";
-      hash = "sha256-Qo03rGS/qB6Sc1IunU7F81WJ/t+mWR7ZRsKYK97LHik=";
+      hash = "sha256-McYLczudKG4tRNIw/Ws4rht0n4tiKA2M99yKtJbdlY8=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

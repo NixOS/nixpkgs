@@ -9809,7 +9809,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_15;
+    electron = electron_22;
   };
 
   mosh = callPackage ../tools/networking/mosh { };
@@ -32090,6 +32090,8 @@ with pkgs;
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
+  pianotrans = callPackage ../applications/audio/pianotrans { };
+
   picard = callPackage ../applications/audio/picard { };
 
   picocom = callPackage ../tools/misc/picocom {
@@ -37944,7 +37946,7 @@ with pkgs;
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
-  pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
+  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
