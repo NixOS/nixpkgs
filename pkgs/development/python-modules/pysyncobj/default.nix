@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncobj";
-  version = "0.3.11";
+  version = "0.3.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "bakwc";
     repo = "PySyncObj";
     rev = "refs/tags/${version}";
-    hash = "sha256-MsyEDRla+okamffm78hoC2OwhjHLvCDQeZCzPZPbGy4=";
+    hash = "sha256-ZWzvvv13g/iypm+MIl5q0Y8ekqzZEY5upSTPk3MFTPI=";
   };
 
   # Tests require network features
