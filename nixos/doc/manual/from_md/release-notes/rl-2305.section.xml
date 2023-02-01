@@ -77,6 +77,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://dm3mat.darc.de/qdmr/">QDMR</link>, a
+          gui application and command line tool for programming cheap
+          DMR radios
+          <link linkend="opt-programs.qdmr.enable">programs.qdmr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
