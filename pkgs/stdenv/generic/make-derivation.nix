@@ -175,8 +175,11 @@ let
 
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
+  # We exclude Content Addressed derivations as they need to instantiate
+  # the store path after the derivation is built. Thus discarding
+  # context does not help in getting rid of the reference.
   unsafeDerivationToUntrackedOutpath = drv:
-    if lib.isDerivation drv
+    if lib.isDerivation drv && (!drv.__contentAddressed or false)
     then builtins.unsafeDiscardStringContext drv.outPath
     else drv;
 
