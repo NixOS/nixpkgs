@@ -228,10 +228,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # For the same reason we don't split "lib" output we undo the $target/
+  # prefix for installed headers and libraries we link:
+  #   $out/$host/$target/lib/*     to $out/lib/
+  #   $out/$host/$target/include/* to $dev/include/*
+  # TODO(trofi): fix installation paths upstream so we could remove this
+  # code and have "lib" output unconditionally.
+  postInstall = lib.optionalString (hostPlatform != targetPlatform) ''
+    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+  '';
+
   passthru = {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
+    # Having --enable-plugins is not enough, system has to support
+    # dlopen() or equivalent. See config/plugins.m4 and configure.ac
+    # (around PLUGINS) for cases that support or not support plugins.
+    # No platform specific filters yet here.
+    hasPluginAPI = enableGold;
   };
 
   meta = with lib; {
