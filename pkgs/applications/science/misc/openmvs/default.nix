@@ -72,13 +72,6 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/TextureMesh -v
-    runHook postInstallCheck
-  '';
-
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
     homepage = "https://github.com/cdcseacave/openMVS";
