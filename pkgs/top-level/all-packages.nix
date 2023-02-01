@@ -28858,7 +28858,7 @@ with pkgs;
   dunst = callPackage ../applications/misc/dunst { };
 
   du-dust = callPackage ../tools/misc/dust {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
   };
 
   dutree = callPackage ../tools/misc/dutree { };
