@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "eigenpy";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-gYGJutTnvq5ERv6tDff6b+t7Kitnx9QAD/6hauHxOt4=";
+    hash = "sha256-R+j68l2N+Qb2uqdl+Ng6nwj8O3YhqXgnYZBIzZ06aRA=";
   };
 
   strictDeps = true;
