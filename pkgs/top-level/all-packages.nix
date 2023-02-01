@@ -7603,11 +7603,8 @@ with pkgs;
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    openssl = openssl_1_1;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
   gitlab-ee = callPackage ../applications/version-management/gitlab {
-    openssl = openssl_1_1;
     gitlabEnterprise = true;
   };
 
@@ -21306,6 +21303,14 @@ with pkgs;
 
   libiconvReal = callPackage ../development/libraries/libiconv { };
 
+  iconv =
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ] then
+      lib.getBin stdenv.cc.libc
+    else if stdenv.hostPlatform.isDarwin then
+      lib.getBin darwin.libiconv
+    else
+      lib.getBin libiconvReal;
+
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
 
@@ -32059,6 +32064,8 @@ with pkgs;
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
+
+  pianotrans = callPackage ../applications/audio/pianotrans { };
 
   picard = callPackage ../applications/audio/picard { };
 
