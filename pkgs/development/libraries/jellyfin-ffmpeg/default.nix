@@ -9,13 +9,13 @@
   nv-codec-headers = nv-codec-headers-11;
 }).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "5.1.2-6";
+  version = "5.1.2-7";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "sha256-YPw29cnScchL4Y2CEatUjzqUW/U9kOdi29Dr577Qy5A=";
+    sha256 = "sha256-OWSixz1QjWthykO55wMAlywe2ihFLugzLH1qg4Qbe3I=";
   };
 
   buildInputs = old.buildInputs ++ [ chromaprint ];
