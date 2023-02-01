@@ -11862,6 +11862,12 @@
     githubId = 33375;
     name = "Peter Sanford";
   };
+  pseud0n = {
+    email = "palermo-phillips@proton.me";
+    github = "pseud0n";
+    githubID = 41120880;
+    name = "Palermo Phillips";
+  };
   pshirshov = {
     email = "pshirshov@eml.cc";
     github = "pshirshov";
