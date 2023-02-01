@@ -1,28 +1,30 @@
 { lib
+, stdenv
 , fetchFromGitHub
+, wrapQtAppsHook
 , pkg-config
 , qmake
-, mkDerivation
+, qtwayland
 , qtsvg
 , postgresql
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.0.0-beta1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-5ZIzxo2UvE+aKznF9ZLYFg5z3JkYCB+9rGdVDJl14Hw=";
+    sha256 = "sha256-Lim9iQYdmulwZEIayoBGoAmQ7rysTEEof5iXy3kfKXs=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
   qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ];
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
-  buildInputs = [ postgresql qtsvg ];
+  buildInputs = [ postgresql qtsvg qtwayland ];
 
   meta = with lib; {
     description = "A database modeling tool for PostgreSQL";

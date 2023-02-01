@@ -37944,7 +37944,7 @@ with pkgs;
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
-  pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
+  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
