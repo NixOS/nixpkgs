@@ -148,7 +148,7 @@ let
       ];
 
       options = {
-        enable = mkEnableOption (lib.mdDoc "DokuWiki web application.");
+        enable = mkEnableOption (lib.mdDoc "DokuWiki web application");
 
         package = mkOption {
           type = types.package;

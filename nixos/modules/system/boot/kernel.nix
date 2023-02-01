@@ -20,7 +20,7 @@ in
   ###### interface
 
   options = {
-    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel.") // {
+    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel") // {
       default = true;
     };
 
