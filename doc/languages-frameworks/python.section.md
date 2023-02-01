@@ -58,7 +58,7 @@ with a nix-shell that has `numpy` and `toolz` in Python 3.9; then we will create
 a re-usable environment in a single-file Python script; then we will create a
 full Python environment for development with this same environment.
 
-Philosphically, this should be familiar to users who are used to a `venv` style
+Philosophically, this should be familiar to users who are used to a `venv` style
 of development: individual projects create their own Python environments without
 impacting the global environment or each other.
 
