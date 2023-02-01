@@ -37,7 +37,6 @@ _roff_escapes = {
     ord('^'): "\\(ha",
     ord('`'): "\\(ga",
     ord('~'): "\\(ti",
-    ord('…'): "...", # TODO docbook compat, remove later
 }
 def man_escape(s: str) -> str:
     s = s.translate(_roff_escapes)
