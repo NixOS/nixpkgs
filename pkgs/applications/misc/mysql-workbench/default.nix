@@ -190,5 +190,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ ];
     platforms = platforms.linux;
+    # https://github.com/NixOS/nixpkgs/issues/202872
+    broken = true;
   };
 }
