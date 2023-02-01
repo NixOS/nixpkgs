@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glmark2";
-  version = "2021.12";
+  version = "2023.01";
 
   src = fetchFromGitHub {
     owner = "glmark2";
     repo = "glmark2";
     rev = version;
-    sha256 = "sha256-S6KkazkG+kdx02MPwrYvCFWSOtM6t5xT0OTE9PLCzas=";
+    sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
   nativeBuildInputs = [ pkg-config wafHook makeWrapper ];

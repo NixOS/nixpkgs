@@ -47,6 +47,11 @@ buildPythonPackage rec {
       url = "https://github.com/amaranth-lang/amaranth/pull/722/commits/e5a56b07c568e5f4cc2603eefebd14c5cc4e13d8.patch";
       hash = "sha256-C8FyMSKHA7XsEMpO9eYNZx/X5rGaK7p3eXP+jSb6wVg=";
     })
+    (fetchpatch {
+      name = "add-python-3.11-support.patch";
+      url = "https://github.com/amaranth-lang/amaranth/commit/851546bf2d16db62663d7002bece51f07078d0a5.patch";
+      hash = "sha256-eetlFCLqmpCfTKViD16OScJbkql1yhdi5uJGnfnpcCE=";
+    })
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
