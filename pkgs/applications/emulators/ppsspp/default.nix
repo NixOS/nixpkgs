@@ -115,10 +115,10 @@ stdenv.mkDerivation (self: {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ppsspp.org/";
     description = "A HLE Playstation Portable emulator, written in C++ ("
-                  ++ (if enableQt then "Qt" else "SDL + headless") ++ ")";
+                  + (if enableQt then "Qt" else "SDL + headless") + ")";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
