@@ -285,9 +285,7 @@ class ManpageRenderer(Renderer):
                   env: MutableMapping[str, Any]) -> str:
         if token.meta['name'] in [ 'command', 'env', 'option' ]:
             return f'\\fB{man_escape(token.content)}\\fP'
-        elif token.meta['name'] == 'file':
-            return f'{man_escape(token.content)}'
-        elif token.meta['name'] == 'var':
+        elif token.meta['name'] in [ 'file', 'var' ]:
             return f'\\fI{man_escape(token.content)}\\fP'
         elif token.meta['name'] == 'manpage':
             [page, section] = [ s.strip() for s in token.content.rsplit('(', 1) ]
