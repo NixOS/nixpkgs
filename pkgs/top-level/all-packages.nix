@@ -15849,6 +15849,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  convenient_test_manager = callPackage ../development/tools/convenient_test_manager {};
+
   devserver = callPackage ../development/tools/rust/devserver {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     openssl = openssl_1_1;
