@@ -24,6 +24,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=range-loop-construct"
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
   ];
 
   meta = with lib; {

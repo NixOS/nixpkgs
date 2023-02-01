@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" "-DCMAKE_C_FLAGS=-Wno-error=cast-function-type" ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+  ];
+
   meta = with lib; {
     description = "An opensource implementation of ZRTP keys exchange protocol. Part of the Linphone project.";
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";

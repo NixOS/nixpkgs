@@ -63,6 +63,12 @@ stdenv.mkDerivation rec {
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=mismatched-new-delete"
+    "-Wno-error=use-after-free"
+  ];
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
     # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access

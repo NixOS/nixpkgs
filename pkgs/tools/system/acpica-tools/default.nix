@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
     "iasl"
   ];
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  NIX_CFLAGS_COMPILE = [
+    "-O3"
+    # Needed with GCC 12
+    "-Wno-dangling-pointer"
+  ];
 
   enableParallelBuilding = true;
 

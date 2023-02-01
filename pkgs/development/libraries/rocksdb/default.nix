@@ -36,8 +36,16 @@ stdenv.mkDerivation rec {
     "tools"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
-    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field -faligned-allocation";
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=deprecated-copy"
+    "-Wno-error=pessimizing-move"
+    # Needed with GCC 12
+    "-Wno-error=format-truncation"
+    "-Wno-error=maybe-uninitialized"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=unused-private-field"
+    "-faligned-allocation"
+  ];
 
   cmakeFlags = [
     "-DPORTABLE=1"

@@ -24,7 +24,11 @@ in stdenv.mkDerivation rec {
   pname = "blobfuse";
   inherit version src;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=catch-value"
+  ];
 
   buildInputs = [ curl gnutls libgcrypt libuuid fuse boost cpplite ];
   nativeBuildInputs = [ cmake pkg-config ];
