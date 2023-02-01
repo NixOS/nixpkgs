@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-     curl 
+    curl 
   ];
 
   installFlags = [ 
-     "PREFIX=${"out"}" 
+    "PREFIX=${"out"}" 
   ];
 
   meta = with lib; {
