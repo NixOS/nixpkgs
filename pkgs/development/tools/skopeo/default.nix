@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , gpgme
 , lvm2
 , btrfs-progs
@@ -24,6 +25,15 @@ buildGoModule rec {
     repo = "skopeo";
     hash = "sha256-P556Is03BeC0Tf+kNv+Luy0KASgTXsyZ/MrPaPFUHE8=";
   };
+
+  patches = [
+    # revert version to 1.11.0 (remove in next release)
+    (fetchpatch {
+      url = "https://github.com/containers/skopeo/commit/cc958d3e5d47cb71f60f8882f10ef041605e1a32.patch";
+      revert = true;
+      hash = "sha256-ZmwbJnfYTDl9LYU0Y3COeOs7d5OVigTpct57CkNU6Gg=";
+    })
+  ];
 
   outputs = [ "out" "man" ];
 
