@@ -2325,6 +2325,12 @@
     githubId = 3212452;
     name = "Cameron Nemo";
   };
+  camillemndn = {
+    email = "camillemondon@free.fr";
+    github = "camillemndn";
+    githubId = 26444818;
+    name = "Camille M.";
+  };
   campadrenalin = {
     email = "campadrenalin@gmail.com";
     github = "campadrenalin";
