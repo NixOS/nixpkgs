@@ -79,7 +79,6 @@ in with builtins; {
 
   foundationdb61 = cmakeBuild {
     version = "6.1.13";
-    branch  = "release-6.1";
     sha256  = "10vd694dcnh2pp91mri1m80kfbwjanhiy50c53c5ncqfa6pwvk00";
 
     patches = [

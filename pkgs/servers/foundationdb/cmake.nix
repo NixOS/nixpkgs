@@ -16,7 +16,6 @@ let
 
   makeFdb =
     { version
-    , branch # unused
     , sha256
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
