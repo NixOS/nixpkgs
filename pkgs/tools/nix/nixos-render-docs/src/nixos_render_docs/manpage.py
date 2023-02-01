@@ -77,6 +77,11 @@ class List:
 class ManpageRenderer(Renderer):
     __output__ = "man"
 
+    # whether to emit mdoc .Ql equivalents for inline code or just the contents. this is
+    # mainly used by the options manpage converter to not emit extra quotes in defaults
+    # and examples where it's already clear from context that the following text is code.
+    inline_code_is_quoted: bool = True
+
     _href_targets: dict[str, str]
 
     _do_parbreak_stack: list[bool]
@@ -141,7 +146,8 @@ class ManpageRenderer(Renderer):
         return " "
     def code_inline(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                     env: MutableMapping[str, Any]) -> str:
-        return _protect_spaces(man_escape(token.content))
+        s = _protect_spaces(man_escape(token.content))
+        return f"\\fR\\(oq{s}\\(cq\\fP" if self.inline_code_is_quoted else s
     def code_block(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
         return self.fence(token, tokens, i, options, env)
