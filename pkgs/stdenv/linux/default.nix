@@ -343,6 +343,35 @@ in
             # in `xgcc` being copied to $prefix/bin/gcc).  So we imitate that.
             #
             pname = "x${a.pname}";
+
+            # Gcc will look for the C library headers in
+            #
+            #    ${with_build_sysroot}${native_system_header_dir}
+            #
+            # The ordinary gcc expression sets `--with-build-sysroot=/` and sets
+            # `native-system-header-dir` to `"${lib.getDev stdenv.cc.libc}/include`.
+            #
+            # Unfortunately the value of "--with-native-system-header-dir=" gets "burned in" to the
+            # compiler, and it is quite difficult to get the compiler to change or ignore it
+            # afterwards.  On the other hand, the `sysroot` is very easy to change; you can just pass
+            # a `--sysroot` flag to `gcc`.
+            #
+            # So we override the expression to remove the default settings for these flags, and
+            # replace them such that the concatenated value will be the same as before, but we split
+            # the value between the two variables differently: `--native-system-header-dir=/include`,
+            # and `--with-build-sysroot=${lib.getDev stdenv.cc.libc}`.
+            #
+            configureFlags =
+              (builtins.filter
+                (f: !(
+                  lib.hasPrefix "--with-native-system-header-dir=" f ||
+                  lib.hasPrefix "--with-build-sysroot=" f
+                ))
+                (a.configureFlags or []))
+              ++ [
+                "--with-native-system-header-dir=/include"
+                "--with-build-sysroot=${lib.getDev final.stdenv.cc.libc}"
+              ];
           });
       };
     })
