@@ -9708,6 +9708,8 @@ self: super: with self; {
 
   qnapstats = callPackage ../development/python-modules/qnapstats { };
 
+  qpageview = callPackage ../development/python-modules/qpageview { };
+
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
