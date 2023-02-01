@@ -37,7 +37,7 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "v" + version;
-      sha256 = "sha256-ZkQ20Qt/RF/leVP6Kc38tGgPz+C6lEuHvoL+s97oksE=";
+      hash = "sha256-ZkQ20Qt/RF/leVP6Kc38tGgPz+C6lEuHvoL+s97oksE=";
     };
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
