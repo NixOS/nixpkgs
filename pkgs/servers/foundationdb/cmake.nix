@@ -64,14 +64,6 @@ let
 
         inherit patches;
 
-        # fix up the use of the very weird and custom 'fdb_install' command by just
-        # replacing it with cmake's ordinary version.
-        postPatch = ''
-          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do
-            substituteInPlace $x --replace 'fdb_install' 'install'
-          done
-        '';
-
         # the install phase for cmake is pretty wonky right now since it's not designed to
         # coherently install packages as most linux distros expect -- it's designed to build
         # packaged artifacts that are shipped in RPMs, etc. we need to add some extra code to
