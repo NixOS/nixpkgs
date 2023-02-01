@@ -32,6 +32,8 @@ lib.makeScope newScope (self:
 
     docopt = callPackage ../development/nim-packages/docopt { };
 
+    eris = callPackage ../development/nim-packages/eris { };
+
     flatty = callPackage ../development/nim-packages/flatty { };
 
     freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
