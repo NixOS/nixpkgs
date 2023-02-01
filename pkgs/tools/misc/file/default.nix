@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "file";
-  version = "5.43";
+  version = "5.44";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/${pname}-${version}.tar.gz"
       "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-jIAV6Rrg6NAyHZTHgjmJLvnbxwxK3gAIwOlYlKv7GZE=";
+    sha256 = "sha256-N1HH+6jbyDHLjXzIr/IQNUWbjOUVXviwiAon0ChHXzs=";
   };
 
   strictDeps = true;
