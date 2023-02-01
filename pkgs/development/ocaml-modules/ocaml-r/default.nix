@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "pveber";
