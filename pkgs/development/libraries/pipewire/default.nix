@@ -111,6 +111,7 @@ let
       })
     ];
 
+    strictDeps = true;
     nativeBuildInputs = [
       docutils
       doxygen
@@ -119,6 +120,7 @@ let
       ninja
       pkg-config
       python3
+      glib
     ];
 
     buildInputs = [
