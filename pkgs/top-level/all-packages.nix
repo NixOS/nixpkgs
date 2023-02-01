@@ -16487,7 +16487,7 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-  python311Full = python310.override {
+  python311Full = python311.override {
     self = python311Full;
     pythonAttr = "python311Full";
     bluezSupport = true;
