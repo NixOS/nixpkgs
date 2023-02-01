@@ -164,6 +164,53 @@ rec {
   */
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
+  /* Like `filter`, but with an index. O(n) complexity.
+
+     Type: filter :: (int -> a -> bool) -> [a] -> [a]
+
+     Example:
+       ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
+       => [ 1 3 ]
+  */
+  ifilter0 =
+    ipred:
+    input:
+    let
+      # Whether each element in the input list is included
+      includeList = imap0 ipred input;
+
+      # The length of output
+      outputLength = count id includeList;
+
+      # Return the next included input index that's equal to or larger to the
+      # given starting index
+      nextIncludedInputIndex = i:
+        if elemAt includeList i then i
+        else nextIncludedInputIndex (i + 1);
+
+      # The list of all input indices that are included in the output
+      includedInputIndices = genList (o:
+        # For the first included index start searching at 0
+        if o == 0 then nextIncludedInputIndex 0
+
+        # For the next included index,
+        #                            get the previous included index
+        #                            v
+        else nextIncludedInputIndex (elemAt includedInputIndices (o - 1) + 1)
+        #    ^                                       go to the next index ^
+        #    And start searching for the next one from there
+        #
+        # This makes it so that `nextIncludedInputIndex` is called exactly once for every input index
+
+      ) outputLength;
+
+      # The output
+    in genList (o:
+      # Get the included input index for the given output index
+      # And then get that input index from the input list
+      elemAt input (elemAt includedInputIndices o)
+    ) outputLength;
+
   /* Map and concatenate the result.
 
      Type: concatMap :: (a -> [b]) -> [a] -> [b]

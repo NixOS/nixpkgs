@@ -497,6 +497,31 @@ runTests {
     expected = ["b" "c"];
   };
 
+  testIfilter0Example = {
+    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
+    expected = [ 1 3 ];
+  };
+  testIfilter0Empty = {
+    expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
+    expected = [ ];
+  };
+  testIfilter0IndexOnly = {
+    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expected = 2;
+  };
+  testIfilter0All = {
+    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
+    expected = [ 10 11 12 13 14 15 ];
+  };
+  testIfilter0First = {
+    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expected = [ 10 ];
+  };
+  testIfilter0Last = {
+    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expected = [ 15 ];
+  };
+
   testFold =
     let
       f = op: fold: fold op 0 (range 0 100);
