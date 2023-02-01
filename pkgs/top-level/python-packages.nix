@@ -308,6 +308,8 @@ self: super: with self; {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aioruuvigateway = callPackage ../development/python-modules/aioruuvigateway { };
+
   aiorwlock = callPackage ../development/python-modules/aiorwlock { };
 
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
