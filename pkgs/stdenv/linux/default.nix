@@ -177,7 +177,7 @@ let
 
         cc = if prevStage.gcc-unwrapped == null
              then null
-             else lib.makeOverridable (import ../../build-support/cc-wrapper) {
+             else (lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
           nativeTools = false;
           nativeLibc = false;
@@ -191,7 +191,11 @@ let
           inherit lib;
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
-        };
+        }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.pname or "" == "xgcc") {
+          postFixup = (a.postFixup or "") + ''
+            echo "--sysroot=${lib.getDev (getLibc prevStage)}" >> $out/nix-support/cc-cflags
+          '';
+        });
 
         overrides = self: super: {
           inherit (prevStage) perl;  # only build perl *once*
