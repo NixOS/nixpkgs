@@ -55,12 +55,6 @@ buildPythonPackage rec {
     "ismartgate"
   ];
 
-  disabledTestPaths = [
-    # Tests are out-dated
-    "ismartgate/tests/test_init.py"
-  ];
-
-
   meta = with lib; {
     description = "Python module to work with the ismartgate and gogogate2 API";
     homepage = "https://github.com/bdraco/ismartgate";
