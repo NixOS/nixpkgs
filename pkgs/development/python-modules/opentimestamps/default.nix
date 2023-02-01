@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "opentimestamps";
-  version = "0.4.3";
+  version = "0.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "opentimestamps";
     repo = "python-opentimestamps";
     rev = "python-opentimestamps-v${version}";
-    hash = "sha256-ZTZ7D3NGhO18IxKqTMFBe6pDvqtGR+9w0cgs6VAHtwg=";
+    hash = "sha256-clG/5NAPmmmoj4b3LdVwl58DHg1EFMIMu+erx+GT+NE=";
   };
 
   propagatedBuildInputs = [
