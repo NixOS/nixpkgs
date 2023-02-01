@@ -28,6 +28,8 @@ lib.makeScope newScope (self:
 
     chroma = callPackage ../development/nim-packages/chroma { };
 
+    coap = callPackage  ../development/nim-packages/coap { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
     flatty = callPackage ../development/nim-packages/flatty { };
