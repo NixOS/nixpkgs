@@ -2171,7 +2171,7 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp = callPackage ../applications/emulators/ppsspp { };
+  ppsspp = libsForQt5.callPackage ../applications/emulators/ppsspp { };
 
   ppsspp-sdl = ppsspp;
 
@@ -2181,7 +2181,6 @@ with pkgs;
   };
 
   ppsspp-qt = ppsspp.override {
-    inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
     enableQt = true;
     enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
   };
@@ -12736,6 +12735,8 @@ with pkgs;
 
   oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
 
+  ttfb = callPackage ../development/tools/ttfb { };
+
   twilight = callPackage ../tools/graphics/twilight {
     libX11 = xorg.libX11;
   };
@@ -16536,7 +16537,7 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-  python311Full = python310.override {
+  python311Full = python311.override {
     self = python311Full;
     pythonAttr = "python311Full";
     bluezSupport = true;
@@ -27730,6 +27731,8 @@ with pkgs;
   roboto = callPackage ../data/fonts/roboto { };
 
   roboto-mono = callPackage ../data/fonts/roboto-mono { };
+
+  roboto-serif = callPackage ../data/fonts/roboto-serif { };
 
   roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
