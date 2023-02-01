@@ -16,12 +16,12 @@ class Converter(nixos_render_docs.md.Converter):
 
 def test_inline_code() -> None:
     c = Converter({})
-    assert c._render("1  `x  a  x`  2") == "1 x  a  x 2"
+    assert c._render("1  `x  a  x`  2") == "1 \\fR\\(oqx  a  x\\(cq\\fP 2"
 
 def test_fonts() -> None:
     c = Converter({})
     assert c._render("*a **b** c*") == "\\fIa \\fBb\\fI c\\fR"
-    assert c._render("*a [1 `2`](3) c*") == "\\fIa \\fB1 2\\fI c\\fR"
+    assert c._render("*a [1 `2`](3) c*") == "\\fIa \\fB1 \\fR\\(oq2\\(cq\\fP\\fI c\\fR"
 
 def test_expand_link_targets() -> None:
     c = Converter({}, { '#foo1': "bar", "#foo2": "bar" })

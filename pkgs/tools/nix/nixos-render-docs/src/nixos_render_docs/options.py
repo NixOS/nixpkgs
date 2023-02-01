@@ -291,7 +291,12 @@ class ManpageConverter(BaseConverter):
         if lit := option_is(option, key, 'literalDocBook'):
             raise RuntimeError("can't render manpages in the presence of docbook")
         else:
-            return super()._render_code(option, key)
+            assert isinstance(self._md.renderer, OptionsManpageRenderer)
+            try:
+                self._md.renderer.inline_code_is_quoted = False
+                return super()._render_code(option, key)
+            finally:
+                self._md.renderer.inline_code_is_quoted = True
 
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         if isinstance(desc, str) and not self._markdown_by_default:
