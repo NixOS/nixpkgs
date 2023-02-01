@@ -20,9 +20,11 @@ let
   };
 
   plugins = with python.pkgs; {
+    poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
   };
 
   # selector is a function mapping pythonPackages to a list of plugins
+  # e.g. poetry.withPlugins (ps: with ps; [ poetry-plugin-up ])
   withPlugins = selector: let
     selected = selector plugins;
   in python.pkgs.toPythonApplication (python.pkgs.poetry.overridePythonAttrs (old: {
