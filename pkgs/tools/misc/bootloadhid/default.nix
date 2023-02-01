@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A software-only implementation of a low-speed USB device for Atmel’s AVR® microcontrollers";
     license = lib.licenses.gpl2;
-    maintainers = [  ];
+    maintainers = [ lib.maintainers.pseud0n ];
   };
 }
