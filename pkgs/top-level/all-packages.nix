@@ -7603,11 +7603,8 @@ with pkgs;
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    openssl = openssl_1_1;
-  };
+  gitlab = callPackage ../applications/version-management/gitlab { };
   gitlab-ee = callPackage ../applications/version-management/gitlab {
-    openssl = openssl_1_1;
     gitlabEnterprise = true;
   };
 
