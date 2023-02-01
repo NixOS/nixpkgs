@@ -38,9 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   # SSE is enabled by default
-  cmakeFlags = [
-    "-DOpenMVS_ENABLE_TESTS=OFF"
-  ] ++ lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
   buildInputs = [
     boostWithZstd
@@ -61,9 +59,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  postFixup = ''
+  postInstall = ''
     mv $out/bin/OpenMVS/* $out/bin
     rmdir $out/bin/OpenMVS
+    rm $out/bin/Tests
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest
+    runHook postCheck
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/TextureMesh -v
+    runHook postInstallCheck
   '';
 
   meta = {
