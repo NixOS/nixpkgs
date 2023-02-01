@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = ["-DBUILD_TESTS=yes"];
 
+  # Undefined symbols for architecture arm64: "_gpg_strerror"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lgpg-error";
+
   doCheck = true;
   checkPhase = ''
     runHook preCheck
