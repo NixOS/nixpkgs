@@ -34,6 +34,8 @@ lib.makeScope newScope (self:
 
     flatty = callPackage ../development/nim-packages/flatty { };
 
+    freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
+
     frosty = callPackage ../development/nim-packages/frosty { };
 
     getdns = callPackage ../development/nim-packages/getdns {
