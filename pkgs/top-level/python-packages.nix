@@ -9884,6 +9884,8 @@ self: super: with self; {
 
   remi = callPackage ../development/python-modules/remi { };
 
+  remote-pdb = callPackage ../development/python-modules/remote-pdb { };
+
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
