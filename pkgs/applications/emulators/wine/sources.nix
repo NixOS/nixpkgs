@@ -73,9 +73,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "8.0";
-    url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
-    hash = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
+    version = "8.1";
+    url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
+    hash = "sha256-QSDuaz8pTZeq8scwNM8cLL8ToZXJTFx0pkaoH5JBJZg=";
     inherit (stable) gecko32 gecko64 patches;
 
     mono = fetchurl rec {
@@ -105,7 +105,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    hash = "sha256-AZVDcwgnF8m+h/jyWSMCLOAWN34sqnhTu2HnJoNyCYc=";
+    hash = "sha256-5AzXXaRGyvfYxd3yXtAlZREv1wp6UqWdDRdnwmKVaUg=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
