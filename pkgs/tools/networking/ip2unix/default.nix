@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, libyamlcpp, systemd
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, yaml-cpp, systemd
 , python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
 , libxml2, docbook5
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  buildInputs = [ libyamlcpp ];
+  buildInputs = [ yaml-cpp ];
 
   doCheck = true;
 

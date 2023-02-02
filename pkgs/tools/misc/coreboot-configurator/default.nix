@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, libyamlcpp
+, yaml-cpp
 , nvramtool
 , qtbase
 , qtsvg
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ inkscape meson ninja pkg-config wrapQtAppsHook ];
-  buildInputs = [ libyamlcpp qtbase qtsvg ];
+  buildInputs = [ yaml-cpp qtbase qtsvg ];
 
   postPatch = ''
     substituteInPlace src/application/*.cpp \

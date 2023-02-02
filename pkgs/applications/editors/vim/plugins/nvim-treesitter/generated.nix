@@ -214,12 +214,12 @@
   };
   cuda = buildGrammar {
     language = "cuda";
-    version = "98265a0";
+    version = "a02c214";
     src = fetchFromGitHub {
       owner = "theHamsta";
       repo = "tree-sitter-cuda";
-      rev = "98265a0a190c116234da73240ac8e373833ff5f7";
-      hash = "sha256-AOZJ29JELZi8Jafd4StXVY9gCKZj8y2nx1Z8XVlYV9E=";
+      rev = "a02c21408c592e6e6856eaabe4727faa97cf8d85";
+      hash = "sha256-bgyisXPNZXlvPF0nRPD5LeVhvbTx0TLgnToue9IFHwI=";
     };
     meta.homepage = "https://github.com/theHamsta/tree-sitter-cuda";
   };
@@ -338,12 +338,12 @@
   };
   elsa = buildGrammar {
     language = "elsa";
-    version = "86fb3db";
+    version = "c83c21c";
     src = fetchFromGitHub {
       owner = "glapa-grossklag";
       repo = "tree-sitter-elsa";
-      rev = "86fb3dbe8462f299dfc9a93c718a11363d69e90f";
-      hash = "sha256-OL3FJTwBkCIXdhqkSbn7BBiTylmhOC3e5KE97SfUpyA=";
+      rev = "c83c21c1f8f6b38dfc5bd1392de03a7b05bb78f4";
+      hash = "sha256-6PnI58jxuRuluK11/6hjTI24AVq2IQcuIplhvCv10nA=";
     };
     meta.homepage = "https://github.com/glapa-grossklag/tree-sitter-elsa";
   };
@@ -1366,6 +1366,17 @@
     };
     meta.homepage = "https://github.com/amaanq/tree-sitter-smali";
   };
+  smithy = buildGrammar {
+    language = "smithy";
+    version = "cf8c7eb";
+    src = fetchFromGitHub {
+      owner = "indoorvivants";
+      repo = "tree-sitter-smithy";
+      rev = "cf8c7eb9faf7c7049839585eac19c94af231e6a0";
+      hash = "sha256-3cqT6+e0uqAtd92M55qSbza1eph8gklGlEGyO9R170w=";
+    };
+    meta.homepage = "https://github.com/indoorvivants/tree-sitter-smithy";
+  };
   solidity = buildGrammar {
     language = "solidity";
     version = "52ed088";
@@ -1390,12 +1401,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "4fe05b2";
+    version = "286e10c";
     src = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "4fe05b2d81565ddb689d2f415e07afdacc515c52";
-      hash = "sha256-rfx4jBKC2zXo+zWBBb2WkFopF00KB7WHzz7LZ3M026M=";
+      rev = "286e10c5bc5d1703ee8f9afb351165a9a6182be1";
+      hash = "sha256-sIZ6615ioSz2wzjQLxcMaXKxd17qGR6nFDMxuwOx0Z8=";
     };
     generate = true;
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
