@@ -27,3 +27,17 @@ def test_expand_link_targets() -> None:
     c = Converter({}, { '#foo1': "bar", "#foo2": "bar" })
     assert (c._render("[a](#foo1) [](#foo2) [b](#bar1) [](#bar2)") ==
             "\\fBa\\fR \\fBbar\\fR \\fBb\\fR \\fB\\fR")
+
+def test_collect_links() -> None:
+    c = Converter({}, { '#foo': "bar" })
+    assert isinstance(c._md.renderer, nixos_render_docs.manpage.ManpageRenderer)
+    c._md.renderer.link_footnotes = []
+    assert c._render("[a](link1) [b](link2)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[2]\\fR"
+    assert c._md.renderer.link_footnotes == ['link1', 'link2']
+
+def test_dedup_links() -> None:
+    c = Converter({}, { '#foo': "bar" })
+    assert isinstance(c._md.renderer, nixos_render_docs.manpage.ManpageRenderer)
+    c._md.renderer.link_footnotes = []
+    assert c._render("[a](link) [b](link)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[1]\\fR"
+    assert c._md.renderer.link_footnotes == ['link']
