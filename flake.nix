@@ -12,8 +12,19 @@
       lib = import ./lib;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+      # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
+      # through this attribute are "legacy" packages. Instead, `legacyPackages`
+      # is used here as a substitute attribute name for `packages`. The problem
+      # with `packages` is that it makes operations like `nix flake show
+      # nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
+      # needs to evaluate. But when the Nix CLI sees a `legacyPackages`
+      # attribute it displays `omitted` instead of evaluating all packages,
+      # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
+      # information rich.
+      legacyPackages = forAllSystems (system: import ./. { inherit system; });
     in
     {
+      inherit legacyPackages;
       lib = lib.extend (final: prev: {
 
         nixos = import ./nixos/lib { lib = final; };
@@ -36,6 +47,7 @@
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;
+      formatter.x86_64-linux = legacyPackages.x86_64-linux.nixpkgs-fmt;
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;
@@ -43,17 +55,6 @@
           nixpkgs = self;
         }).nixos.manual.x86_64-linux;
       };
-
-      # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
-      # through this attribute are "legacy" packages. Instead, `legacyPackages`
-      # is used here as a substitute attribute name for `packages`. The problem
-      # with `packages` is that it makes operations like `nix flake show
-      # nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
-      # needs to evaluate. But when the Nix CLI sees a `legacyPackages`
-      # attribute it displays `omitted` instead of evaluating all packages,
-      # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
-      # information rich.
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
