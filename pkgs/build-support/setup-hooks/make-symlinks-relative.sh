@@ -6,8 +6,8 @@ postFixupHooks+=(_makeSymlinksRelative)
 _makeSymlinksRelative() {
     local symlinkTarget
 
-    if [ -n "${dontRewriteSymlinks-}" ]; then
-        return 0
+    if [ "${dontRewriteSymlinks-}" ] || [ ! -e "$prefix" ]; then
+       return
     fi
 
     while IFS= read -r -d $'\0' f; do

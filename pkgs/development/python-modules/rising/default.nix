@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
+, pythonRelaxDepsHook
 , dill
+, lightning-utilities
 , numpy
 , torch
 , threadpoolctl
@@ -12,21 +14,34 @@
 
 buildPythonPackage rec {
   pname = "rising";
-  version = "0.2.1";
-
-  disabled = isPy27;
+  version = "0.3.0";
+  disabled = pythonOlder "TODO";
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "15wYWToXRae1cMpHWbJwzAp0THx6ED9ixQgL+n1v9PI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  propagatedBuildInputs = [ numpy torch threadpoolctl tqdm ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "lightning-utilities" ];
+
+  propagatedBuildInputs = [
+    lightning-utilities numpy torch threadpoolctl tqdm
+  ];
   nativeCheckInputs = [ dill pytestCheckHook ];
 
-  disabledTests = [ "test_affine" ];  # deprecated division operator '/'
+  pythonImportsCheck = [
+    "rising"
+    "rising.loading"
+    "rising.ops"
+    "rising.random"
+    "rising.transforms"
+    "rising.transforms.functional"
+    "rising.utils"
+  ];
 
   meta = {
     description = "High-performance data loading and augmentation library in PyTorch";

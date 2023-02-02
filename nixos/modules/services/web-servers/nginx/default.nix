@@ -117,7 +117,7 @@ let
       # used by most other Linux distributions by default.
       include ${pkgs.mailcap}/etc/nginx/mime.types;
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
-      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
       types_hash_max_size 4096;
 
@@ -184,25 +184,17 @@ let
         brotli_window 512k;
         brotli_min_length 256;
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
-        brotli_buffers 32 8k;
       ''}
 
+      # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
       ${optionalString cfg.recommendedGzipSettings ''
         gzip on;
-        gzip_proxied any;
-        gzip_comp_level 5;
-        gzip_types
-          application/atom+xml
-          application/javascript
-          application/json
-          application/xml
-          application/xml+rss
-          image/svg+xml
-          text/css
-          text/javascript
-          text/plain
-          text/xml;
+        gzip_static on;
         gzip_vary on;
+        gzip_comp_level 5;
+        gzip_min_length 256;
+        gzip_proxied expired no-cache no-store private auth;
+        gzip_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
       ${optionalString cfg.recommendedProxySettings ''
@@ -211,6 +203,8 @@ let
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
+        # don't let clients close the keep-alive connection to upstream
+        proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}
 

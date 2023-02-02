@@ -22,26 +22,6 @@
 , zlib
 }:
 let
-  libs = [
-    alsa-lib
-    bzip2
-    fftw
-    freeglut
-    freetype
-    glew
-    libjack2
-    libGL
-    libGLU
-    libjpeg
-    liblo
-    libpng
-    libsndfile
-    libtiff
-    ode
-    openal
-    openssl
-    zlib
-  ];
   racket = racket_7_9;
 in
 stdenv.mkDerivation rec {
@@ -77,7 +57,6 @@ stdenv.mkDerivation rec {
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''

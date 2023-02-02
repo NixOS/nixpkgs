@@ -13,19 +13,19 @@
 stdenv.mkDerivation rec {
   pname = "${passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "unstable-2022-10-03";
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "61538429a501a09f369366d832799f2e3b196a02";
-    sha256 = "sha256-YvqRw0klSqOxIuO5QFKjcUp6aRWlO2j3L+T1ekx8SfA=";
+    rev = "996740acdbb173499ec1bf2ba6c8942f2a374220";
+    sha256 = "sha256-9m+0e2v1Hk8jYZHqJwb1mN02WgGDArsWbF7Ut3Z5OIg=";
   };
 
   postPatch = ''
     patchShebangs *.sh
 
-    for dateSource in cmnvars.sh bld/wipfc/configure; do
+    for dateSource in bld/wipfc/configure; do
       substituteInPlace $dateSource \
         --replace '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
     done
@@ -35,14 +35,17 @@ stdenv.mkDerivation rec {
       --replace '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
 
     substituteInPlace build/makeinit \
-      --replace '%__CYEAR__' '%OWCYEAR'
+      --replace '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
       --replace '-static' ""
   '';
 
-  nativeBuildInputs = [ dosbox ]
-    ++ lib.optional withDocs ghostscript;
+  nativeBuildInputs = [
+    dosbox
+  ] ++ lib.optionals withDocs [
+    ghostscript
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -120,7 +123,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://open-watcom.github.io";
     license = licenses.watcom;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-windows" "i686-windows" ];
+    platforms = with platforms; windows ++ unix;
+    badPlatforms = platforms.riscv ++ [ "powerpc64-linux" "powerpc64le-linux" "mips64el-linux" ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }

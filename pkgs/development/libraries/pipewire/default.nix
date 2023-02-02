@@ -2,6 +2,7 @@
 , lib
 , buildPackages
 , fetchFromGitLab
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -67,7 +68,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.64";
+    version = "0.3.65";
 
     outputs = [
       "out"
@@ -85,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-wIvdciLBWIQjENEipzbVID0eliOcEwqS567pLxVVOsc=";
+      sha256 = "sha256-O5nu58QFlOPTaN4qNi50Wp9acxM6dWNy63BD+AnVl5w=";
     };
 
     patches = [
@@ -101,6 +102,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport a fix to actually install the new module
+      # FIXME: remove after 0.3.66
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
+        hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -237,7 +245,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [ jtojnar kranzes k900 ];
     };
   };
 

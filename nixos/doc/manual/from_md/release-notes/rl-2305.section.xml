@@ -115,6 +115,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://dm3mat.darc.de/qdmr/">QDMR</link>, a
+          gui application and command line tool for programming cheap
+          DMR radios
+          <link linkend="opt-programs.qdmr.enable">programs.qdmr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
@@ -207,6 +215,18 @@
           version 0.8.0, which includes backwards incompatible changes.
           The <literal>git-bug-migration</literal> package can be used
           to upgrade existing repositories.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.kubo.settings</literal> option is now no
+          longer stateful. If you changed any of the options in
+          <literal>services.kubo.settings</literal> in the past and then
+          removed them from your NixOS configuration again, those
+          changes are still in your Kubo configuration file but will now
+          be reset to the default. If you’re unsure, you may want to
+          make a backup of your configuration file (probably
+          /var/lib/ipfs/config) and compare after the update.
         </para>
       </listitem>
       <listitem>
@@ -353,6 +373,12 @@
       </listitem>
       <listitem>
         <para>
+          Calling <literal>makeSetupHook</literal> without passing a
+          <literal>name</literal> argument is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Qt 5.12 and 5.14 have been removed, as the corresponding
           branches have been EOL upstream for a long time. This affected
           under 10 packages in nixpkgs, largely unmaintained upstream as
@@ -411,6 +437,17 @@
           .NET 5.0 was removed due to being end-of-life, use a newer,
           supported .NET version -
           https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The iputils package, which is installed by default, no longer
+          provides the <literal>ninfod</literal>,
+          <literal>rarpd</literal> and <literal>rdisc</literal> tools.
+          See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20221126">upstream’s
+          release notes</link> for more details and available
+          replacements.
         </para>
       </listitem>
     </itemizedlist>
@@ -682,6 +719,36 @@
       </listitem>
       <listitem>
         <para>
+          Updated recommended settings in
+          <literal>services.nginx.recommendedGzipSettings</literal>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Enables gzip compression for only certain proxied
+              requests.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Allow checking and loading of precompressed files.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Updated gzip mime-types.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Increased the minimum length of a response that will be
+              gzipped.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>
           version is based on
           <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>,
@@ -700,6 +767,13 @@
           <literal>hip</literal> has been separated into
           <literal>hip</literal>, <literal>hip-common</literal> and
           <literal>hipcc</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.nginx.recommendedProxySettings</literal> now
+          removes the <literal>Connection</literal> header preventing
+          clients from closing backend connections.
         </para>
       </listitem>
       <listitem>
@@ -764,15 +838,6 @@
           The option
           <literal>services.nomad.extraSettingsPlugins</literal> has
           been fixed to allow more than one plugin in the path.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          A new option was added to the virtualisation module that
-          enables specifying explicitly named network interfaces in QEMU
-          VMs. The existing <literal>virtualisation.vlans</literal> is
-          still supported for cases where the name of the network
-          interface is irrelevant.
         </para>
       </listitem>
     </itemizedlist>

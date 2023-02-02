@@ -10,7 +10,7 @@
 , gnutls
 , lame
 , libev
-, libgme
+, game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gnutls
     lame
     libev
-    libgme
+    game-music-emu
     libmicrohttpd
     libopenmpt
     mpg123

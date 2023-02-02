@@ -296,7 +296,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage)
-        ccWrapperStdenv
+        ccWrapperStdenv gettext
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
@@ -332,7 +332,8 @@ in
         # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
-          inherit (prevStage.bintools.bintools) name;
+          pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
+          inherit (prevStage.bintools.bintools) version;
           enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
@@ -369,7 +370,7 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils coreutils gnugrep
+        binutils coreutils gnugrep gettext
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       gcc-unwrapped =

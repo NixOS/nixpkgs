@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rTW6wADpkP9GglNmQNVecHfA2yJZuzYhJfsLfucbcgY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QHFwIfX0rSVnWgxe82zQXMwIS99CiPgprfoMbuXvXH0=";
   };
 
   postPatch = ''
