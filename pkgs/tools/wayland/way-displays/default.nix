@@ -4,7 +4,7 @@
 , pkg-config
 , wayland
 , libinput
-, libyamlcpp
+, yaml-cpp
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    libyamlcpp
+    yaml-cpp
     libinput
   ];
 

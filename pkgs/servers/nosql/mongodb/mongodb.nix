@@ -7,7 +7,7 @@
 , pcre-cpp
 , snappy
 , zlib
-, libyamlcpp
+, yaml-cpp
 , sasl
 , openssl
 , libpcap
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     curl
     gperftools
     libpcap
-    libyamlcpp
+    yaml-cpp
     openssl
     pcre-cpp
     variants.python

@@ -9,7 +9,7 @@
 , ghc_filesystem
 , libarchive
 , libsolv
-, libyamlcpp
+, yaml-cpp
 , nlohmann_json
 , python3
 , reproc
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     nlohmann_json
     curl
     libarchive
-    libyamlcpp
+    yaml-cpp
     libsolv'
     reproc
     spdlog'

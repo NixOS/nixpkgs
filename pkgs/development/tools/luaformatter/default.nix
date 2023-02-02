@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4_9, libargs, catch2, cmake, libyamlcpp }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4_9, libargs, catch2, cmake, yaml-cpp }:
 
 let
   antlr4 = antlr4_9;
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-lib-paths.patch;
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
-      inherit libargs catch2 libyamlcpp;
+      inherit libargs catch2 yaml-cpp;
     })
   ];
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ antlr4.runtime.cpp libyamlcpp ];
+  buildInputs = [ antlr4.runtime.cpp yaml-cpp ];
 
   meta = with lib; {
     description = "Code formatter for Lua";
