@@ -4802,6 +4802,8 @@ self: super: with self; {
 
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 
+  jaraco-net = callPackage ../development/python-modules/jaraco-net { };
+
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
   jaraco-test = callPackage ../development/python-modules/jaraco-test { };
