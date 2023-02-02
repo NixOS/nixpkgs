@@ -17,6 +17,7 @@
 , makeRustPlatform
 , llvmPackages_11
 , llvmPackages_15, llvm_15
+, fetchpatch
 } @ args:
 
 import ./default.nix {
@@ -58,6 +59,13 @@ import ./default.nix {
   selectRustPackage = pkgs: pkgs.rust_1_67;
 
   rustcPatches = [
+    # fix thin archive reading
+    # https://github.com/rust-lang/rust/pull/107360
+    (fetchpatch {
+      name = "revert-back-to-llvmarchivebuilder-on-all-platforms.patch";
+      url = "https://github.com/rust-lang/rust/commit/de363d54c40a378717881240e719f5f7223ba376.patch";
+      hash = "sha256-3Xb803LZUZ1dldxGJ65Iw6gg1V1K827OB/0b32GqilU=";
+    })
   ];
 }
 
