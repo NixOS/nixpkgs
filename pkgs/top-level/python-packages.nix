@@ -334,6 +334,8 @@ self: super: with self; {
 
   aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
 
+  aiosomecomfort = callPackage ../development/python-modules/aiosomecomfort { };
+
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
   aiosteamist = callPackage ../development/python-modules/aiosteamist { };
