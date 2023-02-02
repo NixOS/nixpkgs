@@ -4792,6 +4792,8 @@ self: super: with self; {
 
   jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
 
+  jaraco-email = callPackage ../development/python-modules/jaraco-email { };
+
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
