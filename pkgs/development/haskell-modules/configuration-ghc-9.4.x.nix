@@ -208,4 +208,9 @@ in {
   # the GHC 9.6 configuration may need similar overrides eventually.
   X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
 
+  # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
+  # recent versions of Cabal require. This leads to builds like cairo and glib
+  # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
+  gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
+
 }
