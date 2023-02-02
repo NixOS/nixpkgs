@@ -105,7 +105,7 @@ in {
   singleton-bool = doJailbreak super.singleton-bool;
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
-
+  libmpd = doJailbreak super.libmpd;
   base-orphans = dontCheck super.base-orphans;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
