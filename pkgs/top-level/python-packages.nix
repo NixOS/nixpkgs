@@ -18,8 +18,6 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
-  abodepy = callPackage ../development/python-modules/abodepy { };
-
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accuweather = callPackage ../development/python-modules/accuweather { };
@@ -4789,6 +4787,8 @@ self: super: with self; {
   jamo = callPackage ../development/python-modules/jamo { };
 
   janus = callPackage ../development/python-modules/janus { };
+
+  jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
 
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
