@@ -196,9 +196,7 @@ in {
   };
 
   # https://github.com/tweag/ormolu/issues/941
-  ormolu = overrideCabal (drv: {
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.ormolu);
+  ormolu = doDistribute self.ormolu_0_5_2_0;
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
