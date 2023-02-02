@@ -1,7 +1,7 @@
 { pkgs, lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "bootloadhid";
-  version = "1.0.0";
+  version = "2012-12-08";
 
   src = fetchFromGitHub {
     owner = "pseud0n";
