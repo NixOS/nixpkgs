@@ -5406,9 +5406,7 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river {
-    zig = zig_0_9;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
     zig = zig_0_9;
