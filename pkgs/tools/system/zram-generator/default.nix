@@ -51,8 +51,11 @@ stdenv.mkDerivation rec {
     "SYSTEMD_SYSTEM_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) zram-generator;
+  passthru = {
+    tests = {
+      inherit (nixosTests) zram-generator;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
