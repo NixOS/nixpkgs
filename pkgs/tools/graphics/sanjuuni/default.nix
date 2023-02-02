@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sanjuuni";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "MCJack123";
     repo = "sanjuuni";
     rev = version;
-    sha256 = "sha256-WWDbPwiU4YD8XCMuqLWEGinpHkq2FNJZsz3GyVqjDHQ=";
+    sha256 = "sha256-8IbdLXWUtT2VN6Eu1b8x4DnyI8JOd/12t0XDa6o3N+A=";
   };
 
   nativeBuildInputs = [
