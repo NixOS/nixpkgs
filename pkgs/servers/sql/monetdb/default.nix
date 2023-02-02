@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchurl, cmake, python3
-, bison, openssl, readline, bzip2
-}:
+{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "monetdb";
-  version = "11.45.11";
+  version = "11.45.13";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "sha256-0Hme9ohyRuiN9CAZq7SAWGcQxNakiDVWEoL+wt1GsfY=";
+    sha256 = "sha256-TYTzC1oiU/YwrJNABwyA50qSB12cwrMurqYFVCtSAcc=";
   };
 
   postPatch = ''
