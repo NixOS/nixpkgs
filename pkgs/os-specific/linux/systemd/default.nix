@@ -3,6 +3,7 @@
 { stdenv
 , lib
 , nixosTests
+, pkgsCross
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
@@ -63,6 +64,7 @@
 , withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
 , kexec-tools
 , bashInteractive
+, bash
 , libmicrohttpd
 , libfido2
 , p11-kit
@@ -139,7 +141,7 @@ let
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1667246393";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
@@ -362,6 +364,7 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
+      bash
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
     ++ lib.optionals withLibBPF [
@@ -382,6 +385,7 @@ stdenv.mkDerivation {
       libuuid
       linuxHeaders
       pam
+      bashInteractive # for patch shebangs
     ]
 
     ++ lib.optional wantGcrypt libgcrypt
@@ -695,6 +699,10 @@ stdenv.mkDerivation {
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    # 'or p' is for manually specified buildPackages as they dont have __spliced
+    (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
+
   passthru = {
     # The interface version prevents NixOS from switching to an
     # incompatible systemd at runtime.  (Switching across reboots is
@@ -708,6 +716,7 @@ stdenv.mkDerivation {
 
     tests = {
       inherit (nixosTests) switchTest;
+      cross = pkgsCross.aarch64-multiplatform.systemd;
     };
   };
 
@@ -722,4 +731,4 @@ stdenv.mkDerivation {
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
-}
+})
