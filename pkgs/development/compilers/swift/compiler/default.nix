@@ -427,15 +427,20 @@ in stdenv.mkDerivation {
     #   builds, so we enable it as well. On Darwin, we have to use the system
     #   Swift libs because of ABI-stability, but this may be trouble if the
     #   builder is an older macOS.
-    # - Experimental features are OFF by default in CMake, but some are
-    #   required to build the stdlib.
+    # - Experimental features are OFF by default in CMake, but are enabled in
+    #   official builds, so we do the same. (Concurrency is also required in
+    #   the stdlib. StringProcessing is often implicitely imported, causing
+    #   lots of warnings if missing.)
     # - SWIFT_STDLIB_ENABLE_OBJC_INTEROP is set explicitely because its check
     #   is buggy. (Uses SWIFT_HOST_VARIANT_SDK before initialized.)
     #   Fixed in: https://github.com/apple/swift/commit/84083afef1de5931904d5c815d53856cdb3fb232
     cmakeFlags="
       -GNinja
       -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.isDarwin "-WITH-HOSTLIBS"}
+      -DSWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING=ON
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON
+      -DSWIFT_ENABLE_EXPERIMENTAL_DISTRIBUTED=ON
+      -DSWIFT_ENABLE_EXPERIMENTAL_STRING_PROCESSING=ON
       -DLLVM_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/llvm
       -DClang_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/clang
       -DSWIFT_PATH_TO_CMARK_SOURCE=$SWIFT_SOURCE_ROOT/swift-cmark
