@@ -2201,6 +2201,8 @@ with pkgs;
 
   ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
 
+  rpcemu = callPackage ../applications/emulators/rpcemu { };
+
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
   ruffle = callPackage ../applications/emulators/ruffle { };
