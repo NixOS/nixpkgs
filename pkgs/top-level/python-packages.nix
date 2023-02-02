@@ -122,6 +122,8 @@ self: super: with self; {
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
+  aio-pika = callPackage ../development/python-modules/aio-pika { };
+
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
   aioairq = callPackage ../development/python-modules/aioairq { };
