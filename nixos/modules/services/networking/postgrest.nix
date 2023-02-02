@@ -99,15 +99,14 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["postgresql.service"];
       script = let
+        credentials =
+          if cfg.postgresPassword == null
+          then cfg.postgresUser
+          else "${cfg.postgresUser}:${cfg.postgresPassword}";
         dbURI =
           if cfg.dbURI != null
           then cfg.dbURI
-          else
-            let credentials =
-              if cfg.postgresPassword == null
-              then cfg.postgresUser
-              else "${cfg.postgresUser}:${cfg.postgresPassword}";
-            in "postgres://${credentials}@${cfg.postgresHost}:${toString cfg.postgresPort}/${cfg.postgresDatabase}";
+          else "postgres://${credentials}@${cfg.postgresHost}:${toString cfg.postgresPort}/${cfg.postgresDatabase}";
         postgrestConfig = pkgs.writeText "postgrest.conf" ''
           db-uri = "${dbURI}"
           server-port = ${toString cfg.port}
