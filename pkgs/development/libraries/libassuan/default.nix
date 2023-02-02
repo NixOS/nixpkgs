@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ npth gettext ];
 
   configureFlags = [
+    # Required for cross-compilation.
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
   ];
 
