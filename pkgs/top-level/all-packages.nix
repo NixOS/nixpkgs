@@ -19682,6 +19682,8 @@ with pkgs;
 
   funambol = callPackage ../development/libraries/funambol { };
 
+  functionalplus = callPackage ../development/libraries/functionalplus { };
+
   galer = callPackage ../tools/security/galer { };
 
   gallia = callPackage ../tools/security/gallia { };
