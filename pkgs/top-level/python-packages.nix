@@ -3079,7 +3079,6 @@ self: super: with self; {
 
   etebase = callPackage ../development/python-modules/etebase {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-    openssl = pkgs.openssl_1_1;
   };
 
   etebase-server = callPackage ../servers/etebase { };
@@ -11262,7 +11261,9 @@ self: super: with self; {
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
-  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability {
+    inherit (pkgs.darwin) cctools;
+  };
 
   tensorflow = self.tensorflow-build;
 
