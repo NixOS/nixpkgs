@@ -6528,6 +6528,8 @@ self: super: with self; {
 
   objax = callPackage ../development/python-modules/objax { };
 
+  objsize = callPackage ../development/python-modules/objsize { };
+
   objgraph = callPackage ../development/python-modules/objgraph {
     # requires both the graphviz package and python package
     graphvizPkgs = pkgs.graphviz;
