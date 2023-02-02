@@ -149,14 +149,12 @@ class ManpageRenderer(Renderer):
     def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         href = cast(str, token.attrs['href'])
-        (text, font) = ("", "\\fB")
+        text = ""
         if tokens[i + 1].type == 'link_close' and href in self._href_targets:
             # TODO error or warning if the target can't be resolved
             text = self._href_targets[href]
-        elif href in self._href_targets:
-            font = "\\fR" # TODO docbook renders these links differently for some reason
-        self._font_stack.append(font)
-        return f"{font}{text}\0 <"
+        self._font_stack.append("\\fB")
+        return f"\\fB{text}\0 <"
     def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
         self._font_stack.pop()

@@ -26,4 +26,4 @@ def test_fonts() -> None:
 def test_expand_link_targets() -> None:
     c = Converter({}, { '#foo1': "bar", "#foo2": "bar" })
     assert (c._render("[a](#foo1) [](#foo2) [b](#bar1) [](#bar2)") ==
-            "\\fRa\\fR \\fBbar\\fR \\fBb\\fR \\fB\\fR")
+            "\\fBa\\fR \\fBbar\\fR \\fBb\\fR \\fB\\fR")
