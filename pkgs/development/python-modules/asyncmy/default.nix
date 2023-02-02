@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asyncmy";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "long2ice";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yLAse8p+2RYHJmDwD5vrHlf29URB+kdupjD1DwTcRAc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UWwqQ0ZYGoOsgRC7ROV9DDBQ/l/vXWB6uHpQ/WaFRAw=";
   };
 
   nativeBuildInputs = [
