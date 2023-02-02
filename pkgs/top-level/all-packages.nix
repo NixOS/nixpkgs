@@ -10400,7 +10400,9 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  openmvs = callPackage ../applications/science/misc/openmvs { };
+  openmvs = callPackage ../applications/science/misc/openmvs {
+    inherit (llvmPackages) openmp;
+  };
 
   openntpd = callPackage ../tools/networking/openntpd { };
 
