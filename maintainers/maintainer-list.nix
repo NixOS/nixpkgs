@@ -14666,6 +14666,12 @@
     githubId = 610615;
     name = "Chih-Mao Chen";
   };
+  pkosel = {
+    name = "pkosel";
+    email = "philipp.kosel@gmail.com";
+    github = "pkosel";
+    githubId = 170943;
+  };
   pks = {
     email = "ps@pks.im";
     github = "pks-t";
