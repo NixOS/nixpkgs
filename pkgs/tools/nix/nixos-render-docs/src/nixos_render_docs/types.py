@@ -7,7 +7,9 @@ from markdown_it.utils import OptionsDict
 OptionLoc = str | dict[str, str]
 Option = dict[str, str | dict[str, str] | list[OptionLoc]]
 
-RenderedOption = NamedTuple('RenderedOption', [('loc', list[str]),
-                                               ('lines', list[str])])
+class RenderedOption(NamedTuple):
+    loc: list[str]
+    lines: list[str]
+    links: Optional[list[str]] = None
 
 RenderFn = Callable[[Token, Sequence[Token], int, OptionsDict, MutableMapping[str, Any]], str]

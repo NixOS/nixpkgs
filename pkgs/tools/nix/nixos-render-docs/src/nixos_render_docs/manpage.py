@@ -81,9 +81,11 @@ class ManpageRenderer(Renderer):
     # mainly used by the options manpage converter to not emit extra quotes in defaults
     # and examples where it's already clear from context that the following text is code.
     inline_code_is_quoted: bool = True
+    link_footnotes: Optional[list[str]] = None
 
     _href_targets: dict[str, str]
 
+    _link_stack: list[str]
     _do_parbreak_stack: list[bool]
     _list_stack: list[List]
     _font_stack: list[str]
@@ -92,6 +94,7 @@ class ManpageRenderer(Renderer):
                  parser: Optional[markdown_it.MarkdownIt] = None):
         super().__init__(manpage_urls, parser)
         self._href_targets = href_targets
+        self._link_stack = []
         self._do_parbreak_stack = []
         self._list_stack = []
         self._font_stack = []
@@ -154,6 +157,7 @@ class ManpageRenderer(Renderer):
     def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         href = cast(str, token.attrs['href'])
+        self._link_stack.append(href)
         text = ""
         if tokens[i + 1].type == 'link_close' and href in self._href_targets:
             # TODO error or warning if the target can't be resolved
@@ -162,8 +166,17 @@ class ManpageRenderer(Renderer):
         return f"\\fB{text}\0 <"
     def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                    env: MutableMapping[str, Any]) -> str:
+        href = self._link_stack.pop()
+        text = ""
+        if self.link_footnotes is not None:
+            try:
+                idx = self.link_footnotes.index(href) + 1
+            except ValueError:
+                self.link_footnotes.append(href)
+                idx = len(self.link_footnotes)
+            text = "\\fR" + man_escape(f"[{idx}]")
         self._font_stack.pop()
-        return f">\0 {self._font_stack[-1]}"
+        return f">\0 {text}{self._font_stack[-1]}"
     def list_item_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                        env: MutableMapping[str, Any]) -> str:
         self._enter_block()

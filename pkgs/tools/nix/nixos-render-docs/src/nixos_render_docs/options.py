@@ -148,12 +148,15 @@ class BaseConverter(Converter):
 
         return [ l for part in blocks for l in part ]
 
+    def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
+        try:
+            return RenderedOption(option['loc'], self._convert_one(option))
+        except Exception as e:
+            raise Exception(f"Failed to render option {name}") from e
+
     def add_options(self, options: dict[str, Any]) -> None:
         for (name, option) in options.items():
-            try:
-                self._options[name] = RenderedOption(option['loc'], self._convert_one(option))
-            except Exception as e:
-                raise Exception(f"Failed to render option {name}") from e
+            self._options[name] = self._render_option(name, option)
 
     @abstractmethod
     def finalize(self) -> str: raise NotImplementedError()
@@ -277,10 +280,18 @@ class ManpageConverter(BaseConverter):
     __option_block_separator__ = ".sp"
 
     _options_by_id: dict[str, str]
+    _links_in_last_description: Optional[list[str]] = None
 
     def __init__(self, revision: str, markdown_by_default: bool):
         self._options_by_id = {}
         super().__init__({}, revision, markdown_by_default)
+
+    def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
+        assert isinstance(self._md.renderer, OptionsManpageRenderer)
+        links = self._md.renderer.link_footnotes = []
+        result = super()._render_option(name, option)
+        self._md.renderer.link_footnotes = None
+        return result._replace(links=links)
 
     def add_options(self, options: dict[str, Any]) -> None:
         for (k, v) in options.items():
@@ -356,6 +367,17 @@ class ManpageConverter(BaseConverter):
                 ".RS 4",
             ]
             result += opt.lines
+            if links := opt.links:
+                result.append(self.__option_block_separator__)
+                md_links = ""
+                for i in range(0, len(links)):
+                    md_links += "\n" if i > 0 else ""
+                    if links[i].startswith('#opt-'):
+                        md_links += f"{i+1}. see the {{option}}`{self._options_by_id[links[i]]}` option"
+                    else:
+                        md_links += f"{i+1}. " + md_escape(links[i])
+                result.append(self._render(md_links))
+
             result.append(".RE")
 
         result += [
