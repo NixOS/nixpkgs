@@ -17,7 +17,7 @@
 
     extraMeta = {
       branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura ];
+      maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
     };
   } // argsOverride;
 
