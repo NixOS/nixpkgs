@@ -40,6 +40,12 @@ class BaseConverter(Converter):
         self._id_prefix = id_prefix
         self._markdown_by_default = markdown_by_default
 
+    def _sorted_options(self) -> list[tuple[str, RenderedOption]]:
+        keys = list(self._options.keys())
+        keys.sort(key=lambda opt: [ (0 if p.startswith("enable") else 1 if p.startswith("package") else 2, p)
+                                    for p in self._options[opt].loc ])
+        return [ (k, self._options[k]) for k in keys ]
+
     def _format_decl_def_loc(self, loc: OptionLoc) -> tuple[Optional[str], str]:
         # locations can be either plain strings (specific to nixpkgs), or attrsets
         # { name = "foo/bar.nix"; url = "https://github.com/....."; }
@@ -215,10 +221,6 @@ class DocBookConverter(BaseConverter):
         return [ "</simplelist>" ]
 
     def finalize(self) -> str:
-        keys = list(self._options.keys())
-        keys.sort(key=lambda opt: [ (0 if p.startswith("enable") else 1 if p.startswith("package") else 2, p)
-                                    for p in self._options[opt].loc ])
-
         result = []
 
         result.append('<?xml version="1.0" encoding="UTF-8"?>')
@@ -235,7 +237,7 @@ class DocBookConverter(BaseConverter):
             f'              xml:id="{self._varlist_id}">',
         ]
 
-        for name in keys:
+        for (name, opt) in self._sorted_options():
             id = make_xml_id(self._id_prefix + name)
             result += [
                 "<varlistentry>",
@@ -244,7 +246,7 @@ class DocBookConverter(BaseConverter):
                  f"<option>{escape(name)}</option></term>"),
                 "<listitem>"
             ]
-            result += self._options[name].lines
+            result += opt.lines
             result += [
                 "</listitem>",
                 "</varlistentry>"
