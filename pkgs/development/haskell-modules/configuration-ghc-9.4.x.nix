@@ -184,14 +184,13 @@ in {
   })
     self.ghc-exactprint_1_6_1_1;
 
-  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # 2023-02-01: plugins disabled for hls 1.9.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
-    hls-refactor-plugin = null;
     hls-eval-plugin = null;
-    hls-floskell-plugin = null;
-    hls-ormolu-plugin = null;
-    hls-rename-plugin = null;
+    hls-ormolu-plugin = null;     # This plugin is supposed to work, but fails to compile.
+    hls-floskell-plugin = null;   # This plugin is supposed to work, but fails to compile.
+    hls-rename-plugin = null;     # This plugin is supposed to work, but fails to compile.
     hls-stylish-haskell-plugin = null;
   };
 
