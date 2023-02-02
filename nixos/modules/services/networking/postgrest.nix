@@ -71,6 +71,13 @@ in {
         Port for the database.
       '';
     };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.haskellPackages.postgrest;
+      description = mdDoc ''
+        postgrest package override.
+      '';
+    };
     anonRole = mkOption {
       type = types.str;
       example = "anon";
@@ -108,7 +115,7 @@ in {
           db-schema = "${cfg.postgresSchema}"
           ${cfg.extraConf}
         '';
-      in "${pkgs.haskellPackages.postgrest}/bin/postgrest ${postgrestConfig}";
+      in "${cfg.package}/bin/postgrest ${postgrestConfig}";
     };
   };
 }

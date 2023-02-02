@@ -47,6 +47,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
         anonRole = "anon";
         postgresDatabase = "postgres";
         enable = true;
+        package = pkgs.haskellPackages.postgrest;
       };
     };
   };
