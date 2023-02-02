@@ -7,7 +7,8 @@
     "3_day_blinds" = ps: with ps; [
     ];
     "abode" = ps: with ps; [
-    ]; # missing inputs: jaraco.abode
+      jaraco-abode
+    ];
     "accuweather" = ps: with ps; [
       accuweather
     ];
@@ -4427,6 +4428,7 @@
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
+    "abode"
     "accuweather"
     "acmeda"
     "adax"
