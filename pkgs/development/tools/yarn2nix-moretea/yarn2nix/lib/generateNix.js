@@ -136,7 +136,7 @@ function fetchLockedDep(builtinFetchGit) {
         fileName,
         `${githubUrl}.git`,
         githubRev,
-        branch || "master",
+        branch || "HEAD",
         builtinFetchGit
       );
     }
