@@ -1385,7 +1385,7 @@ self: super: {
   hls-hlint-plugin = super.hls-hlint-plugin.override {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" super.hlint;
-    apply-refact = self.apply-refact_0_12_0_0;
+    apply-refact = self.apply-refact_0_11_0_0;
   };
 
   # For -f-auto see cabal.project in haskell-language-server.

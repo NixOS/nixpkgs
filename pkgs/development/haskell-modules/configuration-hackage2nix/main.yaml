@@ -96,6 +96,7 @@ extra-packages:
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
+  - apply-refact == 0.11.*              # 2023-02-02: needed for hls-hlint-plugin on GHC 9.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
