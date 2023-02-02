@@ -545,7 +545,7 @@ class Machine:
         self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
-        return (rc, output.decode())
+        return (rc, output.decode(errors="replace"))
 
     def shell_interact(self, address: Optional[str] = None) -> None:
         """Allows you to interact with the guest shell for debugging purposes.
