@@ -6,11 +6,11 @@ in
 
   openssh = common rec {
     pname = "openssh";
-    version = "9.1p1";
+    version = "9.2p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-GfhQCcfj4jeH8CNvuxV4OSq01L+fjsX+a8HNfov90og=";
+      hash = "sha256-P2bb8WVftF9Q4cVtpiqwEhjCKIB7ITONY068351xz0Y=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
@@ -36,6 +36,13 @@ in
         url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/ae66cffc19f357cbd51d5841c9b110a9ffd63e32/security/openssh-portable/files/extra-patch-hpn";
         stripLen = 1;
         sha256 = "sha256-p3CmMqTgrqFZUo4ZuqaPLczAhjmPufkCvptVW5dI+MI=";
+      })
+
+      (fetchpatch {
+        name = "CVE-2023-25136.patch";
+        url = "https://ftp.openbsd.org/pub/OpenBSD/patches/7.2/common/017_sshd.patch.sig";
+        stripLen = 1;
+        hash = "sha256-ol/YXXb2gJNBfvg9JKmIEdwGK8RaDfW53aKKT6HU++M=";
       })
     ];
 
