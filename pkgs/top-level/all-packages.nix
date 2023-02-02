@@ -284,6 +284,8 @@ with pkgs;
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
+  ansi = callPackage ../development/tools/ansi { };
+
   arti = callPackage ../tools/security/arti {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -2202,6 +2204,8 @@ with pkgs;
   retrofe = callPackage ../applications/emulators/retrofe { };
 
   ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+
+  rpcemu = callPackage ../applications/emulators/rpcemu { };
 
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
