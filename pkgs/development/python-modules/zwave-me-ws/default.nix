@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Z-Wave-Me";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DfQh9wuYx/gCyW3ONk8wwDOgbp8Pifx3nwDgS5NZFhI=";
+    hash = "sha256-DfQh9wuYx/gCyW3ONk8wwDOgbp8Pifx3nwDgS5NZFhI=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to a ZWave-Me instance";
     homepage = "https://github.com/Z-Wave-Me/zwave-me-ws";
+    changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
