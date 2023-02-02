@@ -76,7 +76,7 @@ buildPythonApplication rec {
     libicns  # For the png2icns tool.
   ];
 
-  outputs = [ "out" "terminfo" "shell_integration" ];
+  outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 
   patches = [
     # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
@@ -95,6 +95,10 @@ buildPythonApplication rec {
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
+  CGO_ENABLED = 0;
+  GO_FLAGS = "-trimpath";
+  disallowedReferences = [ go ];
 
   configurePhase = let
     goModules = (buildGoModule {
@@ -176,15 +180,19 @@ buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
+    mkdir -p $kitten/bin
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitten "$out/bin/kitten"
+    cp ./kitty.app/Contents/MacOS/kitten "$kitten/bin/kitten"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
 
     installManPage 'docs/_build/man/kitty.1'
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
+    cp linux-package/bin/kitten $kitten/bin/kitten
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
