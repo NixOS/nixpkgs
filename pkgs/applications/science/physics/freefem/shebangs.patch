@@ -1,0 +1,36 @@
+diff --git a/3rdparty/ff-petsc/Makefile b/3rdparty/ff-petsc/Makefile
+index c3dec1ac..9cf483dc 100644
+--- a/3rdparty/ff-petsc/Makefile
++++ b/3rdparty/ff-petsc/Makefile
+@@ -299,6 +299,7 @@ $(SRCDIR)/tag-tar:$(PACKAGE)
+ 	-mkdir $(SRCDIR) 2>/dev/null
+ 	-tar xzf $(PACKAGE) -C $(SRCDIR) --strip-components 1
+ 	cd $(SRCDIR) && patch -p1 < ../petsc-cmake-seq.patch && cd -
++	. $(stdenv)/setup; patchShebangs .
+ 	touch $@
+ $(PACKAGE):
+ 	../getall -o PETSc -a
+diff --git a/3rdparty/mmg/Makefile b/3rdparty/mmg/Makefile
+index 18508a30..cb0fde57 100644
+--- a/3rdparty/mmg/Makefile
++++ b/3rdparty/mmg/Makefile
+@@ -57,6 +57,7 @@ tag-tar: $(PACKAGE)
+ 	-rm -rf mmg-*
+ 	unzip -q $(PACKAGE) && mv mmg-* mmg-sources
+ #	patch -p1 <patch-mmg 
++	. $(stdenv)/setup; patchShebangs .
+ 	touch tag-tar
+ 
+ $(PACKAGE): FORCE
+diff --git a/3rdparty/parmmg/Makefile b/3rdparty/parmmg/Makefile
+index 560fc44e..4aeb2bba 100644
+--- a/3rdparty/parmmg/Makefile
++++ b/3rdparty/parmmg/Makefile
+@@ -67,6 +67,7 @@ FAIRE: FAIT.done install.done
+ tag-tar: $(PACKAGE)
+ 	-rm -rf ParMmg-* parmmg-sources
+ 	unzip -q $(PACKAGE) && mv ParMmg-* parmmg-sources
++	. $(stdenv)/setup; patchShebangs .
+ 	touch tag-tar
+ 
+ $(PACKAGE): FORCE
