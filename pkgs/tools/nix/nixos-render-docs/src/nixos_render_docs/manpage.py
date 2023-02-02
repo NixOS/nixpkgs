@@ -165,7 +165,7 @@ class ManpageRenderer(Renderer):
                        env: MutableMapping[str, Any]) -> str:
         self._enter_block()
         lst = self._list_stack[-1]
-        maybe_space = '' if not lst.first_item_seen else '.sp\n'
+        maybe_space = '' if lst.compact or not lst.first_item_seen else '.sp\n'
         lst.first_item_seen = True
         head = "•"
         if lst.next_idx is not None:
@@ -182,7 +182,7 @@ class ManpageRenderer(Renderer):
         return ".RE"
     def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                          env: MutableMapping[str, Any]) -> str:
-        self._list_stack.append(List(width=4, compact=False))
+        self._list_stack.append(List(width=4, compact=bool(token.meta['compact'])))
         return self._maybe_parbreak()
     def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
