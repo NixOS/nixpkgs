@@ -10288,9 +10288,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  oha = callPackage ../tools/networking/oha {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  oha = callPackage ../tools/networking/oha { };
 
   onetun = callPackage ../tools/networking/onetun {
     inherit (darwin.apple_sdk.frameworks) Security;
