@@ -14774,6 +14774,12 @@ with pkgs;
        then haskell.compiler.native-bignum.ghc92
        else haskell.compiler.ghc92);
 
+  alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
+
+  happy = haskell.lib.compose.justStaticExecutables haskellPackages.happy;
+
+  hscolour = haskell.lib.compose.justStaticExecutables haskellPackages.hscolour;
+
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
   stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack;
