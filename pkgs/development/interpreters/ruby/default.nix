@@ -190,14 +190,7 @@ let
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
-          awk -i inplace -F' = ' \
-            ' # operate on the line starting with
-              /^  CONFIG\["CC"\]/ {
-                # replace the right hand side
-                sub($2, "ENV[\"CC\"] || \"1\"")
-              }; { print }' "$rbConfig"
-          # test that the line isn't mangled in case upstream made the above unnecessary
-          grep -qx '  CONFIG\["CC"\] = ENV\["CC"\] || "1"' "$rbConfig"
+          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
 
           # Remove unnecessary external intermediate files created by gems
           extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
@@ -234,6 +227,21 @@ let
             -t ${baseRuby} \
             $rbConfig $out/lib/libruby*
         '';
+
+        installCheckPhase = ''
+          overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
+          if [[ "$overriden_cc" != "foo" ]]; then
+             echo "CC cannot be overwritten: $overriden_cc != foo" >&2
+             false
+          fi
+
+          fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
+          if [[ "$fallback_cc" != "$CC" ]]; then
+             echo "CC='$fallback_cc' should be '$CC' by default" >&2
+             false
+          fi
+        '';
+        doInstallCheck = true;
 
         disallowedRequisites = op (!jitSupport) stdenv.cc.cc
           ++ op useBaseRuby baseRuby;
