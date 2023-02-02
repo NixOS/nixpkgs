@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, docutils
+, setuptools
 , lxml
 , pytestCheckHook
 , wcag-contrast-ratio
@@ -10,20 +10,22 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.13.0";
+    version = "2.14.0";
+    format = "pyproject";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      sha256 = "sha256-VqhQiulfmOK5vfk6a+WuP32K+Fi0PgLFov8INya+QME=";
+      hash = "sha256-s+0GqeismpquWm9dvniopYZV0XtDuTwHjwlN3Edq4pc=";
     };
 
-    propagatedBuildInputs = [
-      docutils
+    nativeBuildInputs = [
+      setuptools
     ];
 
     # circular dependencies if enabled by default
     doCheck = false;
+
     nativeCheckInputs = [
       lxml
       pytestCheckHook
