@@ -78,22 +78,6 @@ let
         ];
       });
 
-      caldav = super.caldav.overridePythonAttrs (old: rec {
-        version = "0.9.1";
-        src = fetchFromGitHub {
-          owner = "python-caldav";
-          repo = "caldav";
-          rev = "v${version}";
-          hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
-        };
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace ", 'xandikos<0.2.4'" "" \
-            --replace ", 'radicale'" ""
-        '';
-        nativeCheckInputs = old.nativeCheckInputs ++ [ self.nose ];
-      });
-
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
         version = "0.33";
         src = fetchFromGitHub {
@@ -111,15 +95,6 @@ let
           repo = "python-gridnet";
           rev = "refs/tags/v${version}";
           hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
-        };
-      });
-
-      icalendar = super.icalendar.overridePythonAttrs (oldAttrs: rec {
-        version = "4.1.0";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-l0i3wC78xD5Y0GFa4JdqxPJl6Q2t7ptPiE3imQXBs5U=";
         };
       });
 
@@ -176,33 +151,22 @@ let
         };
       });
 
-      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.3";
-        src = fetchFromGitHub {
-          owner = "riptideio";
-          repo = "pymodbus";
-          rev= "refs/tags/v${version}";
-          hash = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
-        };
-      });
-
-      # Pinned due to API changes in 1.0.24
-      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.22";
-        src = fetchFromGitHub {
-          owner = "andrey-git";
-          repo = "pysensibo";
-          rev = "refs/tags/${version}";
-          hash = "sha256-AUcdKcdoYCg8OgUcFoLLpNK5GQMTg89XCR5CkTfNkcc=";
-        };
-      });
-
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = super.fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
+        };
+      });
+
+      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
+        version = "9.0.1";
+        src = fetchFromGitHub {
+          owner = "home-assistant-libs";
+          repo = "pytradfri";
+          rev = "refs/tags/${version}";
+          hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
       });
 
@@ -233,25 +197,6 @@ let
             --replace "tornado==6.1" "tornado"
         '';
         doCheck = false;
-      });
-
-      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
-        version = "9.0.0";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pytradfri";
-          rev = "refs/tags/${version}";
-          hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
-        };
-      });
-
-      pysoma = super.pysoma.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.10";
-        src = super.fetchPypi {
-          pname = "pysoma";
-          inherit version;
-          hash = "sha256-sU1qHbAjdIUu0etjate8+U1zvunbw3ddBtDVUU10CuE=";
-        };
       });
 
       # Pinned due to API changes in 0.3.0
@@ -326,7 +271,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.1.7";
+  hassVersion = "2023.2.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -334,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.9";
+  disabled = python.pythonOlder "3.10";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -344,7 +289,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-z8dTFRs7Tm4WTQcYeHu9jlGbva9yNPhjmQ+CQY+9DN4=";
+    hash = "sha256-tW1tVPJ50DIGIuxJP9nq4+Tw4fiPA+kINSclW7JkJmE=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -368,6 +313,7 @@ in python.pkgs.buildPythonApplication rec {
       "ifaddr"
       "orjson"
       "PyJWT"
+      "pyOpenSSL"
       "requests"
       "typing-extensions"
       "yarl"
