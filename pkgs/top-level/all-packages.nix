@@ -4794,12 +4794,6 @@ with pkgs;
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
-  # NOTE: If overriding qt version, krita needs to use the same qt version as
-  # well.
-  gmic-qt-krita = gmic-qt.override {
-    variant = "krita";
-  };
-
   gpg-tui = callPackage ../tools/security/gpg-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin) libobjc libresolv;
