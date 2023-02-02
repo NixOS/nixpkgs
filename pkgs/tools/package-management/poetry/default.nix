@@ -20,6 +20,7 @@ let
   };
 
   plugins = with python.pkgs; {
+    poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
     poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
   };
 
