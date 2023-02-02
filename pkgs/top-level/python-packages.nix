@@ -18,8 +18,6 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
-  abodepy = callPackage ../development/python-modules/abodepy { };
-
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accuweather = callPackage ../development/python-modules/accuweather { };
@@ -1486,6 +1484,8 @@ self: super: with self; {
   bunch = callPackage ../development/python-modules/bunch { };
 
   bundlewrap = callPackage ../development/python-modules/bundlewrap { };
+
+  bx-py-utils = callPackage ../development/python-modules/bx-py-utils { };
 
   bx-python = callPackage ../development/python-modules/bx-python { };
 
@@ -4788,9 +4788,13 @@ self: super: with self; {
 
   janus = callPackage ../development/python-modules/janus { };
 
+  jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
+
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
   jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
+
+  jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
@@ -4799,6 +4803,8 @@ self: super: with self; {
   jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
 
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
+
+  jaraco-net = callPackage ../development/python-modules/jaraco-net { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 

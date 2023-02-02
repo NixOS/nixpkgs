@@ -23,7 +23,7 @@
 , libxcb
 , libxkbcommon
 , libxmlxx
-, libyamlcpp
+, yaml-cpp
 , lttng-ust
 , mesa
 , nettle
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     libxmlxx
-    libyamlcpp
+    yaml-cpp
     lttng-ust
     mesa
     nettle

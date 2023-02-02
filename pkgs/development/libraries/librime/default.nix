@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
+  yaml-cpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
 
 let
   copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ]
+  buildInputs = [ boost glog leveldb marisa opencc yaml-cpp gtest capnproto ]
               ++ plugins; # for propagated build inputs
 
   preConfigure = copyPlugins;
