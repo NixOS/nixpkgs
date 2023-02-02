@@ -61,6 +61,9 @@ self: super: {
     process = self.process_1_6_16_0;
   });
 
+  # weeder == 2.5.* requires GHC 9.4
+  weeder = doDistribute self.weeder_2_4_1;
+
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
