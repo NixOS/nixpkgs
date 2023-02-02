@@ -73,6 +73,11 @@ mkDerivation rec {
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
+
+      # opescad tries to use pkg-config on lib3MF name, instead of the proper lib3fm
+      # let's help it to find the library
+      "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+      "LIB3MF_LIBPATH=${lib3mf}/lib"
     ];
 
   enableParallelBuilding = true;
