@@ -6960,6 +6960,7 @@ with pkgs;
   # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.21";
   elk7Version = "7.17.4";
+  elk8Version = "8.6.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     util-linux = util-linuxMinimal;
@@ -6971,6 +6972,10 @@ with pkgs;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
+    util-linux = util-linuxMinimal;
+    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+  elasticsearch8 = callPackage ../servers/search/elasticsearch/8.x.nix {
     util-linux = util-linuxMinimal;
     jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
