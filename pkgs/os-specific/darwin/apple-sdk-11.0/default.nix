@@ -84,8 +84,13 @@ let
       inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreServices CoreGraphics ImageIO;
     };
 
+    rustPlatform = pkgs.makeRustPlatform {
+      inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+      inherit (pkgs) rustc cargo;
+    };
+
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin rec {
-      inherit (pkgs.darwin.apple_sdk_11_0) stdenv xcodebuild;
+      inherit (pkgs.darwin.apple_sdk_11_0) stdenv xcodebuild rustPlatform;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
         apple_sdk = prev.darwin.apple_sdk_11_0;
