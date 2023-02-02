@@ -1,22 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pygments }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jupyter-packaging
+, jupyterlab
+, pygments
+ }:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_pygments";
-  version = "0.1.2";
+  pname = "jupyterlab-pygments";
+  version = "0.2.2";
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = version;
-    sha256 = "02lv63qalw4x6xs70n2w2p3c2cnhk91sr961wlbi77xs0g8fcman";
+  # requires yarn to build
+  src = fetchPypi {
+    pname = "jupyterlab_pygments";
+    inherit version;
+    hash = "sha256-dAXX/eYIGdkFqfqM6J5M2DDjGM2tIqADD3qQHacFWF0=";
   };
 
-  # no tests exist on upstream repo
-  doCheck = false;
+  nativeBuildInputs = [
+    jupyter-packaging
+    pygments
+  ];
 
-  propagatedBuildInputs = [ pygments ];
+  doCheck = false; # no tests
 
-  pythonImportsCheck = [ "jupyterlab_pygments" ];
+  pythonImportsCheck = [
+    "jupyterlab_pygments"
+  ];
 
   meta = with lib; {
     description = "Jupyterlab syntax coloring theme for pygments";
