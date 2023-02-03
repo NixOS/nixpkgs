@@ -1,5 +1,6 @@
 { lib, fetchurl, buildDunePackage, cstruct-lwt, diet, logs
-, mirage-block, ounit2, rresult, uri }:
+, mirage-block, ounit2, rresult, uri
+}:
 
 buildDunePackage rec {
   pname = "mirage-block-unix";
@@ -16,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct-lwt logs mirage-block rresult uri ];
 
   doCheck = true;
-  nativeCheckInputs = [ diet ounit2 ];
+  checkInputs = [ diet ounit2 ];
 
   meta = with lib; {
     description = "MirageOS disk block driver for Unix";

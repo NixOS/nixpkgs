@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "00haz1cmplk3j9ysh6j656zrldy60585fmlndmfhpd5332mxrfdw";
   };
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
   propagatedBuildInputs = [ ppxlib ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

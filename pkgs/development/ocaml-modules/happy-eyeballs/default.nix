@@ -13,8 +13,6 @@ buildDunePackage rec {
     hash = "sha256-gR9q4J/DnYJz8oYmk/wy17h4F6wxbllba/gkor5i1nQ=";
   };
 
-  strictDeps = true;
-
   propagatedBuildInputs = [
     domain-name
     duration

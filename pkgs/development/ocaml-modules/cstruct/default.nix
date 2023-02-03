@@ -14,7 +14,7 @@ buildDunePackage rec {
   buildInputs = [ fmt ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest crowbar ];
+  checkInputs = [ alcotest crowbar ];
 
   meta = {
     description = "Access C-like structures directly from OCaml";

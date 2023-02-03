@@ -13,8 +13,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
-  strictDeps = true;
-
   nativeBuildInputs = [ menhir ];
 
   meta = {

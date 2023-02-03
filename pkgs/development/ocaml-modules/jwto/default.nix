@@ -22,7 +22,7 @@ buildDunePackage rec {
   propagatedBuildInputs =
     [ digestif fmt yojson base64 re ppx_deriving ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

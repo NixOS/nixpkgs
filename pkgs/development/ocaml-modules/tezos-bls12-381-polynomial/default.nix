@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildDunePackage,
-  bls12-381,
-  data-encoding,
-  bigstringaf,
-  alcotest,
-  alcotest-lwt,
-  bisect_ppx,
-  qcheck-alcotest,
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, bls12-381
+, data-encoding
+, bigstringaf
+, alcotest
+, alcotest-lwt
+, bisect_ppx
+, qcheck-alcotest
+,
 }:
 
 buildDunePackage rec {
@@ -22,9 +22,9 @@ buildDunePackage rec {
     sha256 = "sha256-H1Wog3GItTIVsawr9JkyyKq+uGqbTQPTR1dacpmxLbs=";
   };
 
-  propagatedBuildInputs = [bls12-381 data-encoding bigstringaf];
+  propagatedBuildInputs = [ bls12-381 data-encoding bigstringaf ];
 
-  nativeCheckInputs = [alcotest alcotest-lwt bisect_ppx qcheck-alcotest];
+  checkInputs = [ alcotest alcotest-lwt bisect_ppx qcheck-alcotest ];
 
   doCheck = false; # circular dependencies
 
@@ -32,6 +32,6 @@ buildDunePackage rec {
     description = "Polynomials over BLS12-381 finite field";
     license = lib.licenses.mit;
     homepage = "https://gitlab.com/nomadic-labs/privacy-team";
-    maintainers = [lib.maintainers.ulrikstrid];
+    maintainers = [ lib.maintainers.ulrikstrid ];
   };
 }
