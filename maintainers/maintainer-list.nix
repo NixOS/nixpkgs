@@ -7292,6 +7292,12 @@
     githubId = 3267697;
     name = "Joshua Potter";
   };
+  jrrmyr = {
+    email = "jrrmyr@gmail.com";
+    github = "jrrmyr";
+    githubId = 102282561;
+    name = "Jeremy Robinson";
+  };
   jshcmpbll = {
     email = "me@joshuadcampbell.com";
     github = "jshcmpbll";
