@@ -16,7 +16,7 @@
 
 let
   pname = "wallabag";
-  version = "2.5.2";
+  version = "2.5.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -27,26 +27,22 @@ stdenv.mkDerivation {
       "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
       "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
     ];
-    hash = "sha256-Q989SorGPm3KBuQhGAinYU6HGIa9RrhtRPvwGALU6jk=";
+    hash = "sha256-a30z9rdXcfc2eVuShEobgDWWHr9TfMwq9WwaWdrI3QU=";
   };
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
-
-    # Use sendmail from php.ini instead of FHS path.
-    (fetchpatch {
-      url = "https://github.com/symfony/swiftmailer-bundle/commit/31a4fed8f621f141ba70cb42ffb8f73184995f4c.patch";
-      stripLen = 1;
-      extraPrefix = "vendor/symfony/swiftmailer-bundle/";
-      sha256 = "rxHiGhKFd/ZWnIfTt6omFLLoNFlyxOYNCHIv/UtxCho=";
-    })
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R * $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
