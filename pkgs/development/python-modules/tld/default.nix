@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.12.6";
+  version = "0.12.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69fed19d26bb3f715366fb4af66fdeace896c55c052b00e8aaba3a7b63f3e7f0";
+    sha256 = "sha256-tvdynhnODrx3ugpltw1iE665UsAf9gXhKZquX7diHF4=";
   };
 
   nativeCheckInputs = [
