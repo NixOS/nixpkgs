@@ -3,6 +3,7 @@ import json
 
 from abc import abstractmethod
 from collections.abc import MutableMapping, Sequence
+from pathlib import Path
 from typing import Any, cast, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
 from markdown_it.token import Token
@@ -26,11 +27,15 @@ class BaseConverter(Converter):
         super().__init__(manpage_urls)
         self._sections = []
 
-    def add_section(self, id: Optional[str], chapters: list[str]) -> None:
+    def add_section(self, id: Optional[str], chapters: list[Path]) -> None:
         self._sections.append(RenderedSection(id))
-        for content in chapters:
-            self._md.renderer._title_seen = False # type: ignore[attr-defined]
-            self._sections[-1].chapters.append(self._render(content))
+        for chpath in chapters:
+            try:
+                with open(chpath, 'r') as f:
+                    self._md.renderer._title_seen = False # type: ignore[attr-defined]
+                    self._sections[-1].chapters.append(self._render(f.read()))
+            except Exception as e:
+                raise RuntimeError(f"failed to render manual chapter {chpath}") from e
 
     @abstractmethod
     def finalize(self) -> str: raise NotImplementedError()
@@ -45,7 +50,13 @@ class ManualDocBookRenderer(DocBookRenderer):
         (tag, attrs) = super()._heading_tag(token, tokens, i, options, env)
         if self._title_seen:
             if token.tag == 'h1':
-                raise RuntimeError("only one title heading allowed", token)
+                assert token.map is not None
+                raise RuntimeError(
+                    "only one title heading (# [text...]) allowed per manual chapter "
+                    f"but found a second in lines [{token.map[0]}..{token.map[1]}]. "
+                    "please remove all such headings except the first, split your "
+                    "chapters, or demote the subsequent headings to (##) or lower.",
+                    token)
             return (tag, attrs)
         self._title_seen = True
         return ("chapter", attrs | {
@@ -111,7 +122,7 @@ class ChaptersAction(argparse.Action):
                  values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
         sections = getattr(ns, self.dest)
         if sections is None: raise argparse.ArgumentError(self, "no active section")
-        sections[-1].chapters.extend(cast(Sequence[str], values))
+        sections[-1].chapters.extend(map(Path, cast(Sequence[str], values)))
 
 def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
@@ -124,11 +135,7 @@ def _run_cli_db(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
         md = DocBookConverter(json.load(manpage_urls))
         for section in args.contents:
-            chapters = []
-            for p in section.chapters:
-                with open(p, 'r') as f:
-                    chapters.append(f.read())
-            md.add_section(section.id, chapters)
+            md.add_section(section.id, section.chapters)
         with open(args.outfile, 'w') as f:
             f.write(md.finalize())
 

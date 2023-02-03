@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "2.0.0";
+  version = "2.0.1";
 
   format = "setuptools";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-B6oLy4Ai30SGGTgGcO0V+f1mf1P1W8sMpzk7oIUtcJY=";
+    hash = "sha256-1tmUf0HIKufiocAZPxkTLyicMU0o8dhSjCij2Lc/lyk=";
   };
 
   propagatedBuildInputs = [
