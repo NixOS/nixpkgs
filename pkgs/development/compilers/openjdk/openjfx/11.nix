@@ -14,16 +14,6 @@ let
     java = openjdk11-bootstrap;
   });
 
-  NIX_CFLAGS_COMPILE = [
-    # avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
-    # glib-2.62 deprecations
-    # -fcommon: gstreamer workaround for -fno-common toolchains:
-    #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
-    #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-    "-fcommon"
-  ];
-
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
 
