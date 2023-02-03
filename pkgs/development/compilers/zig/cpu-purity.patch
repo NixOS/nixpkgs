@@ -1,0 +1,20 @@
+By default, Zig will use the generate code for the native CPU. This is impure.
+Change the default to -mcpu=baseline.
+
+https://github.com/NixOS/nixpkgs/issues/169461
+https://github.com/NixOS/nixpkgs/issues/214356
+https://github.com/NixOS/nixpkgs/issues/185665
+
+diff --git a/lib/std/zig/CrossTarget.zig b/lib/std/zig/CrossTarget.zig
+index 6c59a4a3a..d45e9ab5a 100644
+--- a/lib/std/zig/CrossTarget.zig
++++ b/lib/std/zig/CrossTarget.zig
+@@ -12,7 +12,7 @@ const mem = std.mem;
+ /// `null` means native.
+ cpu_arch: ?Target.Cpu.Arch = null,
+
+-cpu_model: CpuModel = CpuModel.determined_by_cpu_arch,
++cpu_model: CpuModel = CpuModel.baseline,
+
+ /// Sparse set of CPU features to add to the set from `cpu_model`.
+ cpu_features_add: Target.Cpu.Feature.Set = Target.Cpu.Feature.Set.empty,

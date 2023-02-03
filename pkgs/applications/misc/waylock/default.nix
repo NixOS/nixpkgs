@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dman-pages -Dcpu=baseline --prefix $out install
+    zig build -Drelease-safe -Dman-pages --prefix $out install
     runHook postInstall
   '';
 

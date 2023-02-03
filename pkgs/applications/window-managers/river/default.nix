@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
+    zig build -Drelease-safe ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
     install contrib/river.desktop -Dt $out/share/wayland-sessions
     runHook postInstall
   '';

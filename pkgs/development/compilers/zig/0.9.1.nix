@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix impurities.
+    ./cpu-purity.patch
     # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
     ./rpath.patch
     # Fix build on macOS 13 (cherry-picked from 0.10-dev)

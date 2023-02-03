@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
+    zig build -Drelease-safe --prefix $out install
   '';
 
   meta = with lib; {

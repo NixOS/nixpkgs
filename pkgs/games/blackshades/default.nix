@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    zig build -Drelease-fast -Dcpu=baseline --prefix $out install
+    zig build -Drelease-fast --prefix $out install
   '';
 
   meta = {

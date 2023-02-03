@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    zig build -Drelease-safe=true -Dcpu=baseline --prefix $out install
+    zig build -Drelease-safe=true --prefix $out install
     install -d $out/share/man/man1
     $out/bin/mepo -docman > $out/share/man/man1/mepo.1
 

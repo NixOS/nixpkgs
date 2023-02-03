@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-69QIkkKzApOGfrBdgtmxFMDytRkSh+0YiaJQPbXsBeo=";
   };
 
+  patches = [
+    # Fix impurities.
+    ./cpu-purity.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     llvmPackages.llvm.dev
