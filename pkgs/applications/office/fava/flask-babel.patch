@@ -1,0 +1,14 @@
+diff --git a/src/fava/application.py b/src/fava/application.py
+index 811c1de4..19de051a 100644
+--- a/src/fava/application.py
++++ b/src/fava/application.py
+@@ -148,8 +148,7 @@ def get_locale() -> str | None:
+     return request.accept_languages.best_match(["en"] + LANGUAGES)
+ 
+ 
+-BABEL = Babel(app)
+-BABEL.localeselector(get_locale)
++BABEL = Babel(app, locale_selector=get_locale)
+ 
+ 
+ for function in template_filters.FILTERS:
