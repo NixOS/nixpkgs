@@ -600,6 +600,8 @@ self: super: with self; {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
+  arsenic = callPackage ../development/python-modules/arsenic { };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
