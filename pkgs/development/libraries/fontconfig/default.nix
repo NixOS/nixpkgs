@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fontconfig";
-  version = "2.14.0";
+  version = "2.14.2";
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    sha256 = "3L64TJx0u/2xM9U1/hx77cnyIhqNrzkUuYTETFIOm6w=";
+    sha256 = "sha256-26aVtXvOFQI9LO7e+CBiwrkl5R9dTMSu9zbPE/YKRos=";
   };
 
   nativeBuildInputs = [
