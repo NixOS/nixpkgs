@@ -10,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "ossfs";
-  version = "2021.8.0";
-  format = "setuptools";
+  version = "2023.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
