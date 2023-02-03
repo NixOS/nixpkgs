@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs setup.sh
-    patchShebangs gen-template.sh
-    patchShebangs gen-text-file.sh
+    patchShebangs setup.sh gen-template.sh gen-text-file.sh
     substituteInPlace setup.sh --replace gcc "$CC"
     substituteInPlace Makefile --replace gcc "$CC"
   '';
