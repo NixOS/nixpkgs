@@ -3,13 +3,13 @@
 , bash-completion
 , fetchurl
 , fetchpatch
-, gdbm ? null
+, gdbm
 , glib
 , gsettings-desktop-schemas
 , gtk-vnc
 , gtk3
 , intltool
-, libcap ? null
+, libcap
 , libgovirt
   # Currently unsupported. According to upstream, libgovirt is for a very narrow
   # use-case and we don't currently cover it in Nixpkgs. It's safe to disable.
@@ -26,19 +26,12 @@
 , python3
 , shared-mime-info
 # https://gitlab.com/virt-viewer/virt-viewer/-/issues/88
-, spice-gtk_libsoup2 ? null
-, spice-protocol ? null
+, spice-gtk_libsoup2
+, spice-protocol
 , spiceSupport ? true
 , vte
 , wrapGAppsHook
 }:
-
-assert spiceSupport -> (
-  gdbm != null
-  && (stdenv.isLinux -> libcap != null)
-  && spice-gtk_libsoup2 != null
-  && spice-protocol != null
-);
 
 with lib;
 
@@ -52,10 +45,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with meson 0.61
-    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    # Fix build with meson 0.61. Should be fixed in the next release.
+    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/120
     (fetchpatch {
-      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/98d9f202ef768f22ae21b5c43a080a1aa64a7107.patch";
       sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
     })
   ];
