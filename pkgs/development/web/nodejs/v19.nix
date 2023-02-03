@@ -9,8 +9,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "19.5.0";
-  sha256 = "sha256-KBMXvce6iVITi/jw9fB2SV95+G6FGmWb4fmD3sM8pXc=";
+  version = "19.6.0";
+  sha256 = "sha256-UZxtVCqfmW8AwaPTsuXPUrfbmY2V9s7VqJPRagPeM+o=";
   patches = [
     ./revert-arm64-pointer-auth.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
