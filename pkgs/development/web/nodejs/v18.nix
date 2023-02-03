@@ -6,14 +6,13 @@ let
     python = python3;
   };
 
-  npmPatches = callPackage ./npm-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.13.0";
-  sha256 = "0s6sscynhw9limpp43f965rn9grdamcvsnd9wfb2h5qxw1icajpx";
+  version = "18.14.0";
+  sha256 = "sha256-Qu+d0xmT1cjoKwqwlpE1CT5qKW76J7G+mvwErADwJno=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
-  ] ++ npmPatches;
+  ];
 }
