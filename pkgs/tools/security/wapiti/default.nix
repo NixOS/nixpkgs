@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-b377nPXvpxg+WDNgjxm2RoJ5jNt7MTES2Bspxsvo/wc=";
   };
 
@@ -143,6 +143,7 @@ python3.pkgs.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
   };
