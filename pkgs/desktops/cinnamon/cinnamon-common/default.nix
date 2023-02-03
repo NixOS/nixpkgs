@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
       pycairo
       python3.pkgs.xapp # The scope prefix is required
       pillow
+      pyinotify # for looking-glass
       pytz
       tinycss2
       python-pam
@@ -171,6 +172,9 @@ stdenv.mkDerivation rec {
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
     sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop ./files/usr/share/applications/cinnamon2d.desktop
+
+    # Only needed for cinnamon <= 5.4.12
+    sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/dbus-1/services/org.Cinnamon.Melange.service
 
     sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
 
