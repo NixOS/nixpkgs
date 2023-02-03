@@ -12524,6 +12524,18 @@ final: prev:
     meta.homepage = "https://github.com/t9md/vim-smalls/";
   };
 
+  vim-smartbd = buildVimPluginFrom2Nix {
+    pname = "vim-smartbd";
+    version = "2015-12-20";
+    src = fetchFromGitHub {
+      owner = "Industrial";
+      repo = "vim-smartbd";
+      rev = "62c267401f634d4f8f65933c812469610ba505ea";
+      sha256 = "0a4ls93bgy5r7ar3r60zgdn2jzdkk10wrws14lw2xl8yg65rc0mg";
+    };
+    meta.homepage = "https://github.com/Industrial/vim-smartbd/";
+  };
+
   vim-smartbw = buildVimPluginFrom2Nix {
     pname = "vim-smartbw";
     version = "2015-12-20";
