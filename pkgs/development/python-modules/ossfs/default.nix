@@ -4,6 +4,8 @@
 , fsspec
 , oss2
 , pythonOlder
+, setuptools-scm
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -11,7 +13,7 @@ buildPythonPackage rec {
   version = "2021.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
@@ -19,6 +21,18 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-5mz1OC+6kDpiLNsMwOp+bdqY2eozMpAekS6h34QiOdo=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  pythonRelaxDeps = [
+    "fsspec"
+    "oss2"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     fsspec
