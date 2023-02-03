@@ -259,13 +259,14 @@ rec {
 
             mkdir -p image/$extractionID/layer
             tar -C image/$extractionID/layer -xpf image/$layerTar
-            rm image/$layerTar
 
             find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
             # Get the next lower directory and continue the loop.
             lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
           done
+          # Don't remove tarballs until all unpacked in case some are used more than once
+          awk '{print "image/"$0}' layer-list | xargs rm -f
 
           mkdir work
           mkdir layer
