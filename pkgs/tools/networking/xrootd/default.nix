@@ -16,7 +16,7 @@
 , systemd
 , voms
 , zlib
-, enableTests ? true
+, enableTests ? stdenv.isLinux
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
     openssl
     readline
     zlib
+    fuse
   ]
   ++ lib.optionals stdenv.isLinux [
-    fuse
     systemd
     voms
   ]
