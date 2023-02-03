@@ -18,33 +18,34 @@ let
       # separate lines, because Nix would only show the last line of the comment.
 
       # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage; });
+      args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
-      finalPackage =
-        mkDerivationSimple
-          (f0:
-            let
-              f = self: super:
-                # Convert f0 to an overlay. Legacy is:
-                #   overrideAttrs (super: {})
-                # We want to introduce self. We follow the convention of overlays:
-                #   overrideAttrs (self: super: {})
-                # Which means the first parameter can be either self or super.
-                # This is surprising, but far better than the confusion that would
-                # arise from flipping an overlay's parameters in some cases.
-                let x = f0 super;
-                in
-                  if builtins.isFunction x
-                  then
-                    # Can't reuse `x`, because `self` comes first.
-                    # Looks inefficient, but `f0 super` was a cheap thunk.
-                    f0 self super
-                  else x;
+      overrideAttrs = f0:
+        let
+          f = self: super:
+            # Convert f0 to an overlay. Legacy is:
+            #   overrideAttrs (super: {})
+            # We want to introduce self. We follow the convention of overlays:
+            #   overrideAttrs (self: super: {})
+            # Which means the first parameter can be either self or super.
+            # This is surprising, but far better than the confusion that would
+            # arise from flipping an overlay's parameters in some cases.
+            let x = f0 super;
             in
-              makeDerivationExtensible
-                (self: let super = rattrs self; in super // f self super))
-          args;
+              if builtins.isFunction x
+              then
+                # Can't reuse `x`, because `self` comes first.
+                # Looks inefficient, but `f0 super` was a cheap thunk.
+                f0 self super
+              else x;
+        in
+          makeDerivationExtensible
+            (self: let super = rattrs self; in super // f self super);
+
+      finalPackage =
+        mkDerivationSimple overrideAttrs args;
+
     in finalPackage;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
