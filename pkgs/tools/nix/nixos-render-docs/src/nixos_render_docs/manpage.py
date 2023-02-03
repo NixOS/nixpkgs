@@ -172,12 +172,12 @@ class ManpageRenderer(Renderer):
         lst.first_item_seen = True
         head = "•"
         if lst.next_idx is not None:
-            head = f" {lst.next_idx}."
+            head = f"{lst.next_idx}."
             lst.next_idx += 1
         return (
             f'{maybe_space}'
             f'.RS {lst.width}\n'
-            f"\\h'-{lst.width}'{man_escape(head)}\\h'{lst.width - len(head)}'\\c"
+            f"\\h'-{len(head) + 1}'\\fB{man_escape(head)}\\fP\\h'1'\\c"
         )
     def list_item_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
