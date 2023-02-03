@@ -10341,6 +10341,8 @@ with pkgs;
 
   ombi = callPackage ../servers/ombi { };
 
+  ome_zarr = with python3Packages; toPythonApplication ome-zarr;
+
   omping = callPackage ../applications/networking/omping { };
 
   onefetch = callPackage ../tools/misc/onefetch {
