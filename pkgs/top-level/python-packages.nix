@@ -3396,8 +3396,6 @@ self: super: with self; {
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
-  flaskbabel = callPackage ../development/python-modules/flaskbabel { };
-
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
   flask-basicauth = callPackage ../development/python-modules/flask-basicauth { };
