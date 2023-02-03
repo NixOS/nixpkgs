@@ -21,11 +21,13 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
   version = "1.2.13";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     urls = [
       # This URL works for 1.2.13 only; hopefully also for future releases.
       "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
@@ -131,4 +133,4 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.all;
   };
-}
+})
