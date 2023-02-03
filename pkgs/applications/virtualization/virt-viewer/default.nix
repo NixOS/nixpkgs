@@ -25,8 +25,7 @@
 , pkg-config
 , python3
 , shared-mime-info
-# https://gitlab.com/virt-viewer/virt-viewer/-/issues/88
-, spice-gtk_libsoup2
+, spice-gtk
 , spice-protocol
 , spiceSupport ? true
 , vte
@@ -78,14 +77,14 @@ stdenv.mkDerivation rec {
     libgovirt
   ] ++ optionals spiceSupport ([
     gdbm
-    spice-gtk_libsoup2
+    spice-gtk
     spice-protocol
   ] ++ optionals stdenv.isLinux [
     libcap
   ]);
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
 
   mesonFlags = [
     (lib.mesonEnable "ovirt" ovirtSupport)
