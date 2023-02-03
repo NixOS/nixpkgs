@@ -160,6 +160,8 @@ self: super: with self; {
 
   aiodns = callPackage ../development/python-modules/aiodns { };
 
+  aiodocker = callPackage ../development/python-modules/aiodocker { };
+
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
   aioeagle = callPackage ../development/python-modules/aioeagle { };
