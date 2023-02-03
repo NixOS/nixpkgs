@@ -4,8 +4,8 @@
 
 let
   major = "17";
-  update = ".0.5";
-  build = "+1";
+  update = ".0.6";
+  build = "+3";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     java = openjdk17_headless;
@@ -18,7 +18,7 @@ let
       owner = "openjdk";
       repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-jzLOlWuhkUS0/4+nXtjd1/IYbAHHnJrusFRTh7aPt8U=";
+      sha256 = "sha256-9VfXk2EfMebMyVKPohPRP2QXRFf8XemUtfY0JtBCHyw=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
