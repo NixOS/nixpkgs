@@ -120,6 +120,8 @@ self: super: with self; {
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
+  aio-pika = callPackage ../development/python-modules/aio-pika { };
+
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
   aioairq = callPackage ../development/python-modules/aioairq { };
@@ -299,6 +301,8 @@ self: super: with self; {
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
   aioridwell = callPackage ../development/python-modules/aioridwell { };
+
+  aiormq = callPackage ../development/python-modules/aiormq { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
