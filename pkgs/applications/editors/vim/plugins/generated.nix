@@ -13149,6 +13149,18 @@ final: prev:
     meta.homepage = "https://github.com/mg979/vim-visual-multi/";
   };
 
+  vim-visual-star-search = buildVimPluginFrom2Nix {
+    pname = "vim-visual-star-search";
+    version = "2021-07-14";
+    src = fetchFromGitHub {
+      owner = "bronson";
+      repo = "vim-visual-star-search";
+      rev = "7c32edb9e3c85d473d9be4dec721a4c9d5d4d69c";
+      sha256 = "1g3n84bwvy2535n8xwh14j3s8n1jwvl577vigg8zsxxvhjzl878b";
+    };
+    meta.homepage = "https://github.com/bronson/vim-visual-star-search/";
+  };
+
   vim-visualstar = buildVimPluginFrom2Nix {
     pname = "vim-visualstar";
     version = "2015-08-27";

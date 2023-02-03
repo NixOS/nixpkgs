@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "rising";
   version = "0.3.0";
-  disabled = pythonOlder "TODO";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     lightning-utilities numpy torch threadpoolctl tqdm
   ];
   nativeCheckInputs = [ dill pytestCheckHook ];
+  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
+    "test_progressive_resize_integration"
+  ];
 
   pythonImportsCheck = [
     "rising"
