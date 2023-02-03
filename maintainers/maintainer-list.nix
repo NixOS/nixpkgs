@@ -5105,6 +5105,12 @@
     githubId = 36706276;
     name = "Fufezan Mihai";
   };
+  fugi = {
+    email = "me@fugi.dev";
+    github = "FugiMuffi";
+    githubId = 21362942;
+    name = "Fugi";
+  };
   fusion809 = {
     email = "brentonhorne77@gmail.com";
     github = "fusion809";

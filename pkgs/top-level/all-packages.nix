@@ -13793,6 +13793,8 @@ with pkgs;
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bash;
 
+  agdsn-zsh-config = callPackage ../shells/zsh/agdsn-zsh-config { };
+
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
   bash = lowPrio (callPackage ../shells/bash/5.nix {
