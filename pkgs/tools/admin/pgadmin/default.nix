@@ -104,6 +104,33 @@ let
         final.pythonPackages.pyqrcode
       ];
     });
+
+    flask-babel = final.buildPythonPackage rec {
+      pname = "Flask-Babel";
+      version = "2.0.0";
+
+      src = final.fetchPypi {
+        inherit pname version;
+        sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+      };
+
+      propagatedBuildInputs = with final; [
+        flask
+        babel
+        jinja2
+        pytz
+        speaklater
+      ];
+
+      unittestFlagsArray = [ "-s" "tests" ];
+
+      meta = with lib; {
+        description = "Adds i18n/l10n support to Flask applications";
+        license = licenses.bsd2;
+        maintainers = [ ];
+        homepage = "https://github.com/python-babel/flask-babel";
+      };
+    };
   });
 
 in
