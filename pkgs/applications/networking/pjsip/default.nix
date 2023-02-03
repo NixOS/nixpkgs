@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ]
     ++ lib.optional pythonSupport "py";
 
+  configureFlags = [ "--enable-shared" ];
+
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
