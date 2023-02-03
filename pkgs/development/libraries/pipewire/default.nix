@@ -109,6 +109,13 @@ let
         url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
         hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
       })
+
+      # backport a fix for rust-cbindgen errors in downstream packages
+      # See https://github.com/NixOS/nixpkgs/pull/211872#issuecomment-1415981135 for details.
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/caf58ecffb4dc8e2bfa7898d0ed910cf0a82d65f.patch";
+        hash = "sha256-kCQNG0j3lwT01WNfGsdUmKvDHg8tvMfS2eunPyXBV1E=";
+      })
     ];
 
     strictDeps = true;
