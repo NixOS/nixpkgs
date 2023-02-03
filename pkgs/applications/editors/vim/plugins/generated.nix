@@ -7512,6 +7512,18 @@ final: prev:
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
   };
 
+  smart-splits-nvim = buildVimPluginFrom2Nix {
+    pname = "smart-splits.nvim";
+    version = "2022-12-21";
+    src = fetchFromGitHub {
+      owner = "mrjones2014";
+      repo = "smart-splits.nvim";
+      rev = "fdd158ce7554dc830fb86e0fe952cd9476cdf726";
+      sha256 = "17xjcfjfzmy4crs6ks8drdjcygdnri776gf3vmnssjyvmzab3mdl";
+    };
+    meta.homepage = "https://github.com/mrjones2014/smart-splits.nvim/";
+  };
+
   snap = buildVimPluginFrom2Nix {
     pname = "snap";
     version = "2022-08-03";
