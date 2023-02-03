@@ -284,6 +284,8 @@ with pkgs;
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
+  ansi = callPackage ../development/tools/ansi { };
+
   arti = callPackage ../tools/security/arti {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -716,6 +718,8 @@ with pkgs;
   dwarf2json = callPackage ../tools/misc/dwarf2json { };
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
+
+  qdmr = libsForQt5.callPackage ../applications/radio/qdmr { };
 
   edwin = callPackage ../data/fonts/edwin { };
 
@@ -1467,7 +1471,7 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
-  httm = callPackage ../tools/filesystems/httm { };
+  httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
@@ -1597,7 +1601,12 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd { };
+  xrootd = callPackage ../tools/networking/xrootd {
+    fuse =
+      if hostPlatform.isDarwin then osxfuse
+      else if hostPlatform.isLinux then fuse
+      else null;
+  };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
 
@@ -2198,6 +2207,8 @@ with pkgs;
   retrofe = callPackage ../applications/emulators/retrofe { };
 
   ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+
+  rpcemu = callPackage ../applications/emulators/rpcemu { };
 
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
@@ -4788,12 +4799,6 @@ with pkgs;
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
-  # NOTE: If overriding qt version, krita needs to use the same qt version as
-  # well.
-  gmic-qt-krita = gmic-qt.override {
-    variant = "krita";
-  };
-
   gpg-tui = callPackage ../tools/security/gpg-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin) libobjc libresolv;
@@ -5406,9 +5411,7 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river {
-    zig = zig_0_9;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
     zig = zig_0_9;
@@ -5782,7 +5785,7 @@ with pkgs;
 
   bup = callPackage ../tools/backup/bup { };
 
-  bupstash = callPackage ../tools/backup/bupstash { };
+  bupstash = darwin.apple_sdk_11_0.callPackage ../tools/backup/bupstash { };
 
   burp = callPackage ../tools/backup/burp { };
 
@@ -5791,6 +5794,8 @@ with pkgs;
   bukut = callPackage ../applications/misc/bukut { };
 
   byzanz = callPackage ../applications/video/byzanz {};
+
+  algolia-cli = callPackage ../development/tools/algolia-cli { };
 
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
@@ -9021,6 +9026,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-epub = callPackage ../tools/text/mdbook-epub {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
@@ -10284,9 +10293,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  oha = callPackage ../tools/networking/oha {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  oha = callPackage ../tools/networking/oha { };
 
   onetun = callPackage ../tools/networking/onetun {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -10396,7 +10403,9 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  openmvs = callPackage ../applications/science/misc/openmvs { };
+  openmvs = callPackage ../applications/science/misc/openmvs {
+    inherit (llvmPackages) openmp;
+  };
 
   openntpd = callPackage ../tools/networking/openntpd { };
 
@@ -15821,8 +15830,8 @@ with pkgs;
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-watch = callPackage ../development/tools/rust/cargo-watch {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
+  cargo-watch = darwin.apple_sdk_11_0.callPackage ../development/tools/rust/cargo-watch {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {
@@ -17089,17 +17098,7 @@ with pkgs;
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = bazel_3;
-
-  bazel_3 = callPackage ../development/tools/build-managers/bazel/bazel_3 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk11_headless;
-    buildJdkName = "java11";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    bazel_self = bazel_3;
-  };
+  bazel = bazel_6;
 
   bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
     inherit (darwin) cctools;
@@ -21945,9 +21944,9 @@ with pkgs;
 
   libyaml = callPackage ../development/libraries/libyaml { };
 
-  libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
+  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
 
-  libyamlcpp_0_3 = callPackage ../development/libraries/libyaml-cpp/0.3.0.nix { };
+  yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
   libyang = callPackage ../development/libraries/libyang { };
 
@@ -31771,9 +31770,8 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
-  ncdu = callPackage ../tools/misc/ncdu {
-    zig = zig_0_9;
-  };
+  ncdu = callPackage ../tools/misc/ncdu { };
+
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
@@ -31936,9 +31934,7 @@ with pkgs;
 
   organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
 
-  osm2xmap = callPackage ../applications/misc/osm2xmap {
-    libyamlcpp = libyamlcpp_0_3;
-  };
+  osm2xmap = callPackage ../applications/misc/osm2xmap { };
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
@@ -38955,6 +38951,8 @@ with pkgs;
   zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zram-generator = callPackage ../tools/system/zram-generator { };
 
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;

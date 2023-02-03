@@ -18,8 +18,6 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
-  abodepy = callPackage ../development/python-modules/abodepy { };
-
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accuweather = callPackage ../development/python-modules/accuweather { };
@@ -308,6 +306,8 @@ self: super: with self; {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aioruuvigateway = callPackage ../development/python-modules/aioruuvigateway { };
+
   aiorwlock = callPackage ../development/python-modules/aiorwlock { };
 
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
@@ -331,6 +331,8 @@ self: super: with self; {
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
   aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
+
+  aiosomecomfort = callPackage ../development/python-modules/aiosomecomfort { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
@@ -1260,9 +1262,7 @@ self: super: with self; {
 
   bitbox02 = callPackage ../development/python-modules/bitbox02 { };
 
-  bitcoinlib = callPackage ../development/python-modules/bitcoinlib {
-    openssl = pkgs.openssl_1_1;
-  };
+  bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-utils-fork-minimal = callPackage ../development/python-modules/bitcoin-utils-fork-minimal { };
 
@@ -1484,6 +1484,8 @@ self: super: with self; {
   bunch = callPackage ../development/python-modules/bunch { };
 
   bundlewrap = callPackage ../development/python-modules/bundlewrap { };
+
+  bx-py-utils = callPackage ../development/python-modules/bx-py-utils { };
 
   bx-python = callPackage ../development/python-modules/bx-python { };
 
@@ -3066,6 +3068,8 @@ self: super: with self; {
   eradicate = callPackage ../development/python-modules/eradicate { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
+
+  esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
   esprima = callPackage ../development/python-modules/esprima { };
 
@@ -4784,9 +4788,13 @@ self: super: with self; {
 
   janus = callPackage ../development/python-modules/janus { };
 
+  jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
+
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
   jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
+
+  jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
@@ -4795,6 +4803,8 @@ self: super: with self; {
   jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
 
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
+
+  jaraco-net = callPackage ../development/python-modules/jaraco-net { };
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
@@ -6530,6 +6540,8 @@ self: super: with self; {
 
   objax = callPackage ../development/python-modules/objax { };
 
+  objsize = callPackage ../development/python-modules/objsize { };
+
   objgraph = callPackage ../development/python-modules/objgraph {
     # requires both the graphviz package and python package
     graphvizPkgs = pkgs.graphviz;
@@ -7187,6 +7199,8 @@ self: super: with self; {
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
+  pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
+
   pygti = callPackage ../development/python-modules/pygti { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
@@ -7682,8 +7696,6 @@ self: super: with self; {
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
-
-  pyalmond = callPackage ../development/python-modules/pyalmond { };
 
   pyamg = callPackage ../development/python-modules/pyamg { };
 
@@ -10693,8 +10705,6 @@ self: super: with self; {
 
   somajo = callPackage ../development/python-modules/somajo { };
 
-  somecomfort = callPackage ../development/python-modules/somecomfort { };
-
   somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
 
   sonarr = callPackage ../development/python-modules/sonarr { };
@@ -11435,6 +11445,8 @@ self: super: with self; {
   timetagger = callPackage ../development/python-modules/timetagger { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
+
+  timm = callPackage ../development/python-modules/timm { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
@@ -12601,8 +12613,6 @@ self: super: with self; {
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
   zimports = callPackage ../development/python-modules/zimports { };
-
-  zipfile36 = callPackage ../development/python-modules/zipfile36 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
 

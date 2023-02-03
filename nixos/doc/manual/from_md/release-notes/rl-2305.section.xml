@@ -115,6 +115,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://dm3mat.darc.de/qdmr/">QDMR</link>, a
+          gui application and command line tool for programming cheap
+          DMR radios
+          <link linkend="opt-programs.qdmr.enable">programs.qdmr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
@@ -517,6 +525,16 @@
           next release and CommonMark will become the default. DocBook
           option documentation that has not been migrated until then
           will no longer render properly or cause errors.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          NixOS now defaults to using nsncd (a non-caching
+          reimplementation in Rust) as NSS lookup dispatcher, instead of
+          the buggy and deprecated glibc-provided nscd. If you need to
+          switch back, set
+          <literal>services.nscd.enableNsncd = false</literal>, but
+          please open an issue in nixpkgs so your issue can be fixed.
         </para>
       </listitem>
       <listitem>

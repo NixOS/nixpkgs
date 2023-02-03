@@ -124,6 +124,7 @@ mapAliases ({
   bazel_0_27 = throw "bazel 0.27 is past end of life as it is not an lts version"; # Added 2022-05-09
   bazel_0_29 = throw "bazel 0.29 is past end of life as it is not an lts version"; # Added 2022-05-09
   bazel_1 = throw "bazel 1 is past end of life as it is not an lts version"; # Added 2022-05-09
+  bazel_3 = throw "bazel 3 is past end of life as it is not an lts version"; # Added 2023-02-02
   bcat = throw "bcat has been removed because upstream is dead"; # Added 2021-08-22
   beetsExternalPlugins = throw "beetsExternalPlugins has been deprecated, use beetsPackages.$pluginname"; # Added 2022-05-07
   beret = throw "beret has been removed"; # Added 2021-11-16
@@ -528,7 +529,7 @@ mapAliases ({
   glib_networking = throw "'glib_networking' has been renamed to/replaced by 'glib-networking'"; # Converted to throw 2022-02-22
   glimpse = throw "glimpse was removed, as the project was discontinued. You can use gimp instead."; # Added 2022-07-11
   gmailieer = lieer; # Added 2020-04-19
-  gmic_krita_qt = gmic-qt-krita; # Added 2019-09-07
+  gmic-qt-krita = throw "gmic-qt-krita was removed as it's no longer supported upstream."; # Converted to throw 2023-02-02
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # Added 2021-03-08
   gnash = throw "gnash has been removed; broken and abandoned upstream"; # added 2022-02-06
   gnome-breeze = throw "gnome-breeze has been removed, use libsForQt5.breeze-gtk instead"; # Added 2022-04-22
@@ -827,6 +828,8 @@ mapAliases ({
   libva-full = throw "'libva-full' has been renamed to/replaced by 'libva'"; # Converted to throw 2022-02-22
   libva1-full = throw "'libva1-full' has been renamed to/replaced by 'libva1'"; # Converted to throw 2022-02-22
   libwnck3 = libwnck;
+  libyamlcpp = yaml-cpp; # Added 2023-01-29
+  libyamlcpp_0_3 = yaml-cpp_0_3; # Added 2023-01-29
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lighttable = throw "'lighttable' crashes (SIGSEGV) on startup, has not been updated in years and depends on deprecated GTK2"; # Added 2022-06-15
   lilyterm = throw "lilyterm has been removed from nixpkgs, because it was relying on a vte version that depended on python2"; # Added 2022-01-14

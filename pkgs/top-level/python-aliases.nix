@@ -33,6 +33,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  abodepy = jaraco-abode; # added 2023-02-01
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
@@ -147,6 +148,7 @@ mapAliases ({
   protonup = protonup-ng; # Added 2022-11-06
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
+  pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
@@ -213,6 +215,7 @@ mapAliases ({
   sharkiqpy = sharkiq; # added 2022-05-21
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
+  somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   SPARQLWrapper = sparqlwrapper;
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02

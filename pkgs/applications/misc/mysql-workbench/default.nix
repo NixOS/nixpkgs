@@ -140,8 +140,13 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
-  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = toString ([
+    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+    "-Wno-error=deprecated-declarations"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # error: narrowing conversion of '-1' from 'int' to 'char'
+    "-Wno-error=narrowing"
+  ]);
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"

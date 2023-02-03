@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "edwin";
-  version = "0.52";
+  version = "0.54";
 
   src = fetchurl {
     url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-7yQUiLZupGc+RCZdhyO08JWqhROYqMOZ9wRdGJ6uixU=";
+    hash = "sha256-F6BzwnrsaELegdo6Bdju1OG+RI9zKnn4tIASR3q6zYk=";
   };
 
   installPhase = ''
