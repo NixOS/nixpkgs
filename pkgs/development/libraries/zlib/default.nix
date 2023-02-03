@@ -8,6 +8,7 @@
 # the `.pc` file lists only the main output's lib dir.
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
+, testers
 }:
 
 # Without either the build will actually still succeed because the build
@@ -127,10 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
     "SHARED_MODE=1"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    pkgConfigModules = [ "zlib" ];
   };
 })

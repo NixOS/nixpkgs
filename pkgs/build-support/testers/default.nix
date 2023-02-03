@@ -123,4 +123,5 @@
 
   hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
 
+  testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }
