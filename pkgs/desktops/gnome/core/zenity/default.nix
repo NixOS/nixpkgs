@@ -15,12 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "zenity";
-  version = "3.43.0";
+  version = "3.44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sNfKHgwYaPoY8FwhAmDYp74fCO4Tt/XP26ubYfoW+DM=";
+    sha256 = "wVWCMB7ZC51CzlIdvM+ZqYnyLxIEG91SecZjbamev2U=";
   };
+
+  patches = [
+    ./fix-icon-install.patch
+  ];
 
   nativeBuildInputs = [
     meson
