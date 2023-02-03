@@ -1,4 +1,5 @@
 { lib, stdenv
+, fetchzip
 , fetchurl
 , meson
 , ninja
@@ -25,37 +26,24 @@
 , gdk-pixbuf
 }:
 
-let
-  # This file was mistakenly not included with the 0.15.0 release tarball.
-  # Should be fixed with the next release.
-  # https://gitlab.freedesktop.org/spice/spice/-/issues/56
-  doxygen_sh = fetchurl {
-    url = "https://gitlab.freedesktop.org/spice/spice/-/raw/v0.15.0/doxygen.sh";
-    sha256 = "0g4bx91qclihp1jfhdhyj7wp4hf4289794xxbw32kk58lnd7bzkg";
-  };
-in
-
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.15.0";
+  version = "0.15.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
-    sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
+    sha256 = "sha256-gmbtCCAOaDQ/Qn8n0aLuPpNpnsxIecFtJgillDb+9eY=";
   };
 
   patches = [
     ./remove-rt-on-darwin.patch
   ];
   postPatch = ''
-    install ${doxygen_sh} doxygen.sh
     patchShebangs build-aux
 
-    # https://gitlab.freedesktop.org/spice/spice-common/-/issues/5
-    substituteInPlace subprojects/spice-common/meson.build \
-      --replace \
-      "cmd = run_command(python, '-m', module)" \
-      "cmd = run_command(python, '-c', 'import @0@'.format(module))"
+    # ERROR: Program 'build-aux/meson-dist' not found or not executable
+    # Arch does the same.
+    sed -i "/meson-dist/d" meson.build
   '';
 
   nativeBuildInputs = [
