@@ -12524,6 +12524,18 @@ final: prev:
     meta.homepage = "https://github.com/t9md/vim-smalls/";
   };
 
+  vim-smartbw = buildVimPluginFrom2Nix {
+    pname = "vim-smartbw";
+    version = "2015-12-20";
+    src = fetchFromGitHub {
+      owner = "Industrial";
+      repo = "vim-smartbw";
+      rev = "8091e5e452f63b10d4c9eacf0cc84cba394148f7";
+      sha256 = "08i8qyqahj2jv44pay7bi2dxajhsrx244i44v53y4iiddps6smxn";
+    };
+    meta.homepage = "https://github.com/Industrial/vim-smartbw/";
+  };
+
   vim-smoothie = buildVimPluginFrom2Nix {
     pname = "vim-smoothie";
     version = "2022-06-10";
