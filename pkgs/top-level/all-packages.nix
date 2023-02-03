@@ -18564,6 +18564,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  revup = with python3Packages; callPackage ../development/python-modules/revup {};
+
   spruce = callPackage ../development/tools/misc/spruce {};
 
   sqlc = callPackage ../development/tools/database/sqlc { };

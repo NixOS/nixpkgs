@@ -3973,6 +3973,12 @@
     githubId = 24233408;
     name = "Ate Eskola";
   };
+  dukeofcool199 = {
+    email = "jenkin.schibel@protonmail.com";
+    github = "dukeofcool199";
+    githubId = 11435199;
+    name = "Jenkin Schibel";
+  };
   dump_stack = {
     email = "root@dumpstack.io";
     github = "jollheef";
@@ -16484,7 +16490,6 @@
   };
   zyansheep = {
     email = "zyansheep@protonmail.com";
-    github = "zyansheep";
     githubId = 20029431;
     name = "Zyansheep";
   };
