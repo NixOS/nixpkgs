@@ -110,6 +110,7 @@
 , wrapQtAppsHook ? null
 , variant ? "fresh"
 , symlinkJoin
+, postgresql
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
@@ -404,6 +405,7 @@ in
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
+    "--with-system-postgresql"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -418,7 +420,6 @@ in
     # I imagine this helps. Copied from go-oo.
     # Modified on every upgrade, though
     "--disable-odk"
-    "--disable-postgresql-sdbc"
     "--disable-firebird-sdbc"
     "--without-fonts"
     "--without-doxygen"
@@ -546,6 +547,7 @@ in
     pam
     perl
     poppler
+    postgresql
     python3
     sane-backends
     unixODBC
