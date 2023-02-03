@@ -38,8 +38,6 @@ buildPythonPackage rec {
     igraph-c
   ];
 
-  doCheck = true;
-
   checkInputs = [
     ddt
     unittestCheckHook
