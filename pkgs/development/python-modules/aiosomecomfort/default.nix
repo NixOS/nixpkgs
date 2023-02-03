@@ -3,13 +3,11 @@
 , fetchFromGitHub
 , aiohttp
 , prettytable
-, mock
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aiosomecomfort";
-  version = "0.0.3";
+  version = "0.0.6";
 
   format = "setuptools";
 
@@ -17,26 +15,19 @@ buildPythonPackage rec {
     owner = "mkmer";
     repo = "AIOSomecomfort";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qw0KR934GS7AuT3nRYaunypt091fZLRioVbNOp9JesY=";
+    hash = "sha256-3p38gWCqQVYz3sgu6SgfPH+wH/ZH2Qg+tVXiARuUh7s=";
   };
-
-  postPatch = ''
-    # https://github.com/mkmer/AIOSomecomfort/issues/1
-    mv aiosomecomfort AIOSomecomfort
-  '';
 
   propagatedBuildInputs = [
     aiohttp
     prettytable
   ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
+  pythonImportsCheck = [
+    "aiosomecomfort"
   ];
 
-  # SyntaxError in test.py
-  doCheck = false;
+  doCheck = false; # tests only run on windows, due to WindowsSelectorEventLoopPolicy
 
   meta = {
     description = "AsyicIO client for US models of Honeywell Thermostats";
