@@ -9868,6 +9868,8 @@ with pkgs;
 
   mubeng = callPackage ../tools/networking/mubeng { };
 
+  multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
+
   multitime = callPackage ../tools/misc/multitime { };
 
   sta = callPackage ../tools/misc/sta {};
