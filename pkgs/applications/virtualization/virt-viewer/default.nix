@@ -11,6 +11,12 @@
 , intltool
 , libcap ? null
 , libgovirt
+  # Currently unsupported. According to upstream, libgovirt is for a very narrow
+  # use-case and we don't currently cover it in Nixpkgs. It's safe to disable.
+  # https://gitlab.com/virt-viewer/virt-viewer/-/issues/100#note_1265011223
+  # Can be enabled again once this is merged:
+  # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/129
+, ovirtSupport ? false
 , libvirt
 , libvirt-glib
 , libxml2
@@ -71,11 +77,12 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk-vnc
     gtk3
-    libgovirt
     libvirt
     libvirt-glib
     libxml2
     vte
+  ] ++ optionals ovirtSupport [
+    libgovirt
   ] ++ optionals spiceSupport ([
     gdbm
     spice-gtk_libsoup2
@@ -86,6 +93,10 @@ stdenv.mkDerivation rec {
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
+
+  mesonFlags = [
+    (lib.mesonEnable "ovirt" ovirtSupport)
+  ];
 
   strictDeps = true;
 
