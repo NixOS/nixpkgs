@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3 }:
+{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3, runCommand, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
@@ -10,6 +10,15 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-NciyzKiDKIMeuHhTjzmHIc3dYW4AniuCNjZugm4hMss=";
   };
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+
+  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Pull a header that contains a definition of proc_pid_rusage().
+    (runCommand "${pname}_headers" { } ''
+      install -Dm444 ${lib.getDev darwin.apple_sdk.sdk}/include/libproc.h $out/include/libproc.h
+    '')
+  ];
 
   NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
 

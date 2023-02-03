@@ -25,11 +25,7 @@ in
 
   config = {
 
-    assertions = [
-      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
-        message = "ENA driver fails to build with kernel >= 5.17";
-      }
-    ];
+    assertions = [ ];
 
     boot.growPartition = true;
 
