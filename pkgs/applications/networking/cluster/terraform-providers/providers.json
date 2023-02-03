@@ -93,14 +93,14 @@
     "vendorHash": "sha256-pRbhgukYRn0Ej0v/ANKZ3gtkmfL8qo1E6F/fKDNf/Iw="
   },
   "avi": {
-    "hash": "sha256-0FcdVd7EGVHZ0iRonoGfjwYgXpJtUhqX5i925Ejhv54=",
+    "hash": "sha256-mBLdIL4mUI4zA3c9gB4DL1QY0xHW15Q1rO/v1gVYKYU=",
     "homepage": "https://registry.terraform.io/providers/vmware/avi",
     "owner": "vmware",
     "proxyVendor": true,
     "repo": "terraform-provider-avi",
-    "rev": "v22.1.2",
+    "rev": "v22.1.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yDkox74g0N8iniWHSNk6KjfM0HJa8H2HUxm6RxrdhkE="
+    "vendorHash": "sha256-0k1BYRQWp4iU9DRwPbluOg3S5VzL981PpFrgiQaYWNw="
   },
   "aviatrix": {
     "hash": "sha256-jZXTsCa1TDwdOFGJKX4xM3sB0zfix5nTBuBdBGtwOOs=",
