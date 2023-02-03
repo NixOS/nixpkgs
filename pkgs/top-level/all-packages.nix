@@ -10302,6 +10302,8 @@ with pkgs;
 
   openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
 
+  openfortigui = callPackage ../applications/networking/openfortigui { };
+
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix { };
