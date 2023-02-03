@@ -467,6 +467,7 @@ unsupported-platforms:
   bindings-directfb:                            [ platforms.darwin ]
   bindings-sane:                                [ platforms.darwin ]
   bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
+  bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   cut-the-crap:                                 [ platforms.darwin ]
@@ -570,6 +571,7 @@ supported-platforms:
   bindings-parport:                             [ platforms.linux ] # parport is a linux kernel component
   blake3:                                       [ platforms.x86 ] # uses x86 intrinsics
   btrfs:                                        [ platforms.linux ] # depends on linux
+  bytepatch:                                    [ platforms.x86 ] # due to blake3
   cpuid:                                        [ platforms.x86 ] # needs to be i386 compatible (IA-32)
   crc32c:                                       [ platforms.x86 ] # uses x86 intrinsics
   d3d11binding:                                 [ platforms.windows ]
@@ -613,6 +615,7 @@ supported-platforms:
   scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
   scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]
   Win32-dhcp-server:                            [ platforms.windows ]
