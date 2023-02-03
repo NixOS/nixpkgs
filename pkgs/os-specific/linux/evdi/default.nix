@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "2022-10-13";
+  version = "unstable-2022-10-13";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
