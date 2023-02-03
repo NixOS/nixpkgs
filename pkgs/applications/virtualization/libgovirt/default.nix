@@ -1,45 +1,47 @@
 { lib
 , stdenv
-, fetchurl
-, glib
+, fetchzip
 , gnome
-, librest
-, libsoup
+, meson
 , pkg-config
 , gobject-introspection
+, ninja
+, glib
+, librest_1_0
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgovirt";
-  version = "0.3.8";
+  version = "0.3.9";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HckYYikXa9+p8l/Y+oLAoFi2pgwcyAfHUH7IqTwPHfg=";
+    sha256 = "sha256-6RDuJTyaVYlO4Kq+niQyepom6xj1lqdBbyWL/VnZUdk=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    # The flag breaks the build on darwin and doesn't seem necessary
-    ./no-version-script-ld-flag.patch
+  patches = [
+    # https://gitlab.gnome.org/GNOME/libgovirt/-/issues/9
+    ./auto-disable-incompatible-compiler-warnings.patch
   ];
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
+    "-Wno-typedef-redefinition"
+    "-Wno-missing-field-initializers"
+    "-Wno-cast-align"
+  ]);
 
   nativeBuildInputs = [
+    meson
     pkg-config
     gobject-introspection
-  ];
-
-  buildInputs = [
-    libsoup
+    ninja
   ];
 
   propagatedBuildInputs = [
     glib
-    librest
+    librest_1_0
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     updateScript = gnome.updateScript {
