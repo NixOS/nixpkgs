@@ -580,6 +580,17 @@
     };
     meta.homepage = "https://github.com/camdencheek/tree-sitter-go-mod";
   };
+  gosum = buildGrammar {
+    language = "gosum";
+    version = "68974b6";
+    src = fetchFromGitHub {
+      owner = "amaanq";
+      repo = "tree-sitter-go-sum";
+      rev = "68974b63c19dc6e27214a5c76b6e26c0c40fe5b7";
+      hash = "sha256-Avk9nAICwy59VYIlLhp9FkozAna9kMwY60pAqKyJsK4=";
+    };
+    meta.homepage = "https://github.com/amaanq/tree-sitter-go-sum";
+  };
   gowork = buildGrammar {
     language = "gowork";
     version = "949a8a4";
@@ -824,12 +835,12 @@
   };
   julia = buildGrammar {
     language = "julia";
-    version = "9d36818";
+    version = "e2f449e";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-julia";
-      rev = "9d368185be7e8139f2eda93d8b0acc2a54031718";
-      hash = "sha256-6jKiqDo8fSHrUGFIizNSKWoB0CVXJv6b3XfN9YjNLJc=";
+      rev = "e2f449e2bcc95f1d07ceb62d67f986005f73a6be";
+      hash = "sha256-ZXnEvHtheP8rI/lwPf94lVCF5S5rw38bewuZ0GHxjr8=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-julia";
   };
