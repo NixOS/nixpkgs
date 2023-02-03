@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = version;
-    hash = "sha256-bORiE3sIDNESjEizdzsJYZTSMbcqpbjostXo+0NQDfA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5mz1OC+6kDpiLNsMwOp+bdqY2eozMpAekS6h34QiOdo=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Filesystem for Alibaba Cloud (Aliyun) Object Storage System (OSS)";
     homepage = "https://github.com/fsspec/ossfs";
+    changelog = "https://github.com/fsspec/ossfs/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
