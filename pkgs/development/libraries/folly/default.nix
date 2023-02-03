@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
-  buildInputs = [
+  propagatedBuildInputs = [
     boost
     double-conversion
     glog
@@ -53,9 +53,6 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optional stdenv.isLinux jemalloc;
 
-  # jemalloc headers are required in include/folly/portability/Malloc.h
-  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
-
   NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
@@ -64,13 +61,6 @@ stdenv.mkDerivation rec {
       --replace '=''${prefix}//' '=/' \
       --replace '=''${exec_prefix}//' '=/'
   '';
-
-  # folly-config.cmake, will `find_package` these, thus there should be
-  # a way to ensure abi compatibility.
-  passthru = {
-    inherit boost;
-    fmt = fmt_8;
-  };
 
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
