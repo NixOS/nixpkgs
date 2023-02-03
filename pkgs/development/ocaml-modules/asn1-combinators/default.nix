@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-asn1-combinators";

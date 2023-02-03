@@ -6,6 +6,7 @@
 , sphinx
 , nixosTests
 , pkgs
+, fetchPypi
 }:
 
 let
@@ -74,6 +75,17 @@ let
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
+    # flask-security-too 4.1.5 is incompatible with flask-babel 3.x
+    flask-babel = prev.flask-babel.overridePythonAttrs (oldAttrs: rec {
+      version = "2.0.0";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+      };
+      nativeBuildInputs = [ ];
+      format = "setuptools";
+      outputs = [ "out" ];
+    });
     # flask 2.2 is incompatible with pgadmin 6.18
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {

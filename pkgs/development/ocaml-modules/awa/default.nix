@@ -18,8 +18,6 @@ buildDunePackage rec {
     hash = "sha256-ae1gTx3Emmkof/2Gnhq0d5RyfkFx21hHkVEVgyPdXuo=";
   };
 
-  nativeBuildInputs = [ ppx_cstruct ];
-
   propagatedBuildInputs = [
     mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
     cstruct cstruct-sexp sexplib mtime
@@ -27,8 +25,10 @@ buildDunePackage rec {
     ppx_sexp_conv eqaf
   ];
 
+  buildInputs = [ ppx_cstruct ];
+
   doCheck = true;
-  nativeCheckInputs = [ cstruct-unix cmdliner fmt ];
+  checkInputs = [ cstruct-unix cmdliner fmt ];
 
   meta = with lib; {
     description = "SSH implementation in OCaml";

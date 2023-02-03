@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/hannesm/duration";

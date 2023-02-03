@@ -27,8 +27,10 @@ let compcert = mkCoqDerivation rec {
     "3.11".sha256 = "sha256-ZISs/ZAJVWtxp9+Sg5qV5Rss1gI9hK769GnBfawLa6A=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with ocamlPackages; [ ocaml findlib menhir menhirLib ] ++ [ coq coq2html ];
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages; [ makeWrapper ocaml findlib menhir coq coq2html ];
+  buildInputs = with ocamlPackages; [ menhirLib ];
   propagatedBuildInputs = [ flocq ];
 
   enableParallelBuilding = true;

@@ -3,6 +3,7 @@
 , botocore
 , buildPythonPackage
 , fetchPypi
+, fsspec
 , pandas
 , pythonOlder
 , tenacity
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     boto3
     botocore
+    fsspec
     pandas
     tenacity
   ];

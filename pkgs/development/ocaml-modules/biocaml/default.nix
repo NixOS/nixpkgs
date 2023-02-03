@@ -1,6 +1,7 @@
 { lib, buildDunePackage, fetchFromGitHub, fetchpatch
 , ounit, async, base64, camlzip, cfstream
-, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
+, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm
+}:
 
 buildDunePackage rec {
   pname = "biocaml";
@@ -10,8 +11,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "01yw12yixs45ya1scpb9jy2f7dw1mbj7741xib2xpq3kkc1hc21s";
   };
 
@@ -21,7 +22,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
   propagatedBuildInputs = [ async base64 camlzip cfstream core rresult uri xmlm ];
 
   meta = with lib; {

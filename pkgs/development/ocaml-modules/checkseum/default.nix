@@ -24,7 +24,7 @@ buildDunePackage rec {
     ocaml-freestanding
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     bos
     astring

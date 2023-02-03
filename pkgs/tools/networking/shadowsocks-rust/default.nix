@@ -18,8 +18,17 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
-  cargoBuildFlags = [
-    "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"
+  cargoBuildFeatures = [
+    "trust-dns"
+    "local-http-native-tls"
+    "local-tunnel"
+    "local-socks4"
+    "local-redir"
+    "local-dns"
+    "local-tun"
+    "aead-cipher-extra"
+    "aead-cipher-2022"
+    "aead-cipher-2022-extra"
   ];
 
   # all of these rely on connecting to www.example.com:80

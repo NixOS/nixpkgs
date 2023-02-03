@@ -1,5 +1,6 @@
 { lib, buildDunePackage, irmin, astring, logs, lwt
-, alcotest, irmin-test, irmin-watcher }:
+, alcotest, irmin-test, irmin-watcher
+}:
 
 buildDunePackage rec {
 
@@ -9,7 +10,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ irmin astring logs lwt ];
 
-  nativeCheckInputs = [ alcotest irmin-test irmin-watcher ];
+  checkInputs = [ alcotest irmin-test irmin-watcher ];
 
   doCheck = true;
 

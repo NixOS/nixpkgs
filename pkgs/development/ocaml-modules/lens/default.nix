@@ -17,7 +17,7 @@ buildDunePackage rec {
   buildInputs = [ ppx_deriving ppxlib ];
 
   doCheck = true;
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   meta = with lib; {
     homepage = "https://github.com/pdonadeo/ocaml-lens";

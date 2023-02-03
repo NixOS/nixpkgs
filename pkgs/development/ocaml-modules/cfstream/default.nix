@@ -17,11 +17,10 @@ buildDunePackage rec {
 
   patches = [ ./git_commit.patch ];
 
-  # This currently fails with dune
-  strictDeps = false;
+  strictDeps = true;
 
   nativeBuildInputs = [ m4 ];
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
   propagatedBuildInputs = [ core_kernel ];
 
   doCheck = true;
