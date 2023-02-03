@@ -16574,6 +16574,8 @@ with pkgs;
 
   poetry = callPackage ../tools/package-management/poetry { };
 
+  poetryPlugins = recurseIntoAttrs poetry.plugins;
+
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
