@@ -4,8 +4,8 @@
 
 let
   major = "19";
-  update = "";
-  build = "+11";
+  update = ".0.2.1";
+  build = "+1";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
@@ -19,7 +19,7 @@ let
       owner = "openjdk";
       repo = "jfx";
       rev = repover;
-      hash = "sha256-UXTaXtJ8py83V7IQK9wACIEWDAMRUaYNgH9e/Aeyuzc=";
+      hash = "sha256-A08GhCGpzWlUG1+f6mcjvkJmMNaOReacQKPEmNpUvLs=";
     };
 
     patches = [
