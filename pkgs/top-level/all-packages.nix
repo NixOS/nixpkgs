@@ -1601,12 +1601,7 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd {
-    fuse =
-      if hostPlatform.isDarwin then osxfuse
-      else if hostPlatform.isLinux then fuse
-      else null;
-  };
+  xrootd = callPackage ../tools/networking/xrootd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
 
