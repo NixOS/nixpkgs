@@ -9026,6 +9026,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-emojicodes = callPackage ../tools/text/mdbook-emojicodes { };
+
   mdbook-epub = callPackage ../tools/text/mdbook-epub {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
