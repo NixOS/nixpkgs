@@ -853,6 +853,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openjdk</literal> from version 11 and above is not
+          build with <literal>openjfx</literal> (i.e.: JavaFX) support
+          by default anymore. You can re-enable it by overriding, e.g.:
+          <literal>openjdk11.override { enableJavaFX = true; };</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
           can now access AX.25 interfaces via the
           <literal>libax25</literal> package.
