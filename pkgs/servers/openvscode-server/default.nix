@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs-16_x-openssl_1_1, libsecret, xorg, ripgrep
+, esbuild, nodejs-16_x, libsecret, xorg, ripgrep
 , AppKit, Cocoa, Security, cctools }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs-16_x-openssl_1_1;
+  nodejs = nodejs-16_x;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
@@ -40,19 +40,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.73.1";
+  version = "1.74.3";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "DZWAzNRRRZ/eElwRGvSK7TxstKK6X1Tj+uAxD4SOScQ=";
+    sha256 = "2+/5I0dpQsmoWA7Q0dCgPO85dkOKQWHeO34cueH4sjQ=";
   };
 
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    nativeBuildInputs = [ cacert yarn git ];
+    nativeBuildInputs = [ cacert yarn' git ];
     buildPhase = ''
       export HOME=$PWD
 
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-7UBXigQj7c+fuHPIM5BbRe02DuL+cs6VbQ/D84Yk8i4=";
+    outputHash = "sha256-4B/ESi4lM2p+pY0dfUKWgwmYkwqPYaNuCLJ99ByjwWE=";
   };
 
   nativeBuildInputs = [
@@ -142,6 +142,8 @@ in stdenv.mkDerivation rec {
     jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
     popd
   '' + ''
+    export NODE_OPTIONS=--openssl-legacy-provider
+
     # rebuild binaries, we use npm here, as yarn does not provide an alternative
     # that would not attempt to try to reinstall everything and break our
     # patching attempts
