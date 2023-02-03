@@ -4101,6 +4101,8 @@ with pkgs;
 
   swayr = callPackage ../tools/wayland/swayr { };
 
+  swayrbar = callPackage ../tools/wayland/swayrbar { };
+
   swaysome = callPackage ../tools/wayland/swaysome { };
 
   swayimg = callPackage ../tools/wayland/swayimg { };
