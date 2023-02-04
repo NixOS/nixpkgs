@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haguichi";
-  version = "1.4.5";
+  version = "1.146.0";
 
   src = fetchFromGitHub {
     owner = "ztefn";
     repo = "haguichi";
     rev = version;
-    sha256 = "1kgjl9g9lyg00cfx4x28s4xyqsqk5057xv6k2cj6ckg9lkxaixvc";
+    sha256 = "sha256-606WZ8OEypBTCXZppA1h9tKvMm46DMnegnK4pNRkWBc=";
   };
 
   nativeBuildInputs = [
