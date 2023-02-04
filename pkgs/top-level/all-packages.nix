@@ -27226,6 +27226,8 @@ with pkgs;
 
   joypixels = callPackage ../data/fonts/joypixels { };
 
+  junction-font = callPackage ../data/fonts/junction { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   julia-mono = callPackage ../data/fonts/julia-mono { };
