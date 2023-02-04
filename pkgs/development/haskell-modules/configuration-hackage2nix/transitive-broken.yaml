@@ -247,6 +247,7 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
+ - LPFP
  - LPPaver
  - LambdaHack
  - LambdaINet
@@ -676,7 +677,7 @@ dont-distribute-packages:
  - ascii-superset_1_2_5_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_5_1_0
+ - ascii_1_5_2_0
  - asic
  - asil
  - assert4hs-hspec
@@ -811,6 +812,7 @@ dont-distribute-packages:
  - bitcoin-types
  - bitcoind-regtest
  - bitcoind-rpc
+ - bitfield
  - bitly-cli
  - bitmaps
  - bittorrent
@@ -1116,7 +1118,6 @@ dont-distribute-packages:
  - crf-chain1-constrained
  - crf-chain2-generic
  - crf-chain2-tiers
- - criterion-compare
  - criu-rpc
  - crockford
  - cron-compat
@@ -1394,6 +1395,7 @@ dont-distribute-packages:
  - eventuo11y
  - eventuo11y-batteries
  - eventuo11y-json
+ - eventuo11y-otel
  - every-bit-counts
  - ewe
  - exference
@@ -1863,6 +1865,7 @@ dont-distribute-packages:
  - grenade
  - gridbounds
  - gridland
+ - grisette
  - groot
  - gross
  - groundhog-converters
@@ -2200,8 +2203,6 @@ dont-distribute-packages:
  - hpaco-lib
  - hpage
  - hpaste
- - hpath-directory
- - hpath-io
  - hpc-tracer
  - hplayground
  - hpqtypes-effectful
@@ -2251,7 +2252,6 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
- - hslua-module-zip
  - hsndfile-storablevector
  - hspec-expectations-pretty
  - hspec-pg-transact
@@ -2368,6 +2368,7 @@ dont-distribute-packages:
  - instant-deepseq
  - instant-hashable
  - instant-zipper
+ - instrument-cloudwatch
  - integreat
  - intel-aes
  - interpolatedstring-qq
@@ -3047,6 +3048,8 @@ dont-distribute-packages:
  - persistable-record
  - persistable-types-HDBC-pg
  - persistent-audit
+ - persistent-event-source
+ - persistent-eventsource
  - persistent-hssqlppp
  - persistent-map
  - persistent-mtl
@@ -3464,6 +3467,7 @@ dont-distribute-packages:
  - satchmo-funsat
  - satchmo-toysat
  - sauron
+ - sbv-program
  - sbvPlugin
  - sc2-lowlevel
  - sc2-support
@@ -3547,7 +3551,6 @@ dont-distribute-packages:
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
- - servant-streamly
  - servant-swagger-tags
  - servant-to-elm
  - servant-util
@@ -3626,7 +3629,6 @@ dont-distribute-packages:
  - smtlib2-quickcheck
  - smtlib2-timing
  - smtp2mta
- - snap-blaze-clay
  - snap-elm
  - snap-extras
  - snaplet-actionlog
@@ -3738,7 +3740,6 @@ dont-distribute-packages:
  - streamed
  - streaming-fft
  - streaming-process
- - streamly-posix
  - strelka
  - strelka-wai
  - strict-containers-lens
@@ -3880,7 +3881,6 @@ dont-distribute-packages:
  - theoremquest-client
  - thimk
  - threaded
- - threepenny-gui-flexbox
  - thumbnail-polish
  - tic-tac-toe
  - tickle
@@ -4124,7 +4124,6 @@ dont-distribute-packages:
  - weatherhs
  - web-inv-route
  - web-mongrel2
- - web-page
  - web-rep
  - web-routes-regular
  - web-routing

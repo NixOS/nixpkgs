@@ -2480,7 +2480,6 @@ broken-packages:
   - hslogger-template
   - hs-logo
   - hslua-examples
-  - hslua-list
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
