@@ -26886,6 +26886,8 @@ with pkgs;
 
   blackbird = callPackage ../data/themes/blackbird { };
 
+  blackout = callPackage ../data/fonts/blackout { };
+
   brise = callPackage ../data/misc/brise { };
 
   cacert = callPackage ../data/misc/cacert { };
