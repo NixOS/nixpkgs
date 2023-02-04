@@ -15,8 +15,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Integration tests do not work in sandbox enviroment
   nativeBuildInputs = [ pkg-config ];
   meta = with lib; {
-    description =
-      "Efficient animated wallpaper daemon for wayland, controlled at runtime";
+    description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
     homepage = "https://github.com/Horus645/swww";
     license = licenses.gpl3;
     platforms = platforms.linux;
