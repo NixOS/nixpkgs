@@ -5265,6 +5265,18 @@ final: prev:
     meta.homepage = "https://github.com/sbdchd/neoformat/";
   };
 
+  neogen = buildVimPluginFrom2Nix {
+    pname = "neogen";
+    version = "2023-01-16";
+    src = fetchFromGitHub {
+      owner = "danymat";
+      repo = "neogen";
+      rev = "465af9d6c6fb7f360175991dcc23fc10917e3a06";
+      sha256 = "08frlngajmb1905f52xh299h8l3mf34lp4aa5rgs2hl96iafbjr3";
+    };
+    meta.homepage = "https://github.com/danymat/neogen/";
+  };
+
   neogit = buildVimPluginFrom2Nix {
     pname = "neogit";
     version = "2023-01-31";
