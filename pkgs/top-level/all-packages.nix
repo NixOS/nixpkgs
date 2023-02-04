@@ -9872,6 +9872,8 @@ with pkgs;
 
   mubeng = callPackage ../tools/networking/mubeng { };
 
+  multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
+
   multitime = callPackage ../tools/misc/multitime { };
 
   sta = callPackage ../tools/misc/sta {};
@@ -14773,6 +14775,12 @@ with pkgs;
     (if stdenv.targetPlatform.isStatic
        then haskell.compiler.native-bignum.ghc92
        else haskell.compiler.ghc92);
+
+  alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
+
+  happy = haskell.lib.compose.justStaticExecutables haskellPackages.happy;
+
+  hscolour = haskell.lib.compose.justStaticExecutables haskellPackages.hscolour;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 

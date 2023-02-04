@@ -7015,6 +7015,12 @@
     githubId = 2308444;
     name = "Joshua Gilman";
   };
+  jnsgruk = {
+    email = "jon@sgrs.uk";
+    github = "jnsgruk";
+    githubId = 668505;
+    name = "Jon Seager";
+  };
   jo1gi = {
     email = "joakimholm@protonmail.com";
     github = "jo1gi";
