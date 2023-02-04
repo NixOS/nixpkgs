@@ -116,7 +116,7 @@
 
 self: super: {
 
-  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+  barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
       description = "A VS Code like winbar for Neovim";
