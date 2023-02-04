@@ -27318,6 +27318,8 @@ with pkgs;
 
   lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
 
+  linden-hill = callPackage ../data/fonts/linden-hill { };
+
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
   linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin {};
