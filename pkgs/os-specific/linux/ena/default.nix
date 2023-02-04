@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.1";
+  version = "2.8.2";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "sha256-JkGzmmsAmLvL9e+bg58H79GNHgsqydK/79VoWEq5/Mc=";
+    sha256 = "sha256-KlRNI2lnUbNeQGY1G+Qm683yXRTNCJwWIri51+PAi9o=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
-    broken = kernel.kernelAtLeast "5.17";
   };
 }
