@@ -11137,8 +11137,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "ledger";
       repo = "vim-ledger";
-      rev = "e97dd2018012cf48d6fefb21e689a41e8d006c72";
-      sha256 = "1d51lqdxhazan4p17iz70wibmsvzcm6r68kycwqji6msrm1xcwl3";
+      rev = "9b18bd548ec1fd6e94b262b3af0d9fb337c0b1df";
+      sha256 = "1paqjvvrcgngpggwa2a57d85xzvz5g5mk43bzn5fkgc1xfd77yv1";
     };
     meta.homepage = "https://github.com/ledger/vim-ledger/";
   };
