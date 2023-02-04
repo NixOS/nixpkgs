@@ -203,7 +203,9 @@ in {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
 
-  # The Haskell library has additional dependencies when compiled with ghc-9.4.x.
-  X11-xft = addExtraLibraries [pkgs.xorg.libXau pkgs.xorg.libXdmcp pkgs.expat] super.X11-xft;
+  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
+  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
+  # the GHC 9.6 configuration may need similar overrides eventually.
+  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
 
 }
