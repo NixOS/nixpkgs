@@ -3884,6 +3884,18 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/indent-blankline.nvim/";
   };
 
+  indent-o-matic = buildVimPluginFrom2Nix {
+    pname = "indent-o-matic";
+    version = "2023-01-24";
+    src = fetchFromGitHub {
+      owner = "Darazaki";
+      repo = "indent-o-matic";
+      rev = "3103dde7a47f2855097558ab52162bbbdbe8dc40";
+      sha256 = "1nfwzqki00x5vv75iawyky122v68qcajihfcdqxixlqln3srrmi4";
+    };
+    meta.homepage = "https://github.com/Darazaki/indent-o-matic/";
+  };
+
   indentLine = buildVimPluginFrom2Nix {
     pname = "indentLine";
     version = "2022-09-07";
@@ -6251,12 +6263,12 @@ final: prev:
 
   nvim-nonicons = buildVimPluginFrom2Nix {
     pname = "nvim-nonicons";
-    version = "2022-12-22";
+    version = "2023-02-04";
     src = fetchFromGitHub {
       owner = "yamatsum";
       repo = "nvim-nonicons";
-      rev = "68ecb6476f1b96d03c702dce6cf3ef1e5171c9a8";
-      sha256 = "1vmzl5b3a07kh8b4wqqxd05sygvlyxq9vkrsshn2lrxmpbdg6227";
+      rev = "ceda07dc7339f35444b5f4c4016f76a9eb42ac16";
+      sha256 = "0kcagkzgvib0jg9aywfvrk4bx7pdyk7zj5b5i4wzacdcyx5yb7mx";
     };
     meta.homepage = "https://github.com/yamatsum/nvim-nonicons/";
   };
