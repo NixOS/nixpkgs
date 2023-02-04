@@ -27276,11 +27276,13 @@ with pkgs;
 
   lato = callPackage ../data/fonts/lato {};
 
-  league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
-
   league-gothic = callPackage ../data/fonts/league-gothic { };
 
+  league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
+
   league-script-number-one = callPackage ../data/fonts/league-script-number-one { };
+
+  league-spartan = callPackage ../data/fonts/league-spartan { };
 
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
 
