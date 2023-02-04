@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   buildInputs = [ cmdliner yojson ];
   propagatedBuildInputs = [ base64 rresult xmlm ];
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

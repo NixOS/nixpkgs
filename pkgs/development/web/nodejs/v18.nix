@@ -6,19 +6,13 @@ let
     python = python3;
   };
 
-  npmPatches = callPackage ./npm-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.13.0";
-  sha256 = "0s6sscynhw9limpp43f965rn9grdamcvsnd9wfb2h5qxw1icajpx";
+  version = "18.14.0";
+  sha256 = "sha256-Qu+d0xmT1cjoKwqwlpE1CT5qKW76J7G+mvwErADwJno=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
-
-    (fetchpatch {
-      url = "https://salsa.debian.org/js-team/nodejs/-/raw/master/debian/patches/riscv/fix-ftbfs-riscv64-18-13-0.patch";
-      sha256 = "sha256-1hd0oJY9aIoKkL7WHHPlcbLunF89J7J197silc2sExE=";
-    })
-  ] ++ npmPatches;
+  ];
 }

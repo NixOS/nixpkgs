@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ipaddr ];
 
-  nativeCheckInputs = [ ipaddr-cstruct ounit ppx_sexp_conv ];
+  checkInputs = [ ipaddr-cstruct ounit ppx_sexp_conv ];
   doCheck = true;
 
   meta = ipaddr.meta // {

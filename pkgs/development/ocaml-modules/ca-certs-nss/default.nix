@@ -39,7 +39,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = with lib; {
     description = "X.509 trust anchors extracted from Mozilla's NSS";

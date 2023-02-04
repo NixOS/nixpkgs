@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ graphql_parser rresult yojson ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

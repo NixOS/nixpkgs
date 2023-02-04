@@ -8,7 +8,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ irmin fmt logs lwt ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest irmin-test ];
+  checkInputs = [ alcotest irmin-test ];
 
   meta = irmin.meta // {
     description = "Irmin backend which allow to store values into chunks";

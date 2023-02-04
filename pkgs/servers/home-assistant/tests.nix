@@ -76,8 +76,8 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
       ++ home-assistant.getPackages component home-assistant.python.pkgs
       ++ extraCheckInputs.${component} or [ ];
 
-    disabledTests = old.disabledTests ++ extraDisabledTests.${component} or [];
-    disabledTestPaths = old.disabledTestPaths ++ extraDisabledTestPaths.${component} or [ ];
+    disabledTests = old.disabledTests or [] ++ extraDisabledTests.${component} or [];
+    disabledTestPaths = old.disabledTestPaths or [] ++ extraDisabledTestPaths.${component} or [ ];
 
     # components are more often racy than the core
     dontUsePytestXdist = true;

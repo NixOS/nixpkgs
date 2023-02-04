@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, rpclib
+{ lib
+, buildDunePackage
+, rpclib
 , lwt
-, alcotest-lwt, ppx_deriving_rpc, yojson
+, alcotest-lwt
+, ppx_deriving_rpc
+, yojson
 }:
 
 buildDunePackage {
@@ -9,7 +13,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [ lwt rpclib ];
 
-  nativeCheckInputs = [ alcotest-lwt ppx_deriving_rpc yojson ];
+  checkInputs = [ alcotest-lwt ppx_deriving_rpc yojson ];
   doCheck = true;
 
   meta = rpclib.meta // {

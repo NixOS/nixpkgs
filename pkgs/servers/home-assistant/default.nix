@@ -271,7 +271,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.2.0";
+  hassVersion = "2023.2.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -289,8 +289,12 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-tW1tVPJ50DIGIuxJP9nq4+Tw4fiPA+kINSclW7JkJmE=";
+    hash = "sha256-gWcq0E/k6c4YQJwLlU379kse2u4Yn6xvLZ5QnGXVTJA=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
@@ -328,7 +332,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    # Only packages required in setup.py
+    # Only packages required in pyproject.toml
     aiohttp
     astral
     async-timeout
@@ -346,6 +350,7 @@ in python.pkgs.buildPythonApplication rec {
     lru-dict
     orjson
     pip
+    pyopenssl
     pyjwt
     python-slugify
     pyyaml
@@ -353,10 +358,8 @@ in python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
-    # Not in setup.py, but used in homeassistant/util/package.py
+    # Implicit dependency via homeassistant/requirements.py
     setuptools
-    # Not in setup.py, but uncounditionally imported via tests/conftest.py
-    paho-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -369,22 +372,28 @@ in python.pkgs.buildPythonApplication rec {
     freezegun
     pytest-asyncio
     pytest-aiohttp
-    pytest-freezegun
+    pytest-freezer
     pytest-mock
     pytest-rerunfailures
     pytest-socket
+    pytest-timeout
     pytest-unordered
     pytest-xdist
     pytestCheckHook
     requests-mock
     respx
     stdlib-list
-    # required by tests/auth/mfa_modules
+    tomli
+    # required through tests/auth/mfa_modules/test_otp.py
     pyotp
+    # Sneakily imported in tests/conftest.py
+    paho-mqtt
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
     "hue"
+    # for tests/test_config.py::test_merge_id_schema
+    "qwikswitch"
   ];
 
   pytestFlagsArray = [
@@ -395,8 +404,8 @@ in python.pkgs.buildPythonApplication rec {
     "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
-    # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
-    "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
+    # AssertionError: assert 1 == 0
+    "--deselect tests/test_config.py::test_merge"
     # tests are located in tests/
     "tests"
   ];
@@ -408,17 +417,6 @@ in python.pkgs.buildPythonApplication rec {
     "tests/pylint"
     # don't bulk test all components
     "tests/components"
-    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
-    "tests/auth/mfa_modules/test_notify.py"
-  ];
-
-  disabledTests = [
-    # AssertionError: assert 1 == 0
-    "test_merge"
-    # Tests are flaky
-    "test_config_platform_valid"
-    # Test requires pylint>=2.13.0
-    "test_invalid_discovery_info"
   ];
 
   preCheck = ''

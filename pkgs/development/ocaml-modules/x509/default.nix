@@ -17,7 +17,7 @@ buildDunePackage rec {
     hash = "sha256-Zf/ZZjUAkeWe04XLmqMKgbxN/qe/Z1mpKM82veXVf2I=";
   };
 
-  nativeCheckInputs = [ alcotest cstruct-unix ];
+  checkInputs = [ alcotest cstruct-unix ];
   propagatedBuildInputs = [ asn1-combinators domain-name fmt gmap mirage-crypto mirage-crypto-pk mirage-crypto-ec pbkdf logs base64 ipaddr ];
 
   doCheck = true;

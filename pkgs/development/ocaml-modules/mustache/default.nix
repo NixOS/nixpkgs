@@ -11,11 +11,12 @@ buildDunePackage rec {
     sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
   };
 
-  buildInputs = [ ezjsonm menhir ];
+  nativeBuildInputs = [ menhir ];
+  buildInputs = [ ezjsonm ];
   propagatedBuildInputs = [ menhirLib ];
 
   doCheck = true;
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   meta = {
     description = "Mustache logic-less templates in OCaml";

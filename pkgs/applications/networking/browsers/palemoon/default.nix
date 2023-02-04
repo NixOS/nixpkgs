@@ -40,7 +40,7 @@
 assert stdenv.cc.isGNU;
 assert with lib.strings; (
   versionAtLeast stdenv.cc.version "7.1"
-  && versionOlder stdenv.cc.version "12"
+  && versionOlder stdenv.cc.version "13"
 );
 
 stdenv.mkDerivation rec {
