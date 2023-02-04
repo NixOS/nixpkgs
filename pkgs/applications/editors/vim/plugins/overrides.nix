@@ -905,6 +905,11 @@ self: super: {
       '';
     });
 
+  unison = super.unison.overrideAttrs (old: {
+    # Editor stuff isn't at top level
+    postPatch = "cd editor-support/vim";
+  });
+
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
     propagatedBuildInputs = [ gnome.zenity ];
