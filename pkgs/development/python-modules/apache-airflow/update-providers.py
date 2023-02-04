@@ -61,6 +61,7 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
             "--arg",
             "config",
             "{ allowAliases = false; }",
+            "--out-path",
             "--json",
         ]
     )
@@ -93,8 +94,16 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
             # logging.debug("Checking match for %s with %s", name, package["name"])
             if pattern.match(package["name"]):
                 attr_paths.append(attr_path)
-    # Let's hope there's only one derivation with a matching name
-    assert len(attr_paths) <= 1, f"{req} matches more than one derivation: {attr_paths}"
+
+    # check for existence of more than one matching path, being lenient
+    # for cases where all are aliasing a drv with the same outpath - in
+    # which case just choosing the first one will be fine
+    if len(attr_paths) > 1 and len(set(packages[p]["outputs"]["out"] for p in attr_paths)) > 1:
+        raise ValueError(
+            f"{req} matches more than one derivation: {attr_paths!r}. "
+            "Choose one and add it to PKG_PREFERENCES"
+        )
+
     if attr_paths:
         return attr_paths[0]
     return None
