@@ -67,6 +67,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ paperdigits ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
   };
 }
