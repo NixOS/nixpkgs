@@ -27783,6 +27783,8 @@ with pkgs;
 
   theano = callPackage ../data/fonts/theano { };
 
+  the-neue-black = callPackage ../data/fonts/the-neue-black { };
+
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
   };
