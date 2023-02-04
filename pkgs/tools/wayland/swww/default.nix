@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
     homepage = "https://github.com/Horus645/swww";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ mateodd25 ];
     platforms = platforms.linux;
   };
 }
