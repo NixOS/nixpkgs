@@ -398,6 +398,7 @@ in {
   minidlna = handleTest ./minidlna.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
+  miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mod_perl = handleTest ./mod_perl.nix {};

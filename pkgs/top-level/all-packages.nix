@@ -24903,6 +24903,8 @@ with pkgs;
 
   mir = callPackage ../servers/mir { };
 
+  miriway = callPackage ../applications/window-managers/miriway { };
+
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 
   icinga2-agent = callPackage ../servers/monitoring/icinga2 {
