@@ -27280,6 +27280,8 @@ with pkgs;
 
   league-gothic = callPackage ../data/fonts/league-gothic { };
 
+  league-script-number-one = callPackage ../data/fonts/league-script-number-one { };
+
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
 
   inherit (callPackages ../data/fonts/liberation-fonts { })
