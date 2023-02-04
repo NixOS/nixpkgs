@@ -2,7 +2,7 @@ import argparse
 import json
 import sys
 
-formats = ['commonmark', 'asciidoc']
+formats = ['asciidoc']
 
 parser = argparse.ArgumentParser(
     description = 'Generate documentation for a set of JSON-formatted NixOS options'
@@ -37,33 +37,6 @@ class OptionsEncoder(json.JSONEncoder):
                 raise Exception(f'Unexpected type `{_type}` in {json.dumps(obj)}')
 
         return super().encode(obj)
-
-def generate_commonmark(options):
-    for (name, value) in options.items():
-        print('##', name.replace('<', '&lt;').replace('>', '&gt;'))
-        print(value['description'])
-        print()
-        if 'type' in value:
-            print('*_Type_*')
-            print ('```')
-            print(value['type'])
-            print ('```')
-        print()
-        print()
-        if 'default' in value:
-            print('*_Default_*')
-            print('```')
-            print(json.dumps(value['default'], cls=OptionsEncoder, ensure_ascii=False, separators=(',', ':')))
-            print('```')
-        print()
-        print()
-        if 'example' in value:
-            print('*_Example_*')
-            print('```')
-            print(json.dumps(value['example'], cls=OptionsEncoder, ensure_ascii=False, separators=(',', ':')))
-            print('```')
-        print()
-        print()
 
 # TODO: declarations: link to github
 def generate_asciidoc(options):
@@ -103,9 +76,7 @@ def generate_asciidoc(options):
 with open(args.nix_options_path) as nix_options_json:
     options = json.load(nix_options_json)
 
-    if args.format == 'commonmark':
-        generate_commonmark(options)
-    elif args.format == 'asciidoc':
+    if args.format == 'asciidoc':
         generate_asciidoc(options)
     else:
         raise Exception(f'Unsupported documentation format `--format {args.format}`')
