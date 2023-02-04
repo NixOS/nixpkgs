@@ -1233,6 +1233,8 @@ let
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
+    rusage = callPackage ../development/ocaml-modules/rusage { };
+
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
