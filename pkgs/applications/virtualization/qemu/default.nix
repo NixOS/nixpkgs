@@ -149,7 +149,6 @@ stdenv.mkDerivation rec {
     # have our patches and will be subtly broken because of that.
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--cpu=${stdenv.hostPlatform.uname.processor}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
