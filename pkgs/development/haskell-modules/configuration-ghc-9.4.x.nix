@@ -207,6 +207,10 @@ in {
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
   # the GHC 9.6 configuration may need similar overrides eventually.
   X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
+  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
+  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
+  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
+  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
 
   # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
   # recent versions of Cabal require. This leads to builds like cairo and glib
