@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
     homepage = "https://github.com/sissaschool/elementpath";
+    changelog = "https://github.com/sissaschool/elementpath/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
