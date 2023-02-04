@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock, setuptools }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
@@ -18,6 +18,8 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test test_pytest_rerunfailures.py
   '';
+
+  propagatedBuildInputs = [ setuptools ];
 
   meta = with lib; {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";
