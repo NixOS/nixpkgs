@@ -8369,6 +8369,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/unicode.vim/";
   };
 
+  unison = buildVimPluginFrom2Nix {
+    pname = "unison";
+    version = "2023-02-03";
+    src = fetchFromGitHub {
+      owner = "unisonweb";
+      repo = "unison";
+      rev = "59acc0cbe429492a99bfebf2b783fc2fa3967f75";
+      sha256 = "1nrpxprq1f2pp269nrx18avv7ghngqlr7rjahib91rgkvhw6k1x7";
+    };
+    meta.homepage = "https://github.com/unisonweb/unison/";
+  };
+
   unite-vim = buildVimPluginFrom2Nix {
     pname = "unite.vim";
     version = "2021-02-06";
