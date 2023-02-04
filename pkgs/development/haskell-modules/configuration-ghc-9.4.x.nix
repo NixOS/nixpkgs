@@ -105,7 +105,7 @@ in {
   singleton-bool = doJailbreak super.singleton-bool;
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
-
+  libmpd = doJailbreak super.libmpd;
   base-orphans = dontCheck super.base-orphans;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
@@ -184,21 +184,18 @@ in {
   })
     self.ghc-exactprint_1_6_1_1;
 
-  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # 2023-02-01: plugins disabled for hls 1.9.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
-    hls-refactor-plugin = null;
     hls-eval-plugin = null;
-    hls-floskell-plugin = null;
-    hls-ormolu-plugin = null;
-    hls-rename-plugin = null;
+    hls-ormolu-plugin = null;     # This plugin is supposed to work, but fails to compile.
+    hls-floskell-plugin = null;   # This plugin is supposed to work, but fails to compile.
+    hls-rename-plugin = null;     # This plugin is supposed to work, but fails to compile.
     hls-stylish-haskell-plugin = null;
   };
 
   # https://github.com/tweag/ormolu/issues/941
-  ormolu = overrideCabal (drv: {
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.ormolu);
+  ormolu = doDistribute self.ormolu_0_5_2_0;
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
