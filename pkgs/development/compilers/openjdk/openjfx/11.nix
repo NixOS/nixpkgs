@@ -1,6 +1,9 @@
 { stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
-, openjdk11-bootstrap }:
+, gperf, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
+, openjdk11-bootstrap
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "11";
@@ -10,16 +13,6 @@ let
   gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
-
-  NIX_CFLAGS_COMPILE = [
-    # avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
-    # glib-2.62 deprecations
-    # -fcommon: gstreamer workaround for -fno-common toolchains:
-    #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
-    #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-    "-fcommon"
-  ];
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
@@ -31,7 +24,7 @@ let
       sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -81,8 +74,8 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''

@@ -2921,7 +2921,9 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
+    openjdk11 = openjdk11.override { enableJavaFX = true; };
+  };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -14904,7 +14906,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -31673,7 +31675,9 @@ with pkgs;
 
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic {
+    jdk11 = openjdk11.override { enableJavaFX = true; };
+  };
 
   mupdf = callPackage ../applications/misc/mupdf { };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
