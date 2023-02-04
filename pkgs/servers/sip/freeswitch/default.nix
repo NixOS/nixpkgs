@@ -153,5 +153,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl11;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = with lib.platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }
