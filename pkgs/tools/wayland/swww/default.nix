@@ -7,8 +7,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Horus645";
     repo = pname;
-    rev = "v0.7.0";
-    sha256 = "ofJTL+9izMmwENaEVYQ7rjpoEFR1J2szkJxzYb09N7g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ofJTL+9izMmwENaEVYQ7rjpoEFR1J2szkJxzYb09N7g=";
   };
   cargoSha256 = "sha256-ntulNQUQZ42CGvwnnQSMQsr/MDSNY/5/Aq2Ew9QItn8=";
   buildInputs = [ lz4 libxkbcommon ];
