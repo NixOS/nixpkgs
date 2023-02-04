@@ -13,6 +13,7 @@
 , qqc2-desktop-style
 
 , kirigami2
+, kirigami-addons
 , kdbusaddons
 , ki18n
 , kcalendarcore
@@ -55,6 +56,7 @@ mkDerivation rec {
     qqc2-desktop-style
 
     kirigami2
+    kirigami-addons
     kdbusaddons
     ki18n
     kcalendarcore
