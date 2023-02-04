@@ -195,6 +195,7 @@
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
+  ./programs/miriway.nix
   ./programs/mosh.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
