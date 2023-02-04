@@ -24,7 +24,7 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  driverVersion = "1.27.1";
+  driverVersion = "1.30.0";
 
   driver = let
     suffix = {
@@ -41,10 +41,10 @@ let
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
-        x86_64-linux = "0x71b4kb8hlyacixipgfbgjgrbmhckxpbmrs2xk8iis7n5kg7539";
-        aarch64-linux = "125lih7g2gj91k7j196wy5a5746wyfr8idj3ng369yh5wl7lfcfv";
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
-        aarch64-darwin = "0qajh4ac5lr1sznb2c471r5c5g2r0dk2pyqz8vhvnbk36r524h1h";
+        x86_64-linux = "0rk2j90j6gx1343fzj516vrsrnq8zk1wlg3zlg7awz12a3axx1vg";
+        aarch64-linux = "156byd2xpgw2h5fps3va9q1sddc5ks9lw8k7gc732y37zq06zy6h";
+        x86_64-darwin = "163sjhfz7smn48i3aacigzjkfv3k9ync1n2pldaksma78r446nkj";
+        aarch64-darwin = "0kwsbw8fnig96zrq6icpd0hdvq02sznjz9b9qqa9sxkq4f22wjzs";
       }.${system} or throwSystem;
     };
 
@@ -133,7 +133,7 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
-  version = "1.27.1";
+  version = "1.30.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -141,7 +141,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    hash = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
+    hash = "sha256-HibuYggWNnUD0e506PAmSgkSzj8k3NoogxSy8Tyy2Uk=";
   };
 
   patches = [
@@ -166,7 +166,7 @@ buildPythonPackage rec {
       --replace "greenlet==1.1.3" "greenlet>=1.1.3" \
       --replace "pyee==8.1.0" "pyee>=8.1.0" \
       --replace "setuptools-scm==7.0.5" "setuptools-scm>=7.0.5" \
-      --replace "wheel==0.37.1" "wheel>=0.37.1"
+      --replace "wheel==0.38.1" "wheel>=0.37.1"
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
