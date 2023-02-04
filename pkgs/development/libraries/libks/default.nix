@@ -6,6 +6,7 @@
 , pkg-config
 , libuuid
 , openssl
+, libossp_uuid
 }:
 
 stdenv.mkDerivation rec {
@@ -33,16 +34,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libuuid
-    openssl
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isLinux libuuid
+    ++ lib.optional stdenv.isDarwin libossp_uuid;
 
   meta = with lib; {
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
 }
