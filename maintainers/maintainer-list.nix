@@ -13228,6 +13228,12 @@
     githubId = 38824235;
     name = "Serge Belov";
   };
+  serge_sans_paille = {
+    email = "serge.guelton@telecom-bretagne.eu";
+    github = "serge-sans-paille";
+    githubId = 863807;
+    name = "Serge Guelton";
+  };
   sersorrel = {
     email = "ash@sorrel.sh";
     github = "sersorrel";

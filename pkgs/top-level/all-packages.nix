@@ -18764,6 +18764,8 @@ with pkgs;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
 
+  xeus = callPackage ../development/libraries/xeus { };
+
   xmlindent = callPackage ../development/web/xmlindent {};
 
   xpwn = callPackage ../development/mobile/xpwn {};
