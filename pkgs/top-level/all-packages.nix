@@ -3154,6 +3154,8 @@ with pkgs;
 
   fitnesstrax = callPackage ../applications/misc/fitnesstrax { };
 
+  flaresolverr = callPackage ../servers/flaresolverr { };
+
   flavours = callPackage ../applications/misc/flavours { };
 
   flirc = libsForQt5.callPackage ../applications/video/flirc { };

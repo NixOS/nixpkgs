@@ -1,0 +1,41 @@
+diff --git a/src/utils.py b/src/utils.py
+index ceff7ec..a65dc17 100644
+--- a/src/utils.py
++++ b/src/utils.py
+@@ -56,35 +56,8 @@ def get_webdriver() -> WebDriver:
+         else:
+             start_xvfb_display()
+ 
+-    # if we are inside the Docker container, we avoid downloading the driver
+-    driver_exe_path = None
+-    version_main = None
+-    if os.path.exists("/app/chromedriver"):
+-        # running inside Docker
+-        driver_exe_path = "/app/chromedriver"
+-    else:
+-        version_main = get_chrome_major_version()
+-        if PATCHED_DRIVER_PATH is not None:
+-            driver_exe_path = PATCHED_DRIVER_PATH
+-
+-    # downloads and patches the chromedriver
+-    # if we don't set driver_executable_path it downloads, patches, and deletes the driver each time
+-    driver = uc.Chrome(options=options, driver_executable_path=driver_exe_path, version_main=version_main,
++    driver = uc.Chrome(options=options, driver_executable_path="NIX_STORE_DRIVER_PATH",
+                        windows_headless=windows_headless)
+-
+-    # save the patched driver to avoid re-downloads
+-    if driver_exe_path is None:
+-        PATCHED_DRIVER_PATH = os.path.join(driver.patcher.data_path, driver.patcher.exe_name)
+-        shutil.copy(driver.patcher.executable_path, PATCHED_DRIVER_PATH)
+-
+-    # selenium vanilla
+-    # options = webdriver.ChromeOptions()
+-    # options.add_argument('--no-sandbox')
+-    # options.add_argument('--window-size=1920,1080')
+-    # options.add_argument('--disable-setuid-sandbox')
+-    # options.add_argument('--disable-dev-shm-usage')
+-    # driver = webdriver.Chrome(options=options)
+-
+     return driver
+ 
+ 
