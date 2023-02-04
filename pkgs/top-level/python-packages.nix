@@ -6979,6 +6979,8 @@ self: super: with self; {
 
   peewee = callPackage ../development/python-modules/peewee { };
 
+  peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   pelican = callPackage ../development/python-modules/pelican {
@@ -9730,6 +9732,8 @@ self: super: with self; {
   qnap-qsw = callPackage ../development/python-modules/qnap-qsw{ };
 
   qnapstats = callPackage ../development/python-modules/qnapstats { };
+
+  qpageview = callPackage ../development/python-modules/qpageview { };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
 

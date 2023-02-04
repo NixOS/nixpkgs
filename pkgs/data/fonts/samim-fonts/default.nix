@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "samim-fonts";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "samim-font";
     rev = "v${version}";
-    hash = "sha256-erT8iV5YHbEN47nEE5p5CbQYUgm8daOjymLAWF4fpVk=";
+    hash = "sha256-DVBMsNOVAVwzlZ3cDus/3CSsC05bLZalQ2KeueEvwXs=";
   };
 
   installPhase = ''

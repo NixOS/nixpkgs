@@ -28,6 +28,17 @@ let
                 sha256 = "sha256-eWOdJ7m3cY08ASN/X+7ILJK99iLJJwCY8294fwJiDew=";
               };
             });
+            flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.0";
+              src = super.fetchPypi {
+                pname = "Flask-Babel";
+                inherit version;
+                sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
+              };
+              nativeBuildInputs = [ ];
+              format = "setuptools";
+              outputs = [ "out" ];
+            });
           }
         )
         # Built-in dependency
