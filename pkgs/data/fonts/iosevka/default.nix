@@ -4,6 +4,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , nodejs
+, darwin
 , remarshal
 , ttfautohint-nox
   # Custom font set options.
@@ -67,7 +68,14 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-Ncf07ggyOnz/2SpgdmaYS2X/8Bad+J2sz8Yyx9Iri3E=";
 
-  nativeBuildInputs = [ nodejs remarshal ttfautohint-nox ];
+  nativeBuildInputs = [
+    nodejs
+    remarshal
+    ttfautohint-nox
+  ] ++ lib.optionals stdenv.isDarwin [
+    # libtool
+    darwin.cctools
+  ];
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
