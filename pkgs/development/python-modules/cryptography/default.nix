@@ -18,6 +18,7 @@
 , pretend
 , libiconv
 , iso8601
+, py
 , pytz
 , hypothesis
 }:
@@ -27,19 +28,20 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "38.0.1"; # Also update the hash in vectors.nix
+  version = "38.0.4"; # Also update the hash in vectors.nix
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HbPYB6FJMfoxf5ZDVpXZ7Dhr57hLYYzGHPpdCLCuM9c=";
+    hash = "sha256-F1wagYuHyayAu3N39VILfzGz7yoABOJCAxm+re22cpA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-o8l13fnfEUvUdDasq3LxSPArozRHKVsZfQg9DNR6M6Q=";
+    hash = "sha256-BN0kOblUwgHj5QBf52RY2Jx0nBn03lwoN1O5PEohbwY=";
   };
 
   cargoRoot = "src/rust";
@@ -58,11 +60,13 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography-vectors
-    hypothesis
+    # "hypothesis" indirectly depends on cryptography to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     iso8601
     pretend
+    py
     pytestCheckHook
     pytest-benchmark
     pytest-subtests

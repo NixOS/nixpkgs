@@ -24,13 +24,13 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.5.5";
+    version = "3.5.7";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "sha256-olLEDiHPTyOsbhO//cuCtZALScMEPtj9MdpcYftY0Dc=";
+      sha256 = "sha256-h6QJA3m0/DTn86Q0cXMJBndsNzmIhwhqgDV9ZP3QZUs=";
     };
 
     patches = [
@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
     doCheck = !stdenv.isDarwin;
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
     ];
 

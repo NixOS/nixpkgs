@@ -3,33 +3,20 @@
 , mopidy
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.22.0";
-        format = "setuptools";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-CZ4uoW4UHn5C+MckQXysTdydaApn99b0UCnF5RPb7DI=";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
-  version = "0.3.7";
+  version = "0.3.8";
 
-  src = python.pkgs.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit version;
-    pname = "Mopidy-YTMusic";
-    sha256 = "0gqjvi3nfzkqvbdhihzai241p1h5p037bj2475cc93xwzyyqxcrq";
+    pname = "mopidy_ytmusic";
+    sha256 = "6b4d8ff9c477dbdd30d0259a009494ebe104cad3f8b37241ae503e5bce4ec2e8";
   };
 
   propagatedBuildInputs = [
-    (mopidy.override { pythonPackages = python.pkgs; })
-    python.pkgs.ytmusicapi
-    python.pkgs.pytube
+    (mopidy.override { pythonPackages = python3.pkgs; })
+    python3.pkgs.ytmusicapi
+    python3.pkgs.pytube
   ];
 
   pythonImportsCheck = [ "mopidy_ytmusic" ];
@@ -38,6 +25,7 @@ in python.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/OzymandiasTheGreat/mopidy-ytmusic/blob/v${version}/CHANGELOG.rst";
     description = "Mopidy extension for playing music from YouTube Music";
     homepage = "https://github.com/OzymandiasTheGreat/mopidy-ytmusic";
     license = licenses.asl20;

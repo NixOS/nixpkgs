@@ -28,7 +28,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytest-asyncio
     pytestCheckHook

@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, tcl }:
+{ lib, stdenv, fetchurl, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "eggdrop";
-  version = "1.9.3";
+  version = "1.9.4";
 
-  src = fetchFromGitHub {
-    owner = "eggheads";
-    repo = "eggdrop";
-    rev = "v${version}";
-    sha256 = "sha256-BYPDIPn1nuVhnPjs2vZ6KC6pjBVYDWsRjB8c1Z6UUdE=";
+  src = fetchurl {
+    url = "https://ftp.eggheads.org/pub/eggdrop/source/${lib.versions.majorMinor version}/eggdrop-${version}.tar.gz";
+    hash = "sha256-DCh+N+h7XBidScnl2I9cwzhsmMB0MdPmAzgDwYkCltE=";
   };
 
   buildInputs = [ tcl ];

@@ -12,7 +12,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , cloog ? null, isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkg-config ? null
@@ -147,7 +147,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  # When targetting darwin, libgcc_ext.10.{4,5}.dylib are created as
+  # When targeting darwin, libgcc_ext.10.{4,5}.dylib are created as
   # MH_DYLIB_STUB files, which install_name_tool can't change, so we
   # get a cycle between $out and $lib.
   outputs = if langJava || langGo || targetPlatform.isDarwin then ["out" "man" "info"]
@@ -212,7 +212,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform langJava langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -227,7 +227,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
       cloog
 
       enableLTO
@@ -247,6 +247,7 @@ stdenv.mkDerivation ({
   };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

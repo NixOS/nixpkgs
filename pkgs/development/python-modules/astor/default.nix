@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

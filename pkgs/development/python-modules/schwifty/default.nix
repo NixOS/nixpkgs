@@ -31,7 +31,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cov
     pytestCheckHook
   ];

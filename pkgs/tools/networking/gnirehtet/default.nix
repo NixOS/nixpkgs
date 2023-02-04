@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchzip, androidenv, makeWrapper }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, fetchzip
+, androidenv
+, makeWrapper
+}:
 let
 version = "2.5";
 apk = stdenv.mkDerivation {
@@ -6,7 +14,7 @@ apk = stdenv.mkDerivation {
   inherit version;
   src = fetchzip {
     url = "https://github.com/Genymobile/gnirehtet/releases/download/v${version}/gnirehtet-rust-linux64-v${version}.zip";
-    sha256 = "1db0gkg5z8lighhkyqfsr9jiacrck89zmfnmp74vj865hhxgjzgq";
+    hash = "sha256-+H35OoTFILnJudW6+hOaLDMVZcraYT8hfJGiX958YLU=";
   };
   installPhase = ''
     mkdir $out
@@ -19,13 +27,38 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-      owner = "Genymobile";
-      repo = "gnirehtet";
-      rev = "v${version}";
-      sha256 = "0wk6n082gnj9xk46n542h1012h8gyhldca23bs7vl73g0534g878";
+    owner = "Genymobile";
+    repo = "gnirehtet";
+    rev = "v${version}";
+    hash = "sha256-6KBHRgFvHLqPXkMo1ij0D0ERQICCFGvI7EnaJxCwZnI=";
   };
+
   sourceRoot = "source/relay-rust";
-  cargoSha256 = "03r8ivsvmhi5f32gj4yacbyzanziymszya18dani53bq9zis9z31";
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "fix-trailing-semicolon-in-macro.patch";
+      url = "https://github.com/Genymobile/gnirehtet/commit/537b3d87344a456e1310f10dcef37592063f4e54.patch";
+      hash = "sha256-6U4ZEcqyXcXrfLRtynepS7gp+Uh5sujRyHVLXbWvpq8=";
+      stripLen = 1;
+    })
+    # Updates Cargo.lock and is needed to apply the subsequent patch
+    (fetchpatch {
+      name = "prefix-unused-field-with-underscore.patch";
+      url = "https://github.com/Genymobile/gnirehtet/commit/2f695503dd80519ce73a80c5aa360b08a97c029d.patch";
+      hash = "sha256-YVd1B2PVLRGpJNkKb7gpUQWmccfvYaeAmayOmWg8D+Y=";
+      stripLen = 1;
+    })
+    # https://github.com/Genymobile/gnirehtet/pull/478
+    (fetchpatch {
+      name = "fix-for-rust-1.64.patch";
+      url = "https://github.com/Genymobile/gnirehtet/commit/8eeed2084d0d1e2f83056bd11622beaa1fa61281.patch";
+      hash = "sha256-Wwc+4vG48/qpusGjlE+mSJvvarYq2mQ2CkDkrtKHAwo=";
+      stripLen = 1;
+    })
+  ];
+
+  cargoHash = "sha256-3iYOeHIQHwxmh8b8vKUf5fQS2fXP2g3orLquvLXzZwE=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,7 +1,8 @@
 { lib
 , stdenv
-, fetchzip
+, fetchurl
 , openjdk
+, libnotify
 , makeWrapper
 , tor
 , p7zip
@@ -18,13 +19,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "briar-desktop";
-  version = "0.2.1-beta";
+  version = "0.4.0-beta";
 
-  src = fetchzip {
-    url = "https://code.briarproject.org/briar/briar-desktop/-/jobs/18424/artifacts/download?file_type=archive";
-    sha256 = "sha256-ivMbgo0+iZE4/Iffq9HUBErGIQMVLrRZUQ6R3V3X8II=";
-    extension = "zip";
+  src = fetchurl {
+    url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
+    hash = "sha256-7zeIWsdPvROHGaf5igodlZss6Gow3kp6PX+QAzmxMnw=";
   };
+
+  dontUnpack = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -33,9 +35,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
-    cp ${src}/briar-desktop.jar $out/lib/
+    cp ${src} $out/lib/briar-desktop.jar
     makeWrapper ${openjdk}/bin/java $out/bin/briar-desktop \
-      --add-flags "-jar $out/lib/briar-desktop.jar"
+      --add-flags "-jar $out/lib/briar-desktop.jar" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+        libnotify
+      ]}"
   '';
 
   fixupPhase = ''
@@ -53,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://code.briarproject.org/briar/briar-desktop";
     license = licenses.gpl3;
     maintainers = with maintainers; [ onny ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -13,7 +13,7 @@ let
   serviceName = iface: "supplicant-${if (iface=="WLAN") then "wlan@" else (
                                      if (iface=="LAN") then "lan@" else (
                                      if (iface=="DBUS") then "dbus"
-                                     else (replaceChars [" "] ["-"] iface)))}";
+                                     else (replaceStrings [" "] ["-"] iface)))}";
 
   # TODO: Use proper privilege separation for wpa_supplicant
   supplicantService = iface: suppl:
@@ -27,7 +27,7 @@ let
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
       confFileArg = optionalString (suppl.configFile.path!=null) "-c${suppl.configFile.path}";
-      extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceChars [" "] ["-"] iface}" ''
+      extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceStrings [" "] ["-"] iface}" ''
         ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
         ${optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
@@ -223,7 +223,7 @@ in
         text = ''
           ${flip (concatMapStringsSep "\n") (filter (n: n!="WLAN" && n!="LAN" && n!="DBUS") (attrNames cfg)) (iface:
             flip (concatMapStringsSep "\n") (splitString " " iface) (i: ''
-              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceChars [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
+              ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceStrings [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
           ${optionalString (hasAttr "WLAN" cfg) ''
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"

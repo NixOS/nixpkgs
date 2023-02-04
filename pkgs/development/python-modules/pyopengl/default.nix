@@ -47,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://pyopengl.sourceforge.net/";
+    homepage = "https://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
       PyOpenGL is the cross platform Python binding to OpenGL and

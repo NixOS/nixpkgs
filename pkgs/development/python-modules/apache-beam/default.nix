@@ -45,13 +45,13 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.40.0";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    rev = "v${version}";
-    sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lqGXCC66eyBnHcK06k9knggX5C+2d0m6xBAI5sh0RHo=";
   };
 
   patches = [
@@ -60,6 +60,13 @@ buildPythonPackage rec {
       name = "fix-for-dill-0.3.6.patch";
       url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
       hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
+      stripLen = 2;
+    })
+    (fetchpatch {
+      # https://github.com/apache/beam/pull/24573
+      name = "relax-httplib2-version.patch";
+      url = "https://github.com/apache/beam/commit/4045503575ae5ccef3de8d7b868c54e37fef658b.patch";
+      hash = "sha256-YqT+sHaa1R9vLQnEQN2K0lYoCdnGoPY9qduGBpXPaek=";
       stripLen = 2;
     })
   ];
@@ -114,7 +121,7 @@ buildPythonPackage rec {
     "apache_beam"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     mock
     pandas

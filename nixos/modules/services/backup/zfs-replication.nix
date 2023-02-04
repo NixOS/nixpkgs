@@ -12,7 +12,7 @@ in {
       enable = mkEnableOption (lib.mdDoc "ZFS snapshot replication.");
 
       followDelete = mkOption {
-        description = lib.mdDoc "Remove remote snapshots that don't have a local correspondant.";
+        description = lib.mdDoc "Remove remote snapshots that don't have a local correspondent.";
         default = true;
         type = types.bool;
       };
@@ -30,7 +30,7 @@ in {
       };
 
       localFilesystem = mkOption {
-        description = lib.mdDoc "Local ZFS fileystem from which snapshots should be sent.  Defaults to the attribute name.";
+        description = lib.mdDoc "Local ZFS filesystem from which snapshots should be sent.  Defaults to the attribute name.";
         example = "pool/file/path";
         type = types.str;
       };

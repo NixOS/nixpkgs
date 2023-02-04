@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "wallpapers";
     rev = version;
-    sha256 = "sha256-E/cUxa/GNt/01EjuuvurHxJu3qV9e+jcdcCi2+NxVDA=";
+    sha256 = "sha256-i9tIz5UckON8uwGlE62b/y0M0Neqt86rR3VdNUWBo04=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

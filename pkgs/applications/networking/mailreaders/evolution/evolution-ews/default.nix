@@ -17,15 +17,16 @@
 , substituteAll
 , _experimental-update-script-combinators
 , glib
+, makeHardcodeGsettingsPatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.46.1";
+  version = "3.46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "p5Jp7wnoqAuo8My8ZDMl0rsFc0158G8x8lAehWfLjb0=";
+    sha256 = "BFnqQFY2OKWllPQt3BzHGRotOCLCEcz/+82LNtMmQCU=";
   };
 
   patches = [
@@ -64,9 +65,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
       inherit src;
-      glib-schema-to-var = {
+      schemaIdToVariableMapping = {
         "org.gnome.evolution.mail" = "evo";
         "org.gnome.evolution.calendar" = "evo";
       };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
   # Only needed for tests
-  checkInputs = [ pkgs.openssl ];
+  nativeCheckInputs = [ pkgs.openssl ];
 
   meta = with lib; {
     description = "ECDSA cryptographic signature library";

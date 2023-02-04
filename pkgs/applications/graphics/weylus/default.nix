@@ -14,6 +14,7 @@
 , pango
 , pipewire
 , cmake
+, git
 , autoconf
 , libtool
 , nodePackages
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
+    git
     nodePackages.typescript
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [

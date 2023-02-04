@@ -1,24 +1,24 @@
 { lib
 , stdenv
-, alsa-lib
-, copyDesktopItems
-, CoreAudioKit
-, expat
 , fetchFromGitHub
-, fetchurl
+, alsa-lib
+, SDL2
+, SDL2_ttf
+, copyDesktopItems
+, expat
 , flac
 , fontconfig
-, ForceFeedback
 , glm
 , installShellFiles
+, libXi
+, libXinerama
 , libjpeg
 , libpcap
 , libpulseaudio
-, libXi
-, libXinerama
 , lua5_3
 , makeDesktopItem
 , makeWrapper
+, papirus-icon-theme
 , pkg-config
 , portaudio
 , portmidi
@@ -26,32 +26,27 @@
 , python3
 , qtbase
 , rapidjson
-, SDL2
-, SDL2_ttf
 , sqlite
 , utf8proc
 , which
 , writeScript
 , zlib
+, darwin
 }:
 
 let
-  # Get icon from Arch Linux package
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/614b24ef3856cb52b5cafc386b0f77923cbc9156/trunk/mame.svg";
-    sha256 = "sha256-F8RCyTPXZBdeTOHeUKgMDC3dXXM8rwnDzV5rppesQ/Q=";
-  };
-  dest = "$out/opt/mame";
+  inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.249";
+  version = "0.251";
+  srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
-    rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
-    sha256 = "sha256-im6y/E0pQxruX2kNXZLE3fHq+zXfsstnOoC1QvH4fd4=";
+    rev = "mame${srcVersion}";
+    hash = "sha256-x+QV4gunnERBHyYB2fXJ2LvMv437Z2omvk+fYkmZfqA=";
   };
 
   outputs = [ "out" "tools" ];
@@ -109,15 +104,17 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # by default MAME assumes that paths with stock resources
-    # are relative and that you run MAME changing to
-    # install directory, so we add absolute paths here
-    ./emuopts.patch
+    # by default MAME assumes that paths with stock resources are relative and
+    # that you run MAME changing to install directory, so we add absolute paths
+    # here
+    ./001-use-absolute-paths.diff
   ];
 
+  # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
+  # it is not possible to use substituteAll
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \
-      --subst-var-by mame ${dest}
+      --subst-var-by mamePath "$out/opt/mame"
   '';
 
   desktopItems = [
@@ -134,23 +131,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installPhase = ''
+  # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
+  # to the final package after we figure out how they work
+  installPhase = let
+    icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
+  in ''
     runHook preInstall
 
     # mame
-    mkdir -p ${dest}
+    mkdir -p $out/opt/mame
 
     install -Dm755 mame -t $out/bin
     install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
     installManPage docs/man/*.1 docs/man/*.6
-    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} ${dest}
-    # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
-    # to the final package after we figure out how they work
+    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
 
     # mame-tools
-    for _i in castool chdman floptool imgtool jedutil ldresample ldverify nltool nlwav pngcmp regrep romcmp \
-              split srcclean testkeys unidasm; do
-      install -Dm755 $_i -t $tools/bin
+    for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
+                 nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
+                 unidasm; do
+       install -Dm755 $_tool -t $tools/bin
     done
     mv $tools/bin/{,mame-}split
 
@@ -176,11 +176,26 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
+    description = "A multi-purpose emulation framework";
+    longDescription = ''
+      MAME's purpose is to preserve decades of software history. As electronic
+      technology continues to rush forward, MAME prevents this important
+      "vintage" software from being lost and forgotten. This is achieved by
+      documenting the hardware and how it functions. The source code to MAME
+      serves as this documentation. The fact that the software is usable serves
+      primarily to validate the accuracy of the documentation (how else can you
+      prove that you have recreated the hardware faithfully?). Over time, MAME
+      (originally stood for Multiple Arcade Machine Emulator) absorbed the
+      sister-project MESS (Multi Emulator Super System), so MAME now documents a
+      wide variety of (mostly vintage) computers, video game consoles and
+      calculators, in addition to the arcade video games that were its initial
+      focus.
+    '';
+    changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
     license = with licenses; [ bsd3 gpl2Plus ];
-    platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

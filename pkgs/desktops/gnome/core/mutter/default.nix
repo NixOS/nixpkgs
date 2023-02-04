@@ -47,15 +47,15 @@
 , wayland-protocols
 }:
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.1";
+  version = "43.2";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "8vCLJSeDlIpezILwDp6TWmHrv4VkhEvdkniKtEqngmQ=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+    sha256 = "/S63B63DM8wnevhoXlzzkTXhxNeYofnQXojkU9w+u4Q=";
   };
 
   patches = [
@@ -150,12 +150,12 @@ let self = stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${self}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
-        if [[ ! -d ${self.libdir} ]]; then
-          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+        if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
         fi
         touch $out
@@ -163,8 +163,8 @@ let self = stdenv.mkDerivation rec {
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "mutter";
+      attrPath = "gnome.mutter";
     };
   };
 
@@ -175,5 +175,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-};
-in self
+})

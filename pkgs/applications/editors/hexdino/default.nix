@@ -1,19 +1,17 @@
-{ lib, fetchFromGitHub, rustPlatform, ncurses }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hexdino";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "Luz";
     repo = pname;
     rev = version;
-    sha256 = "1n8gizawx8h58hpyyqivp7vwy7yhn6scipl5rrbvkpnav8qpmk1r";
+    sha256 = "sha256-OFtOa6StpOuLgkULnY5MlqDcSTEiMxogowHIBEiGr4E=";
   };
 
-  cargoSha256 = "01869b1d7gbsprcxxj7h9z16pvnzb02j2hywh97gfq5x96gnmkz3";
-
-  buildInputs = [ ncurses ];
+  cargoSha256 = "sha256-lvLiRQNH3rpu+JTXWhQtXczmGRWGtnnLDknZaMp3d0s=";
 
   meta = with lib; {
     description = "A hex editor with vim like keybindings written in Rust";

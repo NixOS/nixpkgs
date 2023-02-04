@@ -12,9 +12,16 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  # no source repository can be found for this extension
+  "floating-panel@aylur" = "floating-panel";
+  "floating-panel-usedbymyself@wpism" = null;
+
   # forks of each other, azan@faissal.bensefia.id is more recent
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
+
+  "noannoyance@sindex.com" = "noannoyance";
+  "noannoyance@daase.net" = "noannoyance-2";
 
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
@@ -62,9 +69,6 @@
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
   "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
-
-  "noannoyance@sindex.com" = "noannoyance";
-  "noannoyance@daase.net" = "noannoyance-2";
 
   "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
   "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";

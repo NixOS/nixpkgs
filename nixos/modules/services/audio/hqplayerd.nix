@@ -82,7 +82,6 @@ in
       etc = {
         "hqplayer/hqplayerd.xml" = mkIf (cfg.config != null) { source = pkgs.writeText "hqplayerd.xml" cfg.config; };
         "hqplayer/hqplayerd4-key.xml" = mkIf (cfg.licenseFile != null) { source = cfg.licenseFile; };
-        "modules-load.d/taudio2.conf".source = "${pkg}/etc/modules-load.d/taudio2.conf";
       };
       systemPackages = [ pkg ];
     };
@@ -90,8 +89,6 @@ in
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 8088 4321 ];
     };
-
-    services.udev.packages = [ pkg ];
 
     systemd = {
       tmpfiles.rules = [

@@ -40,7 +40,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pydantic
     pytest-mypy-plugins

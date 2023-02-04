@@ -109,8 +109,9 @@ rec {
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
 
-  /* doBenchmark enables dependency checking, compilation and execution
+  /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
+     Benchmarks are, however, not executed at the moment.
    */
   doBenchmark = overrideCabal (drv: { doBenchmark = true; });
   /* dontBenchmark disables dependency checking, compilation and execution
@@ -355,7 +356,7 @@ rec {
    */
   triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  /* Override the sources for the package and optionaly the version.
+  /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
    */
   overrideSrc = { src, version ? null }: drv:

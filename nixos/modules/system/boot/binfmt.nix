@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString stringAfter;
 
   cfg = config.boot.binfmt;
 
@@ -281,7 +281,7 @@ in {
   config = {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
-      value = let
+      value = { config, ... }: let
         interpreter = getEmulator system;
         qemuArch = getQemuArch system;
 
@@ -292,13 +292,13 @@ in {
         in
           if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
           else interpreter;
-      in {
-        inherit preserveArgvZero;
+      in ({
+        preserveArgvZero = mkDefault preserveArgvZero;
 
-        interpreter = interpreterReg;
-        wrapInterpreterInShell = !preserveArgvZero;
-        interpreterSandboxPath = dirOf (dirOf interpreterReg);
-      } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
+        interpreter = mkDefault interpreterReg;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
+      } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
     nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
       extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";

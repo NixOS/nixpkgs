@@ -9,10 +9,17 @@ buildDunePackage {
   pname = "cohttp-lwt-unix";
   inherit (cohttp-lwt) version src;
 
+  duneVersion = "3";
+
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
+    cohttp-lwt
+    conduit-lwt
+    conduit-lwt-unix
+    fmt
+    logs
+    magic-mime
   ];
 
   # TODO(@sternenseemann): fail for unknown reason

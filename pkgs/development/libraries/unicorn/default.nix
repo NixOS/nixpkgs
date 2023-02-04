@@ -9,20 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "unicorn";
-  version = "2.0.1";
+  version = "2.0.1.post1";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = pname;
     rev = version;
-    hash = "sha256-D8kwrHo58zksVjB13VtzoVqmz++FRfJ4zI2CT+YeBVE=";
+    hash = "sha256-Jz5C35rwnDz0CXcfcvWjkwScGNQO1uijF7JrtZhM7mI=";
   };
-
-  patches = [
-    # Fix compilation on aarch64-darwin
-    # See https://github.com/unicorn-engine/unicorn/issues/1730
-    ./tests_unit_endian_aarch64.patch
-  ];
 
   nativeBuildInputs = [
     cmake

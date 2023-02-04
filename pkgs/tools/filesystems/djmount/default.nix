@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = {
-    homepage = "http://djmount.sourceforge.net/";
+    homepage = "https://djmount.sourceforge.net/";
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jagajaga ];

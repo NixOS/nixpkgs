@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "1.5";
 
   propagatedBuildInputs = [ simplejson setproctitle redis pkgs.ps ];
-  checkInputs = [ nose pkgs.redis ];
+  nativeCheckInputs = [ nose pkgs.redis ];
 
   # PyPI tarball doesn't contain tests so let's use GitHub
   src = fetchFromGitHub {

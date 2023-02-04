@@ -13,6 +13,7 @@ with import <nixpkgs> {};
 
 let
   androidComposition = androidenv.composeAndroidPackages {
+    cmdLineToolsVersion = "8.0";
     toolsVersion = "26.1.1";
     platformToolsVersion = "30.0.5";
     buildToolsVersions = [ "30.0.3" ];
@@ -42,7 +43,10 @@ exceptions are the tools, platform-tools and build-tools sub packages.
 
 The following parameters are supported:
 
-* `toolsVersion`, specifies the version of the tools package to use
+* `cmdLineToolsVersion `, specifies the version of the `cmdline-tools` package to use
+* `toolsVersion`, specifies the version of the `tools` package. Notice `tools` is
+  obsolete, and currently only `26.1.1` is available, so there's not a lot of
+  options here, however, you can set it as `null` if you don't want it.
 * `platformsToolsVersion` specifies the version of the `platform-tools` plugin
 * `buildToolsVersions` specifies the versions of the `build-tools` plugins to
   use.
@@ -232,7 +236,6 @@ androidenv.emulateApp {
   platformVersion = "24";
   abiVersion = "armeabi-v7a"; # mips, x86, x86_64
   systemImageType = "default";
-  useGoogleAPIs = false;
   app = ./MyApp.apk;
   package = "MyApp";
   activity = "MainActivity";

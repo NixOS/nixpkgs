@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
-    badPlatforms = [ platforms.aarch64 ];
+    badPlatforms = platforms.aarch64;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.34";
+  version = "3.24.36";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
+    sha256 = "sha256-J6bvFXdDNQyAf/6lm6odcCJtvt6CpelT/9WOpgWf5pE=";
   };
 
   patches = [
@@ -110,7 +110,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
@@ -134,6 +133,8 @@ stdenv.mkDerivation rec {
     libSM
     libXcomposite
     libXcursor
+    libXdamage
+    libXfixes
     libXi
     libXrandr
     libXrender

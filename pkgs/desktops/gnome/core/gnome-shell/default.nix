@@ -68,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.1";
+  version = "43.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "3wREdl3vG9Cv7pYX0rWRm8ebTbhufnV6wOH3N0jsG9w=";
+    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
   };
 
   patches = [

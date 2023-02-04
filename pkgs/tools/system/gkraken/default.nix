@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     meson
     pkg-config
+    gobject-introspection
     glib
     ninja
     gtk3

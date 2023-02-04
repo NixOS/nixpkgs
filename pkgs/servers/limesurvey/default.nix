@@ -37,5 +37,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
+    knownVulnerabilities = [
+      "CVE-2022-48008"
+      "CVE-2022-48010"
+    ];
   };
 }

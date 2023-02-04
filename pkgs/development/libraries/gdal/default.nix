@@ -61,13 +61,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.5.2";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "sha256-jtAFI1J64ZaTqIljqQL1xOiTGC79AZWcIgidozWczMM=";
+    hash = "sha256-fdj/o+dm7V8QLrjnaQobaFX80+penn+ohx/yNmUryRA=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/mysql/libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
-  installCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
     lxml
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${src.rev}/RELEASE_NOTES.html";
+    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcweber dotlambda ];
     platforms = lib.platforms.unix;

@@ -1,0 +1,76 @@
+.Dd January 1, 1980
+.\" nixpkgs groff will use Nixpkgs as the OS in the title by default, taking it from
+.\" doc-default-operating-system. mandoc doesn't have this register set by default,
+.\" so we can use it as a groff/mandoc switch.
+.ie ddoc-default-operating-system .Dt nixos-enter \&8 "NixOS System Manager's Manual"
+.el .Dt nixos-enter 8
+.Os NixOS
+.Sh NAME
+.Nm nixos-enter
+.Nd run a command in a NixOS chroot environment
+.
+.
+.
+.Sh SYNOPSIS
+.Nm nixos-enter
+.Op Fl -root Ar root
+.Op Fl -system Ar system
+.Op Fl -command | c Ar shell-command
+.Op Fl -silent
+.Op Fl -help
+.Op Fl - Ar arguments ...
+.
+.
+.
+.Sh DESCRIPTION
+This command runs a command in a NixOS chroot environment, that is, in a filesystem hierarchy previously prepared using
+.Xr nixos-install 8 .
+.
+.
+.
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl -root Ar root
+The path to the NixOS system you want to enter. It defaults to
+.Pa /mnt Ns
+\&.
+.It Fl -system Ar system
+The NixOS system configuration to use. It defaults to
+.Pa /nix/var/nix/profiles/system Ns
+\&. You can enter a previous NixOS configuration by specifying a path such as
+.Pa /nix/var/nix/profiles/system-106-link Ns
+\&.
+.
+.It Fl -command Ar shell-command , Fl c Ar shell-command
+The bash command to execute.
+.
+.It Fl -silent
+Suppresses all output from the activation script of the target system.
+.
+.It Fl -
+Interpret the remaining arguments as the program name and arguments to be invoked.
+The program is not executed in a shell.
+.El
+.
+.
+.
+.Sh EXAMPLES
+.Bl -tag -width indent
+.It Ic nixos-enter --root /mnt
+Start an interactive shell in the NixOS installation in
+.Pa /mnt Ns .
+.
+.It Ic nixos-enter -c 'ls -l /; cat /proc/mounts'
+Run a shell command.
+.
+.It Ic nixos-enter -- cat /proc/mounts
+Run a non-shell command.
+.El
+.
+.
+.
+.Sh AUTHORS
+.An -nosplit
+.An Eelco Dolstra
+and
+.An the Nixpkgs/NixOS contributors

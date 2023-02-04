@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://apgdiff.com";
     license = licenses.mit;
     inherit (jre.meta) platforms;
-    sourceProvenance = sourceTypes.binaryBytecode;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
     maintainers = [ maintainers.misterio77 ];
   };
 })

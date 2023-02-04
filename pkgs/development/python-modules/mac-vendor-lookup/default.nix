@@ -13,8 +13,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bauerj";
     repo = "mac_vendor_lookup";
-    rev = "5b57faac0c5a701a7e18085e331853397b68c07c";
-    hash = "sha256-F/aiMs+J4bAesr6mKy+tYVjAjZ3l9vyHxV7zaaB6KbA=";
+    rev = "90dbea48f8a9d567b5f9039ebd151ddfe7d12a19";
+    hash = "sha256-mPPJDrWdyvkTdb4WfeTNYwuC+Ek9vH7ORKRTREg+vK8=";
   };
 
   postPatch = ''

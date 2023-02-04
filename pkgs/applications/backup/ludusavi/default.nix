@@ -13,7 +13,7 @@
 , libXrandr
 , libXi
 , gnome
-, kdialog
+, libsForQt5
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/$pname"
-      wrapProgram $out/bin/$pname --prefix PATH : ${lib.makeBinPath [ gnome.zenity kdialog ]}
+      wrapProgram $out/bin/$pname --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
     '';
 
 

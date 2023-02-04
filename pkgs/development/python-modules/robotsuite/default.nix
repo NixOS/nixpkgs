@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, unittest2
 , lxml
 , robotframework
 , pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -16,16 +16,13 @@ buildPythonPackage rec {
     sha256 = "sha256-iugVKUPl6HTTO8K1EbSqAk1fl/fsEPoOcsOnnAgcEas=";
   };
 
-  buildInputs = [
-    unittest2
-  ];
-
   propagatedBuildInputs = [
     robotframework
     lxml
+    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

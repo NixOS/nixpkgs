@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ glibcLocales ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # I don't know enough about crystal structures to fix
   checkPhase = ''

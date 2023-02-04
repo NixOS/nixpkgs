@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/sieve-connect \
       --prefix PERL5LIB : "${with perlPackages; makePerlPath [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
+        AuthenSASL Socket6 IOSocketINET6 IOSocketSSL NetSSLeay NetDNS
         TermReadKey TermReadLineGnu ]}"
   '';
 

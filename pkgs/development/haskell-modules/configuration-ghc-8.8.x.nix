@@ -66,6 +66,9 @@ self: super: {
     process = self.process_1_6_16_0;
   });
 
+  # Additionally depends on OneTuple for GHC < 9.0
+  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
+
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
@@ -73,7 +76,7 @@ self: super: {
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
-  hashable = doJailbreak super.hashable;
+  hashable = addBuildDepend self.base-orphans super.hashable;
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
@@ -123,45 +126,26 @@ self: super: {
   liquidhaskell = markBroken super.liquidhaskell;
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_5;
-
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
-  # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+  exceptions = super.exceptions_0_10_7;
 
   ormolu = super.ormolu_0_2_0_0;
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
-  ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
+  ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
 
   mime-string = disableOptimization super.mime-string;
 
-  haskell-language-server = addBuildDepend self.hls-brittany-plugin (super.haskell-language-server.overrideScope (lself: lsuper: {
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
-    # Pick old ormolu and fourmolu because ghc-lib-parser is not compatible
-    ormolu = doJailbreak lself.ormolu_0_1_4_1;
-    fourmolu = doJailbreak lself.fourmolu_0_3_0_0;
-    hlint = lself.hlint_3_2_8;
-    aeson = lself.aeson_1_5_6_0;
-    stylish-haskell = lself.stylish-haskell_0_13_0_0;
-    lsp-types = doJailbreak lsuper.lsp-types;
-  }));
+  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.8 in version 1.9.0.0 please use a newer ghc version or an older nixpkgs version";
 
-  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
-    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = lself.hlint_3_2_8;
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
-  });
+  hlint = self.hlint_3_2_8;
 
-  hls-brittany-plugin = super.hls-brittany-plugin.overrideScope (lself: lsuper: {
-    brittany = doJailbreak lself.brittany_0_13_1_2;
-    aeson = lself.aeson_1_5_6_0;
-    lsp-types = doJailbreak lsuper.lsp-types;
-  });
+  ghc-lib-parser = self.ghc-lib-parser_8_10_7_20220219;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
@@ -189,4 +173,11 @@ self: super: {
   # Unnecessarily strict lower bound on base
   # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
   megaparsec = doJailbreak super.megaparsec;
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+  apply-refact = self.apply-refact_0_9_3_0;
 }

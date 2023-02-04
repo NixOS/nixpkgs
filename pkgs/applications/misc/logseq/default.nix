@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, appimage-run
+, makeWrapper
+, git
+}:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.8.11";
+  version = "0.8.16";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "sha256-c8gP7OJwnCEXnT2FQH1ttYRzZfbcJL86FX2JQezJI+s=";
+    sha256 = "sha256-0tIDoNQoqSn1nYm+YdgzXh34aH1e5N8wl9lqGbQoOeU=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -23,28 +30,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/applications
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications $out/share/${pname}/resources/app/icons
+    cp -a ${appimageContents}/resources/app/icons/logseq.png $out/share/${pname}/resources/app/icons/logseq.png
     cp -a ${appimageContents}/Logseq.desktop $out/share/applications/${pname}.desktop
 
-    # remove the `git` in `dugite` because we want the `git` in `nixpkgs`
-    chmod +w -R $out/share/${pname}/resources/app/node_modules/dugite/git
-    chmod +w $out/share/${pname}/resources/app/node_modules/dugite
-    rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
-    chmod -w $out/share/${pname}/resources/app/node_modules/dugite
+    # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
+    makeWrapper ${appimage-run}/bin/appimage-run $out/bin/logseq \
+      --set "LOCAL_GIT_DIRECTORY" ${git} \
+      --add-flags ${src}
 
+    # Make the desktop entry run the app using appimage-run
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace Exec=Logseq Exec=${pname} \
+      --replace Exec=Logseq "Exec=$out/bin/logseq" \
       --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --set "LOCAL_GIT_DIRECTORY" ${git} \
-      --add-flags $out/share/${pname}/resources/app
   '';
 
   passthru.updateScript = ./update.sh;
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
+    changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ weihua ];
     platforms = [ "x86_64-linux" ];

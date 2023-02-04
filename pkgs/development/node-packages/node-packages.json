@@ -1,6 +1,5 @@
 [
   "@angular/cli"
-, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
@@ -12,6 +11,7 @@
 , "@forge/cli"
 , "@google/clasp"
 , "@medable/mdctl-cli"
+, "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
@@ -117,7 +117,6 @@
 , "csslint"
 , "dat"
 , "degit"
-, {"deltachat-desktop": "../../applications/networking/instant-messengers/deltachat-desktop"}
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
@@ -184,7 +183,6 @@
 , "insect"
 , "intelephense"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v15.6.3.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -250,7 +248,6 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
-, {"photoprism-frontend": "../../servers/photoprism"}
 , "pkg"
 , "pm2"
 , "pnpm"

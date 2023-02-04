@@ -12,22 +12,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
   buildInputs = [
     SDL2
   ];
 
-  configurePhase = ''
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-  '';
-
-  buildPhase = ''
-    cmake --build build
-  '';
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   installPhase = ''
-    mv build $out
+    runHook preInstall
+    mkdir -p "$out/bin"
+    mv Nanosaur Data ReadMe.txt "$out/"
     makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -38,9 +38,7 @@ stdenv.mkDerivation rec {
       And you get to shoot at T-Rexes with nukes.
     '';
     homepage = "https://github.com/jorio/Nanosaur";
-    license = with licenses; [
-      cc-by-sa-40
-    ];
+    license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
   };

@@ -5,20 +5,20 @@
 
 buildGoModule rec {
   pname = "ferretdb";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    sha256 = "sha256-oSNE7JJwni+X5AiAmHLuxVI9gMh3AT84xejWgmJSlzk=";
+    sha256 = "sha256-i3XCYVJfZ2sF4XGOxaBZqBOw7nRdzcGKhNNdqQMccPU=";
   };
 
   postPatch = ''
     echo ${version} > internal/util/version/gen/version.txt
   '';
 
-  vendorSha256 = "sha256-H/EXUPNMTD6mgcUFupxL5wTLHvAlH5L6bv2GmvsbKms=";
+  vendorSha256 = "sha256-qyAc5EVg8QPTnXQjqJGpT3waDrfn8iXz+O1iESCzCIc=";
 
   CGO_ENABLED = 0;
 

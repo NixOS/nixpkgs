@@ -21,7 +21,7 @@ set -eu
 echo "testBuildFailure: Expecting non-zero exit from builder and args: ${*@Q}"
 
 ("$@" 2>&1) | @coreutils@/bin/tee $TMPDIR/testBuildFailure.log \
-  | while read ln; do
+  | while IFS= read -r ln; do
     echo "original builder: $ln"
   done
 
@@ -34,8 +34,17 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 
 # -----------------------------------------
 # Write the build log to the default output
+#
+# # from stdenv setup.sh
+getAllOutputNames() {
+    if [ -n "$__structuredAttrs" ]; then
+        echo "${!outputs[*]}"
+    else
+        echo "$outputs"
+    fi
+}
 
-outs=( $outputs )
+outs=( $(getAllOutputNames) )
 defOut=${outs[0]}
 defOutPath=${!defOut}
 

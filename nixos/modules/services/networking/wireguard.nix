@@ -251,6 +251,21 @@ let
         '';
       };
 
+      dynamicEndpointRefreshRestartSeconds = mkOption {
+        default = null;
+        example = 5;
+        type = with types; nullOr ints.unsigned;
+        description = lib.mdDoc ''
+          When the dynamic endpoint refresh that is configured via
+          dynamicEndpointRefreshSeconds exits (likely due to a failure),
+          restart that service after this many seconds.
+
+          If set to `null` the value of
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          will be used as the default.
+        '';
+      };
+
       persistentKeepalive = mkOption {
         default = null;
         type = with types; nullOr int;
@@ -288,7 +303,7 @@ let
           set -e
 
           # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
+          # Otherwise, does nothing, keeping existing permissions intact.
           mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
 
           if [ ! -f "${values.privateKeyFile}" ]; then
@@ -300,7 +315,7 @@ let
 
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
+      keyToUnitName = replaceStrings
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
       unitName = keyToUnitName publicKey;
@@ -348,7 +363,16 @@ let
                 # cannot be used with systemd timers (see `man systemd.timer`),
                 # which is why `simple` with a loop is the best choice here.
                 # It also makes starting and stopping easiest.
+                #
+                # Restart if the service exits (e.g. when wireguard gives up after "Name or service not known" dns failures):
+                Restart = "always";
+                RestartSec = if null != peer.dynamicEndpointRefreshRestartSeconds
+                             then peer.dynamicEndpointRefreshRestartSeconds
+                             else peer.dynamicEndpointRefreshSeconds;
               };
+        unitConfig = lib.optionalAttrs dynamicRefreshEnabled {
+          StartLimitIntervalSec = 0;
+        };
 
         script = let
           wg_setup = concatStringsSep " " (

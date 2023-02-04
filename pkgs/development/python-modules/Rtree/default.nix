@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libspatialindex ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];

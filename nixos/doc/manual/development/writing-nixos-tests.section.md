@@ -165,7 +165,7 @@ The following methods are available on machine objects:
 `get_screen_text_variants`
 
 :   Return a list of different interpretations of what is currently
-    visible on the machine\'s screen using optical character
+    visible on the machine's screen using optical character
     recognition. The number and order of the interpretations is not
     specified and is subject to change, but if no exception is raised at
     least one will be returned.
@@ -177,7 +177,7 @@ The following methods are available on machine objects:
 `get_screen_text`
 
 :   Return a textual representation of what is currently visible on the
-    machine\'s screen using optical character recognition.
+    machine's screen using optical character recognition.
 
     ::: {.note}
     This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
@@ -273,12 +273,13 @@ The following methods are available on machine objects:
 
 `wait_for_open_port`
 
-:   Wait until a process is listening on the given TCP port (on
-    `localhost`, at least).
+:   Wait until a process is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_closed_port`
 
-:   Wait until nobody is listening on the given TCP port.
+:   Wait until nobody is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_x`
 
@@ -298,7 +299,7 @@ The following methods are available on machine objects:
 
 :   Wait until the supplied regular expressions match a line of the
     serial console output. This method is useful when OCR is not
-    possibile or accurate enough.
+    possible or accurate enough.
 
 `wait_for_window`
 
@@ -350,8 +351,8 @@ machine.wait_for_unit("xautolock.service", "x-session-user")
 This applies to `systemctl`, `get_unit_info`, `wait_for_unit`,
 `start_job` and `stop_job`.
 
-For faster dev cycles it\'s also possible to disable the code-linters
-(this shouldn\'t be commited though):
+For faster dev cycles it's also possible to disable the code-linters
+(this shouldn't be committed though):
 
 ```nix
 {
@@ -370,7 +371,7 @@ For faster dev cycles it\'s also possible to disable the code-linters
 
 This will produce a Nix warning at evaluation time. To fully disable the
 linter, wrap the test script in comment directives to disable the Black
-linter directly (again, don\'t commit this within the Nixpkgs
+linter directly (again, don't commit this within the Nixpkgs
 repository):
 
 ```nix

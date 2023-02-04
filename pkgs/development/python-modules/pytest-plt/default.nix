@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-IkTNlierFXIG9WSVUfVoirfQ6z7JOYlCaa5NhnBSuxc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
   ];

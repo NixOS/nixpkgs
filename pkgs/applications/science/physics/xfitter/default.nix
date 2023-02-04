@@ -13,7 +13,7 @@
 , lhapdf
 , libtirpc
 , libyaml
-, libyamlcpp
+, yaml-cpp
 , pkg-config
 , qcdnum
 , root
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gfortran pkg-config ];
   buildInputs =
-    [ apfel blas ceres-solver lhapdf lapack libyaml root qcdnum gsl libyamlcpp zlib ]
+    [ apfel blas ceres-solver lhapdf lapack libyaml root qcdnum gsl yaml-cpp zlib ]
     ++ lib.optionals ("5" == lib.versions.major root.version) [ apfelgrid applgrid ]
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook memstreamHook ]
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc

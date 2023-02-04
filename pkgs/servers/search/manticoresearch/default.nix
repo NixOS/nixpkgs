@@ -58,12 +58,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_GALERA=0"
+    "-DWITH_MYSQL=1"
+    "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
+    "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
   ];
 
   meta = with lib; {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
     license = licenses.gpl2;
+    mainProgram = "searchd";
     maintainers = with maintainers; [ jdelStrother ];
     platforms = platforms.all;
   };

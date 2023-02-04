@@ -1,4 +1,5 @@
-{ lib, buildDunePackage
+{ lib
+, buildDunePackage
 , git
 , mimic
 , mimic-happy-eyeballs
@@ -43,6 +44,7 @@ buildDunePackage {
   inherit (git) version src;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   buildInputs = [
     dns

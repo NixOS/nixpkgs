@@ -54,7 +54,7 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook makefun ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";

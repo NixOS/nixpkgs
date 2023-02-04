@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, GitPython
+, gitpython
 , isort
 , jupyter-client
 , jupyter-packaging
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
+    hash = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
   };
 
   patches = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
-    GitPython
+  nativeCheckInputs = [
+    gitpython
     isort
     jupyter-client
     notebook

@@ -18,7 +18,7 @@ let
   repo  = "math-comp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with versions; lib.switch coq.coq-version [
       { case = range "8.14" "8.16"; out = "1.15.0"; }
       { case = range "8.11" "8.15"; out = "1.14.0"; }
       { case = range "8.11" "8.15"; out = "1.13.0"; }
@@ -50,7 +50,7 @@ let
 
   mathcomp_ = package: let
       mathcomp-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (pred.equal package) packages));
+        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''

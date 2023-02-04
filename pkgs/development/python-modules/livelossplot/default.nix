@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ bokeh ipython matplotlib numpy ];
 
-  checkInputs = [ nbconvert nbformat pytestCheckHook ];
+  nativeCheckInputs = [ nbconvert nbformat pytestCheckHook ];
 
   meta = with lib; {
     description = "Live training loss plot in Jupyter for Keras, PyTorch, and others";

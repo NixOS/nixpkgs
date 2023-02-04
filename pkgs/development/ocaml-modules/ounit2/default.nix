@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ seq stdlib-shims ];
 
   doCheck = true;
-  checkInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
+  nativeCheckInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   meta = with lib; {
     homepage = "https://github.com/gildor478/ounit";

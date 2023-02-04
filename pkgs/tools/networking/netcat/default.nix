@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utility which reads and writes data across network connections";
-    homepage = "http://netcat.sourceforge.net/";
+    homepage = "https://netcat.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

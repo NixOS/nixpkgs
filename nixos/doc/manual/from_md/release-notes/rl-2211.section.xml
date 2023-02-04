@@ -1,48 +1,207 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.11">
-  <title>Release 22.11 (“Raccoon”, 2022.11/??)</title>
+  <title>Release 22.11 (“Raccoon”, 2022.11/30)</title>
   <para>
-    Support is planned until the end of June 2023, handing over to
-    23.05.
+    The NixOS release team is happy to announce a new version of NixOS
+    22.11. NixOS is a Linux distribution, whose set of packages can also
+    be used on other Linux systems and macOS.
+  </para>
+  <para>
+    This release is supported until the end of June 2023, handing over
+    to NixOS 23.05.
+  </para>
+  <para>
+    To upgrade to the latest release follow the
+    <link linkend="sec-upgrading">upgrade chapter</link>.
   </para>
   <section xml:id="sec-release-22.11-highlights">
     <title>Highlights</title>
     <para>
       In addition to numerous new and upgraded packages, this release
-      has the following highlights:
+      includes the following highlights:
     </para>
     <itemizedlist>
       <listitem>
         <para>
-          GNOME has been upgraded to 43. Please take a look at their
-          <link xlink:href="https://release.gnome.org/43/">Release
-          Notes</link> for details.
+          Software that uses the <literal>crypt</literal> password
+          hashing API is now using the implementation provided by
+          <link xlink:href="https://github.com/besser82/libxcrypt"><literal>libxcrypt</literal></link>
+          instead of glibc’s, which enables support for more secure
+          algorithms.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Support for algorithms that <literal>libxcrypt</literal>
+              <link xlink:href="https://github.com/besser82/libxcrypt/blob/v4.4.28/lib/hashes.conf#L41">does
+              not consider strong</link> are
+              <emphasis role="strong">deprecated</emphasis> as of this
+              release, and will be removed in NixOS 23.05.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              This includes system login passwords. Given this, we
+              <emphasis role="strong">strongly encourage</emphasis> all
+              users to update their system passwords, as you will be
+              unable to login if password hashes are not migrated by the
+              time their support is removed.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  When using
+                  <literal>users.users.&lt;name&gt;.hashedPassword</literal>
+                  to configure user passwords, run
+                  <literal>mkpasswd</literal>, and use the yescrypt hash
+                  that is provided as the new value.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  On the other hand, for interactively configured user
+                  passwords, simply re-set the passwords for all users
+                  with <literal>passwd</literal>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  This release introduces warnings for the use of
+                  deprecated hash algorithms for both methods of
+                  configuring passwords. To make sure you migrated
+                  correctly, run
+                  <literal>nixos-rebuild switch</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The NixOS documentation is now generated from markdown. While
+          docbook is still part of the documentation build process, it’s
+          a big step towards the full migration.
         </para>
       </listitem>
       <listitem>
         <para>
-          During cross-compilation, tests are now executed if the test
-          suite can be executed by the build platform. This is the case
-          when doing “native” cross-compilation where the build and host
-          platforms are largely the same, but the nixpkgs’ cross
-          compilation infrastructure is used, e.g.
-          <literal>pkgsStatic</literal> and <literal>pkgsLLVM</literal>.
-          Another possibility is that the build platform is a superset
-          of the host platform, e.g. when cross-compiling from
-          <literal>x86_64-unknown-linux</literal> to
-          <literal>i686-unknown-linux</literal>. The predicate gating
-          test suite execution is the newly added
-          <literal>canExecute</literal> predicate: You can e.g. check if
-          <literal>stdenv.buildPlatform</literal> can execute binaries
-          built for <literal>stdenv.hostPlatform</literal> (i.e.
-          produced by <literal>stdenv.cc</literal>) by evaluating
-          <literal>stdenv.buildPlatform.canExecute stdenv.hostPlatform</literal>.
+          <literal>aarch64-linux</literal> is now included in the
+          <literal>nixos-22.11</literal> and
+          <literal>nixos-22.11-small</literal> channels. This means that
+          when those channel update, both
+          <literal>x86_64-linux</literal> and
+          <literal>aarch64-linux</literal> will be available in the
+          binary cache.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <literal>nixpkgs.hostPlatform</literal> and
-          <literal>nixpkgs.buildPlatform</literal> options have been
-          added. These cover and override the
+          <literal>aarch64-linux</literal> ISOs are now available on the
+          <link xlink:href="https://nixos.org/download.html">downloads
+          page</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nsncd</literal> is now available as a replacement of
+          <literal>nscd</literal>.
+        </para>
+        <para>
+          <literal>nscd</literal> is responsible for resolving
+          hostnames, users and more in NixOS and has been a long
+          standing source of bugs, such as sporadic network freezes.
+        </para>
+        <para>
+          More context in this
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135888">issue</link>.
+        </para>
+        <para>
+          Help us test the new implementation by setting
+          <literal>services.nscd.enableNsncd</literal> to
+          <literal>true</literal>.
+        </para>
+        <para>
+          We plan to use <literal>nsncd</literal> by default in NixOS
+          23.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Linode cloud images are now supported by importing
+          <literal>${modulesPath}/virtualisation/linode-image.nix</literal>
+          and accessing <literal>system.build.linodeImage</literal> on
+          the output.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hardware.nvidia</literal> has a new option,
+          <literal>hardware.nvidia.open</literal>, that can be used to
+          enable the usage of NVIDIA’s open-source kernel driver. Note
+          that the driver’s support for GeForce and Workstation GPUs is
+          still alpha quality, see
+          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">the
+          release announcement</link> for more information.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>emacs</literal> package now makes use of native
+          compilation which means:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Emacs packages from Nixpkgs, builtin or not, will do
+              native compilation ahead of time so you can enjoy the
+              benefit of native compilation without compiling them on
+              you machine;
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Emacs packages from somewhere else, e.g.
+              <literal>package-install</literal>, will perform
+              asynchronously deferred native compilation. If you do not
+              want this, maybe to avoid CPU consumption for compilation,
+              you can use
+              <literal>(setq native-comp-deferred-compilation nil)</literal>
+              to disable it while still benefiting from native
+              compilation for packages from Nixpkgs.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-internal">
+    <title>Internal changes</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Haskell <literal>ghcWithPackages</literal> is now up to 15
+          times faster to evaluate, thanks to changing
+          <literal>lib.closePropagation</literal> from a quadratic to
+          linear complexity. Please see backward incompatibilities notes
+          below.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/194391">https://github.com/NixOS/nixpkgs/pull/194391</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For cross-compilation targets that can also run on the
+          building machine, we now run tests. This, for example, is the
+          case for the <literal>pkgsStatic</literal> and
+          <literal>pkgsLLVM</literal> package sets or i686 packages on
+          <literal>x86_64</literal> machines.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          To simplify cross-compilation in NixOS, this release
+          introduces the <literal>nixpkgs.hostPlatform</literal> and
+          <literal>nixpkgs.buildPlatform</literal> options. These cover
+          and override the
           <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
           options.
         </para>
@@ -77,78 +236,53 @@
           with any supported NixOS release.
         </para>
       </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-version-updates">
+    <title>Notable version updates</title>
+    <itemizedlist>
       <listitem>
         <para>
-          <literal>emacs</literal> enables native compilation which
-          means:
+          Nix has been upgraded from v2.8.1 to v2.11.0. For more
+          information, please see the release notes for
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.9.html">2.9</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.10.html">2.10</link>
+          and
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.11.html">2.11</link>.
         </para>
-        <itemizedlist spacing="compact">
-          <listitem>
-            <para>
-              emacs packages from nixpkgs, builtin or not, will do
-              native compilation ahead of time so you can enjoy the
-              benefit of native compilation without compiling them on
-              you machine;
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              emacs packages from somewhere else, e.g.
-              <literal>package-install</literal>, will do asynchronously
-              deferred native compilation. If you do not want this,
-              maybe to avoid CPU consumption for compilation, you can
-              use
-              <literal>(setq native-comp-deferred-compilation nil)</literal>
-              to disable it while still enjoy the benefit of native
-              compilation for packages from nixpkgs.
-            </para>
-          </listitem>
-        </itemizedlist>
       </listitem>
       <listitem>
         <para>
-          <literal>nixos-generate-config</literal> now generates
-          configurations that can be built in pure mode. This is
-          achieved by setting the new
-          <literal>nixpkgs.hostPlatform</literal> option.
+          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
         </para>
+      </listitem>
+      <listitem>
         <para>
-          You may have to unset the <literal>system</literal> parameter
-          in <literal>lib.nixosSystem</literal>, or similarly remove
-          definitions of the
-          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
-          options.
+          GNOME has been upgraded to version 43. Please see the
+          <link xlink:href="https://release.gnome.org/43/">release
+          notes</link> for details.
         </para>
+      </listitem>
+      <listitem>
         <para>
-          Alternatively, you can remove the
-          <literal>hostPlatform</literal> line and use NixOS like you
-          would in NixOS 22.05 and earlier.
+          KDE Plasma has been upgraded from v5.24 to v5.26. Please see
+          the release notes for
+          <link xlink:href="https://kde.org/announcements/plasma/5/5.25.0/">v5.25</link>
+          and
+          <link xlink:href="https://kde.org/announcements/plasma/5/5.26.0/">v5.26</link>
+          for more details on the included changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Cinnamon has been updated to 5.4, and the Cinnamon module now
+          defaults to Blueman as the Bluetooth manager and slick-greeter
+          as the LightDM greeter, to match upstream.
         </para>
       </listitem>
       <listitem>
         <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          PHP is now built <literal>NTS</literal> (Non-Thread Safe)
-          style by default, for Apache and <literal>mod_php</literal>
-          usage we still enable <literal>ZTS</literal> (Zend Thread
-          Safe). This has been a common practice for a long time in
-          other distributions.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          PHP 8.2.0 RC 6 is available.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>protonup</literal> has been aliased to and replaced
-          by <literal>protonup-ng</literal> due to upstream not
-          maintaining it.
         </para>
       </listitem>
       <listitem>
@@ -160,348 +294,7 @@
       </listitem>
       <listitem>
         <para>
-          Improved performances of
-          <literal>lib.closePropagation</literal> which was previously
-          quadratic. This is used in e.g.
-          <literal>ghcWithPackages</literal>. Please see backward
-          incompatibilities notes below.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Cinnamon has been updated to 5.4. While at it, the cinnamon
-          module now defaults to blueman as bluetooth manager and
-          slick-greeter as lightdm greeter to match upstream.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          An image configuration and generator has been added for Linode
-          images, largely based on the present GCE configuration and
-          image.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>hardware.nvidia</literal> has a new option
-          <literal>open</literal> that can be used to opt in the
-          opensource version of NVIDIA kernel driver. Note that the
-          driver’s support for GeForce and Workstation GPUs is still
-          alpha quality, see
-          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">NVIDIA
-          Releases Open-Source GPU Kernel Modules</link> for the
-          official announcement.
-        </para>
-      </listitem>
-    </itemizedlist>
-  </section>
-  <section xml:id="sec-release-22.11-new-services">
-    <title>New Services</title>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
-          Nix based app VMs. Available as
-          <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/maxbrunet/automatic-timezoned">automatic-timezoned</link>.
-          a Linux daemon to automatically update the system timezone
-          based on location. Available as
-          <link linkend="opt-services.automatic-timezoned.enable">services.automatic-timezoned</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          [xray] (https://github.com/XTLS/Xray-core), a fully compatible
-          v2ray-core replacement. Features XTLS, which when enabled on
-          server and client, brings UDP FullCone NAT to proxy setups.
-          Available as
-          <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
-          a self-hostable sync server for Firefox. Available as
-          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
-          a modern replacement for Redis and Memcached. Available as
-          <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://komga.org/">Komga</link>, a free and
-          open source comics/mangas media server. Available as
-          <link linkend="opt-services.komga.enable">services.komga</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
-          a self-hosted multi-tenant recipe collection. Available as
-          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://hbase.apache.org/">HBase
-          cluster</link>, a distributed, scalable, big data store.
-          Available as
-          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/edneville/please">Please</link>,
-          a Sudo clone written in Rust. Available as
-          <link linkend="opt-security.please.enable">security.please</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
-          an SMS alerting tool for the Prometheus Alertmanager.
-          Available as
-          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://evcc.io">EVCC</link> is an EV charge
-          controller with PV integration. It supports a multitude of
-          chargers, meters, vehicle APIs and more and ties that together
-          with a well-tested backend and a lightweight web frontend.
-          Available as
-          <link linkend="opt-services.evcc.enable">services.evcc</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
-          a hardware True Random Number Generator dongle. Available as
-          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
-          an alert acknowledgement management daemon for Prometheus
-          Alertmanager. Available as
-          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
-          a tool to improve keyboard comfort and usability with advanced
-          customization. Available as
-          <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/prymitive/karma">karma</link>,
-          an alert dashboard for Prometheus Alertmanager. Available as
-          <link xlink:href="options.html#opt-services.karma.enable">services.karma</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://languagetool.org/">languagetool</link>,
-          a multilingual grammar, style, and spell checker. Available as
-          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://gitlab.com/CalcProgrammer1/OpenRGB/-/tree/master">OpenRGB</link>,
-          a FOSS tool for controlling RGB lighting. Available as
-          <link xlink:href="options.html#opt-services-hardware-openrgb-enable">services.hardware.openrgb.enable</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.getoutline.com/">Outline</link>,
-          a wiki and knowledge base similar to Notion. Available as
-          <link linkend="opt-services.outline.enable">services.outline</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
-          notification service. Available as
-          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
-          a simple and extensible webmail. Available as
-          <link linkend="opt-services.alps.enable">services.alps</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/skeeto/endlessh">endlessh</link>,
-          an SSH tarpit. Available as
-          <link linkend="opt-services.endlessh.enable">services.endlessh</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
-          an SSH tarpit that exposes Prometheus metrics. Available as
-          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
-          a simple object storage server for geodistributed deployments,
-          alternative to MinIO. Available as
-          <link linkend="opt-services.garage.enable">services.garage</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://netbird.io">netbird</link>, a zero
-          configuration VPN. Available as
-          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
-          a daemon to add virtual proxy devices that mirror a physical
-          input device but persist even if the underlying hardware is
-          hot-plugged. Available as
-          <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://schleuder.org/">schleuder</link>, a
-          mailing list manager with PGP support. Enable using
-          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
-          an enterprise resource planning and customer relationship
-          manager. Enable using
-          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
-          free, self-hostable RSS feed aggregator. Available as
-          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
-          the CLI client for ExpressVPN. Available as
-          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
-          a small and easy HTTP server based on thttpd. Available as
-          <link linkend="opt-services.merecat.enable">services.merecat</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
-          IMAP/SMTP autodiscover server. Available as
-          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
-          server side part of
-          <link xlink:href="https://tmate.io/">tmate</link>. Available
-          as
-          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
-          Tempo</link>, a distributed tracing store. Available as
-          <link linkend="opt-services.tempo.enable">services.tempo</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
-          the authentication software for the German ID card. Available
-          as
-          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
-          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
-          Available as
-          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
-          IPMI exporter</link>, an IPMI exporter for Prometheus.
-          Available as
-          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://writefreely.org">WriteFreely</link>,
-          a simple blogging platform with ActivityPub support. Available
-          as
-          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://listmonk.app">Listmonk</link>, a
-          self-hosted newsletter manager. Enable using
-          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://uptime.kuma.pet/">Uptime
-          Kuma</link>, a fancy self-hosted monitoring tool. Available as
-          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
-          fast, simple, hackable OSM map viewer for mobile and desktop
-          Linux. Available as
-          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
+          Python now defaults to 3.10, updated from 3.9.
         </para>
       </listitem>
     </itemizedlist>
@@ -521,10 +314,7 @@
           generated using <literal>lib.systems.elaborate</literal>. In
           most cases you will want to use the new
           <literal>canExecute</literal> predicate instead which also
-          considers the kernel / syscall interface. It is briefly
-          described in the release’s
-          <link linkend="sec-release-22.11-highlights">highlights
-          section</link>.
+          takes the kernel / syscall interface into account.
           <literal>lib.systems.parse.isCompatible</literal> still
           exists, but has changed semantically: Architectures with
           differing endianness modes are <emphasis>no longer considered
@@ -539,20 +329,28 @@
           upgrade guide</link> and
           <link xlink:href="https://ngrok.com/docs/ngrok-agent/changelog">changelog</link>.
           Notably, breaking changes are that the config file format has
-          changed and support for single hypen arguments was dropped.
+          changed and support for single hyphen arguments was dropped.
         </para>
       </listitem>
       <listitem>
         <para>
-          <literal>i18n.supportedLocales</literal> is now by default
-          only generated with the locales set in
-          <literal>i18n.defaultLocale</literal> and
-          <literal>i18n.extraLocaleSettings</literal>. This got
-          partially copied over from the minimal profile and reduces the
-          final system size by up to 200MB. If you require all locales
-          installed set the option to
-          <literal>[ &quot;all&quot; ]</literal>.
+          <literal>i18n.supportedLocales</literal> is now only generated
+          with the locales set in <literal>i18n.defaultLocale</literal>
+          and <literal>i18n.extraLocaleSettings</literal>.
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This reduces the final system closure size by up to 200MB.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If you require all locales installed, set the option to
+              <literal>[ &quot;all&quot; ]</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -606,7 +404,7 @@
           <literal>ssh-keygen -A</literal> as they are insecure. Also,
           <literal>SetEnv</literal> directives in
           <literal>ssh_config</literal> and
-          <literal>sshd_config</literal> are now first-match-wins
+          <literal>sshd_config</literal> are now first-match-wins.
         </para>
       </listitem>
       <listitem>
@@ -650,17 +448,17 @@
       </listitem>
       <listitem>
         <para>
-          The <literal>openssl</literal>-extension for the PHP
-          interpreter used by Nextcloud is built against OpenSSL 1.1 if
+          The OpenSSL extension for the PHP interpreter used by
+          Nextcloud is built against OpenSSL 1.1 if
           <xref linkend="opt-system.stateVersion" /> is below
           <literal>22.11</literal>. This is to make sure that people
           using
           <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side
-          encryption</link> don’t loose access to their files.
+          encryption</link> don’t lose access to their files.
         </para>
         <para>
-          In any other case it’s safe to use OpenSSL 3 for PHP’s openssl
-          extension. This can be done by setting
+          In any other case, it’s safe to use OpenSSL 3 for PHP’s
+          OpenSSL extension. This can be done by setting
           <xref linkend="opt-services.nextcloud.enableBrokenCiphersForSSE" />
           to <literal>false</literal>.
         </para>
@@ -707,6 +505,14 @@
           because of stability and compatibility issues. Users who still
           wish to remain using GTK can do so by using
           <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kanidm</literal> has been updated to 1.1.0-alpha.10
+          and now requires a TLS certificate and key. It will always
+          start <literal>https</literal> and-–-if enabled-–-an LDAPS
+          server and no HTTP and LDAP server anymore.
         </para>
       </listitem>
       <listitem>
@@ -963,7 +769,7 @@
       </listitem>
       <listitem>
         <para>
-          <literal>k3s</literal> no longer supports docker as runtime
+          <literal>k3s</literal> no longer supports Docker as runtime
           due to upstream dropping support.
         </para>
       </listitem>
@@ -1036,7 +842,7 @@ signald -d /var/lib/signald/db \
         <para>
           <literal>stylua</literal> no longer accepts
           <literal>lua52Support</literal> and
-          <literal>luauSupport</literal> overrides, use
+          <literal>luauSupport</literal> overrides. Use
           <literal>features</literal> instead, which defaults to
           <literal>[ &quot;lua54&quot; &quot;luau&quot; ]</literal>.
         </para>
@@ -1092,9 +898,25 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
     <itemizedlist>
       <listitem>
         <para>
+          PHP is now built in <literal>NTS</literal> (Non-Thread Safe)
+          mode by default.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Apache and <literal>mod_php</literal> usage, we enable
+              <literal>ZTS</literal> (Zend Thread Safe) mode. This has
+              been a common practice for a long time in other
+              distributions.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>firefox</literal>, <literal>thunderbird</literal> and
-          <literal>librewolf</literal> come with enabled Wayland support
-          by default. The <literal>firefox-wayland</literal>,
+          <literal>librewolf</literal> now come with Wayland support by
+          default. The <literal>firefox-wayland</literal>,
           <literal>firefox-esr-wayland</literal>,
           <literal>thunderbird-wayland</literal> and
           <literal>librewolf-wayland</literal> attributes are obsolete
@@ -1113,7 +935,8 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
         <para>
           Configuring multiple GitHub runners is now possible through
           <literal>services.github-runners.&lt;name&gt;</literal>. The
-          option <literal>services.github-runner</literal> remains.
+          options under <literal>services.github-runner</literal>
+          remain, to configure a single runner.
         </para>
       </listitem>
       <listitem>
@@ -1128,29 +951,39 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          A new module was added for the Saleae Logic device family,
-          providing the options
+          A new module was added to provide hardware support for the
+          Saleae Logic device family, providing the options
           <literal>hardware.saleae-logic.enable</literal> and
           <literal>hardware.saleae-logic.package</literal>.
         </para>
       </listitem>
       <listitem>
         <para>
-          ZFS module will not allow hibernation by default, this is a
-          safety measure to prevent data loss cases like the ones
-          described at
-          <link xlink:href="https://github.com/openzfs/zfs/issues/260">OpenZFS/260</link>
-          and
-          <link xlink:href="https://github.com/openzfs/zfs/issues/12842">OpenZFS/12842</link>.
-          Use the <literal>boot.zfs.allowHibernation</literal> option to
-          configure this behaviour.
+          ZFS module will no longer allow hibernation by default.
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This is a safety measure to prevent data loss cases like
+              the ones described at
+              <link xlink:href="https://github.com/openzfs/zfs/issues/260">OpenZFS/260</link>
+              and
+              <link xlink:href="https://github.com/openzfs/zfs/issues/12842">OpenZFS/12842</link>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Use the <literal>boot.zfs.allowHibernation</literal>
+              option to configure this behaviour.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
-          <literal>mastodon</literal> now automatically removes remote
-          media attachments older than 30 days. This is configurable
-          through <literal>services.mastodon.mediaAutoRemove</literal>.
+          Mastodon now automatically removes remote media attachments
+          older than 30 days. This is configurable through
+          <literal>services.mastodon.mediaAutoRemove</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1162,9 +995,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Neo4j was updated from version 3 to version 4. See this
+          Neo4j was updated from version 3 to version 4. See upstream’s
           <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
-          guide</link> on how to migrate your Neo4j instance.
+          guide</link> for information on how to migrate your instance.
         </para>
       </listitem>
       <listitem>
@@ -1197,8 +1030,8 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <literal>prismlauncher</literal>, a fork by the rest of the
           maintainers. For more details, see
           <link xlink:href="https://github.com/NixOS/nixpkgs/pull/196624">the
-          pull request that made this change</link> and
-          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">this
+          PR that made this change</link> and
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">the
           issue detailing the vulnerability</link>. Users with existing
           installations should rename
           <literal>~/.local/share/polymc</literal> to
@@ -1219,8 +1052,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          The <literal>services.matrix-synapse</literal> systemd unit
-          has been hardened.
+          Synapse’s systemd unit has been hardened.
         </para>
       </listitem>
       <listitem>
@@ -1250,7 +1082,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               removed. This option was an association of environment
               variables for Grafana. If you had an expression like
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 {
   services.grafana.extraOptions.SECURITY_ADMIN_USER = &quot;foobar&quot;;
 }
@@ -1264,7 +1096,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               For the migration, it is recommended to turn it into the
               INI format, i.e. to declare
             </para>
-            <programlisting language="bash">
+            <programlisting language="nix">
 {
   services.grafana.settings.security.admin_user = &quot;foobar&quot;;
 }
@@ -1292,9 +1124,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <listitem>
             <para>
               Previously, the options
-              <xref linkend="opt-services.grafana.provision.datasources" />
+              <link linkend="opt-services.grafana.provision.datasources">services.grafana.provision.datasources</link>
               and
-              <xref linkend="opt-services.grafana.provision.dashboards" />
+              <link linkend="opt-services.grafana.provision.dashboards">services.grafana.provision.dashboards</link>
               expected lists of datasources or dashboards for the
               <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/">declarative
               provisioning</link>.
@@ -1307,14 +1139,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                 <para>
                   <emphasis role="strong">datasources</emphasis>, please
                   rename your declarations to
-                  <xref linkend="opt-services.grafana.provision.datasources.settings.datasources" />.
+                  <link linkend="opt-services.grafana.provision.datasources.settings.datasources">services.grafana.provision.datasources.settings.datasources</link>.
                 </para>
               </listitem>
               <listitem>
                 <para>
                   <emphasis role="strong">dashboards</emphasis>, please
                   rename your declarations to
-                  <xref linkend="opt-services.grafana.provision.dashboards.settings.providers" />.
+                  <link linkend="opt-services.grafana.provision.dashboards.settings.providers">services.grafana.provision.dashboards.settings.providers</link>.
                 </para>
               </listitem>
             </itemizedlist>
@@ -1327,9 +1159,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   It’s possible to declare the
                   <literal>apiVersion</literal> of your dashboards and
                   datasources by
-                  <xref linkend="opt-services.grafana.provision.datasources.settings.apiVersion" />
+                  <link linkend="opt-services.grafana.provision.datasources.settings.apiVersion">services.grafana.provision.datasources.settings.apiVersion</link>
                   (or
-                  <xref linkend="opt-services.grafana.provision.dashboards.settings.apiVersion" />).
+                  <link linkend="opt-services.grafana.provision.dashboards.settings.apiVersion">services.grafana.provision.dashboards.settings.apiVersion</link>).
                 </para>
               </listitem>
               <listitem>
@@ -1337,9 +1169,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   Instead of declaring datasources and dashboards in
                   pure Nix, it’s also possible to specify configuration
                   files (or directories) with YAML instead using
-                  <xref linkend="opt-services.grafana.provision.datasources.path" />
+                  <link linkend="opt-services.grafana.provision.datasources.path">services.grafana.provision.datasources.path</link>
                   (or
-                  <xref linkend="opt-services.grafana.provision.dashboards.path" />.
+                  <link linkend="opt-services.grafana.provision.dashboards.path">services.grafana.provision.dashboards.path</link>.
                   This is useful when having provisioning files from
                   non-NixOS Grafana instances that you also want to
                   deploy to NixOS.
@@ -1354,9 +1186,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
               </listitem>
               <listitem>
                 <para>
-                  <xref linkend="opt-services.grafana.provision.notifiers" />
+                  <link linkend="opt-services.grafana.provision.notifiers">services.grafana.provision.notifiers</link>
                   is not affected by this change because this feature is
-                  deprecated by Grafana and will probably removed in
+                  deprecated by Grafana and will probably be removed in
                   Grafana 10. It’s recommended to use
                   <literal>services.grafana.provision.alerting.contactPoints</literal>
                   instead.
@@ -1377,7 +1209,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Matrix Synapse now requires entries in the
+          Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
           information (for example, because a database backup was
@@ -1404,9 +1236,17 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <literal>dockerTools.buildImage</literal> deprecates the
-          misunderstood <literal>contents</literal> parameter, in favor
-          of <literal>copyToRoot</literal>. Use
+          The <literal>netlify-cli</literal> package has been updated
+          from 6.13.2 to 12.2.4, see the
+          <link xlink:href="https://github.com/netlify/cli/releases">changelog</link>
+          for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>dockerTools.buildImage</literal>’s
+          <literal>contents</literal> parameter has been deprecated in
+          favor of <literal>copyToRoot</literal>. Use
           <literal>copyToRoot = buildEnv { ... };</literal> or similar
           if you intend to add packages to <literal>/bin</literal>.
         </para>
@@ -1440,9 +1280,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Option descriptions, examples, and defaults writting in
-          DocBook are now deprecated. Using CommonMark is preferred and
-          will become the default in a future release.
+          Option descriptions, examples, and defaults writing in DocBook
+          are now deprecated. Using CommonMark is preferred and will
+          become the default in a future release.
         </para>
       </listitem>
       <listitem>
@@ -1459,9 +1299,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          The redis module now persists each instance’s configuration
+          The Redis module now persists each instance’s configuration
           file in the state directory, in order to support some more
-          advanced use cases like sentinel.
+          advanced use cases like Sentinel.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>protonup</literal> has been aliased to and replaced
+          by <literal>protonup-ng</literal> due to upstream not
+          maintaining it.
         </para>
       </listitem>
       <listitem>
@@ -1499,7 +1346,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           </listitem>
           <listitem>
             <para>
-              For <literal>system.stateVersion</literal> being
+              If <literal>system.stateVersion</literal> is
               <emphasis role="strong">&gt;=22.11</emphasis>, Nextcloud
               25 will be installed by default. For older versions,
               Nextcloud 24 will be installed.
@@ -1507,7 +1354,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           </listitem>
           <listitem>
             <para>
-              Please ensure that you only upgrade on major release at a
+              Please ensure that you only upgrade one major release at a
               time! Nextcloud doesn’t support upgrades across multiple
               versions, i.e. an upgrade from
               <emphasis role="strong">23</emphasis> to
@@ -1517,24 +1364,6 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
             </para>
           </listitem>
         </itemizedlist>
-      </listitem>
-      <listitem>
-        <para>
-          Add udev rules for the Teensy family of microcontrollers.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The Qt QML disk cache is now disabled by default. This fixes a
-          long-standing issue where updating Qt/KDE apps would sometimes
-          cause them to crash or behave strangely without explanation.
-          Those concerned about the small (~10%) performance hit to
-          application startup can re-enable the cache (and expose
-          themselves to gremlins) by setting the envrionment variable
-          <literal>QML_FORCE_DISK_CACHE</literal> to
-          <literal>1</literal> using e.g. the
-          <literal>environment.sessionVariables</literal> NixOS option.
-        </para>
       </listitem>
       <listitem>
         <para>
@@ -1569,14 +1398,8 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          There is a new module for AMD SEV CPU functionality, which
-          grants access to the hardware.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The Wordpress module got support for installing language packs
-          through
+          The Wordpress module now has support for installing language
+          packs through a new option,
           <literal>services.wordpress.sites.&lt;site&gt;.languages</literal>.
         </para>
       </listitem>
@@ -1594,12 +1417,12 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          PowerDNS has been updated from <literal>4.6.x</literal> to
-          <literal>4.7.x</literal>. Please be sure to review the
+          PowerDNS has been updated from v4.6.2 to v4.7.2. Please be
+          sure to review the
           <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#to-4-7-0-or-master">Upgrade
           Notes</link> provided by upstream before upgrading. Worth
           specifically noting is that the new Catalog Zones feature
-          comes with a mandatory schema change for the gsql database
+          comes with a mandatory schema change for the GSQL database
           backends, which has to be manually applied.
         </para>
       </listitem>
@@ -1611,21 +1434,19 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           service and a systemd unit. The option
           <literal>services.xserver.desktopManager.xfce.thunarPlugins</literal>
           has been renamed to
-          <literal>programs.thunar.plugins</literal>, and in a future
-          release it may be removed.
+          <literal>programs.thunar.plugins</literal>, and may be removed
+          in a future release.
         </para>
       </listitem>
       <listitem>
         <para>
-          There is a new module for the <literal>xfconf</literal>
-          program (the Xfce configuration storage system), which has a
-          dbus service.
+          There is a new module for <literal>xfconf</literal> (the Xfce
+          configuration storage system), which has a dbus service.
         </para>
       </listitem>
       <listitem>
         <para>
-          The Mastodon package got upgraded from the major version 3 to
-          4. See the
+          The Mastodon package has been upgraded to v4.0.0. See the
           <link xlink:href="https://github.com/mastodon/mastodon/releases/tag/v4.0.0">v4.0.0
           release notes</link> for a list of changes. On standard
           setups, no manual migration steps are required. Nevertheless,
@@ -1634,8 +1455,8 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          The <literal>nomad</literal> package now defaults to 1.3,
-          which no longer has a downgrade path to releases 1.2 or older.
+          The <literal>nomad</literal> package now defaults to v1.3,
+          which no longer has a downgrade path to v1.2 or older.
         </para>
       </listitem>
       <listitem>
@@ -1654,7 +1475,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
         <para>
           <literal>boot.kernel.sysctl</literal> is defined as a
           freeformType and adds a custom merge option for
-          <quote>net.core.rmem_max</quote> (taking the highest value
+          <literal>net.core.rmem_max</literal> (taking the highest value
           defined to avoid conflicts between 2 services trying to set
           that value).
         </para>
@@ -1684,6 +1505,335 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <literal>services.picom.experimentalBackends</literal> was
           removed since it is now the default and the option will cause
           <literal>picom</literal> to quit instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackages.callHackage</literal> is not always
+          invalidated if <literal>all-cabal-hashes</literal> changes,
+          leading to less rebuilds of haskell dependencies.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackages.callHackage</literal> and
+          <literal>haskellPackages.callCabal2nix</literal> (and related
+          functions) no longer keep a reference to the
+          <literal>cabal2nix</literal> call used to generate them. As a
+          result, they will be garbage collected more often.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-new-services">
+    <title>New Services</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
+          a simple and extensible webmail. Available as
+          <link linkend="opt-services.alps.enable">services.alps</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
+          Nix based app VMs. Available as
+          <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
+          the authentication software for the German ID card. Available
+          as
+          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/maxbrunet/automatic-timezoned">automatic-timezoned</link>.
+          a Linux daemon to automatically update the system timezone
+          based on location. Available as
+          <link linkend="opt-services.automatic-timezoned.enable">services.automatic-timezoned</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
+          a modern replacement for Redis and Memcached. Available as
+          <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/skeeto/endlessh">endlessh</link>,
+          an SSH tarpit. Available as
+          <link linkend="opt-services.endlessh.enable">services.endlessh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://evcc.io">EVCC</link> is an EV charge
+          controller with PV integration. It supports a multitude of
+          chargers, meters, vehicle APIs and more and ties that together
+          with a well-tested backend and a lightweight web frontend.
+          Available as
+          <link linkend="opt-services.evcc.enable">services.evcc</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
+          the CLI client for ExpressVPN. Available as
+          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
+          free, self-hostable RSS feed aggregator. Available as
+          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
+          IMAP/SMTP autodiscover server. Available as
+          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
+          Tempo</link>, a distributed tracing store. Available as
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
+          a hardware True Random Number Generator dongle. Available as
+          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
+          a tool to improve keyboard comfort and usability with advanced
+          customization. Available as
+          <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prymitive/karma">karma</link>,
+          an alert dashboard for Prometheus Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.karma.enable">services.karma</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
+          an alert acknowledgement management daemon for Prometheus
+          Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://listmonk.app">Listmonk</link>, a
+          self-hosted newsletter manager. Enable using
+          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
+          fast, simple, hackable OSM map viewer for mobile and desktop
+          Linux. Available as
+          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
+          a small and easy HTTP server based on thttpd. Available as
+          <link linkend="opt-services.merecat.enable">services.merecat</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
+          notification service. Available as
+          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://gitlab.com/CalcProgrammer1/OpenRGB/-/tree/master">OpenRGB</link>,
+          a FOSS tool for controlling RGB lighting. Available as
+          <link xlink:href="options.html#opt-services.hardware.openrgb.enable">services.hardware.openrgb.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.getoutline.com/">Outline</link>,
+          a wiki and knowledge base similar to Notion. Available as
+          <link linkend="opt-services.outline.enable">services.outline</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
+          a daemon to add virtual proxy devices that mirror a physical
+          input device but persist even if the underlying hardware is
+          hot-plugged. Available as
+          <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/edneville/please">Please</link>,
+          a Sudo clone written in Rust. Available as
+          <link linkend="opt-security.please.enable">security.please</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
+          IPMI exporter</link>, an IPMI exporter for Prometheus.
+          Available as
+          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://schleuder.org/">schleuder</link>, a
+          mailing list manager with PGP support. Enable using
+          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="http://www.litech.org/tayga/">TAYGA</link>,
+          an out-of-kernel stateless NAT64 implementation. Available as
+          <link linkend="opt-services.tayga.enable">services.tayga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://writefreely.org">WriteFreely</link>,
+          a simple blogging platform with ActivityPub support. Available
+          as
+          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/XTLS/Xray-core">xray</link>,
+          a fully compatible v2ray-core replacement. Features XTLS,
+          which when enabled on server and client, brings UDP FullCone
+          NAT to proxy setups. Available as
+          <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
         </para>
       </listitem>
     </itemizedlist>

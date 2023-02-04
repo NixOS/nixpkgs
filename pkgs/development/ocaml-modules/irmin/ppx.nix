@@ -11,8 +11,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.10";
 
-  strictDeps = false; # We must provide checkInputs as buildInputs because dune builds tests at build time
-
   propagatedBuildInputs = [
     ppx_repr
     ppxlib

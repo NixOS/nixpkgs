@@ -26,7 +26,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.6.2";
+  version = "3.6.6";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-eTcQrbYYY+V87i6PuIEWCFczIqL8oxtdojPY/mZpJBU=";
+    sha256 = "sha256-P3LSgrcMZZM0OY3yQz8t3Cf5spJJTB+JTIpoT9U3+xc=";
   };
 
   patches = [
@@ -82,6 +82,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DBUILD_UPDATER=off"
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];

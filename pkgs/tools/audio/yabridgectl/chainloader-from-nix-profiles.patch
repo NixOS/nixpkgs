@@ -1,5 +1,5 @@
 diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
-index 523a083b..399302e0 100644
+index 76075938..4f69642f 100644
 --- a/tools/yabridgectl/src/config.rs
 +++ b/tools/yabridgectl/src/config.rs
 @@ -22,6 +22,7 @@ use serde_derive::{Deserialize, Serialize};
@@ -10,7 +10,7 @@ index 523a083b..399302e0 100644
  use std::path::{Path, PathBuf};
  use which::which;
  use xdg::BaseDirectories;
-@@ -213,34 +214,27 @@ impl Config {
+@@ -225,34 +226,27 @@ impl Config {
                  }
              }
              None => {
@@ -50,24 +50,23 @@ index 523a083b..399302e0 100644
                      _ => {
                          return Err(anyhow!(
 -                            "Could not find '{}' in either '{}' or '{}'. You can override the \
--                            default search path using 'yabridgectl set --path=<path>'.",
 +                            "Could not find '{}' through 'NIX_PROFILES' or '{}'. You can override the \
-+                             default search path using 'yabridgectl set --path=<path>'.",
+                              default search path using 'yabridgectl set --path=<path>'.",
                              VST2_CHAINLOADER_NAME,
 -                            system_path.display(),
                              user_path.display()
                          ));
                      }
 diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
-index 302ff8ae..9d9bbeac 100644
+index e5618575..72b730f1 100644
 --- a/tools/yabridgectl/src/main.rs
 +++ b/tools/yabridgectl/src/main.rs
-@@ -130,7 +130,7 @@ fn main() -> Result<()> {
-                         .help("Path to the directory containing 'libyabridge-chainloader-{vst2,vst3}.so'")
+@@ -135,7 +135,7 @@ fn main() -> Result<()> {
                          .long_help(
-                             "Path to the directory containing 'libyabridge-chainloader-{vst2,vst3}.so'. \
--                             If this is not set, then yabridgectl will look in both '/usr/lib' and \
-+                             If this is not set, then yabridgectl will look through 'NIX_PROFILES' and \
+                             "Path to the directory containing \
+                              'libyabridge-chainloader-{clap,vst2,vst3}.so'. If this is not set, \
+-                             then yabridgectl will look in both '/usr/lib' and \
++                             then yabridgectl will look through 'NIX_PROFILES' and \
                               '~/.local/share/yabridge' by default.",
                          )
                          .validator(validate_path)

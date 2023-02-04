@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
+    "POSTINSTALL_PROGRAM=install_name_tool"
   ]);
 
   # We need a bootstrap-chicken to regenerate the c-files after

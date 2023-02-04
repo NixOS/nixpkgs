@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.7";
+  version = "5.15.8";
   overrides = {};
 
   mk = name: args:
@@ -14,7 +14,7 @@ let
         fetchgit {
           inherit (args) url rev sha256;
           fetchLFS = false;
-          fetchSubmodules = false;
+          fetchSubmodules = true;
           deepClone = false;
           leaveDotGit = false;
         };
@@ -32,6 +32,12 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
       sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
     };
     version = "5.212.0-alpha4";
+  };
+
+  catapult = fetchgit {
+    url = "https://chromium.googlesource.com/catapult";
+    rev = "5eedfe23148a234211ba477f76fc2ea2e8529189";
+    hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
   };
 
   qtwebengine =

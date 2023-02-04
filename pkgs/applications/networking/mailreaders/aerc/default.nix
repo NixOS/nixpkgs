@@ -7,6 +7,7 @@
 , python3
 , w3m
 , dante
+, gawk
 }:
 
 buildGoModule rec {
@@ -46,7 +47,7 @@ buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ];
+  buildInputs = [ python3 notmuch gawk ];
 
   installPhase = ''
     runHook preInstall
@@ -57,10 +58,13 @@ buildGoModule rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "${lib.makeBinPath [ ncurses ]}"
-    wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${lib.makeBinPath [ w3m dante ]}
+    wrapProgram $out/bin/aerc \
+      --prefix PATH ":" "${lib.makeBinPath [ ncurses ]}"
+    wrapProgram $out/share/aerc/filters/html \
+      --prefix PATH ":"  ${lib.makeBinPath [ w3m dante ]}
+    wrapProgram $out/share/aerc/filters/html-unsafe \
+      --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
+    patchShebangs $out/share/aerc/filters
   '';
 
   meta = with lib; {

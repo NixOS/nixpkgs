@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.75.0";
+  version = "1.84.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-bmHUfRytUGlS0X1PEQHFocMZ4+FslA2rvzqHNE+3B3E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AdfrzN7ufvy77tKjnHPNo+jHoHRw9fXtdUdYvdnMAjs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

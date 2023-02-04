@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
       url    = "https://sources.debian.org/data/main/j/jfsutils/1.1.15-4/debian/patches/add_sysmacros.patch";
       sha256 = "1qcwvxs4d0d24w5x98z59arqfx2n7f0d9xaqhjcg6w8n34vkhnyc";
     })
+    # fix for musl
+    (fetchpatch {
+      name = "musl-fix-includes.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/jfsutils/musl-fix-includes.patch?id=567823dca7dc1f8ce919efbe99762d2d5c020124";
+      sha256 = "sha256-FjdUOI+y+MdSWxTR+csH41uR0P+PWWTfIMPwQjBfQtQ=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -1,19 +1,19 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, substituteAll, nixosTests, iputils }:
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, nixosTests, iputils, nodejs, makeWrapper }:
 let
   deps = import ./composition.nix { inherit pkgs; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uptime-kuma";
-  version = "1.18.5";
+  version = "1.19.6";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = finalAttrs.version;
-    sha256 = "sha256-4RLOY8OqhbcnSPa0VpAdMT3E1M0/ev/sSAmbQUQxqbw=";
+    sha256 = "sha256-Hk0me4VPP8vKp4IhzQKjjhM2BWLGSHnN7JiDJu2WlE8=";
   };
 
-  uiSha256 = "sha256-0KbxagFh4bxNrnekUHx0DGr3urfUUz33zn4EtJIZBps=";
+  uiSha256 = "sha256-oeXklGxAPsUoLRT6DAVRgWm0kvKbLFW4IBc0Rh3j5V4=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -21,14 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-database-permissions.patch
   ];
 
-  postPatch = ''
-    substituteInPlace server/ping-lite.js \
-      --replace "/bin/ping" "${iputils}/bin/ping" \
-      --replace "/sbin/ping6" "${iputils}/bin/ping" \
-      --replace "/sbin/ping" "${iputils}/bin/ping"
-  '';
-
-  buildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/
@@ -41,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    makeWrapper ${pkgs.nodejs}/bin/node $out/bin/uptime-kuma-server \
+    makeWrapper ${nodejs}/bin/node $out/bin/uptime-kuma-server \
       --add-flags $out/share/server/server.js \
       --chdir $out/share/
   '';

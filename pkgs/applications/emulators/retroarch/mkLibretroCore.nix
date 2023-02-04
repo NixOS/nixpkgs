@@ -16,7 +16,7 @@
 }@args:
 
 let
-  d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
+  d2u = if normalizeCore then (lib.replaceStrings [ "-" ] [ "_" ]) else (x: x);
   coreDir = placeholder "out" + libretroCore;
   coreFilename = "${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   mainProgram = "retroarch-${core}";

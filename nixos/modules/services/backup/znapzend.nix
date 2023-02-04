@@ -9,7 +9,7 @@ let
       The znapzend backup plan to use for the source.
 
       The plan specifies how often to backup and for how long to keep the
-      backups. It consists of a series of retention periodes to interval
+      backups. It consists of a series of retention periods to interval
       associations:
 
       ```
@@ -268,7 +268,7 @@ let
 
   mkSrcAttrs = srcCfg: with srcCfg; {
     enabled = onOff enable;
-    # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
+    # mbuffer is not referenced by its full path to accommodate non-NixOS systems or differing mbuffer versions between source and target
     mbuffer = with mbuffer; if enable then "mbuffer"
         + optionalString (port != null) ":${toString port}" else "off";
     mbuffer_size = mbuffer.size;
@@ -372,7 +372,7 @@ in
         compressed feature which adds the options `-Lce` to
         the {command}`zfs send` command. When this is enabled, make
         sure that both the sending and receiving pool have the same relevant
-        features enabled. Using `-c` will skip unneccessary
+        features enabled. Using `-c` will skip unnecessary
         decompress-compress stages, `-L` is for large block
         support and -e is for embedded data support. see
         {manpage}`znapzend(1)`

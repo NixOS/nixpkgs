@@ -20,7 +20,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     cliff
     docutils
     stestr

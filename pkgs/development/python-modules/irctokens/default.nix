@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-FgcLngS11U9eBNV/8jllwdrm89tCmthA1sUaFDovk6U=";
   };
 
-  checkInputs = [ pyyaml ];
+  nativeCheckInputs = [ pyyaml ];
   checkPhase = ''
     ${python.interpreter} -m unittest test
   '';

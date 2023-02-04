@@ -4,7 +4,7 @@
 , substituteAll
 , cmake
 , openjpeg
-, libyamlcpp
+, yaml-cpp
 , batchVersion ? false
 , withJpegLs ? true
 , withOpenJpeg ? true
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals batchVersion [ libyamlcpp ]
+  buildInputs = lib.optionals batchVersion [ yaml-cpp ]
     ++ lib.optionals withOpenJpeg [ openjpeg openjpeg.dev ];
 
   cmakeFlags = lib.optionals batchVersion [
     "-DBATCH_VERSION=ON"
-    "-DYAML-CPP_DIR=${libyamlcpp}/lib/cmake/yaml-cpp"
+    "-DYAML-CPP_DIR=${yaml-cpp}/lib/cmake/yaml-cpp"
   ] ++ lib.optionals withJpegLs [
     "-DUSE_JPEGLS=ON"
   ] ++ lib.optionals withOpenJpeg [

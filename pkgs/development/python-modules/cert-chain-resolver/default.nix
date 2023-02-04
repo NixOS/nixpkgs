@@ -26,7 +26,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     six

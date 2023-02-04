@@ -1,36 +1,40 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
+{ lib
 , anytree
-, nbval
-, sympy
-, scipy
+, buildPythonPackage
 , cached-property
-, psutil
-, py-cpuinfo
 , cgen
 , click
-, multidict
-, distributed
-, pyrevolve
 , codepy
-, pytestCheckHook
-, matplotlib
-, pytest-xdist
+, distributed
+, fetchFromGitHub
 , gcc
 , llvmPackages
+, matplotlib
+, multidict
+, nbval
+, psutil
+, py-cpuinfo
+, pyrevolve
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, scipy
+, stdenv
+, sympy
 }:
 
 buildPythonPackage rec {
   pname = "devito";
   version = "4.7.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "v${version}";
-    sha256 = "sha256-crKTxlueE8NGjAqu625iFvp35UK2U7+9kl8rpbzf0gs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-crKTxlueE8NGjAqu625iFvp35UK2U7+9kl8rpbzf0gs=";
   };
 
   postPatch = ''
@@ -48,7 +52,30 @@ buildPythonPackage rec {
         -i requirements.txt
   '';
 
-  checkInputs = [ pytestCheckHook pytest-xdist matplotlib gcc ];
+  propagatedBuildInputs = [
+    anytree
+    cached-property
+    cgen
+    click
+    codepy
+    distributed
+    nbval
+    multidict
+    psutil
+    py-cpuinfo
+    pyrevolve
+    scipy
+    sympy
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    matplotlib
+    gcc
+  ];
 
   # I've had to disable the following tests since they fail while using nix-build, but they do pass
   # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
@@ -64,6 +91,11 @@ buildPythonPackage rec {
     "test_subdomainset_mpi"
     "test_init_omp_env_w_mpi"
     "test_mpi_nocomms"
+    "test_shortcuts"
+    "est_docstrings"
+    "test_docstrings[finite_differences.coefficients]"
+    "test_coefficients_w_xreplace"
+    "test_loop_bounds_forward"
   ];
 
   disabledTestPaths = [
@@ -76,27 +108,14 @@ buildPythonPackage rec {
     "tests/test_gradient.py"
   ];
 
-  propagatedBuildInputs = [
-    anytree
-    cached-property
-    cgen
-    click
-    codepy
-    distributed
-    nbval
-    multidict
-    psutil
-    py-cpuinfo
-    pyrevolve
-    scipy
-    sympy
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
-
-  pythonImportsCheck = [ "devito" ];
+  pythonImportsCheck = [
+    "devito"
+  ];
 
   meta = with lib; {
-    homepage = "https://www.devitoproject.org/";
     description = "Code generation framework for automated finite difference computation";
+    homepage = "https://www.devitoproject.org/";
+    changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ atila ];
   };

@@ -1,39 +1,40 @@
 
 { buildPythonPackage
 , fetchFromGitHub
-, isPy37
 , lib
 
 # Python Dependencies
-, mock
-, pytest
 , six
+, urllib3
+, requests
+
+# tests
+, pytestCheckHook
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "mixpanel";
-  version = "4.5.0";
-  disabled = !isPy37;
+  version = "4.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mixpanel";
     repo = "mixpanel-python";
-    rev = version;
-    sha256 = "1hlc717wcn71i37ngsfb3c605rlyjhsn3v6b5bplq00373r4d39z";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jV2NLEc23uaI5Q7ZXDwGaZV9iAKQLMAETRTw8epZwQA=";
   };
 
   propagatedBuildInputs = [
+    requests
     six
+    urllib3
   ];
 
-  checkInputs = [
-    mock
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
   ];
-
-  checkPhase = ''
-    py.test
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/mixpanel/mixpanel-python";

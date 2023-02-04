@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , mock
 , pyopenssl
 , pytestCheckHook
@@ -17,6 +18,14 @@ buildPythonPackage rec {
     sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-tests-with-twisted-22.10.0.patch";
+      url = "https://github.com/warner/foolscap/commit/c04202eb5d4cf052e650ec2985ea6037605fd79e.patch";
+      hash = "sha256-RldDc18n3WYHdYg0ZmM8PBffIuiGa1NIfdoHs3mEEfc=";
+    })
+  ];
+
   propagatedBuildInputs = [
     mock
     twisted
@@ -24,7 +33,7 @@ buildPythonPackage rec {
     service-identity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

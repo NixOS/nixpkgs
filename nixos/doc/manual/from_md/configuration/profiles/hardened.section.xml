@@ -9,7 +9,7 @@
     available to processes through the <literal>/sys</literal> and
     <literal>/proc</literal> filesystems. It also disables the User
     Namespaces feature of the kernel, which stops Nix from being able to
-    build anything (this particular setting can be overriden via
+    build anything (this particular setting can be overridden via
     <xref linkend="opt-security.allowUserNamespaces" />). See the
     <link xlink:href="https://github.com/nixos/nixpkgs/tree/master/nixos/modules/profiles/hardened.nix">profile
     source</link> for further detail on which settings are altered.

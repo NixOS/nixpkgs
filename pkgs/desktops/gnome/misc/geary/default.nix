@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gnutls # for certtool
     cacert # trust store for glib-networking
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     HOME=$TMPDIR \
     XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
 
     runHook postCheck

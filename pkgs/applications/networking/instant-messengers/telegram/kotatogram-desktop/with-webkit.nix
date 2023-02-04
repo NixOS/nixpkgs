@@ -1,7 +1,5 @@
 { stdenv, lib, kotatogram-desktop, glib-networking, webkitgtk, makeWrapper }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "${kotatogram-desktop.pname}-with-webkit";
   version = kotatogram-desktop.version;
@@ -15,9 +13,9 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     makeWrapper ${kotatogram-desktop}/bin/kotatogram-desktop $out/bin/kotatogram-desktop \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules \
-      --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ webkitgtk ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ webkitgtk ]}
   '';
   meta = kotatogram-desktop.meta // {
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

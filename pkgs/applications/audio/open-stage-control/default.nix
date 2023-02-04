@@ -2,21 +2,21 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-XgwlRdwUSl4gIRKqk6BnMAKarVvp291zk8vmNkuRWKo=";
+    hash = "sha256-tfWimJ9eEFBUxPRVNjgbu8tQNokPbXOxOXO64mFuMfM=";
   };
 
-  patches = [
-    # Use generated package-lock.json since upstream does not provide one in releases
-    ./package-lock.json.patch
-  ];
+  # Remove some Electron stuff from package.json
+  postPatch = ''
+    sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
+  '';
 
-  npmDepsHash = "sha256-SGLcFjPnmhFoeXtP4gfGr4Qa1dTaXwSnzkweEvYW/1k=";
+  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -33,16 +33,13 @@ buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 
-  # Override installPhase so we can copy the only folders that matter (app and node_modules)
+  # Override installPhase so we can copy the only directory that matters (app)
   installPhase = ''
     runHook preInstall
 
-    # prune unused deps
-    npm prune --omit dev $npmFlags
-
     # copy built app and node_modules directories
     mkdir -p $out/lib/node_modules/open-stage-control
-    cp -r app node_modules $out/lib/node_modules/open-stage-control/
+    cp -r app $out/lib/node_modules/open-stage-control/
 
     # copy icon
     install -Dm644 resources/images/logo.png $out/share/icons/hicolor/256x256/apps/open-stage-control.png

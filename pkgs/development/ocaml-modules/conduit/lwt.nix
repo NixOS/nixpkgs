@@ -3,6 +3,7 @@
 buildDunePackage {
   pname = "conduit-lwt";
   inherit (conduit) version src;
+  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ];
 

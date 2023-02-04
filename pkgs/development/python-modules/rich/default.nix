@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , CommonMark
-, dataclasses
 , poetry-core
 , pygments
 , typing-extensions
@@ -19,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.5.1";
+  version = "13.0.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-FjzvFx+A4DS2XeKBZ2DGRqudvH22AUSQJnIxKs2O0AU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Mc2ZTpn2cPGXIBblwwukJGiD8etdVi8ag9Xb77gG62A=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -35,19 +33,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     pygments
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # darwin console duplicates 3 of 4 lines
-    "test_rich_console_ex"
   ];
 
   pythonImportsCheck = [ "rich" ];
@@ -60,6 +51,6 @@ buildPythonPackage rec {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris jyooru ];
+    maintainers = with maintainers; [ ris joelkoen ];
   };
 }

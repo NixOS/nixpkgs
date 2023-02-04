@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     description = "Clock application designed for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

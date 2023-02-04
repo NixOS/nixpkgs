@@ -2,23 +2,29 @@
 , lib
 , fetchFromGitHub
 , cmake
+, docbook-xsl-nons
+, libxslt
 , pkg-config
 , alsa-lib
+, faac
+, faad2
 , ffmpeg
 , glib
+, openh264
 , openssl
-, pcre
+, pcre2
 , zlib
 , libX11
 , libXcursor
 , libXdamage
+, libXdmcp
 , libXext
 , libXi
 , libXinerama
 , libXrandr
 , libXrender
-, libXv
 , libXtst
+, libXv
 , libxkbcommon
 , libxkbfile
 , wayland
@@ -27,7 +33,6 @@
 , gst-plugins-good
 , libunwind
 , orc
-, libxslt
 , cairo
 , libusb1
 , libpulseaudio
@@ -42,6 +47,7 @@
 , Carbon
 , Cocoa
 , CoreMedia
+, withUnfree ? false
 }:
 
 let
@@ -58,6 +64,8 @@ let
       file = "TestGetComputerName.c";
     }
   ];
+
+  inherit (lib) optionals;
 
 in
 stdenv.mkDerivation rec {
@@ -97,6 +105,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     cups
+    faad2
     ffmpeg
     glib
     gst-plugins-base
@@ -105,6 +114,7 @@ stdenv.mkDerivation rec {
     libX11
     libXcursor
     libXdamage
+    libXdmcp
     libXext
     libXi
     libXinerama
@@ -118,45 +128,54 @@ stdenv.mkDerivation rec {
     libusb1
     libxkbcommon
     libxkbfile
-    libxslt
+    openh264
     openssl
     orc
-    pcre
+    pcre2
     pcsclite
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     alsa-lib
     systemd
     wayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
     Cocoa
     CoreMedia
+  ]
+  ++ optionals withUnfree [
+    faac
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake libxslt docbook-xsl-nons pkg-config ];
 
   doCheck = true;
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ]
-    ++ lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
-    BUILD_TESTING = doCheck;
-    WITH_CUNIT = doCheck;
+  # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
+  cmakeFlags = [
+    "-Wno-dev"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
+  ]
+  ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
+    BUILD_TESTING = false; # false is recommended by upstream
+    WITH_CAIRO = (cairo != null);
     WITH_CUPS = (cups != null);
+    WITH_FAAC = (withUnfree && faac != null);
+    WITH_FAAD2 = (faad2 != null);
+    WITH_JPEG = (libjpeg_turbo != null);
+    WITH_OPENH264 = (openh264 != null);
     WITH_OSS = false;
     WITH_PCSC = (pcsclite != null);
     WITH_PULSE = (libpulseaudio != null);
     WITH_SERVER = buildServer;
-    WITH_SSE2 = stdenv.isx86_64;
-    WITH_VAAPI = true;
-    WITH_JPEG = (libjpeg_turbo != null);
-    WITH_CAIRO = (cairo != null);
+    WITH_VAAPI = false; # false is recommended by upstream
     WITH_X11 = true;
   };
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"

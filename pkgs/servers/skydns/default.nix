@@ -1,22 +1,34 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "skydns";
-  version = "2.5.3a";
-  rev = version;
-
-  goPackagePath = "github.com/skynetservices/skydns";
+  version = "unstable-2019-10-15";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "skynetservices";
     repo = "skydns";
-    sha256 = "0i1iaif79cwnwm7pc8nxfa261cgl4zhm3p2a5a3smhy1ibgccpq7";
+    rev = "94b2ea0d8bfa43395656ea94d4a6235bdda47129";
+    hash = "sha256-OWLJmGx21UoWwrm6YNbPYdj3OgEZz7C+xccnkMOZ71g=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-J3+DACU9JuazGCZZrfKxHukG5M+nb+WbV3eTG8EaT/w=";
 
-  meta = {
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/skynetservices/skydns/commit/37be34cd64a3037a6d5a3b3dbb673f391e9d7eb1.patch";
+      hash = "sha256-JziYREg3vw8NMIPd8Zv8An7XUj+U6dvgRcaZph0DLPg=";
+    })
+  ];
+
+  subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
+    description = "A distributed service for announcement and discovery of services";
+    homepage = "https://github.com/skynetservices/skydns";
     license = lib.licenses.mit;
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

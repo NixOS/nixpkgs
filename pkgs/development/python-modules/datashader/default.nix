@@ -51,7 +51,7 @@ buildPythonPackage rec {
     scipy
   ] ++ dask.optional-dependencies.complete;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     nbsmoke

@@ -3,8 +3,6 @@
 , xorg
 }:
 
-with lib;
-
 let
   bits = "x86_64";
 
@@ -19,7 +17,7 @@ let
     categories = [ "Network" ];
   };
 
-  tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
+  tarball = "Wavebox_${lib.replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
 in stdenv.mkDerivation {
   pname = "wavebox";
@@ -40,7 +38,7 @@ in stdenv.mkDerivation {
     alsa-lib gtk3 nss
   ];
 
-  runtimeDependencies = [ (getLib udev) libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox

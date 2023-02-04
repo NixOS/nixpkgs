@@ -50,7 +50,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ figsoda ];
-    # https://hydra.nixos.org/build/162650896/nixlog/1
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

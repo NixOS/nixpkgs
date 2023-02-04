@@ -34,11 +34,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.6";
+  version = "1.9.9";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "02j6n693lhfn9x8kaz253xm76zzsdz8h10rkyxnlqiwwbn1wnmsa";
+    sha256 = "0jisxzajsc4wfvxabvfzd0x9y1fxzg39fkhap1781q7wyi4ry9kd";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg zip xz ];

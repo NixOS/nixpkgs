@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 tagtext=""
@@ -10,10 +11,8 @@ elif test -n "$context"; then
     tagflags="--context=$context"
 fi
 
-header "getting $url $partial ${tagtext} into $out"
+echo "getting $url $partial ${tagtext} into $out"
 
 darcs get --lazy $tagflags "$url" "$out"
 # remove metadata, because it can change
 rm -rf "$out/_darcs"
-
-stopNest

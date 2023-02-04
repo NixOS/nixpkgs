@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WjsVvFhwVCzclHxA+Gu2YtR2yK0Opqhncwlg9FEhOLk=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+  '';
+
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ zlib ]
@@ -55,9 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

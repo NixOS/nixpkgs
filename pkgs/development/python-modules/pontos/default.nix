@@ -7,14 +7,16 @@
 , packaging
 , poetry-core
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
 , rich
 , tomlkit
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.10.0";
+  version = "23.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-z+oJakeZARnyZrkkNjLlyFcOB73u9+G0tXhbI13neyc=";
+    hash = "sha256-4GIfXHDY2g6dhvymYzunK2UWxJcO37dXQbI2jxOIwCw=";
   };
 
   nativeBuildInputs = [
@@ -34,19 +36,18 @@ buildPythonPackage rec {
     colorful
     httpx
     packaging
+    python-dateutil
     rich
+    typing-extensions
     tomlkit
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'packaging = "^20.3"' 'packaging = "*"'
-  '';
 
   disabledTests = [
     "PrepareTestCase"
@@ -69,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck

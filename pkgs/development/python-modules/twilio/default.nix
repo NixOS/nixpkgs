@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "7.15.3";
+  version = "7.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-c1UNqp8eYK9tkogpcDtTOTHa5ME+yOkop2UccXwOAqM=";
+    hash = "sha256-Z783lHGZc5/Fl4pnM5mf863UVuFroRNwV5cljPSpCmw=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     django
     mock
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
+    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

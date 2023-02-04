@@ -4,11 +4,11 @@ let
   inherit (builtins) add length readFile replaceStrings unsafeDiscardStringContext toString map;
 in buildDotnetPackage rec {
   pname = "keepass";
-  version = "2.49";
+  version = "2.52";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "sha256-1hg4bRuQSG+UzEQGeQcSURTmTxt5ITGQqfg0IS7RWt0=";
+    sha256 = "sha256-6dGCfysen26VGHIHETuNGkqHbPyeWRIEopqJa6AMzXA=";
   };
 
   sourceRoot = ".";

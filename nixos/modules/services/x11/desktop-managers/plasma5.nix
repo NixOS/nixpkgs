@@ -32,7 +32,7 @@ let
   inherit (lib)
     getBin optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption types;
+    mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
 
   ini = pkgs.formats.ini { };
 
@@ -198,6 +198,11 @@ in
       example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
     };
 
+    notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
+      default = [ "noto-fonts" ];
+      example = "noto-fonts-lgc-plus";
+    };
+
     # Internally allows configuring kdeglobals globally
     kdeglobals = mkOption {
       internal = true;
@@ -360,6 +365,7 @@ in
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ];
           optionalPackages = [
+            pkgs.aha # needed by kinfocenter for fwupd support
             plasma-browser-integration
             konsole
             oxygen
@@ -384,6 +390,11 @@ in
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
+      # Extra services for D-Bus activation
+      services.dbus.packages = [
+        plasma5.kactivitymanagerd
+      ];
+
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
         "/share"
@@ -391,12 +402,23 @@ in
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
 
-      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+      environment.sessionVariables = {
+        PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+
+        # Needed for things that depend on other store.kde.org packages to install correctly,
+        # notably Plasma look-and-feel packages (a.k.a. Global Themes)
+        #
+        # FIXME: this is annoyingly impure and should really be fixed at source level somehow,
+        # but kpackage is a library so we can't just wrap the one thing invoking it and be done.
+        # This also means things won't work for people not on Plasma, but at least this way it
+        # works for SOME people.
+        KPACKAGE_DEP_RESOLVERS_PATH = "${pkgs.plasma5Packages.frameworkintegration.out}/libexec/kf5/kpackagehandlers";
+      };
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      fonts.fonts = with pkgs; [ noto-fonts hack-font ];
+      fonts.fonts = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
@@ -446,6 +468,9 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      # xdg-desktop-portal-kde expects PipeWire to be running.
+      # This does not, by default, replace PulseAudio.
+      services.pipewire.enable = mkDefault true;
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
@@ -537,7 +562,7 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable;
+          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
           message = "Plasma Mobile requires pulseaudio.";
         }
       ];
@@ -577,6 +602,8 @@ in
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg

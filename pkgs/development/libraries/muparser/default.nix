@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "muparser";
   version = "2.2.3";
-  url-version = lib.replaceChars ["."] ["_"] version;
+  url-version = lib.replaceStrings ["."] ["_"] version;
 
   src = fetchurl {
     url = "mirror://sourceforge/muparser/muparser_v${url-version}.zip";

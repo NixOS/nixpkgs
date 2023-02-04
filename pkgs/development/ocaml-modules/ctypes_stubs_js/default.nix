@@ -19,11 +19,13 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ integers_stubs_js ];
+  nativeCheckInputs = [
+    nodejs
+    js_of_ocaml-compiler
+  ];
   checkInputs = [
     ctypes
-    js_of_ocaml-compiler
     ppx_expect
-    nodejs
   ];
   doCheck = true;
 

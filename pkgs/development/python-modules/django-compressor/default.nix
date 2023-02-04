@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   doCheck = false; # missing package django-sekizai
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     brotli
     pytestCheckHook

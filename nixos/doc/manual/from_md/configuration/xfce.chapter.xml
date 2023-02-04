@@ -3,7 +3,7 @@
   <para>
     To enable the Xfce Desktop Environment, set
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 services.xserver.desktopManager.xfce.enable = true;
 services.xserver.displayManager.defaultSession = &quot;xfce&quot;;
 </programlisting>
@@ -11,7 +11,7 @@ services.xserver.displayManager.defaultSession = &quot;xfce&quot;;
     Optionally, <emphasis>picom</emphasis> can be enabled for nice
     graphical effects, some example settings:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 services.picom = {
   enable = true;
   fade = true;
@@ -36,8 +36,8 @@ services.picom = {
       <xref linkend="opt-environment.systemPackages" />.
     </para>
     <para>
-      If you'd like to add extra plugins to Thunar, add them to
-      <xref linkend="opt-programs.thunar.plugins" />. You shouldn't just
+      If you’d like to add extra plugins to Thunar, add them to
+      <xref linkend="opt-programs.thunar.plugins" />. You shouldn’t just
       add them to <xref linkend="opt-environment.systemPackages" />.
     </para>
   </section>
@@ -54,9 +54,10 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 </programlisting>
     <para>
       This is caused by some needed GNOME services not running. This is
-      all fixed by enabling &quot;Launch GNOME services on startup&quot;
-      in the Advanced tab of the Session and Startup settings panel.
-      Alternatively, you can run this command to do the same thing.
+      all fixed by enabling <quote>Launch GNOME services on
+      startup</quote> in the Advanced tab of the Session and Startup
+      settings panel. Alternatively, you can run this command to do the
+      same thing.
     </para>
     <programlisting>
 $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true

@@ -1,4 +1,4 @@
-fixupOutputHooks+=(_makeSymlinksRelative)
+postFixupHooks+=(_makeSymlinksRelative)
 
 # For every symlink in $output that refers to another file in $output
 # ensure that the symlink is relative. This removes references to the output
@@ -6,8 +6,8 @@ fixupOutputHooks+=(_makeSymlinksRelative)
 _makeSymlinksRelative() {
     local symlinkTarget
 
-    if [ -n "${dontRewriteSymlinks-}" ]; then
-        return 0
+    if [ "${dontRewriteSymlinks-}" ] || [ ! -e "$prefix" ]; then
+       return
     fi
 
     while IFS= read -r -d $'\0' f; do

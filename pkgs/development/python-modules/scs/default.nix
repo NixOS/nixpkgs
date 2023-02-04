@@ -31,7 +31,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
   meta = with lib; {

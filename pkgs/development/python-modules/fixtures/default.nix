@@ -37,7 +37,7 @@ buildPythonPackage rec {
     six # not in install_requires, but used in fixture.py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
   ];
 

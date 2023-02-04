@@ -73,7 +73,7 @@ There are also two ways to try compiling a package which has been marked as unsu
     }
     ```
 
-The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program *ought* to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g.  `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what \"ought\" means exactly. That is left to the package maintainer.
+The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program *ought* to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g.  `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what "ought" means exactly. That is left to the package maintainer.
 
 ## Installing unfree packages {#sec-allow-unfree}
 
@@ -310,16 +310,16 @@ For this to work fully, you must also have this script sourced when you are logg
 
 ```ShellSession
 #!/bin/sh
-if [ -d $HOME/.nix-profile/etc/profile.d ]; then
-  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do
-    if [ -r $i ]; then
-      . $i
+if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
+  for i in "${HOME}/.nix-profile/etc/profile.d/"*.sh; do
+    if [ -r "$i" ]; then
+      . "$i"
     fi
   done
 fi
 ```
 
-Now just run `source $HOME/.profile` and you can starting loading man pages from your environment.
+Now just run `. "${HOME}/.profile"` and you can start loading man pages from your environment.
 
 ### GNU info setup {#sec-gnu-info-setup}
 

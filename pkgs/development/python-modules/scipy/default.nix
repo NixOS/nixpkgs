@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchPypi
-, fetchpatch
 , python
 , pythonOlder
 , buildPythonPackage
@@ -21,20 +20,13 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.9.1";
+  version = "1.9.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JtKMRokA5tX9s30oEqtG2wzNIsY7qglQV4cfqjpJi8k=";
+    sha256 = "sha256-+8XAXIXBoCvnex/1kQh8g7xEV5xtK9n7eYu2TqXhoCc=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/scipy/scipy/commit/318d8c6d16fdf000be8637e9917989729f2c8ce7.diff";
-      sha256 = "sha256-Zfb9GYP0r9MDJ91hSzMN1r4eNilajPThNIvZmDzFEXo=";
-    })
-  ];
 
   nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
@@ -47,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose pytest pytest-xdist ];
+  nativeCheckInputs = [ nose pytest pytest-xdist ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 

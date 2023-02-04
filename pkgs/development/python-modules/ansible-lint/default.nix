@@ -22,13 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.8.6";
+  version = "6.11.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Fx/o2tYgeLmBm1x01g61r6ow6py5ybqHBhSeVsVam24=";
+    hash = "sha256-NIrDVsOBem25j7aZPsF7WyNsFjEiOHWfCj8U81Q6nlA=";
   };
 
   postPatch = ''
@@ -59,7 +60,7 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-xdist
     pytestCheckHook
@@ -91,15 +92,15 @@ buildPythonPackage rec {
     "test_run_inside_role_dir"
     "test_run_multiple_role_path_no_trailing_slash"
     "test_runner_exclude_globs"
-
     "test_discover_lintables_umlaut"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
+    homepage = "https://github.com/ansible/ansible-lint";
+    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sengaya ];
   };

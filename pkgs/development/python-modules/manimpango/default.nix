@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ManimCommunity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ftoESXUMc+jnKmEzhmwZc/R7vVX9idsezPFHRUzPbaU=";
+    hash = "sha256-FT3X6TmGfwd8kRPtuqy78ZCGeEGGg6IJEeEpB7ZbIsA=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

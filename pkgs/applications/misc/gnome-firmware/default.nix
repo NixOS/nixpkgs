@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-firmware";
-  version = "42.2";
+  version = "43.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
     rev = version;
-    sha256 = "L0R2lXU69I6NI7Srq5s+8N9261Ic8B7FVaaXNjz2Ll0=";
+    sha256 = "9QS6X1Cm9/wToQ8hnGNn3VytSCpZI8StZ3+vf0/wbAw=";
   };
 
   nativeBuildInputs = [

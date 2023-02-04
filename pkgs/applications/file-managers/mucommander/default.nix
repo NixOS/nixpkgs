@@ -5,7 +5,7 @@
 , perl
 , makeWrapper
 , writeText
-, jdk11
+, jdk
 , gsettings-desktop-schemas
 }:
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/share/mucommander/mucommander.sh $out/bin/mucommander \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-      --set JAVA_HOME ${jdk11}
+      --set JAVA_HOME ${jdk}
   '';
 
   meta = with lib; {

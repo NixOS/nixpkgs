@@ -13,12 +13,18 @@ buildDunePackage {
   ];
 
   propagatedBuildInputs = [
-    irmin irmin-fs ppx_irmin lwt mtime
+    irmin
+    irmin-fs
+    ppx_irmin
+    lwt
+    mtime
   ];
 
   doCheck = true;
   checkInputs = [
-    alcotest alcotest-lwt cacert
+    alcotest
+    alcotest-lwt
+    cacert
   ];
 
   meta = ppx_irmin.meta // {

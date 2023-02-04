@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.13.2";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ydRdnzOI9syfF2ox9vHA9Q0j8C7ZNb0b7CJfqUprPA0=";
+    rev = version;
+    sha256 = "sha256-3wXZBPYths3+Vhtq4W2BTR47V63o0bq++fWLIpWrm7Y=";
   };
 
-  cargoSha256 = "sha256-IprUSNxoojagXUO/I7WDGJMG0U541ioe4qgLT4hqmbY=";
+  cargoSha256 = "sha256-xBw2OMJMale4MWRyy6v0E0ZE4A98QXLyRu0k7L+9q8k=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ zstd ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

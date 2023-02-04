@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "0.3.3";
+  version = "0.4.0rc1";
 
   format = "wheel";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    sha256 = "9685959dbbb492af005165ef1b9229fdd5d5431580ac181578beae3b4d012d91";
+    sha256 = "bfad8ef469885da5633f7cf7f8cd9a0ae11ea2351a91e507b44cf15973934512";
   };
 
   propagatedBuildInputs = [
@@ -34,10 +34,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
+    changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
-    # Missing sphinx 5.X support
-    # https://github.com/executablebooks/sphinx-book-theme/issues/592
-    broken = true;
   };
 }

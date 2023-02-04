@@ -67,7 +67,7 @@ in {
       '');
 
       servers = mkOption {
-        type = with types; attrsOf (submodule ({config, name, ...}@args: {
+        type = with types; attrsOf (submodule ({ config, name, ... }: {
           options = {
             enable = mkEnableOption (lib.mdDoc ''
               Redis server.
@@ -271,14 +271,11 @@ in {
           };
           config.settings = mkMerge [
             {
-              port = config.port;
+              inherit (config) port logfile databases maxclients appendOnly;
               daemonize = false;
               supervised = "systemd";
               loglevel = config.logLevel;
-              logfile = config.logfile;
               syslog-enabled = config.syslog;
-              databases = config.databases;
-              maxclients = config.maxclients;
               save = if config.save == []
                 then ''""'' # Disable saving with `save = ""`
                 else map
@@ -286,12 +283,11 @@ in {
                   config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
-              appendOnly = config.appendOnly;
               appendfsync = config.appendFsync;
               slowlog-log-slower-than = config.slowLogLogSlowerThan;
               slowlog-max-len = config.slowLogMaxLen;
             }
-            (mkIf (config.bind != null) { bind = config.bind; })
+            (mkIf (config.bind != null) { inherit (config) bind; })
             (mkIf (config.unixSocket != null) {
               unixsocket = config.unixSocket;
               unixsocketperm = toString config.unixSocketPerm;

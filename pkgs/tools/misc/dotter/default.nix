@@ -23,12 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

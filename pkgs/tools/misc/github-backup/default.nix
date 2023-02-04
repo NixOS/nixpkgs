@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.41.0";
+  version = "0.42.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "6e6462125b930de4d28efed7ee0d4377e77371a4918768436c3cecf79cc87078";
+    sha256 = "sha256-tFfS3Z7xrbN2QEOrYcUVd8/YwGKfmR2NaUBeXuSL+tY=";
   };
 
   makeWrapperArgs = [
@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
-    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -7,9 +7,13 @@ dotnetInstallHook() {
     runHook preInstall
 
     if [ "${selfContainedBuild-}" ]; then
-        dotnetInstallFlags+=("--self-contained")
+        dotnetInstallFlags+=(--runtime "@runtimeId@" "--self-contained")
     else
         dotnetInstallFlags+=("--no-self-contained")
+    fi
+
+    if [ "${useAppHost-}" ]; then
+        dotnetInstallFlags+=("-p:UseAppHost=true")
     fi
 
     dotnetPublish() {
@@ -17,7 +21,6 @@ dotnetInstallHook() {
         env dotnet publish ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            -p:UseAppHost=true \
             --output "$out/lib/${pname}" \
             --configuration "@buildType@" \
             --no-build \

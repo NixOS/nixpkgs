@@ -37,7 +37,7 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

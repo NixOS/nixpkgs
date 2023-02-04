@@ -1,36 +1,46 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
-, writeScript
-, addOpenGLRunpath
-, cmake
+, rocmUpdateScript
 , pkg-config
+, cmake
 , xxd
-, elfutils
-, libdrm
-, llvm
-, numactl
 , rocm-device-libs
-, rocm-thunk }:
+, rocm-thunk
+, libelf
+, libdrm
+, numactl
+, valgrind
+, libxml2
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.3.1";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
-    rev = "rocm-${version}";
-    hash = "sha256-26E7vA2JlC50zmpaQfDrFMlgjAqmfTdp9/A8g5caDqI=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-JkTXTQmdESHSFbA6HZdMK3pYEApz9aoAlMzdXayzdyY=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  nativeBuildInputs = [ cmake pkg-config xxd ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    xxd
+  ];
 
-  buildInputs = [ elfutils libdrm llvm numactl ];
-
-  cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${rocm-thunk}" ];
+  buildInputs = [
+    rocm-thunk
+    libelf
+    libdrm
+    numactl
+    valgrind
+    libxml2
+  ];
 
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
@@ -45,20 +55,22 @@ stdenv.mkDerivation rec {
   '';
 
   fixupPhase = ''
-    rm -rf $out/hsa
+    rm -rf $out/hsa/*
+    ln -s $out/{include,lib} $out/hsa
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCR-Runtime/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-runtime "$version"
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
-}
+})

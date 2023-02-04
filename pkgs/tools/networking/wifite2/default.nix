@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     pixiewps
   ];
 
-  checkInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
+  nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/kimocoder/wifite2";

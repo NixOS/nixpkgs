@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "0p4zz8b5bwbw7w0vhbyihl99d2gw13cb81rxzj4z626a1cnl8vm6";
   };
 
-  checkInputs = [ nose blinker tzlocal mock rednose ];
+  nativeCheckInputs = [ nose blinker tzlocal mock rednose ];
   propagatedBuildInputs = [ flask six jsonschema pytz aniso8601 flask-restful ]
    ++ lib.optional isPy27 enum34;
 

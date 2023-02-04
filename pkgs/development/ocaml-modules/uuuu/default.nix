@@ -25,9 +25,7 @@ buildDunePackage rec {
 
   buildInputs = [ angstrom ];
 
-  strictDeps = !doCheck;
-
-  checkInputs = [ re ];
+  nativeCheckInputs = [ re ];
   doCheck = true;
 
   meta = {

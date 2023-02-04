@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnuplot
   ];
 

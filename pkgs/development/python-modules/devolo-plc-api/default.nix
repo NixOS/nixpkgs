@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    rev = "v${version}";
-    sha256 = "sha256-Gjs4x52LwCsE0zAJjLO1N0w5r1jDJkZoVY1JVZB8bmE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xM7g6q18A+qmOhQeey4uxs6ow6Hf5YKDdbpXwYr2RXo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -39,22 +39,21 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytest-mock
     pytestCheckHook
   ];
 
-
-
   pythonImportsCheck = [
     "devolo_plc_api"
   ];
 
   meta = with lib; {
-    description = "Python module to interact with Devolo PLC devices";
+    description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
+    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -21,7 +21,7 @@
 , libnatpmp
 , libpulseaudio
 , libupnp
-, libyamlcpp
+, yaml-cpp
 , msgpack
 , opendht-jami
 , openssl
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     libnatpmp
     libpulseaudio
     libupnp
-    libyamlcpp
+    yaml-cpp
     msgpack
     opendht-jami
     openssl

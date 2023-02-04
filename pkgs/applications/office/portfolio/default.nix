@@ -11,6 +11,7 @@
 , makeDesktopItem
 , webkitgtk
 , wrapGAppsHook
+, writeScript
 }:
 let
   desktopItem = makeDesktopItem {
@@ -26,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.59.3";
+  version = "0.60.2";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-HYzDenWicKbYTEWGaTtoEoruLrqPCxx64eLJBEHC+A0=";
+    hash = "sha256-jSRZZufGi1wmdT7LeNutkO74bqln8uJ5TSEDCJyfPB4=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +61,20 @@ stdenv.mkDerivation rec {
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/buchen/portfolio/tags" | jq '.[0].name' --raw-output)"
+    update-source-version portfolio "$version"
+  '';
+
   meta = with lib; {
     description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
+    mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };
 }

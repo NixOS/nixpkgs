@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "SELinux policy core utilities (packaging additions)";
     license = licenses.gpl2;
     inherit (libsepol.meta) homepage platforms;
-    maintainers = [ maintainers.e-user ];
+    maintainers = [ ];
   };
 }

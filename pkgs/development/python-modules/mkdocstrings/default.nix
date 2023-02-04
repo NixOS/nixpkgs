@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.19.0";
+  version = "0.20.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,9 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-7OF1CrRnE4MYHuYD/pasnZpLe9lrbieGp4agnWAaKVo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-eFHcwbYEIwVWvDJWlmeUvEdqp3NYAF8SgdHJGw6bEMc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}'
+  '';
 
   nativeBuildInputs = [
     pdm-pep517
@@ -39,14 +45,9 @@ buildPythonPackage rec {
     pymdown-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   pythonImportsCheck = [
     "mkdocstrings"
@@ -57,9 +58,15 @@ buildPythonPackage rec {
     "tests/test_extension.py"
   ];
 
+  disabledTests = [
+    # Not all requirements are available
+    "test_disabling_plugin"
+  ];
+
   meta = with lib; {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

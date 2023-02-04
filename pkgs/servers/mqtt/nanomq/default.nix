@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja, mbedtls, sqlite }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.13.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
-    rev = version;
-    hash = "sha256-fxV/X34yohh/bxOsnoVngBKiwqABQDthLgZxvomC0+g=";
+    rev = finalAttrs.version;
+    hash = "sha256-h4TCorZfg9Sin4CZPRifUkqeg4F2V1DluolerSeREs4=";
     fetchSubmodules = true;
   };
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mbedtls sqlite ];
 
   cmakeFlags = [
+    "-DBUILD_NANOMQ_CLI=ON"
     "-DNNG_ENABLE_TLS=ON"
     "-DNNG_ENABLE_SQLITE=ON"
   ];
@@ -33,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

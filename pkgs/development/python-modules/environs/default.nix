@@ -29,7 +29,7 @@ buildPythonPackage rec {
     python-dotenv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-database-url
     dj-email-url
     django-cache-url

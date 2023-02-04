@@ -242,7 +242,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") firefox').
+     (e.g. `++ optional (system == "i686-linux") firefox`).
 
      Type: optional :: bool -> a -> [a]
 
@@ -283,7 +283,7 @@ rec {
   */
   toList = x: if isList x then x else [x];
 
-  /* Return a list of integers from `first' up to and including `last'.
+  /* Return a list of integers from `first` up to and including `last`.
 
      Type: range :: int -> int -> [int]
 
@@ -306,7 +306,7 @@ rec {
   /* Splits the elements of a list in two lists, `right` and
      `wrong`, depending on the evaluation of a predicate.
 
-     Type: (a -> bool) -> [a] -> { right :: [a], wrong :: [a] }
+     Type: (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
 
      Example:
        partition (x: x > 2) [ 5 1 2 3 4 ]
@@ -320,7 +320,7 @@ rec {
     ) { right = []; wrong = []; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
-     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+     Predicate should return a string which becomes keys of attrset `groupBy` returns.
 
      `groupBy'` allows to customise the combining function and initial value
 
@@ -374,7 +374,7 @@ rec {
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
 
-     Type: zipLists :: [a] -> [b] -> [{ fst :: a, snd :: b}]
+     Type: zipLists :: [a] -> [b] -> [{ fst :: a; snd :: b; }]
 
      Example:
        zipLists [ 1 2 ] [ "a" "b" ]

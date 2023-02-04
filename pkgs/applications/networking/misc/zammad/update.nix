@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/update.sh
     wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

@@ -15,14 +15,14 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "1.5.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-h7zcHCOxe1h7HRB6idtjf4HUBEoHC4V2pqbN9hpe00g=";
+    hash = "sha256-unTss2byytG8KUQfg5s34YpRuHHDLo7D/ZickHhz1AE=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out
     cp -r ../include $out
+    cp -r ../dmlc-core/include/dmlc $out/include
+    cp -r ../rabit/include/rabit $out/include
     install -Dm755 ../lib/${libname} $out/lib/${libname}
     install -Dm755 ../xgboost $out/bin/xgboost
     runHook postInstall
@@ -65,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nviets ];
   };
 }

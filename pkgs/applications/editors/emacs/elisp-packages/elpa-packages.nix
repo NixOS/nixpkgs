@@ -60,6 +60,7 @@ self: let
         else super.org-transclusion;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       cl-lib = null; # builtin
+      cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
       seq = if lib.versionAtLeast self.emacs.version "27"

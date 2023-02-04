@@ -116,7 +116,7 @@ buildPerlPackage rec {
   ];
 
   doCheck = !stdenv.isDarwin;
-  checkInputs = [
+  nativeCheckInputs = [
     MailIMAPClient
     curl
     git

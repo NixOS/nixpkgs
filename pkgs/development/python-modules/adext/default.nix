@@ -27,7 +27,7 @@ buildPythonPackage rec {
     alarmdecoder
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,12 +1,12 @@
-{ lib, python3 }:
+{ lib, python3, khard, testers }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.17.0";
+  version = "0.18.0";
   pname = "khard";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
+    sha256 = "05860fdayqap128l7i6bcmi9kdyi2gx02g2pmh88d56xgysd927y";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,6 +32,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "khard" ];
+
+  passthru.tests.version = testers.testVersion { package = khard; };
 
   meta = {
     homepage = "https://github.com/scheibler/khard";

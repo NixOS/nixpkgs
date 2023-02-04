@@ -1,6 +1,19 @@
 # Testers {#chap-testers}
 This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
 
+## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+
+Checks whether a package exposes a certain `pkg-config` module.
+
+Example:
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  package = finalAttrs.finalPackage;
+  moduleName = "libfoo";
+}
+```
+
 ## `testVersion` {#tester-testVersion}
 
 Checks the command output contains the specified version
@@ -62,7 +75,7 @@ runCommand "example" {
 '';
 ```
 
-While `testBuildFailure` is designed to keep changes to the original builder's 
+While `testBuildFailure` is designed to keep changes to the original builder's
 environment to a minimum, some small changes are inevitable.
 
  - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
@@ -147,7 +160,7 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
   name = "nix-source";
   url = "https://github.com/NixOS/nix";
   rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-  sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
 };
 ```
 

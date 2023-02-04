@@ -1,0 +1,18 @@
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index 911e280..d484943 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -1,12 +1,6 @@
+ find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-    pybind11
+-    GIT_REPOSITORY https://github.com/pybind/pybind11
+-    GIT_TAG v2.10.0)
+-FetchContent_MakeAvailable(pybind11)
+-
++find_package(pybind11 REQUIRED)
+ add_library(ale-py MODULE ale_python_interface.cpp)
+ # Depend on the ALE and pybind11 module
+ target_link_libraries(ale-py PUBLIC ale ale-lib)

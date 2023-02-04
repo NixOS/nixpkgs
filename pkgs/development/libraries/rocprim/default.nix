@@ -1,25 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , hip
-, gtest ? null
-, gbenchmark ? null
+, gtest
+, gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> gbenchmark != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  rocmVersion = "5.3.1";
-  version = "2.11.0-${rocmVersion}";
+  version = "5.4.2";
 
   outputs = [
     "out"
@@ -32,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-aapvj9bwwlg7VJfnH1PVR8DulMcJh1xR6B4rPPGU6Q4=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-VGTrMllQguIJKexdQNXC07KX7TxU/e5oT6VZdlSRcQY=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +36,7 @@ stdenv.mkDerivation rec {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ] ++ lib.optionals buildBenchmarks [
     gbenchmark
@@ -75,11 +65,18 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
+
   meta = with lib; {
     description = "ROCm parallel primitives";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
-}
+})

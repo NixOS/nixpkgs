@@ -123,7 +123,7 @@ in
           };
         };
         description = lib.mdDoc ''
-          Extra settings merged in and overwritting defaults in sddm.conf.
+          Extra settings merged in and overwriting defaults in sddm.conf.
         '';
       };
 

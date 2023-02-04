@@ -255,12 +255,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.7.0";
+    version = "11.0.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
-      hash = "sha256-/lQ3TLFQ1IgwYM540gxAFiEGOfHQIQQMf/pqCZ29ztQ=";
+      hash = "sha256-2rt9crMqNFevIHFIdOGWDq+j0ZJPVt1a9Z7P9HG58Ks=";
     };
 
     meta = with lib; {

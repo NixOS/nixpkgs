@@ -3,6 +3,7 @@
 , AudioUnit
 , CoreAudio
 , CoreMIDI
+, portaudio
 , alsa-lib ? null
 , libpulseaudio ? null
 , libjack2 ? null
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "csound";
-  version = "6.17.0";
+  version = "6.18.1";
 
   hardeningDisable = [ "format" ];
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "csound";
     rev = version;
-    sha256 = "sha256-O19jm3JxHg4TcQzWQZu1uFjfYN2FR41fCRq5YGnTGD0=";
+    sha256 = "sha256-O7s92N54+zIl07eIdK/puoSve/qJ3O01fTh0TP+VdZA=";
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
     ++ lib.optionals stdenv.isDarwin [
-      Accelerate AudioUnit CoreAudio CoreMIDI
+      Accelerate AudioUnit CoreAudio CoreMIDI portaudio
     ] ++ lib.optionals stdenv.isLinux (builtins.filter (optional: optional != null) [
       alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen

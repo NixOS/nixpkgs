@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , jdk8
-, jdk
+, jdk17
 , zlib
 , file
 , wrapQtAppsHook
@@ -20,7 +20,7 @@
 , tomlplusplus
 , ghc_filesystem
 , msaClientID ? ""
-, jdks ? [ jdk jdk8 ]
+, jdks ? [ jdk17 jdk8 ]
 }:
 
 let
@@ -34,16 +34,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "prismlauncher";
-  version = "5.2";
+  version = "6.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-sKAhcbDoRbWf/DuwcBmDjb+VSMM0K2C33gu1K9AlPoQ=";
+    sha256 = "sha256-7tptHKWkbdxTn6VIPxXE1K3opKRiUW2zv9r6J05dcS8=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake file jdk wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
   buildInputs = [
     qtbase
     qtsvg

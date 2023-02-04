@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     services.xserver.enable = true;
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
-    qt5 = {
+    qt = {
       enable = true;
       platformTheme = "gnome";
       style = "adwaita-dark";

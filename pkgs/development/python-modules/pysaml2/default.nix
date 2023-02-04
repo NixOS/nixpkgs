@@ -59,7 +59,7 @@ in buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pyasn1
     pymongo3

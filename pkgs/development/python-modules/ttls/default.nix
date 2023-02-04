@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ttls";
-  version = "1.4.3";
+  version = "1.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschlyter";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lBmkfB7HXB+1xLbfOl4wVtsOVfKhztoDBqzV8i6bFAg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W7r2XgH8SloL9l/Lw1xWLmjF8aMBHWFe2DQ3tkqu+JQ=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Twinkly LEDs";
     homepage = "https://github.com/jschlyter/ttls";
+    changelog = "https://github.com/jschlyter/ttls/blob/v${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

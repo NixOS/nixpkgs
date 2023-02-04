@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblapack";
-  version = "3.10.1";
+  version = "3.11";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${version}";
-    sha256 = "07wwydw72gl4fhfqcyc8sbz7ynm0i23pggyfqn0r9a29g7qh8bqs";
+    sha256 = "sha256-AYD78u70y8cY19hmM/aDjQEzxO8u9lPWhCFxRe5cqXI=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];
@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     "-DCBLAS=ON"
     "-DBUILD_TESTING=ON"
   ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON"
-    ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
+    ++ lib.optional blas64 "-DBUILD_INDEX64=ON"
+    # Tries to run host platform binaries during the build
+    # Will likely be disabled by default in 3.12, see:
+    # https://github.com/Reference-LAPACK/lapack/issues/757
+    ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) "-DTEST_FORTRAN_COMPILER=OFF";
 
   passthru = { inherit blas64; };
 

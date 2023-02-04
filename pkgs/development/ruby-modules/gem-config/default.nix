@@ -14,7 +14,7 @@
 #   gems that don't behave correctly, fixes are already provided in the form of
 #   derivations.
 #
-# This seperates "what to build" (the exact gem versions) from "how to build"
+# This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 }@args:
 
 let
@@ -384,6 +384,9 @@ in
         --replace "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
+    meta.broken = true; # At 2023-01-20, errors as:
+                        #   "Failed to build gem native extension."
+                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -539,6 +542,10 @@ in
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  psych = attrs: {
+    buildInputs = [ libyaml ];
   };
 
   puma = attrs: {

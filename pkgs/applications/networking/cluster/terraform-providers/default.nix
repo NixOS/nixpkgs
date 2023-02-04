@@ -17,17 +17,21 @@ let
     ({ owner
      , repo
      , rev
-     , version
+     , spdx ? "UNSET"
+     , version ? lib.removePrefix "v" rev
      , hash ? throw "use hash instead of sha256" # added 2202/09
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
      , mkProviderGoModule ? buildGoModule
-       # Looks like "registry.terraform.io/vancluever/acme"
-     , provider-source-address
+       # "https://registry.terraform.io/providers/vancluever/acme"
+     , homepage ? ""
+       # "registry.terraform.io/vancluever/acme"
+     , provider-source-address ? lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ] homepage
      , ...
      }@attrs:
+      assert lib.stringLength provider-source-address > 0;
       mkProviderGoModule {
         pname = repo;
         inherit vendorHash version deleteVendor proxyVendor;
@@ -42,6 +46,11 @@ let
           inherit owner repo rev hash;
         };
 
+        meta = {
+          inherit homepage;
+          license = lib.getLicenseFromSpdxId spdx;
+        };
+
         # Move the provider to libexec
         postInstall = ''
           dir=$out/libexec/terraform-providers/${provider-source-address}/${version}/''${GOOS}_''${GOARCH}
@@ -52,6 +61,7 @@ let
 
         # Keep the attributes around for later consumption
         passthru = attrs // {
+          inherit provider-source-address;
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
             ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
@@ -67,9 +77,8 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      netlify = automated-providers.netlify.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
-      pass = automated-providers.pass.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
-      tencentcloud = automated-providers.tencentcloud.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
+      checkly = automated-providers.checkly.override { spdx = "MIT"; };
       gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
@@ -79,17 +88,21 @@ let
   removed-providers =
     let
       archived = name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
+      license = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date} because of unclear licensing";
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
       b2 = removed "b2" "2022/06";
       checkpoint = removed "checkpoint" "2022/11";
       dome9 = removed "dome9" "2022/08";
+      logicmonitor = license "logicmonitor" "2022/11";
       ncloud = removed "ncloud" "2022/08";
+      nsxt = license "nsxt" "2022/11";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
       panos = removed "panos" "2022/05";
       template = archived "template" "2022/05";
+      vercel = license "vercel" "2022/11";
     };
 
   # excluding aliases, used by terraform-full

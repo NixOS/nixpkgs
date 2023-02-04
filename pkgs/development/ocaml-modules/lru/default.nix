@@ -2,13 +2,11 @@
 
 buildDunePackage rec {
   pname = "lru";
-  version = "0.3.0";
-
-  useDune2 = true;
+  version = "0.3.1";
 
   src = fetchurl {
-    url = "https://github.com/pqwy/lru/releases/download/v${version}/lru-v${version}.tbz";
-    sha256 = "1ab9rd7cq15ml8x0wjl44wy99h5z7x4g9vkkz4i2d7n84ghy7vw4";
+    url = "https://github.com/pqwy/lru/releases/download/v${version}/lru-${version}.tbz";
+    hash = "sha256-bL4j0np9WyRPhpwLiBQNR/cPQTpkYu81wACTJdSyNv0=";
   };
 
   propagatedBuildInputs = [ psq ];

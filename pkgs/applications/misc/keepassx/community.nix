@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , qttools
@@ -36,8 +37,6 @@
 , nixosTests
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "keepassxc";
   version = "2.7.4";
@@ -49,13 +48,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-amedKK9nplLVJTldeabN3/c+g/QesrdH+qx+rba2/4s=";
   };
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang [
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
   ];
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch
@@ -66,13 +65,13 @@ stdenv.mkDerivation rec {
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_UPDATECHECK=OFF"
   ]
-  ++ (optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
-  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
-  ++ (optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
-  ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-  ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
-  ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-  ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
+  ++ (lib.optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
+  ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
+  ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
+  ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
+  ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
@@ -81,8 +80,9 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
-    # testcli and testgui are flaky - skip them both
-    make test ARGS+="-E 'testcli|testgui' --output-on-failure"
+    # testcli, testgui and testkdbx4 are flaky - skip them all
+    # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
+    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
 
     runHook postCheck
   '';
@@ -90,8 +90,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
   dontWrapGApps = true;
-  postFixup = ''
+  preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
   '';
 
   buildInputs = [
@@ -108,14 +110,14 @@ stdenv.mkDerivation rec {
     readline
     zlib
   ]
-  ++ optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication
-  ++ optional stdenv.isDarwin qtmacextras
-  ++ optional stdenv.isLinux libusb1
-  ++ optional withKeePassX11 qtx11extras;
+  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication
+  ++ lib.optional stdenv.isDarwin qtmacextras
+  ++ lib.optional stdenv.isLinux libusb1
+  ++ lib.optional withKeePassX11 qtx11extras;
 
   passthru.tests = nixosTests.keepassxc;
 
-  meta = {
+  meta = with lib; {
     description = "Offline password manager with many features.";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
@@ -128,6 +130,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato turion srapenne ];
     platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin;  # see to https://github.com/NixOS/nixpkgs/issues/172165
   };
 }

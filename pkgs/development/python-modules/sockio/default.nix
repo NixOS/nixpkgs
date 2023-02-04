@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace "--durations=2 --verbose" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

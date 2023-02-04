@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsv";
-  version = "unstable-2022-11-12";
+  version = "0.3.5-alpha";
 
   src = fetchFromGitHub {
     owner = "liquidaty";
     repo = "zsv";
-    rev = "058a990e2086e639d1e11ed8b2ae81b03e4bfcac";
-    sha256 = "sha256-V1wkwNSpMsSpaL/j4z4TN59W1+Xn6MYMEWBdwdtTz+s=";
+    rev = "v${version}";
+    hash = "sha256-HW/w2bJVnTELh36rUfGIzAsc6e+PTBGsAdHDz7gFAdI=";
   };
 
   nativeBuildInputs = [ perl ];

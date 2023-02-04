@@ -94,7 +94,7 @@ in
         '';
 
         wantedBy = [ "multi-user.target" ];
-        after = [ ((replaceChars [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
+        after = [ ((replaceStrings [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
 
         restartTriggers = [ config.environment.etc.projects.source ];
 

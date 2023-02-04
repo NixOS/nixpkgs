@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-3mCzbFuBIMdF6tbKLxqNKAO50vaRWeOxpydJ4ZeE+Vc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
+    changelog = "https://github.com/carpedm20/emoji/blob/v${version}/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
   };

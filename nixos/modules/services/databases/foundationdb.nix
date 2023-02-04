@@ -424,6 +424,6 @@ in
     };
   };
 
-  meta.doc         = ./foundationdb.xml;
+  meta.doc         = ./foundationdb.md;
   meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

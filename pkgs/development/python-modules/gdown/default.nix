@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "gdown";
-  version = "4.5.3";
+  version = "4.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bL991BCFiMc0qliBMdjh1S5k8Ic4cPcfdMusGV8MYO8=";
+    hash = "sha256-XOPbCu2lT0bKrLLfhvMcPj7NF8NVaJ5kVthftSi6l0k=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A CLI tool for downloading large files from Google Drive";
     homepage = "https://github.com/wkentaro/gdown";
+    changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ breakds ];
   };

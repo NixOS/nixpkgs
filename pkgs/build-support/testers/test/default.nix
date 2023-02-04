@@ -12,6 +12,8 @@ let
 
 in
 lib.recurseIntoAttrs {
+  hasPkgConfigModule = pkgs.callPackage ../hasPkgConfigModule/tests.nix { };
+
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
   nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, pkgs, figlet, ... }: {
@@ -29,15 +31,24 @@ lib.recurseIntoAttrs {
     happy = runCommand "testBuildFailure-happy" {
       failed = testers.testBuildFailure (runCommand "fail" {} ''
         echo ok-ish >$out
+
         echo failing though
         echo also stderr 1>&2
+        echo 'line\nwith-\bbackslashes'
+        printf "incomplete line - no newline"
+
         exit 3
       '');
     } ''
+      grep -F 'ok-ish' $failed/result
+
       grep -F 'failing though' $failed/testBuildFailure.log
       grep -F 'also stderr' $failed/testBuildFailure.log
-      grep -F 'ok-ish' $failed/result
+      grep -F 'line\nwith-\bbackslashes' $failed/testBuildFailure.log
+      grep -F 'incomplete line - no newline' $failed/testBuildFailure.log
+
       [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+
       touch $out
     '';
 
@@ -49,9 +60,10 @@ lib.recurseIntoAttrs {
       inherit hello;
     } ''
       echo "Checking $failed/testBuildFailure.log"
-      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log
+      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log >/dev/null
       [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
       touch $out
+      echo 'All good.'
     '';
 
     multiOutput = runCommand "testBuildFailure-multiOutput" {

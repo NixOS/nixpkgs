@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.24.0";
+  version = "0.25.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
-    hash = "sha256-Gcht9pmh15dvSHRsG9y82l4HoJ7l/gxbmrRh7Jow2Bs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AZZhwHtVhdHkztzr/Hdi63VC5CjK2Vz8h8zizmSUdNY=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";
+    changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

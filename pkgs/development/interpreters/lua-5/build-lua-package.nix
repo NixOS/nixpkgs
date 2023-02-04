@@ -14,14 +14,14 @@
 , rockspecVersion ? version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? "${lua.pname}${lua.sourceVersion.major}.${lua.sourceVersion.minor}-"
+, namePrefix ? "${lua.pname}${lib.versions.majorMinor version}-"
 
 # Dependencies for building the package
 , buildInputs ? []
 
 # Dependencies needed for running the checkPhase.
-# These are added to buildInputs when doCheck = true.
-, checkInputs ? []
+# These are added to nativeBuildInputs when doCheck = true.
+, nativeCheckInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -114,7 +114,7 @@ let
   nativeBuildInputs = [
     wrapLua
     luarocks
-  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ self.checkInputs);
+  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs);
 
   buildInputs = buildInputs
     ++ (map (d: d.dep) externalDeps');

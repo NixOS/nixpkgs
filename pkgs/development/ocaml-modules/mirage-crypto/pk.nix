@@ -10,8 +10,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng
                             zarith eqaf sexplib0 ];
 
-  strictDeps = !doCheck;
-
   doCheck = true;
   checkInputs = [ ounit2 randomconv ];
 

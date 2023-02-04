@@ -6,24 +6,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "catfs";
-  version = "unstable-2020-03-21";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kahing";
     repo = pname;
-    rev = "daa2b85798fa8ca38306242d51cbc39ed122e271";
-    sha256 = "0zca0c4n2p9s5kn8c9f9lyxdf3df88a63nmhprpgflj86bh8wgf5";
+    rev = "v${version}";
+    hash = "sha256-OvmtU2jpewP5EqPwEFAf67t8UCI1WuzUO2QQj4cH1Ak=";
   };
 
-  cargoSha256 = "1agcwq409s40kyij487wjrp8mj7942r9l2nqwks4xqlfb0bvaimf";
-
-  cargoPatches = [
-    # update cargo lock
-    (fetchpatch {
-      url = "https://github.com/kahing/catfs/commit/f838c1cf862cec3f1d862492e5be82b6dbe16ac5.patch";
-      sha256 = "1r1p0vbr3j9xyj9r1ahipg4acii3m4ni4m9mp3avbi1rfgzhblhw";
-    })
+  patches = [
+    # monitor https://github.com/kahing/catfs/issues/71
+    ./fix-for-rust-1.65.diff
   ];
+
+  cargoHash = "sha256-xF1J2Pr4qtNFcd2kec4tnbdYxoLK+jRnzp8p+cmNOcI=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pluggy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];

@@ -14,7 +14,7 @@ if pythonAtLeast "3.4" then null else buildPythonPackage rec {
     sha256 = "cce6a7477ed816bd2542d03d53db9f0db935dd013b70f336a95c73979289f248";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/enum34";

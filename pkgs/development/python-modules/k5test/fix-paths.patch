@@ -7,13 +7,13 @@ index e289fac..e2f486a 100644
      # if there was no LD_LIBRARY_PATH, or the above failed
      if _PLUGIN_DIR is None:
 -        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib64')
-+        lib_dir = os.path.join(get_output('@krb5FullDev@/bin/krb5-config --prefix'), 'lib64')
++        lib_dir = os.path.join(get_output('@krb5Dev@/bin/krb5-config --prefix'), 'lib64')
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      # /usr/lib64 seems only to be distinct on Fedora/RHEL/Centos family
      if _PLUGIN_DIR is None:
 -        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib')
-+        lib_dir = os.path.join(get_output('@krb5FullDev@/bin/krb5-config --prefix'), 'lib')
++        lib_dir = os.path.join(get_output('@krb5Dev@/bin/krb5-config --prefix'), 'lib')
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      if _PLUGIN_DIR is not None:
@@ -53,7 +53,7 @@ index 161e5ad..9f50049 100644
          if provider_cls == K5Realm:
              krb5_config = _discover_path('krb5-config',
 -                                         '/usr/bin/krb5-config', kwargs)
-+                                         '@krb5Full@/bin/krb5-config', kwargs)
++                                         '@krb5@/bin/krb5-config', kwargs)
  
              try:
                  krb5_version = subprocess.check_output(
@@ -62,7 +62,7 @@ index 161e5ad..9f50049 100644
                  if 'heimdal' in krb5_version.lower() or (
                          sys.platform == 'darwin' and
 -                        krb5_config == '/usr/bin/krb5-config'):
-+                        krb5_config == '@krb5Full@/bin/krb5-config'):
++                        krb5_config == '@krb5@/bin/krb5-config'):
                      provider_cls = HeimdalRealm
                  else:
                      provider_cls = MITRealm
@@ -78,14 +78,14 @@ index 161e5ad..9f50049 100644
 -            ('kprop', 'kprop', '/usr/sbin/kprop'),
 -            ('_kinit', 'kinit', '/usr/bin/kinit'),
 -            ('_klist', 'klist', '/usr/bin/klist'),
-+            ('kdb5_util', 'kdb5_util', '@krb5Full@/bin/kdb5_util'),
-+            ('krb5kdc', 'krb5kdc', '@krb5Full@/bin/kdb5kdc'),
-+            ('kadmin', 'kadmin', '@krb5Full@/bin/admin'),
-+            ('kadmin_local', 'kadmin.local', '@krb5Full@/bin/kadmin.local'),
-+            ('kadmind', 'kadmind', '@krb5Full@/bin/kadmind'),
-+            ('kprop', 'kprop', '@krb5Full@/bin/kprop'),
-+            ('_kinit', 'kinit', '@krb5Full@/bin/kinit'),
-+            ('_klist', 'klist', '@krb5Full@/bin/klist'),
++            ('kdb5_util', 'kdb5_util', '@krb5@/bin/kdb5_util'),
++            ('krb5kdc', 'krb5kdc', '@krb5@/bin/kdb5kdc'),
++            ('kadmin', 'kadmin', '@krb5@/bin/admin'),
++            ('kadmin_local', 'kadmin.local', '@krb5@/bin/kadmin.local'),
++            ('kadmind', 'kadmind', '@krb5@/bin/kadmind'),
++            ('kprop', 'kprop', '@krb5@/bin/kprop'),
++            ('_kinit', 'kinit', '@krb5@/bin/kinit'),
++            ('_klist', 'klist', '@krb5@/bin/klist'),
          ]
  
      @property
@@ -95,15 +95,15 @@ index 161e5ad..9f50049 100644
              ('krb5kdc', 'kdc', os.path.join(base, 'kdc')),
 -            ('kadmin', 'kadmin', '/usr/bin/kadmin'),
 -            ('kadmin_local', 'kadmin', '/usr/bin/kadmin'),
-+            ('kadmin', 'kadmin', '@krb5Full@/bin/kadmin'),
-+            ('kadmin_local', 'kadmin', '@krb5Full@/bin/kadmin'),
++            ('kadmin', 'kadmin', '@krb5@/bin/kadmin'),
++            ('kadmin_local', 'kadmin', '@krb5@/bin/kadmin'),
              ('kadmind', 'kadmind', os.path.join(base, 'kadmind')),
 -            ('_kinit', 'kinit', '/usr/bin/kinit'),
 -            ('_klist', 'klist', '/usr/bin/klist'),
 -            ('_ktutil', 'ktutil', '/usr/bin/ktutil'),
-+            ('_kinit', 'kinit', '@krb5Full@/bin/kinit'),
-+            ('_klist', 'klist', '@krb5Full@/bin/klist'),
-+            ('_ktutil', 'ktutil', '@krb5Full@/bin/ktutil'),
++            ('_kinit', 'kinit', '@krb5@/bin/kinit'),
++            ('_klist', 'klist', '@krb5@/bin/klist'),
++            ('_ktutil', 'ktutil', '@krb5@/bin/ktutil'),
          ]
  
      @property
@@ -116,7 +116,7 @@ index 3c64b9e..59da1ab 100644
      global _KRB_VERSION
      if _KRB_VERSION is None:
 -        _KRB_VERSION = _utils.get_output("krb5-config --version")
-+        _KRB_VERSION = _utils.get_output("@krb5FullDev@/bin/krb5-config --version")
++        _KRB_VERSION = _utils.get_output("@krb5Dev@/bin/krb5-config --version")
          _KRB_VERSION = _KRB_VERSION.split(' ')[-1].split('.')
  
      def make_ext_test(func):

@@ -4,7 +4,9 @@
 , src ? null
 , srcs ? null
 , sourceRoot ? null
+, prePatch ? ""
 , patches ? [ ]
+, postPatch ? ""
 , nativeBuildInputs ? [ ]
 , buildInputs ? [ ]
   # The output hash of the dependencies for this project.
@@ -30,7 +32,7 @@
 
 let
   npmDeps = fetchNpmDeps {
-    inherit src srcs sourceRoot patches;
+    inherit src srcs sourceRoot prePatch patches postPatch;
     name = "${name}-npm-deps";
     hash = npmDepsHash;
   };

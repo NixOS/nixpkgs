@@ -9,17 +9,17 @@ buildDunePackage rec {
   inherit (irmin) version src strictDeps;
 
   propagatedBuildInputs = [
-   irmin
-   irmin-pack
-   ppx_irmin
-   digestif
-   fmt
-   tezos-base58
+    irmin
+    irmin-pack
+    ppx_irmin
+    digestif
+    fmt
+    tezos-base58
   ];
 
   buildInputs = [
-   cmdliner
-   yojson
+    cmdliner
+    yojson
   ];
 
   checkInputs = [ alcotest hex irmin-test fpath ];

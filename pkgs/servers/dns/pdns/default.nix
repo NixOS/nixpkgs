@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, nixosTests
-, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
+, boost, yaml-cpp, libsodium, sqlite, protobuf, openssl, systemd
 , mariadb-connector-c, postgresql, lua, openldap, geoip, curl, unixODBC, lmdb, tinycdb
 }:
 
 stdenv.mkDerivation rec {
   pname = "pdns";
-  version = "4.7.2";
+  version = "4.7.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    hash = "sha256-TcrjXr3ASRWHLXv24tC8pLBcY1ChAKXPnCnfU7qlPOI=";
+    hash = "sha256-i601Gy4JQm9tT7A0aIGlFV/lVUl8PYUHHlMefHr+PnY=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost mariadb-connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl unixODBC openssl systemd lmdb tinycdb
+    yaml-cpp libsodium curl unixODBC openssl systemd lmdb tinycdb
   ];
 
   # Configure phase requires 64-bit time_t even on 32-bit platforms.

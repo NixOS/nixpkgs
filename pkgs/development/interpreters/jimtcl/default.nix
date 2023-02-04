@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   # test posix-1.6 needs the "hostname" command
-  checkInputs = [ inetutils ];
+  nativeCheckInputs = [ inetutils ];
 
   postInstall = ''
     ln -sr $out/lib/libjim.so.${version} $out/lib/libjim.so

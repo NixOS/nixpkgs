@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.11.11";
+  version = "7.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-4iyh/oXuYsdtqEf1Dh4Z3y8AHWiS1TmimO5HUwsHrHA=";
+    hash = "sha256-cAbDw/u0kLUEdmd/NBNDy/bt5Wno9QpmqpqicqZ/Q6g=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

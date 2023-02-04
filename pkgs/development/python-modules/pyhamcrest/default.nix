@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, hatchling
 , hatch-vcs
+, hatchling
 , numpy
-, pythonOlder
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyhamcrest";
   version = "2.0.4";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hamcrest";
@@ -22,25 +23,37 @@ buildPythonPackage rec {
     hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
 
   nativeBuildInputs = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytest-xdist
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Tests started failing with numpy 1.24
+    "test_numpy_numeric_type_complex"
+    "test_numpy_numeric_type_float"
+    "test_numpy_numeric_type_int"
+  ];
+
+  pythonImportsCheck = [
+    "hamcrest"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/hamcrest/PyHamcrest";
     description = "Hamcrest framework for matcher objects";
+    homepage = "https://github.com/hamcrest/PyHamcrest";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      alunduil
-    ];
+    maintainers = with maintainers; [ alunduil ];
   };
 }

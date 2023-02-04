@@ -15,13 +15,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i5VOKBNAzu65Ha3Lj3Hh6k+EMGPRAo5/qnwnJipDnMI=";
+    sha256 = "sha256-mt5udwSdzGaspfpAdUavQ55dBeJdhbZjcQpd9xNOQms=";
   };
 
   outputs = [ "out" "man" ];
@@ -47,7 +47,7 @@ let ccache = stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
@@ -110,9 +110,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";

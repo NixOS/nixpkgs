@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin)[
     xvfb-run
   ];
 

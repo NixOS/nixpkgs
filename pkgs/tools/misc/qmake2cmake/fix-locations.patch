@@ -1,0 +1,36 @@
+diff --git a/src/qmake2cmake/condition_simplifier_cache.py b/src/qmake2cmake/condition_simplifier_cache.py
+index 86c8e83..9d1ac00 100755
+--- a/src/qmake2cmake/condition_simplifier_cache.py
++++ b/src/qmake2cmake/condition_simplifier_cache.py
+@@ -29,8 +29,7 @@ def get_current_file_path() -> str:
+ 
+ 
+ def get_cache_location() -> str:
+-    this_file = get_current_file_path()
+-    dir_path = os.path.dirname(this_file)
++    dir_path = os.getcwd()
+     cache_path = os.path.join(dir_path, ".pro2cmake_cache", "cache.json")
+     return cache_path
+ 
+diff --git a/src/qmake2cmake/run_pro2cmake.py b/src/qmake2cmake/run_pro2cmake.py
+index fd3e11a..bdbadb0 100755
+--- a/src/qmake2cmake/run_pro2cmake.py
++++ b/src/qmake2cmake/run_pro2cmake.py
+@@ -194,7 +194,6 @@ def run(all_files: typing.List[str], pro2cmake: str, args: argparse.Namespace) -
+     ) -> typing.Tuple[int, str, str]:
+         filename, index, total = data
+         pro2cmake_args = []
+-        pro2cmake_args.append(sys.executable)
+         pro2cmake_args.append(pro2cmake)
+         if args.min_qt_version:
+             pro2cmake_args += ["--min-qt-version", args.min_qt_version]
+@@ -257,8 +256,7 @@ def run(all_files: typing.List[str], pro2cmake: str, args: argparse.Namespace) -
+ def main() -> None:
+     args = parse_command_line()
+ 
+-    script_path = os.path.dirname(os.path.abspath(__file__))
+-    pro2cmake = os.path.join(script_path, "pro2cmake.py")
++    pro2cmake = os.path.join(os.path.dirname(sys.argv[0]), "qmake2cmake")
+     base_path = args.path
+ 
+     all_files = find_all_pro_files(base_path, args)

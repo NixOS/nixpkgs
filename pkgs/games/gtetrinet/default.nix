@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       GTetrinet is a client program for Tetrinet, a multiplayer tetris game
       that is played over the internet.
     '';
-    homepage = "http://gtetrinet.sourceforge.net/";
+    homepage = "https://gtetrinet.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.chris-martin ];

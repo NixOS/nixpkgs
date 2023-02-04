@@ -30,7 +30,6 @@
 , wrapGAppsHook
 , gobject-introspection
 , itstool
-, libchamplain
 , libsecret
 , gsettings-desktop-schemas
 , python3
@@ -86,7 +85,6 @@ stdenv.mkDerivation rec {
     librest
     gcr
     gnome.adwaita-icon-theme
-    libchamplain
     libsecret
   ];
 

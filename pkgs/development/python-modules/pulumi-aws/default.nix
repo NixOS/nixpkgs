@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independant of pulumi's.
-  version = "5.19.0";
+  version = "5.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pulumi";
     repo = "pulumi-aws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZpbWqhTScWOlcVsX4OYlA5dYQg0UsfOhMLllXjEDdUI=";
+    hash = "sha256-7lO3GbVPG70u+PzS/22d6i6xIRXiTMc/iUXrZurD2LU=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
+    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

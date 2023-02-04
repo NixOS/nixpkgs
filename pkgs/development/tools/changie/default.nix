@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "miniscruff";
     repo = pname;
-    sha256 = "sha256-8wcnbmS3T/rPKEN3zpo9ysaEIjgbPN50Jp9URpkRaUI=";
+    sha256 = "sha256-hnRK9pj5NruSRvo2oetyRMVwhO7T/wSEZjcbYHb7ZUY=";
   };
 
-  vendorSha256 = "sha256-Ddw4YnOFURZxwqRBX9e1YGMO9E3hUNAoLTVcSJuaCU0=";
-
-  patches = [ ./skip-flaky-test.patch ];
+  vendorSha256 = "sha256-0/3Ou8z6yLWhc81hdN2gkaFLLlKQWUGcIdvRHVLTrjQ=";
 
   ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
 
@@ -22,7 +20,6 @@ buildGoModule rec {
     changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
     description = "Automated changelog tool for preparing releases with lots of customization options";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

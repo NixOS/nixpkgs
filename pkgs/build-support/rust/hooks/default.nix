@@ -1,7 +1,7 @@
 { buildPackages
 , callPackage
 , cargo
-, clang
+, cargo-nextest
 , lib
 , makeSetupHook
 , maturin
@@ -55,6 +55,15 @@ in {
       };
     } ./cargo-install-hook.sh) {};
 
+  cargoNextestHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-nextest-hook.sh";
+      deps = [ cargo cargo-nextest ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-nextest-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
@@ -98,6 +107,9 @@ in {
           host-config = true
           target-applies-to-host = true
         '';
+
+        # https://github.com/NixOS/nixpkgs/issues/201254
+        aarch64LinuxGccWorkaround = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
       };
     } ./cargo-setup-hook.sh) {};
 
@@ -114,8 +126,8 @@ in {
     bindgenHook = callPackage ({}: makeSetupHook {
       name = "rust-bindgen-hook";
       substitutions = {
-        libclang = clang.cc.lib;
-        inherit clang;
+        libclang = rustc.llvmPackages.clang.cc.lib;
+        clang = rustc.llvmPackages.clang;
       };
     }
     ./rust-bindgen-hook.sh) {};

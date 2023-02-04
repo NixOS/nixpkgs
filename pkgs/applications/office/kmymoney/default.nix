@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckInputs = [ xvfb-run ];
+  nativeInstallCheckInputs = [ xvfb-run ];
   installCheckPhase =
     lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \

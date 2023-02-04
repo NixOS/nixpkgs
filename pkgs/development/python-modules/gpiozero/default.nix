@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "gpiozero.tools"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

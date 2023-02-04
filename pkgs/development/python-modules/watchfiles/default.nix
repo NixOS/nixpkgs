@@ -45,7 +45,7 @@ buildPythonPackage rec {
     anyio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dirty-equals
     pytest-mock
     pytest-timeout
