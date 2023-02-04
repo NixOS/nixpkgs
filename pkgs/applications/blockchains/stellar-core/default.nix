@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellar-core";
-  version = "19.6.0";
+  version = "19.7.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lDefmPZM8ow6t5CpNBxef+9BoT773p5UgeMhgF+em2w=";
+    sha256 = "sha256-VfaP4EIVsu5JTAV7AX0Ymo44/TD8eUB61CViwf6Hfqw=";
     fetchSubmodules = true;
   };
 
