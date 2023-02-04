@@ -27133,6 +27133,8 @@ with pkgs;
 
   go-font = callPackage ../data/fonts/go-font { };
 
+  goudy-bookletter-1911 = callPackage ../data/fonts/goudy-bookletter-1911 { };
+
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
   graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
