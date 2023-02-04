@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];
 
   doCheck = true;
-  nativeCheckInputs = [ ounit2 ];
+  checkInputs = [ ounit2 ];
 
   meta = {
     description = "OCaml client for google services";

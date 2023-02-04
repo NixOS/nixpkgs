@@ -13,13 +13,13 @@ buildDunePackage rec {
     hash = "sha256-3MYJDvVbPIv/JDiB9nKcLRFC5Qa0afyEfz7hk8MWRII=";
   };
 
-  nativeBuildInputs = [ lwt_ppx ];
+  buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [ lwt stringext ];
 
   duneVersion = "3";
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Parser for multipart/form-data (RFC2388)";

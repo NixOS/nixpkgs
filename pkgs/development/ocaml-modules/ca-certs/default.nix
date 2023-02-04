@@ -19,7 +19,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ bos fpath ptime mirage-crypto x509 astring logs ];
 
   doCheck = true;
-  nativeCheckInputs = [
+  checkInputs = [
     cacert    # for /etc/ssl/certs/ca-bundle.crt
     alcotest
     fmt

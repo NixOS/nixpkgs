@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cohttp dispatch ptime ];
 
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   doCheck = true;
 

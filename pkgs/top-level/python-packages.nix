@@ -120,6 +120,8 @@ self: super: with self; {
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
+  aio-pika = callPackage ../development/python-modules/aio-pika { };
+
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
   aioairq = callPackage ../development/python-modules/aioairq { };
@@ -299,6 +301,8 @@ self: super: with self; {
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
   aioridwell = callPackage ../development/python-modules/aioridwell { };
+
+  aiormq = callPackage ../development/python-modules/aiormq { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
@@ -531,6 +535,8 @@ self: super: with self; {
   appnope = callPackage ../development/python-modules/appnope { };
 
   apprise = callPackage ../development/python-modules/apprise { };
+
+  approval-utilities = callPackage ../development/python-modules/approval-utilities { };
 
   approvaltests = callPackage ../development/python-modules/approvaltests { };
 
@@ -3394,8 +3400,6 @@ self: super: with self; {
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
-  flaskbabel = callPackage ../development/python-modules/flaskbabel { };
-
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
   flask-basicauth = callPackage ../development/python-modules/flask-basicauth { };
@@ -5253,6 +5257,10 @@ self: super: with self; {
 
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+  };
+
+  leidenalg = callPackage ../development/python-modules/leidenalg {
+    igraph-c = pkgs.igraph;
   };
 
   lektor = callPackage ../development/python-modules/lektor { };
@@ -8615,6 +8623,8 @@ self: super: with self; {
   pyquil = callPackage ../development/python-modules/pyquil { };
 
   pyqvrpro = callPackage ../development/python-modules/pyqvrpro { };
+
+  pyqwikswitch = callPackage ../development/python-modules/pyqwikswitch { };
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 

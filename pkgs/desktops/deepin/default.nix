@@ -22,6 +22,7 @@ let
 
     #### Dtk Application
     deepin-calculator = callPackage ./apps/deepin-calculator { };
+    deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
 
     #### ARTWORK

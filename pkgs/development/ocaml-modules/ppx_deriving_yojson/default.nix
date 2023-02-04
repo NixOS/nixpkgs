@@ -28,7 +28,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ppxlib ppx_deriving yojson ];
 
   doCheck = true;
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   meta = {
     description = "A Yojson codec generator for OCaml >= 4.04";

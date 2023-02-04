@@ -9,7 +9,7 @@ buildDunePackage {
   inherit (containers) src version doCheck;
 
   buildInputs = [ dune-configurator ];
-  nativeCheckInputs = [ gen iter qcheck-core ];
+  checkInputs = [ gen iter qcheck-core ];
 
   propagatedBuildInputs = [ containers ];
 

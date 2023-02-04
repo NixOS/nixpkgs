@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ macaddr domain-name stdlib-shims ];
 
-  nativeCheckInputs = [ ppx_sexp_conv ounit ];
+  checkInputs = [ ppx_sexp_conv ounit ];
   doCheck = true;
 
   meta = macaddr.meta // {

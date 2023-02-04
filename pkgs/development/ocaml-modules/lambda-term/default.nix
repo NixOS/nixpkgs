@@ -16,8 +16,6 @@ buildDunePackage rec {
 
   duneVersion = if lib.versionAtLeast ocaml.version "4.08" then "3" else "2";
 
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;

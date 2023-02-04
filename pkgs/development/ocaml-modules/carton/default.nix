@@ -56,7 +56,7 @@ buildDunePackage rec {
   nativeBuildInputs = [
     findlib
   ];
-  nativeCheckInputs = [
+  checkInputs = [
     base64
     alcotest
     alcotest-lwt

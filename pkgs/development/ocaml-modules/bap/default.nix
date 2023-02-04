@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
 
-  buildInputs = [ linenoise
+  buildInputs = [ ocamlbuild
+                  linenoise
                   ounit
                   ppx_bitstring
                   z3

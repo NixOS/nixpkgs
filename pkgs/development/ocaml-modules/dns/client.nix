@@ -12,11 +12,28 @@ buildDunePackage {
   inherit (dns) src version;
   duneVersion = "3";
 
-  propagatedBuildInputs = [ cstruct fmt logs dns randomconv domain-name ipaddr
-                            lwt mirage-random mirage-time mirage-clock
-                            ca-certs ca-certs-nss happy-eyeballs tcpip tls tls-mirage
-                            mtime mirage-crypto-rng ];
-  nativeCheckInputs = [ alcotest ];
+  propagatedBuildInputs = [
+    cstruct
+    fmt
+    logs
+    dns
+    randomconv
+    domain-name
+    ipaddr
+    lwt
+    mirage-random
+    mirage-time
+    mirage-clock
+    ca-certs
+    ca-certs-nss
+    happy-eyeballs
+    tcpip
+    tls
+    tls-mirage
+    mtime
+    mirage-crypto-rng
+  ];
+  checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = dns.meta // {

@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ graphql ocaml_lwt ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

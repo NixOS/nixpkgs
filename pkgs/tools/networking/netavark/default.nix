@@ -3,23 +3,24 @@
 , fetchFromGitHub
 , installShellFiles
 , mandown
+, protobuf
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nG+HTwF3v8FUK2SE+I312Ec5y6YPShS9si9Pc2SG1jc=";
+    hash = "sha256-EuhnI7N8Ry6qV4q3QxdHdTuJ7F4gIA3a9NZnb33KWZ8=";
   };
 
-  cargoHash = "sha256-szIG1udBCZj18sN3IiQtOuR8qw/xWhTMgb/n4lyTwvs=";
+  cargoHash = "sha256-2FEtYnIRg4s92K8Kr123tuZqUsGOauel2JdeSF0bFGo=";
 
-  nativeBuildInputs = [ installShellFiles mandown ];
+  nativeBuildInputs = [ installShellFiles mandown protobuf ];
 
   postBuild = ''
     make -C docs netavark.1
