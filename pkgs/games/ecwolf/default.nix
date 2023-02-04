@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
     sed -i -e "s|include(\''${CMAKE_CURRENT_SOURCE_DIR}/macosx/install.txt)||" src/CMakeLists.txt
   '';
 
+  # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
+  # directories to the PATH.
+  postInstall = ''
+    mv "$out/games" "$out/bin"
+  '';
+
   meta = with lib; {
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     homepage = "https://maniacsvault.net/ecwolf/";
