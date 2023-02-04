@@ -34509,6 +34509,8 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
+  ton = callPackage ../applications/blockchains/ton { };
+
   torq = callPackage ../applications/blockchains/torq { };
 
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
