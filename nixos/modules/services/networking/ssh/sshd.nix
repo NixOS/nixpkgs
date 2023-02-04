@@ -221,6 +221,10 @@ in
           NOTE: this will override default listening on all local addresses and port 22.
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
+          NOTE: If the IP address is not available at boot time, the following has
+          to be added to make sure sshd will wait for dhcp configuration:
+              systemd.services.sshd.wants = [ "network-online.target" ];
+              systemd.services.sshd.after = [ "network-online.target" ];
         '';
       };
 
