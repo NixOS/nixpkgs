@@ -13590,10 +13590,6 @@ with pkgs;
   yarn = callPackage ../development/tools/yarn  { };
 
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
-  yarn2nix-moretea-openssl_1_1 = callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
-    pkgs = pkgs.__splicedPackages;
-    nodejs = nodejs.override { openssl = openssl_1_1; };
-  };
 
   inherit (yarn2nix-moretea)
     yarn2nix
