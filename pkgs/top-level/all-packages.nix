@@ -27246,6 +27246,8 @@ with pkgs;
 
   khmeros = callPackage ../data/fonts/khmeros {};
 
+  knewave = callPackage ../data/fonts/knewave { };
+
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
