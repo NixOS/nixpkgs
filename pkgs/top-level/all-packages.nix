@@ -26918,6 +26918,8 @@ with pkgs;
 
   chonburi-font = callPackage ../data/fonts/chonburi { };
 
+  chunk = callPackage ../data/fonts/chunk { };
+
   cldr-annotations = callPackage ../data/misc/cldr-annotations { };
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
