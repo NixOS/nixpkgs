@@ -179,6 +179,8 @@ in {
     environment.systemPackages = [ cfg.package ]
                                  ++ lib.optional cfg.jack.enable jack-libs;
 
+    hardware.pulseaudio.available = lib.mkIf cfg.pulse.enable true;
+
     systemd.packages = [ cfg.package ]
                        ++ lib.optional cfg.pulse.enable cfg.package.pulse;
 
