@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  NIX_CFLAGS_COMPILE = [
-    # Needed with GCC 12
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
     "-std=c++14"
   ];
 
