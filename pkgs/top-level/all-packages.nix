@@ -4585,6 +4585,8 @@ with pkgs;
 
   ### TOOLS/TYPESETTING/TEX
 
+  advi = callPackage ../tools/typesetting/tex/advi { };
+
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
   blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
