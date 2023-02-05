@@ -5,6 +5,7 @@
 , lxml
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = ["elementpath"];
 
   # Ignore broken fixtures, and tests for files which don't exist.
   # For darwin, we need to explicity say we can't reach network
