@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ libubox json_c ];
 
-  NIX_CFLAGS_COMPILE = [
-    # Needed with GCC 12
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
     "-Wno-error=dangling-pointer"
   ];
 

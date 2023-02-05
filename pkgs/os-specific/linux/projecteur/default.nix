@@ -13,6 +13,10 @@ mkDerivation rec {
     sha256 = "sha256-kg6oYtJ4H5A6RNATBg+XvMfCb9FlhEBFjfxamGosMQg=";
   };
 
+  postPatch = ''
+    sed '1i#include <array>' -i src/device.h # gcc12
+  '';
+
   buildInputs = [ qtbase qtgraphicaleffects ];
   nativeBuildInputs = [ wrapQtAppsHook cmake pkg-config ];
 

@@ -99,6 +99,8 @@ stdenv.mkDerivation rec {
      cp -r ${expected-wrap} ${expected-wrap.name}
      cp -r ${wlroots-wrap} ${wlroots-wrap.name}
     )
+
+    sed '1i#include <functional>' -i cardboard/ViewAnimation.h # gcc12
   '';
 
   # "Inherited" from Nixpkgs expression for wlroots
@@ -107,6 +109,8 @@ stdenv.mkDerivation rec {
     "-Dwlroots:logind-provider=systemd"
     "-Dwlroots:libseat=disabled"
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ]; # gcc12
 
   meta = with lib; {
     homepage = "https://gitlab.com/cardboardwm/cardboard";
