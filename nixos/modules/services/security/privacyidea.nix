@@ -41,7 +41,7 @@ let
 
   piCfgFile = pkgs.writeText "privacyidea.cfg" ''
     SUPERUSER_REALM = [ '${concatStringsSep "', '" cfg.superuserRealm}' ]
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///privacyidea'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2:///privacyidea'
     SECRET_KEY = '${cfg.secretKey}'
     PI_PEPPER = '${cfg.pepper}'
     PI_ENCFILE = '${cfg.encFile}'
