@@ -97,8 +97,7 @@ buildPythonApplication rec {
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   CGO_ENABLED = 0;
-  GO_FLAGS = "-trimpath";
-  disallowedReferences = [ go ];
+  GOFLAGS = "-trimpath";
 
   configurePhase = let
     goModules = (buildGoModule {
