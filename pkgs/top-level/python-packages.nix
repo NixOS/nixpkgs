@@ -6692,10 +6692,11 @@ self: super: with self; {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
-  openvino = toPythonModule (pkgs.openvino.override {
-    inherit (self) python;
-    enablePython = true;
-  });
+  openvino = callPackage ../development/python-modules/openvino {
+    openvino-native = pkgs.openvino.override {
+      inherit python;
+    };
+  };
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
