@@ -22,7 +22,11 @@ let
     categories = [ "Development" ];
   };
 
-in stdenv.mkDerivation rec {
+in
+
+let ghidra =
+
+stdenv.mkDerivation rec {
   pname = "ghidra";
   version = "10.2.2";
   versiondate = "20221115";
@@ -68,6 +72,14 @@ in stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
 
+  passthru = {
+    # TODO better? mkOverridable?
+    withPatches = patches: symlinkJoin {
+      name = ghidra.name + "-with-patches";
+      paths = [ ghidra ] ++ patches;
+    };
+  };
+
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
@@ -78,3 +90,5 @@ in stdenv.mkDerivation rec {
   };
 
 }
+
+; in ghidra
