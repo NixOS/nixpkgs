@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "wiffi";
-  version = "1.1.0";
+  version = "1.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mampfes";
     repo = "python-wiffi";
     rev = "refs/tags/${version}";
-    hash = "sha256-XCSJjRQ/ErNQJcPR496KEhUJogRj0zJhUFgmgZoVilQ=";
+    hash = "sha256-pnbzJxq8K947Yg54LysPPho6IRKf0cc+szTETgyzFao=";
   };
 
   propagatedBuildInputs = [
