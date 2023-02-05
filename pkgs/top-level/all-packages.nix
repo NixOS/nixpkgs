@@ -10638,9 +10638,7 @@ with pkgs;
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
-  ovftool = callPackage ../tools/virtualization/ovftool {
-    libressl = libressl_3_4;
-  };
+  ovftool = callPackage ../tools/virtualization/ovftool { };
 
   overcommit = callPackage ../development/tools/overcommit { };
 
