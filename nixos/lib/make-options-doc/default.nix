@@ -91,11 +91,14 @@ let
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
-      --format asciidoc \
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options asciidoc \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > $out
+      $out
   '';
 
   optionsCommonMark = pkgs.runCommand "options.md" {
