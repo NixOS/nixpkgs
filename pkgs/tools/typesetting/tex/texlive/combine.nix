@@ -44,28 +44,35 @@ let
     name = "${name}-texmf";
 
     paths = pkgList.nonbin;
-    extraPrefix = "/share/texmf";
 
     nativeBuildInputs = [ perl bin.core.out ];
 
-    postBuild =
+    postBuild = # generate ls-R database
     ''
-      # generate ls-R database
       perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
-        -- "$out/share/texmf/scripts/texlive/mktexlsr.pl" --sort "$out/share/texmf"
-      # link info and man pages
-      for d in {info,man}; do
-        [[ -e "$out/share/texmf/doc/$d" ]] && ln -s "texmf/doc/$d" "$out/share/$d"
-      done
+        -- "$out/scripts/texlive/mktexlsr.pl" --sort "$out"
     '';
   }).overrideAttrs (_: { allowSubstitutes = true; });
+
+  # expose info and man pages in usual /share/{info,man} location
+  doc = buildEnv {
+    name = "${name}-doc";
+
+    paths = [ (texmf.outPath + "/doc") ];
+    extraPrefix = "/share";
+
+    pathsToLink = [
+      "/info"
+      "/man"
+    ];
+  };
 
 in (buildEnv {
 
   inherit name;
 
   ignoreCollisions = false;
-  paths = pkgList.bin ++ [ texmf ];
+  paths = pkgList.bin ++ [ doc ];
   pathsToLink = [
     "/"
     "/bin" # ensure these are writeable directories
@@ -78,7 +85,7 @@ in (buildEnv {
   passthru.packages = pkgList.all;
 
   postBuild = ''
-    TEXMFDIST="${texmf}/share/texmf"
+    TEXMFDIST="${texmf}"
     export PATH="$out/bin:$PATH"
     export PERL5LIB="$TEXMFDIST/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
     TEXMFSYSCONFIG="$out/share/texmf-config"
