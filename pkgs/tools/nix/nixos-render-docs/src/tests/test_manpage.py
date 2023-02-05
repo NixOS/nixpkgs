@@ -1,5 +1,7 @@
 import nixos_render_docs
 
+from sample_md import sample1
+
 from typing import Mapping, Optional
 
 import markdown_it
@@ -41,3 +43,135 @@ def test_dedup_links() -> None:
     c._md.renderer.link_footnotes = []
     assert c._render("[a](link) [b](link)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[1]\\fR"
     assert c._md.renderer.link_footnotes == ['link']
+
+def test_full() -> None:
+    c = Converter({ 'man(1)': 'http://example.org' })
+    assert c._render(sample1) == """\
+.sp
+.RS 4
+\\fBWarning\\fP
+.br
+foo
+.sp
+.RS 4
+\\fBNote\\fP
+.br
+nested
+.RE
+.RE
+.sp
+\\fBmultiline\\fR
+.sp
+\\fBman\\fP\\fR(1)\\fP reference
+.sp
+some nested anchors
+.sp
+\\fIemph\\fR \\fBstrong\\fR \\fInesting emph \\fBand strong\\fI and \\fR\\(oqcode\\(cq\\fP\\fR
+.sp
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+wide bullet
+.RE
+.sp
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+list
+.RE
+.sp
+.RS 4
+\\h'-3'\\fB1\\&.\\fP\\h'1'\\c
+wide ordered
+.RE
+.sp
+.RS 4
+\\h'-3'\\fB2\\&.\\fP\\h'1'\\c
+list
+.RE
+.sp
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+narrow bullet
+.RE
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+list
+.RE
+.sp
+.RS 4
+\\h'-3'\\fB1\\&.\\fP\\h'1'\\c
+narrow ordered
+.RE
+.RS 4
+\\h'-3'\\fB2\\&.\\fP\\h'1'\\c
+list
+.RE
+.sp
+.RS 4
+\\h'-3'\\fI\\(lq\\(rq\\fP\\h'1'\\c
+quotes
+.sp
+.RS 4
+\\h'-3'\\fI\\(lq\\(rq\\fP\\h'1'\\c
+with \\fInesting\\fR
+.sp
+.RS 4
+.nf
+nested code block
+.fi
+.RE
+.RE
+.sp
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+and lists
+.RE
+.RS 4
+\\h'-2'\\fB\\[u2022]\\fP\\h'1'\\c
+.sp
+.RS 4
+.nf
+containing code
+.fi
+.RE
+.RE
+.sp
+and more quote
+.RE
+.sp
+.RS 6
+\\h'-5'\\fB100\\&.\\fP\\h'1'\\c
+list starting at 100
+.RE
+.RS 6
+\\h'-5'\\fB101\\&.\\fP\\h'1'\\c
+goes on
+.RE
+.RS 4
+.PP
+deflist
+.RS 4
+.RS 4
+\\h'-3'\\fI\\(lq\\(rq\\fP\\h'1'\\c
+with a quote and stuff
+.RE
+.sp
+.RS 4
+.nf
+code block
+.fi
+.RE
+.sp
+.RS 4
+.nf
+fenced block
+.fi
+.RE
+.sp
+text
+.RE
+.PP
+more stuff in same deflist
+.RS 4
+foo
+.RE
+.RE"""
