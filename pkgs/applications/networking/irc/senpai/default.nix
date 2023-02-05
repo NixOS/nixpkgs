@@ -32,6 +32,6 @@ buildGoModule rec {
     description = "Your everyday IRC student";
     homepage = "https://ellidri.org/senpai";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

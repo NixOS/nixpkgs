@@ -8930,8 +8930,8 @@
     githubId = 2914269;
     name = "Malo Bourgon";
   };
-  malvo = {
-    email = "malte@malvo.org";
+  malte-v = {
+    email = "nixpkgs@mal.tc";
     github = "malte-v";
     githubId = 34393802;
     name = "Malte Voos";
