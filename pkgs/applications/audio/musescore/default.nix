@@ -60,5 +60,6 @@ mkDerivation rec {
     # Darwin requires CoreMIDI from SDK 11.3, we use the upstream built .dmg
     # file in ./darwin.nix in the meantime.
     platforms = platforms.linux;
+    mainProgram = "mscore";
   };
 }
