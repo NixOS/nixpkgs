@@ -7,7 +7,6 @@
 , vcrpy
 , citeproc-py
 , requests
-, setuptools
 , six
 }:
 
@@ -21,8 +20,7 @@ buildPythonPackage rec {
     sha256 = "f6192ce9315b35f6a67174761291e61d0831e496e8ff4acbc061731e7604faf8";
   };
 
-  # bin/duecredit requires setuptools at runtime
-  propagatedBuildInputs = [ citeproc-py requests setuptools six ];
+  propagatedBuildInputs = [ citeproc-py requests six ];
 
   nativeCheckInputs = [ pytest pytestCheckHook vcrpy ];
 
