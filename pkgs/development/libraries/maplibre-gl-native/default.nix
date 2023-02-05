@@ -9,6 +9,7 @@
 , libuv
 , glfw3
 , rapidjson
+, stdenv
 }:
 
 mkDerivation rec {
