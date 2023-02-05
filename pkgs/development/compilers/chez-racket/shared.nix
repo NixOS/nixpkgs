@@ -24,8 +24,7 @@ stdenv.mkDerivation (args // {
   '';
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin (with darwin; [ cctools autoSignDarwinBinariesHook ]);
-  buildInputs = [ ncurses libX11 zlib lz4 ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv libX11 lz4 ncurses zlib ];
 
   enableParallelBuilding = true;
 
