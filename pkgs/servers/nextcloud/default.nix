@@ -1,9 +1,11 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
-let
-  generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
+rec {
+  nextcloud.mkDerivation = {
+    eol ? false,
+    extraVulnerabilities ? [],
+    hash,
+    version,
   }: let
     major = lib.versions.major version;
   in stdenv.mkDerivation rec {
@@ -12,7 +14,7 @@ let
 
     src = fetchurl {
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
     patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
@@ -36,7 +38,7 @@ let
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };
   };
-in {
+
   nextcloud23 = throw ''
     Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
@@ -49,16 +51,13 @@ in {
     first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  nextcloud24 = generic {
+  nextcloud24 = nextcloud.mkDerivation {
     version = "24.0.9";
-    sha256 = "580a3384c9c09aefb8e9b41553d21a6e20001799549dbd25b31dea211d97dd1e";
+    hash = "sha256-WAozhMnAmu+46bQVU9IabiAAF5lUnb0lsx3qIR2X3R4=";
   };
 
-  nextcloud25 = generic {
+  nextcloud25 = nextcloud.mkDerivation {
     version = "25.0.3";
-    sha256 = "4b2b1423736ef92469096fe24f61c24cad87a34e07c1c7a81b385d3ea25c00ec";
+    hash = "sha256-SysUI3Nu+SRpCW/iT2HCTK2Ho04HwceoGzhdPqJcAOw=";
   };
-
-  # tip: get the sha with:
-  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }
