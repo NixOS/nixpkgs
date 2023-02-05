@@ -8,11 +8,13 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from markdown_it.utils import OptionsDict
 from markdown_it.token import Token
 from typing import Any, Optional
+from urllib.parse import quote
 from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 
 from . import parallel
+from .asciidoc import AsciiDocRenderer, asciidoc_escape
 from .commonmark import CommonMarkRenderer
 from .docbook import DocBookRenderer, make_xml_id
 from .manpage import ManpageRenderer, man_escape
@@ -476,6 +478,59 @@ class CommonMarkConverter(BaseConverter):
 
         return "\n".join(result)
 
+class OptionsAsciiDocRenderer(OptionDocsRestrictions, AsciiDocRenderer):
+    pass
+
+class AsciiDocConverter(BaseConverter):
+    __renderer__ = AsciiDocRenderer
+    __option_block_separator__ = ""
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._manpage_urls, self._revision, self._markdown_by_default)
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> AsciiDocConverter:
+        return cls(*a)
+
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if lit := option_is(option, key, 'literalDocBook'):
+            return [ f"*{key.capitalize()}:* {lit['text']}" ]
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if isinstance(desc, str) and not self._markdown_by_default:
+            return [ desc ]
+        else:
+            return super()._render_description(desc)
+
+    def _related_packages_header(self) -> list[str]:
+        return [ "__Related packages:__" ]
+
+    def _decl_def_header(self, header: str) -> list[str]:
+        return [ f"__{header}:__\n" ]
+
+    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
+        if href is not None:
+            return [ f"* link:{quote(href, safe='/:')}[{asciidoc_escape(name)}]" ]
+        return [ f"* {asciidoc_escape(name)}" ]
+
+    def _decl_def_footer(self) -> list[str]:
+        return []
+
+    def finalize(self) -> str:
+        result = []
+
+        for (name, opt) in self._sorted_options():
+            result.append(f"== {asciidoc_escape(name)}\n")
+            result += opt.lines
+            result.append("\n\n")
+
+        return "\n".join(result)
+
 def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
@@ -492,6 +547,13 @@ def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
     p.add_argument("outfile")
 
 def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
+    p.add_argument('--manpage-urls', required=True)
+    p.add_argument('--revision', required=True)
+    p.add_argument('--markdown-by-default', default=False, action='store_true')
+    p.add_argument("infile")
+    p.add_argument("outfile")
+
+def _build_cli_asciidoc(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
     p.add_argument('--markdown-by-default', default=False, action='store_true')
@@ -537,11 +599,24 @@ def _run_cli_commonmark(args: argparse.Namespace) -> None:
         with open(args.outfile, 'w') as f:
             f.write(md.finalize())
 
+def _run_cli_asciidoc(args: argparse.Namespace) -> None:
+    with open(args.manpage_urls, 'r') as manpage_urls:
+        md = AsciiDocConverter(
+            json.load(manpage_urls),
+            revision = args.revision,
+            markdown_by_default = args.markdown_by_default)
+
+        with open(args.infile, 'r') as f:
+            md.add_options(json.load(f))
+        with open(args.outfile, 'w') as f:
+            f.write(md.finalize())
+
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
     _build_cli_db(formats.add_parser('docbook'))
     _build_cli_manpage(formats.add_parser('manpage'))
     _build_cli_commonmark(formats.add_parser('commonmark'))
+    _build_cli_asciidoc(formats.add_parser('asciidoc'))
 
 def run_cli(args: argparse.Namespace) -> None:
     if args.format == 'docbook':
@@ -550,5 +625,7 @@ def run_cli(args: argparse.Namespace) -> None:
         _run_cli_manpage(args)
     elif args.format == 'commonmark':
         _run_cli_commonmark(args)
+    elif args.format == 'asciidoc':
+        _run_cli_asciidoc(args)
     else:
         raise RuntimeError('format not hooked up', args)
