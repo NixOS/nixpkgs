@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "python-crfsuite";
-  version = "0.9.8";
+  version = "0.9.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DgPPbro2KHF8zwbfoPSiuoYohgrbF0y/0lCnpGkoZaE=";
+    sha256 = "sha256-yqYmHWlVRmdW+Ya3/PvU/VBiKWPjvbXMGAwSnGKzp20=";
   };
 
   preCheck = ''

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "0.17.1";
+  version = "0.17.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-0VZRtsh17W8h1qcGfAxE4KUehtCk1PKy3MO3fVJb4qY=";
+    hash = "sha256-v2c1FoLgG6HH02d+YBr4Qh12ztRsiwWyueUNOBpWqPM=";
   };
 
   nativeBuildInputs = [

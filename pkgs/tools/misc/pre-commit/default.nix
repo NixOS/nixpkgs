@@ -61,7 +61,8 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  doCheck = true;
+  # i686-linux: dotnet-sdk not available
+  doCheck = stdenv.buildPlatform.system != "i686-linux";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \

@@ -107,6 +107,46 @@ in {
           };
         });
       };
+      postExportCommands = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          ${pkgs.cot}/bin/cot edit-hardware "$fn" \
+            -v vmx-14 \
+            --nics 2 \
+            --nic-types VMXNET3 \
+            --nic-names 'Nic name' \
+            --nic-networks 'Nic match' \
+            --network-descriptions 'Nic description' \
+            --scsi-subtypes VirtualSCSI
+        '';
+        description = lib.mdDoc ''
+          Extra commands to run after exporting the OVA to `$fn`.
+        '';
+      };
+      storageController = mkOption {
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        example = {
+          name = "SCSI";
+          add = "scsi";
+          portcount = 16;
+          bootable = "on";
+          hostiocache = "on";
+        };
+        default = {
+          name = "SATA";
+          add = "sata";
+          portcount = 4;
+          bootable = "on";
+          hostiocache = "on";
+        };
+        description = lib.mdDoc ''
+          Parameters passed to the VirtualBox appliance. Must have at least
+          `name`.
+
+          Run `VBoxManage storagectl --help` to see more options.
+        '';
+      };
     };
   };
 
@@ -167,11 +207,11 @@ in {
           VBoxManage modifyvm "$vmName" \
             --memory ${toString cfg.memorySize} \
             ${lib.cli.toGNUCommandLineShell { } cfg.params}
-          VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
-          VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
+          VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
+          VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
             --medium disk.vmdk
           ${optionalString (cfg.extraDisk != null) ''
-            VBoxManage storageattach "$vmName" --storagectl SATA --port 1 --device 0 --type hdd \
+            VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 1 --device 0 --type hdd \
             --medium data-disk.vmdk
           ''}
 
@@ -179,6 +219,7 @@ in {
           mkdir -p $out
           fn="$out/${cfg.vmFileName}"
           VBoxManage export "$vmName" --output "$fn" --options manifest ${escapeShellArgs cfg.exportParams}
+          ${cfg.postExportCommands}
 
           rm -v $diskImage
 

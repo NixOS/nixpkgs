@@ -4,7 +4,6 @@
   autoconf, hexdump, perl, nixosTests,
   supportFlags,
   patches,
-  vkd3dArches,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
@@ -71,7 +70,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
-  ++ lib.optional openalSupport          pkgs.openal
   ++ lib.optional cairoSupport           pkgs.cairo
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
@@ -82,7 +80,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional krb5Support            pkgs.libkrb5
-  ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
@@ -91,7 +88,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
-  ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
     (gst-plugins-bad.override { enableZbar = false; }) ])
@@ -101,7 +97,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
-     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
   ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
      libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext

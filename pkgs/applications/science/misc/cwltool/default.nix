@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20230127121939";
+  version = "3.1.20230201130431";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pEow2vEpQ2+c3fXkB8q7R4pud1xLzE74+HEqcBzg0D8=";
+    hash = "sha256-rx5rdB8OgJ7Mck3pm1GRrymZbQ3lHlXFecICb/pbnKg=";
   };
 
   postPatch = ''

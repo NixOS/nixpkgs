@@ -392,10 +392,8 @@ else let
           # See https://mesonbuild.com/Reference-tables.html#cpu-families
           cpuFamily = platform: with platform;
             /**/ if isAarch32 then "arm"
-            else if isAarch64 then "aarch64"
             else if isx86_32  then "x86"
-            else if isx86_64  then "x86_64"
-            else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
+            else platform.uname.processor;
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]

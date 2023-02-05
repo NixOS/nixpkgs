@@ -2325,6 +2325,12 @@
     githubId = 3212452;
     name = "Cameron Nemo";
   };
+  camillemndn = {
+    email = "camillemondon@free.fr";
+    github = "camillemndn";
+    githubId = 26444818;
+    name = "Camille M.";
+  };
   campadrenalin = {
     email = "campadrenalin@gmail.com";
     github = "campadrenalin";
@@ -6632,6 +6638,12 @@
     github = "jayeshbhoot";
     githubId = 1915507;
   };
+  jayman2000 = {
+    email = "jason@jasonyundt.email";
+    github = "Jayman2000";
+    githubId = 5579359;
+    name = "Jason Yundt";
+  };
   jb55 = {
     email = "jb55@jb55.com";
     github = "jb55";
@@ -7008,6 +7020,12 @@
     github = "jmgilman";
     githubId = 2308444;
     name = "Joshua Gilman";
+  };
+  jnsgruk = {
+    email = "jon@sgrs.uk";
+    github = "jnsgruk";
+    githubId = 668505;
+    name = "Jon Seager";
   };
   jo1gi = {
     email = "joakimholm@protonmail.com";
@@ -13221,6 +13239,12 @@
     github = "serge-belov";
     githubId = 38824235;
     name = "Serge Belov";
+  };
+  serge_sans_paille = {
+    email = "serge.guelton@telecom-bretagne.eu";
+    github = "serge-sans-paille";
+    githubId = 863807;
+    name = "Serge Guelton";
   };
   sersorrel = {
     email = "ash@sorrel.sh";
