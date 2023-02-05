@@ -33,13 +33,6 @@ let
       };
       enableOCR = true;
 
-      # testScriptWithTypes:55: error: Item "function" of
-      # "Union[Callable[[Callable[..., Any]], ContextManager[Any]], ContextManager[Any]]"
-      # has no attribute "__enter__"
-      #     with codium_running:
-      #          ^
-      skipTypeCheck = true;
-
       testScript = ''
         @polling_condition
         def codium_running():
@@ -50,10 +43,10 @@ let
 
         machine.wait_for_unit('graphical.target')
 
-        codium_running.wait()
-        with codium_running:
+        codium_running.wait() # type: ignore[union-attr]
+        with codium_running: # type: ignore[union-attr]
             # Wait until vscodium is visible. "File" is in the menu bar.
-            machine.wait_for_text('Get Started')
+            machine.wait_for_text('Welcome')
             machine.screenshot('start_screen')
 
             test_string = 'testfile'
