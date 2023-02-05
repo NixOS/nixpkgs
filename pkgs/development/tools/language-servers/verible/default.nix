@@ -9,7 +9,7 @@
 }:
 
 let
-  system = stdenv.hostPlatform.system;
+  arch = lib.elemAt (lib.splitString "-" stdenv.hostPlatform.system) 0;
 in
 buildBazelPackage rec {
   pname = "verible";
@@ -41,6 +41,12 @@ buildBazelPackage rec {
     "--//bazel:use_local_flex_bison"
     "--javabase=@bazel_tools//tools/jdk:remote_jdk11"
     "--host_javabase=@bazel_tools//tools/jdk:remote_jdk11"
+  ]
+  ++ lib.optionals stdenv.cc.isClang [   # Issue #150655 workaround
+    "--cxxopt=-x"
+    "--cxxopt=c++"
+    "--host_cxxopt=-x"
+    "--host_cxxopt=c++"
   ];
 
   fetchAttrs = {
@@ -49,9 +55,9 @@ buildBazelPackage rec {
     # of the output derivation ? Is there a more robust way to do this ?
     # (Hashes extracted from the ofborg build logs)
     sha256 = {
-      aarch64-linux = "sha256-dYJoae3+u+gpULHS8nteFzzL974cVJ+cJzeG/Dz2HaQ=";
-      x86_64-linux = "sha256-Jd99+nhqgZ2Gwd78eyXfnSSfbl8C3hoWkiUnzJG1jqM=";
-    }.${system} or (throw "No hash for system: ${system}");
+      aarch64 = "sha256-dYJoae3+u+gpULHS8nteFzzL974cVJ+cJzeG/Dz2HaQ=";
+      x86_64 = "sha256-Jd99+nhqgZ2Gwd78eyXfnSSfbl8C3hoWkiUnzJG1jqM=";
+    }.${arch} or (throw "No hash for arch: ${arch}");
   };
 
   nativeBuildInputs = [
@@ -102,7 +108,10 @@ buildBazelPackage rec {
     homepage = "https://github.com/chipsalliance/verible";
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server.";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    # Because our fixed output derivation hash is specific to platform,
+    # we need to narrow available platforms here.
+    platforms = [ "aarch64-linux"  "x86_64-linux"
+                  "aarch64-darwin" "x86_64-darwin" ];
     maintainers = with maintainers; [ hzeller newam ];
   };
 }
