@@ -80,7 +80,7 @@ in {
           Whether to open the UDP port used for multicast peer
           discovery. The NixOS firewall blocks link-local
           communication, so in order to make local peering work you
-          will also need to set `LinkLocalTCPPort` in your
+          will also need to set `port` of `MulticastInterfaces` in your
           yggdrasil configuration ({option}`settings` or
           {option}`configFile`) to a port number other than 0,
           and then add that port to
