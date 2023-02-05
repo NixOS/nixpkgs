@@ -509,8 +509,8 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
+          ${lndir}/bin/lndir $i $out
+        done 2>&1 | sed 's/^/symlinkJoin: warning: keeping existing file: /'
         ${postBuild}
       '';
 
