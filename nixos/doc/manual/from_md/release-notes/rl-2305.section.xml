@@ -860,6 +860,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>tvbrowser-bin</literal> was removed, and now
+          <literal>tvbrowser</literal> is built from source.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos-version</literal> now accepts
           <literal>--configuration-revision</literal> to display more
           information about the current generation revision
