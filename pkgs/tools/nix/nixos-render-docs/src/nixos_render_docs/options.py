@@ -15,7 +15,7 @@ import markdown_it
 from . import parallel
 from .docbook import DocBookRenderer, make_xml_id
 from .manpage import ManpageRenderer, man_escape
-from .md import Converter, md_escape
+from .md import Converter, md_escape, md_make_code
 from .types import OptionLoc, Option, RenderedOption
 
 def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
@@ -95,18 +95,7 @@ class BaseConverter(Converter):
         if lit := option_is(option, key, 'literalMD'):
             return [ self._render(f"*{key.capitalize()}:*\n{lit['text']}") ]
         elif lit := option_is(option, key, 'literalExpression'):
-            code = lit['text']
-            # for multi-line code blocks we only have to count ` runs at the beginning
-            # of a line, but this is much easier.
-            multiline = '\n' in code
-            longest, current = (0, 0)
-            for c in code:
-                current = current + 1 if c == '`' else 0
-                longest = max(current, longest)
-            # inline literals need a space to separate ticks from content, code blocks
-            # need newlines. inline literals need one extra tick, code blocks need three.
-            ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
-            code = f"{ticks}{sep}{code}{sep}{ticks}"
+            code = md_make_code(lit['text'])
             return [ self._render(f"*{key.capitalize()}:*\n{code}") ]
         elif key in option:
             raise Exception(f"{key} has unrecognized type", option[key])

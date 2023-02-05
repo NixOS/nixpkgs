@@ -27,6 +27,19 @@ _md_escape_table = {
 def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
+def md_make_code(code: str) -> str:
+    # for multi-line code blocks we only have to count ` runs at the beginning
+    # of a line, but this is much easier.
+    multiline = '\n' in code
+    longest, current = (0, 0)
+    for c in code:
+        current = current + 1 if c == '`' else 0
+        longest = max(current, longest)
+    # inline literals need a space to separate ticks from content, code blocks
+    # need newlines. inline literals need one extra tick, code blocks need three.
+    ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
+    return f"{ticks}{sep}{code}{sep}{ticks}"
+
 AttrBlockKind = Literal['admonition', 'example']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
