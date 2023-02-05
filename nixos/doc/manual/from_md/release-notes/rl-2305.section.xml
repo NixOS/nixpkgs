@@ -33,6 +33,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/ners/nix-monitored">nix-monitored</link>,
+          a transparent wrapper around Nix that pipes its output through
+          Nix Output Monitor. Available as
+          <link xlink:href="options.html#opt-nix.monitored.enable">nix.monitored.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://akkoma.social">Akkoma</link>, an
           ActivityPub microblogging server. Available as
           <link xlink:href="options.html#opt-services.akkoma.enable">services.akkoma</link>.

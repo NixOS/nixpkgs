@@ -205,6 +205,7 @@
   ./programs/nethoscope.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
+  ./programs/nix-monitored.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
   ./programs/noisetorch.nix

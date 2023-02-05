@@ -37817,6 +37817,8 @@ with pkgs;
 
   nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
 
+  nix-monitored = callPackage ../tools/nix/nix-monitored { };
+
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   nix-prefetch = callPackage ../tools/package-management/nix-prefetch { };
