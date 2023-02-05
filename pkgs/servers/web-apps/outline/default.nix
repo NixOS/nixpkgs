@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.67.1";
+  version = "0.67.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-oc9rG1dHi5YEU8VdwldHDv1qporMk8K7wpXOrCgcc0w=";
+    sha256 = "sha256-O5t//UwF+AVFxeBQHRIZM5RSf4+DgUE5LHWVRKxJLfc=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
