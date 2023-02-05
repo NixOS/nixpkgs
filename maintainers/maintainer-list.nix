@@ -12842,6 +12842,12 @@
     githubId = 3280280;
     name = "Ryne Everett";
   };
+  ryota-ka = {
+    email = "ok@ryota-ka.me";
+    github = "ryota-ka";
+    githubId = 7309170;
+    name = "Ryota Kameoka";
+  };
   rytone = {
     email = "max@ryt.one";
     github = "rastertail";
