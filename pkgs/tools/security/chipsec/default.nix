@@ -10,15 +10,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.8.1";
+  version = "1.10.2";
 
   disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = version;
-    hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FXqu1UyIuQ+8G3vaWmdlaAebfOMDtkDxi++PfjtyY1w=";
   };
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
