@@ -1075,8 +1075,6 @@ self: super: with self; {
 
   azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
 
-  azure-storage = callPackage ../development/python-modules/azure-storage { };
-
   azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
 
   azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
