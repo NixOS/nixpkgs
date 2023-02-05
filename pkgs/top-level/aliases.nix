@@ -1487,8 +1487,7 @@ mapAliases ({
   tex-gyre-pagella-math = throw "'tex-gyre-pagella-math' has been renamed to/replaced by 'tex-gyre-math.pagella'"; # Converted to throw 2022-02-22
   tex-gyre-schola-math = throw "'tex-gyre-schola-math' has been renamed to/replaced by 'tex-gyre-math.schola'"; # Converted to throw 2022-02-22
   tex-gyre-termes-math = throw "'tex-gyre-termes-math' has been renamed to/replaced by 'tex-gyre-math.termes'"; # Converted to throw 2022-02-22
-  textadept11 = throw "textadept11 has been removed. Please use textadept12 instead"; # Added 2022-12-23 TODO: UPDATE THE DATE
-  textadept12 = textadept; # Added 2022-12-23 TODO: UPDATE THE DATE
+  textadept11 = throw "textadept11 has been removed. Please use textadept instead"; # Added 2022-12-23 TODO: UPDATE THE DATE
   tftp_hpa = throw "'tftp_hpa' has been renamed to/replaced by 'tftp-hpa'"; # Converted to throw 2022-02-22
   thunderbird-68 = throw "Thunderbird 68 reached end of life with its final release 68.12.0 on 2020-08-25";
   thunderbird-bin-68 = thunderbird-68;
