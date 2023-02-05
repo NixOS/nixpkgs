@@ -1,21 +1,21 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (self: {
   pname = "orbitron";
-  version = "20110526";
+  version = "2011-05-25";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = "orbitron";
-    rev = "13e6a52";
+    repo = self.pname;
+    rev = "13e6a5222aa6818d81c9acd27edd701a2d744152";
     hash = "sha256-zjNPVrDUxcQbrsg1/8fFa6Wenu1yuG/XDfKA7NVZ0rA=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/fonts/opentype/orbitron *.otf
-    install -m444 -Dt $out/share/fonts/ttf/orbitron      *.ttf
+    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
 
     runHook postInstall
   '';
@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.leenaars ];
+    maintainers = with lib.maintainers; [ leenaars minijackson ];
   };
-}
+})

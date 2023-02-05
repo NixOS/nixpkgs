@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzbd";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbd";
     rev = "v${version}";
-    sha256 = "GoCHwuR4ylyaN/FskIqKyAPe2A2O3iFVcI3UxPlqvtk=";
+    sha256 = "sha256-iMQjOWsgsS+uI8mqoOXHRAV1+SIu1McUAcrsY+/zcu8=";
   };
 
   nativeBuildInputs = [
