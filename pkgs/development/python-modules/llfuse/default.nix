@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, contextlib2
 , cython
 , fuse
 , pkg-config
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython pkg-config ];
 
   buildInputs = [ fuse ];
-
-  propagatedBuildInputs = [ contextlib2 ];
 
   preConfigure = ''
     substituteInPlace setup.py \
