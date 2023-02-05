@@ -5740,6 +5740,8 @@ self: super: with self; {
 
   loopy = callPackage ../development/python-modules/loopy { };
 
+  looseversion = callPackage ../development/python-modules/looseversion { };
+
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
