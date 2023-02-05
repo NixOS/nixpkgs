@@ -27463,7 +27463,9 @@ with pkgs;
   netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
   };
-
+  
+  nonicons = callPackage ../data/fonts/nonicons { };
+  
   nordic = callPackage ../data/themes/nordic { };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
