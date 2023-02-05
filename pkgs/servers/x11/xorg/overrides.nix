@@ -592,6 +592,7 @@ self: super:
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };

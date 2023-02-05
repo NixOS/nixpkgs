@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    # Needed with GCC 12
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
     "-Wno-error=mismatched-new-delete"
     "-Wno-error=use-after-free"
   ];

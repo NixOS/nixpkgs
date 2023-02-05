@@ -14,6 +14,13 @@ stdenv.mkDerivation rec{
     sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
   };
 
+  # needed since gcc12
+  postPatch = ''
+    sed '1i#include <ctime>' -i \
+      src/tests/{tag/tag_perf.cpp,zlib/zlib_perf.cpp} \
+      src/examples/*.cpp
+  '';
+
   buildInputs = [ ]
     ++ lib.optional zlibSupport zlib
     ++ lib.optional sslSupport openssl
