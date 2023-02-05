@@ -38538,6 +38538,8 @@ with pkgs;
 
   yersinia = callPackage ../tools/security/yersinia { };
 
+  yatas = callPackage ../tools/security/yatas { };
+
   yaxg = callPackage ../tools/graphics/yaxg {};
 
   zap = callPackage ../tools/networking/zap { };
