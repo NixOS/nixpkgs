@@ -66,6 +66,15 @@ import ./default.nix {
       url = "https://github.com/rust-lang/rust/commit/de363d54c40a378717881240e719f5f7223ba376.patch";
       hash = "sha256-3Xb803LZUZ1dldxGJ65Iw6gg1V1K827OB/0b32GqilU=";
     })
+
+    # Fixes ICE.
+    # https://github.com/rust-lang/rust/pull/107688
+    (fetchpatch {
+      name = "re-erased-regions-are-local.patch";
+      url = "https://github.com/rust-lang/rust/commit/9d110847ab7f6aef56a8cd20cb6cea4fbcc51cd9.patch";
+      excludes = [ "*tests/*" ];
+      hash = "sha256-EZH5K1BEOOfi97xZr1xEHFP4jjvJ1+xqtRMvxBoL8pU=";
+    })
   ];
 }
 
