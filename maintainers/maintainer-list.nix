@@ -11983,6 +11983,12 @@
     githubId = 920910;
     name = "peelz";
   };
+  pelme = {
+    email = "andreas@pelme.se";
+    github = "pelme";
+    githubId = 20529;
+    name = "Andreas Pelme";
+  };
   penalty1083 = {
     email = "penalty1083@outlook.com";
     github = "penalty1083";
