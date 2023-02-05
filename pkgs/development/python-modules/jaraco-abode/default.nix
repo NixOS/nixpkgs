@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch
 , setuptools
 , setuptools-scm
 , requests
@@ -39,14 +38,10 @@ buildPythonPackage rec {
     hash = "sha256-ZDdZba1oTOPaUm+r4fWC5E3ni/k8kXo6t5AWQTvfd5E=";
   };
 
-  patches = [
+  postPatch = ''
     # https://github.com/jaraco/jaraco.abode/issues/19
-    (fetchpatch {
-      name = "specify-options-package-data.patch";
-      url = "https://github.com/jaraco/jaraco.abode/commit/8deebf57162fa097243d2b280942b6b7f95174c8.patch";
-      hash = "sha256-Iu2uw9D+nMdVJZyoecEkwQaJH1oSzFN/ZLXKPZPGuPk=";
-    })
-  ];
+    echo "graft jaraco" > MANIFEST.in
+  '';
 
   nativeBuildInputs = [
     setuptools

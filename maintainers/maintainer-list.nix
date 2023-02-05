@@ -6638,6 +6638,12 @@
     github = "jayeshbhoot";
     githubId = 1915507;
   };
+  jayman2000 = {
+    email = "jason@jasonyundt.email";
+    github = "Jayman2000";
+    githubId = 5579359;
+    name = "Jason Yundt";
+  };
   jb55 = {
     email = "jb55@jb55.com";
     github = "jb55";

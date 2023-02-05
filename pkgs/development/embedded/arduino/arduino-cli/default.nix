@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv, installShellFiles }:
 
 let
 
@@ -13,6 +13,10 @@ let
       sha256 = "sha256-jew4KLpOOXE9N/h4qFqof8y26DQrvm78E/ARbbwocD4=";
     };
 
+    nativeBuildInputs = [
+      installShellFiles
+    ];
+
     subPackages = [ "." ];
 
     vendorSha256 = "sha256-BunonnjzGnpcmGJXxEQXvjJLGvdSXUOK9zAhXoAemHY=";
@@ -22,6 +26,15 @@ let
     ldflags = [
       "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
     ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+
+    postInstall = ''
+      export HOME="$(mktemp -d)"
+      for s in {bash,zsh,fish}; do
+        $out/bin/arduino-cli completion $s > completion.$s
+        installShellCompletion --cmd arduino-cli --$s completion.$s
+      done
+      unset HOME
+    '';
 
     meta = with lib; {
       inherit (src.meta) homepage;
@@ -46,7 +59,9 @@ if stdenv.isLinux then
 
     extraInstallCommands = ''
       mv $out/bin/$name $out/bin/arduino-cli
+      cp -r ${pkg.outPath}/share $out/share
     '';
+    passthru.pureGoPkg = pkg;
 
     targetPkgs = pkgs: with pkgs; [
       zlib
