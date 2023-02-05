@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "rpi-gpio2";
-  version = "0.3.0a3";
+  version = "0.4.0";
 
   # PyPi source does not work for some reason
   src = fetchFromGitHub {
     owner = "underground-software";
     repo = "RPi.GPIO2";
-    rev = "v${version}";
-    hash = "sha256-8HQbEnO+4Ppo2Z3HBulbBcSKJF1bNNQYz8k6aUt65oc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CNnej67yTh3C8n4cCA7NW97rlfIDrrlepRNDkv+BUeY=";
   };
 
   propagatedBuildInputs = [
