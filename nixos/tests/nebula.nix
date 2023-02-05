@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       environment.systemPackages = [ pkgs.nebula ];
       users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
       services.openssh.enable = true;
+      networking.interfaces.eth1.useDHCP = false;
 
       services.nebula.networks.smoke = {
         # Note that these paths won't exist when the machine is first booted.
@@ -30,7 +31,7 @@ in
 
     lighthouse = { ... } @ args:
       makeNebulaNode args "lighthouse" {
-        networking.interfaces.eth1.ipv4.addresses = [{
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [{
           address = "192.168.1.1";
           prefixLength = 24;
         }];
@@ -47,7 +48,7 @@ in
 
     allowAny = { ... } @ args:
       makeNebulaNode args "allowAny" {
-        networking.interfaces.eth1.ipv4.addresses = [{
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [{
           address = "192.168.1.2";
           prefixLength = 24;
         }];
@@ -66,7 +67,7 @@ in
 
     allowFromLighthouse = { ... } @ args:
       makeNebulaNode args "allowFromLighthouse" {
-        networking.interfaces.eth1.ipv4.addresses = [{
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [{
           address = "192.168.1.3";
           prefixLength = 24;
         }];
@@ -85,7 +86,7 @@ in
 
     allowToLighthouse = { ... } @ args:
       makeNebulaNode args "allowToLighthouse" {
-        networking.interfaces.eth1.ipv4.addresses = [{
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [{
           address = "192.168.1.4";
           prefixLength = 24;
         }];
@@ -105,7 +106,7 @@ in
 
     disabled = { ... } @ args:
       makeNebulaNode args "disabled" {
-        networking.interfaces.eth1.ipv4.addresses = [{
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [{
           address = "192.168.1.5";
           prefixLength = 24;
         }];
@@ -134,6 +135,7 @@ in
           "chown 700 /root/.ssh",
           "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
           "chown 600 /root/.ssh/id_snakeoil",
+          "mkdir -p /root"
       )
     '';
 
@@ -152,14 +154,14 @@ in
       ${name}.succeed(
           "mkdir -p /etc/nebula",
           "nebula-cert keygen -out-key /etc/nebula/${name}.key -out-pub /etc/nebula/${name}.pub",
-          "scp ${sshOpts} /etc/nebula/${name}.pub 192.168.1.1:/var/tmp/${name}.pub",
+          "scp ${sshOpts} /etc/nebula/${name}.pub root@192.168.1.1:/root/${name}.pub",
       )
       lighthouse.succeed(
-          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /var/tmp/${name}.pub -out-crt /var/tmp/${name}.crt',
+          'nebula-cert sign -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "${name}" -groups "${name}" -ip "${ip}" -in-pub /root/${name}.pub -out-crt /root/${name}.crt'
       )
       ${name}.succeed(
-          "scp ${sshOpts} 192.168.1.1:/var/tmp/${name}.crt /etc/nebula/${name}.crt",
-          "scp ${sshOpts} 192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
+          "scp ${sshOpts} root@192.168.1.1:/root/${name}.crt /etc/nebula/${name}.crt",
+          "scp ${sshOpts} root@192.168.1.1:/etc/nebula/ca.crt /etc/nebula/ca.crt",
           '(id nebula-smoke >/dev/null && chown -R nebula-smoke:nebula-smoke /etc/nebula) || true'
       )
     '';
