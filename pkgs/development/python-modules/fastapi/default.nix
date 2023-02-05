@@ -17,6 +17,7 @@
 , sqlalchemy
 , trio
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -97,5 +98,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tiangolo/fastapi";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
+    # methodobject.h:59: PyCFunction_GET_FLAGS: Assertion `PyCFunction_Check(func)' failed
+    broken = pythonAtLeast "3.11"; # At 2023-02-05
   };
 }
