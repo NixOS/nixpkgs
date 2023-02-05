@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yubihsm-shell";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = version;
-    sha256 = "sha256-rSIdI6ECLte+dEbT8NOUqS8jkozRhbo+eqFrdhTIKpY=";
+    sha256 = "sha256-zWhvECPdZnrbSAVPDVZk54SWHVkd/HEQxS3FgXoqXHY=";
   };
 
   nativeBuildInputs = [
