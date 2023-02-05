@@ -12259,6 +12259,8 @@ with pkgs;
 
   swapview = callPackage ../os-specific/linux/swapview { };
 
+  swc = callPackage ../development/tools/swc { };
+
   swtpm = callPackage ../tools/security/swtpm { };
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
