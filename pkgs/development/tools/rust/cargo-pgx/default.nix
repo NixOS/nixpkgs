@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 { lib, stdenv, fetchCrate, rustPlatform, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
