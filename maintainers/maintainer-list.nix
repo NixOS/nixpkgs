@@ -16172,6 +16172,12 @@
     githubId = 40352765;
     name = "Yoctocell";
   };
+  YodaEmbedding = {
+    email = "mulhaq2005@gmail.com";
+    github = "YodaEmbedding";
+    githubId = 721196;
+    name = "Mateen Ulhaq";
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     matrix = "@yorickvp:matrix.org";
