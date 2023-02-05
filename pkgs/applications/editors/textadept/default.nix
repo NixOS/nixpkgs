@@ -1,52 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
-
+{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, qtbase, wrapQtAppsHook }:
 stdenv.mkDerivation rec {
-  version = "11.4";
+  version = "11.4.9"; # TODO: THAT'S A DUMMY VERSION NUMBER; CHANGE TO 12.0 WHEN RELEASED.
   pname = "textadept";
-
-  nativeBuildInputs = [ pkg-config unzip zip ];
-  buildInputs = [
-    gtk2 ncurses glib
-  ];
-
-  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
-    rev = "textadept_${version}";
-    sha256 = "sha256-1we2NC4N8oY4QmmqIIWGSpTBuLx3MEFkZK+BjmNEfD0=";
+#    rev = "textadept_${version}";
+    rev = "96f58f1fa34fa50feead22df21b34412c1327da1"; # TODO: WHEN PACKAGE RELEASE, UNCOMMENT PREVIOUS LINE AND REMOVE THIS ONE.
+    sha256 = "sha256-a8ZmGDee75HOyE0W3yFFPNjLWBz5WXktmt9B+61bCy8=";
   };
 
-  preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
-      "ln -s ${fetchurl params} $PWD/src/${name}"
-    ) (import ./deps.nix)) + ''
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  buildInputs = [ qtbase ];
 
-    cd src
-    make deps
-  '';
-
-  postBuild = ''
-    make curses
-  '';
-
-  preInstall = ''
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-  '';
-
-  postInstall = ''
-    make curses install PREFIX=$out MAKECMDGOALS=curses
-  '';
-
-  makeFlags = [
-    "PREFIX=$(out)"
-    "WGET=true"
-    "PIXMAPS_DIR=$(out)/share/pixmaps"
-    "GTK2=1"
+  cmakeFlags = [
+    "CMAKE_INSTALL_PREFIX=build/install"
   ];
+
+  preConfigure = ''
+    mkdir -p $PWD/build/_deps
+
+    '' +
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
+      "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
+    ) (import ./deps.nix));
 
   meta = with lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting.";

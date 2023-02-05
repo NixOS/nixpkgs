@@ -1,21 +1,19 @@
 {
-  "scintilla524.tgz" = {
-    url = "https://www.scintilla.org/scintilla524.tgz";
-    sha256 = "sha256-Su8UiMmkOxcuBat2JWYEnhNdG5HKnV1fn1ClnJhazGY=";
+  "scintilla530.tgz" = {
+    url = "https://www.scintilla.org/scintilla530.tgz";
+    sha256 = "sha256-/VJg9W3kTMnV4tkAhuxv/nCWq73JG8nBxF9Sic1AQHs=";
   };
   "lexilla510.tgz" = {
     url = "https://www.scintilla.org/lexilla510.tgz";
     sha256 = "sha256-azWVJ0AFSYZxuFTPV73uwiVJZvNxcS/POnFtl6p/P9g=";
   };
-  "9088723504b19f8611b66c119933a4dc7939d7b8.zip" = {
-    url =
-      "https://github.com/orbitalquark/scintillua/archive/9088723504b19f8611b66c119933a4dc7939d7b8.zip";
-    sha256 = "sha256-V2t1kt6+SpZQvQSzLhh8n+WiAnA32SRVFnrbTaJrHRo=";
+  "scinterm_4.1.zip" = {
+    url = "https://github.com/orbitalquark/scinterm/archive/scinterm_4.1.zip";
+    sha256 = "sha256-pdgf2m5Bmmgh470G2Cx62z414YBq10qqe1+80ZGFypI=";
   };
-  "475d8d43f3418590c28bd2fb07ee9229d1fa2d07.zip" = {
-    url =
-      "https://github.com/orbitalquark/scinterm/archive/475d8d43f3418590c28bd2fb07ee9229d1fa2d07.zip";
-    sha256 = "sha256-lNMK0RFcOLg9RRE5a6VelhSzUYVl5TiAiXcje2JOedE=";
+  "scintillua_6.1.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.1.zip";
+    sha256 = "sha256-h2hr+SK+ahR0+KXe6HxObt1jJXZWJHA6yXuyX/JfNIo=";
   };
   "lua-5.4.4.tar.gz" = {
     url = "http://www.lua.org/ftp/lua-5.4.4.tar.gz";
@@ -29,11 +27,6 @@
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_8_0.zip";
     sha256 = "sha256-46a+ynqKkFIu7THbbM3F7WWkM4JlAMaGJ4TidnG54Yo=";
   };
-  "444af9ca8a73151dbf759e6676d1035af469f01a.zip" = {
-    url =
-      "https://github.com/orbitalquark/gtdialog/archive/444af9ca8a73151dbf759e6676d1035af469f01a.zip";
-    sha256 = "sha256-7AkX7OWXJtzKq3h4uJeLzHpf6mrsz67SXtPvmyA5xxg=";
-  };
   "cdk-5.0-20200923.tgz" = {
     url = "http://invisible-mirror.net/archives/cdk/cdk-5.0-20200923.tgz";
     sha256 = "sha256-AH9d6IDLLuvYVW335M2Gc9XmTJlwFH7uaSOoFMKfqu0=";
@@ -43,3 +36,5 @@
     sha256 = "sha256-aUW9PEqqg9qD2AoEXFVj2k7dfQN0xiwNNa7AnrMBRgA=";
   };
 }
+
+
