@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ jpylyzer ];
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
-      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"jpylyzer\" # "
+      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"$(command -v jpylyzer)\" # "
     OPJ_SOURCE_DIR=.. ctest -S ../tools/ctest_scripts/travis-ci.cmake
   '';
 
