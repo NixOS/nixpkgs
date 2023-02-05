@@ -1,18 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, nix-update-script
 , nwjs
 }:
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.23.0110";
+  version = "1.23.0206";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    sha256 = "sha256-yQWdBNt7maYTzroB+P1hsGIeivkP+soR3/b847HLYZY=";
+    sha256 = "sha256-XWjKJga9aQrMb0ZfA4ElsPU1CfMwFtwYSK1vjgtlKes=";
   };
 
   postPatch = ''
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "NO_DIST_INSTALL=1" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An amateur radio companion to WSJT-X or JTDX";
