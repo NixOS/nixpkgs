@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
       "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
     ];
-    hash = "sha256-a30z9rdXcfc2eVuShEobgDWWHr9TfMwq9WwaWdrI3QU=";
+    hash = "sha256-3o5LFGPd4oFz3leKzCy7lIjQ3ELSLqZuIswptB7i24U=";
   };
 
   patches = [
