@@ -135,6 +135,9 @@ let
 
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+
+      # see https://github.com/gentoo/gentoo/commit/4da5959
+      chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
     '';
 
     inherit meta;

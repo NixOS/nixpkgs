@@ -1527,6 +1527,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
+
   scarab = callPackage ../tools/games/scarab { };
 
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
@@ -26865,6 +26867,8 @@ with pkgs;
 
   blackbird = callPackage ../data/themes/blackbird { };
 
+  blackout = callPackage ../data/fonts/blackout { };
+
   brise = callPackage ../data/misc/brise { };
 
   cacert = callPackage ../data/misc/cacert { };
@@ -26894,6 +26898,8 @@ with pkgs;
   cherry = callPackage ../data/fonts/cherry { };
 
   chonburi-font = callPackage ../data/fonts/chonburi { };
+
+  chunk = callPackage ../data/fonts/chunk { };
 
   cldr-annotations = callPackage ../data/misc/cldr-annotations { };
 
@@ -27054,6 +27060,8 @@ with pkgs;
 
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
+  fanwood = callPackage ../data/fonts/fanwood { };
+
   fira = callPackage ../data/fonts/fira { };
 
   fira-code = callPackage ../data/fonts/fira-code { };
@@ -27105,6 +27113,8 @@ with pkgs;
   gnome-icon-theme = callPackage ../data/icons/gnome-icon-theme { };
 
   go-font = callPackage ../data/fonts/go-font { };
+
+  goudy-bookletter-1911 = callPackage ../data/fonts/goudy-bookletter-1911 { };
 
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
@@ -27197,6 +27207,8 @@ with pkgs;
 
   joypixels = callPackage ../data/fonts/joypixels { };
 
+  junction-font = callPackage ../data/fonts/junction { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   julia-mono = callPackage ../data/fonts/julia-mono { };
@@ -27214,6 +27226,8 @@ with pkgs;
   kde-rounded-corners = libsForQt5.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
 
   khmeros = callPackage ../data/fonts/khmeros {};
+
+  knewave = callPackage ../data/fonts/knewave { };
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
@@ -27243,7 +27257,13 @@ with pkgs;
 
   lato = callPackage ../data/fonts/lato {};
 
+  league-gothic = callPackage ../data/fonts/league-gothic { };
+
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
+
+  league-script-number-one = callPackage ../data/fonts/league-script-number-one { };
+
+  league-spartan = callPackage ../data/fonts/league-spartan { };
 
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
 
@@ -27278,6 +27298,8 @@ with pkgs;
   libre-franklin = callPackage ../data/fonts/libre-franklin { };
 
   lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
+
+  linden-hill = callPackage ../data/fonts/linden-hill { };
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
@@ -27492,6 +27514,8 @@ with pkgs;
 
   orion = callPackage ../data/themes/orion {};
 
+  ostrich-sans = callPackage ../data/fonts/ostrich-sans { };
+
   overpass = callPackage ../data/fonts/overpass { };
 
   oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
@@ -27559,6 +27583,8 @@ with pkgs;
   powerline-rs = callPackage ../tools/misc/powerline-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  prociono = callPackage ../data/fonts/prociono { };
 
   profont = callPackage ../data/fonts/profont { };
 
@@ -27639,9 +27665,13 @@ with pkgs;
 
   snap7 = callPackage ../development/libraries/snap7 {};
 
+  sniglet = callPackage ../data/fonts/sniglet { };
+
   snowblind = callPackage ../data/themes/snowblind { };
 
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
+
+  sorts-mill-goudy = callPackage ../data/fonts/sorts-mill-goudy { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
 
@@ -27761,6 +27791,8 @@ with pkgs;
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
 
   theano = callPackage ../data/fonts/theano { };
+
+  the-neue-black = callPackage ../data/fonts/the-neue-black { };
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
@@ -31730,7 +31762,9 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
-  ncdu = callPackage ../tools/misc/ncdu { };
+  ncdu = callPackage ../tools/misc/ncdu {
+    zig = zig_0_10;
+  };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 

@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.43.0";
+  version = "0.43.1";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YL2rKsP5FSoG1gIyxQtt9kovBAyu8Flko5RxXRQy5mQ=";
+    sha256 = "sha256-UI63OJukot+MH+51h/yLnimJAcy8OFan9sUbuZaJZXc=";
   };
 
   depsExtraArgs = {
@@ -39,13 +39,7 @@ rustPlatform.buildRustPackage rec {
       popd
     '';
   };
-  cargoSha256 = "sha256-SUNBnJP8B/HvlozcCbehL1A2/WudYE20DIPc7/fYF/k=";
-
-  checkFlags = [
-    # test is broken
-    # https://github.com/Wilfred/difftastic/issues/479
-    "--skip=files::tests::test_gzip_is_binary"
-  ];
+  cargoSha256 = "sha256-IfwZ800PGbmzxQ0e6okieKR7A8jgt+II2j8FRDkiXfw=";
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 

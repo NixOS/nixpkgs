@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.12.5";
-  disabled = pythonOlder "3.6";
+  version = "0.12.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-DwWX8ztqnm/KYkiarG9KXkHcVxYE6Cc285oOMz9gkqc=";
+    hash = "sha256-odtMbPHty3NUqz+4UAw+8dsK6AMZer41/BAX8cK5Rek=";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +36,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "policy_sentry" ];
+  pythonImportsCheck = [
+    "policy_sentry"
+  ];
 
   meta = with lib; {
     description = "Python module for generating IAM least privilege policies";
     homepage = "https://github.com/salesforce/policy_sentry";
+    changelog = "https://github.com/salesforce/policy_sentry/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
