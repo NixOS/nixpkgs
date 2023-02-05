@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, ninja, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, static ? stdenv.hostPlatform.isStatic,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ] ++ lib.optionals (stdenv.cc.isClang && (lib.versionOlder stdenv.cc.version "16.0")) [
     # Enable C++17 support
     # https://github.com/google/googletest/issues/3081
