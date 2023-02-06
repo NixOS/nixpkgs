@@ -45,8 +45,10 @@ stdenv.mkDerivation rec {
   # Original installs udev rules and service config into global paths
   postPatch = ''
     substituteInPlace etc/meson.build \
-      --replace "install_dir: unitdir" "install_dir: datadir" \
-      --replace "install_dir: rulesdir" "install_dir: datadir" \
+      --replace "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
+      --replace "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
+    substituteInPlace etc/udev/50-ipts.rules \
+      --replace "/bin/systemd-escape" "${systemd}/bin/systemd-escape"
   '';
 
   mesonFlags = [
