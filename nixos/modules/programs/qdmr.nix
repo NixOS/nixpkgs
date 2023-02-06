@@ -20,6 +20,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
-    users.groups.wireshark = {};
+    users.groups.dialout = {};
   };
 }
