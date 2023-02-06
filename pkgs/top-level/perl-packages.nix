@@ -17825,6 +17825,21 @@ let
     };
   };
 
+  NetIPXS = buildPerlPackage {
+    pname = "Net-IP-XS";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
+      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+    };
+    propagatedBuildInputs = [ IOCapture TieSimple ];
+    meta = {
+      homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
+      description = "IPv4/IPv6 address library";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   NetLDAPServer = buildPerlPackage {
     pname = "Net-LDAP-Server";
     version = "0.43";
