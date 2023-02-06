@@ -78,7 +78,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer;
+  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in stdenv.mkDerivation (self: {
   pname = "mpv";
