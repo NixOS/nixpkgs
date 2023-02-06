@@ -4529,6 +4529,8 @@ with pkgs;
 
   er-patcher = callPackage ../tools/games/er-patcher { };
 
+  erdtree = callPackage ../tools/system/erdtree { };
+
   errcheck = callPackage ../development/tools/errcheck { };
 
   eschalot = callPackage ../tools/security/eschalot { };
