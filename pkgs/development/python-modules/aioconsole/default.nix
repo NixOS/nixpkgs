@@ -38,6 +38,8 @@ buildPythonPackage rec {
       --replace "--cov aioconsole --count 2" ""
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     "test_interact_syntax_error"
     # Output and the sandbox don't work well together
