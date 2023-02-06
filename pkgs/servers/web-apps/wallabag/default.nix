@@ -27,11 +27,19 @@ stdenv.mkDerivation {
       "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
       "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
     ];
-    hash = "sha256-a30z9rdXcfc2eVuShEobgDWWHr9TfMwq9WwaWdrI3QU=";
+    hash = "sha256-3o5LFGPd4oFz3leKzCy7lIjQ3ELSLqZuIswptB7i24U=";
   };
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
+
+    # Use sendmail from php.ini instead of FHS path.
+    (fetchpatch {
+      url = "https://github.com/symfony/swiftmailer-bundle/commit/31a4fed8f621f141ba70cb42ffb8f73184995f4c.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/symfony/swiftmailer-bundle/";
+      sha256 = "rxHiGhKFd/ZWnIfTt6omFLLoNFlyxOYNCHIv/UtxCho=";
+    })
   ];
 
   dontBuild = true;
