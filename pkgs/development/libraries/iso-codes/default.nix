@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext python3 ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
