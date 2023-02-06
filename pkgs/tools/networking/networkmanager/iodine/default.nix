@@ -5,7 +5,7 @@ let
   pname = "NetworkManager-iodine";
   version = "unstable-2019-11-05";
 in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

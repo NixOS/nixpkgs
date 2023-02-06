@@ -75,7 +75,7 @@ let
   tfFeature = x: if x then "1" else "0";
 
   version = "2.11.0";
-  variant = if cudaSupport then "-gpu" else "";
+  variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:

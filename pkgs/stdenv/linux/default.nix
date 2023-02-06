@@ -104,8 +104,8 @@ let
     ''
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
       export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-      ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
-      ${if system == "mipsel-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
+      ${lib.optionalString (system == "x86_64-linux") "NIX_LIB64_IN_SELF_RPATH=1"}
+      ${lib.optionalString (system == "mipsel-linux") "NIX_LIB32_IN_SELF_RPATH=1"}
     '';
 
 

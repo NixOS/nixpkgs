@@ -92,9 +92,8 @@ let
     else "";
 
   expand-response-params =
-    if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
-    then import ../expand-response-params { inherit (buildPackages) stdenv; }
-    else "";
+    lib.optionalString (buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null")
+    (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
 in
 
