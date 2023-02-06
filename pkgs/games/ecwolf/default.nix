@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ecwolf";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromBitbucket {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "n1G1zvfE1l42fbJ7ZaMdV0QXn45PjMpaaZTDQAOBtYk=";
+    sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
   nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
