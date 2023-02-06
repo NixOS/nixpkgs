@@ -10882,6 +10882,8 @@ self: super: with self; {
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
 
+  sphinxcontrib-youtube = callPackage ../development/python-modules/sphinxcontrib-youtube { };
+
   sphinx = callPackage ../development/python-modules/sphinx { };
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
