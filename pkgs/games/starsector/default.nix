@@ -62,12 +62,16 @@ stdenv.mkDerivation rec {
   # it tries to run everything with relative paths, which makes it CWD dependent
   # also point mod, screenshot, and save directory to $XDG_DATA_HOME
   # additionally, add some GC options to improve performance of the game
+  # lastly, pass-through CLI args ($@) to the underlying java call, so the user
+  # can override JVM arguments (e.g. setting a higher -Xmx value for modded
+  # usage)
   postPatch = ''
     substituteInPlace starsector.sh \
       --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace "./native/linux" "$out/share/starsector/native/linux" \
       --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
+      --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
+      --replace "com.fs.starfarer.StarfarerLauncher" "com.fs.starfarer.StarfarerLauncher \"\$@\""
   '';
 
   meta = with lib; {
