@@ -9,13 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QI95nfQTVGj6fKNetrBcQAS+pEPYHKWLibLkgkAagrs=";
   };
 
-  patchPhase = ''
-    for i in `find . -name \*.py`
-    do
-        sed -i -e "s|#!/usr/bin/env python|#!${python3}/bin/python|" $i
-    done
-  '';
-
   nativeBuildInputs = [ gettext python3 ];
 
   meta = with lib; {
