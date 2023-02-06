@@ -13353,6 +13353,12 @@
     githubId = 16765155;
     name = "Shardul Baral";
   };
+  sharzy = {
+    email = "me@sharzy.in";
+    github = "SharzyL";
+    githubId = 46294732;
+    name = "Sharzy";
+  };
   shawndellysse = {
     email = "sdellysse@gmail.com";
     github = "sdellysse";

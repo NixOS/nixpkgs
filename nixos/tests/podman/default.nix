@@ -149,7 +149,6 @@ import ../make-test-python.nix (
           docker.succeed(su_cmd("docker version"))
 
       with subtest("Run container via docker cli"):
-          docker.succeed("docker network create default")
           docker.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           docker.succeed(
             "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
@@ -158,7 +157,6 @@ import ../make-test-python.nix (
           docker.succeed("podman ps | grep sleeping")
           docker.succeed("docker stop sleeping")
           docker.succeed("docker rm sleeping")
-          docker.succeed("docker network rm default")
 
       with subtest("A podman non-member can not use the docker cli"):
           docker.fail(su_cmd("docker version", user="mallory"))
