@@ -41,7 +41,9 @@ let
       name = "repeated-layer-test";
       copyToRoot = pkgs.bash;
       # A runAsRoot script is required to force previous layers to be unpacked
-      runAsRoot = "";
+      runAsRoot = ''
+        echo 'runAsRoot has run.'
+      '';
     };
 in {
   name = "docker-tools";
