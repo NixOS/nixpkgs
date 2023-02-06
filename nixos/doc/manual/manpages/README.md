@@ -4,6 +4,8 @@ This is the collection of NixOS manpages, excluding `configuration.nix(5)`.
 
 Man pages are written in [`mdoc(7)` format](https://mandoc.bsd.lv/man/mdoc.7.html) and should be portable between mandoc and groff for rendering (though minor differences may occur, mandoc and groff seem to have slightly different spacing rules.)
 
+For previewing edited files, you can just run `man -l path/to/file.8` and you will see it rendered.
+
 Being written in `mdoc` these manpages use semantic markup. This file provides a guideline on where to apply which of the semantic elements of `mdoc`.
 
 ### Command lines and arguments

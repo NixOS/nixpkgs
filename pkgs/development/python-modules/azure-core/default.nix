@@ -17,7 +17,7 @@
 , typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.26.1";
+  version = "1.26.3";
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-IjsOkMvdHwPEGxlbAyOYmYQ/INAJZNu4XmQ4aHNBSi0=";
+    sha256 = "sha256-rL0NqpZ1zohiPaNcgNgZza+pFzHe5rJpXGTXyp2oLbQ=";
   };
 
   propagatedBuildInputs = [

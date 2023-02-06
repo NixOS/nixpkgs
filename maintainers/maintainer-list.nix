@@ -693,6 +693,15 @@
       fingerprint = "7FDB 17B3 C29B 5BA6 E5A9  8BB2 9FAA 63E0 9750 6D9D";
     }];
   };
+  Alper-Celik = {
+    email = "dev.alpercelik@gmail.com";
+    name = "Alper Çelik";
+    github = "Alper-Celik";
+    githubId = 110625473;
+    keys = [{
+      fingerprint = "6B69 19DD CEE0 FAF3 5C9F  2984 FA90 C0AB 738A B873";
+    }];
+  };
   almac = {
     email = "alma.cemerlic@gmail.com";
     github = "a1mac";
