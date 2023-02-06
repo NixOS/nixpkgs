@@ -25480,6 +25480,11 @@ with pkgs;
     inherit (darwin.apple_sdk) sdk;
   };
 
+  nushell0_75 = callPackage ../shells/nushell/75.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation Security;
+    inherit (darwin.apple_sdk) sdk;
+  };
+
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
     else unixtools.nettools;
