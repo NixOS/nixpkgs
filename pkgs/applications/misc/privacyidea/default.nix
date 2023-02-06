@@ -100,7 +100,7 @@ python3'.pkgs.buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A3Dk1oX0yf5uoH3z7JkH6Uoi+l/jf1BwUurN1U8UnL0=";
+    sha256 = "sha256-FCvuWXon8c9LnX1FnCxcSTfBR5/6zijD6ld0iAEVFkU=";
     fetchSubmodules = true;
   };
 
