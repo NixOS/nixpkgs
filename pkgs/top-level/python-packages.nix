@@ -1075,8 +1075,6 @@ self: super: with self; {
 
   azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
 
-  azure-storage = callPackage ../development/python-modules/azure-storage { };
-
   azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
 
   azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
@@ -6694,10 +6692,11 @@ self: super: with self; {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
-  openvino = toPythonModule (pkgs.openvino.override {
-    inherit (self) python;
-    enablePython = true;
-  });
+  openvino = callPackage ../development/python-modules/openvino {
+    openvino-native = pkgs.openvino.override {
+      inherit python;
+    };
+  };
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
@@ -12588,7 +12587,7 @@ self: super: with self; {
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
-  zeek = (toPythonModule (pkgs.zeek.override {
+  zeek = (toPythonModule (pkgs.zeek.broker.override {
     python3 = python;
   })).py;
 

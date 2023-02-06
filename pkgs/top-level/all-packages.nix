@@ -9046,6 +9046,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-kroki-preprocessor = callPackage ../tools/text/mdbook-kroki-preprocessor { };
+
   mdbook-linkcheck = callPackage ../tools/text/mdbook-linkcheck {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -18514,6 +18516,8 @@ with pkgs;
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
+  spicy-parser-generator = callPackage ../development/tools/parsing/spicy { };
+
   spin = callPackage ../development/tools/analysis/spin { };
 
   spirv-headers = callPackage ../development/libraries/spirv-headers { };
@@ -21991,6 +21995,8 @@ with pkgs;
   lzo = callPackage ../development/libraries/lzo { };
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
+
+  magic-enum = callPackage ../development/libraries/magic-enum { };
 
   mapnik = callPackage ../development/libraries/mapnik {
     harfbuzz = harfbuzz.override {
@@ -30529,8 +30535,6 @@ with pkgs;
 
   kail = callPackage ../tools/networking/kail {  };
 
-  kanboard = callPackage ../applications/misc/kanboard { };
-
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
@@ -38474,9 +38478,7 @@ with pkgs;
 
   xorex = callPackage ../tools/security/xorex { };
 
-  xbps = callPackage ../tools/package-management/xbps {
-    openssl = openssl_1_1;
-  };
+  xbps = callPackage ../tools/package-management/xbps { };
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
@@ -38696,8 +38698,9 @@ with pkgs;
 
   openring = callPackage ../applications/misc/openring { };
 
-  openvino = callPackage ../development/libraries/openvino
-    { stdenv = gcc10StdenvCompat; python = python3; };
+  openvino = callPackage ../development/libraries/openvino {
+    python = python3;
+  };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
