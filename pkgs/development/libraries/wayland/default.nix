@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
 , meson
 , pkg-config
 , ninja
@@ -124,6 +123,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
-
-  passthru.version = version;
 }
