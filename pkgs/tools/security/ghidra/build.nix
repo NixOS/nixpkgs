@@ -277,6 +277,8 @@ stdenv.mkDerivation rec {
     };
     patches = {
       scale-by-2 = callPackage ./patches/scale-by-2 { };
+      # patch is broken, just a demo how to add files
+      #flatlaf-dark-theme = callPackage ./patches/flatlaf-dark-theme { };
     };
   };
 
