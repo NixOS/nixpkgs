@@ -1628,8 +1628,6 @@ with pkgs;
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
 
-  zq = callPackage ../development/tools/zq { };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   deepgit = callPackage ../applications/version-management/deepgit {};
@@ -4534,6 +4532,8 @@ with pkgs;
   envfs = callPackage ../tools/filesystems/envfs { };
 
   er-patcher = callPackage ../tools/games/er-patcher { };
+
+  erdtree = callPackage ../tools/system/erdtree { };
 
   errcheck = callPackage ../development/tools/errcheck { };
 

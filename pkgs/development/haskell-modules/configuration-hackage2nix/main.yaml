@@ -667,7 +667,7 @@ dont-distribute-packages:
   - yices-easy
   - yices-painless
 
-  # These packages don‘t build because they use deprecated webkit versions.
+  # These packages don’t build because they use deprecated webkit versions.
   - diagrams-hsqml
   - dialog
   - ghcjs-dom-webkit
