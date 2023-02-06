@@ -39,6 +39,7 @@ let
     in pkgs.dockerTools.buildImage {
       fromImage = repeatedRootfsDiffs;
       name = "repeated-layer-test";
+      tag = "latest";
       copyToRoot = pkgs.bash;
       # A runAsRoot script is required to force previous layers to be unpacked
       runAsRoot = ''
