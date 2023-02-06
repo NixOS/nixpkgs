@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , freeglut, glew, libGL, libGLU, libX11, libXext, mesa
-, meson, ninja, pkg-config, wayland, wayland-protocols
+, meson, ninja, pkg-config, wayland-scanner, wayland, wayland-protocols
 , vulkan-loader, libxkbcommon, libdecor, glslang }:
 
 stdenv.mkDerivation rec {
@@ -12,17 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
+  depsBuildBuild = [ pkg-config];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [
-    freeglut glew libX11 libXext libGL libGLU mesa wayland
-    wayland-protocols vulkan-loader libxkbcommon libdecor glslang
-  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa ;
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+    freeglut glew libX11 libXext libGL libGLU mesa
+    vulkan-loader libxkbcommon libdecor glslang
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
+    wayland wayland-protocols
+  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa;
 
   mesonFlags = [
     "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
-    "-Dlibdrm=${if mesa.libdrm == null then "disabled" else "enabled"}"
-    "-Dosmesa=${if mesa ? osmesa then "enabled" else "disabled"}"
-    "-Dwayland=${if wayland.withLibraries then "enabled" else "disabled"}"
+    (lib.mesonEnable "libdrm" (mesa.libdrm != null))
+    (lib.mesonEnable "osmesa" (mesa ? osmesa))
+    (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
     "-Dwith-system-data-files=true"
   ];
 

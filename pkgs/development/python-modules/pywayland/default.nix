@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ pkg-config wayland-scanner ];
+  nativeBuildInputs = [ wayland-scanner ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
