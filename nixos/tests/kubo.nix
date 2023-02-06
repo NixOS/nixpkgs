@@ -50,12 +50,13 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.succeed("test ! -e /var/lib/ipfs/")
 
     # Test FUSE mountpoint
+    # The FUSE mount functionality is broken as of v0.13.0 and v0.17.0.
+    # See https://github.com/ipfs/kubo/issues/9044.
+    # Workaround: using CID Version 1 avoids that.
     ipfs_hash = fuse.succeed(
-        "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter"
+        "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter --cid-version=1"
     )
 
-    # The FUSE mount functionality is broken as of v0.13.0.
-    # See https://github.com/ipfs/kubo/issues/9044.
-    # fuse.succeed(f"cat /ipfs/{ipfs_hash.strip()} | grep fnord3")
+    fuse.succeed(f"cat /ipfs/{ipfs_hash.strip()} | grep fnord3")
   '';
 })
