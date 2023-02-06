@@ -1,14 +1,17 @@
 { mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
 
+let
+  srcInfo = builtins.fromJSON (builtins.readFile ./pin.json);
+in
 mkYarnPackage rec {
   pname = "vieb";
-  version = "9.5.0";
+  inherit (srcInfo) version;
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SWHjzrEvRlTn4HJnT81Le4KsFDypN3QH3F/z7zZ8p3E=";
+    inherit (srcInfo) sha256;
   };
 
   packageJSON = ./package.json;
@@ -52,11 +55,13 @@ mkYarnPackage rec {
 
   distPhase = ":"; # disable useless $out/tarballs directory
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner fortuneteller2k ];
+    maintainers = with maintainers; [ gebner fortuneteller2k tejing ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };
