@@ -1212,6 +1212,8 @@ self: super: with self; {
 
   bellows = callPackage ../development/python-modules/bellows { };
 
+  bencode-py = callPackage ../development/python-modules/bencode-py { };
+
   bencoder = callPackage ../development/python-modules/bencoder { };
 
   beniget = callPackage ../development/python-modules/beniget { };
