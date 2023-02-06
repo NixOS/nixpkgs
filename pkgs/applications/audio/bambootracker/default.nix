@@ -1,39 +1,55 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
-, qmake
 , pkg-config
-, qttools
+, qmake
 , qtbase
+, qttools
 , rtaudio
 , rtmidi
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "bambootracker";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-yubaKTc8NFLxMY0/5c2VubRHgAGOsRlitmXJ1UHzl60=";
+    hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
   };
 
-  nativeBuildInputs = [ qmake qttools pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase rtaudio rtmidi ];
+  buildInputs = [
+    qtbase
+    rtaudio
+    rtmidi
+  ];
 
-  qmakeFlags = [ "CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi" ];
+  qmakeFlags = [
+    "CONFIG+=system_rtaudio"
+    "CONFIG+=system_rtmidi"
+  ];
 
   postConfigure = "make qmake_all";
+
+  # Wrapping the inside of the app bundles, avoiding double-wrapping
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/{bin,Applications}/BambooTracker.app
     ln -s $out/{Applications/BambooTracker.app/Contents/MacOS,bin}/BambooTracker
+    wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
 
   meta = with lib; {
