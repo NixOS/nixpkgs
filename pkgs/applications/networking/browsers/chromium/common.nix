@@ -34,6 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, libffi
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
@@ -151,7 +152,8 @@ let
       libepoxy
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
-      ++ lib.optional pulseSupport libpulseaudio;
+      ++ lib.optional pulseSupport libpulseaudio
+      ++ lib.optional (chromiumVersionAtLeast "110") libffi;
 
     patches = [
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
@@ -299,6 +301,10 @@ let
       use_system_libwayland = true;
       # The default value is hardcoded instead of using pkg-config:
       system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
+    } // lib.optionalAttrs (chromiumVersionAtLeast "110") {
+      # To fix the build as we don't provide libffi_pic.a
+      # (ld.lld: error: unable to find library -l:libffi_pic.a):
+      use_system_libffi = true;
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
