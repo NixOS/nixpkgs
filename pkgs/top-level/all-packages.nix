@@ -28238,6 +28238,12 @@ with pkgs;
     else
       stdenv;
   };
+  bambootracker-qt6 = qt6Packages.callPackage ../applications/audio/bambootracker {
+    stdenv = if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk_11_0.stdenv
+    else
+      stdenv;
+  };
 
   blocky = callPackage ../applications/networking/blocky { };
 
