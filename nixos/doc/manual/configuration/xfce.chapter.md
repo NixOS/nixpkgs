@@ -54,4 +54,4 @@ run this command to do the same thing.
 $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 ```
 
-It is necessary to logout and login again for this to take effect.
+It is necessary to log out and log in again for this to take effect.
