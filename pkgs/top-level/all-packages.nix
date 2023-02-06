@@ -26283,6 +26283,8 @@ with pkgs;
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
+  go-jet = callPackage ../development/tools/go-jet { };
+
   go-mockery = callPackage ../development/tools/go-mockery { };
 
   gomacro = callPackage ../development/tools/gomacro { };
