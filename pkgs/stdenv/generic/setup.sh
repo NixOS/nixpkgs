@@ -28,10 +28,16 @@ if [ -n "$__structuredAttrs" ]; then
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-    # $NIX_ATTRS_JSON_FILE points to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736
-    export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+
+    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
+    # https://github.com/NixOS/nix/issues/6736; please keep around until the
+    # fix reaches *every patch version* that's >= lib/minver.nix
+    if ! [[ -e "$NIX_ATTRS_JSON_FILE" ]]; then
+        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
+    fi
+    if ! [[ -e "$NIX_ATTRS_SH_FILE" ]]; then
+        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+    fi
 else
     : "${outputs:=out}"
 fi
