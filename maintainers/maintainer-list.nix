@@ -13663,6 +13663,12 @@
     githubId = 57048005;
     name = "snicket2100";
   };
+  sno2wman = {
+    name = "SnO2WMaN";
+    email = "me@sno2wman.net";
+    github = "sno2wman";
+    githubId = 15155608;
+  };
   snpschaaf = {
     email = "philipe.schaaf@secunet.com";
     name = "Philippe Schaaf";
