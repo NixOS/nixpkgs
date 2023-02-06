@@ -27322,6 +27322,8 @@ with pkgs;
 
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
 
+  libGDSII = callPackage ../development/libraries/science/chemistry/libGDSII { };
+
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
