@@ -13609,6 +13609,8 @@ with pkgs;
 
   yamlfix = with python3Packages; toPythonApplication yamlfix;
 
+  yamlfmt = callPackage ../development/tools/yamlfmt {};
+
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   yamlpath = callPackage ../development/tools/yamlpath { };
