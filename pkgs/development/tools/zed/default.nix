@@ -41,6 +41,6 @@ buildGoModule rec {
     homepage = "https://zed.brimdata.io";
     changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya knl ];
   };
 }

@@ -1625,8 +1625,6 @@ with pkgs;
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
 
-  zq = callPackage ../development/tools/zq { };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   deepgit = callPackage ../applications/version-management/deepgit {};
