@@ -22907,10 +22907,10 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "3.009";
+    version = "3.101";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.009.tar.gz";
-      hash = "sha256-1q0ju/Y3pZtd/RrABkYN/LGFmC5IUs3ncVD70IXx9bY=";
+      url = "mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-3.101.tar.gz";
+      hash = "sha256-0qMt1sIeSzfGqT34CHyp6IDPrmE6Pl766jB7C9yu21g=";
     };
     doCheck = !stdenv.isDarwin;
     propagatedBuildInputs = [ AppConfig ];
