@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tPuDDVV4ZeBva/oHcw0rNjkzYmCtT2vLCdwCukBM28w=";
+    sha256 = "sha256-FcEthx5uaTROmW+wrWdpRoVT8o5Ok0HgkllMut/FEyM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
