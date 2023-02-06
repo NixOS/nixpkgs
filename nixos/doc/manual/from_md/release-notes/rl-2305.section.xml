@@ -841,6 +841,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>zramSwap</literal> is now implemented with
+          <literal>zram-generator</literal>, and the option
+          <literal>zramSwap.numDevices</literal> for using ZRAM devices
+          as general purpose ephemeral block devices has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>unifi-poller</literal> package and corresponding
           NixOS module have been renamed to <literal>unpoller</literal>
           to match upstream.
