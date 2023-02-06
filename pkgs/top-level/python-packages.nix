@@ -1619,6 +1619,8 @@ self: super: with self; {
 
   cepa = callPackage ../development/python-modules/cepa { };
 
+  cer = callPackage ../development/python-modules/cer { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
