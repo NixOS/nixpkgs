@@ -87,5 +87,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/flax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # Py3.10 requires orbax, tensorstore which needs packaging
+    # Py3.11 requires tensorboard, which is unsupported at py3.11 atm
+    broken = true; # At 2023-02-05
   };
 }
