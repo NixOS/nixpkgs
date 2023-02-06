@@ -27806,10 +27806,10 @@ let
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "4.0.1";
+    version = "5.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
-      hash = "sha256-7dNPe4E35JLmzoR0xFpVBXLcpQVqve/EXAdt+daWXKA=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v5.0.1.tar.gz";
+      hash = "sha256-a/PPgavkaw9gCW44rj7+6AjOOSHKglg4H3kr6jXuRE4=";
     };
     propagatedBuildInputs = [
       JSONXS
