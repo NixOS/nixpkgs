@@ -3123,6 +3123,8 @@ self: super: with self; {
 
   ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
 
+  evaluate = callPackage ../development/python-modules/evaluate { };
+
   evdev = callPackage ../development/python-modules/evdev { };
 
   eve = callPackage ../development/python-modules/eve { };
