@@ -1101,6 +1101,8 @@ self: super: with self; {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  bambi = callPackage ../development/python-modules/bambi { };
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
@@ -3570,6 +3572,8 @@ self: super: with self; {
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
   formbox = callPackage ../development/python-modules/formbox { };
+
+  formulae = callPackage ../development/python-modules/formulae { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
