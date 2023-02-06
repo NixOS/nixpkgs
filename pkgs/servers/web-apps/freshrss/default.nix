@@ -17,7 +17,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-l1SOaQA4C8yXbrfi7pEE1PpUO4DVmLTTDUSACCSQ5LE=";
   };
 
-  passthru.tests = nixosTests.freshrss;
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql;
+  };
 
   buildInputs = [ php ];
 
