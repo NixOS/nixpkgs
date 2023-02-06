@@ -1,26 +1,15 @@
 { lib
-, buildPythonPackage
+, python3
 , fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
 , sdcc
-, amaranth
-, fx2
-, libusb1
-, aiohttp
-, pyvcd
-, bitarray
-, crcmod
 , yosys
 , icestorm
 , nextpnr
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
   version = "unstable-2021-12-12";
-  disabled = pythonOlder "3.7";
   # python software/setup.py --version
   realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
 
@@ -31,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm sdcc ];
+  nativeBuildInputs = [ python3.pkgs.setuptools-scm sdcc ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     setuptools
     amaranth
     fx2
@@ -49,7 +38,7 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-    make -C firmware LIBFX2=${fx2}/share/libfx2
+    make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
     cd software
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
@@ -59,7 +48,7 @@ buildPythonPackage rec {
   doInstallCheck = false;
 
   checkPhase = ''
-    python -W ignore::DeprecationWarning test.py
+    ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
 
   makeWrapperArgs = [
