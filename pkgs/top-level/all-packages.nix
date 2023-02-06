@@ -31653,6 +31653,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  rime-cli = callPackage ../applications/office/rime-cli {};
+
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
 
