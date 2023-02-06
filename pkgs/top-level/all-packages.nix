@@ -36045,6 +36045,8 @@ with pkgs;
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
+  wxmacmolplt = callPackage ../applications/science/chemistry/wxmacmolplt { };
+
   ### SCIENCE/GEOMETRY
 
   antiprism = callPackage ../applications/science/geometry/antiprism { };
