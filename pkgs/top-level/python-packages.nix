@@ -10067,6 +10067,8 @@ self: super: with self; {
 
   rmrl = callPackage ../development/python-modules/rmrl { };
 
+  rmsd = callPackage ../development/python-modules/rmsd { };
+
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
   rnginline = callPackage ../development/python-modules/rnginline { };

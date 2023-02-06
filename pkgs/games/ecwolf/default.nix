@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , fetchFromBitbucket
-, makeDesktopItem
-, copyDesktopItems
 , cmake
+, copyDesktopItems
 , pkg-config
+, makeWrapper
 , zlib
 , bzip2
 , libjpeg
@@ -16,27 +16,29 @@
 
 stdenv.mkDerivation rec {
   pname = "ecwolf";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromBitbucket {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "n1G1zvfE1l42fbJ7ZaMdV0QXn45PjMpaaZTDQAOBtYk=";
+    sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
-  nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
+  nativeBuildInputs = [ cmake copyDesktopItems pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
   buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk3 ];
 
-  # Disable app bundle creation on Darwin. It fails, and it is not needed to run it from the Nix store
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    sed -i -e "s|include(\''${CMAKE_CURRENT_SOURCE_DIR}/macosx/install.txt)||" src/CMakeLists.txt
-  '';
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
   # directories to the PATH.
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mv "$out/games" "$out/bin"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R ecwolf.app $out/Applications
+    makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
   '';
 
   meta = with lib; {
@@ -45,7 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jayman2000 sander ];
     platforms = platforms.all;
-    # On Darwin, the linker fails to find a bunch of symbols.
-    broken = stdenv.isDarwin;
   };
 }

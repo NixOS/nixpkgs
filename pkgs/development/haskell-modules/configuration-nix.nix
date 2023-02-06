@@ -1115,7 +1115,7 @@ self: super: builtins.intersectAttrs super {
     hls-splice-plugin
     hls-refactor-plugin
     hls-cabal-plugin;
-  # Tests have file permissions expections that don‘t work with the nix store.
+  # Tests have file permissions expections that don’t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 

@@ -5200,14 +5200,14 @@ let
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.31";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.31.tar.gz";
-      hash = "sha256-QXNAOtTPdnMhkgmfgz+/vzzYEE4CRrOEQYeuOE0sVDY=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.33.tar.gz";
+      hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "RSA encoding and decoding, using the openSSL libraries";
