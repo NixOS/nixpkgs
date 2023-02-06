@@ -887,6 +887,13 @@
           been fixed to allow more than one plugin in the path.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.prometheus.exporters.pihole.interval</literal>
+          does not exist anymore and has been removed.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
