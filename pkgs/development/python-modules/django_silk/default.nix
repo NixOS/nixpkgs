@@ -1,7 +1,6 @@
 { lib
 , autopep8
 , buildPythonPackage
-, contextlib2
 , django
 , factory_boy
 , fetchFromGitHub
@@ -72,7 +71,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    contextlib2
     networkx
     pydot
     factory_boy

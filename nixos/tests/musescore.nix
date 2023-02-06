@@ -2,13 +2,12 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   # Make sure we don't have to go through the startup tutorial
-  customMuseScoreConfig = pkgs.writeText "MuseScore3.ini" ''
+  customMuseScoreConfig = pkgs.writeText "MuseScore4.ini" ''
     [application]
-    startup\firstStart=false
+    hasCompletedFirstLaunchSetup=true
 
-    [ui]
-    application\startup\showTours=false
-    application\startup\showStartCenter=false
+    [project]
+    preferredScoreCreationMode=1
     '';
 in
 {
@@ -40,26 +39,43 @@ in
     # Inject custom settings
     machine.succeed("mkdir -p /root/.config/MuseScore/")
     machine.succeed(
-        "cp ${customMuseScoreConfig} /root/.config/MuseScore/MuseScore3.ini"
+        "cp ${customMuseScoreConfig} /root/.config/MuseScore/MuseScore4.ini"
     )
 
     # Start MuseScore window
     machine.execute("DISPLAY=:0.0 mscore >&2 &")
 
     # Wait until MuseScore has launched
-    machine.wait_for_window("MuseScore")
+    machine.wait_for_window("MuseScore 4")
 
     # Wait until the window has completely initialised
-    machine.wait_for_text("MuseScore")
-
-    # Start entering notes
-    machine.send_key("n")
-    # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
-    machine.send_chars("cdef6gg5aaaa7g")
-    # Make sure the VM catches up with all the keys
-    machine.sleep(1)
+    machine.wait_for_text("MuseScore 4")
 
     machine.screenshot("MuseScore0")
+
+    # Create a new score
+    machine.send_key("ctrl-n")
+
+    # Wait until the creation wizard appears
+    machine.wait_for_window("New score")
+
+    machine.screenshot("MuseScore1")
+
+    machine.send_key("tab")
+    machine.send_key("tab")
+    machine.send_key("tab")
+    machine.send_key("tab")
+    machine.send_key("right")
+    machine.send_key("right")
+    machine.send_key("ret")
+
+    machine.sleep(1)
+
+    # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
+    machine.send_chars("cdef6gg5aaaa7g")
+    machine.sleep(1)
+
+    machine.screenshot("MuseScore2")
 
     # Go to the export dialogue and create a PDF
     machine.send_key("alt-f")
@@ -67,24 +83,24 @@ in
     machine.send_key("e")
 
     # Wait until the export dialogue appears.
-    machine.wait_for_window("Export")
-    machine.screenshot("MuseScore1")
-    machine.send_key("shift-tab")
-    machine.sleep(1)
-    machine.send_key("shift-tab")
-    machine.sleep(1)
-    machine.send_key("ret")
-    machine.sleep(1)
-    machine.send_key("ret")
-
-    machine.screenshot("MuseScore2")
-
-    # Wait until PDF is exported
-    machine.wait_for_file("/root/Documents/MuseScore3/Scores/Untitled.pdf")
-
-    # Check that it contains the title of the score
-    machine.succeed("pdfgrep Title /root/Documents/MuseScore3/Scores/Untitled.pdf")
+    machine.wait_for_text("Export")
 
     machine.screenshot("MuseScore3")
+
+    machine.send_key("shift-tab")
+    machine.sleep(1)
+    machine.send_key("ret")
+    machine.sleep(1)
+    machine.send_key("ret")
+
+    machine.screenshot("MuseScore4")
+
+    # Wait until PDF is exported
+    machine.wait_for_file('"/root/Documents/MuseScore4/Scores/Untitled score.pdf"')
+
+    # Check that it contains the title of the score
+    machine.succeed('pdfgrep "Untitled score" "/root/Documents/MuseScore4/Scores/Untitled score.pdf"')
+
+    machine.screenshot("MuseScore5")
   '';
 })
