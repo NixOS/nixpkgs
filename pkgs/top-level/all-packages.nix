@@ -23058,10 +23058,7 @@ with pkgs;
 
   serd = callPackage ../development/libraries/serd {};
 
-  serf = callPackage ../development/libraries/serf {
-    openssl = openssl_1_1;
-    aprutil = aprutil.override { openssl = openssl_1_1; };
-  };
+  serf = callPackage ../development/libraries/serf { };
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
