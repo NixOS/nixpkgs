@@ -111,6 +111,15 @@ in buildPythonPackage rec {
     # base is 10.12. Until we upgrade, we can fall back on the older
     # pthread support.
     ./pthreadpool-disable-gcd.diff
+  ] ++ [
+    # PyTorch fails to build on gcc 12 due to gloo
+    # https://github.com/pytorch/pytorch/issues/77614
+    (fetchpatch {
+      url = "https://github.com/facebookincubator/gloo/commit/4a5e339b764261d20fc409071dc7a8b8989aa195.patch";
+      stripLen = 1;
+      extraPrefix = "third_party/gloo/";
+      hash = "sha256-UxR1r7F6g76BWj3GBIrSy5t+YZDCWy6mMddwx+hon5w=";
+    })
   ];
 
   postPatch = lib.optionalString rocmSupport ''
@@ -204,7 +213,11 @@ in buildPythonPackage rec {
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
   # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
+  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
+  # Suppress gcc regression: avx512 math function raises uninitialized variable warning
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
+  # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
+  ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=maybe-uninitialized" "-Wno-error=uninitialized" ];
 
   nativeBuildInputs = [
     cmake
