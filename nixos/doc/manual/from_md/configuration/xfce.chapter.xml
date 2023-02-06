@@ -63,7 +63,8 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 </programlisting>
     <para>
-      It is necessary to logout and login again for this to take effect.
+      It is necessary to log out and log in again for this to take
+      effect.
     </para>
   </section>
 </chapter>
