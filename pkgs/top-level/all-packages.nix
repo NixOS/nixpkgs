@@ -7899,6 +7899,8 @@ with pkgs;
 
   gyb = callPackage ../tools/backup/gyb { };
 
+  harminv = callPackage ../development/libraries/science/chemistry/harminv { };
+
   igrep = callPackage ../tools/text/igrep {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
