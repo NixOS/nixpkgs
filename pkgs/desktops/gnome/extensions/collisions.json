@@ -187,6 +187,10 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
+    ],
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
@@ -221,9 +225,21 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
+    ],
+    "keep-awake": [
+      "KeepAwake@jepfa.de",
+      "awake@vixalien.com"
+    ],
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
     ],
     "floating-panel": [
       "floating-panel@aylur",

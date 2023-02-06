@@ -23,6 +23,15 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
+  "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
+
+  "KeepAwake@jepfa.de" = "keep-awake";
+  "awake@vixalien.com" = "keep-awake-2";
+
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated
