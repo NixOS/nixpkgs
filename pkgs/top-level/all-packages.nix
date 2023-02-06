@@ -10333,7 +10333,12 @@ with pkgs;
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
-  openrgb-with-all-plugins = openrgb.withPlugins [ openrgb-plugin-hardwaresync ];
+  openrgb-with-all-plugins = openrgb.withPlugins [
+    openrgb-plugin-effects
+    openrgb-plugin-hardwaresync
+  ];
+
+  openrgb-plugin-effects = libsForQt5.callPackage ../applications/misc/openrgb-plugins/effects { };
 
   openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
