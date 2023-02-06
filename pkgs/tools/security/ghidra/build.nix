@@ -276,6 +276,7 @@ stdenv.mkDerivation rec {
       '';
     };
     patches = {
+      scale-by-2 = callPackage ./patches/scale-by-2 { };
     };
   };
 
