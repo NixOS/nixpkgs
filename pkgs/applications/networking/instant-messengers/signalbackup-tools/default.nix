@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
+{ lib, stdenv, overrideCC, clang_14, Libsystem, fetchFromGitHub, openssl, sqlite }:
 
-stdenv.mkDerivation rec {
+let
+  # Package requires newer version of Clang than the one provided in `stdenv`.
+  # Override is taken from `../../../../os-specific/darwin/apple-sdk-11.0/default.nix` and is
+  # required for package to build on `x86_64-darwin`.
+  clang = clang_14.override {
+    bintools = stdenv.cc.bintools.override { libc = Libsystem; };
+    libc = Libsystem;
+  };
+in
+
+(if stdenv.isDarwin then overrideCC stdenv clang else stdenv).mkDerivation rec {
   pname = "signalbackup-tools";
   version = "20230206";
 
