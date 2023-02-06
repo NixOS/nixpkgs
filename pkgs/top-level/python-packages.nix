@@ -3838,8 +3838,6 @@ self: super: with self; {
 
   glances-api = callPackage ../development/python-modules/glances-api { };
 
-  glasgow = callPackage ../development/python-modules/glasgow { };
-
   glcontext = callPackage ../development/python-modules/glcontext { };
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
