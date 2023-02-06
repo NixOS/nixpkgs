@@ -38,6 +38,19 @@ stdenv.mkDerivation rec {
     "-DCIRCT_LLHD_SIM_ENABLED=OFF"
   ];
 
+  # There are some tests depending on `clang-tools` to work. They are activated only when detected
+  # `clang-tidy` in PATH, However, we cannot simply put `clang-tools` in checkInputs to make these
+  # tests work. Because
+  #
+  # 1. The absolute paths of binaries used in tests are resolved in configure phase.
+  # 2. When stdenv = clangStdenv, the `clang-tidy` binary appears in PATH via `clang-unwrapped`,
+  #    which is always placed before `${clang-tools}/bin` in PATH. `clang-tidy` provided in
+  #    `clang-unwrapped` cause tests failing because it is not wrapped to resolve header search paths.
+  #    https://github.com/NixOS/nixpkgs/issues/214945 discusses this issue.
+  #
+  # As a temporary fix, we disabled these tests when using clang stdenv
+  LIT_FILTER_OUT = lib.optionalString stdenv.cc.isClang "CIRCT :: Target/ExportSystemC/.*\.mlir";
+
   preConfigure = ''
     substituteInPlace test/circt-reduce/test/annotation-remover.mlir --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
