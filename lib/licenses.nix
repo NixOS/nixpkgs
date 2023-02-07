@@ -343,6 +343,13 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ecl20 = {
+    fullName = "Educational Community License, Version 2.0";
+    url = "https://opensource.org/licenses/ECL-2.0";
+    shortName = "ECL 2.0";
+    spdxId = "ECL-2.0";
+  };
+
   efl10 = {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";
