@@ -14,7 +14,14 @@ buildGoModule rec {
   };
 
   patches = [
+    ./inject_version_info.diff
     ./use_tmpdir_on_darwin.diff
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/caddyserver/xcaddy/cmd.customVersion=v${version}"
   ];
 
   vendorHash = "sha256-RpbnoXyTrqGOI7DpgkO+J47P17T4QCVvM1CfS6kRO9Y=";
