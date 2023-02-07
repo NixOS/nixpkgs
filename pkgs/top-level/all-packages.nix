@@ -1370,11 +1370,21 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  alice-tools = callPackage ../tools/games/alice-tools {
+    withGUI = false;
+  };
+
+  alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
+
+  alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
+
   allure = callPackage ../development/tools/allure {};
 
   aquosctl = callPackage ../tools/misc/aquosctl { };
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
+
+  argocd-vault-plugin = callPackage ../tools/security/argocd-vault-plugin {};
 
   arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
 
@@ -10343,6 +10353,8 @@ with pkgs;
 
   ombi = callPackage ../servers/ombi { };
 
+  ome_zarr = with python3Packages; toPythonApplication ome-zarr;
+
   omping = callPackage ../applications/networking/omping { };
 
   onefetch = callPackage ../tools/misc/onefetch {
@@ -10787,6 +10799,8 @@ with pkgs;
   pg_flame = callPackage ../tools/misc/pg_flame { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
+
+  pgagroal = callPackage ../development/tools/database/pgagroal { };
 
   pgcenter = callPackage ../tools/misc/pgcenter { };
 
@@ -11875,6 +11889,8 @@ with pkgs;
   silice = callPackage ../development/compilers/silice { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
+
+  simple-mtpfs = callPackage ../tools/filesystems/simple-mtpfs { };
 
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
@@ -16965,6 +16981,10 @@ with pkgs;
 
   kotlin-language-server = callPackage ../development/tools/language-servers/kotlin-language-server { };
 
+  lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/lua-language-server {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
+  };
+
   metals = callPackage ../development/tools/language-servers/metals { };
 
   millet = callPackage ../development/tools/language-servers/millet { };
@@ -16972,10 +16992,6 @@ with pkgs;
   nil = callPackage ../development/tools/language-servers/nil { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
-
-  sumneko-lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/sumneko-lua-language-server {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
-  };
 
   svls = callPackage ../development/tools/language-servers/svls { };
 

@@ -10,13 +10,13 @@
 
 mkYarnPackage rec {
   pname = "heroic-unwrapped";
-  version = "2.5.2";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    sha256 = "sha256-vyZH/uOE7Oph8TuBFM2cUFwM4ed8Ri3fKRUrl9A6zHc=";
+    sha256 = "sha256-bU4jvF81GI8a9ACwYn1Hdb5DbpK6GI7z19enO7uu48o=";
   };
 
   packageJSON = ./package.json;

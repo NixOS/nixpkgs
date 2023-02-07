@@ -162,6 +162,8 @@ self: super: with self; {
 
   aiodns = callPackage ../development/python-modules/aiodns { };
 
+  aiodocker = callPackage ../development/python-modules/aiodocker { };
+
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
   aioeagle = callPackage ../development/python-modules/aioeagle { };
@@ -6592,6 +6594,8 @@ self: super: with self; {
   oletools = callPackage ../development/python-modules/oletools { };
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
+
+  ome-zarr = callPackage ../development/python-modules/ome-zarr { };
 
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 

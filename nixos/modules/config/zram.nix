@@ -32,8 +32,7 @@ in
       };
 
       swapDevices = lib.mkOption {
-        default = 0;
-        example = 1;
+        default = 1;
         type = lib.types.int;
         description = lib.mdDoc ''
           Number of zram devices to be used as swap, recommended is 1.
