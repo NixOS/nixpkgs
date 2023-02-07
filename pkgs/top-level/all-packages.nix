@@ -1371,6 +1371,14 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  alice-tools = callPackage ../tools/games/alice-tools {
+    withGUI = false;
+  };
+
+  alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
+
+  alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
+
   allure = callPackage ../development/tools/allure {};
 
   aquosctl = callPackage ../tools/misc/aquosctl { };
