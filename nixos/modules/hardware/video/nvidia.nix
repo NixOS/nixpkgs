@@ -331,7 +331,7 @@ in
       modules = optionals (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
-        ${optionalString (pCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
+        ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
       name = "nvidia";
