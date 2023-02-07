@@ -929,12 +929,9 @@ self: super: {
     '';
   }) super.hpack;
 
-  # hslua has tests that appear to break when using musl.
+  # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
-  # Note that hslua is currently version 1.3.  However, in the latest version
-  # (>= 2.0), hslua has been split into multiple packages and this override
-  # will likely need to be moved to the hslua-core package.
-  hslua = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua else super.hslua;
+  hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
 
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
