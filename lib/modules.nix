@@ -347,6 +347,7 @@ let
       };
 
       result = withWarnings {
+        _type = "configuration";
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
