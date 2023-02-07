@@ -9,6 +9,7 @@
 , fetchPypi
 , postgresqlTestHook
 , postgresql
+, server-mode ? true
 }:
 
 let
@@ -88,6 +89,8 @@ pythonPackages.buildPythonApplication rec {
   patches = [
     # Expose setup.py for later use
     ./expose-setup.py.patch
+    # check for permission of /etc/pgadmin/config_system and don't fail
+    ./check-system-config-dir.patch
   ];
 
   postPatch = ''
@@ -105,6 +108,10 @@ pythonPackages.buildPythonApplication rec {
     sed 's|==|>=|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req"
+    ${lib.optionalString (!server-mode) ''
+    substituteInPlace web/config.py \
+      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+    ''}
   '';
 
   preBuild = ''
@@ -242,7 +249,20 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Administration and development platform for PostgreSQL";
+    description = "Administration and development platform for PostgreSQL${optionalString (!server-mode) ". Desktop Mode"}";
+    longDescription = ''
+      pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike,
+      providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects.
+      ${if server-mode then ''
+      This version is build with SERVER_MODE set to True (the default). It will require access to `/var/lib/pgadmin`
+      and `/var/log/pgadmin`. This is the default version for the NixOS module `services.pgadmin`.
+      This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
+      '' else ''
+      This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
+      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used.
+      This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
+      ''}
+    '';
     homepage = "https://www.pgadmin.org/";
     license = licenses.mit;
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
