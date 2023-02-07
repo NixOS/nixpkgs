@@ -1,7 +1,7 @@
-{ lib, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, qtbase, qtx11extras
+{ lib, stdenv, fetchFromGitLab, fetchurl
+, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, ninja, mpi, python3, tbb, libGLU, libGL
 , withDocs ? true
 }:
 
@@ -26,7 +26,7 @@ let
     })
   ];
 
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -68,6 +68,7 @@ in mkDerivation rec {
     makeWrapper
     ninja
     gfortran
+    wrapQtAppsHook
   ];
 
   buildInputs = [
