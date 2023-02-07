@@ -1101,6 +1101,8 @@ self: super: with self; {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  bambi = callPackage ../development/python-modules/bambi { };
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
@@ -1217,6 +1219,8 @@ self: super: with self; {
   behave = callPackage ../development/python-modules/behave { };
 
   bellows = callPackage ../development/python-modules/bellows { };
+
+  bencode-py = callPackage ../development/python-modules/bencode-py { };
 
   bencoder = callPackage ../development/python-modules/bencoder { };
 
@@ -3568,6 +3572,8 @@ self: super: with self; {
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
   formbox = callPackage ../development/python-modules/formbox { };
+
+  formulae = callPackage ../development/python-modules/formulae { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
@@ -10879,6 +10885,8 @@ self: super: with self; {
   };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
+
+  sphinxcontrib-youtube = callPackage ../development/python-modules/sphinxcontrib-youtube { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 

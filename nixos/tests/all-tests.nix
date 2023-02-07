@@ -134,6 +134,7 @@ in {
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix {};
   cloudlog = handleTest ./cloudlog.nix {};
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
+  cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   collectd = handleTest ./collectd.nix {};
   connman = handleTest ./connman.nix {};

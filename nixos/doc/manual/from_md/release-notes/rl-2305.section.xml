@@ -423,6 +423,16 @@
       </listitem>
       <listitem>
         <para>
+          Nebula now runs as a system user and group created for each
+          nebula network, using the <literal>CAP_NET_ADMIN</literal>
+          ambient capability on launch rather than starting as root.
+          Ensure that any files each Nebula instance needs to access are
+          owned by the correct user and group, by default
+          <literal>nebula-${networkName}</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           In <literal>mastodon</literal> it is now necessary to specify
           location of file with <literal>PostgreSQL</literal> database
           password. In
@@ -512,19 +522,72 @@
         <para>
           A few openssh options have been moved from extraConfig to the
           new freeform option <literal>settings</literal> and renamed as
-          follow:
-          <literal>services.openssh.kbdInteractiveAuthentication</literal>
-          to
-          <literal>services.openssh.settings.KbdInteractiveAuthentication</literal>,
-          <literal>services.openssh.passwordAuthentication</literal> to
-          <literal>services.openssh.settings.PasswordAuthentication</literal>,
-          <literal>services.openssh.useDns</literal> to
-          <literal>services.openssh.settings.UseDns</literal>,
-          <literal>services.openssh.permitRootLogin</literal> to
-          <literal>services.openssh.settings.PermitRootLogin</literal>,
-          <literal>services.openssh.logLevel</literal> to
-          <literal>services.openssh.settings.LogLevel</literal>.
+          follows:
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>services.openssh.forwardX11</literal> to
+              <literal>services.openssh.settings.X11Forwarding</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.kbdInteractiveAuthentication</literal>
+              -&gt;
+              <literal>services.openssh.settings.KbdInteractiveAuthentication</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.passwordAuthentication</literal>
+              to
+              <literal>services.openssh.settings.PasswordAuthentication</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.useDns</literal> to
+              <literal>services.openssh.settings.UseDns</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.permitRootLogin</literal> to
+              <literal>services.openssh.settings.PermitRootLogin</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.logLevel</literal> to
+              <literal>services.openssh.settings.LogLevel</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.kexAlgorithms</literal> to
+              <literal>services.openssh.settings.KexAlgorithms</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.macs</literal> to
+              <literal>services.openssh.settings.Macs</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.cyphers</literal> to
+              <literal>services.openssh.settings.Cyphers</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.gatewayPorts</literal> to
+              <literal>services.openssh.settings.GatewayPorts</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -801,6 +864,18 @@
           <link xlink:href="options.html#opt-services.garage.package">services.garage.package</link>
           or upgrade accordingly
           <link xlink:href="options.html#opt-system.stateVersion">system.stateVersion</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nebula now supports the
+          <literal>services.nebula.networks.&lt;name&gt;.isRelay</literal>
+          and
+          <literal>services.nebula.networks.&lt;name&gt;.relays</literal>
+          configuration options for setting up or allowing traffic
+          relaying. See the
+          <link xlink:href="https://www.defined.net/blog/announcing-relay-support-in-nebula/">announcement</link>
+          for more details about relays.
         </para>
       </listitem>
       <listitem>

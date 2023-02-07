@@ -6,13 +6,13 @@
 , importlib-metadata
 , pytestCheckHook
 , pythonOlder
-, setuptools
-, setuptools-scm
+, hatch-vcs
+, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.5.0";
+  version = "4.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,19 +21,18 @@ buildPythonPackage rec {
     owner = "python-humanize";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vTfK45sZ9m7TUQJwZpQWhOXgZzO46CwCsnNP+PI1YfA=";
+    hash = "sha256-sI773uzh+yMiyu1ebsk6zutfyt+tfx/zT/X2AdH5Fyg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
     gettext
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
