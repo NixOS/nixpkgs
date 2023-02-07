@@ -40,7 +40,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/mooltipass/moolticute";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.kirikaza ];
+    maintainers = with maintainers; [ kirikaza hughobrien ];
     platforms = platforms.linux;
   };
 }
