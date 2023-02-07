@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tilt-ble";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PR+BA0wUljUeUYCTRMKxkG+kj6PfklksbO/k9L7sWdE=";
+    hash = "sha256-ok9XWx47hcke535480NORfS1pSagaOJvMR48lYTa/Tg=";
   };
 
   nativeBuildInputs = [
