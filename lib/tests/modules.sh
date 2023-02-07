@@ -358,6 +358,9 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
   config.result \
   ./doRename-warnings.nix
 
+# Recursive types using `either` fail with an error mentioning `types.recursive`
+checkConfigError 'types\.recursive' docOptions ./declare-recursive-type.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

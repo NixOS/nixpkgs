@@ -24,12 +24,14 @@ let
       };
       owner = mkOption {
         type = types.str;
-        default = "${cfg.user}";
+        default = cfg.user;
+        defaultText = lib.literalExpression "cfg.user";
         description = lib.mdDoc "Owner to set on unix socket";
       };
       group = mkOption {
         type = types.str;
-        default = "${cfg.group}";
+        default = cfg.group;
+        defaultText = lib.literalExpression "cfg.group";
         description = lib.mdDoc "Group to set on unix socket";
       };
       rawEntry = mkOption {

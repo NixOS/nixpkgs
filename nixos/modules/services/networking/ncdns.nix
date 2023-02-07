@@ -12,7 +12,7 @@ let
   valueType = with types; oneOf [ int str bool path ]
     // { description = "setting type (integer, string, bool or path)"; };
 
-  configType = with types; attrsOf (nullOr (either valueType configType))
+  configType = with types; recursive (t: attrsOf (nullOr (either valueType t)))
     // { description = ''
           ncdns.conf configuration type. The format consists of an
           attribute set of settings. Each setting can be either `null`,

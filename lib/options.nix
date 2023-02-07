@@ -227,7 +227,7 @@ rec {
     concatMap (opt:
       let
         name = showOption opt.loc;
-        docOption = rec {
+        docOption = {
           loc = opt.loc;
           inherit name;
           description = opt.description or null;
@@ -261,6 +261,7 @@ rec {
       in
         # To find infinite recursion in NixOS option docs:
         # builtins.trace opt.loc
+        builtins.seq docOption.type # gives more useful traces
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 

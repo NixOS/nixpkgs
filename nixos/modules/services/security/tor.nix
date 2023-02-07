@@ -64,6 +64,7 @@ let
   };
   optionPort = mkOption {
     type = with types; nullOr (oneOf [port (enum ["auto"])]);
+    description = lib.mdDoc (descriptionGeneric "");
     default = null;
   };
   optionPorts = optionName: mkOption {
@@ -78,8 +79,16 @@ let
         addr = optionAddress;
         port = optionPort;
         flags = optionFlags;
-        SessionGroup = mkOption { type = nullOr int; default = null; };
-      } // genAttrs isolateFlags (name: mkOption { type = types.bool; default = false; });
+        SessionGroup = mkOption {
+          type = nullOr int;
+          default = null;
+          description = lib.mdDoc (descriptionGeneric "SessionGroup");
+        };
+      } // genAttrs isolateFlags (name: mkOption {
+        type = types.bool;
+        description = lib.mdDoc (descriptionGeneric name);
+        default = false;
+      });
       config = {
         flags = filter (name: config.${name} == true) isolateFlags ++
                 optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
@@ -113,8 +122,16 @@ let
           addr = optionAddress;
           port = optionPort;
           flags = optionFlags;
-          SessionGroup = mkOption { type = nullOr int; default = null; };
-        } // genAttrs flags (name: mkOption { type = types.bool; default = false; });
+          SessionGroup = mkOption {
+            type = nullOr int;
+            default = null;
+            description = lib.mdDoc (descriptionGeneric "SessionGroup");
+          };
+        } // genAttrs flags (name: mkOption {
+          type = types.bool;
+          description = lib.mdDoc (descriptionGeneric name);
+          default = false;
+        });
         config = mkIf doConfig { # Only add flags in SOCKSPort to avoid duplicates
           flags = filter (name: config.${name} == true) flags ++
                   optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
@@ -123,6 +140,7 @@ let
     ];
   optionFlags = mkOption {
     type = with types; listOf str;
+    description = lib.mdDoc (descriptionGeneric "");
     default = [];
   };
   optionORPort = optionName: mkOption {
@@ -138,7 +156,11 @@ let
           addr = optionAddress;
           port = optionPort;
           flags = optionFlags;
-        } // genAttrs flags (name: mkOption { type = types.bool; default = false; });
+        } // genAttrs flags (name: mkOption {
+          type = types.bool;
+          description = lib.mdDoc (descriptionGeneric name);
+          default = false;
+        });
         config = {
           flags = filter (name: config.${name} == true) flags;
         };
@@ -475,6 +497,7 @@ in
                           port = optionPort;
                         };
                       }));
+                      description = lib.mdDoc "The HiddenServicePort's target.";
                     };
                   };
                 }))
@@ -595,7 +618,11 @@ in
                   flags = optionFlags;
                   addr = optionAddress;
                   port = optionPort;
-                } // genAttrs flags (name: mkOption { type = types.bool; default = false; });
+                } // genAttrs flags (name: mkOption {
+                  type = types.bool;
+                  description = lib.mdDoc (descriptionGeneric name);
+                  default = false;
+                });
                 config = {
                   flags = filter (name: config.${name} == true) flags;
                 };

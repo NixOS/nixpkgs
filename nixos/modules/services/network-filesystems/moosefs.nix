@@ -17,9 +17,9 @@ let
 
     in {
       type = with types; let
-        valueType = oneOf ([
-          (listOf valueType)
-        ] ++ allowedTypes) // {
+        valueType = recursive (t: oneOf ([
+          (listOf t)
+        ] ++ allowedTypes)) // {
           description = "Flat key-value file";
         };
       in attrsOf valueType;

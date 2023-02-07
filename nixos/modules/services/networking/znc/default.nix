@@ -61,16 +61,12 @@ let
     in
       concatStringsSep "\n" (toLines cfg.config);
 
-  semanticTypes = with types; rec {
+  zncConfType = with types; let
     zncAtom = nullOr (oneOf [ int bool str ]);
+  in recursive (zncConf: let
     zncAttr = attrsOf (nullOr zncConf);
-    zncAll = oneOf [ zncAtom (listOf zncAtom) zncAttr ];
-    zncConf = attrsOf (zncAll // {
-      # Since this is a recursive type and the description by default contains
-      # the description of its subtypes, infinite recursion would occur without
-      # explicitly breaking this cycle
-      description = "znc values (null, atoms (str, int, bool), list of atoms, or attrsets of znc values)";
-    });
+  in attrsOf (oneOf [ zncAtom (listOf zncAtom) zncAttr ])) // {
+    description = "znc values (null, atoms (str, int, bool), list of atoms, or attrsets of znc values)";
   };
 
 in
@@ -123,7 +119,7 @@ in
       };
 
       config = mkOption {
-        type = semanticTypes.zncConf;
+        type = zncConfType;
         default = {};
         example = literalExpression ''
           {
