@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
-let
-  target = if stdenv.isDarwin then "macOS" else "Linux";
-in
+
 stdenv.mkDerivation rec {
-  pname = "sumneko-lua-language-server";
+  pname = "lua-language-server";
   version = "3.6.10";
 
   src = fetchFromGitHub {
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   ninjaFlags = [
-    "-fcompile/ninja/${lib.toLower target}.ninja"
+    "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja"
   ];
 
   postBuild = ''
@@ -67,8 +65,8 @@ stdenv.mkDerivation rec {
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/log \
-      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/meta"
+      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/log \
+      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/meta"
 
     runHook postInstall
   '';
@@ -77,11 +75,10 @@ stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Lua Language Server coded by Lua";
+    description = "A language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    maintainers = with maintainers; [ figsoda sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "lua-language-server";
   };
 }
