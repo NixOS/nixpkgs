@@ -68,7 +68,30 @@ let
       optionIdPrefix = "test-opt-";
     };
 
-  sources = lib.sourceFilesBySuffices ./. [".xml"];
+  sources = runCommand "manual-sources" {
+    inputs = lib.sourceFilesBySuffices ./. [ ".xml" ".md" ];
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    mkdir $out
+    cd $out
+    cp -r --no-preserve=all $inputs/* .
+    rm -rf from_md
+
+    declare -a convert_args
+    while read -r mf; do
+      if [[ "$mf" = *.chapter.md ]]; then
+        convert_args+=("--chapter")
+      else
+        convert_args+=("--section")
+      fi
+
+      convert_args+=("from_md/''${mf%.md}.xml" "$mf")
+    done < <(find . -type f -name '*.md')
+
+    nixos-render-docs manual docbook-fragment \
+      --manpage-urls ${manpageUrls} \
+      "''${convert_args[@]}"
+  '';
 
   modulesDoc = runCommand "modules.xml" {
     nativeBuildInputs = [ pkgs.nixos-render-docs ];
