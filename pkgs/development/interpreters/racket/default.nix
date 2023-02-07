@@ -3,6 +3,7 @@
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
 , gtk3
+, glibcLocales
 , libedit, libffi
 , libiconv
 , libGL
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
 
   '' + lib.optionalString stdenv.isLinux ''
     gappsWrapperArgs+=("--prefix"   "LD_LIBRARY_PATH" ":" ${libPath})
+    gappsWrapperArgs+=("--set"      "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
   '' + lib.optionalString stdenv.isDarwin ''
     gappsWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" ${libPath})
   ''

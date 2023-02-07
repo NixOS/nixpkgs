@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fd/WZXRvJb6XCATNmPj2xi1UseoZqBT9IN21iwxHGLs=";
+    hash = "sha256-B5d1OjrRB164BYtFzZoZ3I4elZSKpHg0PCBiwXPnqLs=";
   };
 
   nativeBuildInputs = [
@@ -45,8 +45,10 @@ stdenv.mkDerivation rec {
   # Original installs udev rules and service config into global paths
   postPatch = ''
     substituteInPlace etc/meson.build \
-      --replace "install_dir: unitdir" "install_dir: datadir" \
-      --replace "install_dir: rulesdir" "install_dir: datadir" \
+      --replace "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
+      --replace "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
+    substituteInPlace etc/udev/50-ipts.rules \
+      --replace "/bin/systemd-escape" "${systemd}/bin/systemd-escape"
   '';
 
   mesonFlags = [

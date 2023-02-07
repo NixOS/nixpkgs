@@ -21,8 +21,13 @@ let
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
 
     #### Dtk Application
+    deepin-album = callPackage ./apps/deepin-album { };
     deepin-calculator = callPackage ./apps/deepin-calculator { };
+    deepin-compressor = callPackage ./apps/deepin-compressor { };
+    deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
+    deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
+    deepin-picker = callPackage ./apps/deepin-picker { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
 
     #### ARTWORK
@@ -30,6 +35,9 @@ let
     deepin-icon-theme = callPackage ./artwork/deepin-icon-theme { };
     deepin-gtk-theme = callPackage ./artwork/deepin-gtk-theme { };
     deepin-sound-theme = callPackage ./artwork/deepin-sound-theme { };
+
+    #### MISC
+    deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
   };
 in
 lib.makeScope libsForQt5.newScope packages

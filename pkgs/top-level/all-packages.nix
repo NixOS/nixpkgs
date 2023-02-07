@@ -314,6 +314,8 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
 
+  bibtex-tidy = nodePackages.bibtex-tidy;
+
   binbloom = callPackage ../tools/security/binbloom {};
 
   bingo = callPackage ../development/tools/bingo {};
@@ -389,6 +391,8 @@ with pkgs;
   checkov = callPackage ../development/tools/analysis/checkov {};
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
+
+  circt = callPackage ../development/compilers/circt { };
 
   classicube = callPackage ../games/classicube { };
 
@@ -1367,6 +1371,14 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  alice-tools = callPackage ../tools/games/alice-tools {
+    withGUI = false;
+  };
+
+  alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
+
+  alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
+
   allure = callPackage ../development/tools/allure {};
 
   aquosctl = callPackage ../tools/misc/aquosctl { };
@@ -1624,8 +1636,6 @@ with pkgs;
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
-
-  zq = callPackage ../development/tools/zq { };
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 
@@ -4530,6 +4540,8 @@ with pkgs;
 
   er-patcher = callPackage ../tools/games/er-patcher { };
 
+  erdtree = callPackage ../tools/system/erdtree { };
+
   errcheck = callPackage ../development/tools/errcheck { };
 
   eschalot = callPackage ../tools/security/eschalot { };
@@ -4636,6 +4648,8 @@ with pkgs;
   fsql = callPackage ../tools/misc/fsql { };
 
   ### TOOLS/TYPESETTING/TEX
+
+  advi = callPackage ../tools/typesetting/tex/advi { };
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
@@ -9086,17 +9100,7 @@ with pkgs;
 
   memtester = callPackage ../tools/system/memtester { };
 
-  mesa-demos =
-    let
-      wayland' = wayland.override { withLibraries = stdenv.isLinux; };
-    in
-    callPackage ../tools/graphics/mesa-demos {
-      wayland = wayland';
-      wayland-protocols = wayland-protocols.override {
-        wayland = wayland';
-        wayland-scanner = wayland'.bin;
-      };
-    };
+  mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
   mhonarc = perlPackages.MHonArc;
 
@@ -13611,6 +13615,8 @@ with pkgs;
 
   yamlfix = with python3Packages; toPythonApplication yamlfix;
 
+  yamlfmt = callPackage ../development/tools/yamlfmt {};
+
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   yamlpath = callPackage ../development/tools/yamlpath { };
@@ -17898,7 +17904,7 @@ with pkgs;
   img = callPackage ../development/tools/img { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_14;
+    llvmPackages = llvmPackages_15;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
@@ -24252,6 +24258,8 @@ with pkgs;
 
   clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
 
+  cockpit = callPackage ../servers/monitoring/cockpit { };
+
   codeowners = callPackage ../development/tools/codeowners { };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
@@ -25199,6 +25207,8 @@ with pkgs;
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
+  sharing = callPackage ../servers/sharing { };
+
   showoff = callPackage ../servers/http/showoff {};
 
   serfdom = callPackage ../servers/serf { };
@@ -25671,9 +25681,7 @@ with pkgs;
 
   fwupd-efi = callPackage ../os-specific/linux/firmware/fwupd-efi { };
 
-  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager {
-    openssl = openssl_1_1;
-  };
+  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
 
   firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
 
@@ -26282,6 +26290,8 @@ with pkgs;
   };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
+
+  go-jet = callPackage ../development/tools/go-jet { };
 
   go-mockery = callPackage ../development/tools/go-mockery { };
 
@@ -26894,6 +26904,8 @@ with pkgs;
   blackbird = callPackage ../data/themes/blackbird { };
 
   blackout = callPackage ../data/fonts/blackout { };
+
+  breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
 
   brise = callPackage ../data/misc/brise { };
 
@@ -31632,7 +31644,7 @@ with pkgs;
   polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
 
   portfolio = callPackage ../applications/office/portfolio {
-    jre = openjdk11;
+    jre = openjdk17;
   };
 
   prevo = callPackage ../applications/misc/prevo { };
@@ -31648,6 +31660,8 @@ with pkgs;
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
   qemacs = callPackage ../applications/editors/qemacs { };
+
+  rime-cli = callPackage ../applications/office/rime-cli {};
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
@@ -36021,6 +36035,8 @@ with pkgs;
 
   molden = callPackage ../applications/science/chemistry/molden { };
 
+  mopac = callPackage ../applications/science/chemistry/mopac { };
+
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openlp = libsForQt5.callPackage ../applications/misc/openlp { };
@@ -36044,6 +36060,8 @@ with pkgs;
   siesta = callPackage ../applications/science/chemistry/siesta { };
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
+
+  wxmacmolplt = callPackage ../applications/science/chemistry/wxmacmolplt { };
 
   ### SCIENCE/GEOMETRY
 
@@ -38206,6 +38224,8 @@ with pkgs;
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
+  pv-migrate = callPackage ../applications/networking/cluster/pv-migrate { };
+
   tagref = callPackage ../tools/misc/tagref { };
 
   tcat = callPackage ../tools/misc/tcat { };
@@ -38569,6 +38589,8 @@ with pkgs;
   yarGen = callPackage ../tools/security/yarGen { };
 
   yersinia = callPackage ../tools/security/yersinia { };
+
+  yatas = callPackage ../tools/security/yatas { };
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 

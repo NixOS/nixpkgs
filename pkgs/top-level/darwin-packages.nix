@@ -170,6 +170,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
+  openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
+    inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
+  };
+
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 
   trash = callPackage ../os-specific/darwin/trash { };

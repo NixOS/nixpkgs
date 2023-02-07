@@ -10008,6 +10008,12 @@
     githubId = 3073833;
     name = "Massimo Redaelli";
   };
+  mrityunjaygr8 = {
+    email = "mrityunjaysaxena1996@gmail.com";
+    github = "mrityunjaygr8";
+    name = "Mrityunjay Saxena";
+    githubId = 14573967;
+  };
   mrkkrp = {
     email = "markkarpov92@gmail.com";
     github = "mrkkrp";
@@ -13347,6 +13353,12 @@
     githubId = 16765155;
     name = "Shardul Baral";
   };
+  sharzy = {
+    email = "me@sharzy.in";
+    github = "SharzyL";
+    githubId = 46294732;
+    name = "Sharzy";
+  };
   shawndellysse = {
     email = "sdellysse@gmail.com";
     github = "sdellysse";
@@ -13671,6 +13683,12 @@
     github = "snicket2100";
     githubId = 57048005;
     name = "snicket2100";
+  };
+  sno2wman = {
+    name = "SnO2WMaN";
+    email = "me@sno2wman.net";
+    github = "sno2wman";
+    githubId = 15155608;
   };
   snpschaaf = {
     email = "philipe.schaaf@secunet.com";
@@ -15290,6 +15308,12 @@
     github = "Valodim";
     githubId = 27813;
     name = "Vincent Breitmoser";
+  };
+  vamega = {
+    email = "github@madiathv.com";
+    github = "vamega";
+    githubId = 223408;
+    name = "Varun Madiath";
   };
   vandenoever = {
     email = "jos@vandenoever.info";

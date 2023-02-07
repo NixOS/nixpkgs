@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     # Relative paths.
     "BINDIR=/bin"
     "PERLDIR=/share/perl5"
-    "MODSDIR=/lib/"
+    "MODSDIR=/nonexistent" # AMC will test for that dir before
+    # defaulting to the "portable" strategy, so this test *must* fail.
     "TEXDIR=/tex/latex/" # what texlive.combine expects
     "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
     "MAN1DIR=/share/man/man1"
