@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   pname = "vips";
   version = "8.14.1";
 
-  outputs = [ "bin" "out" "man" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    gtk-doc
     docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtk-doc
   ];
 
   buildInputs = [
@@ -99,11 +100,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
     "-Dcgif=disabled"
     "-Dspng=disabled"
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-Dgtk_doc=true"
   ];
 
   meta = with lib; {
