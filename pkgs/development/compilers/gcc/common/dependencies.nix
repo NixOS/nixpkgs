@@ -12,6 +12,8 @@
 , gmp
 , mpfr
 , libmpc
+, libucontext ? null
+, libxcrypt ? null
 , cloog ? null
 , isl ? null
 , zlib ? null
@@ -27,6 +29,7 @@
 , langJava ? false
 , javaAwtGtk ? false
 , langAda ? false
+, langGo ? false
 , crossStageStatic ? null
 , threadsCross ? null
 }:
@@ -71,6 +74,9 @@ in
     gmp
     mpfr
     libmpc
+  ]
+  ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
+  ++ [
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ]
   ++ optionals (cloog != null) [ cloog ]
@@ -78,6 +84,7 @@ in
   ++ optionals (zlib != null) [ zlib ]
   ++ optionals langJava [ boehmgc zip unzip ]
   ++ optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs)
+  ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ]
   ;
 
   # threadsCross.package after gcc6 so i assume its okay for 4.8 and 4.9 too
