@@ -9,23 +9,23 @@ version : builtins.getAttr version {
   "0.13.1" = {
     x86_64-linux-37 = {
       name = "torchaudio-0.13.1-cp37-cp37m-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torchaudio-0.13.1%2Bcu116-cp37-cp37m-linux_x86_64.whl";
-      hash = "sha256-jrztfOrRCFKVNuXqnyeM3GCRDj/K8DDmW9jNLckCEAs=";
+      url = "https://download.pytorch.org/whl/cu117/torchaudio-0.13.1%2Bcu117-cp37-cp37m-linux_x86_64.whl";
+      hash = "sha256-wQJJ2BPkQAGxXx8H0rt3P39wsl/6KhbF27wYHT5L6/o=";
     };
     x86_64-linux-38 = {
       name = "torchaudio-0.13.1-cp38-cp38-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torchaudio-0.13.1%2Bcu116-cp38-cp38-linux_x86_64.whl";
-      hash = "sha256-oESJecUUYoHWYkPa8/+t86rjEj4F4CNpvPpCwZAk5AY=";
+      url = "https://download.pytorch.org/whl/cu117/torchaudio-0.13.1%2Bcu117-cp38-cp38-linux_x86_64.whl";
+      hash = "sha256-QCY7LUVyj7/x2zOBJyvkKXD/blj5KZSqWHKlvUx+cmQ=";
     };
     x86_64-linux-39 = {
       name = "torchaudio-0.13.1-cp39-cp39-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torchaudio-0.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl";
-      hash = "sha256-W8DinLePfEUu608nApxABJdw1RVTv4QLTKLt1j2iie4=";
+      url = "https://download.pytorch.org/whl/cu117/torchaudio-0.13.1%2Bcu117-cp39-cp39-linux_x86_64.whl";
+      hash = "sha256-Zbs2FdQz1bkwrNwQNu+xJAR9VxfbpN63D0GSkNlC+DY=";
     };
     x86_64-linux-310 = {
       name = "torchaudio-0.13.1-cp310-cp310-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torchaudio-0.13.1%2Bcu116-cp310-cp310-linux_x86_64.whl";
-      hash = "sha256-3vRLFxUB3LmU9aGUjVWWYnBXBe475veBvRHvzTu/zTA=";
+      url = "https://download.pytorch.org/whl/cu117/torchaudio-0.13.1%2Bcu117-cp310-cp310-linux_x86_64.whl";
+      hash = "sha256-k/RVSktT+WmNAiJJA8kjwSpsIrPJQtz8IXm1gdjzcUY=";
     };
     x86_64-darwin-37 = {
       name = "torchaudio-0.13.1-cp37-cp37m-macosx_10_9_x86_64.whl";
