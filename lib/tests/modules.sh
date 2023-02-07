@@ -365,6 +365,10 @@ checkConfigOutput '^{ }$' config.ok.config ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
 checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
 
+# _type check
+checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
+checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 # doRename adds a warning.
