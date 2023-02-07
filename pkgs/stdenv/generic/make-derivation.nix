@@ -563,12 +563,33 @@ lib.extendDerivation
        _derivation_original_args = derivationArg.args;
 
        builder = stdenv.shell;
-       # The bash builtin `export` dumps all current environment variables,
-       # which is where all build input references end up (e.g. $PATH for
-       # binaries). By writing this to $out, Nix can find and register
-       # them as runtime dependencies (since Nix greps for store paths
-       # through $out to find them)
-       args = [ "-c" "export > $out" ];
+       args =
+          if __structuredAttrs
+          then
+            [ "-c"
+              ''
+                set -ex
+                function dog {
+                  while read ln; do echo \"$ln\"; done
+                }
+                (
+                  echo 'NOTE: this file only serves as a garbage collection root. inputDerivation'
+                  echo '      should produce a directory instead of a file, but currently it can'
+                  echo '      not, as it can not reference mkdir.'
+                  echo '.attrs.json:'
+                  dog < .attrs.json
+                  echo '.attrs.sh:'
+                  dog < .attrs.sh
+                ) >''${outputs[out]}
+              ''
+            ]
+          else
+            # The bash builtin `export` dumps all current environment variables,
+            # which is where all build input references end up (e.g. $PATH for
+            # binaries). By writing this to $out, Nix can find and register
+            # them as runtime dependencies (since Nix greps for store paths
+            # through $out to find them)
+            [ "-c" "export > $out" ];
 
        # inputDerivation produces the inputs; not the outputs, so any
        # restrictions on what used to be the outputs don't serve a purpose
