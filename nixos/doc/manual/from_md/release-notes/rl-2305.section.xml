@@ -577,8 +577,8 @@
           </listitem>
           <listitem>
             <para>
-              <literal>services.openssh.cyphers</literal> to
-              <literal>services.openssh.settings.Cyphers</literal>
+              <literal>services.openssh.ciphers</literal> to
+              <literal>services.openssh.settings.Ciphers</literal>
             </para>
           </listitem>
           <listitem>
