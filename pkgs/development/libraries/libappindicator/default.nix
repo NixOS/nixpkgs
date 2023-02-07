@@ -78,6 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
     # TODO: Resolve the issues with the Mono bindings.
-    broken = monoSupport && (gtkVersion != "2");
+    broken = monoSupport;
   };
 })
