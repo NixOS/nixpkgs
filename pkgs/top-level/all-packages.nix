@@ -1385,6 +1385,8 @@ with pkgs;
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
 
+  argocd-vault-plugin = callPackage ../tools/security/argocd-vault-plugin {};
+
   arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
 
   audible-cli = callPackage ../tools/misc/audible-cli { };
