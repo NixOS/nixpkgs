@@ -362,8 +362,15 @@ let
 
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
-        if isFunction m || isAttrs m then
+        if isFunction m then
           unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
+        else if isAttrs m then
+          if m._type or "module" == "module" then
+            unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
+          else if m._type == "if" || m._type == "override" then
+            loadModule args fallbackFile fallbackKey { config = m; }
+          else
+            throw "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}${lib.optionalString (fallbackFile != null) ", in file ${toString fallbackFile}."}"
         else if isList m then
           let defs = [{ file = fallbackFile; value = m; }]; in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
