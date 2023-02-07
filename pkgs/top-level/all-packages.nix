@@ -3387,6 +3387,8 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  pbpctrl = callPackage ../applications/audio/pbpctrl { };
+
   pdepend = callPackage ../development/php-packages/pdepend { };
 
   platformsh = callPackage ../misc/platformsh { };
