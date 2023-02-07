@@ -28,12 +28,6 @@
   # Path for the sources file that will be used
   # See `update.nix` file for a description on how this file works
 , sourcesPath ? ./. + "/graalvm${javaVersion}-ce-sources.json"
-  # Use musl instead of glibc to allow true static builds in GraalVM's
-  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc static
-  # builds to fail, so it should be used with care
-, useMusl ? false
-  # Extra libraries to be included in native-image using '-H:CLibraryPath' flag
-, extraCLibs ? [ ]
 }:
 
 { stdenv
@@ -68,6 +62,12 @@
 , gtk3
 , jq
 , writeShellScript
+  # Use musl instead of glibc to allow true static builds in GraalVM's
+  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc static
+  # builds to fail, so it should be used with care
+, useMusl ? false
+  # Extra libraries to be included in native-image using '-H:CLibraryPath' flag
+, extraCLibs ? [ ]
 }:
 
 assert useMusl -> stdenv.isLinux;
