@@ -4692,6 +4692,8 @@ self: super: with self; {
     cudaSupport = false;
   };
 
+  jaxopt = callPackage ../development/python-modules/jaxopt { };
+
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
   jc = callPackage ../development/python-modules/jc { };
