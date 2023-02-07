@@ -376,7 +376,7 @@ class Converter(ABC):
                 end_stack.append([i, cast(int, tokens[i].attrs.get('start', 1))])
             elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
                 (idx, compact) = wide_stack.pop()
-                tokens[idx].attrs['compact'] = compact
+                tokens[idx].meta['compact'] = compact
                 (idx, end) = end_stack.pop()
                 if tokens[i].type == 'ordered_list_close':
                     tokens[idx].meta['end'] = end - 1
