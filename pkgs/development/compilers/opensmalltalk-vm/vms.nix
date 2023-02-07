@@ -27,4 +27,30 @@
       ];
     };
   };
+  "linux64x64" = {
+    "newspeak.cog.spur" = {
+      configureFlagsArray = ''(
+        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2"
+        TARGET_ARCH="-m64"
+      )'';
+      configureFlags = [
+        "--with-vmversion=5.0"
+        "--with-src=src/spur64.cog.newspeak"
+        "--without-vm-display-fbdev"
+        "--without-npsqueak"
+      ];
+    };
+    "squeak.cog.spur" = {
+      configureFlagsArray = ''(
+        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
+        TARGET_ARCH="-m64"
+      )'';
+      configureFlags = [
+        "--with-vmversion=5.0"
+        "--with-src=src/spur64.cog"
+        "--with-scriptname=spur64"
+        "--without-npsqueak"
+      ];
+    };
+  };
 }
