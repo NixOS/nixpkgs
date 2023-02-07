@@ -193,38 +193,40 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkg-config)
-    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
-    ++ (optional langAda gnatboot)
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional buildPlatform.isDarwin gnused)
+  inherit (import ../common/dependencies.nix {
+    inherit
+      lib
+      stdenv
+      buildPackages
+      targetPackages
+      crossStageStatic
+      threadsCross
+      version
+      langAda
+      gnatboot
+      flex
+      langJava
+      javaAwtGtk
+      texinfo
+      which
+      gettext
+      pkg-config
+      gnused
+      patchelf
+      gmp
+      mpfr
+      libmpc
+      isl
+      zlib
+      boehmgc
+      zip
+      unzip
+      gtk2
+      libart_lgpl
+      perl
+      xlibs
     ;
-
-  # For building runtime libs
-  depsBuildTarget =
-    (
-      if hostPlatform == buildPlatform then [
-        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-      ] else assert targetPlatform == hostPlatform; [ # build != host == target
-        stdenv.cc
-      ]
-    )
-    ++ optional targetPlatform.isLinux patchelf;
-
-  buildInputs = [
-    gmp mpfr libmpc
-    targetPackages.stdenv.cc.bintools # For linking code at run-time
-  ] ++ (optional (isl != null) isl)
-    ++ (optional (zlib != null) zlib)
-    ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ;
-
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross.package;
+  }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 

@@ -15,6 +15,8 @@
 , cloog ? null
 , isl ? null
 , zlib ? null
+, gnatboot ? null
+, flex ? null
 , boehmgc
 , zip
 , unzip
@@ -22,8 +24,9 @@
 , libart_lgpl
 , perl ? null
 , xlibs ? null
-, langJava ? null
-, javaAwtGtk ? null
+, langJava ? false
+, javaAwtGtk ? false
+, langAda ? false
 , crossStageStatic ? null
 , threadsCross ? null
 }:
@@ -44,6 +47,8 @@ in
   ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals javaAwtGtk [ pkg-config ]
+  ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox) [ flex ]
+  ++ optionals langAda [ gnatboot ]
   # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
   # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
   ++ optionals buildPlatform.isDarwin [ gnused ]
