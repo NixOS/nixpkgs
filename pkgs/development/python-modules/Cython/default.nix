@@ -63,6 +63,12 @@ in buildPythonPackage rec {
       url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
       sha256 = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
     })
+    # Avoid triggering type-check assert for cyfuncs
+    # https://github.com/cython/cython/issues/4804
+    (fetchpatch {
+      url = "https://github.com/cython/cython/commit/8930130481f27502ecfc48b21d8eb13f49ba1353.patch";
+      hash = "sha256-InOvrM/p+5dgnq8dmy29bM305jCAjcHRi1EaFIy4hWk=";
+    })
   ];
 
   checkPhase = ''
