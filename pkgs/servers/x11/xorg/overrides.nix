@@ -863,6 +863,11 @@ self: super:
             url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/ccdd431cd8f1cabae9d744f0514b6533c438908c.diff";
             sha256 = "sha256-IGPsjS7KgRPLrs1ImBXvIFCa8Iu5ZiAHRZvHlBYP8KQ=";
           })
+          (fetchpatch {
+            name = "CVE-2023-0494.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/0ba6d8c37071131a49790243cdac55392ecf71ec.diff";
+            sha256 = "sha256-/+IuGk09OYVEIB/Y+DTKf7kfHyukEFX/6u1FDIGJieY=";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
