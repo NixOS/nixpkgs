@@ -6462,6 +6462,8 @@ with pkgs;
     util-linux = util-linuxMinimal;
   };
 
+  sqldef = callPackage ../development/tools/sqldef { };
+
   sqlint = callPackage ../development/tools/sqlint { };
 
   squawk = callPackage ../development/tools/squawk { };
