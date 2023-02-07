@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, fetchFromGitHub
-, withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
@@ -53,10 +52,10 @@ stdenv.mkDerivation rec {
     stdenv.cc.isGNU;
 
   nativeBuildInputs = [ perl removeReferencesTo ];
-  buildInputs = lib.optional withCryptodev cryptodev
+  buildInputs =
     # perl is included to allow the interpreter path fixup hook to set the
     # correct interpreter in c_rehash.
-    ++ lib.optional withPerl perl;
+    lib.optional withPerl perl;
 
   # TODO(@Ericson2314): Improve with mass rebuild
   configurePlatforms = [];
@@ -102,9 +101,6 @@ stdenv.mkDerivation rec {
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
     "--openssldir=etc/ssl"
-  ] ++ lib.optionals withCryptodev [
-    "-DHAVE_CRYPTODEV"
-    "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
     ++ lib.optional enableSSL3 "enable-ssl3"
     # We select KTLS here instead of the configure-time detection (which we patch out).
