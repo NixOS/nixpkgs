@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "volvooncall";
-  version = "0.10.1";
+  version = "0.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = "volvooncall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-udYvgKj7Rlc/hA86bbeBfnoVRjKkXT4TwpceWz226cU=";
+    hash = "sha256-/BMwDuo4xE/XOLM8qzJwt0A0h0+ihbCVCxT3BBToiVU=";
   };
 
   patches = [
@@ -67,7 +67,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
-    changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ dotlambda ];
   };
