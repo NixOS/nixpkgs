@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib
+, stdenv
+, fetchzip
+, glib
+, jre
+, makeWrapper
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
@@ -9,7 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t05rwP33/V2S5pkWjv87GmPHtYCMrMxT3o3cOrwytK4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    glib
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,5 +51,6 @@ stdenv.mkDerivation rec {
       license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
       platforms = platforms.unix;
+      mainProgram = "vassal";
   };
 }
