@@ -255,8 +255,7 @@ in rec {
 
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
-    { inherit sources;
-      nativeBuildInputs = [
+    { nativeBuildInputs = [
         buildPackages.installShellFiles
       ] ++ lib.optionals allowDocBook [
         buildPackages.libxml2.bin
