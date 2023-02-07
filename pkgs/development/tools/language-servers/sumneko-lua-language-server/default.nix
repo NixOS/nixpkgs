@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "3.6.7";
+  version = "3.6.10";
 
   src = fetchFromGitHub {
-    owner = "sumneko";
+    owner = "luals";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-x7/yO1rJ+VBG4EFpISYblRECLW2lsLz5wcqLR14UV/g=";
+    sha256 = "sha256-QnkWEf1Uv+CZwEyv1b3WMPvaOZEn+mKH5w3CPyw02CQ=";
     fetchSubmodules = true;
   };
 
@@ -24,12 +24,13 @@ stdenv.mkDerivation rec {
     Foundation
   ];
 
-  preBuild = ''
-    cd 3rd/luamake
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    # Needed for the test
-    export HOME=/var/empty
+  postPatch = ''
+    # filewatch tests are failing on darwin
+    # this feature is not used in lua-language-server
+    sed -i /filewatch/d 3rd/bee.lua/test/test.lua
+
+    pushd 3rd/luamake
+  '' + lib.optionalString stdenv.isDarwin ''
     # This package uses the program clang for C and C++ files. The language
     # is selected via the command line argument -std, but this do not work
     # in combination with the nixpkgs clang wrapper. Therefor we have to
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    cd ../..
+    popd
     ./3rd/luamake/luamake rebuild
   '';
 
@@ -72,9 +73,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # some tests require local networking
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Lua Language Server coded by Lua";
-    homepage = "https://github.com/sumneko/lua-language-server";
+    homepage = "https://github.com/luals/lua-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
