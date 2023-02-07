@@ -3,6 +3,7 @@
 
 , cmake, ninja, which, findutils, m4, gawk
 , python2, python3, openjdk, mono, libressl, boost168
+, pkg-config
 }@args:
 
 let

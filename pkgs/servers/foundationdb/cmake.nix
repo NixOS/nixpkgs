@@ -2,6 +2,7 @@
 
 { lib, fetchFromGitHub
 , cmake, ninja, boost, python3, openjdk, mono, libressl
+, pkg-config
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -30,7 +31,7 @@ let
         };
 
         buildInputs = [ libressl boost ];
-        nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
+        nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
