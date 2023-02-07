@@ -8927,6 +8927,15 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  kgtkr = {
+    email = "contact@kgtkr.net";
+    github = "kgtkr";
+    githubId = 17868838;
+    name = "kgtkr";
+    keys = [{
+      fingerprint = "B30D BE93 81E0 3D5D F301 88C8 1F6E B951 9F57 3241";
+    }];
+  };
   khaneliman = {
     email = "khaneliman12@gmail.com";
     github = "khaneliman";
