@@ -157,6 +157,12 @@ let
           fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
         };
       } ./hooks/qmake-hook.sh;
+
+      examples = {
+        qtbase = {
+          i18n = callPackage ./examples/qtbase/i18n.nix { };
+        };
+      };
     };
 
   # TODO(@Artturin): convert to makeScopeWithSplicing
