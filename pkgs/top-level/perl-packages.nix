@@ -17825,6 +17825,21 @@ let
     };
   };
 
+  NetIPXS = buildPerlPackage {
+    pname = "Net-IP-XS";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
+      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+    };
+    propagatedBuildInputs = [ IOCapture TieSimple ];
+    meta = {
+      homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
+      description = "IPv4/IPv6 address library";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   NetLDAPServer = buildPerlPackage {
     pname = "Net-LDAP-Server";
     version = "0.43";
@@ -27791,10 +27806,10 @@ let
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "4.0.1";
+    version = "5.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
-      hash = "sha256-7dNPe4E35JLmzoR0xFpVBXLcpQVqve/EXAdt+daWXKA=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v5.0.1.tar.gz";
+      hash = "sha256-a/PPgavkaw9gCW44rj7+6AjOOSHKglg4H3kr6jXuRE4=";
     };
     propagatedBuildInputs = [
       JSONXS
@@ -27818,18 +27833,13 @@ let
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.5.1";
+    version = "4.6.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
-      hash = "sha256-RdIExtrXzZAXYIS/JCe6qM5QNoSlaZ6+sjbk0zvAuoY=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
+      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
-    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
-
-    preCheck = ''
-      # disable dnssec test as it fails
-      rm -f t/Test-dnssec.t t/manifest.t
-    '';
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP NetIPXS Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
     meta = {
       description = "A tool to check the quality of a DNS zone";
@@ -27839,18 +27849,18 @@ let
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "2.2.2";
+    version = "3.1.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
-      hash = "sha256-4KccPjWqdhkJvjI9QQGCPX/B8vRUGw91eUUgxhHk788=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.1.0.tar.gz";
+      hash = "sha256-Rr4uoQg5g9/ZLVnFQiLAz5MB+Uj39U24YWEa+o2+9HE=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include -I${pkgs.libidn2}.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
-    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl_1_1.dev}" ];
+    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];
 
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];
