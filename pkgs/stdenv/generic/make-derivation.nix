@@ -528,6 +528,12 @@ lib.extendDerivation
        # them as runtime dependencies (since Nix greps for store paths
        # through $out to find them)
        args = [ "-c" "export > $out" ];
+
+       # inputDerivation produces the inputs; not the outputs, so any
+       # restrictions on what used to be the outputs don't serve a purpose
+       # anymore.
+       disallowedReferences = [ ];
+       disallowedRequisites = [ ];
      });
 
      inherit meta passthru overrideAttrs;
