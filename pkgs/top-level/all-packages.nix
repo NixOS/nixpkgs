@@ -30631,6 +30631,8 @@ with pkgs;
 
   khal = callPackage ../applications/misc/khal { };
 
+  khoj = callPackage ../servers/search/khoj { };
+
   khard = callPackage ../applications/misc/khard { };
 
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
