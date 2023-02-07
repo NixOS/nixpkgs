@@ -1967,6 +1967,8 @@ with pkgs;
 
   lefthook = callPackage ../applications/version-management/lefthook { };
 
+  legdur = callPackage ../tools/misc/legdur { };
+
   legit = callPackage ../applications/version-management/legit { };
 
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
