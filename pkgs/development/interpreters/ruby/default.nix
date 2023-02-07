@@ -260,13 +260,13 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "6" "";
-    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+    version = rubyVersion "2" "7" "7" "";
+    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "4" "";
-    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    version = rubyVersion "3" "0" "5" "";
+    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
   };
 
   ruby_3_1 = generic {

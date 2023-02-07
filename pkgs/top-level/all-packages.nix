@@ -15969,6 +15969,10 @@ with pkgs;
         pipewireSupport = false;
       };
     };
+
+    # the default readline is too old to be found by pkg-config,
+    # and thus meson, and thus pipewire
+    readline = readline81;
   };
 
   pipewire-media-session = callPackage ../development/libraries/pipewire/media-session.nix {};

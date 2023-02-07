@@ -3,7 +3,6 @@
 , buildPackages
 , fetchFromGitLab
 , fetchpatch
-, removeReferencesTo
 , python3
 , meson
 , ninja
@@ -20,20 +19,18 @@
 , libjack2
 , libusb1
 , udev
-, libva
 , libsndfile
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
-, readline81 # meson can't find <7 as those versions don't have a .pc file
+, readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
 , makeFontsConf
 , callPackage
 , nixosTests
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
@@ -71,7 +68,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.60";
+    version = "0.3.65";
 
     outputs = [
       "out"
@@ -89,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-HDE2QAV2jnEJCqgiGx4TVP4ceeKAqwd4P3OYw6auNAM=";
+      sha256 = "sha256-O5nu58QFlOPTaN4qNi50Wp9acxM6dWNy63BD+AnVl5w=";
     };
 
     patches = [
@@ -106,37 +103,11 @@ let
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
 
-      # Following are backported patches as recommended by upstream.
-      # FIXME: remove in 0.3.61
-      # fix tdesktop with pw-pulse
+      # backport a fix to actually install the new module
+      # FIXME: remove after 0.3.66
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b720da771efa950cf380101bed42d5d5ee177908.diff";
-        hash = "sha256-p/BvatnbEJAMLQUUOECKAK7FppaNp9ei3FHjAw2spM8=";
-      })
-
-      # fix a crash when quickly switching Bluetooth profiles
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/bf3516ba0496b644b3944b114253f23964178897.diff";
-        hash = "sha256-LqasplS/azCPekslJQPTd9MZkUcRqA0ks94FtwyY3GA=";
-      })
-
-      # fix no sound in VMs (Pipewire on the guest)
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
-        hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
-      })
-
-      # FIXME: backports, remove after 0.3.64
-      # fix bluetooth issues
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/c7b3ef0d9ff16a1e69a299870860bebcb628e298.patch";
-        hash = "sha256-hiZ6VUhMu8NgwX5DZ/JRVl/g1Go0nZQSjQVrmqIzXoY=";
-      })
-
-      # fix routes getting lost
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/89ac6b353521fb9a6d6eb6bb74724c4fa968f75c.patch";
-        hash = "sha256-vzHiKWGmyuUF2iDS/ZQws+bCXVYYEl048JaMckY/fGI=";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
+        hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
       })
     ];
 
@@ -159,7 +130,7 @@ let
       libsndfile
       lilv
       ncurses
-      readline81
+      readline
       udev
       vulkan-headers
       vulkan-loader
@@ -176,7 +147,7 @@ let
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
 
     # Valgrind binary is required for running one optional test.
-    checkInputs = lib.optional withValgrind valgrind;
+    nativeCheckInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -274,7 +245,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ kranzes ];
+      maintainers = with maintainers; [ jtojnar kranzes ];
     };
   };
 
