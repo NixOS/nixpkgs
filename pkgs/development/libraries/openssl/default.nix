@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils
-, withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
@@ -71,10 +70,11 @@ let
 
     nativeBuildInputs = [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
-    buildInputs = lib.optional withCryptodev cryptodev
+
+    buildInputs =
       # perl is included to allow the interpreter path fixup hook to set the
       # correct interpreter in c_rehash.
-      ++ lib.optional withPerl perl;
+      lib.optional withPerl perl;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
@@ -124,9 +124,6 @@ let
          # else the 'prefix' would be prepended to it.
          "--openssldir=/.$(etc)/etc/ssl"
       )
-    ] ++ lib.optionals withCryptodev [
-      "-DHAVE_CRYPTODEV"
-      "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
