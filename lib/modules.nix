@@ -371,7 +371,12 @@ let
           else if m._type == "if" || m._type == "override" then
             loadModule args fallbackFile fallbackKey { config = m; }
           else
-            throw "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}${lib.optionalString (fallbackFile != null) ", in file ${toString fallbackFile}."}"
+            throw (
+              "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}"
+              + lib.optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
+              + lib.optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
+               # Extended explanation: That's because a finalized configuration is more than just a set of modules. For instance, it has its own `specialArgs` that, by the nature of `specialArgs` can't be loaded through `imports` or the the `modules` argument. So instead, we have to ask you to extract the relevant modules and use those instead. This way, we keep the module system comparatively simple, and hopefully avoid a bad surprise down the line.
+            )
         else if isList m then
           let defs = [{ file = fallbackFile; value = m; }]; in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
