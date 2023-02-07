@@ -17,7 +17,7 @@ let
   neovimLuaEnv = lua.withPackages(ps:
     (with ps; [ lpeg luabitop mpack ]
     ++ lib.optionals doCheck [
-        nvim-client luv coxpcall busted luafilesystem penlight inspect
+        nvim-client luv coxpcall busted luafilesystem penlight inspect plenary-nvim
       ]
     ));
   codegenLua =
