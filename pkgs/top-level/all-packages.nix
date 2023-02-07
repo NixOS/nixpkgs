@@ -11881,6 +11881,8 @@ with pkgs;
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
+  simple-mtpfs = callPackage ../tools/filesystems/simple-mtpfs { };
+
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
