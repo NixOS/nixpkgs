@@ -1,6 +1,20 @@
-{ lib , stdenv , fetchFromGitHub , fetchurl
-, alsa-lib , coreutils , file , freetype , gnugrep , libpulseaudio
-, libtool , libuuid , openssl , pango , pkg-config , xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, alsa-lib
+, coreutils
+, file
+, freetype
+, gnugrep
+, libpulseaudio
+, libtool
+, libuuid
+, openssl
+, pango
+, pkg-config
+, xorg
+,
 }:
 let
   owner = "OpenSmalltalk";
@@ -96,4 +110,19 @@ stdenv.mkDerivation {
       ln -s "$BIN" "$f"
     done
   '';
+
+  meta =
+    let
+      platform =
+        if platformDir == "linux64ARMv8" then "aarch64-linux"
+        else if platformDir == "linux64x64" then "x86_64-linux"
+        else throw "unexpected platformDir in meta.platform";
+    in
+    {
+      description = "The cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak.";
+      homepage = "https://opensmalltalk.org/";
+      license = with lib.licenses; [ mit ];
+      maintainers = with lib.maintainers; [ jbaum98 ];
+      platforms = [ platform ];
+    };
 }
