@@ -140,6 +140,9 @@
 , buildAvdevice ? withHeadlessDeps # Build avdevice library
 , buildAvfilter ? withHeadlessDeps # Build avfilter library
 , buildAvformat ? withHeadlessDeps # Build avformat library
+# Deprecated but depended upon by some packages.
+# https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991)
+, buildAvresample ? withHeadlessDeps && lib.versionOlder version "5" # Build avresample library
 , buildAvutil ? withHeadlessDeps # Build avutil library
 , buildPostproc ? withHeadlessDeps # Build postproc library
 , buildSwresample ? withHeadlessDeps # Build swresample library
@@ -301,11 +304,11 @@ assert withPixelutils -> buildAvutil;
 assert buildFfmpeg -> buildAvcodec
                      && buildAvfilter
                      && buildAvformat
-                     && buildSwresample;
+                     && (buildSwresample || buildAvresample);
 assert buildFfplay -> buildAvcodec
                      && buildAvformat
                      && buildSwscale
-                     && buildSwresample;
+                     && (buildSwresample || buildAvresample);
 assert buildFfprobe -> buildAvcodec && buildAvformat;
 /*
  *  Library dependencies
@@ -392,6 +395,10 @@ stdenv.mkDerivation rec {
     (enableFeature buildAvdevice "avdevice")
     (enableFeature buildAvfilter "avfilter")
     (enableFeature buildAvformat "avformat")
+  ] ++ optionals (lib.versionOlder version "5") [
+    # Ffmpeg > 4 doesn't know about the flag anymore
+    (enableFeature buildAvresample "avresample")
+  ] ++ [
     (enableFeature buildAvutil "avutil")
     (enableFeature (buildPostproc && withGPL) "postproc")
     (enableFeature buildSwresample "swresample")
@@ -611,14 +618,22 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  # Fails with SIGABRT otherwise
+  # Fails with SIGABRT otherwise FIXME: Why?
   checkPhase = let
     ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    libsToLink = [ ]
+      ++ optional buildAvcodec "libavcodec"
+      ++ optional buildAvdevice "libavdevice"
+      ++ optional buildAvfilter "libavfilter"
+      ++ optional buildAvformat "libavformat"
+      ++ optional buildAvresample "libavresample"
+      ++ optional buildAvutil "libavutil"
+      ++ optional buildPostproc "libpostproc"
+      ++ optional buildSwresample "libswresample"
+      ++ optional buildSwscale "libswscale"
+    ;
   in ''
-    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavutil:libpostproc${
-      optionalString (withHeadlessDeps) ":libswresample" # TODO this can probably go away
-    }:libswscale:''${${ldLibraryPathEnv}}" \
-      make check -j$NIX_BUILD_CORES
+    ${ldLibraryPathEnv}="${lib.concatStringsSep ":" libsToLink}" make check -j$NIX_BUILD_CORES
   '';
 
   outputs = optionals withBin [ "bin" ] # The first output is the one that gets symlinked by default!
