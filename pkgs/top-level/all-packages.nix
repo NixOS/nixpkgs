@@ -36058,6 +36058,8 @@ with pkgs;
 
   mopac = callPackage ../applications/science/chemistry/mopac { };
 
+  nwchem = callPackage ../applications/science/chemistry/nwchem { };
+
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openlp = libsForQt5.callPackage ../applications/misc/openlp { };
