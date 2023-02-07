@@ -30040,7 +30040,8 @@ with pkgs;
 
   hivelytracker = callPackage ../applications/audio/hivelytracker { };
 
-  hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
+  #hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
+  hledger = callPackage ../applications/office/hledger { };
   hledger-check-fancyassertions = callPackage ../applications/office/hledger-check-fancyassertions { };
   hledger-iadd = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-interest;
