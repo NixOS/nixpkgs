@@ -384,7 +384,7 @@ stdenv.mkDerivation {
       pam
     ]
 
-    ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
@@ -396,7 +396,6 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]
