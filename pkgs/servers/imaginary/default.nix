@@ -23,6 +23,8 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://fly.io/docs/app-guides/run-a-global-image-service";
     changelog = "https://github.com/h2non/${pname}/releases/tag/v${version}";
