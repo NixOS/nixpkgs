@@ -8,9 +8,10 @@
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3
 , gtk-doc, vala, gobject-introspection
 , monoSupport ? false, mono, gtk-sharp-2_0
- }:
+, testers
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}";
   version = "12.10.1+20.10.20200706.1";
@@ -54,11 +55,17 @@ stdenv.mkDerivation {
     "localstatedir=\${TMPDIR}"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];
+    pkgConfigModules = {
+      "2" = [ "appindicator-0.1" ];
+      "3" = [ "appindicator3-0.1" ];
+    }.${gtkVersion} or [];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
   };
-}
+})
