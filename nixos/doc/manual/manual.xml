@@ -12,7 +12,6 @@
  <xi:include href="installation/installation.xml" />
  <xi:include href="configuration/configuration.xml" />
  <xi:include href="administration/running.xml" />
-<!-- <xi:include href="userconfiguration.xml" /> -->
  <xi:include href="development/development.xml" />
  <xi:include href="./from_md/contributing-to-this-manual.chapter.xml" />
  <appendix xml:id="ch-options">
