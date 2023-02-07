@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "The WebAssembly pre-initializer";
     homepage = "https://github.com/bytecodealliance/wizer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with maintainers; [ lucperkins amesgen ];
     broken = stdenv.isx86_64 && stdenv.isDarwin;
   };
 }
