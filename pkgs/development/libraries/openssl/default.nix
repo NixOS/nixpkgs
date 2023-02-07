@@ -216,8 +216,8 @@ in {
 
 
   openssl_1_1 = common {
-    version = "1.1.1s";
-    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
+    version = "1.1.1t";
+    sha256 = "sha256-je6bJL2x3L8MPR6bAvuPa/IhZegH9Fret8lndTaFnTs=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
