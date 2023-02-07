@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-ble";
-  version = "1.5.2";
+  version = "1.5.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-64DywtZwfDFjW8WUzw3ZTT462sBGFgAHGc0bGnKCJpY=";
+    hash = "sha256-17Yzpbcy/r+GlkLktgghehfAEboZHMbB/Dze1no4I80=";
   };
 
   nativeBuildInputs = [
