@@ -16977,6 +16977,10 @@ with pkgs;
 
   kotlin-language-server = callPackage ../development/tools/language-servers/kotlin-language-server { };
 
+  lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/lua-language-server {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
+  };
+
   metals = callPackage ../development/tools/language-servers/metals { };
 
   millet = callPackage ../development/tools/language-servers/millet { };
@@ -16984,10 +16988,6 @@ with pkgs;
   nil = callPackage ../development/tools/language-servers/nil { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
-
-  sumneko-lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/sumneko-lua-language-server {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
-  };
 
   svls = callPackage ../development/tools/language-servers/svls { };
 
