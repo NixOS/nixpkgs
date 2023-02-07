@@ -79,7 +79,7 @@ class ManualDocBookRenderer(DocBookRenderer):
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
-class DocBookConverter(BaseConverter):
+class DocBookSectionConverter(BaseConverter):
     __renderer__ = ManualDocBookRenderer
 
     def finalize(self) -> str:
@@ -124,16 +124,16 @@ class ChaptersAction(argparse.Action):
         if sections is None: raise argparse.ArgumentError(self, "no active section")
         sections[-1].chapters.extend(map(Path, cast(Sequence[str], values)))
 
-def _build_cli_db(p: argparse.ArgumentParser) -> None:
+def _build_cli_db_section(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument("outfile")
     p.add_argument("--section", dest="contents", action=SectionAction, nargs=0)
     p.add_argument("--section-id", dest="contents", action=SectionIDAction)
     p.add_argument("--chapters", dest="contents", action=ChaptersAction, nargs='+')
 
-def _run_cli_db(args: argparse.Namespace) -> None:
+def _run_cli_db_section(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookConverter(json.load(manpage_urls))
+        md = DocBookSectionConverter(json.load(manpage_urls))
         for section in args.contents:
             md.add_section(section.id, section.chapters)
         with open(args.outfile, 'w') as f:
@@ -141,10 +141,10 @@ def _run_cli_db(args: argparse.Namespace) -> None:
 
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
-    _build_cli_db(formats.add_parser('docbook'))
+    _build_cli_db_section(formats.add_parser('docbook-section'))
 
 def run_cli(args: argparse.Namespace) -> None:
-    if args.format == 'docbook':
-        _run_cli_db(args)
+    if args.format == 'docbook-section':
+        _run_cli_db_section(args)
     else:
         raise RuntimeError('format not hooked up', args)

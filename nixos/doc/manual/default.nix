@@ -73,7 +73,7 @@ let
   modulesDoc = runCommand "modules.xml" {
     nativeBuildInputs = [ pkgs.nixos-render-docs ];
   } ''
-    nixos-render-docs manual docbook \
+    nixos-render-docs manual docbook-section \
       --manpage-urls ${manpageUrls} \
       "$out" \
       --section \
