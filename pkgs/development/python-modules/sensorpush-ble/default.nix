@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-17Yzpbcy/r+GlkLktgghehfAEboZHMbB/Dze1no4I80=";
   };
 
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for SensorPush BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/sensorpush-ble";
+    changelog = "https://github.com/Bluetooth-Devices/sensorpush-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
