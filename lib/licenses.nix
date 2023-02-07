@@ -114,6 +114,16 @@ in mkLicense lset) ({
     fullName = "Bitstream Vera Font License";
   };
 
+  bitTorrent10 = {
+     spdxId = "BitTorrent-1.0";
+     fullName = " BitTorrent Open Source License v1.0";
+  };
+
+  bitTorrent11 = {
+    spdxId = "BitTorrent-1.1";
+    fullName = " BitTorrent Open Source License v1.1";
+  };
+
   bola11 = {
     url = "https://blitiri.com.ar/p/bola/";
     fullName = "Buena Onda License Agreement 1.1";

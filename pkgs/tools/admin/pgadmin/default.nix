@@ -11,11 +11,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.18";
+  version = "6.19";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-qqilmJLpJ3XNd8dwk7bDAAPxt8sou5zydFMPcJGcGoo=";
+    sha256 = "sha256-xHvdqVpNU9ZzTA6Xl2Bv044l6Tbvf4fjqyz4TmS9gmI=";
   };
 
   yarnDeps = mkYarnModules {
@@ -70,6 +70,9 @@ let
     azure-mgmt-rdbms
     azure-mgmt-resource
     azure-identity
+    sphinxcontrib-youtube
+    dnspython
+    greenlet
   ];
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -104,7 +107,7 @@ let
         hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
       };
     });
-    # pgadmin 6.18 is incompatible with the major flask-security-too update to 5.0.x
+    # pgadmin 6.19 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {

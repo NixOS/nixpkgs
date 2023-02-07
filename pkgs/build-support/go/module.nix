@@ -145,6 +145,11 @@ let
       cp -r --reflink=auto vendor $out
     ''}
 
+      if ! [ "$(ls -A $out)" ]; then
+        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
+
       runHook postInstall
     '';
 

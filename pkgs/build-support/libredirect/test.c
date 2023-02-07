@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 #ifndef __APPLE__
     struct stat64 testsb64;
 #endif
-#ifdef __linux__
+#if defined(__linux__) && defined(STATX_TYPE)
     struct statx testsbx;
 #endif
     char buf[PATH_MAX];
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 #ifndef __APPLE__
     assert(fstatat64(123, TESTPATH, &testsb64, 0) != -1);
 #endif
-#ifdef __linux__
+#if defined(__linux__) && defined(STATX_TYPE)
     assert(statx(123, TESTPATH, 0, STATX_ALL, &testsbx) != -1);
 #endif
 

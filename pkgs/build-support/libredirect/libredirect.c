@@ -201,7 +201,7 @@ WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 WRAPPER_DEF(__xstat64)
 #endif
 
-#ifdef __linux__
+#if defined(__linux__) && defined(STATX_TYPE)
 WRAPPER(int, statx)(int dirfd, const char * restrict pathname, int flags,
     unsigned int mask, struct statx * restrict statxbuf)
 {
