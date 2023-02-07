@@ -103,7 +103,7 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha512-hmdWGteMDt4HhYq+k9twuftalpTzHtGnVVLphZcpJcw+6vJfersciDMaeLRqbCAeFbzJdgzjYo76bpP6FubySw==";
+          x86_64 = "sha512-yH4/K9sBLCUc2EVYwPL0dLql/S3AfaV6fFh7ewAuIb7yHtcsOWMqy/h1hZUlFFg2ykfwDWDDHEK7qfTI0hM7BQ==";
           aarch64 = "sha512-UYp8t7r2RrN3rKN180cWpJyhyO5LVXL8LrTRKJzttUgB7kM1nroTEI3DesBu+Hw4Ynl7eLiBK397rqcpOAfxJw==";
         }.${arch};
       };
