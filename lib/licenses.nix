@@ -327,6 +327,11 @@ in mkLicense lset) ({
     fullName = "Detection Rule License 1.0";
   };
 
+  dumpasn1 = {
+    fullName = "dumpasn1 License";
+    url = "https://salsa.debian.org/debian/dumpasn1/-/blob/7a10baa8eebcef053c100b27a70e245313611cbb/debian/copyright";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";

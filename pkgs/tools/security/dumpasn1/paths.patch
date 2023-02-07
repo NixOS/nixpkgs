@@ -1,0 +1,54 @@
+From c503ef9c68a90f296a85ab908203b23e007066b5 Mon Sep 17 00:00:00 2001
+From: Alexander Shpilkin <ashpilkin@gmail.com>
+Date: Tue, 7 Feb 2023 17:13:16 +0200
+Subject: [PATCH] Set configuration paths for Nix
+
+---
+ debian/dumpasn1.1.in |  2 +-
+ dumpasn1.c           | 17 +----------------
+ 2 files changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/debian/dumpasn1.1.in b/debian/dumpasn1.1.in
+index 2fc2c6d..d257cef 100644
+--- a/debian/dumpasn1.1.in
++++ b/debian/dumpasn1.1.in
+@@ -4,7 +4,7 @@ ASN.1 encoding rules in a variety of user-specified formats.
+ 
+ [FILES]
+ .ul
+-$HOME/.dumpasn1.cfg, /etc/dumpasn1/dumpasn1.cfg:
++$HOME/.config/dumpasn1/dumpasn1.cfg, $HOME/.dumpasn1.cfg, /etc/dumpasn1/dumpasn1.cfg:
+ 
+ This is the configuration file, it will be searched in this order. It contains
+ OIDs commonly used.
+diff --git a/dumpasn1.c b/dumpasn1.c
+index 9dcf443..64c49cb 100644
+--- a/dumpasn1.c
++++ b/dumpasn1.c
+@@ -430,22 +430,7 @@ static const char *configPaths[] = {
+ #else
+ 
+ static const char *configPaths[] = {
+-  #ifndef DEBIAN
+-	/* Unix absolute paths */
+-	"/usr/bin/", "/usr/local/bin/", "/etc/dumpasn1/",
+-
+-	/* Unix environment-based paths */
+-	"$HOME/", "$HOME/bin/",
+-
+-	/* It's my program, I'm allowed to hardcode in strange paths that no-one
+-	   else uses */
+-	"$HOME/BIN/",
+-  #else
+-	/* Debian has specific places where you're supposed to dump things.  Note
+-	   the dot after $HOME, since config files are supposed to start with a
+-	   dot for Debian */
+-	"$HOME/.", "/etc/dumpasn1/",
+-  #endif /* DEBIAN-specific paths */
++	"$HOME/.config/dumpasn1/", "$HOME/.", "/etc/dumpasn1/", PREFIX "/share/dumpasn1/",
+ 
+ 	/* General environment-based paths */
+ 	"$DUMPASN1_PATH/",
+-- 
+2.38.1
+
