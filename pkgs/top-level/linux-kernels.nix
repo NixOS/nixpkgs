@@ -301,8 +301,6 @@ in {
       withDriver = true;
     };
 
-    cryptodev = callPackage ../os-specific/linux/cryptodev { };
-
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };

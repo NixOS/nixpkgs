@@ -249,6 +249,7 @@ mapAliases ({
   cpp_ethereum = throw "cpp_ethereum has been removed; abandoned upstream"; # Added 2020-11-30
   cpuminer-multi = throw "cpuminer-multi has been removed: deleted by upstream"; # Added 2022-01-07
   crafty = throw "crafty has been removed: deleted by upstream"; # Added 2022-01-07
+  cryptodev = throw "cryptodev has been removed because it is abandoned by upstream"; # Added 2022-02-07
   cryptol = throw "cryptol was removed due to prolonged broken build"; # Added 2020-08-21
   cryptpad = throw "cryptpad has been removed, because it was unmaintained in nixpkgs"; # Added 2022-07-04
   ctl = throw "ctl has been removed: abandoned by upstream"; # Added 2022-05-13
