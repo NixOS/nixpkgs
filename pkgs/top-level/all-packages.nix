@@ -20476,6 +20476,8 @@ with pkgs;
 
   jose = callPackage ../development/libraries/jose { };
 
+  jpcre2 = callPackage ../development/libraries/jpcre2 { };
+
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json2hcl = callPackage ../development/tools/json2hcl { };
