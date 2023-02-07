@@ -7353,6 +7353,8 @@ with pkgs;
     gtk = gtk2-x11;
   };
 
+  gcfflasher = callPackage ../applications/misc/gcfflasher { };
+
   gdmap = callPackage ../tools/system/gdmap { };
 
   gef = callPackage ../development/tools/misc/gef { };
