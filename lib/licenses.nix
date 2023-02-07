@@ -25,6 +25,11 @@ in mkLicense lset) ({
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  aal = {
+    spdxId = "AAL";
+    fullName = "Attribution Assurance License";
+  };
+
   abstyles = {
     spdxId = "Abstyles";
     fullName = "Abstyles License";

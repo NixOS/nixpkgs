@@ -159,6 +159,7 @@ in {
   corerad = handleTest ./corerad.nix {};
   coturn = handleTest ./coturn.nix {};
   couchdb = handleTest ./couchdb.nix {};
+  crater = handleTest ./crater.nix {};
   cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
   cups-pdf = handleTest ./cups-pdf.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
