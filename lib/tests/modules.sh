@@ -166,6 +166,7 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' 
 checkConfigOutput '^true$' "$@" ./define-module-check.nix
 
 # Check coerced value.
+set --
 checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
