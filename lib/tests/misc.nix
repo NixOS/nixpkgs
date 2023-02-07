@@ -504,6 +504,17 @@ runTests {
     expected = false;
   };
 
+# ASSERTS
+
+  testAssertAllExample1 = {
+    expr = asserts.assertAll (n: n != 2) [ 1 3 5 ] (abort "unused");
+    expected = true;
+  };
+  testAssertAllExample2 = {
+    expr = (builtins.tryEval (asserts.assertAll (n: n != 2) [ 1 2 3 ] (i: n:
+      throw "Number ${toString n} at index ${toString i} is two!"))).success;
+    expected = false;
+  };
 
 # ATTRSETS
 
