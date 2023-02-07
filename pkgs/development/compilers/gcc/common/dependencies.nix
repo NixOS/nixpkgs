@@ -6,7 +6,7 @@
 , texinfo
 , which
 , gettext
-, pkg-config
+, pkg-config ? null
 , gnused
 , patchelf
 , gmp
@@ -17,11 +17,11 @@
 , zlib ? null
 , gnatboot ? null
 , flex ? null
-, boehmgc
-, zip
-, unzip
-, gtk2
-, libart_lgpl
+, boehmgc ? null
+, zip ? null
+, unzip ? null
+, gtk2 ? null
+, libart_lgpl ? null
 , perl ? null
 , xlibs ? null
 , langJava ? false
@@ -47,7 +47,7 @@ in
   ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals javaAwtGtk [ pkg-config ]
-  ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox) [ flex ]
+  ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]
   ++ optionals langAda [ gnatboot ]
   # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
   # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
