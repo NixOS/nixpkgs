@@ -34,12 +34,14 @@ class DocBookRenderer(Renderer):
     _link_tags: list[str]
     _deflists: list[Deflist]
     _headings: list[Heading]
+    _attrspans: list[str]
 
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         super().__init__(manpage_urls, parser)
         self._link_tags = []
         self._deflists = []
         self._headings = []
+        self._attrspans = []
 
     def render(self, tokens: Sequence[Token], options: OptionsDict,
                env: MutableMapping[str, Any]) -> str:
@@ -214,16 +216,23 @@ class DocBookRenderer(Renderer):
         raise NotImplementedError("md node not supported yet", token)
     def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
-        # we currently support *only* inline anchors (and no attributes at all).
-        id_part = ""
+        # we currently support *only* inline anchors and the special .keycap class to produce
+        # <keycap> docbook elements.
+        (id_part, class_part) = ("", "")
         if s := token.attrs.get('id'):
             id_part = f'<anchor xml:id={quoteattr(cast(str, s))} />'
-        if 'class' in token.attrs:
-            return super().attr_span_begin(token, tokens, i, options, env)
-        return id_part
+        if s := token.attrs.get('class'):
+            if s == 'keycap':
+                class_part = "<keycap>"
+                self._attrspans.append("</keycap>")
+            else:
+                return super().attr_span_begin(token, tokens, i, options, env)
+        else:
+            self._attrspans.append("")
+        return id_part + class_part
     def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
-        return ""
+        return self._attrspans.pop()
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
         start = f' startingnumber="{token.attrs["start"]}"' if 'start' in token.attrs else ""
