@@ -1,10 +1,10 @@
-{ stdenv, rust, rustPlatform, buildPackages }:
+{ lib, stdenv, rust, rustPlatform, buildPackages }:
 
 { shortTarget, originalCargoToml, target, RUSTFLAGS }:
 
 let
   cargoSrc = import ../../sysroot/src.nix {
-    inherit stdenv rustPlatform buildPackages originalCargoToml;
+    inherit lib stdenv rustPlatform buildPackages originalCargoToml;
   };
 in rustPlatform.buildRustPackage {
   inherit target RUSTFLAGS;
