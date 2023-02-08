@@ -164,6 +164,13 @@ buildPythonPackage rec {
     # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
     # https://github.com/uqfoundation/dill/issues/482#issuecomment-1139017499.
     "apache_beam/transforms/window_test.py"
+
+    # See https://github.com/apache/beam/issues/25390.
+    "apache_beam/coders/slow_coders_test.py"
+    "apache_beam/dataframe/pandas_doctests_test.py"
+    "apache_beam/typehints/typed_pipeline_test.py"
+    "apache_beam/coders/fast_coders_test.py"
+    "apache_beam/dataframe/schemas_test.py"
   ];
 
   disabledTests = [
