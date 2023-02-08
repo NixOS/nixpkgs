@@ -268,9 +268,9 @@ in
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_109 = self.callPackage generic {
-      # Supported until 2023-08
-      version = "10.9.4";
-      hash = "sha256-Hf8IoPN+pc+PAMvRLUDoB1n659cxhMz1a1tRrP3PwFQ=";
+      # Supported until 2023-08. TODO: remove ahead of 23.05 branchoff?
+      version = "10.9.5";
+      hash = "sha256-CXYrdcZEuUEukV0w4bJm3tc5ZRf8L9hrvmf+zDcGWtw=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
