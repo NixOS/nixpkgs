@@ -119,9 +119,8 @@ have a predefined type and string generator already declared under
         default Elixir keyword list
 
 
-::: {#pkgs-formats-result}
+[]{#pkgs-formats-result}
 These functions all return an attribute set with these values:
-:::
 
 `type`
 

@@ -260,8 +260,9 @@
         </listitem>
       </varlistentry>
     </variablelist>
-    <para xml:id="pkgs-formats-result">
-      These functions all return an attribute set with these values:
+    <para>
+      <anchor xml:id="pkgs-formats-result" /> These functions all return
+      an attribute set with these values:
     </para>
     <variablelist>
       <varlistentry>
