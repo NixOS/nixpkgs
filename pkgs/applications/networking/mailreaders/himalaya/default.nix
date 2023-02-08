@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-d+ERCUPUHx41HfBtjb6BjhGKzkUTGIb01BRWvAnLYwk=";
+    sha256 = "sha256-qwtG6pk/PCr5lAcxRt1D8XM3rUG1bEVrUFo+3tMPlRw=";
   };
 
-  cargoSha256 = "sha256-ICaahkIP1uSm4iXvSPMo8uVTtSa1nCyJdDihGdVEQvg=";
+  cargoSha256 = "sha256-Jg/sVluw7UoBEYGk/A5Q5Qr8EojxEpr/E/F1caN7ZG8=";
 
   nativeBuildInputs = [ ]
     ++ lib.optionals (installManPages || installShellCompletions) [ installShellFiles ]
@@ -36,17 +36,16 @@ rustPlatform.buildRustPackage rec {
       openssl
     ];
 
-  # flag added because without end-to-end testing is ran which requires
-  # additional tooling and servers to test
+  # TODO: is there a way to spawn an IMAP server to run integration
+  # tests?
   cargoTestFlags = [ "--lib" ];
-
 
   postInstall = lib.optionalString installManPages ''
     # Install man pages
     mkdir -p $out/man
     $out/bin/himalaya man $out/man
     installManPage $out/man/*
-  '' ++ lib.optionalString installShellCompletions ''
+  '' + lib.optionalString installShellCompletions ''
     # Install shell completions
     installShellCompletion --cmd himalaya \
       --bash <($out/bin/himalaya completion bash) \
