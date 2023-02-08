@@ -57,15 +57,22 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
-  mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
-    pname = "php-${pname}";
-    passthru = {
-      updateScript = nix-update-script {};
-    };
-    meta = args.meta // {
-      mainProgram = args.meta.mainProgram or pname;
-    };
-  });
+  mkDerivation = origArgs:
+    let
+      args = lib.fix (lib.extends
+        (_: previousAttrs: {
+          pname = "php-${previousAttrs.pname}";
+          passthru = (previousAttrs.passthru or { }) // {
+            updateScript = nix-update-script { };
+          };
+          meta = (previousAttrs.meta or { }) // {
+            mainProgram = previousAttrs.meta.mainProgram or previousAttrs.pname;
+          };
+        })
+        (if lib.isFunction origArgs then origArgs else (_: origArgs))
+      );
+    in
+    pkgs.stdenv.mkDerivation args;
 
   # Function to build an extension which is shipped as part of the php
   # source, based on the php version.
