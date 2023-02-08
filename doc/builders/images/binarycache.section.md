@@ -36,7 +36,7 @@ Copy the resulting directory to the other machine, `host2`:
 scp result host2:/tmp/hello-cache
 ```
 
-Build the derivation using the flat-file binary cache on the other machine, `host2`:
+Substitute the derivation using the flat-file binary cache on the other machine, `host2`:
 ```shellSession
 nix-build -A hello '<nixpkgs>' \
   --option require-sigs false \
