@@ -42,17 +42,16 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
+    homepage = "https://www.ledger-cli.org/";
+    changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";
     license = licenses.bsd3;
-
     longDescription = ''
       Ledger is a powerful, double-entry accounting system that is accessed
       from the UNIX command-line. This may put off some users, as there is
       no flashy UI, but for those who want unparalleled reporting access to
       their data, there really is no alternative.
     '';
-
     platforms = platforms.all;
     maintainers = with maintainers; [ jwiegley marsam ];
   };
