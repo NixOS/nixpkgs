@@ -71,7 +71,6 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/issues/156957
     "dill"
     "numpy"
-    "pyarrow"
     "pymongo"
 
     # See https://github.com/NixOS/nixpkgs/issues/193613
