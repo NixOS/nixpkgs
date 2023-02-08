@@ -9,17 +9,22 @@
 , gtk3
 , gtkSupport ? stdenv.isLinux
 , makeWrapper
+, setJavaClassPath
 , unzip
 , xorg
 , zlib
 }:
 { javaVersion
 , meta ? { }
+, products ? [ ]
 , ... } @ args:
 
 let
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
+  mapProducts = key: default: (map (p: p.${key} or default) products);
+  mapProductsList = key: mapProducts key [ ];
+  concatProducts = key: lib.concatStringsSep "\n" (mapProducts key "");
 in
 stdenv.mkDerivation (args // {
   pname = "graalvm${javaVersion}-ce";
@@ -54,10 +59,20 @@ stdenv.mkDerivation (args // {
     runHook postUnpack
   '';
 
+  postUnpack = ''
+    for product in ${toString products}; do
+      cp -Rv $product/* $out
+    done
+  '';
+
   dontStrip = true;
 
   nativeBuildInputs = [ unzip makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+    ++ lib.optional stdenv.isLinux autoPatchelfHook
+    ++ mapProductsList "nativeBuildInputs";
+
+  propagatedBuildInputs = [ setJavaClassPath ]
+    ++ mapProductsList "propagatedBuildInputs";
 
   buildInputs = [
     alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -69,11 +84,12 @@ stdenv.mkDerivation (args // {
     xorg.libXrender
     xorg.libXtst
     zlib
-  ];
+  ] ++ mapProductsList "buildInputs";
 
+  preInstall = concatProducts "preInstall";
   postInstall = ''
     # jni.h expects jni_md.h to be in the header search path.
-    ln -s $out/include/linux/*_md.h $out/include/
+    ln -sf $out/include/linux/*_md.h $out/include/
 
     # copy-paste openjdk's preFixup
     # Set JAVA_HOME automatically.
@@ -81,17 +97,17 @@ stdenv.mkDerivation (args // {
     cat > $out/nix-support/setup-hook << EOF
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
-  '';
+  '' + concatProducts "postInstall";
 
-  postFixup = lib.optionalString (stdenv.isLinux) ''
+  preFixup = lib.optionalString (stdenv.isLinux) ''
     # Find all executables in any directory that contains '/bin/'
     for bin in $(find "$out" -executable -type f -wholename '*/bin/*'); do
       wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
     done
-  '';
+  '' + concatProducts "preFixup";
+  postFixup = concatProducts "postFixup";
 
   doInstallCheck = true;
-
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -109,6 +125,8 @@ stdenv.mkDerivation (args // {
     # run on JVM with Graal Compiler
     echo "Testing GraalVM"
     $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
+
+    ${concatProducts "installCheckPhase"}
 
     runHook postInstallCheck
   '';
