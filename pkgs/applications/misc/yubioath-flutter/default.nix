@@ -11,7 +11,7 @@
 let
   vendorHashes = {
     x86_64-linux = "sha256-Upe0cEDG02RJD50Ht9VNMwkelsJHX8zOuJZssAhMuMY=";
-    aarch64-linux = "sha256-Upe0cEDG02RJD50Ht9VNMwkelsJHX8zOuJZssAhMuMY=";
+    aarch64-linux = "sha256-lKER4+gcyFqnCvgBl/qdVBCbUpocWUnXGLXsX82MSy4=";
   };
 in
 flutter.mkFlutterApp rec {
