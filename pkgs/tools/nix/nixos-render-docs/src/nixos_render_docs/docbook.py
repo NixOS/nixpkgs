@@ -252,6 +252,14 @@ class DocBookRenderer(Renderer):
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
         return '</title>'
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        if id := token.attrs.get('id'):
+            return f"<anchor xml:id={quoteattr(cast(str, id))} />"
+        return ""
+    def example_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        return ""
 
     def _close_headings(self, level: Optional[int], env: MutableMapping[str, Any]) -> str:
         # we rely on markdown-it producing h{1..6} tags in token.tag for this to work

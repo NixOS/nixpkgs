@@ -422,3 +422,31 @@ def test_admonitions() -> None:
         Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
               children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
     ]
+
+def test_example() -> None:
+    c = Converter({})
+    assert c._parse("::: {.example}") == [
+        Token(type='example_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup=':::', info=' {.example}', meta={}, block=True, hidden=False),
+        Token(type='example_close', tag='div', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {#eid .example}") == [
+        Token(type='example_open', tag='div', nesting=1, attrs={'id': 'eid'}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {#eid .example}', meta={}, block=True,
+              hidden=False),
+        Token(type='example_close', tag='div', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.example .note}") == [
+        Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='::: {.example .note}', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='::: {.example .note}', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]

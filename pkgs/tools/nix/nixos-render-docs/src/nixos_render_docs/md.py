@@ -28,7 +28,7 @@ _md_escape_table = {
 def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
-AttrBlockKind = Literal['admonition']
+AttrBlockKind = Literal['admonition', 'example']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
@@ -74,6 +74,8 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             "heading_close": self.heading_close,
             "ordered_list_open": self.ordered_list_open,
             "ordered_list_close": self.ordered_list_close,
+            "example_open": self.example_open,
+            "example_close": self.example_close,
         }
 
         self._admonitions = {
@@ -248,6 +250,12 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                            env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def example_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -288,6 +296,8 @@ def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str],
         if id is not None:
             return None
         return ('admonition', id, classes)
+    if classes == ['example']:
+        return ('example', id, classes)
     return None
 
 def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
@@ -432,6 +442,11 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
                     token.type = 'admonition_open'
                     token.meta['kind'] = classes[0]
                     stack.append('admonition_close')
+                elif kind == 'example':
+                    token.type = 'example_open'
+                    if id is not None:
+                        token.attrs['id'] = id
+                    stack.append('example_close')
                 else:
                     assert_never(kind)
             elif token.type == 'container_blockattr_close':
