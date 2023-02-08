@@ -1513,6 +1513,8 @@ self: super: with self; {
 
   cachetools = callPackage ../development/python-modules/cachetools { };
 
+  cachew = callPackage ../development/python-modules/cachew { };
+
   cachey = callPackage ../development/python-modules/cachey { };
 
   cachy = callPackage ../development/python-modules/cachy { };
