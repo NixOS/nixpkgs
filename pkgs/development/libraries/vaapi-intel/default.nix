@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkg-config, python3
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, gnum4, pkg-config, python3, wayland-scanner
 , intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
 , enableHybridCodec ? false, vaapi-intel-hybrid
 }:
@@ -26,7 +27,9 @@ stdenv.mkDerivation rec {
     "--enable-wayland"
   ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
-  nativeBuildInputs = [ autoreconfHook gnum4 pkg-config python3 ];
+  nativeBuildInputs = [
+    autoreconfHook gnum4 pkg-config python3 wayland-scanner
+  ];
 
   buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libGL wayland ]
     ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
