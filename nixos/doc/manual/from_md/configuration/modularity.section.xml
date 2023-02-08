@@ -79,17 +79,16 @@ services.httpd.adminAddr = pkgs.lib.mkForce &quot;bob@example.org&quot;;
     <literal>config</literal> function argument is for: it contains the
     complete, merged system configuration. That is,
     <literal>config</literal> is the result of combining the
-    configurations returned by every module <footnote>
-      <para>
-        If you’re wondering how it’s possible that the (indirect)
-        <emphasis>result</emphasis> of a function is passed as an
-        <emphasis>input</emphasis> to that same function: that’s because
-        Nix is a <quote>lazy</quote> language — it only computes values
-        when they are needed. This works as long as no individual
-        configuration value depends on itself.
-      </para>
-    </footnote> . For example, here is a module that adds some packages
-    to <xref linkend="opt-environment.systemPackages" /> only if
+    configurations returned by every module. (If you’re wondering how
+    it’s possible that the (indirect) <emphasis>result</emphasis> of a
+    function is passed as an <emphasis>input</emphasis> to that same
+    function: that’s because Nix is a <quote>lazy</quote> language — it
+    only computes values when they are needed. This works as long as no
+    individual configuration value depends on itself.)
+  </para>
+  <para>
+    For example, here is a module that adds some packages to
+    <xref linkend="opt-environment.systemPackages" /> only if
     <xref linkend="opt-services.xserver.enable" /> is set to
     <literal>true</literal> somewhere else:
   </para>
