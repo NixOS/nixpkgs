@@ -1,15 +1,15 @@
 { stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, fetchpatch, installShellFiles, texinfo, gnused, usePython ? true }:
+, installShellFiles, texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
     rev    = "v${version}";
-    sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
+    hash   = "sha256-0hN6Hpmgwb3naV2K1fxX0OyH0IyCQAh1nZ9TMNAutic=";
   };
 
   outputs = [ "out" "dev" "py" ];
@@ -33,22 +33,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt \
       --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
-
-  patches = [
-    # Add support for $XDG_CONFIG_HOME. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/ledger/ledger/commit/c79674649dee7577d6061e3d0776922257520fd0.patch";
-      sha256 = "sha256-vwVQnY9EUCXPzhDJ4PSOmQStb9eF6H0yAOiEmL6sAlk=";
-      excludes = [ "doc/NEWS.md" ];
-    })
-
-    # Fix included bug with boost >= 1.76. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/ledger/ledger/commit/1cb9b84fdecc5604bd1172cdd781859ff3871a52.patch";
-      sha256 = "sha256-ipVkRcTmnEvpfyPgMzLVJ9Sz8QxHeCURQI5dX8xh758=";
-      excludes = [ "test/regress/*" ];
-    })
-  ];
 
   installTargets = [ "doc" "install" ];
 
