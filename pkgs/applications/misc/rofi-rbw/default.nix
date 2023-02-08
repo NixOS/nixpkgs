@@ -1,19 +1,20 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools }:
+{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools, poetry-core }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     rev = "refs/tags/${version}";
-    hash = "sha256-YDL0pMl3BX59kzjuykn0lQHu2RMvPhsBrlSiqdcZAXs=";
+    hash = "sha256-5K6tofC1bIxxNOQ0jk6NbVoaGGyQImYiUZAaAmkwiTA=";
   };
 
   nativeBuildInputs = [
     setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs = [ configargparse ];
