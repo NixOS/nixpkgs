@@ -7553,6 +7553,8 @@ self: super: with self; {
 
   promise = callPackage ../development/python-modules/promise { };
 
+  promnesia = callPackage ../development/python-modules/promnesia { };
+
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
