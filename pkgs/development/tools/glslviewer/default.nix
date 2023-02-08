@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v7x93b61ama0gmzlx1zc56jgi7bvzsfvbkfl82xzwf2h5g1zni7";
   };
 
+  postPatch = ''
+    sed '1i#include <cstring>' -i src/tools/text.cpp # gcc12
+  '';
+
   nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
   buildInputs = [
     glfw libGLU glfw libXrandr libXdamage
