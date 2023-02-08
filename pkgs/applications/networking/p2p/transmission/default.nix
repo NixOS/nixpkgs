@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -12,14 +11,19 @@
 , zlib
 , pcre
 , libb64
-, libutp_3_3
+, libutp
 , miniupnpc
 , dht
 , libnatpmp
 , libiconv
+, libdeflate
+, utf8cpp
+, fmt
+, libpsl
+, python3
   # Build options
 , enableGTK3 ? false
-, gtk3
+, gtkmm3
 , xorg
 , wrapGAppsHook
 , enableQt ? false
@@ -30,11 +34,12 @@
 , enableCli ? true
 , installLib ? false
 , apparmorRulesFromClosure
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "3.00";
+  version = "4.0.2";
 
   outputs = [ "out" "apparmor" ];
 
@@ -42,21 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    hash = "sha256-DaaJnnWEZOl6zLVxgg+U8C5ztv7Iq0wJ9yle0Gxwybc=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix build with openssl 3.0
-    (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
-      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
     cmake
+    python3
   ] ++ lib.optionals enableGTK3 [
     wrapGAppsHook
   ] ++ lib.optionals enableQt [
@@ -70,15 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     pcre
     libb64
-    libutp_3_3
+    libutp
     miniupnpc
     dht
     libnatpmp
+    libdeflate
+    utf8cpp
+    fmt
+    libpsl
   ] ++ lib.optionals enableQt [
     qt5.qttools
     qt5.qtbase
   ] ++ lib.optionals enableGTK3 [
-    gtk3
+    gtkmm3
     xorg.libpthreadstubs
   ] ++ lib.optionals enableSystemd [
     systemd
@@ -86,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     inotify-tools
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   cmakeFlags =
@@ -99,7 +102,28 @@ stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_DAEMON=${mkFlag enableDaemon}"
       "-DENABLE_CLI=${mkFlag enableCli}"
       "-DINSTALL_LIB=${mkFlag installLib}"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
     ];
+
+  postPatch = ''
+    # Clean third-party libraries to ensure system ones are used.
+    # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
+    pushd third-party
+    for f in *; do
+        if [[ ! $f =~ googletest|wildmat|fast_float|wide-integer|jsonsl ]]; then
+            rm -r "$f"
+        fi
+    done
+    popd
+    rm \
+      cmake/FindFmt.cmake \
+      cmake/FindUtfCpp.cmake
+
+    # Upstream uses different config file name.
+    substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+  '';
 
   postInstall =
     let
@@ -114,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
             openssl
             pcre
             zlib
+            libdeflate
+            libpsl
             libnatpmp
             miniupnpc
           ] ++ lib.optionals enableSystemd [
