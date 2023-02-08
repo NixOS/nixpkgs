@@ -348,3 +348,39 @@ def test_block_comment() -> None:
     assert c._parse("<!--\na\n-->") == []
     assert c._parse("<!--\n\na\n\n-->") == []
     assert c._parse("<!--\n\n```\n\n\n```\n\n-->") == []
+
+def test_heading_attributes() -> None:
+    c = Converter({})
+    assert c._parse("# foo *bar* {#hid}") == [
+        Token(type='heading_open', tag='h1', nesting=1, attrs={'id': 'hid'}, map=[0, 1], level=0,
+              children=None, content='', markup='#', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='foo *bar* {#hid}', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='foo ', markup='', info='', meta={}, block=False, hidden=False),
+                  Token(type='em_open', tag='em', nesting=1, attrs={}, map=None, level=0, children=None,
+                        content='', markup='*', info='', meta={}, block=False, hidden=False),
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=1, children=None,
+                        content='bar', markup='', info='', meta={}, block=False, hidden=False),
+                  Token(type='em_close', tag='em', nesting=-1, attrs={}, map=None, level=0, children=None,
+                        content='', markup='*', info='', meta={}, block=False, hidden=False),
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='heading_close', tag='h1', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("# foo--bar {#id-with--double-dashes}") == [
+        Token(type='heading_open', tag='h1', nesting=1, attrs={'id': 'id-with--double-dashes'}, map=[0, 1],
+              level=0, children=None, content='', markup='#', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
+              content='foo--bar {#id-with--double-dashes}', markup='', info='', meta={}, block=True,
+              hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='foo–bar', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='heading_close', tag='h1', nesting=-1, attrs={}, map=None, level=0, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False)
+    ]

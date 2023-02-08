@@ -351,6 +351,22 @@ def _block_comment_plugin(md: markdown_it.MarkdownIt) -> None:
 
 _HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w-]+)\s*\}\s*$")
 
+def _heading_ids(md: markdown_it.MarkdownIt) -> None:
+    def heading_ids(state: markdown_it.rules_core.StateCore) -> None:
+        tokens = state.tokens
+        # this is purposely simple and doesn't support classes or other kinds of attributes.
+        for (i, token) in enumerate(tokens):
+            if token.type == 'heading_open':
+                children = tokens[i + 1].children
+                assert children is not None
+                if len(children) == 0 or children[-1].type != 'text':
+                    continue
+                if m := _HEADER_ID_RE.search(children[-1].content):
+                    tokens[i].attrs['id'] = m[1]
+                    children[-1].content = children[-1].content[:-len(m[0])].rstrip()
+
+    md.core.ruler.before("replacements", "heading_ids", heading_ids)
+
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
@@ -378,21 +394,10 @@ class Converter(ABC):
         self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
+        self._md.use(_heading_ids)
         self._md.enable(["smartquotes", "replacements"])
 
     def _post_parse(self, tokens: list[Token]) -> list[Token]:
-        for i in range(0, len(tokens)):
-            # parse header IDs. this is purposely simple and doesn't support
-            # classes or other inds of attributes.
-            if tokens[i].type == 'heading_open':
-                children = tokens[i + 1].children
-                assert children is not None
-                if len(children) == 0 or children[-1].type != 'text':
-                    continue
-                if m := _HEADER_ID_RE.search(children[-1].content):
-                    tokens[i].attrs['id'] = m[1]
-                    children[-1].content = children[-1].content[:-len(m[0])].rstrip()
-
         # markdown-it signifies wide lists by setting the wrapper paragraphs
         # of each item to hidden. this is not useful for our stylesheets, which
         # signify this with a special css class on list elements instead.
