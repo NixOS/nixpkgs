@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , flutter
 , supportsLinuxDesktop ? stdenv.isLinux
 , makeWrapper
@@ -46,6 +47,7 @@ runCommandLocal "flutter"
       collect libepoxy.dev ++
       collect pango.dev ++
       collect libX11.dev ++
+      collect (callPackage ./packages/libdeflate { }).dev ++
       collect xorgproto
   );
 
