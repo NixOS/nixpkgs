@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-kyeON8S7CCVdHt09wigNXDWScgyaLzC4EhOts8ViP2w=";
+    hash = "sha256-Uha5ueOGNmG2f+1I89uFQKA3pSSp1d02FGy86Fc2eWE=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ buildGoModule rec {
     ./rm-podman-mac-helper-msg.patch
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
