@@ -255,8 +255,8 @@ in
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07
-      version = "10.6.11";
-      hash = "sha256-V4S6TF2Hk7rbpYNIV2gk2YSewVLpy+5HoXZRYdhAyUo=";
+      version = "10.6.12";
+      hash = "sha256-PtLrdCnC+uVCPKVcZhdC0QfjUkbxqwwQcJbwxLg5Rjo=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
