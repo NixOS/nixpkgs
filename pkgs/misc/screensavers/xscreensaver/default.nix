@@ -2,19 +2,19 @@
 , pkg-config, intltool
 , perl, perlPackages, gettext, libX11, libXext, libXi, libXt
 , libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
-, gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
+, gtk3, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
 , systemd, coreutils
 , forceInstallAllHacks ? false
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.04";
+  version = "6.06";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eHAUsp8MV5Pswtk+EQmgSf9IqwwpuFHas09oPO72sVI=";
+    hash = "sha256-9TT6uFqDbeW4vo6R/CG4DKfWpO2ThuviB9S+ek50mac=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perl gettext libX11 libXext libXi libXt
     libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
-    gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
+    gtk3 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
     perlPackages.LWPProtocolHttps perlPackages.MozillaCA
   ] ++ lib.optional withSystemd systemd;
 
