@@ -1409,6 +1409,10 @@ fixupPhase() {
         printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
     done
 
+    if [ -n "${patches:-}" ];then
+        mkdir -p "${!outputDev}/nix-support"
+        printWords $patches > "${!outputDev}/nix-support/patches"
+    fi
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
