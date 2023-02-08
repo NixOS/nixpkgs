@@ -126,6 +126,16 @@
       };
       sha256 = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
     };
+
+    python311 = {
+      sourceVersion = {
+        major = "3";
+        minor = "11";
+        patch = "2";
+        suffix = "";
+      };
+      sha256 = "sha256-KeS49fFlhUKowT4t0nc1jJxI8rL3MYZS7xZ15AK50q8=";
+    };
   };
 
 in {
@@ -175,18 +185,11 @@ in {
     inherit passthruFun;
   } // sources.python310);
 
-  python311 = callPackage ./cpython {
+  python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
-    sourceVersion = {
-      major = "3";
-      minor = "11";
-      patch = "1";
-      suffix = "";
-    };
-    sha256 = "sha256-hYeRkvLP/VbLFsCSkFlJ6/Pl45S392RyNSljeQHftY8=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python311);
 
   python312 = callPackage ./cpython {
     self = __splicedPackages.python312;
