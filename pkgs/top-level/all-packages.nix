@@ -7899,6 +7899,8 @@ with pkgs;
 
   gyb = callPackage ../tools/backup/gyb { };
 
+  harminv = callPackage ../development/libraries/science/chemistry/harminv { };
+
   igrep = callPackage ../tools/text/igrep {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -27321,6 +27323,8 @@ with pkgs;
   league-spartan = callPackage ../data/fonts/league-spartan { };
 
   ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
+
+  libGDSII = callPackage ../development/libraries/science/chemistry/libGDSII { };
 
   inherit (callPackages ../data/fonts/liberation-fonts { })
     liberation_ttf_v1
