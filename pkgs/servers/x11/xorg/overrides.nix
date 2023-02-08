@@ -3,6 +3,7 @@
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
+  ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
@@ -295,6 +296,7 @@ self: super:
   libXpm = super.libXpm.overrideAttrs (attrs: {
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
+    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
@@ -843,6 +845,11 @@ self: super:
             name = "CVE-2022-4283.diff";
             url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/ccdd431cd8f1cabae9d744f0514b6533c438908c.diff";
             sha256 = "sha256-IGPsjS7KgRPLrs1ImBXvIFCa8Iu5ZiAHRZvHlBYP8KQ=";
+          })
+          (fetchpatch {
+            name = "CVE-2023-0494.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/0ba6d8c37071131a49790243cdac55392ecf71ec.diff";
+            sha256 = "sha256-/+IuGk09OYVEIB/Y+DTKf7kfHyukEFX/6u1FDIGJieY=";
           })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
