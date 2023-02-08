@@ -3,6 +3,7 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, cast, Iterable, Optional
 
+import dataclasses
 import re
 
 from .types import RenderFn
@@ -367,6 +368,33 @@ def _heading_ids(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.before("replacements", "heading_ids", heading_ids)
 
+def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
+    @dataclasses.dataclass
+    class Entry:
+        head: Token
+        end: int
+        compact: bool = True
+
+    def compact_list_attr(state: markdown_it.rules_core.StateCore) -> None:
+        # markdown-it signifies wide lists by setting the wrapper paragraphs
+        # of each item to hidden. this is not useful for our stylesheets, which
+        # signify this with a special css class on list elements instead.
+        stack = []
+        for token in state.tokens:
+            if token.type in [ 'bullet_list_open', 'ordered_list_open' ]:
+                stack.append(Entry(token, cast(int, token.attrs.get('start', 1))))
+            elif token.type in [ 'bullet_list_close', 'ordered_list_close' ]:
+                lst = stack.pop()
+                lst.head.meta['compact'] = lst.compact
+                if token.type == 'ordered_list_close':
+                    lst.head.meta['end'] = lst.end - 1
+            elif len(stack) > 0 and token.type == 'paragraph_open' and not token.hidden:
+                stack[-1].compact = False
+            elif token.type == 'list_item_open':
+                stack[-1].end += 1
+
+    md.core.ruler.push("compact_list_attr", compact_list_attr)
+
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
@@ -395,34 +423,11 @@ class Converter(ABC):
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
         self._md.use(_heading_ids)
+        self._md.use(_compact_list_attr)
         self._md.enable(["smartquotes", "replacements"])
 
-    def _post_parse(self, tokens: list[Token]) -> list[Token]:
-        # markdown-it signifies wide lists by setting the wrapper paragraphs
-        # of each item to hidden. this is not useful for our stylesheets, which
-        # signify this with a special css class on list elements instead.
-        wide_stack = []
-        end_stack = []
-        for i in range(0, len(tokens)):
-            if tokens[i].type in [ 'bullet_list_open', 'ordered_list_open' ]:
-                wide_stack.append([i, True])
-                end_stack.append([i, cast(int, tokens[i].attrs.get('start', 1))])
-            elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
-                (idx, compact) = wide_stack.pop()
-                tokens[idx].meta['compact'] = compact
-                (idx, end) = end_stack.pop()
-                if tokens[i].type == 'ordered_list_close':
-                    tokens[idx].meta['end'] = end - 1
-            elif len(wide_stack) > 0 and tokens[i].type == 'paragraph_open' and not tokens[i].hidden:
-                wide_stack[-1][1] = False
-            elif tokens[i].type == 'list_item_open':
-                end_stack[-1][1] += 1
-
-        return tokens
-
     def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
-        tokens = self._md.parse(src, env if env is not None else {})
-        return self._post_parse(tokens)
+        return self._md.parse(src, env if env is not None else {})
 
     def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
         env = {} if env is None else env
