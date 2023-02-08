@@ -5,7 +5,7 @@
 , click
 , decorator
 , logzero
-, lxml 
+, lxml
 , more-itertools
 , mypy
 , orjson

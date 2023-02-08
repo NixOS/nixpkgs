@@ -4,7 +4,7 @@
 , beautifulsoup4
 , cachew
 , fastapi
-, HPI 
+, HPI
 , httptools
 , logzero
 , lxml
@@ -12,14 +12,14 @@
 , more-itertools
 , mypy
 , orgparse
-, pytz 
+, pytz
 , setuptools
 , setuptools-scm
 , sqlcipher3
 , tzlocal
 , urlextract
 , uvicorn
-, uvloop 
+, uvloop
 , watchfiles
 , websockets
 }:
