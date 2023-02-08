@@ -1,8 +1,8 @@
 # This builder is for FoundationDB CMake build system.
 
 { lib, fetchFromGitHub
-, cmake, ninja, boost, python3, openjdk, mono, libressl
-, pkg-config
+, cmake, ninja, python3, openjdk, mono, pkg-config
+, msgpack, toml11
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -20,6 +20,8 @@ let
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
+    , boost
+    , ssl
     }: stdenv.mkDerivation {
         pname = "foundationdb";
         inherit version;
@@ -30,7 +32,9 @@ let
           inherit rev sha256;
         };
 
-        buildInputs = [ libressl boost ];
+        buildInputs = [ ssl boost ]
+          ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ msgpack toml11 ];
+
         nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];
 
@@ -40,12 +44,16 @@ let
         cmakeFlags =
           [ (lib.optionalString officialRelease "-DFDB_RELEASE=TRUE")
 
-            # FIXME: why can't libressl be found automatically?
-            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
-            "-DLIBRESSL_INCLUDE_DIR=${libressl.dev}"
-            "-DLIBRESSL_CRYPTO_LIBRARY=${libressl.out}/lib/libcrypto.so"
-            "-DLIBRESSL_SSL_LIBRARY=${libressl.out}/lib/libssl.so"
-            "-DLIBRESSL_TLS_LIBRARY=${libressl.out}/lib/libtls.so"
+            # Disable CMake warnings for project developers.
+            "-Wno-dev"
+
+            # CMake Error at fdbserver/CMakeLists.txt:332 (find_library):
+            # >   Could not find lz4_STATIC_LIBRARIES using the following names: liblz4.a
+            "-DSSD_ROCKSDB_EXPERIMENTAL=FALSE"
+
+            # FoundationDB's CMake is hardcoded to pull in jemalloc as an external
+            # project at build time.
+            "-DUSE_JEMALLOC=FALSE"
 
             # LTO brings up overall build time, but results in much smaller
             # binaries for all users and the cache.
@@ -56,6 +64,18 @@ let
             # Same with LLD when Clang is available.
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
+          ] ++ lib.optionals (lib.versionOlder version "7.0.0")
+          [ # FIXME: why can't libressl be found automatically?
+            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
+            "-DLIBRESSL_INCLUDE_DIR=${ssl.dev}"
+            "-DLIBRESSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
+            "-DLIBRESSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
+            "-DLIBRESSL_TLS_LIBRARY=${ssl.out}/lib/libtls.so"
+          ] ++ lib.optionals (lib.versionAtLeast version "7.1.0" && lib.versionOlder version "7.2.0")
+          [ # FIXME: why can't openssl be found automatically?
+            "-DOPENSSL_USE_STATIC_LIBS=FALSE"
+            "-DOPENSSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
+            "-DOPENSSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
           ];
 
         env.NIX_CFLAGS_COMPILE = toString [
@@ -69,19 +89,20 @@ let
         # coherently install packages as most linux distros expect -- it's designed to build
         # packaged artifacts that are shipped in RPMs, etc. we need to add some extra code to
         # cmake upstream to fix this, and if we do, i think most of this can go away.
-        postInstall = ''
-          mv $out/sbin/fdbserver $out/bin/fdbserver
-          rm -rf \
-            $out/lib/systemd $out/Library $out/usr $out/sbin \
-            $out/var $out/log $out/etc
-
+        postInstall = lib.optionalString (lib.versionOlder version "7.0.0") ''
           mv $out/fdbmonitor/fdbmonitor $out/bin/fdbmonitor && rm -rf $out/fdbmonitor
-
-          rm -rf $out/lib/foundationdb/
           mkdir $out/libexec && ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
-
+          rm -rf $out/Library
+          rm -rf $out/lib/foundationdb/
           mkdir $out/include/foundationdb && \
             mv $out/include/*.h $out/include/*.options $out/include/foundationdb
+        '' + lib.optionalString (lib.versionAtLeast version "7.0.0") ''
+          mv $out/sbin/fdbmonitor $out/bin/fdbmonitor
+          mkdir $out/libexec && mv $out/usr/lib/foundationdb/backup_agent/backup_agent $out/libexec/backup_agent
+        '' + ''
+          mv $out/sbin/fdbserver $out/bin/fdbserver
+
+          rm -rf $out/etc $out/lib/foundationdb $out/lib/systemd $out/log $out/sbin $out/usr $out/var
 
           # move results into multi outputs
           mkdir -p $dev $lib
@@ -103,12 +124,6 @@ let
           # java bindings
           mkdir -p $lib/share/java
           mv lib/fdb-java-*.jar $lib/share/java/fdb-java.jar
-
-          # include the tests
-          mkdir -p $out/share/test
-          (cd ../tests && for x in ${tests}; do
-            cp --parents $x $out/share/test
-          done)
         '';
 
         outputs = [ "out" "dev" "lib" "pythonsrc" ];
