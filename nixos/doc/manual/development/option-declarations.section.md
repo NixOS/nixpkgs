@@ -189,9 +189,7 @@ changing the main service module file and the type system automatically
 enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
-::: {.title}
 **Example: Extensible type placeholder in the service module**
-:::
 ```nix
 services.xserver.displayManager.enable = mkOption {
   description = "Display manager to use";
@@ -201,9 +199,7 @@ services.xserver.displayManager.enable = mkOption {
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
-::: {.title}
 **Example: Extending `services.xserver.displayManager.enable` in the `gdm` module**
-:::
 ```nix
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "gdm" ]);
@@ -212,9 +208,7 @@ services.xserver.displayManager.enable = mkOption {
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
-::: {.title}
 **Example: Extending `services.xserver.displayManager.enable` in the `sddm` module**
-:::
 ```nix
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "sddm" ]);

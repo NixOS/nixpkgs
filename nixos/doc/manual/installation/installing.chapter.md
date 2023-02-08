@@ -538,9 +538,7 @@ drive (here `/dev/sda`). [Example: NixOS Configuration](#ex-config) shows a
 corresponding configuration Nix expression.
 
 ::: {#ex-partition-scheme-MBR .example}
-::: {.title}
 **Example: Example partition schemes for NixOS on `/dev/sda` (MBR)**
-:::
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
 # parted /dev/sda -- mkpart primary 1MB -8GB
@@ -549,9 +547,7 @@ corresponding configuration Nix expression.
 :::
 
 ::: {#ex-partition-scheme-UEFI .example}
-::: {.title}
 **Example: Example partition schemes for NixOS on `/dev/sda` (UEFI)**
-:::
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
 # parted /dev/sda -- mkpart primary 512MB -8GB
@@ -562,9 +558,8 @@ corresponding configuration Nix expression.
 :::
 
 ::: {#ex-install-sequence .example}
-::: {.title}
 **Example: Commands for Installing NixOS on `/dev/sda`**
-:::
+
 With a partitioned disk.
 
 ```ShellSession
@@ -583,9 +578,7 @@ With a partitioned disk.
 :::
 
 ::: {#ex-config .example}
-::: {.title}
 **Example: NixOS Configuration**
-:::
 ```ShellSession
 { config, pkgs, ... }: {
   imports = [

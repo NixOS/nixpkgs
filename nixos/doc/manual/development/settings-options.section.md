@@ -144,9 +144,8 @@ These functions all return an attribute set with these values:
     :::
 
 ::: {#ex-settings-nix-representable .example}
-::: {.title}
 **Example: Module with conventional `settings` option**
-:::
+
 The following shows a module for an example program that uses a JSON
 configuration file. It demonstrates how above values can be used, along
 with some other related best practices. See the comments for
@@ -220,9 +219,7 @@ the port, which will enforce it to be a valid integer and make it show
 up in the manual.
 
 ::: {#ex-settings-typed-attrs .example}
-::: {.title}
 **Example: Declaring a type-checked `settings` attribute**
-:::
 ```nix
 settings = lib.mkOption {
   type = lib.types.submodule {
