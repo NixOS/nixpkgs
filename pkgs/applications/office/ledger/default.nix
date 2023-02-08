@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, installShellFiles, texinfo, gnused, usePython ? false }:
+{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3, gpgme
+, installShellFiles, texinfo, gnused, usePython ? false, gpgmeSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp mpfr libedit gnused
+  ] ++ lib.optionals gpgmeSupport [
+    gpgme
   ] ++ (if usePython
         then [ python3 (boost.override { enablePython = true; python = python3; }) ]
         else [ boost ]);
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DBUILD_DOCS:BOOL=ON"
     "-DUSE_PYTHON:BOOL=${if usePython then "ON" else "OFF"}"
+    "-DUSE_GPGME:BOOL=${if gpgmeSupport then "ON" else "OFF"}"
   ];
 
   # by default, it will query the python interpreter for it's sitepackages location
