@@ -30,7 +30,7 @@
 , pkgsHostHost
 , pkgsTargetTarget
 , sourceVersion
-, sha256
+, hash
 , passthruFun
 , bash
 , stripConfig ? false
@@ -215,7 +215,7 @@ in with passthru; stdenv.mkDerivation {
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
-    inherit sha256;
+    inherit hash;
   };
 
   prePatch = optionalString stdenv.isDarwin ''
@@ -235,7 +235,7 @@ in with passthru; stdenv.mkDerivation {
       url = "https://github.com/python/cpython/commit/3fae04b10e2655a20a3aadb5e0d63e87206d0c67.diff";
       revert = true;
       excludes = [ "Misc/NEWS.d/*" ];
-      sha256 = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
+      hash = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
     })
   ] ++ [
     # Disable the use of ldconfig in ctypes.util.find_library (since
