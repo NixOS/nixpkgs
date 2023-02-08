@@ -349,7 +349,7 @@ def _block_comment_plugin(md: markdown_it.MarkdownIt) -> None:
 
     md.block.ruler.after("code", "block_comment", block_comment)
 
-_HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w-]+)\s*\}\s*$")
+_HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w.-]+)\s*\}\s*$")
 
 def _heading_ids(md: markdown_it.MarkdownIt) -> None:
     def heading_ids(state: markdown_it.rules_core.StateCore) -> None:
