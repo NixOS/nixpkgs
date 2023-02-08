@@ -770,7 +770,7 @@ in
       services.nginx.recommendedProxySettings = mkDefault true;
     })
     (mkIf (cfg.builds.enable || cfg.git.enable || cfg.hg.enable) {
-      services.openssh = {
+      services.openssh.settings = {
         # Note that sshd will continue to honor AuthorizedKeysFile.
         # Note that you may want automatically rotate
         # or link to /dev/null the following log files:
@@ -778,12 +778,10 @@ in
         # - /var/log/{build,git,hg}srht-keys
         # - /var/log/{git,hg}srht-shell
         # - /var/log/gitsrht-update-hook
-        authorizedKeysCommand = ''/etc/ssh/sourcehut/subdir/srht-dispatch "%u" "%h" "%t" "%k"'';
+        AuthorizedKeysCommand = ''/etc/ssh/sourcehut/subdir/srht-dispatch "%u" "%h" "%t" "%k"'';
         # srht-dispatch will setuid/setgid according to [git.sr.ht::dispatch]
-        authorizedKeysCommandUser = "root";
-        extraConfig = ''
-          PermitUserEnvironment SRHT_*
-        '';
+        AuthorizedKeysCommandUser = "root";
+        PermitUserEnvironment = "SRHT_*";
       };
       environment.etc."ssh/sourcehut/config.ini".source =
         settingsFormat.generate "sourcehut-dispatch-config.ini"

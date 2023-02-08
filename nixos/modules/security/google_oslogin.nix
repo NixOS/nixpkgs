@@ -64,8 +64,8 @@ in
         exec ${package}/bin/google_authorized_keys "$@"
       '';
     };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
-    services.openssh.authorizedKeysCommandUser = "nobody";
+    services.openssh.settings.AuthorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
+    services.openssh.settings.AuthorizedKeysCommandUser = "nobody";
   };
 
 }

@@ -153,8 +153,8 @@ in {
         exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
       '';
     };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
-    services.openssh.authorizedKeysCommandUser = "nobody";
+    services.openssh.settings.AuthorizedKeysCommand = "/etc/ssh/authorized_keys_command";
+    services.openssh.settings.AuthorizedKeysCommandUser = "nobody";
   })];
 
   meta.maintainers = with maintainers; [ bbigras ];

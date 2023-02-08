@@ -100,6 +100,8 @@ in
     (mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
 
+    (mkRenamedOptionModule [ "services" "openssh" "authorizedKeysCommand" ] [  "services" "openssh" "settings" "AuthorizedKeysCommand" ])
+    (mkRenamedOptionModule [ "services" "openssh" "authorizedKeysCommandUser" ] [  "services" "openssh" "settings" "AuthorizedKeysCommandUser" ])
     (mkRenamedOptionModule [ "services" "openssh" "kbdInteractiveAuthentication" ] [  "services" "openssh" "settings" "KbdInteractiveAuthentication" ])
     (mkRenamedOptionModule [ "services" "openssh" "passwordAuthentication" ] [  "services" "openssh" "settings" "PasswordAuthentication" ])
     (mkRenamedOptionModule [ "services" "openssh" "useDns" ] [  "services" "openssh" "settings" "UseDns" ])
@@ -253,28 +255,6 @@ in
           See AuthorizedKeysFile in man sshd_config for details.
         '';
       };
-
-      authorizedKeysCommand = mkOption {
-        type = types.str;
-        default = "none";
-        description = lib.mdDoc ''
-          Specifies a program to be used to look up the user's public
-          keys. The program must be owned by root, not writable by group
-          or others and specified by an absolute path.
-        '';
-      };
-
-      authorizedKeysCommandUser = mkOption {
-        type = types.str;
-        default = "nobody";
-        description = lib.mdDoc ''
-          Specifies the user under whose account the AuthorizedKeysCommand
-          is run. It is recommended to use a dedicated user that has no
-          other role on the host than running authorized keys commands.
-        '';
-      };
-
-
 
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
@@ -561,10 +541,6 @@ in
         ''}
         PrintMotd no # handled by pam_motd
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-        ${optionalString (cfg.authorizedKeysCommand != "none") ''
-          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
-          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
-        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
