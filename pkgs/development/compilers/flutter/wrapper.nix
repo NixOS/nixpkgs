@@ -29,27 +29,7 @@ runCommandLocal "flutter"
     ${flutter}/bin/flutter "$@"
   '';
 
-  buildInputs = [
-    makeWrapper
-    pkg-config
-  ] ++ lib.lists.optionals supportsLinuxDesktop (
-    let
-      # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
-      deps = pkg: (pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]);
-      collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ lib.concatMap collect (deps pkg));
-    in
-    collect atk.dev ++
-      collect cairo.dev ++
-      collect gdk-pixbuf.dev ++
-      collect glib.dev ++
-      collect gtk3.dev ++
-      collect harfbuzz.dev ++
-      collect libepoxy.dev ++
-      collect pango.dev ++
-      collect libX11.dev ++
-      collect (callPackage ./packages/libdeflate { }).dev ++
-      collect xorgproto
-  );
+  buildInputs = [ makeWrapper ];
 
   passthru = flutter.passthru // {
     unwrapped = flutter;
@@ -64,13 +44,33 @@ runCommandLocal "flutter"
 
   makeWrapper "$flutterWithCorrectedCache" $out/bin/flutter \
       --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-      --prefix PATH : ${lib.makeBinPath (lib.lists.optionals supportsLinuxDesktop [
+      --prefix PATH : ${lib.makeBinPath (lib.optionals supportsLinuxDesktop [
           pkg-config
           cmake
           ninja
           clang
         ])} \
-      --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH_FOR_TARGET" \
+      --prefix PKG_CONFIG_PATH : "${
+        let
+          # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
+          deps = pkg: builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
+          collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
+          libraries = builtins.concatMap (pkg: collect (lib.getOutput "dev" pkg)) (lib.optionals supportsLinuxDesktop[
+            atk
+            cairo
+            gdk-pixbuf
+            glib
+            gtk3
+            harfbuzz
+            libepoxy
+            pango
+            libX11
+            (callPackage ./packages/libdeflate { })
+            xorgproto
+          ]);
+          pkgconfigLib = builtins.filter (library: builtins.pathExists "${library}/lib/pkgconfig") libraries;
+          pkgconfigShare = builtins.filter (library: builtins.pathExists "${library}/share/pkgconfig") libraries;
+        in "${lib.makeSearchPathOutput "dev" "lib/pkgconfig" pkgconfigLib}:${lib.makeSearchPathOutput "dev" "share/pkgconfig" pkgconfigShare}"}" \
       --prefix CXXFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-isystem ${libX11.dev}/include -isystem ${xorgproto}/include"}' \
       --prefix LDFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-rpath ${lib.makeLibraryPath [
           atk
