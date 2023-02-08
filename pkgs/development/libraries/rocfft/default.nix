@@ -58,7 +58,7 @@ let
       openmp
     ];
 
-    propogatedBuildInputs = lib.optionals buildTests [
+    propagatedBuildInputs = lib.optionals buildTests [
       fftw
       fftwFloat
     ];
