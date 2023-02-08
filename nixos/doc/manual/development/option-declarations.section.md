@@ -87,6 +87,7 @@ lib.mkOption {
   description = lib.mdDoc "Whether to enable magic.";
 }
 ```
+:::
 
 ### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
 
@@ -108,7 +109,7 @@ You can omit the default path if the name of the option is also attribute path i
 
 During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
 
-::: {#ex-options-declarations-util-mkPackageOption .title}
+[]{#ex-options-declarations-util-mkPackageOption}
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
@@ -122,6 +123,7 @@ lib.mkOption {
   description = lib.mdDoc "The hello package to use.";
 }
 ```
+:::
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
 ```nix
@@ -138,6 +140,7 @@ lib.mkOption {
   description = lib.mdDoc "The GHC package to use.";
 }
 ```
+:::
 
 ## Extensible Option Types {#sec-option-declarations-eot}
 
