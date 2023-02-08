@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Python tool to translate between different languages by using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
     changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v1.10.0";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
   };
 }
