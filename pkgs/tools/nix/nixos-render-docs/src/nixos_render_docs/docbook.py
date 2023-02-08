@@ -212,9 +212,18 @@ class DocBookRenderer(Renderer):
             else:
                 return ref
         raise NotImplementedError("md node not supported yet", token)
-    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
-        return f'<anchor xml:id={quoteattr(cast(str, token.attrs["id"]))} />'
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        # we currently support *only* inline anchors (and no attributes at all).
+        id_part = ""
+        if s := token.attrs.get('id'):
+            id_part = f'<anchor xml:id={quoteattr(cast(str, s))} />'
+        if 'class' in token.attrs:
+            return super().attr_span_begin(token, tokens, i, options, env)
+        return id_part
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        return ""
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
         start = f' startingnumber="{token.attrs["start"]}"' if 'start' in token.attrs else ""

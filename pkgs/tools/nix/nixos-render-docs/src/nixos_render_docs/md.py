@@ -63,7 +63,8 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'myst_role': self.myst_role,
             "container_admonition_open": self.admonition_open,
             "container_admonition_close": self.admonition_close,
-            "inline_anchor": self.inline_anchor,
+            "attr_span_begin": self.attr_span_begin,
+            "attr_span_end": self.attr_span_end,
             "heading_open": self.heading_open,
             "heading_close": self.heading_close,
             "ordered_list_open": self.ordered_list_open,
@@ -224,7 +225,10 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
-    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
@@ -247,10 +251,25 @@ def _is_escaped(src: str, pos: int) -> bool:
         pos -= 1
     return found % 2 == 1
 
-_INLINE_ANCHOR_PATTERN = re.compile(r"\{\s*#([\w-]+)\s*\}")
+# the contents won't be split apart in the regex because spacing rules get messy here
+_ATTR_SPAN_PATTERN = re.compile(r"\{([^}]*)\}")
 
-def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
-    def inline_anchor(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
+def _parse_attrs(s: str) -> Optional[tuple[Optional[str], list[str]]]:
+    (id, classes) = (None, [])
+    for part in s.split():
+        if part.startswith('#'):
+            if id is not None:
+                return None # just bail on multiple ids instead of trying to recover
+            id = part[1:]
+        elif part.startswith('.'):
+            classes.append(part[1:])
+        else:
+            return None # no support for key=value attrs like in pandoc
+
+    return (id, classes)
+
+def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
+    def attr_span(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
         if state.src[state.pos] != '[':
             return False
         if _is_escaped(state.src, state.pos - 1):
@@ -263,24 +282,33 @@ def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
         if label_end < 0:
             return False
 
-        # match id
-        match = _INLINE_ANCHOR_PATTERN.match(state.src[label_end + 1 : ])
+        # match id and classes in any combination
+        match = _ATTR_SPAN_PATTERN.match(state.src[label_end + 1 : ])
         if not match:
             return False
 
         if not silent:
-            token = state.push("inline_anchor", "", 0) # type: ignore[no-untyped-call]
-            token.attrs['id'] = match[1]
+            if (parsed_attrs := _parse_attrs(match[1])) is None:
+                return False
+            id, classes = parsed_attrs
+
+            token = state.push("attr_span_begin", "span", 1) # type: ignore[no-untyped-call]
+            if id:
+                token.attrs['id'] = id
+            if classes:
+                token.attrs['class'] = " ".join(classes)
 
             state.pos = label_begin
             state.posMax = label_end
             state.md.inline.tokenize(state)
 
+            state.push("attr_span_end", "span", -1) # type: ignore[no-untyped-call]
+
         state.pos = label_end + match.end() + 1
         state.posMax = input_end
         return True
 
-    md.inline.ruler.before("link", "inline_anchor", inline_anchor)
+    md.inline.ruler.before("link", "attr_span", attr_span)
 
 def _inline_comment_plugin(md: markdown_it.MarkdownIt) -> None:
     def inline_comment(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
@@ -347,7 +375,7 @@ class Converter(ABC):
         )
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
-        self._md.use(_inline_anchor_plugin)
+        self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
         self._md.enable(["smartquotes", "replacements"])
