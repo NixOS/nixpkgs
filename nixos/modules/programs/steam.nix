@@ -21,17 +21,20 @@ let
     }
   );
 
+  gamescopeSessionStarter =
+    pkgs.writeShellScriptBin "steam-gamescope" ''
+    ${let
+      exports = builtins.attrValues (builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env);
+    in
+      builtins.concatStringsSep "\n" exports}
+      gamescope --steam ${toString cfg.gamescopeSession.args} -- steam -tenfoot -pipewire-dmabuf
+  '';
+
   gamescopeSessionFile = (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
     [Desktop Entry]
     Name=Steam
     Comment=A digital distribution platform
-    Exec=${pkgs.writeShellScript "steam-gamescope" ''
-      ${let
-        exports = builtins.attrValues (builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env);
-      in
-        builtins.concatStringsSep "\n" exports}
-        gamescope --steam ${toString cfg.gamescopeSession.args} -- steam -tenfoot -pipewire-dmabuf
-    ''}
+    Exec=${gamescopeSessionStarter}/bin/steam-gamescope
     Type=Application
   '').overrideAttrs (_: { passthru.providedSessions = [ "steam" ]; });
 in
@@ -143,7 +146,7 @@ in
     environment.systemPackages = [
       cfg.package
       cfg.package.run
-    ];
+    ] ++ lib.optional cfg.gamescopeSession.enable gamescopeSessionStarter;
 
     networking.firewall = mkMerge [
       (mkIf cfg.remotePlay.openFirewall {
