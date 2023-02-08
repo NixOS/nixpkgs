@@ -12185,7 +12185,9 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  watchfiles = callPackage ../development/python-modules/watchfiles { };
+  watchfiles = callPackage ../development/python-modules/watchfiles {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   watchgod = callPackage ../development/python-modules/watchgod { };
 
