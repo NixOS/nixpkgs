@@ -1,7 +1,7 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Callable, cast, Iterable, Optional
+from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
 
 import dataclasses
 import re
@@ -28,9 +28,13 @@ _md_escape_table = {
 def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
+AttrBlockKind = Literal['admonition']
+
+AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
+
 class Renderer(markdown_it.renderer.RendererProtocol):
-    _admonitions: dict[str, tuple[RenderFn, RenderFn]]
-    _admonition_stack: list[str]
+    _admonitions: dict[AdmonitionKind, tuple[RenderFn, RenderFn]]
+    _admonition_stack: list[AdmonitionKind]
 
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         self._manpage_urls = manpage_urls
@@ -62,8 +66,8 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'dd_open': self.dd_open,
             'dd_close': self.dd_close,
             'myst_role': self.myst_role,
-            "container_admonition_open": self.admonition_open,
-            "container_admonition_close": self.admonition_close,
+            "admonition_open": self.admonition_open,
+            "admonition_close": self.admonition_close,
             "attr_span_begin": self.attr_span_begin,
             "attr_span_end": self.attr_span_end,
             "heading_open": self.heading_open,
@@ -73,11 +77,11 @@ class Renderer(markdown_it.renderer.RendererProtocol):
         }
 
         self._admonitions = {
-            "{.note}": (self.note_open, self.note_close),
-            "{.caution}": (self.caution_open,self.caution_close),
-            "{.tip}": (self.tip_open, self.tip_close),
-            "{.important}": (self.important_open, self.important_close),
-            "{.warning}": (self.warning_open, self.warning_close),
+            "note": (self.note_open, self.note_close),
+            "caution": (self.caution_open,self.caution_close),
+            "tip": (self.tip_open, self.tip_close),
+            "important": (self.important_open, self.important_close),
+            "warning": (self.warning_open, self.warning_close),
         }
         self._admonition_stack = []
 
@@ -88,7 +92,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
 
     def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
-        tag = token.info.strip()
+        tag = token.meta['kind']
         self._admonition_stack.append(tag)
         return self._admonitions[tag][0](token, tokens, i, options, env)
     def admonition_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
@@ -254,6 +258,8 @@ def _is_escaped(src: str, pos: int) -> bool:
 
 # the contents won't be split apart in the regex because spacing rules get messy here
 _ATTR_SPAN_PATTERN = re.compile(r"\{([^}]*)\}")
+# this one is for blocks with attrs. we want to use it with fullmatch() to deconstruct an info.
+_ATTR_BLOCK_PATTERN = re.compile(r"\s*\{([^}]*)\}\s*")
 
 def _parse_attrs(s: str) -> Optional[tuple[Optional[str], list[str]]]:
     (id, classes) = (None, [])
@@ -268,6 +274,21 @@ def _parse_attrs(s: str) -> Optional[tuple[Optional[str], list[str]]]:
             return None # no support for key=value attrs like in pandoc
 
     return (id, classes)
+
+def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str], list[str]]]:
+    if (m := _ATTR_BLOCK_PATTERN.fullmatch(info)) is None:
+        return None
+    if (parsed_attrs := _parse_attrs(m[1])) is None:
+        return None
+    id, classes = parsed_attrs
+    # check that we actually support this kind of block, and that is adheres to
+    # whetever restrictions we want to enforce for that kind of block.
+    if len(classes) == 1 and classes[0] in get_args(AdmonitionKind):
+        # don't want to support ids for admonitions just yet
+        if id is not None:
+            return None
+        return ('admonition', id, classes)
+    return None
 
 def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
     def attr_span(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
@@ -395,6 +416,29 @@ def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("compact_list_attr", compact_list_attr)
 
+def _block_attr(md: markdown_it.MarkdownIt) -> None:
+    def assert_never(value: NoReturn) -> NoReturn:
+        assert False
+
+    def block_attr(state: markdown_it.rules_core.StateCore) -> None:
+        stack = []
+        for token in state.tokens:
+            if token.type == 'container_blockattr_open':
+                if (parsed_attrs := _parse_blockattrs(token.info)) is None:
+                    # if we get here we've missed a possible case in the plugin validate function
+                    raise RuntimeError("this should be unreachable")
+                kind, id, classes = parsed_attrs
+                if kind == 'admonition':
+                    token.type = 'admonition_open'
+                    token.meta['kind'] = classes[0]
+                    stack.append('admonition_close')
+                else:
+                    assert_never(kind)
+            elif token.type == 'container_blockattr_close':
+                token.type = stack.pop()
+
+    md.core.ruler.push("block_attr", block_attr)
+
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
@@ -412,10 +456,8 @@ class Converter(ABC):
         )
         self._md.use(
             container_plugin,
-            name="admonition",
-            validate=lambda name, *args: (
-                name.strip() in self._md.renderer._admonitions # type: ignore[attr-defined]
-            )
+            name="blockattr",
+            validate=lambda name, *args: _parse_blockattrs(name),
         )
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
@@ -424,6 +466,7 @@ class Converter(ABC):
         self._md.use(_block_comment_plugin)
         self._md.use(_heading_ids)
         self._md.use(_compact_list_attr)
+        self._md.use(_block_attr)
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:

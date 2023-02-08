@@ -384,3 +384,41 @@ def test_heading_attributes() -> None:
         Token(type='heading_close', tag='h1', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='#', info='', meta={}, block=True, hidden=False)
     ]
+
+def test_admonitions() -> None:
+    c = Converter({})
+    assert c._parse("::: {.note}") == [
+        Token(type='admonition_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {.note}', meta={'kind': 'note'}, block=True,
+              hidden=False),
+        Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
+              children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.caution}") == [
+        Token(type='admonition_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {.caution}', meta={'kind': 'caution'},
+              block=True, hidden=False),
+        Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
+              children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.tip}") == [
+        Token(type='admonition_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {.tip}', meta={'kind': 'tip'}, block=True,
+              hidden=False),
+        Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
+              children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.important}") == [
+        Token(type='admonition_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {.important}', meta={'kind': 'important'},
+              block=True, hidden=False),
+        Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
+              children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.warning}") == [
+        Token(type='admonition_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0,
+              children=None, content='', markup=':::', info=' {.warning}', meta={'kind': 'warning'},
+              block=True, hidden=False),
+        Token(type='admonition_close', tag='div', nesting=-1, attrs={}, map=None, level=0,
+              children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
+    ]
