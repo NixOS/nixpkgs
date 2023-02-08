@@ -75,7 +75,6 @@ let
     mkdir $out
     cd $out
     cp -r --no-preserve=all $inputs/* .
-    rm -rf from_md
 
     declare -a convert_args
     while read -r mf; do
