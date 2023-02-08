@@ -2312,6 +2312,8 @@ self: super: with self; {
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
+  datetime = callPackage ../development/python-modules/datetime { };
+
   dateutils = callPackage ../development/python-modules/dateutils { };
 
   datrie = callPackage ../development/python-modules/datrie { };
