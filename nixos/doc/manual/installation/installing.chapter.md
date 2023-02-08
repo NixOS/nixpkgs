@@ -15,16 +15,16 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      The key to open the boot menu is different across computer brands and even
-     models. It can be <kbd>F12</kbd>, but also <kbd>F1</kbd>,
-     <kbd>F9</kbd>, <kbd>F10</kbd>, <kbd>Enter</kbd>, <kbd>Del</kbd>,
-     <kbd>Esc</kbd> or another function key. If you are unsure and don't see
+     models. It can be [F12]{.keycap}, but also [F1]{.keycap},
+     [F9]{.keycap}, [F10]{.keycap}, [Enter]{.keycap}, [Del]{.keycap},
+     [Esc]{.keycap} or another function key. If you are unsure and don't see
      it on the early boot screen, you can search online for your computers
      brand, model followed by "boot from usb".
      The computer might not even have that feature, so you have to go into the
      BIOS/UEFI settings to change the boot order. Again, search online for
      details about your specific computer model.
 
-     For Apple computers with Intel processors press and hold the <kbd>⌥</kbd>
+     For Apple computers with Intel processors press and hold the [⌥]{.keycap}
      (Option or Alt) key until you see the boot menu. On Apple silicon press
      and hold the power button.
      :::
@@ -41,7 +41,7 @@ To begin the installation, you have to boot your computer from the install drive
 
 3.   Shortly after selecting the appropriate boot drive, you should be
      presented with a menu with different installer options. Leave the default
-     and wait (or press <kbd>Enter</kbd> to speed up).
+     and wait (or press [Enter]{.keycap} to speed up).
 
 4.   The graphical images will start their corresponding desktop environment
      and the graphical installer, which can take some time. The minimal images
