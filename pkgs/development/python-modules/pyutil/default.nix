@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyutil";
-  version = "3.3.0";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c4d4bf668c559186389bb9bce99e4b1b871c09ba252a756ccaacd2b8f401848";
+    sha256 = "sha256-6hbSxVtvg0Eh3rYyp0VLCg+uJdXRMLFfa+l667B2yfw=";
   };
 
   propagatedBuildInputs = [ simplejson ];
