@@ -8,6 +8,7 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@emacs-eask/cli"
+, "@fsouza/prettierd"
 , "@forge/cli"
 , "@google/clasp"
 , "@medable/mdctl-cli"
