@@ -26492,6 +26492,9 @@ with pkgs;
   linuxPackages_testing_bcachefs = linuxKernel.packages.linux_testing_bcachefs;
   linux_testing_bcachefs = linuxKernel.kernels.linux_testing_bcachefs;
 
+  linuxPackages_testing_hdr = linuxKernel.packages.linux_testing_hdr;
+  linux_testing_hdr = linuxKernel.kernels.linux_testing_hdr;
+
   # Realtime kernel
   linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
   linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;

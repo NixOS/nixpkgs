@@ -215,6 +215,13 @@ in {
       kernelPatches = linux_6_1.kernelPatches;
    };
 
+    linux_testing_hdr = callPackage ../os-specific/linux/kernel/linux-testing-hdr.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -592,6 +599,7 @@ in {
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
+    linux_testing_hdr = recurseIntoAttrs (packagesFor kernels.linux_testing_hdr);
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
 
