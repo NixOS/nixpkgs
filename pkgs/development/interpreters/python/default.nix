@@ -117,15 +117,6 @@
   };
 
   sources = {
-    python39 = {
-      sourceVersion = {
-        major = "3";
-        minor = "9";
-        patch = "16";
-        suffix = "";
-      };
-      sha256 = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
-    };
     python310 = {
       sourceVersion = {
         major = "3";
@@ -165,11 +156,18 @@ in {
     inherit passthruFun;
   };
 
-  python39 = callPackage ./cpython ({
+  python39 = callPackage ./cpython {
     self = __splicedPackages.python39;
+    sourceVersion = {
+      major = "3";
+      minor = "9";
+      patch = "16";
+      suffix = "";
+    };
+    sha256 = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python39);
+  };
 
   python310 = callPackage ./cpython ({
     self = __splicedPackages.python310;
