@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake, extra-cmake-modules, qtbase, wrapQtAppsHook, kio, ki18n, polkit-qt }:
+{ lib, stdenv, fetchFromGitLab, cmake, extra-cmake-modules, qtbase, wrapQtAppsHook, kio, ki18n, polkit-qt }:
 
 stdenv.mkDerivation rec {
   pname = "kio-admin";
@@ -14,4 +14,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
   buildInputs = [ qtbase kio ki18n polkit-qt ];
+
+  meta = with lib; {
+    description = "Manage files as administrator using the admin:// KIO protocol.";
+    homepage = "https://invent.kde.org/system/kio-admin";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ k900 ];
+  };
 }
