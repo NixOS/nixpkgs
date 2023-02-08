@@ -25926,6 +25926,8 @@ with pkgs;
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  libnl-tiny = callPackage ../os-specific/linux/libnl-tiny { };
+
   libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
 
   libtracefs = callPackage ../os-specific/linux/libtracefs {};
