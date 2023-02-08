@@ -1,12 +1,17 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
+, lima-bin
 , makeWrapper
 , qemu
 , testers
 , colima
+  # use lima-bin on darwin to support native macOS virtualization
+  # https://github.com/NixOS/nixpkgs/pull/209171
+, lima-drv ? if stdenv.isDarwin then lima-bin else lima
 }:
 
 buildGoModule rec {
@@ -41,7 +46,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima qemu ]}
+      --prefix PATH : ${lib.makeBinPath [ lima-drv qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \

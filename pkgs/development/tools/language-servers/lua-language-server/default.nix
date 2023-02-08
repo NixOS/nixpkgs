@@ -1,16 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
-let
-  target = if stdenv.isDarwin then "macOS" else "Linux";
-in
+
 stdenv.mkDerivation rec {
-  pname = "sumneko-lua-language-server";
-  version = "3.6.7";
+  pname = "lua-language-server";
+  version = "3.6.10";
 
   src = fetchFromGitHub {
-    owner = "sumneko";
+    owner = "luals";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-x7/yO1rJ+VBG4EFpISYblRECLW2lsLz5wcqLR14UV/g=";
+    sha256 = "sha256-QnkWEf1Uv+CZwEyv1b3WMPvaOZEn+mKH5w3CPyw02CQ=";
     fetchSubmodules = true;
   };
 
@@ -24,12 +22,13 @@ stdenv.mkDerivation rec {
     Foundation
   ];
 
-  preBuild = ''
-    cd 3rd/luamake
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    # Needed for the test
-    export HOME=/var/empty
+  postPatch = ''
+    # filewatch tests are failing on darwin
+    # this feature is not used in lua-language-server
+    sed -i /filewatch/d 3rd/bee.lua/test/test.lua
+
+    pushd 3rd/luamake
+  '' + lib.optionalString stdenv.isDarwin ''
     # This package uses the program clang for C and C++ files. The language
     # is selected via the command line argument -std, but this do not work
     # in combination with the nixpkgs clang wrapper. Therefor we have to
@@ -44,11 +43,11 @@ stdenv.mkDerivation rec {
   '';
 
   ninjaFlags = [
-    "-fcompile/ninja/${lib.toLower target}.ninja"
+    "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja"
   ];
 
   postBuild = ''
-    cd ../..
+    popd
     ./3rd/luamake/luamake rebuild
   '';
 
@@ -66,18 +65,20 @@ stdenv.mkDerivation rec {
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/log \
-      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/meta"
+      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/log \
+      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/meta"
 
     runHook postInstall
   '';
 
+  # some tests require local networking
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "Lua Language Server coded by Lua";
-    homepage = "https://github.com/sumneko/lua-language-server";
+    description = "A language server that offers Lua language support";
+    homepage = "https://github.com/luals/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    maintainers = with maintainers; [ figsoda sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "lua-language-server";
   };
 }

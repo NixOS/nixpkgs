@@ -116,8 +116,8 @@
       <listitem>
         <para>
           <link xlink:href="https://dm3mat.darc.de/qdmr/">QDMR</link>, a
-          gui application and command line tool for programming cheap
-          DMR radios
+          GUI application and command line tool for programming DMR
+          radios
           <link linkend="opt-programs.qdmr.enable">programs.qdmr</link>
         </para>
       </listitem>
@@ -577,8 +577,8 @@
           </listitem>
           <listitem>
             <para>
-              <literal>services.openssh.cyphers</literal> to
-              <literal>services.openssh.settings.Cyphers</literal>
+              <literal>services.openssh.ciphers</literal> to
+              <literal>services.openssh.settings.Ciphers</literal>
             </para>
           </listitem>
           <listitem>

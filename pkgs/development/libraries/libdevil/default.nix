@@ -13,16 +13,17 @@
 , OpenGL
 , runtimeShell
 , withXorg ? true
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdevil";
   version = "1.7.8";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/openil/DevIL-${version}.tar.gz";
+    url = "mirror://sourceforge/openil/DevIL-${finalAttrs.version}.tar.gz";
     sha256 = "1zd850nn7nvkkhasrv7kn17kzgslr5ry933v6db62s4lr0zzlbv8";
   };
 
@@ -63,11 +64,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://openil.sourceforge.net/";
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     license = licenses.lgpl2;
+    pkgConfigModules = [ "IL" ];
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ ];
   };
-}
+})

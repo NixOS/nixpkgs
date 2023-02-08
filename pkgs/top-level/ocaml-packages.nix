@@ -357,7 +357,12 @@ let
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
-    dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
+    dune_3 =
+      if lib.versionAtLeast ocaml.version "4.08"
+      then callPackage ../development/tools/ocaml/dune/3.nix { }
+      else if lib.versionAtLeast ocaml.version "4.02"
+      then pkgs.dune_3
+      else throw "dune_3 is not available for OCaml ${ocaml.version}";
 
     dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
@@ -1232,6 +1237,8 @@ let
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
+
+    rusage = callPackage ../development/ocaml-modules/rusage { };
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
