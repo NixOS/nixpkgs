@@ -225,6 +225,7 @@ in
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
+            requiredBy = mkIf sw.randomEncryption.enable [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
               ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
