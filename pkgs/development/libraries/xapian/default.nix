@@ -54,5 +54,5 @@ in {
   # Don't forget to change the hashes in xapian-omega and
   # python3Packages.xapian. They inherit the version from this package, and
   # should always be built with the equivalent xapian version.
-  xapian_1_4 = generic "1.4.21" "sha256-gPhgNNL7VZAHlUgd+uaBv6oQ776BirrTYizcDFXgb4g=";
+  xapian_1_4 = generic "1.4.22" "sha256-BYhK8AsGcCzkhgV9YqO/vmYGz5Za2g9epXCzKKL6Hqg=";
 }
