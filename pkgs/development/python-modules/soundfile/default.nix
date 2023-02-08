@@ -21,6 +21,14 @@ buildPythonPackage rec {
     sha256 = "sha256-kxc4ock+hoTC0+HVFKxjRAzoJ+x4PqCi0+RzDj3FjBg=";
   };
 
+  patches = [
+    # Fix arch detection on darwin, https://github.com/bastibe/python-soundfile/pull/365
+    (fetchpatch {
+      url = "https://github.com/bastibe/python-soundfile/commit/0bf248c72aee4781b2b8aafad46b5f51488be2c4.patch";
+      sha256 = "sha256-dPY8buf9rF3aB6ZkNDDV1rl1UuARFmSix9uY0MBRZ40=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
