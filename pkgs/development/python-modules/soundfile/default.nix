@@ -29,6 +29,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy libsndfile cffi ];
   propagatedNativeBuildInputs = [ cffi ];
 
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    export PYSOUNDFILE_ARCHITECTURE=x86_64
+  '';
+
   meta = {
     description = "An audio library based on libsndfile, CFFI and NumPy";
     license = lib.licenses.bsd3;
