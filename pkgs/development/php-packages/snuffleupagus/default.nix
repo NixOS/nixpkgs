@@ -8,12 +8,12 @@
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.7.0";
+  version = "0.9.0";
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1la6wa9xznc110b7isiy502x71mkvhisq6m8llhczpq4rs4nbcw2";
+    sha256 = "1a4PYJ/j9BsoeF5V/KKGu7rqsL3YMo/FbaCBfNc4bfw=";
   };
 
   buildInputs = [
