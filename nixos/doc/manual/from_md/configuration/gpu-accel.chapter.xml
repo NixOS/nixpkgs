@@ -62,7 +62,7 @@ Platform Vendor      Advanced Micro Devices, Inc.
         <xref linkend="opt-hardware.opengl.extraPackages" /> enables
         OpenCL support:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 hardware.opengl.extraPackages = [
   rocm-opencl-icd
 ];
@@ -85,7 +85,7 @@ hardware.opengl.extraPackages = [
         enable OpenCL support. For example, for Gen8 and later GPUs, the
         following configuration can be used:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 hardware.opengl.extraPackages = [
   intel-compute-runtime
 ];
@@ -162,7 +162,7 @@ GPU1:
         makes amdvlk the default driver and hides radv and lavapipe from
         the device list. A specific driver can be forced as follows:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 hardware.opengl.extraPackages = [
   pkgs.amdvlk
 ];
@@ -206,7 +206,7 @@ $ nix-shell -p libva-utils --run vainfo
         Modern Intel GPUs use the iHD driver, which can be installed
         with:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 hardware.opengl.extraPackages = [
   intel-media-driver
 ];
@@ -215,7 +215,7 @@ hardware.opengl.extraPackages = [
         Older Intel GPUs use the i965 driver, which can be installed
         with:
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 hardware.opengl.extraPackages = [
   vaapiIntel
 ];

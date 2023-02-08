@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -19,6 +20,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) webhook; };
 
   meta = with lib; {
     description = "Incoming webhook server that executes shell commands";

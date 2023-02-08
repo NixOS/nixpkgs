@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "17hvsql5dml7ialjcags8wphs7w6z88b2rgjir1382bg8vn62bkr";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     omake
     ocaml
@@ -65,6 +67,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     # 4.2.5 requires OCaml >= 4.06
     branch = "4.2.4";
+    # incompatible with omake >= 0.10
+    broken = true;
     homepage = "https://gitlab.com/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = licenses.lgpl2Only;

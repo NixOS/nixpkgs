@@ -22,7 +22,7 @@
     a dependency on GTK 2. If you want to build it against GTK 3, you
     can specify that as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
 </programlisting>
   <para>
@@ -46,7 +46,7 @@ environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
     the package, such as the source code. For instance, if you want to
     override the source code of Emacs, you can say:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 environment.systemPackages = [
   (pkgs.emacs.overrideAttrs (oldAttrs: {
     name = &quot;emacs-25.0-pre&quot;;
@@ -72,7 +72,7 @@ environment.systemPackages = [
     everything depend on your customised instance, you can apply a
     <emphasis>global</emphasis> override as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 nixpkgs.config.packageOverrides = pkgs:
   { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
   };

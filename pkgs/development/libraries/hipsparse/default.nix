@@ -4,26 +4,27 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocsparse
 , hip
 , gfortran
 , git
 , gtest
+, openmp
 , buildTests ? false
+, buildSamples ? false
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "5.4.0";
+  version = "5.4.2";
 
   outputs = [
     "out"
   ] ++ lib.optionals buildTests [
     "test"
+  ] ++ lib.optionals buildSamples [
+    "sample"
   ];
 
   src = fetchFromGitHub {
@@ -41,17 +42,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocsparse
     git
   ] ++ lib.optionals buildTests [
     gtest
+  ] ++ lib.optionals (buildTests || buildSamples) [
+    openmp
   ];
 
   cmakeFlags = [
+    "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -110,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/hipsparse-test $test/bin
     mv /build/source/matrices $test
     rmdir $out/bin
+  '' + lib.optionalString buildSamples ''
+    mkdir -p $sample/bin
+    mv clients/staging/example_* $sample/bin
+    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
+      finalAttrs.buildInputs ++ [ hip gfortran.cc ])} $sample/bin/example_*
   '';
 
   passthru.updateScript = rocmUpdateScript {
@@ -123,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/hipSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

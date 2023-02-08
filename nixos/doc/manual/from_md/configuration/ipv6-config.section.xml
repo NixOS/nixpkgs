@@ -10,21 +10,21 @@
     <xref linkend="opt-networking.interfaces._name_.tempAddress" />. You
     can disable IPv6 support globally by setting:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.enableIPv6 = false;
 </programlisting>
   <para>
     You can disable IPv6 on a single interface using a normal sysctl (in
     this example, we use interface <literal>eth0</literal>):
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 boot.kernel.sysctl.&quot;net.ipv6.conf.eth0.disable_ipv6&quot; = true;
 </programlisting>
   <para>
     As with IPv4 networking interfaces are automatically configured via
     DHCPv6. You can configure an interface manually:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.interfaces.eth0.ipv6.addresses = [ {
   address = &quot;fe00:aa:bb:cc::2&quot;;
   prefixLength = 64;
@@ -34,7 +34,7 @@ networking.interfaces.eth0.ipv6.addresses = [ {
     For configuring a gateway, optionally with explicitly specified
     interface:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 networking.defaultGateway6 = {
   address = &quot;fe00::1&quot;;
   interface = &quot;enp0s3&quot;;

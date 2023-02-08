@@ -22,7 +22,7 @@ buildPythonPackage rec {
     python-socks
    ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

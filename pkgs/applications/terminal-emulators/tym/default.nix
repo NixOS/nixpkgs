@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tym";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "endaaman";
     repo = "${pname}";
     rev = "${version}";
-    sha256 = "sha256-ufIYJgbHmSJJbnx4hyDx0DmIjaGCxKXtiekcXcyka14=";
+    sha256 = "sha256-BYWfrvodmrOw2so64Y+bzTWwXosR1NjgrimULTuQu94=";
   };
 
   nativeBuildInputs = [

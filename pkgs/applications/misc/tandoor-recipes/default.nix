@@ -118,7 +118,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     runHook postInstall
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-django
     pytest-factoryboy

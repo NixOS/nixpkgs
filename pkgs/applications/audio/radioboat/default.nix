@@ -42,7 +42,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = radioboat;
       command = "radioboat version";

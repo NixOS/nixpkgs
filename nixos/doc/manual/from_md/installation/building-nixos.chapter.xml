@@ -62,7 +62,7 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
       can create the following file at
       <literal>modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 { config, ... }:
 
 {

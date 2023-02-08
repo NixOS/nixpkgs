@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
-
   doCheck = !stdenv.isFreeBSD;
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -38,5 +36,6 @@ stdenv.mkDerivation rec {
     description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = with platforms; linux ++ freebsd ++ darwin;
     license = licenses.bsd3;
+    mainProgram = "upnpc";
   };
 }

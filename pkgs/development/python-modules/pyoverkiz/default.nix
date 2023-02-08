@@ -45,7 +45,7 @@ buildPythonPackage rec {
     warrant-lite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

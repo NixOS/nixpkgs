@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An easy-to-use IPMI server management utility";
-    homepage = "http://ipmiutil.sourceforge.net/";
+    homepage = "https://ipmiutil.sourceforge.net/";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;

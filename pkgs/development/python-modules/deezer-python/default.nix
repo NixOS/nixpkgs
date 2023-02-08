@@ -29,7 +29,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     environs
     pytest-mock
     pytest-vcr

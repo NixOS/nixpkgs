@@ -78,7 +78,7 @@ For example:
 
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
 ```nix
-lib.mkEnableOption "magic"
+lib.mkEnableOption (lib.mdDoc "magic")
 # is like
 lib.mkOption {
   type = lib.types.bool;
@@ -88,7 +88,7 @@ lib.mkOption {
 }
 ```
 
-### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
+### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
 
 Usage:
 
@@ -106,12 +106,14 @@ The second argument is the name of the option, used in the description "The \<na
 
 You can omit the default path if the name of the option is also attribute path in nixpkgs.
 
+During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
+
 ::: {#ex-options-declarations-util-mkPackageOption .title}
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
 ```nix
-lib.mkPackageOption pkgs "hello" { }
+lib.mkPackageOptionMD pkgs "hello" { }
 # is like
 lib.mkOption {
   type = lib.types.package;
@@ -123,7 +125,7 @@ lib.mkOption {
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
 ```nix
-lib.mkPackageOption pkgs "GHC" {
+lib.mkPackageOptionMD pkgs "GHC" {
   default = [ "ghc" ];
   example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
@@ -149,7 +151,7 @@ multiple modules, or as an alternative to related `enable` options.
 
 As an example, we will take the case of display managers. There is a
 central display manager module for generic display manager options and a
-module file per display manager backend (sddm, gdm \...).
+module file per display manager backend (sddm, gdm ...).
 
 There are two approaches we could take with this module structure:
 

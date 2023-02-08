@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pathops" ];
 

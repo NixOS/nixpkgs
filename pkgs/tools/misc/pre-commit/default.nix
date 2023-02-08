@@ -43,13 +43,14 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cargo
     dotnet-sdk
     git
     go
     nodejs
     pytest-env
+    pytest-forked
     pytest-xdist
     pytestCheckHook
     re-assert
@@ -60,7 +61,8 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  doCheck = true;
+  # i686-linux: dotnet-sdk not available
+  doCheck = stdenv.buildPlatform.system != "i686-linux";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \

@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aspell-python
     chardet
     pytestCheckHook

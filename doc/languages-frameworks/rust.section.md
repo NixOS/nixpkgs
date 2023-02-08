@@ -186,6 +186,23 @@ added. To find the correct hash, you can first use `lib.fakeSha256` or
 `lib.fakeHash` as a stub hash. Building the package (and thus the
 vendored dependencies) will then inform you of the correct hash.
 
+For usage outside nixpkgs, `allowBuiltinFetchGit` could be used to
+avoid having to specify `outputHashes`. For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    allowBuiltinFetchGit = true;
+  };
+
+  # ...
+}
+```
+
 ### Cargo features {#cargo-features}
 
 You can disable default features using `buildNoDefaultFeatures`, and

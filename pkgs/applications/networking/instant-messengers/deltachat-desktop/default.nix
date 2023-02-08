@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_18
+, electron_22
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -21,17 +21,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.102.0";
+    version = "1.107.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-xw/lUNs39nkBrydpcgUBL3j6XrZFafKslxx6zUiElWw=";
+      hash = "sha256-fjiS7GZy1BLgmxu4LFOWgucORcVx+9KleQcga+hRkSY=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-CiqYKFABHcFSjYUH/qop1xWCoygQJajI7nhv04ElD10=";
+      hash = "sha256-7XhSI/C0GEmsaL0UupvufB1bfPGbzSQJH720Y4/Do3o=";
     };
   });
   esbuild' = esbuild.override {
@@ -43,21 +43,21 @@ let
         rev = "v${version}";
         hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
       };
-      vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.0";
+  version = "1.34.3";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-M2ZLWaxVq9PvxJemwv+7jd0cXKQb6T5VCyLvIRF+9d0=";
+    hash = "sha256-6WZJD8lMsk1WNguMkXygBCTVpOzNkNuVZJ3Ygv6VBkM=";
   };
 
-  npmDepsHash = "sha256-wCsPKEgRpPsNmM0HzvS5QjlPnw8COPrOhQRIf+vYeig=";
+  npmDepsHash = "sha256-B91yQ/xi8+uyOllqYR7lZTfLBpJvZat1cIIJk9TkM/c=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -105,7 +105,7 @@ in buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
@@ -128,8 +128,6 @@ in buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

@@ -3,8 +3,6 @@
 , glib, dbus-glib, json-glib
 , gtk2, libindicator-gtk2, libdbusmenu-gtk2, libappindicator-gtk2 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "indicator-application-gtk2";
   version = "12.10.0.1";
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Indicator to take menus from applications and place them in the panel (GTK 2 library for Xfce/LXDE)";
     homepage = "https://launchpad.net/indicators-gtk2";
     license = licenses.gpl3;

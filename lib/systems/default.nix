@@ -101,7 +101,14 @@ rec {
         }.${final.parsed.kernel.name} or null;
 
          # uname -m
-         processor = final.parsed.cpu.name;
+         processor =
+           if final.isPower64
+           then "ppc64${lib.optionalString final.isLittleEndian "le"}"
+           else if final.isPower
+           then "ppc${lib.optionalString final.isLittleEndian "le"}"
+           else if final.isMips64
+           then "mips64"  # endianness is *not* included on mips64
+           else final.parsed.cpu.name;
 
          # uname -r
          release = null;
@@ -135,12 +142,7 @@ rec {
         if final.isAarch32 then "arm"
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
-        else {
-          powerpc = "ppc";
-          powerpcle = "ppc";
-          powerpc64 = "ppc64";
-          powerpc64le = "ppc64le";
-        }.${final.parsed.cpu.name} or final.parsed.cpu.name;
+        else final.uname.processor;
 
       # Name used by UEFI for architectures.
       efiArch =

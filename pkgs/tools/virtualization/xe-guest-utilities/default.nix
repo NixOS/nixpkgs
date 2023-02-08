@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, runtimeShell
 }:
 
 buildGoModule rec {
@@ -15,6 +16,11 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-zhpDvo8iujE426/gxJY+Pqfv99vLNKHqyMQbbXIKodY=";
+
+  postPatch = ''
+    substituteInPlace mk/xen-vcpu-hotplug.rules \
+      --replace "/bin/sh" "${runtimeShell}"
+  '';
 
   buildPhase = ''
     runHook preBuild

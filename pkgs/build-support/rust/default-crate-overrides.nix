@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, atk
 , pkg-config
 , curl
 , darwin
@@ -16,19 +17,24 @@
 , libsodium
 , postgresql
 , gmp
+, gobject-introspection
 , foundationdb
 , capnproto
 , nettle
+, gtk4
 , clang
 , llvmPackages
 , linux-pam
+, pango
 , cmake
 , glib
 , freetype
+, fontconfig
 , rdkafka
 , udev
 , libevdev
 , alsa-lib
+, graphene
 , ...
 }:
 
@@ -42,6 +48,11 @@ in
   };
 
   cairo-rs = attrs: {
+    buildInputs = [ cairo ];
+  };
+
+  cairo-sys-rs = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo ];
   };
 
@@ -73,7 +84,6 @@ in
   };
 
   evdev-sys = attrs: {
-    LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libevdev ];
   };
@@ -122,6 +132,21 @@ in
     buildInputs = [ gdk-pixbuf ];
   };
 
+  gtk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gdk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
+  gsk4-sys = attrs: {
+    buildInputs = [ gtk4 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
@@ -148,6 +173,11 @@ in
     buildInputs = [ udev ];
   };
 
+  graphene-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ graphene gobject-introspection ];
+  };
+
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
@@ -165,6 +195,11 @@ in
 
   pam-sys = attr: {
     buildInputs = [ linux-pam ];
+  };
+
+  pango-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
   };
 
   pq-sys = attr: {
@@ -202,6 +237,11 @@ in
     buildInputs = [ gmp ];
   };
 
+  pangocairo-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pango ];
+  };
+
   sequoia-store = attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
@@ -222,7 +262,7 @@ in
 
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ freetype ];
+    buildInputs = [ freetype fontconfig ];
   };
 
   thrussh-libsodium = attrs: {
@@ -233,4 +273,10 @@ in
   xcb = attrs: {
     buildInputs = [ python3 ];
   };
+
+  atk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ atk ];
+  };
+
 }

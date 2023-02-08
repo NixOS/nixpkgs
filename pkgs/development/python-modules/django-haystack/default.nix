@@ -42,7 +42,7 @@ buildPythonPackage rec {
     django
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     geopy
     nose
     pysolr

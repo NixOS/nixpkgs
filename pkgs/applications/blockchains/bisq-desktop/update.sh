@@ -7,14 +7,13 @@ version="$(curl -s https://api.github.com/repos/bisq-network/bisq/releases| jq '
 depname="Bisq-64bit-$version.deb"
 src="https://github.com/bisq-network/bisq/releases/download/v$version/$depname"
 signature="$src.asc"
-key="CB36 D7D2 EBB2 E35D 9B75 500B CD5D C1C5 29CD FD3B"
 
 pushd $(mktemp -d --suffix=-bisq-updater)
 export GNUPGHOME=$PWD/gnupg
 mkdir -m 700 -p "$GNUPGHOME"
 curl -L -o "$depname" -- "$src"
 curl -L -o signature.asc -- "$signature"
-gpg --batch --recv-keys "$key"
+curl https://bisq.network/pubkey/E222AA02.asc | gpg --import
 gpg --batch --verify signature.asc "$depname"
 sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$depname")
 popd

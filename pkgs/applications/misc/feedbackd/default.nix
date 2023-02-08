@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 

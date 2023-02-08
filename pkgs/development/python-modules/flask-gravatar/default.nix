@@ -31,7 +31,7 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pygments
   ];

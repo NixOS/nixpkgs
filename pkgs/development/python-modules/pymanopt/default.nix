@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy torch ];
-  checkInputs = [ nose2 autograd matplotlib tensorflow ];
+  nativeCheckInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''
     runHook preCheck

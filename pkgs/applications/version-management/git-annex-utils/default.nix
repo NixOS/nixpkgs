@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       This is a set of utilities that are handy to use with git-annex repositories.
       Currently there is only one utility gadu, a du like utility for annexed files.
     '';
-    homepage = "http://git-annex.mysteryvortex.com/git-annex-utils.html";
+    homepage = "https://git-annex.mysteryvortex.com/git-annex-utils.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ woffs ];
     mainProgram = "gadu";

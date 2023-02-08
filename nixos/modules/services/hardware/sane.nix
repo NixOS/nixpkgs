@@ -28,7 +28,7 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = "/etc/sane.d";
+    SANE_CONFIG_DIR = "/etc/sane-config";
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
@@ -167,7 +167,7 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
-      environment.etc."sane.d".source = config.hardware.sane.configDir;
+      environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 

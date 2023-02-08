@@ -26,7 +26,7 @@ my($OCAML_MIN_VERSION) = $OPAM_OPAM =~ /^  "ocaml" \{>= "(.*)"}$/m
 
 print <<"EOF";
 { stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, bubblewrap
+  ocaml, unzip, ncurses, curl, bubblewrap, Foundation
 }:
 
 assert lib.versionAtLeast ocaml.version "$OCAML_MIN_VERSION";
@@ -68,8 +68,12 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "$OPAM_RELEASE";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ curl ncurses ocaml getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
+  buildInputs = [ ncurses getconf ]
+    ++ lib.optionals stdenv.isLinux [ bubblewrap ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   src = srcs.opam;
 
@@ -124,7 +128,9 @@ print <<'EOF';
   meta = with lib; {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
+    changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
     maintainers = [ maintainers.henrytill maintainers.marsam ];
+    license = licenses.lgpl21Only;
     platforms = platforms.all;
   };
 }

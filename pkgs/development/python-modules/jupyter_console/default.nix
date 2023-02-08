@@ -27,7 +27,7 @@ buildPythonPackage rec {
     prompt-toolkit
     pygments
   ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   postPatch = ''
     substituteInPlace setup.py \

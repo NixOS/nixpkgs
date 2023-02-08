@@ -19,7 +19,7 @@ $ nix-shell
 nix-shell$ make
 ```
 
-Once you are done making modifications to the manual, it\'s important to
+Once you are done making modifications to the manual, it's important to
 build it before committing. You can do that as follows:
 
 ```ShellSession

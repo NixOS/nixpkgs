@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     sh
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     gitMinimal
     pytestCheckHook
   ];

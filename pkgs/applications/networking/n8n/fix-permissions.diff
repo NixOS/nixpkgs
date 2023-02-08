@@ -1,0 +1,28 @@
+--- a/dist/LoadNodesAndCredentials.js
++++ b/dist/LoadNodesAndCredentials.js
+@@ -216,6 +216,7 @@
+         const { types } = loader;
+         this.types.nodes = this.types.nodes.concat(types.nodes);
+         this.types.credentials = this.types.credentials.concat(types.credentials);
++        let seen = new Set();
+         const iconPromises = Object.entries(types).flatMap(([typeName, typesArr]) => typesArr.map((type) => {
+             var _a;
+             if (!((_a = type.icon) === null || _a === void 0 ? void 0 : _a.startsWith('file:')))
+@@ -226,7 +227,16 @@
+             type.iconUrl = iconUrl;
+             const source = path_1.default.join(dir, icon);
+             const destination = path_1.default.join(constants_1.GENERATED_STATIC_DIR, iconUrl);
+-            return (0, promises_1.mkdir)(path_1.default.dirname(destination), { recursive: true }).then(async () => (0, promises_1.copyFile)(source, destination));
++            if (!seen.has(destination)) {
++                seen.add(destination);
++                return (0, promises_1.mkdir)(path_1.default.dirname(destination), { recursive: true }).then(async () => {
++                    await (0, promises_1.copyFile)(source, destination);
++                    await (0, promises_1.chmod)(destination, 0o644);
++                });
++            }
++            else {
++                return Promise.resolve();
++            }
+         }));
+         await Promise.all(iconPromises);
+         for (const nodeTypeName in loader.nodeTypes) {

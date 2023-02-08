@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];  # Some patches impact ./configure.
   buildInputs = [ elfutils ];
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   # Import Fedora's (very) large patch series: bug fixes, architecture support,
   # etc. RH/Fedora are currently working with upstream to merge all these

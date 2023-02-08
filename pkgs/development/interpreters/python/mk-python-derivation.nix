@@ -39,6 +39,7 @@
 # Dependencies needed for running the checkPhase.
 # These are added to buildInputs when doCheck = true.
 , checkInputs ? []
+, nativeCheckInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -100,12 +101,6 @@
 
 , ... } @ attrs:
 
-
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
-else
-
 let
   inherit (python) stdenv;
 
@@ -113,8 +108,9 @@ let
 
   name_ = name;
 
+  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
     "disabledTestPaths" "outputs"
   ]) // {
 
@@ -169,13 +165,14 @@ let
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    installCheckInputs = [
+    nativeInstallCheckInputs = [
     ] ++ lib.optionals (format == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
       setuptoolsCheckHook
-    ] ++ checkInputs;
+    ] ++ nativeCheckInputs;
+    installCheckInputs = checkInputs;
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
@@ -202,4 +199,7 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation true passthru self
+in lib.extendDerivation
+  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
+  passthru
+  self

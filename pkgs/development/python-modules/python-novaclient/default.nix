@@ -36,7 +36,7 @@ buildPythonPackage rec {
     prettytable
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     openssl
     requests-mock

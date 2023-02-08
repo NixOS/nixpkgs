@@ -11,6 +11,7 @@
 , passlib
 , platformdirs
 , pluggy
+, py
 , pyramid
 , pytestCheckHook
 , repoze_lru
@@ -24,6 +25,7 @@
 buildPythonApplication rec {
   pname = "devpi-server";
   version = "6.7.0";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -59,9 +61,10 @@ buildPythonApplication rec {
     waitress
   ] ++ passlib.optional-dependencies.argon2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     nginx
+    py
     pytestCheckHook
     webtest
   ];

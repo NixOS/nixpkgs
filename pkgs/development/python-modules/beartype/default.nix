@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OFS1Dqqpi7iUkL5X5zxpx3eg8wRXTnBDrH2pisanNaY=";
+    hash = "sha256-O3VFs/MzprBwQraLECFBVUya3S6Xnat7D47WN49699c=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

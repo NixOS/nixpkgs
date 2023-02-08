@@ -30,7 +30,7 @@ buildPythonPackage rec {
     prompt-toolkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

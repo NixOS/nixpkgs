@@ -9,7 +9,7 @@
 , importlib-metadata
 , ipywidgets
 , jinja2
-, jupyter_core
+, jupyter-core
 , jupyterlab-pygments
 , lib
 , markupsafe
@@ -66,7 +66,7 @@ in buildPythonPackage rec {
     bleach
     defusedxml
     jinja2
-    jupyter_core
+    jupyter-core
     jupyterlab-pygments
     markupsafe
     mistune
@@ -84,7 +84,7 @@ in buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipywidgets
     pyppeteer
     pytestCheckHook

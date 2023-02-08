@@ -38,11 +38,14 @@ Below is a short excerpt of some points in there:
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
+  * Be short, just one sentence.
   * Be capitalized.
   * Not start with the package name.
-  * Not have a period at the end.
+    * More generally, it should not refer to the package name.
+  * Not end with a period (or any punctuation for that matter).
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
+  * If in doubt, try to contact the upstream developers for clarification.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -55,7 +58,7 @@ Package version upgrades usually allow for simpler commit messages, including at
 
 Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
 This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
-Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive @~3`. For more details consult the git man pages.
+Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
 ## Rebasing between branches (i.e. from master to staging)
 

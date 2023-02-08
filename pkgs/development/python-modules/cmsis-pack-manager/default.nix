@@ -20,7 +20,7 @@ let
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NeUG6PFI2eTwq5SNtAB6ZMA1M3z1JmMND29V9/O5sgw=";
+    hash = "sha256-NeUG6PFI2eTwq5SNtAB6ZMA1M3z1JmMND29V9/O5sgw=";
   };
 
   native = rustPlatform.buildRustPackage {
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ appdirs milksnake pyyaml ];
 
-  checkInputs = [ hypothesis jinja2 mock pytestCheckHook ];
+  nativeCheckInputs = [ hypothesis jinja2 mock pytestCheckHook ];
 
   preBuild = ''
     mkdir -p rust/target/release/deps
@@ -73,5 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
     license = licenses.asl20;
     maintainers = with maintainers; [ frogamic sbruder ];
+    broken = stdenv.isDarwin;
   };
 }

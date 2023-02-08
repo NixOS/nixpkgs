@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 , makeWrapper
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator ];
+  runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
 
   installPhase = ''
     runHook preInstall
@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
     wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+
+    wrapProgram $out/bin/mullvad-daemon \
+        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
 
     sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
 

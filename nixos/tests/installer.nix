@@ -21,6 +21,8 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        documentation.enable = false;
+
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
@@ -48,6 +50,8 @@ let
         ${optionalString (bootLoader == "systemd-boot") ''
           boot.loader.systemd-boot.enable = true;
         ''}
+
+        boot.initrd.secrets."/etc/secret" = ./secret;
 
         users.users.alice = {
           isNormalUser = true;
@@ -124,6 +128,7 @@ let
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
+          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
@@ -131,9 +136,21 @@ let
       with subtest("Do it again to make sure it's idempotent"):
           machine.succeed("nixos-install < /dev/null >&2")
 
+      with subtest("Check that we can build things in nixos-enter"):
+          machine.succeed(
+              """
+              nixos-enter -- nix-build --option substitute false -E 'derivation {
+                  name = "t";
+                  builder = "/bin/sh";
+                  args = ["-c" "echo nixos-enter build > $out"];
+                  system = builtins.currentSystem;
+                  preferLocalBuild = true;
+              }'
+              """
+          )
+
       with subtest("Shutdown system after installation"):
-          machine.succeed("umount /mnt/boot || true")
-          machine.succeed("umount /mnt")
+          machine.succeed("umount -R /mnt")
           machine.succeed("sync")
           machine.shutdown()
 
@@ -465,8 +482,12 @@ let
     '';
     testSpecialisationConfig = true;
   };
-
-
+  # disable zfs so we can support latest kernel if needed
+  no-zfs-module = {
+    nixpkgs.overlays = [(final: super: {
+      zfs = super.zfs.overrideAttrs(_: {meta.platforms = [];});}
+    )];
+  };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -650,6 +671,55 @@ in {
     '';
   };
 
+  # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
+  # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+          + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
+          + " set 1 boot on"
+          + " mkpart primary ext2 1024MiB -1MiB",  # LUKS
+          "udevadm settle",
+          "modprobe dm_mod dm_crypt",
+          "dd if=/dev/random of=luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda2 -",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda2 luks.key",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda2 crypt",
+          "pvcreate /dev/mapper/crypt",
+          "vgcreate crypt /dev/mapper/crypt",
+          "lvcreate -L 100M -n swap crypt",
+          "lvcreate -l '100%FREE' -n nixos crypt",
+          "mkfs.vfat -n efi /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/crypt/nixos",
+          "mkswap -L swap /dev/crypt/swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/{etc/nixos,boot/efi}",
+          "mount LABEL=efi /mnt/boot/efi",
+          "swapon -L swap",
+          "mv luks.key /mnt/etc/nixos/"
+      )
+    '';
+    bootLoader = "grub";
+    grubUseEfi = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+      boot.initrd.secrets."/luks.key" = ./luks.key;
+      boot.initrd.luks.devices.crypt =
+        { device  = "/dev/vda2";
+          keyFile = "/luks.key";
+        };
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Enter passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
+
   swraid = makeInstallerTest "swraid" {
     createPartitions = ''
       machine.succeed(
@@ -714,6 +784,7 @@ in {
   bcachefsSimple = makeInstallerTest "bcachefs-simple" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''
@@ -737,13 +808,22 @@ in {
   bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+
       environment.systemPackages = with pkgs; [ keyutils ];
     };
 
-    # We don't want to use the normal way of unlocking bcachefs defined in tasks/filesystems/bcachefs.nix.
-    # So, override initrd.postDeviceCommands completely and simply unlock with the predefined password.
     extraConfig = ''
-      boot.initrd.postDeviceCommands = lib.mkForce "echo password | bcachefs unlock /dev/vda3";
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("password\n")
     '';
 
     createPartitions = ''
@@ -769,6 +849,9 @@ in {
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''

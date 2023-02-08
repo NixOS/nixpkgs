@@ -1,8 +1,12 @@
-{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+{ lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, fetchpatch
 }:
 
 let
+  lib_ = lib;
+  stdenv_ = stdenv;
+
   readConfig = configfile: import (runCommand "config.nix" {} ''
     echo "{" > "$out"
     while IFS='=' read key val; do
@@ -12,18 +16,16 @@ let
     done < "${configfile}"
     echo "}" >> $out
   '').outPath;
-in {
-  lib,
-  # Allow overriding stdenv on each buildLinux call
-  stdenv,
+in lib.makeOverridable ({
   # The kernel version
   version,
   # Position of the Linux build expression
   pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
-  # The version of the kernel module directory
-  modDirVersion ? version,
+  # The name of the kernel module directory
+  # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
+  modDirVersion ? lib.versions.pad 3 version,
   # The kernel source (tarball, git checkout, etc.)
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
@@ -36,7 +38,7 @@ in {
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
-  # Use defaultMeta // extraMeta
+  # Extra meta attributes
   extraMeta ? {},
 
   # for module compatibility
@@ -47,7 +49,7 @@ in {
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
-  features ? null,
+  features ? null, lib ? lib_, stdenv ? stdenv_,
 }:
 
 let
@@ -102,7 +104,17 @@ let
         ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
         ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
+        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch
+        # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
+        # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
+        # https://github.com/openzfs/zfs/pull/13367
+        ++ optional (lib.versionAtLeast version "5.12" &&
+                     lib.versionOlder version "5.19" &&
+                     stdenv.hostPlatform.isPower)
+          (fetchpatch {
+            url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
+            hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
+          });
 
       postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
@@ -386,4 +398,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
-} // (optionalAttrs (pos != null) { inherit pos; }))
+} // (optionalAttrs (pos != null) { inherit pos; })))

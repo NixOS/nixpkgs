@@ -722,7 +722,7 @@
           See
           <link xlink:href="https://mariadb.com/kb/en/authentication-from-mariadb-104/">Authentication
           from MariaDB 10.4</link>. unix_socket auth plugin does not use
-          a password, and uses the connecting user's UID instead. When a
+          a password, and uses the connecting user’s UID instead. When a
           new MariaDB data directory is initialized, two MariaDB users
           are created and can be used with new unix_socket auth plugin,
           as well as traditional mysql_native_password plugin:
@@ -730,7 +730,7 @@
           traditional mysql_native_password plugin method, one must run
           the following:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
 services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
   ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD(&quot;verysecret&quot;);
@@ -755,7 +755,7 @@ services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
           allow MySQL to read from /home and /tmp directories when using
           <literal>LOAD DATA INFILE</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce &quot;read-only&quot;;
 }
@@ -766,7 +766,7 @@ services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
           <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql
           user has write access to <literal>/var/data</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   systemd.services.mysql.serviceConfig.ReadWritePaths = [ &quot;/var/data&quot; ];
 }
@@ -864,7 +864,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           <literal>buildGoModule</literal> now internally creates a
           vendor directory in the source tree for downloaded modules
-          instead of using go's
+          instead of using go’s
           <link xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
           proxy protocol</link>. This storage format is simpler and
           therefore less likely to break with future versions of go. As
@@ -885,7 +885,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           <literal>phantomJsSupport = true</literal> to the package
           instantiation:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
     phantomJsSupport = true;
@@ -941,24 +941,24 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           If you used the
           <literal>boot.initrd.network.ssh.host*Key</literal> options,
-          you'll get an error explaining how to convert your host keys
+          you’ll get an error explaining how to convert your host keys
           and migrate to the new
           <literal>boot.initrd.network.ssh.hostKeys</literal> option.
-          Otherwise, if you don't have any host keys set, you'll need to
+          Otherwise, if you don’t have any host keys set, you’ll need to
           generate some; see the <literal>hostKeys</literal> option
           documentation for instructions.
         </para>
       </listitem>
       <listitem>
         <para>
-          Since this release there's an easy way to customize your PHP
+          Since this release there’s an easy way to customize your PHP
           install to get a much smaller base PHP with only wanted
           extensions enabled. See the following snippet installing a
           smaller PHP with the extensions <literal>imagick</literal>,
           <literal>opcache</literal>, <literal>pdo</literal> and
           <literal>pdo_mysql</literal> loaded:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   environment.systemPackages = [
     (pkgs.php.withExtensions
@@ -973,7 +973,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
 }
 </programlisting>
         <para>
-          The default <literal>php</literal> attribute hasn't lost any
+          The default <literal>php</literal> attribute hasn’t lost any
           extensions. The <literal>opcache</literal> extension has been
           added. All upstream PHP extensions are available under
           php.extensions.&lt;name?&gt;.
@@ -997,7 +997,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           The remaining configuration flags can now be set directly on
           the <literal>php</literal> attribute. For example, instead of
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   php.override {
     config.php.embed = true;
@@ -1008,7 +1008,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           you should now write
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   php.override {
     embedSupport = true;
@@ -1062,7 +1062,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           writing to other folders, use
           <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ &quot;/var/www&quot; ];
 }
@@ -1076,7 +1076,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           docs</link> for details). If you require serving files from
           home directories, you may choose to set e.g.
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   systemd.services.nginx.serviceConfig.ProtectHome = &quot;read-only&quot;;
 }
@@ -1093,7 +1093,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           Replace a <literal>nesting.clone</literal> entry with:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   specialisation.example-sub-configuration = {
     configuration = {
@@ -1104,7 +1104,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           Replace a <literal>nesting.children</literal> entry with:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   specialisation.example-sub-configuration = {
     inheritParentConfig = false;
@@ -1162,7 +1162,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
         <para>
           The <literal>systemd-networkd</literal> option
           <literal>systemd.network.networks.&lt;name&gt;.dhcp.CriticalConnection</literal>
-          has been removed following upstream systemd's deprecation of
+          has been removed following upstream systemd’s deprecation of
           the same. It is recommended to use
           <literal>systemd.network.networks.&lt;name&gt;.networkConfig.KeepConfiguration</literal>
           instead. See systemd.network 5 for details.
@@ -1174,7 +1174,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           <literal>systemd.network.networks._name_.dhcpConfig</literal>
           has been renamed to
           <link xlink:href="options.html#opt-systemd.network.networks._name_.dhcpV4Config">systemd.network.networks.<emphasis>name</emphasis>.dhcpV4Config</link>
-          following upstream systemd's documentation change. See
+          following upstream systemd’s documentation change. See
           systemd.network 5 for details.
         </para>
       </listitem>
@@ -1283,7 +1283,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           The
           <link xlink:href="https://github.com/okTurtles/dnschain">DNSChain</link>
           package and NixOS module have been removed from Nixpkgs as the
-          software is unmaintained and can't be built. For more
+          software is unmaintained and can’t be built. For more
           information see issue
           <link xlink:href="https://github.com/NixOS/nixpkgs/issues/89205">#89205</link>.
         </para>
@@ -1350,7 +1350,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
       </listitem>
       <listitem>
         <para>
-          Radicale's default package has changed from 2.x to 3.x. An
+          Radicale’s default package has changed from 2.x to 3.x. An
           upgrade checklist can be found
           <link xlink:href="https://github.com/Kozea/Radicale/blob/3.0.x/NEWS.md#upgrade-checklist">here</link>.
           You can use the newer version in the NixOS service by setting
@@ -1385,7 +1385,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           multi-instance config with an existing bitcoind data directory
           and user, you have to adjust the original config, e.g.:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.bitcoind = {
     enable = true;
@@ -1397,7 +1397,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
         <para>
           To something similar:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.bitcoind.mainnet = {
     enable = true;
@@ -1447,7 +1447,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           the original SSL settings, you have to adjust the original
           config, e.g.:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.dokuwiki = {
     enable = true;
@@ -1458,7 +1458,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
         <para>
           To something similar:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.dokuwiki.&quot;mywiki&quot; = {
     enable = true;
@@ -1472,8 +1472,8 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
 </programlisting>
         <para>
           The base package has also been upgraded to the 2020-07-29
-          &quot;Hogfather&quot; release. Plugins might be incompatible
-          or require upgrading.
+          <quote>Hogfather</quote> release. Plugins might be
+          incompatible or require upgrading.
         </para>
       </listitem>
       <listitem>
@@ -1492,7 +1492,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           option is (<literal>/var/db/postgresql</literal>) and then
           explicitly set this value to maintain compatibility:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.postgresql.dataDir = &quot;/var/db/postgresql&quot;;
 }
@@ -1587,7 +1587,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       <listitem>
         <para>
           The <literal>security.rngd</literal> service is now disabled
-          by default. This choice was made because there's krngd in the
+          by default. This choice was made because there’s krngd in the
           linux kernel space making it (for most usecases) functionally
           redundent.
         </para>
@@ -1609,13 +1609,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           will be EOL (end of life) within the lifetime of 20.09</link>.
         </para>
         <para>
-          It's necessary to upgrade to nextcloud19:
+          It’s necessary to upgrade to nextcloud19:
         </para>
         <itemizedlist>
           <listitem>
             <para>
               From nextcloud17, you have to upgrade to nextcloud18 first
-              as Nextcloud doesn't allow going multiple major revisions
+              as Nextcloud doesn’t allow going multiple major revisions
               forward in a single upgrade. This is possible by setting
               <link xlink:href="options.html#opt-services.nextcloud.package">services.nextcloud.package</link>
               to nextcloud18.
@@ -1623,7 +1623,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           </listitem>
           <listitem>
             <para>
-              From nextcloud18, it's possible to directly upgrade to
+              From nextcloud18, it’s possible to directly upgrade to
               nextcloud19 by setting
               <link xlink:href="options.html#opt-services.nextcloud.package">services.nextcloud.package</link>
               to nextcloud19.
@@ -1685,7 +1685,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       <listitem>
         <para>
           The notmuch package moves its emacs-related binaries and emacs
-          lisp files to a separate output. They're not part of the
+          lisp files to a separate output. They’re not part of the
           default <literal>out</literal> output anymore - if you relied
           on the <literal>notmuch-emacs-mua</literal> binary or the
           emacs lisp files, access them via the
@@ -1736,11 +1736,11 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       </listitem>
       <listitem>
         <para>
-          The cc- and binutils-wrapper's &quot;infix salt&quot; and
+          The cc- and binutils-wrapper’s <quote>infix salt</quote> and
           <literal>_BUILD_</literal> and <literal>_TARGET_</literal>
-          user infixes have been replaced with with a &quot;suffix
-          salt&quot; and suffixes and <literal>_FOR_BUILD</literal> and
-          <literal>_FOR_TARGET</literal>. This matches the autotools
+          user infixes have been replaced with with a <quote>suffix
+          salt</quote> and suffixes and <literal>_FOR_BUILD</literal>
+          and <literal>_FOR_TARGET</literal>. This matches the autotools
           convention for env vars which standard for these things,
           making interfacing with other tools easier.
         </para>
@@ -1774,8 +1774,8 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           <literal>network-link-*</literal> units, which have been
           removed. Bringing the interface up has been moved to the
           beginning of the <literal>network-addresses-*</literal> unit.
-          Note this doesn't require <literal>systemd-networkd</literal>
-          - it's udev that parses <literal>.link</literal> files. Extra
+          Note this doesn’t require <literal>systemd-networkd</literal>
+          - it’s udev that parses <literal>.link</literal> files. Extra
           care needs to be taken in the presence of
           <link xlink:href="https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME">legacy
           udev rules</link> to rename interfaces, as MAC Address and MTU
@@ -1825,7 +1825,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           you must include those directories into the
           <literal>BindPaths</literal> of the service:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   systemd.services.transmission.serviceConfig.BindPaths = [ &quot;/path/to/alternative/download-dir&quot; ];
 }
@@ -1835,7 +1835,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           <literal>transmission-daemon</literal> is now only available
           on the local network interface by default. Use:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.transmission.settings.rpc-bind-address = &quot;0.0.0.0&quot;;
 }
@@ -1850,7 +1850,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           With this release <literal>systemd-networkd</literal> (when
           enabled through
           <link xlink:href="options.html#opt-networking.useNetworkd">networking.useNetworkd</link>)
-          has it's netlink socket created through a
+          has it’s netlink socket created through a
           <literal>systemd.socket</literal> unit. This gives us control
           over socket buffer sizes and other parameters. For larger
           setups where networkd has to create a lot of (virtual) devices
@@ -1873,7 +1873,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         </para>
         <para>
           Since the actual memory requirements depend on hardware,
-          timing, exact configurations etc. it isn't currently possible
+          timing, exact configurations etc. it isn’t currently possible
           to infer a good default from within the NixOS module system.
           Administrators are advised to monitor the logs of
           <literal>systemd-networkd</literal> for
@@ -1882,7 +1882,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         </para>
         <para>
           Note: Increasing the <literal>ReceiveBufferSize=</literal>
-          doesn't allocate any memory. It just increases the upper bound
+          doesn’t allocate any memory. It just increases the upper bound
           on the kernel side. The memory allocation depends on the
           amount of messages that are queued on the kernel side of the
           netlink socket.
@@ -1900,7 +1900,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         <para>
           This means that a configuration like this
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.dovecot2.mailboxes = [
     { name = &quot;Junk&quot;;
@@ -1912,7 +1912,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         <para>
           should now look like this:
         </para>
-        <programlisting language="bash">
+        <programlisting language="nix">
 {
   services.dovecot2.mailboxes = {
     Junk.auto = &quot;create&quot;;
@@ -1934,8 +1934,8 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         </para>
         <para>
           If you have an existing installation, please make sure that
-          you're on nextcloud18 before upgrading to nextcloud19 since
-          Nextcloud doesn't support upgrades across multiple major
+          you’re on nextcloud18 before upgrading to nextcloud19 since
+          Nextcloud doesn’t support upgrades across multiple major
           versions.
         </para>
       </listitem>

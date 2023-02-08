@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace " --cov=strenum --cov-report term-missing --black --pylint" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

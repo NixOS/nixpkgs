@@ -17,6 +17,8 @@ targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch32 then
+  "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
 else
@@ -83,7 +85,7 @@ edk2 = buildStdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
   };
 
   passthru = {

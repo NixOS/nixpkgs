@@ -52,7 +52,7 @@ buildPythonPackage {
   doCheck = false;
 
   # listed in /backend/tests/downstream/requirements.txt
-  checkInputs = [
+  nativeCheckInputs = [
     build
     packaging
     requests

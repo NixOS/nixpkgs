@@ -1,5 +1,5 @@
 diff --git a/tests/test_cst.py b/tests/test_cst.py
-index c436183..bdba2d7 100644
+index 8532240..bdba2d7 100644
 --- a/tests/test_cst.py
 +++ b/tests/test_cst.py
 @@ -3,7 +3,6 @@ import ast
@@ -15,11 +15,11 @@ index c436183..bdba2d7 100644
  
  
 -@pytest.mark.xfail
--@example("A\u2592", black.FileMode())
+-@example("A\u2592", black.Mode())
 -@given(
 -    source_code=hypothesmith.from_node(),
 -    mode=st.builds(
--        black.FileMode,
+-        black.Mode,
 -        line_length=st.just(88) | st.integers(0, 200),
 -        string_normalization=st.booleans(),
 -        is_pyi=st.booleans(),
@@ -39,28 +39,27 @@ index c436183..bdba2d7 100644
  def test_from_node_always_compilable(source_code):
      compile(source_code, "<string>", "exec")
 diff --git a/tests/test_syntactic.py b/tests/test_syntactic.py
-index 7ea42e9..a77ac39 100644
+index 7fe9835..17c4f7c 100644
 --- a/tests/test_syntactic.py
 +++ b/tests/test_syntactic.py
-@@ -3,8 +3,6 @@ import ast
+@@ -3,7 +3,6 @@ import ast
  import io
  import tokenize
  
 -import black
--import blib2to3
+ import blib2to3
  import parso
  import pytest
- from hypothesis import example, given, reject, strategies as st
-@@ -58,34 +56,6 @@ def test_ast_unparse_from_grammar(source_code):
+@@ -58,34 +57,6 @@ def test_ast_unparse_from_grammar(source_code):
      assert ast.dump(first) == ast.dump(second)
  
  
--@example("\\", black.FileMode())
--@example("A#\r#", black.FileMode())
+-@example("\\", black.Mode())
+-@example("A#\r#", black.Mode())
 -@given(
 -    source_code=hypothesmith.from_grammar(),
 -    mode=st.builds(
--        black.FileMode,
+-        black.Mode,
 -        line_length=st.just(88) | st.integers(0, 200),
 -        string_normalization=st.booleans(),
 -        is_pyi=st.booleans(),

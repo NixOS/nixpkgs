@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.15.0";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-InKVwB031BLOngcLAa1zRbgoswUb4z5I0FPNMZk9KVI=";
+    hash = "sha256-FWdAMIAoj3/+SQLIan++UpmWH1o3v92FsDw//b5RorM=";
   };
 
   buildInputs = [ sqlite zlib ];
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

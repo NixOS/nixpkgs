@@ -24,13 +24,13 @@ let
   cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" torch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uoy9okPvFH89FJPRRFseHQisw42mWCSuPNADoGa39fc=";
+    hash = "sha256-lKkEJolJQaLr1TVm44CizbJQedGa1wyy0cFWg2LTJN0=";
   };
 
   nativeBuildInputs = [ libpng ninja which ]
@@ -56,7 +56,7 @@ in buildPythonPackage rec {
     HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
   '';
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "PyTorch vision library";

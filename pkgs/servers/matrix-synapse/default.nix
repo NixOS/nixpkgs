@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
-, enableSystemd ? stdenv.isLinux, nixosTests
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
+, nixosTests
 , enableRedis ? true
 , callPackage
 }:
@@ -11,20 +12,20 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.73.0";
+  version = "1.76.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-Er5a+0Qyvm5V1ObWjDQ8fs+r/XB+4aRItJMqaz1VSqk=";
+    hash = "sha256-kPc6T8yLe1TDxPKLnK/TcU+RUxAVIq8qsr5JQXCXyjM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-yU72e8OBnUtNdUI/crX7v2KRYHHHOY4Ga9CI3PJwais=";
+    hash = "sha256-tXtnVYH9uWu0nHHx53PgML92NWl3qcAcnFKhiijvQBc=";
   };
 
   postPatch = ''
@@ -65,6 +66,7 @@ buildPythonApplication rec {
     psycopg2
     pyasn1
     pydantic
+    pyicu
     pyjwt
     pymacaroons
     pynacl
@@ -82,7 +84,7 @@ buildPythonApplication rec {
   ] ++ lib.optional enableSystemd systemd
     ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
-  checkInputs = [ mock parameterized openssl ];
+  nativeCheckInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 

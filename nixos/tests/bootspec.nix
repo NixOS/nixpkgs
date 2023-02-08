@@ -43,7 +43,7 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /run/current-system/bootspec/boot.json")
+      machine.succeed("test -e /run/current-system/boot.json")
     '';
   };
 
@@ -65,7 +65,7 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /run/current-system/bootspec/boot.json")
+      machine.succeed("test -e /run/current-system/boot.json")
     '';
   };
 
@@ -86,7 +86,33 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
+      machine.succeed("test -e /run/current-system/boot.json")
+    '';
+  };
+
+  # Check that initrd create corresponding entries in bootspec.
+  initrd = makeTest {
+    name = "bootspec-with-initrd";
+    meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+
+    nodes.machine = {
+      imports = [ standard ];
+      environment.systemPackages = [ pkgs.jq ];
+      # It's probably the case, but we want to make it explicit here.
+      boot.initrd.enable = true;
+    };
+
+    testScript = ''
+      import json
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
       machine.succeed("test -e /run/current-system/bootspec/boot.json")
+
+      bootspec = json.loads(machine.succeed("jq -r '.v1' /run/current-system/bootspec/boot.json"))
+
+      assert all(key in bootspec for key in ('initrd', 'initrdSecrets')), "Bootspec should contain initrd or initrdSecrets field when initrd is enabled"
     '';
   };
 
@@ -107,11 +133,11 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /run/current-system/bootspec/boot.json")
-      machine.succeed("test -e /run/current-system/specialisation/something/bootspec/boot.json")
+      machine.succeed("test -e /run/current-system/boot.json")
+      machine.succeed("test -e /run/current-system/specialisation/something/boot.json")
 
-      sp_in_parent = json.loads(machine.succeed("jq -r '.v1.specialisation.something' /run/current-system/bootspec/boot.json"))
-      sp_in_fs = json.loads(machine.succeed("cat /run/current-system/specialisation/something/bootspec/boot.json"))
+      sp_in_parent = json.loads(machine.succeed("jq -r '.v1.specialisation.something' /run/current-system/boot.json"))
+      sp_in_fs = json.loads(machine.succeed("cat /run/current-system/specialisation/something/boot.json"))
 
       assert sp_in_parent == sp_in_fs['v1'], "Bootspecs of the same specialisation are different!"
     '';
@@ -135,7 +161,7 @@ in
       machine.wait_for_unit("multi-user.target")
 
       current_os_release = machine.succeed("cat /etc/os-release")
-      bootspec_os_release = machine.succeed("cat $(jq -r '.v1.extensions.osRelease' /run/current-system/bootspec/boot.json)")
+      bootspec_os_release = machine.succeed("cat $(jq -r '.v1.extensions.osRelease' /run/current-system/boot.json)")
 
       assert current_os_release == bootspec_os_release, "Filename referenced by extension has unexpected contents"
     '';

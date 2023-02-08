@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ply ];
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     export PYTHONPATH=test_project:$PYTHONPATH

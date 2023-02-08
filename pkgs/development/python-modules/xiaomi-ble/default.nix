@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.12.2";
+  version = "0.16.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MwKhoerfloFT5/x1darfMP/qF5sEy6LiKEogINIUq0c=";
+    hash = "sha256-JsrOt6LmmhJZ4MBwLVKKt3IMbvAnxJx70AZROhb9gbc=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

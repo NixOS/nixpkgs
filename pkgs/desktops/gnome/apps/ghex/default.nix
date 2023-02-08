@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];

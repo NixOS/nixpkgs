@@ -63,7 +63,7 @@ in buildPythonPackage rec {
 
   # tests now require pytest-mpi, which isn't available and difficult to package
   doCheck = false;
-  checkInputs = [ pytestCheckHook openssh ];
+  nativeCheckInputs = [ pytestCheckHook openssh ];
 
   pythonImportsCheck = [ "h5py" ];
 

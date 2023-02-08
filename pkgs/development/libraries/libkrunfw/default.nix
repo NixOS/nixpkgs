@@ -13,21 +13,21 @@
 assert sevVariant -> stdenv.isx86_64;
 stdenv.mkDerivation rec {
   pname = "libkrunfw";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6jFIfTPjI6Eq0SFdQVxqqoBDW00AsDz/xHN+n6DezME=";
+    hash = "sha256-hpVE7g6V3nquZ3R5fQCcfRWuFDHJ3rgisezwdsDMaGg=";
   } else fetchurl {
     url = "https://github.com/containers/libkrunfw/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-i7btjGBgb93tHshIS02Rp492iB4aG0N4UuRwv6Pkukg=";
+    hash = "sha256-moZ2LYLhZDb8Y8jgWbdgK6SbJ8lY8f356d5vKHc/54Q=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.0.6.tar.xz";
-    hash = "sha256-hksFry2Gm6c9YanFlZ5FMaFBqyvXshdINnH2Jfl0f6o=";
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.6.tar.xz";
+    hash = "sha256-Pk2OVh2lcDogWujXsr7WxcZPxCme68v9IEgeY7V9XuM=";
   };
 
   preBuild = ''
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
   };
 }

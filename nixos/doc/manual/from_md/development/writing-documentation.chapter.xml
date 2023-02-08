@@ -23,7 +23,7 @@ $ nix-shell
 nix-shell$ make
 </programlisting>
     <para>
-      Once you are done making modifications to the manual, it's
+      Once you are done making modifications to the manual, it’s
       important to build it before committing. You can do that as
       follows:
     </para>

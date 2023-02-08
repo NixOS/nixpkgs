@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "reqif"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, fetchpatch
 , bash
 , makeWrapper
 , bc
@@ -25,16 +26,28 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1l09d543b73r0wbpsj5m6kski8nq48lbraq1myxhidkgl3mm3d5i";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://code.opensuse.org/package/bootiso/raw/3799710e3da40c1b429ea1a2ce3896d18d08a5c5/f/syslinux-lib-root.patch";
+      sha256 = "sha256-x2EJppQsPPymSrjRwEy7mylW+2OKcGzKsKF3y7fzrB8=";
+    })
+  ];
+
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+  postPatch = ''
+    substituteInPlace bootiso \
+      --replace "\$(basename \"\$0\")" "bootiso" \
+      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/bootiso \
       --prefix PATH : ${lib.makeBinPath [ bc jq coreutils util-linux wimlib file syslinux gnugrep busybox ]} \
-      --prefix BOOTISO_SYSLINUX_LIB_ROOT : ${syslinux}/share/syslinux
   '';
 
   meta = with lib; {

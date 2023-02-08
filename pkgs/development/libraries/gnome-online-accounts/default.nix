@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       versionPolicy = "odd-unstable";

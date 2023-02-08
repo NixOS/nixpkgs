@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

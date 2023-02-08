@@ -55,7 +55,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

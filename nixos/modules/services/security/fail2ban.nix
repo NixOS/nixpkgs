@@ -62,11 +62,10 @@ in
       };
 
       packageFirewall = mkOption {
-        default = pkgs.iptables;
-        defaultText = literalExpression "pkgs.iptables";
+        default = config.networking.firewall.package;
+        defaultText = literalExpression "config.networking.firewall.package";
         type = types.package;
-        example = literalExpression "pkgs.nftables";
-        description = lib.mdDoc "The firewall package used by fail2ban service.";
+        description = lib.mdDoc "The firewall package used by fail2ban service. Defaults to the package for your firewall (iptables or nftables).";
       };
 
       extraPackages = mkOption {
@@ -86,24 +85,24 @@ in
       };
 
       banaction = mkOption {
-        default = "iptables-multiport";
+        default = if config.networking.nftables.enable then "nftables-multiport" else "iptables-multiport";
+        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-multiport" else "iptables-multiport"'';
         type = types.str;
-        example = "nftables-multiport";
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
-          iptables-ipset-proto6-allports, shorewall, etc) It is used to
+          iptables-ipset-proto6-allports, shorewall, etc). It is used to
           define action_* variables. Can be overridden globally or per
           section within jail.local file
         '';
       };
 
       banaction-allports = mkOption {
-        default = "iptables-allport";
+        default = if config.networking.nftables.enable then "nftables-allport" else "iptables-allport";
+        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-allport" else "iptables-allport"'';
         type = types.str;
-        example = "nftables-allport";
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
-          shorewall, etc) It is used to define action_* variables. Can be overridden
+          shorewall, etc) for "allports" jails. It is used to define action_* variables. Can be overridden
           globally or per section within jail.local file
         '';
       };
@@ -340,7 +339,7 @@ in
     # Block SSH if there are too many failing connection attempts.
     # Benefits from verbose sshd logging to observe failed login attempts,
     # so we set that here unless the user overrode it.
-    services.openssh.logLevel = lib.mkDefault "VERBOSE";
+    services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
     services.fail2ban.jails.sshd = mkDefault ''
       enabled = true
       port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}

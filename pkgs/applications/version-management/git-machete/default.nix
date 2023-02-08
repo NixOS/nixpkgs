@@ -12,18 +12,22 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.13.0";
+  version = "3.14.3";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ku142NjiDTxiZ50Sm6vZs5ZHJ25oALnLQw8ThWqQ2rE=";
+    hash = "sha256-VOny8r00JYUT4Z7LukvWTH9ZTn86vn2Dc1YhPmtdE5s=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ git pytest-mock pytestCheckHook ];
+  nativeCheckInputs = [
+    git
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
@@ -36,14 +40,13 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
+    changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ blitz ];
   };

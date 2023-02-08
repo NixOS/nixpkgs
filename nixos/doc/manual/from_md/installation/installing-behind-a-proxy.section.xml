@@ -11,7 +11,7 @@
         <literal>/mnt/etc/nixos/configuration.nix</literal> to keep the
         internet accessible after reboot.
       </para>
-      <programlisting language="bash">
+      <programlisting language="nix">
 networking.proxy.default = &quot;http://user:password@proxy:port/&quot;;
 networking.proxy.noProxy = &quot;127.0.0.1,localhost,internal.domain&quot;;
 </programlisting>

@@ -2,7 +2,8 @@
 , sqlite, wxGTK32, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 , GLUT
-} :
+, withGui ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "limesuite";
@@ -19,20 +20,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
-  ];
+  ] ++ lib.optional (!withGui) "-DENABLE_GUI=OFF";
 
   buildInputs = [
     libusb1
     sqlite
-    wxGTK32
-    fltk
     gnuplot
     libusb1
     soapysdr
-    mesa_glu
-    libX11
   ] ++ lib.optionals stdenv.isDarwin [
     GLUT
+  ] ++ lib.optionals withGui [
+    fltk
+    libX11
+    mesa_glu
+    wxGTK32
   ];
 
   postInstall = ''

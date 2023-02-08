@@ -33,7 +33,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     azure-servicebus
     case
     Pyro4

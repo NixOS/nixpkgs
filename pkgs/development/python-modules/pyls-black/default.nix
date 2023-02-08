@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ black toml python-language-server ];
 

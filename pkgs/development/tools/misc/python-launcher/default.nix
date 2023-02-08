@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-2lgWybEPi6HEUMYuGDRWMjWoc94CrFHPP5IeKUjj0q4=";
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   useNextest = true;
 

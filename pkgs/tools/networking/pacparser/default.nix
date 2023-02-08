@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "pacparser";
-  version = "1.3.7";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/manugarg/pacparser/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0jfjm8lqyhdy9ny8a8icyd4rhclhfn608cr1i15jml82q8pyqj7b";
+  src = fetchFromGitHub {
+    owner = "manugarg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-XtYXUqmBnsqI+0b7Dnynni544d49z1eGH8ihAAqQe7Q=";
   };
 
   makeFlags = [ "NO_INTERNET=1" ];
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library to parse proxy auto-config (PAC) files";
-    homepage = "http://pacparser.manugarg.com/";
+    homepage = "https://pacparser.manugarg.com/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -2,12 +2,11 @@
 
 let
   pname = "sawja";
-  version = "1.5.11";
+  version = "1.5.12";
 in
 
-if lib.versionOlder ocaml.version "4.07"
-then throw "${pname} is not available for OCaml ${ocaml.version}"
-else
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
+  "${pname} is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation {
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation {
     owner = "javalib-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1aKkRZDuLJLmDhUC1FXnn4QrgXaTyAbnXfTOAdnKgs8=";
+    hash = "sha256-G1W8/G0TEcldnFnH/NAb9a6ZSGGP2fWTM47lI8bBHnw=";
   };
 
   nativeBuildInputs = [ which ocaml findlib ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
 
-  checkInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
+  nativeCheckInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
 
   meta = with lib; {
     broken = stdenv.isDarwin;

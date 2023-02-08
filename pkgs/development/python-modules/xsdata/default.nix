@@ -46,7 +46,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.cli
     ++ passthru.optional-dependencies.lxml

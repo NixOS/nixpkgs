@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # enable these dependencies when doInstallCheck is false because we're
     # unconditionally building tests and benchmarks
     #
-    # when doInstallCheck is true, these deps are added to installCheckInputs
+    # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
     gbenchmark
     gtest
   ];
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installCheckInputs = lib.optionals doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     gbenchmark
     gtest
   ];
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     # this adds a good chunk of time to the build
     "-DBUILD_TESTING:BOOL=ON"
     "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
-    "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}"
   ] ++ lib.optionals (apis != [ "*" ]) [
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];

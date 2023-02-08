@@ -2,15 +2,18 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
+, flit-core
 , markdown-it-py
 , pytest-regressions
 , pytestCheckHook
+# allow disabling tests for the nixos manual build.
+# the test suite closure is just too large.
+, disableTests ? false
 }:
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.3.0";
+  version = "0.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,19 +21,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-3zFSTjqwjUV6+fU6falYbIzj/Hp7E/9EXKZIi00tkg4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9eaVM5KxrMY5q0c2KWmctCHyPGmEGGNa9B3LoRL/mcI=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = [
     markdown-it-py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = lib.optionals (!disableTests) [
     pytestCheckHook
     pytest-regressions
   ];

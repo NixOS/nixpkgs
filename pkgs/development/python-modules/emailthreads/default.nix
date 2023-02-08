@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   PKGVER = version;
 

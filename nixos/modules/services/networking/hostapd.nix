@@ -94,7 +94,8 @@ in
       };
 
       ssid = mkOption {
-        default = "nixos";
+        default = config.system.nixos.distroId;
+        defaultText = literalExpression "config.system.nixos.distroId";
         example = "mySpecialSSID";
         type = types.str;
         description = lib.mdDoc "SSID to be used in IEEE 802.11 management frames.";

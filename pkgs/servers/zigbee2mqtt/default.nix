@@ -8,25 +8,23 @@
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
-  version = "1.28.4";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    hash = "sha256-7eyCmgpbcjPrpFHscHTab6xRnL4ABvaYaaVcbUcynT8=";
+    hash = "sha256-e/pV2W9POUxKhuX5RT9INEqneC65V4dg66ywTR9YUyI=";
   };
 
-  npmDepsHash = "sha256-qQPn2BwXwXyzyPYYRmgIvzJENZ/XKWATcludorlFEZw=";
+  npmDepsHash = "sha256-sHXTwT5gXi5CkfMU/eZDMgsX2qymMhvUEtfUo6MV3hA=";
 
   nativeBuildInputs = [
     python3
   ];
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/Koenkk/zigbee2mqtt/releases/tag/${version}";

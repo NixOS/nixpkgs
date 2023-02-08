@@ -23,7 +23,7 @@ buildPythonPackage rec {
     marshmallow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

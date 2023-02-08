@@ -102,7 +102,7 @@ in {
           Extra directives added to to the end of MPD's configuration file,
           mpd.conf. Basic configuration like file location and uid/gid
           is added automatically to the beginning of the file. For available
-          options see `man 5 mpd.conf`'.
+          options see {manpage}`mpd.conf(5)`.
         '';
       };
 

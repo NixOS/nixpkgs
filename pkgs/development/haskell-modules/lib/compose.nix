@@ -109,8 +109,9 @@ rec {
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
 
-  /* doBenchmark enables dependency checking, compilation and execution
+  /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
+     Benchmarks are, however, not executed at the moment.
    */
   doBenchmark = overrideCabal (drv: { doBenchmark = true; });
   /* dontBenchmark disables dependency checking, compilation and execution

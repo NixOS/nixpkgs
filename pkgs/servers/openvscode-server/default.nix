@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, runCommand
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, libsecret, xorg, ripgrep
+, esbuild, nodejs-16_x, libsecret, xorg, ripgrep
 , AppKit, Cocoa, Security, cctools }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs-14_x;
+  nodejs = nodejs-16_x;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
@@ -17,29 +17,42 @@ let
     aarch64-darwin = "darwin-arm64";
   }.${system} or (throw "Unsupported system ${system}");
 
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.16.17";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+      };
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+    });
+  };
+
   # replaces esbuild's download script with a binary from nixpkgs
   patchEsbuild = path : version : ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
+    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
+    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.69.2";
+  version = "1.75.0";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "e2vEEZg2H37oFRN+0kZnWW5RU2ma2JJR66XLFDNEOXc=";
+    sha256 = "ZR4gEE+bLVjcGxhoRYQqfxDjk0ulPmdb5IV041qf954=";
   };
 
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    nativeBuildInputs = [ cacert yarn git ];
+    nativeBuildInputs = [ cacert yarn' git ];
     buildPhase = ''
       export HOME=$PWD
 
@@ -56,15 +69,8 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-5wOR7rKzGLE8EAlGd4CkrFUsUOEJOdwuNWQzEdbAL+g=";
+    outputHash = "sha256-KcGhHFglBJDyircYUxpsMLRtQblYx3u/BMQq35A0qhE=";
   };
-
-  # Extract the Node.js source code which is used to compile packages with
-  # native bindings
-  nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
-    mv node-* $out
-  '';
 
   nativeBuildInputs = [
     nodejs yarn' python3 pkg-config makeWrapper git jq moreutils
@@ -102,9 +108,9 @@ in stdenv.mkDerivation rec {
 
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
-  '' + lib.optionalString stdenv.isLinux ''
+
     # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodeSources}"
+    npm config set nodedir "${nodejs}"
   '';
 
   buildPhase = ''
@@ -136,6 +142,8 @@ in stdenv.mkDerivation rec {
     jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
     popd
   '' + ''
+    export NODE_OPTIONS=--openssl-legacy-provider
+
     # rebuild binaries, we use npm here, as yarn does not provide an alternative
     # that would not attempt to try to reinstall everything and break our
     # patching attempts

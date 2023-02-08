@@ -4,7 +4,7 @@
 , hatchling
 , ipykernel
 , jedi
-, jupyter_core
+, jupyter-core
 , pexpect
 , pythonOlder
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ipykernel
     jedi
-    jupyter_core
+    jupyter-core
     pexpect
   ];
 

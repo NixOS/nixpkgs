@@ -55,8 +55,6 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "SDL2";
   version = "2.24.2";
@@ -88,40 +86,40 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland wayland-scanner ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals waylandSupport [ wayland wayland-scanner ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ optional openglSupport libGL
+    ++ lib.optional openglSupport libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ optionals x11Support [ libX11 xorgproto ];
+    ++ lib.optionals x11Support [ libX11 xorgproto ];
 
-  dlopenBuildInputs = optionals alsaSupport [ alsa-lib audiofile ]
-    ++ optional dbusSupport dbus
-    ++ optional libdecorSupport libdecor
-    ++ optional pipewireSupport pipewire
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional udevSupport udev
-    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
-    ++ optionals drmSupport [ libdrm mesa ];
+  dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional libdecorSupport libdecor
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional udevSupport udev
+    ++ lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
+    ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
-    ++ optional ibusSupport ibus
-    ++ optional fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+    ++ lib.optional ibusSupport ibus
+    ++ lib.optional fcitxSupport fcitx
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-oss"
-  ] ++ optional (!x11Support) "--without-x"
-  ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-  ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
-  ++ optional stdenv.isDarwin "--disable-sdltest";
+  ] ++ lib.optional (!x11Support) "--without-x"
+  ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+  ++ lib.optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
+  ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
   # because they make the builds of downstream libs like `SDL_tff`
@@ -156,9 +154,9 @@ stdenv.mkDerivation rec {
   # list the symbols used in this way.
   postFixup =
     let
-      rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+      rpath = lib.makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
     in
-    optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
+    lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
       for lib in $out/lib/*.so* ; do
         if ! [[ -L "$lib" ]]; then
           patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"

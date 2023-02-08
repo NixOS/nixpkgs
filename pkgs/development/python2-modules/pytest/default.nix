@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
   '';
 
-  checkInputs = [ hypothesis mock ];
+  nativeCheckInputs = [ hypothesis mock ];
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ lib.optionals (!isPy3k) [ funcsigs ]

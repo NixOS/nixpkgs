@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.22.3";
+  version = "1.22.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-JOhsV4NyY5OW4smDEup1i9MTSQzK4Ldut/VybPB9ulc=";
+    sha256 = "sha256-ktK/s9Tt1XNIiW/Ztn4znsPXIMrScB4KAS027YqxIVM=";
   };
 
   propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jc" ];
 

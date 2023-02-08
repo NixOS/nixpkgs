@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';
 
+  passthru = {
+    libName = "c++abi";
+  };
+
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";
     description = "Provides C++ standard library support";

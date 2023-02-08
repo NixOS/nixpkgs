@@ -15,7 +15,7 @@
 , rustPlatform
 , rustc
 , rust
-, cargo
+, cargo-auditable-cargo-wrapper
 , gi-docgen
 , python3Packages
 , gnome
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     pkg-config
     rustc
-    cargo
+    cargo-auditable-cargo-wrapper
     python3Packages.docutils
     vala
     rustPlatform.cargoSetupHook

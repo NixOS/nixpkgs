@@ -1,5 +1,6 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
+, nixosTests
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
 , adns, bzip2, gnutls, libusb1, openldap
 , pinentry, readline, sqlite, zlib
@@ -57,7 +58,8 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ lib.optional withTpm2Tss "--with-tss=intel";
+  ++ lib.optional withTpm2Tss "--with-tss=intel"
+  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
@@ -83,6 +85,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.connman = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";

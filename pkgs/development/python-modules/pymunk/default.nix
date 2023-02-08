@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py build_ext --inplace
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

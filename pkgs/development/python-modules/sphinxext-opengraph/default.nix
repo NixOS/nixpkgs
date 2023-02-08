@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
-    rev = "v${version}";
-    hash = "sha256-KzbtuDTMXsp9yf3hiiG6VzpUbSEm3bOtujApsG37H14=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fNtXj7iYX7rSaGO6JcxC+PvR8WzTFl8gYwHyRExYdfI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
   ];

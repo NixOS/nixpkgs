@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "1.12.2";
+  version = "1.12.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QVZlf7t925RFVNBxOj39Ln7sezTkwQ065sbVFcoQG4Y=";
+    hash = "sha256-04Xl2TBs9RL+KWmJgUY+PDoYN4AAvrcWP7TJBEu5lNU=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

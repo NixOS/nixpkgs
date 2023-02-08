@@ -13,7 +13,7 @@
 , alsa-lib, cairo, acl, gpm, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , recurseIntoAttrs, emacsPackagesFor
-, libgccjit, targetPlatform, makeWrapper # native-comp params
+, libgccjit, makeWrapper # native-comp params
 , fetchFromSavannah, fetchFromBitbucket
 
   # macOS dependencies for NS and macPort
@@ -44,7 +44,7 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
-, withSystemd ? stdenv.isLinux, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug

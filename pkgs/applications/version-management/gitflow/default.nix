@@ -1,6 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub }:
-
-with pkgs.lib;
+{ lib, stdenv, fetchFromGitHub, makeWrapper, getopt, git, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "gitflow";
@@ -13,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preBuild = ''
     makeFlagsArray+=(prefix="$out")
@@ -21,9 +19,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-flow \
-      --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt \
-      --suffix PATH : ${pkgs.git}/bin \
-      --prefix PATH : ${pkgs.coreutils}/bin
+      --set FLAGS_GETOPT_CMD ${getopt}/bin/getopt \
+      --suffix PATH : ${git}/bin \
+      --prefix PATH : ${coreutils}/bin
   '';
 
   meta = with lib; {

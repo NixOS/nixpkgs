@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = with python3Packages; [ mediafile ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3Packages.pytestCheckHook
     beets
   ];

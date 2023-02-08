@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://dspam.sourceforge.net/";
+    homepage = "https://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

@@ -1,43 +1,52 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc-google-iam-v1
+, google-api-core
 , google-cloud-core
 , google-cloud-testutils
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
-, sqlparse
+, pytestCheckHook
 , pythonOlder
+, sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.24.0";
+  version = "3.27.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ko/9gfcR7BBX+U60vlWgdh4d1xptUJRRyWmAGq6a4/E=";
+    hash = "sha256-6zrAz+VqO8ojC+E0wcYMktZpnWF7skSj6R4GRrJ3nOs=";
   };
 
   propagatedBuildInputs = [
+    google-api-core
     google-cloud-core
     grpc-google-iam-v1
-    libcst
     proto-plus
+    protobuf
     sqlparse
-  ];
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   preCheck = ''

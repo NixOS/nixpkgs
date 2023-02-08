@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "1228plh55id03qywsw0ai88ypdpbh9iz18jfcyhn21pci7mj77fv";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     mercurial
     pytest

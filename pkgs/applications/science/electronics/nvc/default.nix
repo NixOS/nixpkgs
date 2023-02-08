@@ -8,19 +8,20 @@
 , which
 , elfutils
 , libelf
+, libffi
 , llvm
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "sha256-7N11S7OiAogyuNqrf7R5NZyVbiXgXxJ5t6lwBzL0YAU=";
+    hash = "sha256-9ziGNAZgUYnBofx7YwSzAgL4zIAwoPYMsGWBYs+xtg0=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libffi
     llvm
     zlib
   ] ++ [

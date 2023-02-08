@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
   ];
 

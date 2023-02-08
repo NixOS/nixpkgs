@@ -9,7 +9,7 @@
 , bzip2
 , curl
 , cyrus_sasl
-, enchant1
+, enchant2
 , fetchpatch
 , freetds
 , freetype
@@ -30,6 +30,7 @@
 , libxslt
 , libzip
 , net-snmp
+, nix-update-script
 , oniguruma
 , openldap
 , openssl_1_1
@@ -51,13 +52,16 @@ lib.makeScope pkgs.newScope (self: with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     php = php.unwrapped;
     inherit lib;
-    inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
+    inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
     pname = "php-${pname}";
+    passthru = {
+      updateScript = nix-update-script {};
+    };
     meta = args.meta // {
       mainProgram = args.meta.mainProgram or pname;
     };
@@ -80,6 +84,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     , zendExtension ? false
     , doCheck ? true
     , extName ? name
+    , allowLocalNetworking ? false
     , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
@@ -99,6 +104,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
+      __darwinAllowLocalNetworking = allowLocalNetworking;
 
       preConfigurePhases = [
         "cdToExtensionRootPhase"
@@ -133,8 +139,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       checkPhase = ''
         runHook preCheck
 
-        NO_INTERACTON=yes SKIP_PERF_SENSITIVE=yes make test
-
+        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes make test
         runHook postCheck
       '';
 
@@ -170,6 +175,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
+
+    phan = callPackage ../development/php-packages/phan { };
 
     phing = callPackage ../development/php-packages/phing { };
 
@@ -306,10 +313,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "enchant";
-          buildInputs = [ enchant1 ];
-          configureFlags = [ "--with-enchant=${enchant1}" ];
-          # enchant1 doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ enchant2 ];
+          configureFlags = [ "--with-enchant" ];
           doCheck = false;
         }
         { name = "exif"; doCheck = false; }
@@ -409,7 +414,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           ];
           zendExtension = true;
           # Tests launch the builtin webserver.
-          __darwinAllowLocalNetworking = true;
+          allowLocalNetworking = true;
         }
         {
           name = "openssl";

@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace '"unittest2",' ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, nix-update-script }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.0";
+  version = "0.1.3";
   pname = "open-pdf-sign";
 
   src = fetchurl {
     url = "https://github.com/open-pdf-sign/open-pdf-sign/releases/download/v${version}/open-pdf-sign.jar";
-    sha256 = "AfxpqDLIycXMQmYexRoFh5DD/UCBHrnGSMjfjljvKs4=";
+    sha256 = "sha256-LW+H4LzXxip2XXZtQs0mBKHpb/Byi5v7QIWdF+X5ulk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/open-pdf-sign \
       --add-flags "-jar $out/lib/open-pdf-sign.jar"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Digitally sign PDF files from your commandline";

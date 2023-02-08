@@ -27,7 +27,7 @@ buildPythonPackage rec {
   #doCheck = !(python.isPyPy && python.isPy27);
   doCheck = false; # Infinite recursion pytest
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
     pytest
   ];

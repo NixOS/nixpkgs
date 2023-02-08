@@ -6,6 +6,7 @@
 , cython
 , doCheck ? true
 , fetchFromGitHub
+, ipython
 , matplotlib
 , numpy
 , packaging
@@ -40,10 +41,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
-  ] ++ passthru.optional-dependencies.graphics;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Disabling OpenMP support on Darwin.
   setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [
@@ -74,6 +75,9 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     graphics = [
       matplotlib
+    ];
+    ipython = [
+      ipython
     ];
     semidefinite = [
       cvxpy

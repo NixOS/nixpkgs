@@ -17,7 +17,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ inflect more-itertools six ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # tests no longer available through pypi
   doCheck = false;

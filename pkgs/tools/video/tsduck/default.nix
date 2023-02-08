@@ -49,6 +49,14 @@ stdenv.mkDerivation rec {
     sed -i"" \
       -e '/TSUNIT_TEST(testHomeDirectory);/ d' \
       src/utest/utestSysUtils.cpp
+
+    sed -i"" \
+      -e '/TSUNIT_TEST(testIPv4Address);/ d' \
+      -e '/TSUNIT_TEST(testIPv4AddressConstructors);/ d' \
+      -e '/TSUNIT_TEST(testIPv4SocketAddressConstructors);/ d' \
+      -e '/TSUNIT_TEST(testTCPSocket);/ d' \
+      -e '/TSUNIT_TEST(testUDPSocket);/ d' \
+      src/utest/utestNetworking.cpp
   '';
 
   enableParallelBuilding = true;

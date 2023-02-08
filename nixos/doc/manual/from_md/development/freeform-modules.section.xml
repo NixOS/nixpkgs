@@ -30,7 +30,7 @@
     type-checked <literal>settings</literal> attribute</link> for a more
     complete example.
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { lib, config, ... }: {
 
   options.settings = lib.mkOption {
@@ -52,7 +52,7 @@
   <para>
     And the following shows what such a module then allows
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 {
   # Not a declared option, but the freeform type allows this
   settings.logLevel = &quot;debug&quot;;
@@ -72,7 +72,7 @@
       Freeform attributes cannot depend on other attributes of the same
       set without infinite recursion:
     </para>
-    <programlisting language="bash">
+    <programlisting language="nix">
 {
   # This throws infinite recursion encountered
   settings.logLevel = lib.mkIf (config.settings.port == 80) &quot;debug&quot;;

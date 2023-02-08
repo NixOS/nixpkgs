@@ -37,5 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/avantrec/soco-cli";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sonos";
   };
 }

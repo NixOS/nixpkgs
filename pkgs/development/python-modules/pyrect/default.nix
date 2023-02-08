@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-9lFV9t+bkptnyv+9V8CUfFrlRJ07WA0XgHS/+0egm3g=";
   };
 
-  checkInputs = [ pytestCheckHook pygame ];
+  nativeCheckInputs = [ pytestCheckHook pygame ];
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"

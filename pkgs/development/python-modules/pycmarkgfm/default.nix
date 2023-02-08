@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # pytest in an environment that does not contain this extension, which fails.
   # cmarkgfm has virtually the same build setup as this package, and uses the
   # same trick: pkgs/development/python-modules/cmarkgfm/default.nix
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

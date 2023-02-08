@@ -79,6 +79,9 @@ replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
 
   outputs = [ "out" "man" ];
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";

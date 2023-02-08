@@ -11,6 +11,8 @@
 , pytest-timeout
 , pytestCheckHook
 , python
+, CoreServices
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -33,6 +35,11 @@ buildPythonPackage rec {
     hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
   };
 
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    libiconv
+  ];
+
   nativeBuildInputs = [
   ] ++ (with rustPlatform; [
     cargoSetupHook
@@ -45,7 +52,7 @@ buildPythonPackage rec {
     anyio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dirty-equals
     pytest-mock
     pytest-timeout
@@ -69,6 +76,5 @@ buildPythonPackage rec {
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }

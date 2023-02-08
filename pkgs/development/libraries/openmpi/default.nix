@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, perl, libnl
+{ lib, stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
 
@@ -31,6 +31,14 @@ in stdenv.mkDerivation rec {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
     sha256 = "03ckngrff1cl0l81vfvrfhp99rbgk7s0633kr1l468yibwbjx4cj";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "RDMA-osc-perform-CAS-in-shared-memory-if-possible.patch";
+      url = "https://github.com/open-mpi/ompi/pull/10513/commits/0512c135a77a0278e5288e0e119dce24c95ebed4.patch";
+      sha256 = "sha256-K1Gc+hBUkTPY1WqLP6JWo623EUhkoL4ONrqPVDNfFuE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./

@@ -39,7 +39,7 @@ buildPythonPackage rec {
     BTrees
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     manuel
     zope_testrunner
   ];

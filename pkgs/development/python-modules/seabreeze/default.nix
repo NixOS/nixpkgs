@@ -54,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   # few backends enabled, but still some tests
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     zipp

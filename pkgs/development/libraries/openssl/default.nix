@@ -241,6 +241,9 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
+
+       # Remove with 3.0.8 release
+       ./3.0/CVE-2022-3996.patch
     ];
 
     withDocs = true;

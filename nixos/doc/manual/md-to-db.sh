@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/tarball/21.11 -i bash -p pandoc
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/tarball/22.11 -i bash -p pandoc
 
 # This script is temporarily needed while we transition the manual to
 # CommonMark. It converts the .md files in the regular manual folder
@@ -7,6 +7,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 pushd "$DIR"
+
+link_manpages_filter=$(nix-build --no-out-link "$DIR/../../../doc/build-aux/pandoc-filters/link-manpages.nix")
 
 # NOTE: Keep in sync with Nixpkgs manual (/doc/Makefile).
 # TODO: Remove raw-attribute when we can get rid of DocBook altogether.
@@ -17,7 +19,7 @@ pandoc_flags=(
   # - media extraction (was only required for diagram generator)
   # - docbook-reader/citerefentry-to-rst-role.lua (only relevant for DocBook → MarkDown/rST/MyST)
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/myst-reader/roles.lua"
-  "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/link-unix-man-references.lua"
+  "--lua-filter=$link_manpages_filter"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/rst-roles.lua"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/html-elements.lua"
   "--lua-filter=$DIR/../../../doc/build-aux/pandoc-filters/docbook-writer/labelless-link-is-xref.lua"

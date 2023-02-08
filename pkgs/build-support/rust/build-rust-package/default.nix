@@ -5,12 +5,14 @@
 , stdenv
 , callPackage
 , cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
 , cargoNextestHook
 , cargoSetupHook
+, cargo
+, cargo-auditable
+, cargo-auditable-cargo-wrapper
 , rustc
 , libiconv
 , windows
@@ -42,6 +44,8 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
+, auditable ? false # TODO: change to true
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -115,9 +119,12 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (cargo-auditable-cargo-wrapper.override {
+      inherit cargo cargo-auditable;
+    })
+  ] ++ [
     cacert
-    git
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
@@ -126,6 +133,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   ];
 
   buildInputs = buildInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;

@@ -12,6 +12,7 @@
 , youtube-dl
 , opusTools
 , gst_all_1
+, enableSonos ? true
 }:
 let packages = [
   vorbis-tools
@@ -37,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; ([
     PyChromecast
     psutil
     mutagen
@@ -45,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     netifaces
     requests
     pyqt5
-  ];
+  ] ++ lib.optionals enableSonos [ soco ]);
 
   postPatch = ''
     substituteInPlace setup.py \

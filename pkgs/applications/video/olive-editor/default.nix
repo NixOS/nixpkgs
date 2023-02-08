@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "151g6jwhipgbq4llwib92sq23p1s9hm6avr7j4qq3bvykzrm8z1a";
   };
 
+  patches = [
+    ./q-painter-path.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     which

@@ -31,7 +31,7 @@ buildPythonPackage {
   nativeBuildInputs = [ cython ];
 
   # numpy is optional - if not supplied, tests simply have less coverage
-  checkInputs = [ numpy ];
+  nativeCheckInputs = [ numpy ];
   # checkPhase begins by deleting source dir to force test execution against installed version
   checkPhase = ''
     rm -r code/png

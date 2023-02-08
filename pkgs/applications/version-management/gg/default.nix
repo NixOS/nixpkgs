@@ -36,7 +36,7 @@ in buildGoModule {
   vendorSha256 = "214dc073dad7b323ea449acf24c5b578d573432eeaa1506cf5761a2d7f5ce405";
 
   nativeBuildInputs = [ pandoc installShellFiles makeWrapper ];
-  checkInputs = [ bash coreutils git ];
+  nativeCheckInputs = [ bash coreutils git ];
   buildInputs = [ bash git ];
 
   postInstall = ''

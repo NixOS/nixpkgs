@@ -8,18 +8,13 @@ Subject: [PATCH] Explicitly copy dbus files into the store dir
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/shell_integration/libcloudproviders/CMakeLists.txt b/shell_integration/libcloudproviders/CMakeLists.txt
-index 1f35335..7f76951 100644
+index 2e7349ef7..512d4b188 100644
 --- a/shell_integration/libcloudproviders/CMakeLists.txt
 +++ b/shell_integration/libcloudproviders/CMakeLists.txt
-@@ -19,7 +19,7 @@ MACRO(PKGCONFIG_GETVAR _package _var _output_variable)
- ENDMACRO(PKGCONFIG_GETVAR _package _var _output_variable)
- 
+@@ -1,5 +1,6 @@
  macro(dbus_add_activation_service _sources)
--    PKGCONFIG_GETVAR(dbus-1 session_bus_services_dir _install_dir)
+     pkg_get_variable(_install_dir dbus-1 session_bus_services_dir)
 +    set(_install_dir "${CMAKE_INSTALL_DATADIR}/dbus-1/service")
      foreach (_i ${_sources})
          get_filename_component(_service_file ${_i} ABSOLUTE)
          string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
--- 
-2.19.2
-

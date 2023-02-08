@@ -31,7 +31,7 @@ buildPythonPackage rec {
     python-keystoneclient
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     openstacksdk
     stestr

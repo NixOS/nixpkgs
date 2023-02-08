@@ -6,15 +6,16 @@
 , sphinx
 , nixosTests
 , pkgs
+, fetchPypi
 }:
 
 let
   pname = "pgadmin";
-  version = "6.17";
+  version = "6.19";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-fcMNqki0namB5mRntlJUE9cN+axlw+7b8EA9aactlIw=";
+    sha256 = "sha256-xHvdqVpNU9ZzTA6Xl2Bv044l6Tbvf4fjqyz4TmS9gmI=";
   };
 
   yarnDeps = mkYarnModules {
@@ -69,12 +70,26 @@ let
     azure-mgmt-rdbms
     azure-mgmt-resource
     azure-identity
+    sphinxcontrib-youtube
+    dnspython
+    greenlet
   ];
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # flask 2.2 is incompatible with pgadmin 6.15
+    # flask-security-too 4.1.5 is incompatible with flask-babel 3.x
+    flask-babel = prev.flask-babel.overridePythonAttrs (oldAttrs: rec {
+      version = "2.0.0";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+      };
+      nativeBuildInputs = [ ];
+      format = "setuptools";
+      outputs = [ "out" ];
+    });
+    # flask 2.2 is incompatible with pgadmin 6.18
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
@@ -83,12 +98,21 @@ let
         sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
-    # pgadmin 6.15 is incompatible with the major flask-security-too update to 5.0.x
+    # flask 2.1.3 is incompatible with flask-sqlalchemy > 3
+    flask-sqlalchemy = prev.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      version = "2.5.1";
+      format = "setuptools";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
+      };
+    });
+    # pgadmin 6.19 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+        hash = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
       };
       propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
         final.pythonPackages.flask_mail
@@ -149,7 +173,7 @@ pythonPackages.buildPythonApplication rec {
     do
       if [ -d ''${DIR}_build/html ]; then
           mkdir -p ../pip-build/pgadmin4/docs/''${DIR}_build
-          cp -Rv ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
+          cp -R ''${DIR}_build/html ../pip-build/pgadmin4/docs/''${DIR}_build
       fi
     done
     cd ../

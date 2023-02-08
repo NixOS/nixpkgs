@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "nebula";
@@ -16,6 +16,10 @@ buildGoModule rec {
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   ldflags = [ "-X main.Build=${version}" ];
+
+  passthru.tests = {
+    inherit (nixosTests) nebula;
+  };
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";

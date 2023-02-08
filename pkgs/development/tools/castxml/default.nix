@@ -2,16 +2,19 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, libclang
 , libffi
 , libxml2
-, llvm
-, sphinx
 , zlib
 , withManual ? true
 , withHTML ? true
+, llvmPackages
+, python3
 }:
 
+let
+  inherit (llvmPackages) libclang llvm;
+  inherit (python3.pkgs) sphinx;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
   version = "0.5.1";

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pytz requests ];
-  checkInputs = [ mock pytest pytest-mock requests-kerberos toml ];
+  nativeCheckInputs = [ mock pytest pytest-mock requests-kerberos toml ];
   # TODO requests-kerberos is broken on darwin, weeding out the broken tests without
   # access to macOS is not an adventure I am ready to embark on - @rski
   doCheck = !stdenv.isDarwin;

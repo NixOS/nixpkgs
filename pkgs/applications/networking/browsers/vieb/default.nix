@@ -1,14 +1,17 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
 
+let
+  srcInfo = builtins.fromJSON (builtins.readFile ./pin.json);
+in
 mkYarnPackage rec {
   pname = "vieb";
-  version = "7.2.0";
+  inherit (srcInfo) version;
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4iokmUzs72aVHb95D98ZITRygn4gGAc/K+M5uMnF2NM=";
+    inherit (srcInfo) sha256;
   };
 
   packageJSON = ./package.json;
@@ -37,8 +40,6 @@ mkYarnPackage rec {
     unlink $out/libexec/vieb/deps/vieb/node_modules
     ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
 
-    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
-
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
     pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
@@ -48,16 +49,19 @@ mkYarnPackage rec {
     popd
 
     makeWrapper ${electron}/bin/electron $out/bin/vieb \
-      --add-flags $out/libexec/vieb/node_modules/vieb/app
+      --add-flags $out/libexec/vieb/node_modules/vieb/app \
+      --set npm_package_version ${version}
   '';
 
   distPhase = ":"; # disable useless $out/tarballs directory
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner fortuneteller2k ];
+    maintainers = with maintainers; [ gebner fortuneteller2k tejing ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

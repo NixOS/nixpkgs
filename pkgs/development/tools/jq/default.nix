@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchpatch
-, fetchFromGitHub
+, fetchurl
 , autoreconfHook
 , onigurumaSupport ? true
 , oniguruma
@@ -11,19 +10,14 @@ stdenv.mkDerivation rec {
   pname = "jq";
   version = "1.6";
 
-  src = fetchFromGitHub {
-    owner = "stedolan";
-    repo = "jq";
-    rev = "${pname}-${version}";
-    hash = "sha256-CIE8vumQPGK+TFAncmpBijANpFALLTadOvkob0gVzro";
+  # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
+  src = fetchurl {
+    url = "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
+    sha256 = "sha256-XejI4pqqP7nMa0e7JymfJxNU67clFOOsytx9OLW7qnI=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-tests-when-building-without-regex-supports.patch";
-      url = "https://github.com/stedolan/jq/pull/2292/commits/f6a69a6e52b68a92b816a28eb20719a3d0cb51ae.patch";
-      sha256 = "pTM5FZ6hFs5Rdx+W2dICSS2lcoLY1Q//Lan3Hu8Gr58=";
-    })
+    ./fix-tests-when-building-without-regex-supports.patch
   ];
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
@@ -69,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight and flexible command-line JSON processor";
     homepage = "https://stedolan.github.io/jq/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin globin ];
+    maintainers = with maintainers; [ raskin globin artturin ];
     platforms = platforms.unix;
     downloadPage = "https://stedolan.github.io/jq/download/";
   };

@@ -151,6 +151,13 @@ stdenv.mkDerivation rec {
     git
   ];
 
+  # Workaround cc-wrapper's --sysroot= value for `staging-next`: it
+  # breaks library lookup via RUNPATH:
+  #   ld: warning: libm.so.6, needed by ./generated/linux/release/64/lib.so, not found (try using -rpath or -rpath-link)
+  #   ld: /build/druntime/generated/linux/release/64/libdruntime.so: undefined reference to `log10@GLIBC_2.2.5'
+  # TODO(trofi): remove the workaround once cc-wrapper is fixed.
+  NIX_CFLAGS_COMPILE = [ "--sysroot=/" ];
+
   buildInputs = [
     curl
     tzdata
@@ -158,7 +165,7 @@ stdenv.mkDerivation rec {
     Foundation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb
   ] ++ lib.optionals (lib.versionOlder version "2.089.0") [
     unzip
@@ -213,7 +220,7 @@ stdenv.mkDerivation rec {
     NIX_ENFORCE_PURITY= \
       make -C phobos -f posix.mak unittest $checkFlags -j$checkJobs DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
-    runHook postBuild
+    runHook postCheck
   '';
 
   installPhase = ''

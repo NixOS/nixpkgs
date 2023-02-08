@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.8";
+  version = "3.7.8.2";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-kodRHIkMXdFUBGNVRtSyjbVqGQRxPaHqgp6ddFT5ZIY=";
+    sha256 = "sha256-ZDiiyNT871XMDHNPOhKHm4NzgXHcJ0fN/iO4sEz8pRE=";
   };
 
   buildInputs = [ openssl bzip2 ];

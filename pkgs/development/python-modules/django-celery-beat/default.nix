@@ -32,7 +32,7 @@ buildPythonPackage rec {
     tzdata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephem
     pytest-timeout
     pytest-django

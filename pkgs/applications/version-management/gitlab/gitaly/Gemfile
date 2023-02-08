@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rugged', '~> 1.2'
-gem 'github-linguist', '~> 7.20.0', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.1'
 gem 'activesupport', '~> 6.1.6.1'
 gem 'grpc', '~> 1.42.0' # keep in lock-step with grpc-tools
@@ -13,13 +12,13 @@ gem 'rbtrace', require: false
 gem 'gitaly', '~> 15.5.0'
 
 # Labkit provides observability functionality
-gem 'gitlab-labkit', '~> 0.28'
+gem 'gitlab-labkit', '~> 0.29'
 
 # Detects the open source license the repository includes
 # This version needs to be in sync with GitLab CE/EE
 gem 'licensee', '~> 9.15'
 
-gem 'google-protobuf', '~> 3.21.9'
+gem 'google-protobuf', '~> 3.21.12'
 
 # Rails is currently blocked on the upgrade to the new major version for Redis,
 # so we don't upgrade either until the issue is resolved. This is an indirect
