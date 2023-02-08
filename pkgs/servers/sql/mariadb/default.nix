@@ -45,7 +45,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
         ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
         ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-        ++ (if (lib.versionOlder version "10.6")
+        ++ (if (lib.versionOlder version "10.5")
             then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
             else [ openssl curl ]);
 
@@ -271,6 +271,13 @@ in
       # Supported until 2023-08
       version = "10.9.4";
       hash = "sha256-Hf8IoPN+pc+PAMvRLUDoB1n659cxhMz1a1tRrP3PwFQ=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
+    mariadb_1010 = self.callPackage generic {
+      # Supported until 2023-11
+      version = "10.10.2";
+      hash = "sha256-V8vQESsitZL2V81OuC4vNq2QE1Exe/jheElXjoA/PLI=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

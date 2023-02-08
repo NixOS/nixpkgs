@@ -1,7 +1,7 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Callable, Optional
+from typing import Any, Callable, cast, Iterable, Optional
 
 import re
 
@@ -79,6 +79,11 @@ class Renderer(markdown_it.renderer.RendererProtocol):
         }
         self._admonition_stack = []
 
+    def _join_block(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+    def _join_inline(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+
     def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
         tag = token.info.strip()
@@ -98,7 +103,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_block(map(lambda arg: do_one(*arg), enumerate(tokens)))
     def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         def do_one(i: int, token: Token) -> str:
@@ -106,7 +111,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_inline(map(lambda arg: do_one(*arg), enumerate(tokens)))
 
     def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
              env: MutableMapping[str, Any]) -> str:
@@ -364,14 +369,21 @@ class Converter(ABC):
         # of each item to hidden. this is not useful for our stylesheets, which
         # signify this with a special css class on list elements instead.
         wide_stack = []
+        end_stack = []
         for i in range(0, len(tokens)):
             if tokens[i].type in [ 'bullet_list_open', 'ordered_list_open' ]:
                 wide_stack.append([i, True])
+                end_stack.append([i, cast(int, tokens[i].attrs.get('start', 1))])
             elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
                 (idx, compact) = wide_stack.pop()
-                tokens[idx].attrs['compact'] = compact
+                tokens[idx].meta['compact'] = compact
+                (idx, end) = end_stack.pop()
+                if tokens[i].type == 'ordered_list_close':
+                    tokens[idx].meta['end'] = end - 1
             elif len(wide_stack) > 0 and tokens[i].type == 'paragraph_open' and not tokens[i].hidden:
                 wide_stack[-1][1] = False
+            elif tokens[i].type == 'list_item_open':
+                end_stack[-1][1] += 1
 
         return tokens
 
@@ -379,7 +391,7 @@ class Converter(ABC):
         tokens = self._md.parse(src, env if env is not None else {})
         return self._post_parse(tokens)
 
-    def _render(self, src: str) -> str:
-        env: dict[str, Any] = {}
+    def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
+        env = {} if env is None else env
         tokens = self._parse(src, env)
         return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]

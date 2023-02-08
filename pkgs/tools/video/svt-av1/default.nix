@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ aom bsd3 ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
+    # error: use of undeclared identifier 'kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange'
+    broken = stdenv.isAarch64 && stdenv.isDarwin;
   };
 })
