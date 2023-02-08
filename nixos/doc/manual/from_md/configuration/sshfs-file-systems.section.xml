@@ -12,7 +12,7 @@
   <section xml:id="sec-sshfs-interactive">
     <title>Interactive mounting</title>
     <para>
-      In NixOS, SSHFS is packaged as <package>sshfs</package>. Once
+      In NixOS, SSHFS is packaged as <literal>sshfs</literal>. Once
       installed, mounting a directory interactively is simple as
       running:
     </para>
