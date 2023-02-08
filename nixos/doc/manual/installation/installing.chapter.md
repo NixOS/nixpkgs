@@ -421,7 +421,7 @@ Use the following commands:
         specify on which disk the GRUB boot loader is to be installed.
         Without it, NixOS cannot boot.
 
-    :   If there are other operating systems running on the machine before
+        If there are other operating systems running on the machine before
         installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
         option can be set to `true` to automatically add them to the grub
         menu.
@@ -438,10 +438,10 @@ Use the following commands:
         [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
         as well.
 
-    :   If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
+        If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
         [](#opt-boot.loader.grub.efiSupport) to `true`.
 
-    :   With system-boot, you should not need any special configuration to detect
+        With system-boot, you should not need any special configuration to detect
         other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
         to `true`, but this will only detect windows partitions, not other linux
         distributions. If you dual boot another linux distribution, use system-boot
