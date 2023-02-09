@@ -12669,6 +12669,8 @@ with pkgs;
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
+  ttdl = callPackage ../applications/misc/ttdl { };
+
   ttp = with python3.pkgs; toPythonApplication ttp;
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
@@ -23029,6 +23031,10 @@ with pkgs;
   SDL2_image = callPackage ../development/libraries/SDL2_image {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
+  SDL2_image_2_0_5 = SDL2_image.override({ # Pinned for pygame, toppler
+    version = "2.0.5";
+    hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
+  });
 
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
@@ -30183,6 +30189,13 @@ with pkgs;
 
   shepherd = nodePackages."@nerdwallet/shepherd";
 
+  inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
+    apptainer
+    singularity
+    apptainer-overriden-nixos
+    singularity-overriden-nixos
+    ;
+
   skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
@@ -30192,8 +30205,6 @@ with pkgs;
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
   slweb = callPackage ../applications/misc/slweb { };
-
-  singularity = callPackage ../applications/virtualization/singularity { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
 
@@ -35729,7 +35740,9 @@ with pkgs;
 
   tome4 = callPackage ../games/tome4 { };
 
-  toppler = callPackage ../games/toppler { };
+  toppler = callPackage ../games/toppler {
+    SDL2_image = SDL2_image_2_0_5;
+  };
 
   torus-trooper = callPackage ../games/torus-trooper { };
 
