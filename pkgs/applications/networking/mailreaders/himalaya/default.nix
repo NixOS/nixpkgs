@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage rec {
       openssl
     ];
 
-  # TODO: is there a way to spawn an IMAP server to run integration
-  # tests?
+  # TODO: remove this flag once this issue is fixed:
+  # https://todo.sr.ht/~soywod/pimalaya/36
   cargoTestFlags = [ "--lib" ];
 
   postInstall = lib.optionalString installManPages ''
