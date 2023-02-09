@@ -54,30 +54,31 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.envoy}/bin/envoy -c ${validateConfig conf}";
-        DynamicUser = true;
-        Restart = "no";
         CacheDirectory = [ "envoy" ];
         LogsDirectory = [ "envoy" ];
+        Restart = "no";
+        # Hardening
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_XDP" ];
-        SystemCallArchitectures = "native";
+        DynamicUser = true;
         LockPersonality = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
         PrivateDevices = true;
+        PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
+        ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "ptraceable";
-        ProtectHostname = true;
         ProtectSystem = "strict";
-        UMask = "0066";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_XDP" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@clock" "~@module" "~@mount" "~@reboot" "~@swap" "~@obsolete" "~@cpu-emulation" ];
+        UMask = "0066";
       };
     };
   };
