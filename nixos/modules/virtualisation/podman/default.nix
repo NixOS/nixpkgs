@@ -9,7 +9,8 @@ let
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
-      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
+      # include pkgs.zfs by default in the wrapped podman used by the module so it is cached
+      ++ (if (builtins.elem "zfs" config.boot.supportedFilesystems) then [ config.boot.zfs.package ] else [ pkgs.zfs ]);
   });
 
   # Provides a fake "docker" binary mapping to podman
@@ -183,10 +184,6 @@ in
 
       systemd.packages = [ cfg.package ];
 
-      systemd.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
-
       systemd.services.podman-prune = {
         description = "Prune podman resources";
 
@@ -206,10 +203,6 @@ in
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
-
-      systemd.user.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
 
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
