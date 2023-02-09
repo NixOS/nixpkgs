@@ -8,7 +8,7 @@ let
   conf = format.generate "envoy.json" cfg.settings;
   validateConfig = file:
     pkgs.runCommand "validate-envoy-conf" { } ''
-      ${pkgs.envoy}/bin/envoy --log-level error --mode validate -c "${file}"
+      ${cfg.package}/bin/envoy --log-level error --mode validate -c "${file}"
       cp "${file}" "$out"
     '';
 
@@ -17,6 +17,8 @@ in
 {
   options.services.envoy = {
     enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
+
+    package = mkPackageOptionMD pkgs "envoy" { };
 
     settings = mkOption {
       type = format.type;
@@ -46,14 +48,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.envoy ];
+    environment.systemPackages = [ cfg.package ];
     systemd.services.envoy = {
       description = "Envoy reverse proxy";
       after = [ "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.envoy}/bin/envoy -c ${validateConfig conf}";
+        ExecStart = "${cfg.package}/bin/envoy -c ${validateConfig conf}";
         CacheDirectory = [ "envoy" ];
         LogsDirectory = [ "envoy" ];
         Restart = "no";
