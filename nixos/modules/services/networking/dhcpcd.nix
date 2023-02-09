@@ -81,9 +81,12 @@ let
         noipv6
       ''}
 
-      ${cfg.extraConfig}
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == null && staticIPv6Addresses != [ ]) noIPv6rs}
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
+        noipv6rs
+      ''}
 
-      ${optionalString config.networking.enableIPv6 noIPv6rs}
+      ${cfg.extraConfig}
     '';
 
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
@@ -157,6 +160,16 @@ in
       default = "";
       description = lib.mdDoc ''
          Literal string to append to the config file generated for dhcpcd.
+      '';
+    };
+
+    networking.dhcpcd.IPv6rs = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = lib.mdDoc ''
+        Force enable or disable solicitation and receipt of IPv6 Router Advertisements.
+        This is required, for example, when using a static unique local IPv6 address (ULA)
+        and global IPv6 address auto-configuration with SLAAC.
       '';
     };
 
