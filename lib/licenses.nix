@@ -220,6 +220,12 @@ in mkLicense lset) ({
     fullName = "Creative Commons Zero v1.0 Universal";
   };
 
+  cc-by-nc-nd-30 = {
+    spdxId = "CC-BY-NC-ND-3.0";
+    fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+    free = false;
+  };
+
   cc-by-nc-sa-20 = {
     spdxId = "CC-BY-NC-SA-2.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
