@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     description = "This is a small utility, typically used in conjunction with Ignition, which reads metadata from a given cloud-provider and applies it to the system.";
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
