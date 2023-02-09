@@ -16108,6 +16108,12 @@
     githubId = 2242427;
     name = "Yoann Ono";
   };
+  yajo = {
+    email = "yajo.sk8@gmail.com";
+    github = "yajo";
+    githubId = 973709;
+    name = "Jairo Llopis";
+  };
   yana = {
     email = "yana@riseup.net";
     github = "yanalunaterra";
