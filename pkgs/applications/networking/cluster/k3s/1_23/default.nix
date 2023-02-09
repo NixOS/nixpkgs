@@ -48,30 +48,32 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.23.6+k3s1";     # k3s git tag
-  k3sCommit = "418c3fa858b69b12b9cefbcff0526f666a6236b9"; # k3s git commit at the above version
-  k3sRepoSha256 = "0fmw491dn5mpi058mr7sij51i5m4qg2grx30cnl3h2v4s0sdkx2i";
-  k3sVendorSha256 = "sha256-iHg5ySMaiSWXs98YGmxPwdZr4zdBIFma12dNEuf30Hs=";
+  k3sVersion = "1.23.16+k3s1";     # k3s git tag
+  k3sCommit = "64b0feeb36c2a26976a364a110f23ebcf971f976"; # k3s git commit at the above version
+  k3sRepoSha256 = "sha256-H6aaYa5OYAaD5hjSi8+RNXiP1zhRZCgKXQA6eU7AWBk=";
+  k3sVendorSha256 = "sha256-+xygljXp27NahsHSgoigMANBQCRwGFYwGHQEwlI9YsQ=";
 
-  # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
-  # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
-  traefikChartVersion = "10.19.3";
-  traefikChartSha256 = "04zg5li957svgscdmkzmzjkwljaljyav68rzxmhakkwgav6q9058";
+  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/scripts/download#L29-L32
+  # see also https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/manifests/traefik.yaml#L8-L16
+  # At the time of writing, there are two traefik charts, and that's it
+  charts = import ./chart-versions.nix;
 
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion = "0.11.0";
-  k3sRootSha256 = "016n56vi09xkvjph7wgzb2m86mhd5x65fs4d11pmh20hl249r620";
+  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/scripts/version.sh#L54
+  k3sRootVersion = "0.12.1";
+  k3sRootSha256 = "sha256-xCXbarWztnvW2xn3cGa84hie3OevVZeGEDWh+Uf3RBw=";
 
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion = "1.0.1-k3s1";
-  k3sCNISha256 = "11ihlzzdnqf9p21y0a4ckpbxac016nm7746dcykhj26ym9zxyv92";
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/scripts/version.sh#L47
+  k3sCNIVersion = "1.1.1-k3s1";
+  k3sCNISha256 = "sha256-1Br7s+iMtfiPjM0EcNPuFdSlp9dVPjSG1UGuiPUfq5I=";
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  containerdVersion = "1.5.11-k3s2";
-  containerdSha256 = "16132snvrg8r0vwm6c0lz0q6fx686s2ix53nm3aka9a83xs75vf2";
+  # https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/go.mod#L9
+  containerdVersion = "1.5.16-k3s2-1-22";
+  containerdSha256 = "sha256-PRrp05Jgx368Ox4hTC66lbCInWuex0OtAuCY4l8geqA=";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
+  # https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/go.mod#L19
   criCtlVersion = "1.22.0-k3s1";
 
   baseMeta = k3s.meta;
@@ -94,10 +96,9 @@ let
   ];
 
   # bundled into the k3s binary
-  traefikChart = fetchurl {
-    url = "https://helm.traefik.io/traefik/traefik-${traefikChartVersion}.tgz";
-    sha256 = traefikChartSha256;
-  };
+  traefikChart = fetchurl charts.traefik;
+  traefik-crdChart = fetchurl charts.traefik-crd;
+
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
   # internet. k3s-root is _mostly_ binaries built to be bundled in k3s (which
@@ -181,12 +182,13 @@ let
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
-      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
+      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.16%2Bk3s1/scripts/build#L123-L131
       ln -s k3s ./bin/k3s-agent
       ln -s k3s ./bin/k3s-server
       ln -s k3s ./bin/k3s-etcd-snapshot
       ln -s k3s ./bin/k3s-secrets-encrypt
       ln -s k3s ./bin/k3s-certificate
+      ln -s k3s ./bin/k3s-completion
       ln -s k3s ./bin/kubectl
       ln -s k3s ./bin/crictl
       ln -s k3s ./bin/ctr
@@ -218,10 +220,6 @@ buildGoModule rec {
 
   src = k3sRepo;
   vendorSha256 = k3sVendorSha256;
-
-  patches = [
-    ./0001-script-download-strip-downloading-just-package-CRD.patch
-  ];
 
   postPatch = ''
     # Nix prefers dynamically linked binaries over static binary.
@@ -290,11 +288,9 @@ buildGoModule rec {
     ln -vsf ${k3sContainerd}/bin/* ./bin/
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
     mkdir -p ./build/static/charts
-    # Note, upstream's chart has a 00 suffix. This seems to not matter though, so we're ignoring that naming detail.
-    export TRAEFIK_CHART_FILE=${traefikChart}
-    # place the traefik chart using their code since it's complicated
-    # We trim the actual download, see patches
-    ./scripts/download
+
+    cp ${traefikChart} ./build/static/charts
+    cp ${traefik-crdChart} ./build/static/charts
 
     export ARCH=$GOARCH
     export DRONE_TAG="v${k3sVersion}"
