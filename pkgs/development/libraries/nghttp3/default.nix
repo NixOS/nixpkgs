@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, file
 , cunit, ncurses
+, curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curlHTTP3;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
