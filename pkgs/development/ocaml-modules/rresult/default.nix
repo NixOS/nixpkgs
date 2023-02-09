@@ -1,5 +1,8 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
+  "rresult is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-rresult";
   version = "0.7.0";
