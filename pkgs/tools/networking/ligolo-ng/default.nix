@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     rev = "v${version}";
-    sha256 = "sha256-BuKSIJGeHuHfzcaADgGqKyQ6oy5RAUHyRs8e+d/Nf+0=";
+    sha256 = "sha256-O/qiznQs+x7qBYXVItd0W7a0irEzRf0We7kW7HHLqcw=";
   };
 
   postConfigure = ''
