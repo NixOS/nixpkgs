@@ -1865,6 +1865,8 @@ self: super: with self; {
 
   cma = callPackage ../development/python-modules/cma { };
 
+  cmaes = callPackage ../development/python-modules/cmaes { };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
@@ -2240,6 +2242,8 @@ self: super: with self; {
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
+
+  dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   dataset = callPackage ../development/python-modules/dataset { };
 
@@ -5770,6 +5774,8 @@ self: super: with self; {
 
   mbddns = callPackage ../development/python-modules/mbddns { };
 
+  mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
@@ -7249,6 +7255,8 @@ self: super: with self; {
   pynws = callPackage ../development/python-modules/pynws { };
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
+
+  pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
 
@@ -8940,6 +8948,8 @@ self: super: with self; {
 
   pytabix = callPackage ../development/python-modules/pytabix { };
 
+  pytablewriter = callPackage ../development/python-modules/pytablewriter { };
+
   pytado = callPackage ../development/python-modules/pytado { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
@@ -10053,6 +10063,12 @@ self: super: with self; {
   riprova = callPackage ../development/python-modules/riprova { };
 
   ripser = callPackage ../development/python-modules/ripser { };
+
+  riscof = callPackage ../development/python-modules/riscof { };
+
+  riscv-config = callPackage ../development/python-modules/riscv-config { };
+
+  riscv-isac = callPackage ../development/python-modules/riscv-isac { };
 
   rising = callPackage ../development/python-modules/rising { };
 
@@ -11201,6 +11217,8 @@ self: super: with self; {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
+  tabledata = callPackage ../development/python-modules/tabledata { };
+
   tables = callPackage ../development/python-modules/tables { };
 
   tablib = callPackage ../development/python-modules/tablib { };
@@ -11238,6 +11256,8 @@ self: super: with self; {
   tblib = callPackage ../development/python-modules/tblib { };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
+
+  tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
   tcxparser = callPackage ../development/python-modules/tcxparser { };
 
@@ -11766,6 +11786,8 @@ self: super: with self; {
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
+
+  typepy = callPackage ../development/python-modules/typepy { };
 
   typer = callPackage ../development/python-modules/typer { };
 
