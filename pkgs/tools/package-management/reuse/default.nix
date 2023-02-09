@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "v${version}";
-    hash = "sha256-bjUDImMFwMhRjCa7XzGlqR8h+KfTsyxonrQlRGgApwo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4L5VQtjpJ1P95S3vkbgLYTO/lTFReGiSAVuWSwh14i4=";
   };
 
   nativeBuildInputs = with python3Packages; [
