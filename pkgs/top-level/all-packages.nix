@@ -324,6 +324,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  blkhash = callPackage ../development/libraries/blkhash { };
+
   bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
 
   breakpad = callPackage ../development/misc/breakpad { };
