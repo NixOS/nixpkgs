@@ -1,10 +1,43 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, oxipng, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, fetchYarnDeps, yarn, fixup_yarn_lock, nodePackages, nodejs-14_x
+, ruby
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodePackages
+, nodejs-14_x
 , nodejs-16_x
 
 , plugins ? []
