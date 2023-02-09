@@ -11,7 +11,7 @@
 
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
-  version = "1.13.0";
+  version = "1.13.1";
 
   outputs = [ "out" "dev" ]; # no "devdoc"
 
@@ -20,7 +20,7 @@ buildPerlPackage rec {
     repo = "strip-nondeterminism";
     domain = "salsa.debian.org";
     rev = version;
-    sha256 = "sha256-KZQeoJYBPJzUvz4wlUZbiGODbpCp7/52dsg5OemKDkI=";
+    sha256 = "czx9UhdgTsQSfDNo1mMOXCM/3/nuNe+cPZeyy2xdnKs=";
   };
 
   strictDeps = true;
