@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     hashie (5.0.0)
-    net-ldap (0.14.0)
+    net-ldap (0.17.1)
     omniauth (1.9.2)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -12,17 +12,17 @@ GEM
       pyu-ruby-sasl (~> 0.0.3.2)
       rubyntlm (~> 0.3.4)
     pyu-ruby-sasl (0.0.3.3)
-    rack (2.2.4)
+    rack (2.2.6.2)
     rubyntlm (0.3.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  net-ldap (= 0.14.0)
+  net-ldap (= 0.17.1)
   omniauth-ldap (= 1.0.5)
   pyu-ruby-sasl (= 0.0.3.3)
   rubyntlm (= 0.3.4)
 
 BUNDLED WITH
-   2.3.22
+   2.4.6
