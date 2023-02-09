@@ -1219,13 +1219,13 @@
     "vendorHash": null
   },
   "vsphere": {
-    "hash": "sha256-UwhIGK1zQ++IuwAKH9i+Dlu2vvXkMYL+s1P03qKSe3E=",
+    "hash": "sha256-VScIcK4bInS9yhIYkYRsU8Hhzex9iyVkPiyjnnjshkI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vsphere",
     "owner": "hashicorp",
     "repo": "terraform-provider-vsphere",
-    "rev": "v2.2.0",
+    "rev": "v2.3.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-160GDEQfymeCJpjYOoWP5sGQ0PJHw9kKPaefmbF5Ig4="
+    "vendorHash": "sha256-guUjkk7oW+Gvu015LUAxGqUwZF4H+4xmmOaMqKixZaI="
   },
   "vultr": {
     "hash": "sha256-DfiJgN1R7qW3c13hBabsMizY3mYamIq8AGms1q9kdVU=",
