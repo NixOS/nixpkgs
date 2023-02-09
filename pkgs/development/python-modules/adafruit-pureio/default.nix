@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-pureio";
-  version = "1.1.9";
+  version = "1.1.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Adafruit_PureIO";
     inherit version;
-    sha256 = "0yd8hw676s7plq75gac4z0ilfcfydjkk3wv76bc73xy70zxj5brc";
+    hash = "sha256-EgaIN1PAlmMJ5tAtqXBnbpvHtQO7Sib3NuAXOfVqZLk=";
   };
 
   nativeBuildInputs = [
