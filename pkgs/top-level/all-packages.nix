@@ -7661,6 +7661,8 @@ with pkgs;
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
+
   forgejo = callPackage ../applications/version-management/forgejo {};
 
   gokart = callPackage ../development/tools/gokart { };
