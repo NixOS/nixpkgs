@@ -8843,6 +8843,8 @@ with pkgs;
 
   kubepug = callPackage ../development/tools/kubepug { };
 
+  kubeshark = callPackage ../applications/networking/cluster/kubeshark { };
+
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
   kubo = callPackage ../applications/networking/kubo { };
