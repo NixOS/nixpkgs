@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           socket_address = {
             protocol = "TCP";
             address = "127.0.0.1";
-            port_value = 9901;
+            port_value = 80;
           };
         };
       };
@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
   testScript = ''
     machine.start()
     machine.wait_for_unit("envoy.service")
-    machine.wait_for_open_port(9901)
-    machine.wait_until_succeeds("curl -fsS localhost:9901/ready")
+    machine.wait_for_open_port(80)
+    machine.wait_until_succeeds("curl -fsS localhost:80/ready")
   '';
 })
