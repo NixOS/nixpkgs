@@ -5,6 +5,7 @@
 , cairo
 , cups
 , fontconfig
+, Foundation
 , glib
 , gtk3
 , gtkSupport ? stdenv.isLinux
@@ -71,10 +72,11 @@ let
       ++ lib.optional stdenv.isLinux autoPatchelfHook
       ++ mapProductsList "nativeBuildInputs";
 
-    propagatedBuildInputs = [ setJavaClassPath ]
+    propagatedBuildInputs = [ setJavaClassPath zlib ]
+      ++ lib.optional stdenv.isDarwin Foundation
       ++ mapProductsList "propagatedBuildInputs";
 
-    buildInputs = [
+    buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       stdenv.cc.cc.lib # libstdc++.so.6
@@ -83,7 +85,6 @@ let
       xorg.libXi
       xorg.libXrender
       xorg.libXtst
-      zlib
     ] ++ mapProductsList "buildInputs";
 
     preInstall = concatProducts "preInstall";

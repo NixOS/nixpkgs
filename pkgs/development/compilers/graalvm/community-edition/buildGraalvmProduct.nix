@@ -18,7 +18,7 @@ stdenv.mkDerivation (args // {
   pname = "${product}-java${javaVersion}";
 
   nativeBuildInputs = [ perl unzip makeWrapper ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+    ++ lib.optional stdenv.isLinux autoPatchelfHook
     ++ extraNativeBuildInputs;
 
   buildInputs = [

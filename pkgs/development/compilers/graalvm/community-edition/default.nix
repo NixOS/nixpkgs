@@ -2,10 +2,11 @@
 , stdenv
 , callPackage
 , fetchurl
+, Foundation
 }:
 
 let
-  buildGraalvm = callPackage ./buildGraalvm.nix { };
+  buildGraalvm = callPackage ./buildGraalvm.nix { inherit Foundation; };
   buildGraalvmProduct = callPackage ./buildGraalvmProduct.nix { };
   sources = javaVersion: builtins.fromJSON (builtins.readFile (./. + "/graalvm${javaVersion}-ce-sources.json"));
 in
