@@ -60,10 +60,14 @@ in
         # Hardening
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
         DynamicUser = true;
         LockPersonality = true;
+        MemoryDenyWriteExecute = false; # at least wasmr needs WX permission
         PrivateDevices = true;
         PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -77,7 +81,8 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "~@clock" "~@module" "~@mount" "~@reboot" "~@swap" "~@obsolete" "~@cpu-emulation" ];
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0066";
       };
     };
