@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "sha256-+MQMChTNlphldzg05Pbi4HpT4SsI/bhTsC2GZK70dgs";
   };
 
