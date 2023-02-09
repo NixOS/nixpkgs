@@ -1,0 +1,41 @@
+--- a/mkspecs/features/qt_functions.prf
++++ b/mkspecs/features/qt_functions.prf
+@@ -95,20 +95,28 @@
+         } else {
+             instloc = $$5
+         }
+-        cmd = $$instloc/$$2
+-        exists($${cmd}.pl) {
+-            $${1}_EXE = $${cmd}.pl
+-            cmd = perl -w $$system_path($${cmd}.pl)
++        # ${qtbase.dev}/mkspecs/features/find-qt-tool.sh
++        find_qt_tool = @findQtTool@
++        # extensions: pl, exe, app
++        cmd = $$system("$${find_qt_tool} $${2}.pl $${instloc}")
++        !isEmpty(cmd) {
++            # pl
++            $${1}_EXE = $${cmd}
++            cmd = perl -w $$system_path($${cmd})
+         } else: contains(QMAKE_HOST.os, Windows) {
+-            $${1}_EXE = $${cmd}.exe
+-            cmd = $$system_path($${cmd}.exe)
++            # exe
++            cmd = $$system("$${find_qt_tool} $${2}.exe $${instloc}")
++            $${1}_EXE = $${cmd}
+         } else:contains(QMAKE_HOST.os, Darwin) {
+-            BUNDLENAME = $${cmd}.app/Contents/MacOS/$$2
+-            exists($$BUNDLENAME) {
+-                cmd = $$BUNDLENAME
++            # app
++            cmd = $$system("$${find_qt_tool} $${2}.app $${instloc}")
++            !isEmpty(cmd) {
++                cmd = $${cmd}/Contents/MacOS/$${2}
++                $${1}_EXE = $$cmd
+             }
+-            $${1}_EXE = $$cmd
+         } else {
++            # no extension
++            cmd = $$system("$${find_qt_tool} $${2} $${instloc}")
+             $${1}_EXE = $$cmd
+         }
+     } else {

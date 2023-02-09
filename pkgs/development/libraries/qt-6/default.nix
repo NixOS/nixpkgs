@@ -15,6 +15,8 @@
 , cmake
 , ninja
 , writeText
+, writeShellScript
+, substituteAll
 , gstreamer
 , gst-plugins-base
 , gst-plugins-good
@@ -64,6 +66,11 @@ let
           (fetchpatch {
             url = "https://github.com/Homebrew/formula-patches/raw/c363f0edf9e90598d54bc3f4f1bacf95abbda282/qt/qt_internal_check_if_path_has_symlinks.patch";
             sha256 = "sha256-Gv2L8ymZSbJxcmUijKlT2NnkIB3bVH9D7YSsDX2noTU=";
+          })
+          (substituteAll {
+            src = ./patches/qtbase-qmake-qt-prepare-tool.diff;
+            findQtTool = writeShellScript "find-qt-tool.sh" (
+              builtins.readFile ./patches/qtbase-qmake-qt-prepare-tool-find-qt-tool.sh);
           })
         ];
       };
