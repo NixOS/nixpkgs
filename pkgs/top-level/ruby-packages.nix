@@ -239,6 +239,17 @@
     };
     version = "3.5.0";
   };
+  cli-ui = {
+    dependencies = [];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "92659f3d4dbee5cdaa3852f3c63d715315b7794b10ea0536ac3001fc65af5a2b";
+      type = "gem";
+    };
+    version = "2.1.0";
+  };
   cocoapods = {
     dependencies = ["addressable" "claide" "cocoapods-core" "cocoapods-deintegrate" "cocoapods-downloader" "cocoapods-plugins" "cocoapods-search" "cocoapods-trunk" "cocoapods-try" "colored2" "escape" "fourflusher" "gh_inspector" "molinillo" "nap" "ruby-macho" "xcodeproj"];
     groups = ["default"];
