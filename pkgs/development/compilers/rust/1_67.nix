@@ -21,8 +21,8 @@
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.67.0";
-  rustcSha256 = "sha256-0CnxT85Foux6mmBdKgpAquRznLL9rinun3pukCWn/eQ=";
+  rustcVersion = "1.67.1";
+  rustcSha256 = "sha256-Rkg9Pl3oWjvUb456OuGDdJY5EGfb5xOiXTzwUbPZ/24=";
 
   llvmSharedForBuild = pkgsBuildBuild.llvmPackages_15.libllvm.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvmPackages_15.libllvm.override { enableSharedLibraries = true; };
@@ -59,14 +59,6 @@ import ./default.nix {
   selectRustPackage = pkgs: pkgs.rust_1_67;
 
   rustcPatches = [
-    # fix thin archive reading
-    # https://github.com/rust-lang/rust/pull/107360
-    (fetchpatch {
-      name = "revert-back-to-llvmarchivebuilder-on-all-platforms.patch";
-      url = "https://github.com/rust-lang/rust/commit/de363d54c40a378717881240e719f5f7223ba376.patch";
-      hash = "sha256-3Xb803LZUZ1dldxGJ65Iw6gg1V1K827OB/0b32GqilU=";
-    })
-
     # Fixes ICE.
     # https://github.com/rust-lang/rust/pull/107688
     (fetchpatch {
