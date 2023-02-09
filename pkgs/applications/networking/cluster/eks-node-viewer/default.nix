@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+MQMChTNlphldzg05Pbi4HpT4SsI/bhTsC2GZK70dgs";
+    sha256 = "sha256-PqZVVfq/cUtkmpruJfxphCeQWMXKEmE2AgulgUX9310";
   };
 
-  vendorSha256 = "sha256-fuZIPRZdG7jbyMbnk6ocHL8LNEfNQtc2R361QMFTswQ";
+  vendorSha256 = "sha256-PJ6TakF2yN8eB/SV5Dx164lDZDi4Hr4N2ZW8dzz8jcg";
 
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
