@@ -36,6 +36,9 @@ let
   inherit (lib.types)
     mkOptionType
     ;
+  prioritySuggestion = ''
+   Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+  '';
 in
 rec {
 
@@ -184,7 +187,7 @@ rec {
     if length defs == 1
     then (head defs).value
     else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}";
+      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -195,7 +198,7 @@ rec {
     else if length defs == 1 then (head defs).value
     else (foldl' (first: def:
       if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
+        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
       else
         first) (head defs) (tail defs)).value;
 
