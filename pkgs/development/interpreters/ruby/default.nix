@@ -273,8 +273,8 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "6" "";
-    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+    version = rubyVersion "2" "7" "7" "";
+    sha256 = "e10127db691d7ff36402cfe88f418c8d025a3f1eea92044b162dd72f0b8c7b90";
   };
 
   ruby_3_0 = generic {
