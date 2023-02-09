@@ -1865,6 +1865,8 @@ self: super: with self; {
 
   cma = callPackage ../development/python-modules/cma { };
 
+  cmaes = callPackage ../development/python-modules/cmaes { };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
