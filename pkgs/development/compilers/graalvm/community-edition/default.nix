@@ -2,9 +2,6 @@
 , stdenv
 , callPackage
 , fetchurl
-, gcc
-, glibc
-, zlib
 }:
 
 let
