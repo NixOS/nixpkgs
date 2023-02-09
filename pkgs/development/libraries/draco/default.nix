@@ -16,16 +16,22 @@ let
   cmakeBool = b: if b then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
-  version = "1.5.5";
+  version = "1.5.6";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "sha256-WYWEUfBPz/Pt7sE8snG3/LnOA3DEUm/SUVLtsH7zG5g=";
+    hash = "sha256-2YQMav0JJMbJ2bvnN/Xv90tjE/OWLbrZDO4WlaOvcfI=";
     fetchSubmodules = true;
   };
+
+  # ld: unknown option: --start-group
+  postPatch = ''
+    substituteInPlace cmake/draco_targets.cmake \
+      --replace "^Clang" "^AppleClang"
+  '';
 
   buildInputs = [ gtest ]
     ++ lib.optionals withTranscoder [ eigen ghc_filesystem tinygltf ];
