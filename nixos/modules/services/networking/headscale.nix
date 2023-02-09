@@ -264,7 +264,54 @@ in
           '';
         };
 
+        scope = mkOption {
+          type = types.listOf types.str;
+          default = ["openid" "profile" "email"];
+          description = lib.mdDoc ''
+            Scopes used in the OIDC flow.
+          '';
+        };
+
+        extraParams = mkOption {
+          type = types.attrsOf types.str;
+          default = { };
+          description = lib.mdDoc ''
+            Custom query parameters to send with the Authorize Endpoint request
+          '';
+          example = {
+            domain_hint = "example.com";
+          };
+        };
+
+        allowedDomains = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            Allowed principal domains. if an authenticated user's domain
+            is not in this list authentication request will be rejected.
+          '';
+          example = [ "example.com" ];
+        };
+
+        allowedUsers = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            Users allowed to authenticate even if not in allowedDomains.
+          '';
+          example = [ "alice@example.com" ];
+        };
+
+        stripEmailDomain = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc ''
+            Whether the domain part of the email address should be removed when generating namespaces
+          '';
+        };
+
         domainMap = mkOption {
+          visible = false;
           type = types.attrsOf types.str;
           default = { };
           description = lib.mdDoc ''
@@ -275,7 +322,6 @@ in
             ".*" = "default-namespace";
           };
         };
-
       };
 
       tls = {
@@ -343,9 +389,12 @@ in
 
 
     };
-
   };
   config = mkIf cfg.enable {
+
+    warnings = if (cfg.openIdConnect.domainMap != { })
+      then [ "`services.headscale.openIdConnect.domainMap` has not had any effect since headscale 0.13.0 and will be removed in 23.05"]
+      else [ ];
 
     services.headscale.settings = {
       server_url = mkDefault cfg.serverUrl;
@@ -384,6 +433,11 @@ in
       oidc = {
         issuer = mkDefault cfg.openIdConnect.issuer;
         client_id = mkDefault cfg.openIdConnect.clientId;
+        scope = mkDefault cfg.openIdConnect.scope;
+        extra_params = mkDefault cfg.openIdConnect.extraParams;
+        allowed_domains = mkDefault cfg.openIdConnect.allowedDomains;
+        allowed_users = mkDefault cfg.openIdConnect.allowedUsers;
+        strip_email_domain = mkDefault cfg.openIdConnect.stripEmailDomain;
         domain_map = mkDefault cfg.openIdConnect.domainMap;
       };
 
