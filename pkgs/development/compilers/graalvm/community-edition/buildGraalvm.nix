@@ -24,7 +24,6 @@ let
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
   mapProducts = key: default: (map (p: p.${key} or default) products);
-  mapProductsList = key: mapProducts key [ ];
   concatProducts = key: lib.concatStringsSep "\n" (mapProducts key "");
 
   graalvmXXX-ce = stdenv.mkDerivation (args // {
@@ -69,12 +68,10 @@ let
     dontStrip = true;
 
     nativeBuildInputs = [ unzip makeWrapper ]
-      ++ lib.optional stdenv.isLinux autoPatchelfHook
-      ++ mapProductsList "nativeBuildInputs";
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin Foundation
-      ++ mapProductsList "propagatedBuildInputs";
+      ++ lib.optional stdenv.isDarwin Foundation;
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -85,7 +82,7 @@ let
       xorg.libXi
       xorg.libXrender
       xorg.libXtst
-    ] ++ mapProductsList "buildInputs";
+    ];
 
     preInstall = concatProducts "preInstall";
     postInstall = ''
