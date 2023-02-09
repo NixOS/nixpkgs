@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
-  patches = []
+  # Disable upstream-enforced bundling on macOS.
+  patches = lib.optionals stdenv.isDarwin [
+    ./do-not-bundle.patch
+  ];
   # Disable upstream-enforced bundling on macOS.
   ++ lib.optionals stdenv.isDarwin [ ./do-not-bundle.patch ];
 
