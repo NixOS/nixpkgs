@@ -28,10 +28,6 @@
   # Path for the sources file that will be used
   # See `update.nix` file for a description on how this file works
 , sourcesPath ? ./. + "/graalvm${javaVersion}-ce-sources.json"
-  # Use musl instead of glibc to allow true static builds in GraalVM's
-  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc static
-  # builds to fail, so it should be used with care
-, useMusl ? false
 }:
 
 { stdenv
@@ -66,6 +62,12 @@
 , gtk3
 , jq
 , writeShellScript
+  # Use musl instead of glibc to allow true static builds in GraalVM's
+  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc static
+  # builds to fail, so it should be used with care
+, useMusl ? false
+  # Extra libraries to be included in native-image using '-H:CLibraryPath' flag
+, extraCLibs ? [ ]
 }:
 
 assert useMusl -> stdenv.isLinux;
@@ -75,6 +77,11 @@ let
   version = platform.version or defaultVersion;
   name = "graalvm${javaVersion}-ce";
   sources = builtins.fromJSON (builtins.readFile sourcesPath);
+
+  cLibs = [ glibc zlib.static ]
+    ++ lib.optionals (!useMusl) [ glibc.static ]
+    ++ lib.optionals useMusl [ musl ]
+    ++ extraCLibs;
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -118,6 +125,8 @@ let
       ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     unpackPhase = ''
+      runHook preUnpack
+
       unpack_jar() {
         jar=$1
         unzip -q -o $jar -d $out
@@ -164,13 +173,13 @@ let
       for jar in "''${arr[@]:1}"; do
         unpack_jar "$jar"
       done
+
+      runHook postUnpack
     '';
 
-    outputs = [ "out" "lib" ];
-
     installPhase = ''
-      # ensure that $lib/lib exists to avoid breaking builds
-      mkdir -p "$lib/lib"
+      runHook preInstall
+
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
@@ -181,26 +190,15 @@ let
         if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
       ${
-        lib.optionalString (stdenv.isLinux) ''
-          # provide libraries needed for static compilation
-          ${
-            if useMusl then
-              ''for f in "${musl.stdenv.cc.cc}/lib/"* "${musl}/lib/"* "${zlib.static}/lib/"*; do''
-            else
-              ''for f in "${glibc}/lib/"* "${glibc.static}/lib/"* "${zlib.static}/lib/"*; do''
-          }
-            ln -s "$f" "$out/lib/svm/clibraries/${platform.arch}/$(basename $f)"
-          done
-
-          # add those libraries to $lib output too, so we can use them with
-          # `native-image -H:CLibraryPath=''${lib.getLib graalvmXX-ce}/lib ...` and reduce
-          # closure size by not depending on GraalVM $out (that is much bigger)
-          # we always use glibc here, since musl is only supported for static compilation
-          for f in "${glibc}/lib/"*; do
-            ln -s "$f" "$lib/lib/$(basename $f)"
-          done
+        # Wrap native-image binary to pass -H:CLibraryPath flag and find glibc
+        lib.optionalString (withNativeImageSvm && stdenv.isLinux) ''
+          wrapProgram $out/bin/native-image \
+            ${lib.concatStringsSep " "
+              (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
         ''
       }
+
+      runHook postInstall
     '';
 
     dontStrip = true;
@@ -240,6 +238,8 @@ let
 
     doInstallCheck = true;
     installCheckPhase = ''
+      runHook preInstallCheck
+
       echo ${
         lib.escapeShellArg ''
           public class HelloWorld {
@@ -252,16 +252,25 @@ let
       $out/bin/javac HelloWorld.java
 
       # run on JVM with Graal Compiler
+      echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
+
+      ${
+        lib.optionalString withNativeImageSvm ''
+          echo "Ahead-Of-Time compilation"
+          $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
+          ./helloworld | fgrep 'Hello World'
+        ''
+      }
 
       ${# --static flag doesn't work for darwin
         lib.optionalString (withNativeImageSvm && stdenv.isLinux && !useMusl) ''
-          echo "Ahead-Of-Time compilation"
-          $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
+          echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
+          $out/bin/native-image -H:+StaticExecutableWithDynamicLibC HelloWorld
           ./helloworld | fgrep 'Hello World'
 
           echo "Ahead-Of-Time compilation with --static"
-          $out/bin/native-image --no-server --static HelloWorld
+          $out/bin/native-image --static HelloWorld
           ./helloworld | fgrep 'Hello World'
         ''
       }
@@ -269,7 +278,7 @@ let
       ${# --static flag doesn't work for darwin
         lib.optionalString (withNativeImageSvm && stdenv.isLinux && useMusl) ''
           echo "Ahead-Of-Time compilation with --static and --libc=musl"
-          $out/bin/native-image --no-server --libc=musl --static HelloWorld
+          $out/bin/native-image --libc=musl --static HelloWorld
           ./helloworld | fgrep 'Hello World'
         ''
       }
@@ -302,6 +311,8 @@ let
           echo '1 + 1' | $out/bin/irb
         ''
       }
+
+      runHook postInstallCheck
     '';
 
     passthru = {

@@ -3,6 +3,7 @@
 , libev, nghttp3, quictls
 , cunit, ncurses
 , withJemalloc ? false, jemalloc
+, curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curlHTTP3;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";

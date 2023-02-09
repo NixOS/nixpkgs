@@ -84,6 +84,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     , zendExtension ? false
     , doCheck ? true
     , extName ? name
+    , allowLocalNetworking ? false
     , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
@@ -103,6 +104,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
+      __darwinAllowLocalNetworking = allowLocalNetworking;
 
       preConfigurePhases = [
         "cdToExtensionRootPhase"
@@ -412,7 +414,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           ];
           zendExtension = true;
           # Tests launch the builtin webserver.
-          __darwinAllowLocalNetworking = true;
+          allowLocalNetworking = true;
         }
         {
           name = "openssl";
