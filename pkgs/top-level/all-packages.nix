@@ -13737,6 +13737,8 @@ with pkgs;
 
   zplug = callPackage ../shells/zsh/zplug { };
 
+  zps = callPackage ../tools/system/zps { };
+
   zi = callPackage ../shells/zsh/zi {};
 
   zinit = callPackage ../shells/zsh/zinit {} ;
