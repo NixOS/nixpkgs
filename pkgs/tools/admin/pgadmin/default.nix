@@ -7,6 +7,9 @@
 , nixosTests
 , pkgs
 , fetchPypi
+, postgresqlTestHook
+, postgresql
+, server-mode ? true
 }:
 
 let
@@ -26,54 +29,6 @@ let
     yarnNix = ./yarn.nix;
   };
 
-  # move buildDeps here to easily pass to test suite
-  buildDeps = with pythonPackages; [
-    flask
-    flask-gravatar
-    flask-login
-    flask_mail
-    flask_migrate
-    flask-sqlalchemy
-    flask-wtf
-    flask-compress
-    passlib
-    pytz
-    simplejson
-    sqlparse
-    wtforms
-    flask-paranoid
-    psutil
-    psycopg2
-    python-dateutil
-    sqlalchemy
-    itsdangerous
-    flask-security-too
-    bcrypt
-    cryptography
-    sshtunnel
-    ldap3
-    flask-babelex
-    flask-babel
-    gssapi
-    flask-socketio
-    eventlet
-    httpagentparser
-    user-agents
-    wheel
-    authlib
-    qrcode
-    pillow
-    pyotp
-    botocore
-    boto3
-    azure-mgmt-subscription
-    azure-mgmt-rdbms
-    azure-mgmt-resource
-    azure-identity
-    sphinxcontrib-youtube
-    dnspython
-    greenlet
-  ];
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
@@ -134,6 +89,8 @@ pythonPackages.buildPythonApplication rec {
   patches = [
     # Expose setup.py for later use
     ./expose-setup.py.patch
+    # check for permission of /etc/pgadmin/config_system and don't fail
+    ./check-system-config-dir.patch
   ];
 
   postPatch = ''
@@ -149,10 +106,12 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
-      --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+      --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req"
+    ${lib.optionalString (!server-mode) ''
+    substituteInPlace web/config.py \
+      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+    ''}
   '';
 
   preBuild = ''
@@ -200,23 +159,110 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.wheel
   ];
 
-  # tests need an own data, log directory
-  # and a working and correctly setup postgres database
-  # checks will be run through nixos/tests
-  doCheck = false;
-
-  # speaklater3 is separate because when passing buildDeps
-  # to the test, it fails there due to a collision with speaklater
-  propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
+  propagatedBuildInputs = with pythonPackages; [
+    flask
+    flask-gravatar
+    flask-login
+    flask_mail
+    flask_migrate
+    flask-sqlalchemy
+    flask-wtf
+    flask-compress
+    passlib
+    pytz
+    simplejson
+    sqlparse
+    wtforms
+    flask-paranoid
+    psutil
+    psycopg2
+    python-dateutil
+    sqlalchemy
+    itsdangerous
+    flask-security-too
+    bcrypt
+    cryptography
+    sshtunnel
+    ldap3
+    flask-babelex
+    flask-babel
+    gssapi
+    flask-socketio
+    eventlet
+    httpagentparser
+    user-agents
+    wheel
+    authlib
+    qrcode
+    pillow
+    pyotp
+    botocore
+    boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
+    sphinxcontrib-youtube
+    dnspython
+    greenlet
+    speaklater3
+  ];
 
   passthru.tests = {
-    standalone = nixosTests.pgadmin4-standalone;
-    # regression and function tests of the package itself
-    package = import ../../../../nixos/tests/pgadmin4.nix { inherit pkgs buildDeps; pythonEnv = pythonPackages; };
+    inherit (nixosTests) pgadmin4;
   };
 
+  nativeCheckInputs = [
+    postgresqlTestHook
+    postgresql
+    pythonPackages.testscenarios
+    pythonPackages.selenium
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    ## Setup ##
+
+    # pgadmin needs a home directory to save the configuration
+    export HOME=$TMPDIR
+    cd pgadmin4
+
+    # set configuration for postgresql test
+    # also ensure Server Mode is set to false. If not, the tests will fail, since pgadmin expects read/write permissions
+    # in /var/lib/pgadmin and /var/log/pgadmin
+    # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
+    cp -v regression/test_config.json.in regression/test_config.json
+    substituteInPlace regression/test_config.json --replace "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+
+    ## Browser test ##
+
+    # don't bother to test kerberos authentication
+    python regression/runtests.py --pkg browser --exclude browser.tests.test_kerberos_with_mocking
+
+    ## Reverse engineered SQL test ##
+
+    python regression/runtests.py --pkg resql
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
-    description = "Administration and development platform for PostgreSQL";
+    description = "Administration and development platform for PostgreSQL${optionalString (!server-mode) ". Desktop Mode"}";
+    longDescription = ''
+      pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike,
+      providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects.
+      ${if server-mode then ''
+      This version is build with SERVER_MODE set to True (the default). It will require access to `/var/lib/pgadmin`
+      and `/var/log/pgadmin`. This is the default version for the NixOS module `services.pgadmin`.
+      This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
+      '' else ''
+      This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
+      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used.
+      This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
+      ''}
+    '';
     homepage = "https://www.pgadmin.org/";
     license = licenses.mit;
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
