@@ -4,20 +4,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.8";
+  version = "5.9";
   pname = "rawtherapee";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    sha256 = "0d644s4grfia6f3k6y0byd5pwajr12kai2kc280yxi8v3w1b12ik";
+    sha256 = "kdctfjss/DHEcaSDPXcmT20wXTwkI8moRX/i/5wT5Hg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
-  # This patch is upstream; remove it in 5.9.
-  patches = [ ./fix-6324.patch ]
+  patches = []
   # Disable upstream-enforced bundling on macOS.
   ++ lib.optionals stdenv.isDarwin [ ./do-not-bundle.patch ];
 
