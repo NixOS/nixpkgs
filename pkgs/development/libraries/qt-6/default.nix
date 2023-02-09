@@ -162,6 +162,9 @@ let
         qtbase = {
           i18n = callPackage ./examples/qtbase/i18n.nix { };
         };
+        qtdeclarative = {
+          qml-i18n = callPackage ./examples/qtdeclarative/qml-i18n.nix { };
+        };
       };
     };
 
