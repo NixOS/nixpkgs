@@ -9,7 +9,8 @@
 
 buildDunePackage {
   pname = "rpclib-lwt";
-  inherit (rpclib) version useDune2 src;
+  inherit (rpclib) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ lwt rpclib ];
 

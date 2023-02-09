@@ -78,7 +78,7 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          - [`${lib.optionalString (title != null) "${title} aka "}pkgs.${name}`](
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
               https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
             )${
               lib.optionalString (args ? comment) "\n\n  ${args.comment}"

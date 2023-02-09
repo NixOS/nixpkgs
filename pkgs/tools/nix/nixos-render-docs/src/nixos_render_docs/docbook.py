@@ -103,7 +103,7 @@ class DocBookRenderer(Renderer):
     # HACK open and close para for docbook change size. remove soon.
     def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                          env: MutableMapping[str, Any]) -> str:
-        spacing = ' spacing="compact"' if token.attrs.get('compact', False) else ''
+        spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<para><itemizedlist{spacing}>\n"
     def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
@@ -218,7 +218,7 @@ class DocBookRenderer(Renderer):
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
         start = f' startingnumber="{token.attrs["start"]}"' if 'start' in token.attrs else ""
-        spacing = ' spacing="compact"' if token.attrs.get('compact', False) else ''
+        spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<orderedlist{start}{spacing}>"
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                            env: MutableMapping[str, Any]) -> str:

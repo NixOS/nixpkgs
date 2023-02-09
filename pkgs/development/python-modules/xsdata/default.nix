@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , click
 , click-default-group
 , docformatter
@@ -24,6 +25,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-o9Xxt7b/+MkW94Jcg26ihaTn0/OpTcu+0OY7oV3JRGY=";
   };
+
+  patches = [
+    # https://github.com/tefra/xsdata/pull/741
+    (fetchpatch {
+      name = "use-docformatter-1.5.1.patch";
+      url = "https://github.com/tefra/xsdata/commit/040692db47e6e51028fd959c793e757858c392d7.patch";
+      excludes = [ "setup.cfg" ];
+      hash = "sha256-ncecMJLJUiUb4lB8ys+nyiGU/UmayK++o89h3sAwREQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

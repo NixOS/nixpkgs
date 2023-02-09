@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.19.0";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-59NH4HIhgDOxwgSUJq71ewpQTn2sbpNNT9Q3nj8qJss=";
+    hash = "sha256-DhG8JdYVRrsRuXsmlUzp7HDRlBsI/pLMBDzYqIzmae4=";
   };
 
   propagatedBuildInputs = [

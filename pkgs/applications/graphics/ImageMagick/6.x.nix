@@ -21,6 +21,7 @@
 , libde265Support ? true, libde265
 , fftw
 , ApplicationServices, Foundation
+, testers
 }:
 
 let
@@ -33,14 +34,14 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
   version = "6.9.12-68";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-slQcA0cblxtG/1DiJx5swUh7Kfwgz5HG70eqJFLaQJI=";
   };
 
@@ -109,10 +110,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://legacy.imagemagick.org/";
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
     description = "A software suite to create, edit, compose, or convert bitmap images";
+    pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
@@ -137,4 +141,4 @@ stdenv.mkDerivation rec {
       "CVE-2022-2719"
     ];
   };
-}
+})

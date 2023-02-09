@@ -577,8 +577,8 @@
           </listitem>
           <listitem>
             <para>
-              <literal>services.openssh.cyphers</literal> to
-              <literal>services.openssh.settings.Cyphers</literal>
+              <literal>services.openssh.ciphers</literal> to
+              <literal>services.openssh.settings.Ciphers</literal>
             </para>
           </listitem>
           <listitem>
@@ -920,6 +920,52 @@
           <literal>zram-generator</literal>, and the option
           <literal>zramSwap.numDevices</literal> for using ZRAM devices
           as general purpose ephemeral block devices has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          As Singularity has renamed to
+          <link xlink:href="https://apptainer.org/news/community-announcement-20211130">Apptainer</link>
+          to distinguish from
+          <link xlink:href="https://sylabs.io/2021/05/singularity-community-edition">an
+          un-renamed fork by Sylabs Inc.</link>, there are now two
+          packages of Singularity/Apptainer:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>apptainer</literal>: From
+              <literal>github.com/apptainer/apptainer</literal>, which
+              is the new repo after renaming.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>singularity</literal>: From
+              <literal>github.com/sylabs/singularity</literal>, which is
+              the fork by Sylabs Inc..
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          <literal>programs.singularity</literal> got a new
+          <literal>package</literal> option to specify which package to
+          use.
+        </para>
+        <para>
+          <literal>singularity-tools.buildImage</literal> got a new
+          input argument <literal>singularity</literal> to specify which
+          package to use.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The new option
+          <literal>programs.singularity.enableFakeroot</literal>, if set
+          to <literal>true</literal>, provides
+          <literal>--fakeroot</literal> support for
+          <literal>apptainer</literal> and
+          <literal>singularity</literal>.
         </para>
       </listitem>
       <listitem>

@@ -62,7 +62,7 @@ in
       '';
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes addon manager.");
+    enable = mkEnableOption (lib.mdDoc "Kubernetes addon manager");
   };
 
   ###### implementation

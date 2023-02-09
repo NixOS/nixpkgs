@@ -28,16 +28,16 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.27.0";
+  version = "0.27.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-742RB5ijCEYgjGgGyb6ZZ34GfMHm8253d3cNLQQzL38=";
+    hash = "sha256-/K/5T15kULTQP1FCLnyrKfhlQjIStayutaxLjmHjHes=";
   };
-  vendorHash = "sha256-0hylttMwkmhpydKY7cpOoHrKmaGF4ediI8uwtcT3x4I=";
+  vendorHash = "sha256-JLPPNOsoq+ErLhELsX3z3YehYfgp7OGXEXlP3IVcM5k=";
 
   buildInputs = [
     harfbuzz

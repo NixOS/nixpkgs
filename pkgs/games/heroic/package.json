@@ -1,6 +1,6 @@
 {
   "name": "heroic",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "private": true,
   "main": "build/electron/main.js",
   "homepage": "./",
@@ -39,7 +39,7 @@
       }
     ],
     "win": {
-      "artifactName": "${productName}-${version}-Setup.${ext}",
+      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}",
       "icon": "build/win_icon.ico",
       "asarUnpack": [
         "build/bin/win32/legendary.exe",
@@ -50,7 +50,7 @@
       ]
     },
     "portable": {
-      "artifactName": "${productName}-${version}-Portable.${ext}"
+      "artifactName": "${productName}-${version}-Portable-${arch}.${ext}"
     },
     "mac": {
       "artifactName": "${productName}-${version}-macOS-${arch}.${ext}",
@@ -175,10 +175,10 @@
     "test-watch": "jest --watch --maxWorkers=25%",
     "test:ci": "jest --runInBand --silent",
     "release:linux": "vite build && electron-builder -p always --linux deb AppImage rpm pacman tar.xz",
-    "release:mac": "vite build && electron-builder -p always --mac",
-    "release:win": "vite build && electron-builder -p always --win nsis portable",
+    "release:mac": "vite build && electron-builder -p always --mac --x64 --arm64",
+    "release:win": "vite build && electron-builder -p never --win nsis portable --x64 --arm64",
     "dist:linux": "vite build && electron-builder --linux",
-    "dist:mac": "vite build && electron-builder --mac --x64 --arm64",
+    "dist:mac": "vite build && electron-builder --mac",
     "dist:win": "vite build && electron-builder --win",
     "dist:flatpak": "yarn dist:linux appimage && yarn flatpak:prepare && yarn flatpak:build",
     "lint": "eslint --cache -c .eslintrc --ext .tsx,ts ./src",

@@ -1865,6 +1865,8 @@ self: super: with self; {
 
   cma = callPackage ../development/python-modules/cma { };
 
+  cmaes = callPackage ../development/python-modules/cmaes { };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
@@ -2240,6 +2242,8 @@ self: super: with self; {
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
+
+  dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   dataset = callPackage ../development/python-modules/dataset { };
 
@@ -5770,6 +5774,8 @@ self: super: with self; {
 
   mbddns = callPackage ../development/python-modules/mbddns { };
 
+  mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
@@ -5803,6 +5809,8 @@ self: super: with self; {
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediapy = callPackage ../development/python-modules/mediapy { };
+
+  meep = callPackage ../development/python-modules/meep { };
 
   meilisearch = callPackage ../development/python-modules/meilisearch { };
 
@@ -7248,6 +7256,8 @@ self: super: with self; {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyorthanc = callPackage ../development/python-modules/pyorthanc { };
+
   pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
 
   pyownet = callPackage ../development/python-modules/pyownet { };
@@ -8070,6 +8080,7 @@ self: super: with self; {
 
   pygame = callPackage ../development/python-modules/pygame {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+    SDL2_image = pkgs.SDL2_image_2_0_5;
   };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
@@ -8936,6 +8947,8 @@ self: super: with self; {
   pysyncobj = callPackage ../development/python-modules/pysyncobj { };
 
   pytabix = callPackage ../development/python-modules/pytabix { };
+
+  pytablewriter = callPackage ../development/python-modules/pytablewriter { };
 
   pytado = callPackage ../development/python-modules/pytado { };
 
@@ -10051,6 +10064,12 @@ self: super: with self; {
 
   ripser = callPackage ../development/python-modules/ripser { };
 
+  riscof = callPackage ../development/python-modules/riscof { };
+
+  riscv-config = callPackage ../development/python-modules/riscv-config { };
+
+  riscv-isac = callPackage ../development/python-modules/riscv-isac { };
+
   rising = callPackage ../development/python-modules/rising { };
 
   ritassist = callPackage ../development/python-modules/ritassist { };
@@ -10412,6 +10431,8 @@ self: super: with self; {
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
+
+  sentence-transformers = callPackage ../development/python-modules/sentence-transformers { };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
 
@@ -11196,6 +11217,8 @@ self: super: with self; {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
+  tabledata = callPackage ../development/python-modules/tabledata { };
+
   tables = callPackage ../development/python-modules/tables { };
 
   tablib = callPackage ../development/python-modules/tablib { };
@@ -11233,6 +11256,8 @@ self: super: with self; {
   tblib = callPackage ../development/python-modules/tblib { };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
+
+  tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
   tcxparser = callPackage ../development/python-modules/tcxparser { };
 
@@ -11762,6 +11787,8 @@ self: super: with self; {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
+  typepy = callPackage ../development/python-modules/typepy { };
+
   typer = callPackage ../development/python-modules/typer { };
 
   types-colorama = callPackage ../development/python-modules/types-colorama { };
@@ -12181,7 +12208,9 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  watchfiles = callPackage ../development/python-modules/watchfiles { };
+  watchfiles = callPackage ../development/python-modules/watchfiles {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   watchgod = callPackage ../development/python-modules/watchgod { };
 

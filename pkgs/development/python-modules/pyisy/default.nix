@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.1.11";
+  version = "3.1.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "automicus";
     repo = "PyISY";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RYC0mfskDcCU9O2pSKRL9ulPUaJQO9UKp7WANXZWJ60=";
+    hash = "sha256-FjreG+xjX8f68nUq/4HHEaYcUYjU/9sYvzmIN6kXezU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
