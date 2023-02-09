@@ -49,7 +49,7 @@
 , boost
 , singular
 , pip
-, jupyter_core
+, jupyter-core
 , sage-setup
 , libhomfly
 , libbraiding
@@ -87,7 +87,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     iml
     perl
-    jupyter_core
+    jupyter-core
     pkg-config
     sage-setup
     pip # needed to query installed packages

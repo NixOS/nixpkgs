@@ -36,8 +36,6 @@
 , xorgserver
 }:
 
-with lib;
-
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
@@ -151,6 +149,7 @@ in buildPythonApplication rec {
     python-uinput
     pyxdg
     rencode
+    invoke
   ] ++ lib.optionals withNvenc [
     pycuda
     pynvml
@@ -205,7 +204,7 @@ in buildPythonApplication rec {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";

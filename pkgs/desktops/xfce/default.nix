@@ -1,31 +1,17 @@
 { config
 , lib
 , pkgs
-, splicePackages
-, newScope
-, pkgsBuildBuild
-, pkgsBuildHost
-, pkgsBuildTarget
-, pkgsHostHost
-, pkgsTargetTarget
+, generateSplicesForMkScope
+, makeScopeWithSplicing
 }:
 
 let
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.xfce;
-    selfBuildHost = pkgsBuildHost.xfce;
-    selfBuildTarget = pkgsBuildTarget.xfce;
-    selfHostHost = pkgsHostHost.xfce;
-    selfTargetTarget = pkgsTargetTarget.xfce or { };
-  };
   keep = _self: { };
   extra = _spliced0: { };
 
 in
-lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+makeScopeWithSplicing
+  (generateSplicesForMkScope "xfce")
   keep
   extra
   (self:
@@ -39,7 +25,9 @@ lib.makeScopeWithSplicing
 
       mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
-      automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
+      automakeAddFlags = pkgs.makeSetupHook {
+        name = "xfce-automake-add-flags-hook";
+      } ./automakeAddFlags.sh;
 
       #### CORE
 
@@ -109,9 +97,7 @@ lib.makeScopeWithSplicing
 
       xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
 
-      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
-        inherit (pkgs.gnome) libsoup;
-      };
+      xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter { };
 
       xfdashboard = callPackage ./applications/xfdashboard { };
 
@@ -150,8 +136,6 @@ lib.makeScopeWithSplicing
       xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
       xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
-
-      xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin { };
 
       xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
 
@@ -192,4 +176,5 @@ lib.makeScopeWithSplicing
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
+      xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
     })

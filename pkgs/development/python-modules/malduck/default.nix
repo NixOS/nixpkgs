@@ -46,7 +46,7 @@ buildPythonPackage rec {
       --replace "dnfile==0.11.0" "dnfile"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

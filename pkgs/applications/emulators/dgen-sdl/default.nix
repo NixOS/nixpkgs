@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://dgen.sourceforge.net/";
+    homepage = "https://dgen.sourceforge.net/";
     description = "Sega Genesis/Mega Drive emulator";
     longDescription = ''
       DGen/SDL is a free, open source emulator for Sega Genesis/Mega Drive

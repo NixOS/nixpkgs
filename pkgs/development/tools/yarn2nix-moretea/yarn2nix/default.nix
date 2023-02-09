@@ -2,10 +2,10 @@
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
 , allowAliases ? pkgs.config.allowAliases
-}:
+}@inputs:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
+  inherit (pkgs) stdenv lib callPackage git rsync runCommandLocal;
 
   compose = f: g: x: f (g x);
   id = x: x;
@@ -70,6 +70,8 @@ in rec {
     offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? [ ],
     ignoreScripts ? true,
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -169,6 +171,8 @@ in rec {
     src,
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     packageOverrides ? {},
     ...
   }@attrs:
@@ -226,7 +230,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock packageResolutions workspaceDependencies; }
+          // { inherit src packageJSON yarnLock nodejs yarn packageResolutions workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -241,6 +245,8 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -268,7 +274,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig packageResolutions;
+        inherit packageJSON pname version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python wrapper around the libevdev C library";

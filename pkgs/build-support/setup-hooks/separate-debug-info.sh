@@ -26,7 +26,7 @@ _separateDebugInfo() {
         fi
 
         # Extract the debug info.
-        header "separating debug info from $i (build ID $id)"
+        echo "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
 
         # This may fail, e.g. if the binary is for a different

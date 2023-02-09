@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.9";
+  version = "9.18.11";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-apZlmY1WhgRGDfCRj8jM+tfSk4jU2EJWDAVswhHLskM=";
+    sha256 = "sha256-j/M1KBIjDLy9pC34fK2WH5QWPT2kV8XkvvgFf9XfIVg=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # requires root and the net
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (nixosTests) bind;

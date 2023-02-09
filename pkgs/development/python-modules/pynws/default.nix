@@ -28,7 +28,7 @@ buildPythonPackage rec {
     metar
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-aiohttp
     pytest-asyncio

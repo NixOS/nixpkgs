@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     perl
     (python3.withPackages (ps: with ps; [ numpy scipy ]))

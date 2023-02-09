@@ -67,7 +67,8 @@ in {
       serviceConfig = {
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
-        Restart = "on-failure";
+        Restart = "always";
+        RestartSec = 5;
         EnvironmentFile = cfg.credentialsFile;
         ExecStart = ''
           ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${lib.optionalString (cfg.host != null) "--host ${cfg.host}"} \

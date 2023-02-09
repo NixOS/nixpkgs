@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     qt5.qtsvg
   ];
 
-  installCheckInputs = [ bc ];
+  nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
     patchShebangs ./build ./configure ./run_tests ./bin/*

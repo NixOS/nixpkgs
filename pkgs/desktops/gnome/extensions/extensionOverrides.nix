@@ -3,13 +3,16 @@
 , gjs
 , gnome
 , gobject-introspection
+, gsound
 , hddtemp
+, libgda
 , liquidctl
 , lm_sensors
 , netcat-gnu
 , nvme-cli
 , procps
 , pulseaudio
+, libgtop
 , python3
 , smartmontools
 , substituteAll
@@ -79,6 +82,15 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "pano@elhan.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
+        inherit gsound libgda;
+      })
+    ];
+  }))
+
   (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
     # Requires gjs
     # https://github.com/NixOS/nixpkgs/issues/164865
@@ -99,6 +111,15 @@ super: lib.trivial.pipe super [
     ];
 
     meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+  }))
+
+  (patchExtension "tophat@fflewddur.github.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
   }))
 
   (patchExtension "unite@hardpixel.eu" (old: {

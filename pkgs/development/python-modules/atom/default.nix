@@ -36,7 +36,7 @@ buildPythonPackage rec {
     rm -rf atom
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -54,7 +54,7 @@ buildPythonPackage rec {
     hidapi
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyocd" ];
 

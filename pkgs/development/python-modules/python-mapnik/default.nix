@@ -90,7 +90,7 @@ buildPythonPackage rec {
     export XMLPARSER=libxml2
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];

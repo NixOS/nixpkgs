@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     glib
     polkit
     python3 # for cli tool
-    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
   ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     umockdev
     dbus
   ];

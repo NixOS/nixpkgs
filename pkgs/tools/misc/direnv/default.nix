@@ -27,7 +27,7 @@ buildGoModule rec {
     make install PREFIX=$out
   '';
 
-  checkInputs = [ fish zsh ];
+  nativeCheckInputs = [ fish zsh ];
 
   checkPhase = ''
     export HOME=$(mktemp -d)

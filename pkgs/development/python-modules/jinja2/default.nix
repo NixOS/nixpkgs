@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.is32bit;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

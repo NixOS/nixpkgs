@@ -53,7 +53,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     httpretty
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);

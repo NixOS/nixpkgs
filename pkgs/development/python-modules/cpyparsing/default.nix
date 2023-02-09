@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  checkInputs = [ pexpect ];
+  nativeCheckInputs = [ pexpect ];
 
   checkPhase = ''
     ${python.interpreter} tests/cPyparsing_test.py

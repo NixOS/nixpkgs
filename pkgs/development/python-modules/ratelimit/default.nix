@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pytest.ini
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
 

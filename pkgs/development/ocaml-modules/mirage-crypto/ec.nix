@@ -26,7 +26,6 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    ocaml
     dune-configurator
   ];
   propagatedBuildInputs = [
@@ -37,7 +36,7 @@ buildDunePackage rec {
     ocaml-freestanding
   ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   doCheck = true;
   checkInputs = [

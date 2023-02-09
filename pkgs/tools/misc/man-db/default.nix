@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  checkInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
 
   patches = [ ./systemwide-man-db-conf.patch ];
 

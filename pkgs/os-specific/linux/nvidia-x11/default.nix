@@ -13,8 +13,6 @@ let
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 
-  kernelModVersion = lib.versions.majorMinor kernel.modDirVersion;
-
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version
     then b
     else a;
@@ -27,11 +25,11 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "525.60.11";
-    sha256_64bit = "sha256-gW7mwuCBPMw9SnlY9x/EmjfGDv4dUdYUbBznJAOYPV0=";
-    openSha256 = "sha256-33ATZuYu+SOOxM6UKXp6J+f1+zbmHvaK4v13X3UZTTM=";
-    settingsSha256 = "sha256-gA1x6oEpnkr/OPP4eR1L5gC5srvEKtDrSpnv2QEaEpE=";
-    persistencedSha256 = "sha256-AFMy3agoJ6yVsGgUvTfOzHlz30iApBpAReckq9iS7AA=";
+    version = "525.85.05";
+    sha256_64bit = "sha256-6mO0JTQDsiS7cxOol3qSDf6dID1mHdX2/CZYWnAXkUA=";
+    openSha256 = "sha256-iI41eex/pQhWdQwk9qc9AlnVYcO0HRA9ISoqNdVKN7g=";
+    settingsSha256 = "sha256-ck6ra8y8nn5kA3L9/VcRR2W2RaWvfVbgBiOh2dRJr/8=";
+    persistencedSha256 = "sha256-dt/Tqxp7ZfnbLel9BavjWDoEdLJvdJRwFjTFOBYYKLI=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -53,14 +51,14 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "515.49.25";
-    persistencedVersion = "515.48.07";
-    settingsVersion = "515.48.07";
-    sha256_64bit = "sha256-5j+YtKaPhDxd9bcPX10ViugLMCTXEYJfod+ecn3SHWc=";
-    openSha256 = "sha256-EnZXEvic9GdcNbcvpmbDkq6YPYqypBKyEXxFJJJJpKk=";
-    settingsSha256 = "sha256-XwdMsAAu5132x2ZHqjtFvcBJk6Dao7I86UksxrOkknU=";
-    persistencedSha256 = "sha256-BTfYNDJKe4tOvV71/1JJSPltJua0Mx/RvDcWT5ccRRY=";
-    url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+    version = "525.47.06";
+    persistencedVersion = "525.85.05";
+    settingsVersion = "525.85.05";
+    sha256_64bit = "sha256-HxRXtd3ubjS1V/y1hDWe16XNSCbQYHoEw+Jz8Emy5/4=";
+    openSha256 = "sha256-oiOlCdkFMXm4vVZzmnnI5/INVWUqC02gGj/aIfzjGig=";
+    settingsSha256 = "sha256-ck6ra8y8nn5kA3L9/VcRR2W2RaWvfVbgBiOh2dRJr/8=";
+    persistencedSha256 = "sha256-dt/Tqxp7ZfnbLel9BavjWDoEdLJvdJRwFjTFOBYYKLI=";
+    url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
   # Update note:

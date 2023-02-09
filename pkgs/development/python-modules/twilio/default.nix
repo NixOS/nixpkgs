@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "7.16.0";
+  version = "7.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-+cbcINDnPmgNtZeQUOuTwU24Fe0i3xisxTYurV4GW7Y=";
+    hash = "sha256-Z783lHGZc5/Fl4pnM5mf863UVuFroRNwV5cljPSpCmw=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     django
     mock

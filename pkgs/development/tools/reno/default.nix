@@ -21,7 +21,7 @@ with python3Packages; buildPythonApplication rec {
     setuptools  # required for finding pkg_resources at runtime
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     # Python packages
     pytestCheckHook
     docutils

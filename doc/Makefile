@@ -11,7 +11,7 @@ pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracket
 pandoc_flags = --extract-media=$(pandoc_media_dir) \
 	--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
 	--lua-filter=build-aux/pandoc-filters/myst-reader/roles.lua \
-	--lua-filter=build-aux/pandoc-filters/link-unix-man-references.lua \
+	--lua-filter=$(PANDOC_LINK_MANPAGES_FILTER) \
 	--lua-filter=build-aux/pandoc-filters/docbook-writer/rst-roles.lua \
 	--lua-filter=build-aux/pandoc-filters/docbook-writer/labelless-link-is-xref.lua \
 	-f commonmark$(pandoc_commonmark_enabled_extensions)+smart

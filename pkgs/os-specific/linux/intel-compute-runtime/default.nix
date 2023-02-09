@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , patchelf
 , cmake
 , pkg-config
@@ -12,14 +13,23 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "22.43.24595.35";
+  version = "22.43.24595.41";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-CWiWkv3CmHhXAk2M92voeQ06ximSOnT9hgIA4rIxWmM=";
+    sha256 = "sha256-AdAQX8wurZjXHf3z8IPxnW57CDOwwYlgJ09dNNDhUYQ=";
   };
+
+  patches = [
+    # fix compile with level-zero 1.9.4
+    (fetchpatch {
+      url = "https://github.com/intel/compute-runtime/commit/dce17d319f91b39806b2cd39b6eecd5c5cff2a68.patch";
+      excludes = [ "manifests/manifest.yml" ];
+      sha256 = "sha256-YGzS4LeNO8FO1GXowD2gARj0TL6tBFaeZJNLZOwSsWQ=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

@@ -1,36 +1,28 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 , installShellFiles
-, openssl
 , testers
 , vsmtp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "1.3.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-nBkfIjACmjnVNF3hJ22B4ecjWrX9licV7c8Yxv2tQCg=";
+    hash = "sha256-FI4BvU+83nTzRLJQZ1l1eOn41ZeA62Db+p3d//5o0Wk=";
   };
 
-  cargoHash = "sha256-HqQ8WD1/K7xMx97SbuP45Q/+4oADh1WZFJPXB8wlkbM=";
+  cargoHash = "sha256-Qhhh0riM1qeD3/JZINvY0t5fEOj+prI0fyXagdR43sc=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  cargoBuildFlags = [
-    "--package"
-    "vsmtp"
-    "--package"
-    "vqueue"
-  ];
+  # tests do not run well in the nix sandbox
+  doCheck = false;
 
   postInstall = ''
     installManPage tools/install/man/*.1

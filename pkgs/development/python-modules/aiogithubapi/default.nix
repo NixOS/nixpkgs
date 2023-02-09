@@ -43,7 +43,7 @@ buildPythonPackage rec {
     backoff
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

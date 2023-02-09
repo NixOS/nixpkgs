@@ -7,7 +7,7 @@
     <literal>/dev/disk/by-label/data</literal> onto the mount point
     <literal>/data</literal>:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 fileSystems.&quot;/data&quot; =
   { device = &quot;/dev/disk/by-label/data&quot;;
     fsType = &quot;ext4&quot;;

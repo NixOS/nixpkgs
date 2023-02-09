@@ -123,7 +123,7 @@ buildPythonApplication rec {
       --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  checkInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
+  nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
   checkPhase = ''
     runHook preCheck
 

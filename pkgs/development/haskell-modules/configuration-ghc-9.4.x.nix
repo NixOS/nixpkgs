@@ -60,8 +60,6 @@ in {
 
   # consequences of doctest breakage follow:
 
-  double-conversion = markBroken super.double-conversion;
-  blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
@@ -86,8 +84,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib_9_4_3_20221104;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_3_20221104;
+  ghc-lib = doDistribute self.ghc-lib-parser_9_4_4_20221225;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_4_20221225;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
@@ -106,16 +104,17 @@ in {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
+  shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
 
   base-orphans = dontCheck super.base-orphans;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
   # since those are used for the internal dependencies between the versioned
   # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_7;
-  hspec-core = self.hspec-core_2_10_7;
+  hspec = self.hspec_2_10_8;
+  hspec-core = self.hspec-core_2_10_8;
   hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_7;
+  hspec-discover = self.hspec-discover_2_10_8;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -172,23 +171,28 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  hlint = self.hlint_3_5;
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) hlint;
+  };
+
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
+
+  ghc-exactprint = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ HUnit data-default fail filemanip free ghc-paths ordered-containers silently syb Diff ];
+  })
+    self.ghc-exactprint_1_6_1_1;
 
   # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
     hls-refactor-plugin = null;
-    hls-class-plugin = null;
     hls-eval-plugin = null;
     hls-floskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    hls-gadt-plugin = null;
-    hls-hlint-plugin = null;
     hls-ormolu-plugin = null;
     hls-rename-plugin = null;
     hls-stylish-haskell-plugin = null;
-    hls-retrie-plugin = null;
   };
 
   # https://github.com/tweag/ormolu/issues/941
@@ -197,5 +201,9 @@ in {
   }) (disableCabalFlag "fixity-th" super.ormolu);
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
+
+  # The Haskell library has additional dependencies when compiled with ghc-9.4.x.
+  X11-xft = addExtraLibraries [pkgs.xorg.libXau pkgs.xorg.libXdmcp pkgs.expat] super.X11-xft;
+
 }

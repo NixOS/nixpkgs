@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.1.4";
+  version = "4.1.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-04pOEI0jhsuWN9pmqC3I0HM8rt5Mg8Sv29p4r0IUIRs=";
+    hash = "sha256-vOsP4aOGeBrweIyuQQhiJ1bNBed3VEje7ASnHd+HaF0=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   # ModuleNotFoundError: No module named 'asgiref'
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     argon2-cffi
     asgiref

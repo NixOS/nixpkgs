@@ -63,7 +63,6 @@ self: super: {
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
-  retrie = doJailbreak super.retrie_1_2_1_1;
 
   # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
   # https://github.com/haskell-infra/hackage-trustees/issues/347
@@ -90,10 +89,6 @@ self: super: {
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
-  # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
-  regex-rure = doDistribute (markUnbroken super.regex-rure);
-  jacinda = doDistribute super.jacinda;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;

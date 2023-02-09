@@ -17,6 +17,15 @@ else
    LD_BINARY=$out/lib/ld-*so.?
 fi
 
+# path to version-specific libraries, like libstdc++.so
+LIBSTDCXX_SO_DIR=$(echo $out/lib/gcc/*/*)
+
+# Move version-specific libraries out to avoid library mix when we
+# upgrade gcc.
+# TODO(trofi): update bootstrap tarball script and tarballs to put them
+# into expected location directly.
+LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/mv $out/lib/libstdc++.* $LIBSTDCXX_SO_DIR/
+
 # On x86_64, ld-linux-x86-64.so.2 barfs on patchelf'ed programs.  So
 # use a copy of patchelf.
 LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
@@ -25,8 +34,8 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     if [ -L "$i" ]; then continue; fi
     if [ -z "${i##*/liblto*}" ]; then continue; fi
     echo patching "$i"
-    LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-        ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
+    LD_LIBRARY_PATH=$out/lib:$LIBSTDCXX_SO_DIR $LD_BINARY \
+        ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib:$LIBSTDCXX_SO_DIR --force-rpath "$i"
 done
 
 for i in $out/lib/librt-*.so $out/lib/libpcre*; do

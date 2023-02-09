@@ -56,7 +56,7 @@ in buildPythonPackage rec {
     HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
   '';
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "PyTorch vision library";

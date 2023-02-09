@@ -34,8 +34,6 @@
 , nixosTests
 }:
 
-with lib;
-
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
   python3BuildEnv = python3.buildEnv.override {
@@ -88,10 +86,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-memconf"
-    (enableFeature (dconf != null) "dconf")
-    (enableFeature (libnotify != null) "libnotify")
-    (enableFeature withWayland "wayland")
-    (enableFeature enableUI "ui")
+    (lib.enableFeature (dconf != null) "dconf")
+    (lib.enableFeature (libnotify != null) "libnotify")
+    (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature enableUI "ui")
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
@@ -133,7 +131,7 @@ stdenv.mkDerivation rec {
     isocodes
     json-glib
     libnotify
-  ] ++ optionals withWayland [
+  ] ++ lib.optionals withWayland [
     libxkbcommon
     wayland
   ];
@@ -165,7 +163,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;

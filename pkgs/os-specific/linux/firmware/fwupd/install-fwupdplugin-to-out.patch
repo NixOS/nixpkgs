@@ -1,37 +1,14 @@
-diff --git a/libfwupdplugin/meson.build b/libfwupdplugin/meson.build
-index 1afa28e1..3da81d30 100644
---- a/libfwupdplugin/meson.build
-+++ b/libfwupdplugin/meson.build
-@@ -220,7 +220,8 @@ fwupdplugin = library(
-   ],
-   link_args: cc.get_supported_link_arguments([vflag]),
-   link_depends: fwupdplugin_mapfile,
--  install: true
-+  install: true,
-+  install_dir: bindir / '..' / 'lib',
- )
- 
- fwupdplugin_pkgg = import('pkgconfig')
-@@ -280,7 +281,8 @@ if introspection.allowed()
-       girtargets,
-       fwupd_gir[0],
-     ],
--    install: true
-+    install: true,
-+    install_dir_typelib: bindir / '..' / 'lib' / 'girepository-1.0',
-   )
- 
-   # Verify the map file is correct -- note we can't actually use the generated
 diff --git a/meson.build b/meson.build
-index b91dd037..f97b4c26 100644
+index 9ae278b66..7cddf1a0d 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -504,7 +504,7 @@ if build_standalone
+@@ -507,7 +507,7 @@ if build_standalone
  if host_machine.system() == 'windows'
-   plugin_dir = 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current)
+   libdir_pkg = 'fwupd-@0@'.format(fwupd_version)
  else
--  plugin_dir = join_paths(libdir, 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current))
-+  plugin_dir = join_paths(bindir, '..', 'lib', 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current))
+-  libdir_pkg = join_paths(libdir, 'fwupd-@0@'.format(fwupd_version))
++  libdir_pkg = join_paths(prefix, 'lib', 'fwupd-@0@'.format(fwupd_version))
  endif
- conf.set_quoted('FWUPD_PLUGINDIR', plugin_dir)
+ conf.set_quoted('FWUPD_LIBDIR_PKG', libdir_pkg)
  endif
+

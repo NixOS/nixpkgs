@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool that can convert rgb images to nordtheme palette";

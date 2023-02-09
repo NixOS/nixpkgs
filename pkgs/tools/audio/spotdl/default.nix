@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-mock
     pytest-vcr

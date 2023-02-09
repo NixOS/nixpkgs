@@ -23,7 +23,7 @@ buildPythonPackage rec {
     beancount
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     sh
   ];

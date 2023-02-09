@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     parameterized
     pytestCheckHook
   ];
@@ -51,7 +51,6 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "tests/checker/test_content_allows_robots.py"
     "tests/checker/test_http*.py"
-    "tests/checker/test_noproxy.py"
     "tests/test_network.py"
   ];
 

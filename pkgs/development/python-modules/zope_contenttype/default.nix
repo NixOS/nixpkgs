@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-NnVoeLxSWzY2TQ1b2ZovCw/TuaUND+m73Eqxs4rCOAA=";
   };
 
-  checkInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope_testrunner ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";

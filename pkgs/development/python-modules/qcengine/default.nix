@@ -30,7 +30,7 @@ buildPythonPackage rec {
     qcelemental
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

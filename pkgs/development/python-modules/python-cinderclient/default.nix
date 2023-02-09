@@ -35,7 +35,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     oslo-serialization
     requests-mock

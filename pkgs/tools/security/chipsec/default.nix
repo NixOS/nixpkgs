@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     nasm
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];

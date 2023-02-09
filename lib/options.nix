@@ -114,7 +114,7 @@ rec {
 
      You can omit the default path if the name of the option is also attribute path in nixpkgs.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string]; example :: null | string | [string]; } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -136,13 +136,18 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "The ${name} package to use.";
+        description = "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = args: name: extra:
+    let option = mkPackageOption args name extra;
+    in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -196,7 +201,7 @@ rec {
 
   /* Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a } ] -> [a]
+     Type: getValues :: [ { value :: a; } ] -> [a]
 
      Example:
        getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
@@ -206,7 +211,7 @@ rec {
 
   /* Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a } ] -> [a]
+     Type: getFiles :: [ { file :: a; } ] -> [a]
 
      Example:
        getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]

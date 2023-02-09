@@ -1,16 +1,24 @@
-{ stdenv, lib, fetchurl, withReadline ? true, readline }:
+{ stdenv, lib, fetchurl, symlinkJoin, withReadline ? true, readline }:
 
+let
+  readline-all = symlinkJoin {
+    name = "readline-all"; paths = [ readline readline.dev ];
+  };
+in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.12.9";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-HY/SZiVOfOrA69gGxEp+qdRnuTJ72XveAk9Xp45zcf8=";
+    hash = "sha256-ZrT2vHfbc0S9Q9e9lDiyptfSC3CIiQs8Co9FODil7oY=";
   };
 
   postPatch = ''
     patchShebangs build
+    # TODO: workaround for https://github.com/oilshell/oil/issues/1467
+    #       check for removability on updates :)
+    substituteInPlace configure --replace "echo '#define HAVE_READLINE 1'" "echo '#define HAVE_READLINE 1' && return 0"
   '';
 
   preInstall = ''
@@ -19,7 +27,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
-  configureFlags = lib.optional withReadline "--with-readline";
+  configureFlags = [
+    "--datarootdir=${placeholder "out"}"
+  ] ++ lib.optionals withReadline [
+    "--with-readline"
+    "--readline=${readline-all}"
+  ];
 
   # Stripping breaks the bundles by removing the zip file from the end.
   dontStrip = true;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wcmatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

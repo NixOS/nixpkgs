@@ -54,8 +54,7 @@ let
     ghc902
     ghc924
     ghc925
-    ghc942
-    ghc943
+    ghc944
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -346,6 +345,13 @@ let
               ;
             };
           };
+
+      pkgsCross.ghcjs.haskellPackages = {
+        inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+          ghc
+          hello
+        ;
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -360,16 +366,9 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = released;
+      haskell-language-server = builtins.filter (x: x != compilerNames.ghc884) released;
       hoogle = released;
-      hlint = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        # https://github.com/ndmitchell/hlint/issues/1413
-      ];
+      hlint = released;
       hpack = released;
       hsdns = released;
       jailbreak-cabal = released;

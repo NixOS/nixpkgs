@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "inkbird-ble";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KUBOjeFM4h2Qt9eT0mQKPFYJJ8OWdbYy9+AiHsJWNyU=";
+    hash = "sha256-re5HjPtssFkpcltCr0HEJmJyHbXJdkr2wDgaAHfy2Tk=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

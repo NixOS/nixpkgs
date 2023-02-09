@@ -31,7 +31,7 @@ buildPythonPackage rec {
     "zcs"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boxx
   ];
 

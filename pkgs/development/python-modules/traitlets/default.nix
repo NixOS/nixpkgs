@@ -13,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.4.0";
+  version = "5.8.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PyxOQ14nFZL+Q5DxdG6laDbjoID4Tngz8PgB2WE/7Dk=";
+    sha256 = "sha256-bMV9bcKMhdU2WWFyb/0ZtThzk0d0nhPr404DMjoOj4Q=";
   };
 
   nativeBuildInputs = [ hatchling ];
-  checkInputs = [ glibcLocales pytest mock ];
+  nativeCheckInputs = [ glibcLocales pytest mock ];
   propagatedBuildInputs = [ ipython_genutils decorator six ];
 
   checkPhase = ''
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Traitlets Python config system";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

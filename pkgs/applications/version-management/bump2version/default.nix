@@ -19,7 +19,7 @@ buildPythonApplication rec {
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     testfixtures
   ];

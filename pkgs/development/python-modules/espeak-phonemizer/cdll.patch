@@ -1,0 +1,21 @@
+diff --git a/espeak_phonemizer/__init__.py b/espeak_phonemizer/__init__.py
+index a09472e..730a7f9 100644
+--- a/espeak_phonemizer/__init__.py
++++ b/espeak_phonemizer/__init__.py
+@@ -163,14 +163,10 @@ class Phonemizer:
+             # Already initialized
+             return
+ 
+-        self.libc = ctypes.cdll.LoadLibrary("libc.so.6")
++        self.libc = ctypes.cdll.LoadLibrary("@libc@")
+         self.libc.open_memstream.restype = ctypes.POINTER(ctypes.c_char)
+ 
+-        try:
+-            self.lib_espeak = ctypes.cdll.LoadLibrary("libespeak-ng.so")
+-        except OSError:
+-            # Try .so.1
+-            self.lib_espeak = ctypes.cdll.LoadLibrary("libespeak-ng.so.1")
++        self.lib_espeak = ctypes.cdll.LoadLibrary("@libespeak_ng@")
+ 
+         sample_rate = self.lib_espeak.espeak_Initialize(
+             Phonemizer.AUDIO_OUTPUT_SYNCHRONOUS, 0, None, 0

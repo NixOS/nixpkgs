@@ -1,18 +1,20 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "libertinus";
   version = "7.040";
-in fetchurl rec {
-  name = "libertinus-${version}";
-  url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
-  sha256 = "0z658r88p52dyrcslv0wlccw0sw7m5jz8nbqizv95nf7bfw96iyk";
 
-  downloadToTemp = true;
-  recursiveHash = true;
+  src = fetchurl {
+    url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
+    hash = "sha256-f+nwInItHBzGfcLCihELO7VbrjV1GWFg0kIsiTM7OFA=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -m644 -Dt $out/share/fonts/opentype static/OTF/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

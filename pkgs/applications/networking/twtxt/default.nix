@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ aiohttp python-dateutil humanize click ];
 
-  checkInputs = [ pytestCheckHook tox ];
+  nativeCheckInputs = [ pytestCheckHook tox ];
 
   disabledTests = [
      # Disable test using relative date and time

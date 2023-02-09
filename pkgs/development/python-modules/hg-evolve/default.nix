@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-0frkG8HqzC1ZftGDMv4vk47vc9tQWGBQbL4bzFdaCL4=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mercurial
   ];
 

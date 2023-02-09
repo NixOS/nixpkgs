@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FhuIYXktcNnOVX+KU5cDOd2Qk7AcWaSKvfB/BZYpsZo=";
+    hash = "sha256-KhQRC4zcLCnYUtQm08wJzb/YwBquOEGR5L0YUmnzheg=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "ttp"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
     ttp-templates
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     "test/pytest/test_N2G_formatter.py"
     # missing test file
     "test/pytest/test_extend_tag.py"
+    "test/pytest/test_ttp_parser_methods.py"
   ];
 
   disabledTests = [

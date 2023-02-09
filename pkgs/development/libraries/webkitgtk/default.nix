@@ -63,12 +63,12 @@
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.38.2";
+  version = "2.38.4";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8+uCiZZR9YO02Zys0Wr3hKGncQ/OnntoB71szekJ/j4=";
+    hash = "sha256-T0fqKaLU1fFe7z3J4tbG8Gfo3oY6P2RFXhzPlpPMHTY=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -223,11 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   postFixup = ''

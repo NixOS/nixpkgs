@@ -1,6 +1,7 @@
 { lib
 , fetchurl
 , buildDunePackage
+, ocaml
 , cppo
 , ppxlib
 , ppx_derivers
@@ -38,8 +39,7 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  # This currently fails with dune
-  strictDeps = false;
+  strictDeps = true;
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ ppxlib ];
@@ -51,7 +51,7 @@ buildDunePackage rec {
     result
   ];
 
-  doCheck = true;
+  doCheck = lib.versionOlder ocaml.version "5.0";
   checkInputs = [
     (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
   ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ networkx numpy scipy ];
-  checkInputs = [ matplotlib nose pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
 
   pythonImportsCheck = [ "skfuzzy" ];
 

@@ -163,3 +163,30 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `requireFile` {#requirefile}
+
+`requireFile` allows requesting files that cannot be fetched automatically, but whose content is known.
+This is a useful last-resort workaround for license restrictions that prohibit redistribution, or for downloads that are only accessible after authenticating interactively in a browser.
+If the requested file is present in the Nix store, the resulting derivation will not be built, because its expected output is already available.
+Otherwise, the builder will run, but fail with a message explaining to the user how to provide the file. The following code, for example:
+
+```
+requireFile {
+  name = "jdk-${version}_linux-x64_bin.tar.gz";
+  url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
+  sha256 = "94bd34f85ee38d3ef59e5289ec7450b9443b924c55625661fffe66b03f2c8de2";
+}
+```
+results in this error message:
+```
+***
+Unfortunately, we cannot download file jdk-11.0.10_linux-x64_bin.tar.gz automatically.
+Please go to https://www.oracle.com/java/technologies/javase-jdk11-downloads.html to download it yourself, and add it to the Nix store
+using either
+  nix-store --add-fixed sha256 jdk-11.0.10_linux-x64_bin.tar.gz
+or
+  nix-prefetch-url --type sha256 file:///path/to/jdk-11.0.10_linux-x64_bin.tar.gz
+
+***
+```

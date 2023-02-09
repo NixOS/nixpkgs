@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plum" ];
 
-  checkInputs = [ pytest baseline ];
+  nativeCheckInputs = [ pytest baseline ];
   checkPhase = "pytest tests";
 
   meta = with lib; {

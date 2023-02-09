@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sed -i -e '/^addopts/d' -e '/^filterwarnings/,+2d' setup.cfg
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

@@ -1,7 +1,8 @@
-{ lib, fetchFromGitLab, buildDunePackage
+{ stdenv, lib, fetchFromGitLab, buildDunePackage
 , gmp, pkg-config, dune-configurator
 , zarith, integers
-, alcotest, bisect_ppx }:
+, alcotest, bisect_ppx
+}:
 
 buildDunePackage rec {
   pname = "class_group_vdf";
@@ -23,6 +24,10 @@ buildDunePackage rec {
     dune-configurator
   ];
 
+  buildInputs = [
+    dune-configurator
+  ];
+
   propagatedBuildInputs = [
     zarith
     integers
@@ -38,6 +43,7 @@ buildDunePackage rec {
   meta = {
     description = "Verifiable Delay Functions bindings to Chia's VDF";
     homepage = "https://gitlab.com/nomadic-labs/tezos";
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

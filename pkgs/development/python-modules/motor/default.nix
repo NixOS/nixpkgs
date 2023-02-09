@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pymongo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mockupdb
   ];
 

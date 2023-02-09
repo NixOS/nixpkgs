@@ -73,7 +73,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytest-aiohttp
     pytest-asyncio

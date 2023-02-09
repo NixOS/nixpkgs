@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ autobahn twisted ];
 
-  checkInputs = [ mock twisted ];
+  nativeCheckInputs = [ mock twisted ];
 
   checkPhase = ''
     trial -j$NIX_BUILD_CORES wormhole_transit_relay

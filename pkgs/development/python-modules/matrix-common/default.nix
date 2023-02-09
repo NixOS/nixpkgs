@@ -26,7 +26,7 @@ buildPythonPackage rec {
     attrs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

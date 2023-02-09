@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wolf-shaper";
-  version = "0.1.8";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "pdesaulniers";
     repo = "wolf-shaper";
     rev = "v${version}";
-    sha256 = "1j9xmh1nkf45ay1c5dz2g165qvrwlanzcq6mvb3nfxar265drd9q";
+    sha256 = "sha256-BREv0nQVysWdx/sVd0cdFji49xtLmHEL8b2jLtgjDfI=";
     fetchSubmodules = true;
   };
 

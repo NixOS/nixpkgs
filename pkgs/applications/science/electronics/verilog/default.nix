@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installCheckInputs = [ perl ];
+  nativeInstallCheckInputs = [ perl ];
 
   installCheckPhase = ''
     # copy tests to allow writing results

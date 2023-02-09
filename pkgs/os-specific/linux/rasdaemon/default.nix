@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rasdaemon";
-  version = "0.6.8";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     rev = "v${version}";
-    sha256 = "sha256-gcwoc9lIJyqUiCSAHf1U8geLG58CxzjMFYFl8moaA2Q=";
+    sha256 = "sha256-oLwR+bNgKceVgLTOLYiKHNUkRmLouaQshdp/8UJnfqg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

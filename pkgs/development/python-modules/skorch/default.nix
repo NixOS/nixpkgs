@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
-  checkInputs = [ flaky pandas pytestCheckHook ];
+  nativeCheckInputs = [ flaky pandas pytestCheckHook ];
 
   # patch out pytest-cov dep/invocation
   postPatch = ''

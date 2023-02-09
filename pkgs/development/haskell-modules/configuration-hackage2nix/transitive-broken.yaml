@@ -192,6 +192,7 @@ dont-distribute-packages:
  - HROOT-hist
  - HROOT-io
  - HROOT-math
+ - HROOT-net
  - HROOT-tree
  - HRay
  - HSGEP
@@ -239,6 +240,7 @@ dont-distribute-packages:
  - JsContracts
  - JsonGrammar
  - JuPyTer-notebook
+ - JuicyPixels-scale-dct
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - KiCS
@@ -320,7 +322,6 @@ dont-distribute-packages:
  - Pup-Events-Demo
  - Quelea
  - RESTng
- - RJson
  - RMP
  - RNAFold
  - RNAFoldProgs
@@ -672,7 +673,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
+ - ascii-superset_1_2_5_0
  - ascii-table
+ - ascii-th_1_2_0_0
+ - ascii_1_5_1_0
  - asic
  - asil
  - assert4hs-hspec
@@ -695,6 +699,7 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
+ - autodocodec-openapi3
  - automata
  - autonix-deps-kf5
  - avers
@@ -851,8 +856,6 @@ dont-distribute-packages:
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
- - brittany
- - brittany_0_13_1_2
  - broadcast-chan-conduit
  - broadcast-chan-pipes
  - bronyradiogermany-streaming
@@ -867,13 +870,10 @@ dont-distribute-packages:
  - burnt-explorer
  - buster-gtk
  - buster-network
- - butcher
  - butterflies
  - bv-sized
  - bv-sized-lens
  - bytable
- - bytelog
- - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
@@ -1029,6 +1029,7 @@ dont-distribute-packages:
  - comfort-array
  - comfort-array-shape
  - comfort-fftw
+ - comfort-glpk
  - commsec
  - commsec-keyexchange
  - comonad-random
@@ -1331,8 +1332,6 @@ dont-distribute-packages:
  - elasticsearch-interchange
  - electrs-client
  - elerea-examples
- - eliminators
- - eliminators_0_9_1
  - elliptic-curve
  - elsa
  - emacs-keys
@@ -1392,10 +1391,14 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
+ - eventuo11y
+ - eventuo11y-batteries
+ - eventuo11y-json
  - every-bit-counts
  - ewe
  - exference
  - exinst-aeson
+ - exinst-base
  - exinst-bytes
  - exinst-cereal
  - exinst-deepseq
@@ -1403,7 +1406,6 @@ dont-distribute-packages:
  - exinst-serialise
  - exist
  - exist-instances
- - exon
  - expand
  - expat-enumerator
  - expiring-containers
@@ -1490,6 +1492,7 @@ dont-distribute-packages:
  - fmt-for-rio
  - foldable1
  - follower
+ - fontconfig-pure
  - foo
  - format
  - format-status
@@ -1497,8 +1500,6 @@ dont-distribute-packages:
  - formlets-hsp
  - forsyde-deep
  - forth-hll
- - fortran-src
- - fortran-src-extras
  - fortran-vars
  - foscam-directory
  - foscam-sort
@@ -2118,7 +2119,6 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
- - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2249,7 +2249,6 @@ dont-distribute-packages:
  - hscassandra
  - hscope
  - hsdev
- - hsexif
  - hsfacter
  - hsinspect-lsp
  - hslogstash
@@ -2281,7 +2280,6 @@ dont-distribute-packages:
  - htsn-import
  - http-client-auth
  - http-client-rustls
- - http-encodings
  - http-enumerator
  - http2-client-grpc
  - http2-grpc-proto-lens
@@ -2329,7 +2327,6 @@ dont-distribute-packages:
  - hyperpublic
  - iException
  - ice40-prim
- - iconv-typed
  - ide-backend
  - ide-backend-server
  - ideas-math
@@ -2350,6 +2347,7 @@ dont-distribute-packages:
  - imprevu-happstack
  - improve
  - inch
+ - incipit
  - incremental-computing
  - incremental-maps
  - increments
@@ -2390,7 +2388,6 @@ dont-distribute-packages:
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
- - iridium
  - ironforge
  - isevaluated
  - ismtp
@@ -2431,6 +2428,8 @@ dont-distribute-packages:
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
  - join
+ - jordan-openapi
+ - jordan-servant-openapi
  - jot
  - jsaddle-hello
  - jsc
@@ -2583,7 +2582,6 @@ dont-distribute-packages:
  - liblawless
  - liblinear-enumerator
  - libmolude
- - libpafe
  - libraft
  - librato
  - libxml-enumerator
@@ -2731,7 +2729,6 @@ dont-distribute-packages:
  - mathblog
  - mathlink
  - matsuri
- - matterhorn
  - maxent
  - maxent-learner-hw-gui
  - maxsharing
@@ -2739,7 +2736,6 @@ dont-distribute-packages:
  - medea
  - mediabus-fdk-aac
  - mediabus-rtp
- - melf
  - mellon-gpio
  - mellon-web
  - memcache-conduit
@@ -2757,7 +2753,6 @@ dont-distribute-packages:
  - midimory
  - midisurface
  - mighttpd
- - mime-string
  - minecraft-data
  - minesweeper
  - mini-egison
@@ -2777,7 +2772,6 @@ dont-distribute-packages:
  - mmsyn7ukr
  - mmtl-base
  - moan
- - mockazo
  - modify-fasta
  - modsplit
  - modular-prelude-classy
@@ -2883,6 +2877,7 @@ dont-distribute-packages:
  - nakadi-client
  - named-servant-client
  - named-servant-server
+ - named-text
  - nats-queue
  - natural-number
  - nemesis-titan
@@ -2994,7 +2989,6 @@ dont-distribute-packages:
  - optimal-blocks
  - optimusprime
  - optparse-enum
- - orbits
  - orchid
  - orchid-demo
  - order-maintenance
@@ -3078,7 +3072,6 @@ dont-distribute-packages:
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
  - phooey
- - photoname
  - pianola
  - pier
  - ping
@@ -3116,9 +3109,13 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
+ - polysemy-conc
  - polysemy-http
+ - polysemy-log
  - polysemy-log-co
+ - polysemy-log-di
  - polysemy-methodology-composite
+ - polysemy-process
  - polysemy-scoped-fs
  - polyseq
  - polytypeable-utils
@@ -3273,7 +3270,6 @@ dont-distribute-packages:
  - rasa-ext-views
  - rasa-ext-vim
  - rascal
- - rating-chgk-info
  - raw-feldspar
  - rawr
  - razom-text-util
@@ -3356,6 +3352,7 @@ dont-distribute-packages:
  - remotion
  - repa-array
  - repa-convert
+ - repa-fftw
  - repa-flow
  - repa-plugin
  - repa-stream
@@ -3391,6 +3388,7 @@ dont-distribute-packages:
  - rfc-redis
  - rfc-servant
  - rhine-gloss
+ - rhine-terminal
  - rhythm-game-tutorial
  - rib
  - ribosome
@@ -3400,6 +3398,7 @@ dont-distribute-packages:
  - ribosome-root
  - ribosome-test
  - ridley-extras
+ - rio-process-pool
  - riot
  - ripple
  - ripple-federation
@@ -3541,6 +3540,7 @@ dont-distribute-packages:
  - servant-matrix-param
  - servant-oauth2
  - servant-oauth2-examples
+ - servant-openapi3
  - servant-postgresql
  - servant-pushbullet-client
  - servant-rate-limit
@@ -3553,6 +3553,8 @@ dont-distribute-packages:
  - servant-streamly
  - servant-swagger-tags
  - servant-to-elm
+ - servant-util
+ - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -3597,9 +3599,6 @@ dont-distribute-packages:
  - simple-session
  - simpleirc-lens
  - simseq
- - singleton-nats
- - singletons-presburger
- - singletons-presburger_0_7_1_0
  - siphon
  - siren-json
  - sirkel
@@ -3662,12 +3661,8 @@ dont-distribute-packages:
  - snow-white
  - snowflake-core
  - snowflake-server
- - soap
- - soap-openssl
- - soap-tls
  - sock2stream
  - socket-io
- - sockets
  - socketson
  - solga-swagger
  - solr
@@ -3733,6 +3728,7 @@ dont-distribute-packages:
  - statsd-client
  - statsdi
  - stern-brocot
+ - stm-actor
  - stm-supply
  - stmcontrol
  - storablevector-carray
@@ -4009,7 +4005,6 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
- - unbounded-delays-units
  - uni-events
  - uni-graphs
  - uni-htk
@@ -4023,9 +4018,6 @@ dont-distribute-packages:
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
- - units
- - units-attoparsec
- - units-defs
  - universal
  - universe
  - universe-dependent-sum
@@ -4149,6 +4141,7 @@ dont-distribute-packages:
  - webcloud
  - webcrank-wai
  - webdriver-w3c
+ - webgear-openapi
  - webify
  - webserver
  - websockets-rpc

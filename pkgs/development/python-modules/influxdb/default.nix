@@ -31,7 +31,7 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
     mock

@@ -16,6 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-krQTa9R3hmMVKLoBgnbCw+aSQu9HUXfA3XflB8AZv6w=";
 
+  # fix for compilation on aarch64
+  # see https://github.com/NixOS/nixpkgs/issues/145726
+  prePatch = ''
+    rm .cargo/config.toml
+  '';
+
   meta = with lib; {
     description = "CLI tool to search and replace";
     homepage = "https://github.com/ms-jpq/sad";

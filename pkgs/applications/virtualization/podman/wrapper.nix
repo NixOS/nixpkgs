@@ -15,11 +15,11 @@
 , iproute2
 , catatonit
 , gvproxy
+, aardvark-dns
+, netavark
 }:
 
 # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
-
-# adding aardvark-dns/netavark to `helpersBin` requires changes to the modules and tests
 
 let
   binPath = lib.makeBinPath ([
@@ -41,7 +41,9 @@ let
     paths = [
       gvproxy
     ] ++ lib.optionals stdenv.isLinux [
+      aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
       podman-unwrapped.rootlessport
     ];
   };

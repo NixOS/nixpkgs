@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "hexgui";
-  version = "unstable-2022-5-30";
+  version = "unstable-2023-1-7";
 
   src = fetchFromGitHub {
     owner = "selinger";
     repo = "hexgui";
-    rev = "d94ce1d35a22dad28d3e7def4d28e6bebd54da9d";
-    hash = "sha256-1MroFH2JSEZHFigcsw1+xyHJWEnHTvHmRPVirUgwM6I=";
+    rev = "62f07ff51db0d4a945ad42f86167cc2f2ce65d90";
+    hash = "sha256-yEdZs9HUt3lcrdNO1OH8M8g71+2Ltf+v1RR1fKRDV0o=";
   };
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "GUI for the board game Hex (and Y)";
+    description = "GUI for the board game Hex";
     homepage = "https://github.com/selinger/hexgui";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.ursi ];

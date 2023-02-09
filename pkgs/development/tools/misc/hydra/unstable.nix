@@ -126,13 +126,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "unstable-2022-12-05";
+  version = "2022-12-23";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d1fac69c213002721971cd983e2576b784677d40";
-    sha256 = "sha256-HVsp+BPjEDS1lR7sjplWNrNljHvYcaUiaAn8gGNAMxU=";
+    rev = "f48f00ee6d5727ae3e488cbf9ce157460853fea8";
+    sha256 = "sha256-hXsgJj0Cy0ZiCiYdW2OdBz5WmFyOMKuw4zyxKpgUKm4=";
   };
 
   buildInputs = [
@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
     nukeReferences
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     foreman
     glibcLocales

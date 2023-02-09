@@ -41,6 +41,7 @@
 # characteristics but (hopefully) indistinguishable output.
 , allowDocBook ? true
 # whether lib.mdDoc is required for descriptions to be read as markdown.
+# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
 , markdownByDefault ? false
 }:
 
@@ -77,35 +78,28 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          <listitem>
-            <para>
-              <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
-                <literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name}</literal>
-              </link>
-            </para>
-            ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
-          </listitem>
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
+              https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+            )${
+              lib.optionalString (args ? comment) "\n\n  ${args.comment}"
+            }
         '';
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
-    nativeBuildInputs = [ pkgs.python3Minimal ];
-  } ''
-    python ${./generateDoc.py} \
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
       --format asciidoc \
       ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {
-    nativeBuildInputs = [ pkgs.python3Minimal ];
-  } ''
-    python ${./generateDoc.py} \
+  optionsCommonMark = pkgs.runCommand "options.md" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
       --format commonmark \
       ${optionsJSON}/share/doc/nixos/options.json \
       > $out
@@ -115,16 +109,7 @@ in rec {
     { meta.description = "List of NixOS options in JSON format";
       nativeBuildInputs = [
         pkgs.brotli
-        (let
-          # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
-          # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
-          # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
-          python = if pkgs.stdenv.isDarwin then pkgs.python3 else pkgs.python3Minimal;
-          self = (python.override {
-            inherit self;
-            includeSiteCustomize = true;
-           });
-         in self.withPackages (p: [ p.mistune ]))
+        pkgs.python3Minimal
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
@@ -140,10 +125,10 @@ in rec {
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
+      TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-        ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
-        ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
         $baseJSON $options \
         > $dst/options.json
 
@@ -154,25 +139,30 @@ in rec {
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
 
-  # Convert options.json into an XML file.
-  # The actual generation of the xml file is done in nix purely for the convenience
-  # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {
-    nativeBuildInputs = with pkgs; [ nix ];
-  } ''
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_STATE_DIR=$TMPDIR/state
-    nix-instantiate \
-      --eval --xml --strict ${./optionsJSONtoXML.nix} \
-      --argstr file ${optionsJSON}/share/doc/nixos/options.json \
-      > "$out"
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
   '';
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {
-    nativeBuildInputs = with pkgs; [ libxslt.bin libxslt.bin python3Minimal ];
+    nativeBuildInputs = [
+      pkgs.nixos-render-docs
+    ];
   } ''
-    optionsXML=${optionsXML}
-    if grep /nixpkgs/nixos/modules $optionsXML; then
+    nixos-render-docs options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
+      ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      options.xml
+
+    if grep /nixpkgs/nixos/modules options.xml; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
       echo "caused by an option default that refers to a relative path (see above"
@@ -180,14 +170,7 @@ in rec {
       exit 1
     fi
 
-    python ${./sortXML.py} $optionsXML sorted.xml
-    xsltproc \
-      --stringparam documentType '${documentType}' \
-      --stringparam revision '${revision}' \
-      --stringparam variablelistId '${variablelistId}' \
-      --stringparam optionIdPrefix '${optionIdPrefix}' \
-      -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
-    xsltproc \
-      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
+    ${pkgs.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} options.xml
   '';
 }

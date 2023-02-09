@@ -117,6 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
+
+    # GVariant security fixes
+    # https://discourse.gnome.org/t/multiple-fixes-for-gvariant-normalisation-issues-in-glib/12835
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3126.patch";
+      sha256 = "CNCxouYy8xNHt4eJtPZ2eOi9b0SxzI2DkklNfQMk3d8=";
+    })
+
+    # Menu model security fix
+    # https://discourse.gnome.org/t/fixes-for-gdbusmenumodel-crashes-in-glib/12846
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/4f4d770a1e40f719d5a310cffdac29cbb4e20c11.patch";
+      sha256 = "+S44AnC86HfbMwkRe1ll54IK9pLxaFD3LqiVhPelnXI=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -174,6 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -239,7 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -286,7 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
+    homepage    = "https://wiki.gnome.org/Projects/GLib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;

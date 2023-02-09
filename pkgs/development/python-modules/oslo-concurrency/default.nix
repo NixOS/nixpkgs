@@ -48,7 +48,7 @@ buildPythonPackage rec {
   # tests hang for unknown reason and time the build out
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     fixtures
     oslotest

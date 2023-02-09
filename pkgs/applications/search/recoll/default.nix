@@ -35,16 +35,25 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.33.2";
+  version = "1.33.4";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ql4VHiblIn8uihUbF1htPnpvjw0qMxdzW8HLGlUrZW0=";
+    sha256 = "sha256-ffD49sGYWYEWAFPRtpyDU/CYFvkrEDL21Ddq3QsXCvc=";
   };
 
-  configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
-    ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
-    ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+  configureFlags = [
+    "--enable-recollq"
+    "--disable-webkit"
+    "--without-systemd"
+  ] ++ lib.optionals (!withGui) [
+    "--disable-qtgui"
+    "--disable-x11mon"
+  ] ++ (if stdenv.isLinux then [
+    "--with-inotify"
+  ] else [
+    "--without-inotify"
+  ]);
 
   NIX_CFLAGS_COMPILE = [ "-DNIXPKGS" ];
 
@@ -54,13 +63,23 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    file pkg-config python3Packages.setuptools which
+    file
+    pkg-config
+    python3Packages.setuptools
+    which
   ];
 
   buildInputs = [
-    bison chmlib python3Packages.python xapian zlib
-  ] ++ lib.optional withGui qtbase
-    ++ lib.optional stdenv.isDarwin libiconv;
+    bison
+    chmlib
+    python3Packages.python
+    xapian
+    zlib
+  ] ++ lib.optional withGui [
+    qtbase
+  ] ++ lib.optional stdenv.isDarwin [
+    libiconv
+  ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
@@ -108,7 +127,8 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    license = licenses.gpl2;
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ];
   };

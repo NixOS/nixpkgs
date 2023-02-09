@@ -30,7 +30,7 @@ to your NixOS configuration. For instance, if you remove a user from
 [](#opt-users.users) and run nixos-rebuild, the user
 account will cease to exist. Also, imperative commands for managing users and
 groups, such as useradd, are no longer available. Passwords may still be
-assigned by setting the user\'s
+assigned by setting the user's
 [hashedPassword](#opt-users.users._name_.hashedPassword) option. A
 hashed password can be generated using `mkpasswd`.
 

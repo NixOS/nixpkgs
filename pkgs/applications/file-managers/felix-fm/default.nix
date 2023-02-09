@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VKesly7Jp1PgukArNKvDGzSRh7DaL3A/Dub3dLR6ET4=";
+    sha256 = "sha256-KuEuWZSxh04NefkkJBYClnKs+UP7VwlyPElACjNZ5k8=";
   };
 
-  cargoSha256 = "sha256-7+4SIBnu4R2mbH2nWBX9BmJL1n8t46d1vrMpNaUHAo4=";
+  cargoSha256 = "sha256-jYDe/3PDGCweNgHb+8i9az7J7BATlRjd3yha0nOc/gc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  checkInputs = [ zoxide ];
+  nativeCheckInputs = [ zoxide ];
 
   buildFeatures = [ "zstd/pkg-config" ];
 

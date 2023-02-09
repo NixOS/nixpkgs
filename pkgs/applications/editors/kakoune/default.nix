@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
   version = "2022.10.31";
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
     ln -s --relative "$autoload_target" autoload
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://kakoune.org/";
     description = "A vim inspired text editor";
     license = licenses.publicDomain;

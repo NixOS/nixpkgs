@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "MoltenVK-1.1.5";
+  version = "1.3.236.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
-    rev = version;
-    sha256 = "/t6hAlGY3+bddWg5ERFbqeU4/MAjq+/AEVv1Jy2C0HA=";
+    rev = "sdk-${finalAttrs.version}";
+    hash = "sha256-zx/fjDKgteWizC3O1bL4WSwwPNw2/2m0xCnCiOttgAo=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };
-}
+})

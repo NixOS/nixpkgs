@@ -22,7 +22,7 @@ buildPythonPackage rec {
     taglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

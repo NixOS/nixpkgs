@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

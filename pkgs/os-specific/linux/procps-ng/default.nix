@@ -7,7 +7,7 @@
 
   # `ps` with systemd support is able to properly report different
   # attributes like unit name, so we want to have it on linux.
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 
   # procps is mostly Linux-only. Most commands require a running Linux

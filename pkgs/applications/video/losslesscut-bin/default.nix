@@ -1,7 +1,7 @@
 { lib
+, stdenv
 , callPackage
 , buildPackages
-, hostPlatform
 }:
 
 let
@@ -34,9 +34,9 @@ let
   };
 in
 (
-  if hostPlatform.system == "aarch64-darwin" then aarch64-dmg
-  else if hostPlatform.isDarwin then x86_64-dmg
-  else if hostPlatform.isCygwin then x86_64-windows
+  if stdenv.hostPlatform.system == "aarch64-darwin" then aarch64-dmg
+  else if stdenv.hostPlatform.isDarwin then x86_64-dmg
+  else if stdenv.hostPlatform.isCygwin then x86_64-windows
   else x86_64-appimage
 ).overrideAttrs
   (oldAttrs: {

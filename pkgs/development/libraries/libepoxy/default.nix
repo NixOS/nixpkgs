@@ -56,10 +56,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString x11Support ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
-  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
+  # cgl_core and cgl_epoxy_api fail in darwin sandbox and on Hydra (because it's headless?)
   preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace ../test/meson.build \
       --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    substituteInPlace ../test/meson.build \
+      --replace "[ 'cgl_core', [ 'cgl_core.c' ] ]," ""
   '';
 
   doCheck = true;

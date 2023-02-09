@@ -22,7 +22,7 @@ buildPythonPackage rec {
     yara-python
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "karton.yaramatcher" ];
 

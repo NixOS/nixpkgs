@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nwg-bar";
-  version = "unstable-2021-09-23";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "7dd7df3cd9a9e78fe477e88e0f3cb97309d50ff5";
-    sha256 = "sha256-piysF19WDjb/EGI9MBepYrOrQL9C1fsoq05AP8CYN58=";
+    rev = "v${version}";
+    sha256 = "sha256-3uDEmIrfvUD/QGwgFYYWQUeYq35XJdpSVL9nHBl11kY=";
   };
 
   patches = [ ./fix-paths.patch ];

@@ -102,15 +102,15 @@ let self = {
 
   brotli = {
     name = "brotli";
-    src = let gitsrc = fetchFromGitHub {
+    src = let src' = fetchFromGitHub {
       name = "brotli";
       owner = "google";
       repo = "ngx_brotli";
-      rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
-      sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
+      rev = "6e975bcb015f62e1f303054897783355e2a877dc";
+      sha256 = "sha256-G0IDYlvaQzzJ6cNTSGbfuOuSXFp3RsEwIJLGapTbDgo=";
     }; in
-      runCommand "ngx_brotli-src" { } ''
-        cp -a ${gitsrc} $out
+      runCommand "brotli" { } ''
+        cp -a ${src'} $out
         substituteInPlace $out/filter/config \
           --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev brotli}
       '';
@@ -204,8 +204,8 @@ let self = {
       name = "geoip2";
       owner = "leev";
       repo = "ngx_http_geoip2_module";
-      rev = "3.3";
-      sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
+      rev = "3.4";
+      sha256 = "CAs1JZsHY7RymSBYbumC2BENsXtZP3p4ljH5QKwz5yg=";
     };
     inputs = [ libmaxminddb ];
 

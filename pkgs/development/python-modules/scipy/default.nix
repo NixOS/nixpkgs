@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose pytest pytest-xdist ];
+  nativeCheckInputs = [ nose pytest pytest-xdist ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 

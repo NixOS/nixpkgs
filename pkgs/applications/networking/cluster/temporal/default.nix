@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.17.5";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "sha256-u8GyaXpiVZdPDoPAqIa+TY+JQFZeSGOLrUy+e3E4kig=";
+    hash = "sha256-j2+K/ZDDNakofrToxhyA1gh534l3Eq6G/fNXE0ktceY=";
   };
 
-  vendorSha256 = "sha256-MT/BmGTdyEzmXjuwlA6WhLIWlrQz3Wc4Tl5dMI1587Q=";
+  vendorHash = "sha256-KkgyL37VJy1DhfCB5RJpjczBPbzQwt1xsovQ0xCXGr4=";
+
+  excludedPackages = [ "./build" ];
 
   CGO_ENABLED = 0;
 
@@ -26,6 +28,7 @@ buildGoModule rec {
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
     install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
     install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
+    install -Dm755 "$GOPATH/bin/tdbg" -T $out/bin/tdbg
 
     runHook postInstall
   '';

@@ -7,8 +7,6 @@
 , meta ? { }
 }:
 
-with lib;
-
 stdenv.mkDerivation ({
   pname = "rebar-deps-${name}";
   inherit version;

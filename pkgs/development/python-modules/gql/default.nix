@@ -40,7 +40,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiofiles
     mock
     parse

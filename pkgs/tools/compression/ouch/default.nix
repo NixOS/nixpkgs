@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XB0J7Qeru+FX5YprepglfTndS8b3zsAw1b9mc4n6EdA=";
+    sha256 = "sha256-WzdKr0i31qNRm1EpMZ/W4fOfKKItmvz6BYFbJWcfoHo=";
   };
 
-  cargoSha256 = "sha256-aW1aDXxs64ScocrnlsGy2+NAs6aC8F0/S1f32f9BDJU=";
+  cargoSha256 = "sha256-UhKcWpNuRNyA+uUw5kx84Y2F1Swr05m7JUM1+9lXYPM=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

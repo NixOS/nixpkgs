@@ -1,4 +1,4 @@
-{ runtimeShell
+{ lib
 , writeScript
 }:
 
@@ -10,6 +10,11 @@
 }:
 
 let
+  pname =
+    if lib.hasPrefix "rocm-llvm-" name
+    then "llvmPackages_rocm.${lib.removePrefix "rocm-llvm-" name}"
+    else name;
+
   updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
@@ -22,6 +27,6 @@ let
       version="''${version}.0"
     fi
 
-    update-source-version ${name} "$version" --ignore-same-hash
+    update-source-version ${pname} "$version" --ignore-same-hash
   '';
 in [ updateScript ]

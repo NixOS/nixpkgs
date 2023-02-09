@@ -36,7 +36,7 @@ buildGoModule rec {
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
   preCheck =
     let
       skippedTests = [

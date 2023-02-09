@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # pythonImportsCheck = [ "bpycv" ]; # this import depends on bpy that is only available inside blender
-  checkInputs = [ blender ];
+  nativeCheckInputs = [ blender ];
   checkPhase = let
     bpycv_example_data = fetchFromGitHub {
       owner = "DIYer22";

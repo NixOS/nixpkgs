@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cairo
 , cmake
 , glib
@@ -15,6 +16,7 @@
 , xcbutilcursor
 , xcbutilkeysyms
 , xcbutilwm
+, xcbutil
 , xmodmap
 }:
 
@@ -31,6 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./000-dont-set-compiler.diff
+    # TODO: remove on next release
+    (fetchpatch {
+      url = "https://github.com/hyprwm/Hypr/commit/08d6af2caf882247943f0e8518ad782f35d1aba4.patch";
+      sha256 = "sha256-WjR12ZH8CE+l9xSeQUAPYW5r5HzoPpod5YqDPJTdTY8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/hyprwm/Hypr/commit/7512a3ab91865b1e11b8c4a9dfdffb25c2b153de.patch";
+      sha256 = "sha256-0Hq5n115z0U44op7A1FO9tUOeMEPV0QgD5E5zcmend0=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -51,7 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilcursor
     xcbutilkeysyms
     xcbutilwm
+    xcbutil
   ];
+
+  # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-c++11-narrowing";
 
   installPhase = ''
     runHook preInstall
@@ -71,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (libX11.meta) platforms;
-    broken = stdenv.isDarwin; # xcb/xcb_atom.h not found
     mainProgram = "Hypr";
   };
 })

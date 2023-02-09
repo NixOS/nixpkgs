@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 declare -a autoPatchelfLibs
 declare -a extraAutoPatchelfLibs
@@ -84,7 +84,7 @@ autoPatchelf() {
 # (Expressions don't expand in single quotes, use double quotes for that.)
 postFixupHooks+=('
     if [ -z "${dontAutoPatchelf-}" ]; then
-        autoPatchelf -- $(for output in $outputs; do
+        autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)

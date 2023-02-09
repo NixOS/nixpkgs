@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.1.1";
+  version = "8.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
+    hash = "sha256-Dwj20fxQ4ovxiBTKKxyAfNTVmpMNcTRZpnXghsR3mvk=";
   };
 
   buildInputs = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook

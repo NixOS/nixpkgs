@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bless";
-  version = "0.2.4";
+  version = "0.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevincar";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lC1M6/9uawi4KpcK4/fAygENa9rZv9c7qCVdsZYtl5Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+rnMLqNfhIJASCKkIfOKpVil3S/d8BcMxnLHmdOcRIY=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     dbus-next
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioconsole
     numpy
     pytestCheckHook
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";
     homepage = "https://github.com/kevincar/bless";
+    changelog = "https://github.com/kevincar/bless/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

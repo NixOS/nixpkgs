@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, imagemagick, systemd }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";

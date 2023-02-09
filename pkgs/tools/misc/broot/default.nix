@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -15,14 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.18.0";
+  version = "1.20.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-GR0a5NDJBcRLoNOeG6S+fP3Fr7r5fVB9oEcjANRYJt4=";
+  src = fetchFromGitHub {
+    owner = "Canop";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-+bOdUjBMxYT4qbZ8g5l0pDZJhXaeuYVygb13sx7mg28=";
   };
 
-  cargoHash = "sha256-Hk9bc1mo8GxcPICKXc9zDq18S5TZElDncxJ+w2fC2do=";
+  cargoHash = "sha256-r/oj5ZgBjJXowFa95GKPACruH3bnPHjjyaSRewogXHQ=";
 
   nativeBuildInputs = [
     installShellFiles

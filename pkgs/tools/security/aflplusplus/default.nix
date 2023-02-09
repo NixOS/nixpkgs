@@ -105,7 +105,7 @@ let
         wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
     '';
 
-    installCheckInputs = [ perl file ];
+    nativeInstallCheckInputs = [ perl file ];
     doInstallCheck = true;
     installCheckPhase = ''
       # replace references to tools in build directory with references to installed locations

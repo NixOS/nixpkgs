@@ -20,7 +20,7 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 ### Common
 
 - arbitrary NixOS configuration
-- automatic or bound disk size: `diskSize` parameter, `additionalSpace` can be set when `diskSize` is `auto` to add a constant of disk space 
+- automatic or bound disk size: `diskSize` parameter, `additionalSpace` can be set when `diskSize` is `auto` to add a constant of disk space
 - multiple partition table layouts: EFI, legacy, legacy + GPT, hybrid, none through `partitionTableType` parameter
 - OVMF or EFI firmwares and variables templates can be customized
 - root filesystem `fsType` can be customized to whatever `mkfs.${fsType}` exist during operations

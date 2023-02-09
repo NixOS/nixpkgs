@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.4";
+  version = "1.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Microsoft";
-    repo = pname;
+    owner = "microsoft";
+    repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-THhu6Oa4x2b0chLFrJR7FF1z8X3/dsHzXosBmSqaDeI=";
+    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
   };
 
   patches = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
     gevent

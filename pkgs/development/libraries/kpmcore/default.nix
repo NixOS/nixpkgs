@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "22.08.0";
+  version = "22.12.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-Ws20hKX2iDdke5yBBKXukVUD4OnLf1OmwlhW+jUXL24=";
+    hash = "sha256-ZJ179jHCLEB0kFMWfCe+U6c7k7yZ3MztwqAcUd25t40=";
   };
 
   patches = [

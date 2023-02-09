@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gevent tornado twisted ];
 
-  checkInputs = [ nose2 mock ];
+  nativeCheckInputs = [ nose2 mock ];
 
   postPatch = ''
     # don't stop at first test failure

@@ -27,21 +27,21 @@ in
               popd
             '';
           diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
-          nativeBuildInputs = with pkgs; [ e2fsprogs parted ];
-          buildInputs = with pkgs; [ util-linux perl ];
-          exportReferencesGraph = [ "closure" config.system.build.toplevel ];
+          buildInputs = [ pkgs.util-linux pkgs.perl ];
+          exportReferencesGraph =
+            [ "closure" config.system.build.toplevel ];
         }
         ''
           # Create partition table
-          parted --script /dev/vda mklabel msdos
-          parted --script /dev/vda mkpart primary ext4 1 ${diskSize}
-          parted --script /dev/vda print
+          ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+          ${pkgs.parted}/sbin/parted --script /dev/vda mkpart primary ext4 1 ${diskSize}
+          ${pkgs.parted}/sbin/parted --script /dev/vda print
           . /sys/class/block/vda1/uevent
           mknod /dev/vda1 b $MAJOR $MINOR
 
           # Create an empty filesystem and mount it.
-          mkfs.ext4 -L nixos /dev/vda1
-          tune2fs -c 0 -i 0 /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
 
           mkdir /mnt
           mount /dev/vda1 /mnt
@@ -103,7 +103,7 @@ in
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "prohibit-password";
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";

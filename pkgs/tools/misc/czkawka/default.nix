@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ];
 

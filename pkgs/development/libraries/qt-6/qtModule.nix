@@ -33,7 +33,7 @@ stdenv.mkDerivation (args // {
   postInstall = ''
     if [ ! -z "$dev" ]; then
       mkdir "$dev"
-      for dir in bin libexec mkspecs
+      for dir in libexec mkspecs
       do
         moveToOutput "$dir" "$dev"
       done

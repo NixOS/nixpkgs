@@ -45,7 +45,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [ mock pytest ];
+  nativeCheckInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test libagent/tests

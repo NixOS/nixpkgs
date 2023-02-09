@@ -51,7 +51,7 @@ let bsuite = buildPythonPackage rec {
     termcolor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     distrax
     dm-haiku
     dm-sonnet

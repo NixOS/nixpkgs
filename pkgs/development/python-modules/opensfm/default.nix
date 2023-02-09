@@ -99,7 +99,7 @@ buildPythonPackage rec {
     xmltodict
     cloudpickle
   ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   dontUseCmakeBuildDir = true;
   cmakeFlags = [

@@ -10,13 +10,13 @@
 
 mkDerivation {
   pname = "qcsxcad";
-  version = "unstable-2020-01-04";
+  version = "unstable-2023-01-06";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "QCSXCAD";
-    rev = "0dabbaf2bc1190adec300871cf309791af842c8e";
-    sha256 = "11kbh0mxbdfh7s5azqin3i2alic5ihmdfj0jwgnrhlpjk4cbf9rn";
+    rev = "1cde9d560a5000f4c24c249d2dd5ccda12de38b6";
+    hash = "sha256-kc9Vnx6jGiQC2K88ZH00b61D/DbWxAIZZwYCsINqtrY=";
   };
 
   outputs = [ "out" "dev" ];

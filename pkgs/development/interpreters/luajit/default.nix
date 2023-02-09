@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , buildPackages
-, isStable
 , version
 , src
 , extraMeta ? { }
@@ -26,6 +25,12 @@
 , enableAPICheck ? false
 , enableVMAssertions ? false
 , useSystemMalloc ? false
+# Upstream generates randomized string id's by default for security reasons
+# https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
+# never be needed for correctness (that should be fixed in the lua code),
+# but may be helpful when you want to embed jit-compiled raw lua blobs in
+# binaries that you want to be reproducible.
+, deterministicStringIds ? false
 , luaAttr ? "luajit_${lib.versions.major version}_${lib.versions.minor version}"
 } @ inputs:
 assert enableJITDebugModule -> enableJIT;
@@ -45,7 +50,17 @@ let
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
+
+  # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
+  # TODO support also other build architectures. The ideal way would be to use
+  # stdenv_32bit but that doesn't work due to host platform mismatch:
+  # https://github.com/NixOS/nixpkgs/issues/212494
+  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+    then buildPackages.pkgsi686Linux.buildPackages.stdenv
+    else buildPackages.stdenv;
+
 in
 stdenv.mkDerivation rec {
   pname = "luajit";
@@ -71,7 +86,7 @@ stdenv.mkDerivation rec {
     } >> src/luaconf.h
   '';
 
-  configurePhase = false;
+  dontConfigure = true;
 
   buildInputs = lib.optional enableValgrindSupport valgrind;
 
@@ -82,8 +97,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
-    # TODO: when pointer size differs, we would need e.g. -m32
-    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+    "HOST_CC=${buildStdenv.cc}/bin/cc"
   ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = XCFLAGS;
@@ -91,8 +105,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
-  '' + lib.optionalString (!isStable) ''
-    ln -s "$out"/bin/luajit-* "$out"/bin/luajit
+    if [[ ! -e "$out"/bin/luajit ]]; then
+      ln -s "$out"/bin/luajit* "$out"/bin/luajit
+    fi
   '';
 
   LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
@@ -117,11 +132,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-performance JIT compiler for Lua 5.1";
-    homepage = "http://luajit.org";
+    homepage = "https://luajit.org/";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    # See https://github.com/LuaJIT/LuaJIT/issues/628
-    badPlatforms = [ "riscv64-linux" "riscv64-linux" ];
+    badPlatforms = [
+      "riscv64-linux" "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
+      "powerpc64le-linux"             # `#error "No support for PPC64"`
+    ];
     maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
 }

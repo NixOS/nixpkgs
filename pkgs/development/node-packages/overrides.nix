@@ -361,10 +361,6 @@ final: prev: {
     '';
   };
 
-  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
-    meta.broken = true; # use the top-level package instead
-  };
-
   pnpm = prev.pnpm.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 
@@ -410,7 +406,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-DWIhxvxt8f4h6MDd35mz7BJff+fu7HItW3WPDIEpCR3RzcOWyiHBbLQW5/DOgmf+pRLTjwXQob7kuTZVYUAw5w==";
+      sha512 = "sha512-bS96oZ5oDFXYgoF2l7PJ3Mp1wWWfLOo8B/jAfbA2Pn0Wm5Z/owBHzaMQKS3i1CzVBDWWPVnOohmbJmjvkcHS5w==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -440,6 +436,26 @@ final: prev: {
     '';
   };
 
+  readability-cli = prev.readability-cli.override (oldAttrs: {
+    # Wrap src to fix this build error:
+    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
+    #
+    # Need to wrap the source, instead of patching in patchPhase, because
+    # buildNodePackage only unpacks sources in the installPhase.
+    src = pkgs.srcOnly {
+      src = oldAttrs.src;
+      name = oldAttrs.name;
+      patchPhase = "chmod a-x readable.ts";
+    };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
+  });
+
   reveal-md = prev.reveal-md.override (
     lib.optionalAttrs (!stdenv.isDarwin) {
       nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -452,6 +468,10 @@ final: prev: {
       '';
     }
   );
+
+  rush = prev."@microsoft/rush".override {
+    name = "rush";
+  };
 
   ssb-server = prev.ssb-server.override (oldAttrs: {
     buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
@@ -557,8 +577,7 @@ final: prev: {
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
-      wrapProgram "$out/bin/typescript-language-server" \
-        --suffix PATH : ${lib.makeBinPath [ final.typescript ]}
+      ${pkgs.xorg.lndir}/bin/lndir ${final.typescript} $out
     '';
   };
 

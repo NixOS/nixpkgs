@@ -83,9 +83,12 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
+    postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
+    postBuild = args.postBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
@@ -141,6 +144,11 @@ let
     '' else ''
       cp -r --reflink=auto vendor $out
     ''}
+
+      if ! [ "$(ls -A $out)" ]; then
+        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
 
       runHook postInstall
     '';

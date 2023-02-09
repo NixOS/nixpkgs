@@ -32,7 +32,7 @@ short=0
 @getopt@/bin/getopt --test > /dev/null && rc=$? || rc=$?
 if [[ $rc -ne 4 ]]; then
   # This shouldn't happen.
-  echo "Warning: Enhanced getopt not supported, please open an issue." >&2
+  echo "Warning: Enhanced getopt not supported, please open an issue in nixpkgs." >&2
 else
   # Define all short and long options.
   SHORT=hvidrcas

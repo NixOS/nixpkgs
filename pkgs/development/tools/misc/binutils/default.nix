@@ -1,5 +1,5 @@
 let
-  execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
+  withGold = platform: platform.parsed.kernel.execFormat.name == "elf" && !platform.isRiscV;
 in
 
 { stdenv
@@ -15,10 +15,9 @@ in
 , noSysDirs
 , perl
 , substitute
-, texinfo
 , zlib
 
-, enableGold ? execFormatIsELF stdenv.targetPlatform
+, enableGold ? withGold stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false
@@ -26,7 +25,7 @@ in
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
 # make sure that intent matches result ourselves.
-assert enableGold -> execFormatIsELF stdenv.targetPlatform;
+assert enableGold -> withGold stdenv.targetPlatform;
 
 
 let
@@ -52,7 +51,7 @@ let
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = targetPrefix + "binutils";
   inherit version;
 
@@ -110,10 +109,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  # texinfo was removed here in https://github.com/NixOS/nixpkgs/pull/210132
+  # to reduce rebuilds during stdenv bootstrap.  Please don't add it back without
+  # checking the impact there first.
   nativeBuildInputs = [
     bison
     perl
-    texinfo
   ]
   ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
   ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
@@ -144,6 +145,20 @@ stdenv.mkDerivation {
     for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
         sed -i "$i" -e 's|ln |ln -s |'
     done
+
+    # autoreconfHook is not included for all targets.
+    # Call it here explicitly as well.
+    ${finalAttrs.postAutoreconf}
+  '';
+
+  postAutoreconf = ''
+    # As we regenerated configure build system tries hard to use
+    # texinfo to regenerate manuals. Let's avoid the dependency
+    # on texinfo in bootstrap path and keep manuals unmodified.
+    touch gas/doc/.dirstamp
+    touch gas/doc/asconfig.texi
+    touch gas/doc/as.1
+    touch gas/doc/as.info
   '';
 
   # As binutils takes part in the stdenv building, we don't want references
@@ -226,4 +241,4 @@ stdenv.mkDerivation {
     # collision due to the ld/as wrappers/symlinks in the latter.
     priority = 10;
   };
-}
+})

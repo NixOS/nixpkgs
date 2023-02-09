@@ -40,7 +40,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

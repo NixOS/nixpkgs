@@ -43,7 +43,7 @@ buildPythonPackage rec {
     types-pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     matplotlib
     openpyxl

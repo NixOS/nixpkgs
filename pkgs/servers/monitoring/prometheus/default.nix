@@ -31,10 +31,10 @@
 }:
 
 let
-  version = "2.40.3";
+  version = "2.41.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    sha256 = "sha256-dvMts9uJNLSp8Qho+yKMLPTy/1c2RgfeEn3UQLIZNc4=";
+    sha256 = "sha256-0EFeAuhQUu+4TCoHsWHTbWTGJLjS37POacP1K42sGqI=";
   };
 in
 buildGoModule rec {
@@ -45,10 +45,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-Jg8loH0Sji1MmDXUnMtvLTHjNGmkrzZApxvpe2+OqtU=";
+    sha256 = "sha256-J3KDN02m639bUGrnUrqeCLferrqIHaJ2VEBjIqfm/GY=";
   };
 
-  vendorSha256 = "sha256-aRVoEgP84ITQ1D0PsFVJUKH/Uin7s80iQCwzgrfpjoM=";
+  vendorSha256 = "sha256-4Of1euBp5Lka6Bb2UJYUQuRa7t2/B1HaXCWSOqCASYw=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytz
     pytestCheckHook
     yarl

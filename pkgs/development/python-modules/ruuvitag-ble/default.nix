@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK32
 , curl, gettext, glib, indi-full, libnova, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    wxGTK30
+    wxGTK32
     curl
     gettext
     glib

@@ -48,7 +48,7 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ ncurses ]
     ++ [ zlib ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   patches = [
     # When cross-compiling we configure llvm-config-native with an approximation

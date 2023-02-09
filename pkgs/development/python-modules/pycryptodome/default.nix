@@ -33,7 +33,7 @@ buildPythonPackage rec {
       --replace 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     test-vectors
   ];
 

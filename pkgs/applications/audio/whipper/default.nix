@@ -56,7 +56,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ libsndfile ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     twisted
   ] ++ bins;
 

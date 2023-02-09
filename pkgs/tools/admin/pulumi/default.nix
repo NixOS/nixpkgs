@@ -14,21 +14,23 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.49.0";
+  version = "3.54.0";
 
   # Used in pulumi-language packages, which inherit this prop
-  sdkVendorHash = "sha256-gM3VpX6r/BScUyvk/XefAfbx0qYzdzSBGaWZN+89BS8=";
+  sdkVendorHash = "sha256-NstNzPKHlN8S+HSpYnG60ZtZtUQsh1Idr8Zz2Ef/jiw=";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WO+bTkTIAyaXl3nYwsMUTdovsYibivfGsKz6A7wj2zM=";
+    hash = "sha256-Rl0kh9NCliADfU9Nxc2SwnOIGDilYEeA0rcVCfal5N8=";
+    # Some tests rely on checkout directory name
+    name = "pulumi";
   };
 
-  vendorSha256 = "sha256-q7ZusTYD8l2RyiwP/Wf6dP6AoosWEwpaylbdhfE5cUA=";
+  vendorSha256 = "sha256-Bkmpw+ZneB1zHmaV4S29LFNoCjB2QmO5nR/iwQQQPpo=";
 
-  sourceRoot = "source/pkg";
+  sourceRoot = "${src.name}/pkg";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,7 +53,7 @@ buildGoModule rec {
     "TestPendingDeleteOrder"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 
@@ -109,7 +111,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
-    sourceProvenance = sourceTypes.fromSource;
+    sourceProvenance = [ sourceTypes.fromSource ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "unstable-2022-12-02";
+  version = "unstable-2023-01-10";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
-    rev = "ae861a30097bd6297f553eb0ea2597f86f16d156";
-    sha256 = "sha256-WVrl+LxWSbHkbFGbkUhmw4Klwg6CzfnLAz8F0mF0kb8=";
+    rev = "c36d4a2253f337e1a28d497826a84754b8d833f6";
+    sha256 = "sha256-0uqDuEpL9JCXzD7sQ3PDv4N1KtCSkoMoD5i402uIfas=";
   };
 
-  cargoSha256 = "sha256-qoCOcYp1NYz/YhIBP6AkCCudVLpqhztRehc2xZoYp9A=";
+  cargoSha256 = "sha256-PvMjLC133rlsPrgyESuVHIf2TPCtgGQQULCQvBTIJ20=";
 
   postInstall = ''
     install -Dm444 languages/* -t $out/share/languages

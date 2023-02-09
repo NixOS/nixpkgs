@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false;  # requires several packages not available in Nix
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = "nosetests -v GPyOpt/testing";
 

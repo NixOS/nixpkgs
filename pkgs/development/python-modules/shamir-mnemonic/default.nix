@@ -27,7 +27,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "shamir_mnemonic" ];
 

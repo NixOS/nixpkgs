@@ -47,7 +47,7 @@ buildPythonPackage rec {
   '';
 
   doCheck = !isPy27; # google namespace clash
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "TestSerialization"

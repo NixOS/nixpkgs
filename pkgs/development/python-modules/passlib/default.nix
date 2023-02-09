@@ -23,7 +23,7 @@ buildPythonPackage rec {
     totp = [ cryptography ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.argon2
   ++ passthru.optional-dependencies.bcrypt

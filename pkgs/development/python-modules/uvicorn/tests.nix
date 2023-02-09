@@ -23,7 +23,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     asgiref
     uvicorn
     httpx

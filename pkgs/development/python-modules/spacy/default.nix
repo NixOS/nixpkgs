@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.4.1";
+  version = "3.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WcXPXTSKbA5kpZrFz+bNhdCOhmM3hwyV0exhYdUx5GM=";
+    hash = "sha256-/iAScBKZJ3iATZP3XOk3DViFcwcmOcODLOw49Uv35KU=";
   };
 
   propagatedBuildInputs = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
       --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

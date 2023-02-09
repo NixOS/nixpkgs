@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
   ];

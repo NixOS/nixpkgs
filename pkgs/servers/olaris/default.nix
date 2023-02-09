@@ -1,14 +1,21 @@
-{ buildGoModule, fetchFromGitLab, fetchzip, installShellFiles, lib }:
+{ buildGoModule
+, fetchFromGitLab
+, fetchzip
+, ffmpeg
+, installShellFiles
+, lib
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "olaris-server";
-  version = "0.4.0";
+  version = "unstable-2022-06-11";
 
   src = fetchFromGitLab {
-  owner = "olaris";
+    owner = "olaris";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-iworyQqyTabTI0NpZHTdUBGZSCaiC5Dhr69mRtsHLOs=";
+    rev = "bdb2aeb1595c941210249164a97c12404c1ae0d8";
+    hash = "sha256-Uhnh6GC85ORKnfHeYNtbSA40osuscxXDF5/kXJrF2Cs=";
   };
 
   preBuild = let
@@ -29,9 +36,9 @@ buildGoModule rec {
     "-X gitlab.com/olaris/olaris-server/helpers.Version=${version}"
   ];
 
-  vendorHash = "sha256-xWywDgw0LzJhPtVK0aGgT0TTanejJ39ZmGc50A3d68U=";
+  vendorHash = "sha256-bw8zvDGFBci9bELsxAD0otpNocBnO8aAcgyohLZ3Mv0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   # integration tests require network access
   doCheck = false;
@@ -41,6 +48,7 @@ buildGoModule rec {
       --bash <($out/bin/olaris-server completion bash) \
       --fish <($out/bin/olaris-server completion fish) \
       --zsh <($out/bin/olaris-server completion zsh)
+      wrapProgram $out/bin/olaris-server --prefix PATH : ${lib.makeBinPath [ffmpeg]}
   '';
 
   meta = with lib; {

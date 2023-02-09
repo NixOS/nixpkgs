@@ -32,7 +32,7 @@
     In <xref linkend="sec-configuration-syntax" />, we saw the following
     structure of NixOS modules:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 { option definitions
@@ -50,7 +50,7 @@
     <emphasis role="strong">Example: Structure of NixOS
     Modules</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, pkgs, ... }:
 
 {
@@ -90,7 +90,7 @@
         This <literal>imports</literal> list enumerates the paths to
         other NixOS modules that should be included in the evaluation of
         the system configuration. A default set of modules is defined in
-        the file <literal>modules/module-list.nix</literal>. These don't
+        the file <literal>modules/module-list.nix</literal>. These don’t
         need to be added in the import list.
       </para>
     </listitem>
@@ -146,7 +146,7 @@
     <emphasis role="strong">Example: NixOS Module for the
     <quote>locate</quote> Service</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -208,7 +208,7 @@ in {
     <emphasis role="strong">Example: Escaping in Exec
     directives</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { config, lib, pkgs, utils, ... }:
 
 with lib;

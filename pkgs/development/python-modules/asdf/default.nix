@@ -70,7 +70,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     astropy
     lz4
     pytest-astropy

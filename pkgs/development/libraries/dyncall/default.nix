@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dyncall";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://www.dyncall.org/r${version}/dyncall-${version}.tar.gz";
-    # https://www.dyncall.org/r1.3/SHA256
-    sha256 = "sha256-q/Ys/DHr1/IWWNqhNwp3gcxRQxYrwIaDhKwH3vnj05A=";
+    # https://www.dyncall.org/r1.4/SHA256
+    sha256 = "sha256-FEN9u+87bckkg/ZQfq+CWrl5ZKie7K6Ms0emvsnDKq4=";
   };
 
   # XXX: broken tests, failures masked, lets avoid crashing a bunch for now :)

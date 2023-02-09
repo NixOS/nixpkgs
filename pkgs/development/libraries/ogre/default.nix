@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ogre";
-  version = "13.5.3";
+  version = "13.6.1";
 
   src = fetchFromGitHub {
     owner = "OGRECave";
     repo = "ogre";
     rev = "v${version}";
-    sha256 = "sha256-fjgMAuIA7rm3Gt2z//kPkc7LOcfddoFgY38B7bs6zZo=";
+    hash = "sha256-UG/vwLE80Ski9NwMj9E5+PoLU6rSCdJrSmQOmmFv66U=";
   };
 
   nativeBuildInputs = [

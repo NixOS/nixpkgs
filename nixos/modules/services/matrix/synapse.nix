@@ -507,6 +507,12 @@ in {
                 sqlite3 = null;
                 psycopg2 = "matrix-synapse";
               }.${cfg.settings.database.name};
+              defaultText = lib.literalExpression ''
+                {
+                  sqlite3 = null;
+                  psycopg2 = "matrix-synapse";
+                }.''${cfg.settings.database.name};
+              '';
               description = lib.mdDoc ''
                 Username to connect with psycopg2, set to null
                 when using sqlite3.
@@ -795,7 +801,7 @@ in {
 
   meta = {
     buildDocsInSandbox = false;
-    doc = ./synapse.xml;
+    doc = ./synapse.md;
     maintainers = teams.matrix.members;
   };
 

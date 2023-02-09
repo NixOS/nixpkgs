@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-w3HlnsHYB0R+HZOXtzygC2RST3gllPI7SYtwSCVXhTU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pillow
     pytest

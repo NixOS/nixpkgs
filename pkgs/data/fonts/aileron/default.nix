@@ -1,27 +1,32 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
   majorVersion = "0";
   minorVersion = "102";
-  pname = "aileron";
 in
+stdenvNoCC.mkDerivation (self: {
+  pname = "aileron";
+  version = "${majorVersion}.${minorVersion}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
+    hash = "sha256-Ht48gwJZrn0djo1yl6jHZ4+0b710FVwStiC1Zk5YXME=";
+    stripRoot = false;
+  };
 
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "04xnzdy9plzd2p02yq367h37m5ygx0w8cpkdv39cc3754ljlsxim";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "http://dotcolon.net/font/${self.pname}/";
     description = "A helvetica font in nine weights";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.cc0;
   };
-}
+})

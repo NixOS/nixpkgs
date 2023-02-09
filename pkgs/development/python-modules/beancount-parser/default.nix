@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "beancount-parser";
-  version = "0.1.21";
+  version = "0.1.23";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beancount-parser";
-    rev = version;
-    sha256 = "sha256-0uhH75OEjC9iA0XD0VX7CGoRIP/hpM4y+53JnyXgZpA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3pO1HvH3R2RpNFtplWyaXxqZy0caAoAxlmfSKmjkvKQ=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     lark
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Standalone Lark based Beancount syntax parser";
     homepage = "https://github.com/LaunchPlatform/beancount-parser/";
+    changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ambroisie ];
   };

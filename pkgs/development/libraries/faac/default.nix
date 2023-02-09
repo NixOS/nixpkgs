@@ -5,7 +5,6 @@
 
 assert mp4v2Support -> (mp4v2 != null);
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "faac";
   version = "1.30";
@@ -16,19 +15,19 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ ]
-    ++ optional mp4v2Support "--with-external-mp4v2"
-    ++ optional drmSupport "--enable-drm";
+    ++ lib.optional mp4v2Support "--with-external-mp4v2"
+    ++ lib.optional drmSupport "--enable-drm";
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ ]
-    ++ optional mp4v2Support mp4v2;
+    ++ lib.optional mp4v2Support mp4v2;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     license     = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ codyopel ];

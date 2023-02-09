@@ -7,17 +7,21 @@
 , pyvisa
 , typing-extensions
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.5.3";
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-37GptqqBSIFOpm6SpS61ZZ9C4iU5AiOduVq255mTRNo=";
+    hash = "sha256-cXxiT/PWDf5WV+s8GbEA2u+1dPyfUKu19IQ2+Q4GTqM=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,8 +44,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "PyVISA backend that implements a large part of the Virtual Instrument Software Architecture in pure Python";
+    description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";
+    changelog = "https://github.com/pyvisa/pyvisa-py/blob/${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ mvnetbiz ];
   };

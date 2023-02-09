@@ -106,9 +106,9 @@ in
       description = lib.mdDoc ''
         Extra custom layouts that will be included in the xkb configuration.
         Information on how to create a new layout can be found here:
-        [](https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts).
+        <https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts>.
         For more examples see
-        [](https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples)
+        <https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples>
       '';
     };
 

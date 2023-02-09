@@ -51,7 +51,7 @@ buildPythonPackage {
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

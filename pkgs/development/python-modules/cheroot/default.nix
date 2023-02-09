@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.6.0";
+  version = "9.0.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NmrfbnyslVVIbC0b5il5kwIu/2+MRlXBRDJozKPwjiU=";
+    hash = "sha256-PUetnuGey+wUS0dYOZA2aS/b9npAuW7vH7FFQ2ez0zg=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaraco_text
     portend
     pypytools
