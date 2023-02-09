@@ -6,6 +6,7 @@ let
   pkg = cfg.package;
 
   defaultUser = "paperless";
+  nltkDir = "/var/cache/paperless/nltk";
 
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
@@ -15,6 +16,7 @@ let
     PAPERLESS_DATA_DIR = cfg.dataDir;
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+    PAPERLESS_NLTK_DIR = nltkDir;
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -49,6 +51,7 @@ let
       cfg.dataDir
       cfg.mediaDir
     ];
+    CacheDirectory = "paperless";
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
@@ -290,6 +293,33 @@ in
             '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
         '';
         Type = "oneshot";
+      };
+    };
+
+    # Download NLTK corpus data
+    systemd.services.paperless-download-nltk-data = {
+      wantedBy = [ "paperless-scheduler.service" ];
+      before = [ "paperless-scheduler.service" ];
+      after = [ "network-online.target" ];
+      serviceConfig = defaultServiceConfig // {
+        User = cfg.user;
+        Type = "oneshot";
+        # Enable internet access
+        PrivateNetwork = false;
+        # Restrict write access
+        BindPaths = [];
+        BindReadOnlyPaths = [
+          "/nix/store"
+          "-/etc/resolv.conf"
+          "-/etc/nsswitch.conf"
+          "-/etc/ssl/certs"
+          "-/etc/static/ssl/certs"
+          "-/etc/hosts"
+          "-/etc/localtime"
+        ];
+        ExecStart = let pythonWithNltk = pkg.python.withPackages (ps: [ ps.nltk ]); in ''
+          ${pythonWithNltk}/bin/python -m nltk.downloader -d '${nltkDir}' punkt snowball_data stopwords
+        '';
       };
     };
 
