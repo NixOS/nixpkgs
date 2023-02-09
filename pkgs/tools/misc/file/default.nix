@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N1HH+6jbyDHLjXzIr/IQNUWbjOUVXviwiAon0ChHXzs=";
   };
 
+  patches = [
+    # Backport fix to identification for pyzip files.
+    # Needed for strip-nondeterminism.
+    # https://salsa.debian.org/reproducible-builds/strip-nondeterminism/-/issues/20
+    ./pyzip.patch
+  ];
+
   strictDeps = true;
   enableParallelBuilding = true;
 
