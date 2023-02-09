@@ -527,6 +527,26 @@
         <itemizedlist spacing="compact">
           <listitem>
             <para>
+              <literal>services.openssh.authorizedKeysFile</literal> to
+              <literal>services.openssh.settings.AuthorizedKeysFile</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.authorizedKeysCommand</literal>
+              to
+              <literal>services.openssh.settings.AuthorizedKeysCommand</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>services.openssh.authorizedKeysCommandUser</literal>
+              to
+              <literal>services.openssh.settings.AuthorizedKeysCommandUser</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
               <literal>services.openssh.forwardX11</literal> to
               <literal>services.openssh.settings.X11Forwarding</literal>
             </para>
