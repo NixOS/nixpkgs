@@ -8,6 +8,7 @@
 }:
 { product
 , javaVersion
+, extraNativeBuildInputs ? [ ]
 , extraBuildInputs ? [ ]
 , meta ? { }
 , passthru ? { }
@@ -17,7 +18,8 @@ stdenv.mkDerivation (args // {
   pname = "${product}-java${javaVersion}";
 
   nativeBuildInputs = [ perl unzip makeWrapper ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+    ++ extraNativeBuildInputs;
 
   buildInputs = [
     stdenv.cc.cc.lib # libstdc++.so.6
@@ -44,8 +46,6 @@ stdenv.mkDerivation (args // {
                 }' "$out/META-INF/permissions"
       rm -rf "$out/META-INF"
     }
-
-    mkdir -p "$out"
 
     unpack_jar "$src"
 

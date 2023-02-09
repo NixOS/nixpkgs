@@ -13,6 +13,8 @@ let
   sources = javaVersion: builtins.fromJSON (builtins.readFile (./. + "/graalvm${javaVersion}-ce-sources.json"));
 in
 rec {
+  inherit buildGraalvm buildGraalvmProduct;
+
   graalvm11-ce = buildGraalvm rec {
     version = "22.3.0";
     javaVersion = "11";
@@ -21,32 +23,10 @@ rec {
     products = [ native-image-installable-svm-java11 ];
   };
 
-  native-image-installable-svm-java11 = buildGraalvmProduct rec {
-    product = "native-image-installable-svm";
+  native-image-installable-svm-java11 = callPackage ./native-image-installable-svm.nix rec {
     javaVersion = "11";
     version = "22.3.0";
-    src = fetchurl (sources javaVersion).${stdenv.system}.${"${product}|java${javaVersion}|${version}"};
-    postInstall = lib.optionalString stdenv.isLinux ''
-      wrapProgram $out/bin/native-image \
-        --prefix PATH : ${lib.makeBinPath [ gcc ]} \
-        ${lib.concatStringsSep " "
-          (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") [ glibc glibc.static zlib.static ])}
-    '';
-    installCheckPhase = ''
-      echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
-      ./helloworld | fgrep 'Hello World'
-
-      ${lib.optionalString stdenv.isLinux ''
-        echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-        $out/bin/native-image -H:+StaticExecutableWithDynamicLibC HelloWorld
-        ./helloworld | fgrep 'Hello World'
-
-        echo "Ahead-Of-Time compilation with --static"
-        $out/bin/native-image --static HelloWorld
-        ./helloworld | fgrep 'Hello World'
-      ''}
-    '';
+    src = fetchurl (sources javaVersion).${stdenv.system}.${"native-image-installable-svm|java${javaVersion}|${version}"};
   };
 
   graalvm17-ce = buildGraalvm rec {
@@ -54,34 +34,12 @@ rec {
     javaVersion = "17";
     src = fetchurl (sources javaVersion).${stdenv.system}.${"graalvm-ce|java${javaVersion}|${version}"};
     meta.platforms = builtins.attrNames (sources javaVersion);
-    products = [ native-image-installable-svm-java11 ];
+    products = [ native-image-installable-svm-java17 ];
   };
 
-  native-image-installable-svm-java17 = buildGraalvmProduct rec {
-    product = "native-image-installable-svm";
+  native-image-installable-svm-java17 = callPackage ./native-image-installable-svm.nix rec {
     javaVersion = "17";
     version = "22.3.0";
-    src = fetchurl (sources javaVersion).${stdenv.system}.${"${product}|java${javaVersion}|${version}"};
-    postInstall = lib.optionalString stdenv.isLinux ''
-      wrapProgram $out/bin/native-image \
-        --prefix PATH : ${lib.makeBinPath [ gcc ]} \
-        ${lib.concatStringsSep " "
-          (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") [ glibc glibc.static zlib.static ])}
-    '';
-    installCheckPhase = ''
-      echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
-      ./helloworld | fgrep 'Hello World'
-
-      ${lib.optionalString stdenv.isLinux ''
-        echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-        $out/bin/native-image -H:+StaticExecutableWithDynamicLibC HelloWorld
-        ./helloworld | fgrep 'Hello World'
-
-        echo "Ahead-Of-Time compilation with --static"
-        $out/bin/native-image --static HelloWorld
-        ./helloworld | fgrep 'Hello World'
-      ''}
-    '';
+    src = fetchurl (sources javaVersion).${stdenv.system}.${"native-image-installable-svm|java${javaVersion}|${version}"};
   };
 }
