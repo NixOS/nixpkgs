@@ -65,7 +65,7 @@ let
 
   cudaArchNames = lib.unique (map (v: cudaMicroarchitectureNames.${lib.versions.major v}) cudaRealCapabilities);
   cudaCapabilities = cudaRealCapabilities ++ lib.optional (config.cudaForwardCompat or true) capabilitiesForward;
-  cudaGencode = gencodeMapper "sm" cudaRealCapabilities ++ lib.optionals (config.cudaForwardCompat or true) (gencodeMapper "compute" [ (lib.last cudaPTXArchs) ]);
+  cudaGencode = gencodeMapper "sm" cudaRealCapabilities ++ lib.optionals (config.cudaForwardCompat or true) (gencodeMapper "compute" [ (lib.last cudaRealCapabilities) ]);
 
   cudaCapabilitiesCommaString = lib.strings.concatStringsSep "," cudaCapabilities;
   cudaCapabilitiesSemiColonString = lib.strings.concatStringsSep ";" cudaCapabilities;
