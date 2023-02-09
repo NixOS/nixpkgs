@@ -24,12 +24,14 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage = let
-    setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-  in pkgs.writeShellScript "manage" ''
-    ${setupEnv}
-    exec ${pkg}/bin/paperless-ngx "$@"
-  '';
+  manage =
+    let
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+    in
+    pkgs.writeShellScript "manage" ''
+      ${setupEnv}
+      exec ${pkg}/bin/paperless-ngx "$@"
+    '';
 
   # Secure the services
   defaultServiceConfig = {
@@ -170,7 +172,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = lib.mdDoc ''
         Extra paperless config options.
 
