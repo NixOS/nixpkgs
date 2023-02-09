@@ -184,7 +184,7 @@ rec {
     if length defs == 1
     then (head defs).value
     else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times.\n${message}\nDefinition values:${showDefs defs}";
+      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
