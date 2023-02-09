@@ -18,11 +18,11 @@ let
         else if isString   v then v
         else if true  ==   v then "yes"
         else if false ==   v then "no"
-        else if isList     v then concatStringsSep "," v
         else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
 
   # dont use the "=" operator
   settingsFormat = (pkgs.formats.keyValue {
+      listsAsDuplicateKeys = true;
       mkKeyValue = lib.generators.mkKeyValueDefault {
       mkValueString = mkValueStringSshd;
     } " ";});
@@ -100,6 +100,7 @@ in
     (mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
 
+    (mkRenamedOptionModule [ "services" "openssh" "authorizedKeysFile" ] [  "services" "openssh" "settings" "AuthorizedKeysFile" ])
     (mkRenamedOptionModule [ "services" "openssh" "authorizedKeysCommand" ] [  "services" "openssh" "settings" "AuthorizedKeysCommand" ])
     (mkRenamedOptionModule [ "services" "openssh" "authorizedKeysCommandUser" ] [  "services" "openssh" "settings" "AuthorizedKeysCommandUser" ])
     (mkRenamedOptionModule [ "services" "openssh" "kbdInteractiveAuthentication" ] [  "services" "openssh" "settings" "KbdInteractiveAuthentication" ])
@@ -240,22 +241,6 @@ in
         '';
       };
 
-      authorizedKeysFiles = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
-          Specify the rules for which files to read on the host.
-
-          This is an advanced option. If you're looking to configure user
-          keys, you can generally use [](#opt-users.users._name_.openssh.authorizedKeys.keys)
-          or [](#opt-users.users._name_.openssh.authorizedKeys.keyFiles).
-
-          These are paths relative to the host root file system or home
-          directories and they are subject to certain token expansion rules.
-          See AuthorizedKeysFile in man sshd_config for details.
-        '';
-      };
-
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
         default = { };
@@ -266,6 +251,22 @@ in
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
+            AuthorizedKeysFile = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              apply = concatMapStringsSep " " toString;
+              description = lib.mdDoc ''
+                Specify the rules for which files to read on the host.
+
+                This is an advanced option. If you're looking to configure user
+                keys, you can generally use [](#opt-users.users._name_.openssh.authorizedKeys.keys)
+                or [](#opt-users.users._name_.openssh.authorizedKeys.keyFiles).
+
+                These are paths relative to the host root file system or home
+                directories and they are subject to certain token expansion rules.
+                See AuthorizedKeysFile in man sshd_config for details.
+              '';
+            };
             LogLevel = mkOption {
               type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
               default = "INFO"; # upstream default
@@ -515,7 +516,7 @@ in
     # These values are merged with the ones defined externally, see:
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
-    services.openssh.authorizedKeysFiles =
+    services.openssh.settings.AuthorizedKeysFile =
       [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
@@ -540,7 +541,6 @@ in
           Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
         PrintMotd no # handled by pam_motd
-        AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
