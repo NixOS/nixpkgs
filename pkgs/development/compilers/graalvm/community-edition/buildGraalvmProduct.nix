@@ -55,6 +55,11 @@ stdenv.mkDerivation (args // {
   dontInstall = true;
   dontBuild = true;
   dontStrip = true;
+  # installCheckPhase is going to run in GraalVM main derivation (see buildGraalvm.nix)
+  # to make sure that it has everything it needs to run correctly.
+  # Other hooks like fixupPhase/installPhase are also going to run there for the
+  # same reason.
+  doInstallCheck = false;
 
   passthru = { inherit product; } // passthru;
 
