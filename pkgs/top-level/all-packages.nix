@@ -3189,6 +3189,8 @@ with pkgs;
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
+  gem5 = callPackage ../tools/virtualization/gem5 { };
+
   altermime = callPackage ../tools/networking/altermime { };
 
   alttab = callPackage ../tools/X11/alttab { };
