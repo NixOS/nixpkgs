@@ -141,14 +141,7 @@ let
       license = with licenses; [ upl gpl2Classpath bsd3 ];
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       mainProgram = "java";
-      maintainers = with maintainers; [
-        bandresen
-        hlolli
-        glittershark
-        babariviere
-        ericdallo
-        thiagokokada
-      ];
+      maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
     } // meta);
   });
 in graalvmXXX-ce

@@ -312,6 +312,19 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  graalvm-ce = {
+    members = [
+      bandresen
+      hlolli
+      glittershark
+      babariviere
+      ericdallo
+      thiagokokada
+    ];
+    scope = "Maintain GraalVM Community Edition packages.";
+    shortName = "GraalVM-CE";
+  };
+
   haskell = {
     members = [
       cdepillabout
