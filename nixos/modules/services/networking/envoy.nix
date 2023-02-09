@@ -56,16 +56,16 @@ in
         ExecStart = "${pkgs.envoy}/bin/envoy -c ${validateConfig conf}";
         DynamicUser = true;
         Restart = "no";
-        CacheDirectory = "envoy";
-        LogsDirectory = "envoy";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK AF_XDP";
+        CacheDirectory = [ "envoy" ];
+        LogsDirectory = [ "envoy" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_XDP" ];
         SystemCallArchitectures = "native";
         LockPersonality = true;
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        PrivateUsers = false;  # breaks CAP_NET_BIND_SERVICE
+        PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
         PrivateDevices = true;
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -77,7 +77,7 @@ in
         ProtectHostname = true;
         ProtectSystem = "strict";
         UMask = "0066";
-        SystemCallFilter = "~@clock @module @mount @reboot @swap @obsolete @cpu-emulation";
+        SystemCallFilter = [ "~@clock" "~@module" "~@mount" "~@reboot" "~@swap" "~@obsolete" "~@cpu-emulation" ];
       };
     };
   };
