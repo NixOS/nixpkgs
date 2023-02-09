@@ -1016,6 +1016,13 @@ let
       '';
     });
 
+    quarto = old.quarto.overrideDerivation (attrs: {
+      postPatch = ''
+        substituteInPlace "R/quarto.R" \
+          --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${pkgs.quarto}/bin/quarto')"
+      '';
+    });
+
     s2 = old.s2.overrideDerivation (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
