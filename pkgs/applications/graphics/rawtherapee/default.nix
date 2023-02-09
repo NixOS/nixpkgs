@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   patches = lib.optionals stdenv.isDarwin [
     ./do-not-bundle.patch
   ];
-  # Disable upstream-enforced bundling on macOS.
-  ++ lib.optionals stdenv.isDarwin [ ./do-not-bundle.patch ];
 
   buildInputs = [
     pixman libpthreadstubs gtkmm3 libXau libXdmcp
