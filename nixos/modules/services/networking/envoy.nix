@@ -6,12 +6,11 @@ let
   cfg = config.services.envoy;
   format = pkgs.formats.json { };
   conf = format.generate "envoy.json" cfg.settings;
-  validateConfig = file:
+  validateConfig = required: file:
     pkgs.runCommand "validate-envoy-conf" { } ''
-      ${cfg.package}/bin/envoy --log-level error --mode validate -c "${file}"
+      ${cfg.package}/bin/envoy --log-level error --mode validate -c "${file}" ${lib.optionalString (!required) "|| true"}
       cp "${file}" "$out"
     '';
-
 in
 
 {
@@ -19,6 +18,16 @@ in
     enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
 
     package = mkPackageOptionMD pkgs "envoy" { };
+
+    requireValidConfig = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Whether a failure during config validation at build time is fatal.
+        When the config can't be checked during build time, for example when it includes
+        other files, disable this option.
+      '';
+    };
 
     settings = mkOption {
       type = format.type;
@@ -55,7 +64,7 @@ in
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/envoy -c ${validateConfig conf}";
+        ExecStart = "${cfg.package}/bin/envoy -c ${validateConfig cfg.requireValidConfig conf}";
         CacheDirectory = [ "envoy" ];
         LogsDirectory = [ "envoy" ];
         Restart = "no";
