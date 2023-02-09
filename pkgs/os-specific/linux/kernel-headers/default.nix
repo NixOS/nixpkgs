@@ -1,10 +1,10 @@
 { stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
-, bison ? null, flex ? null, python ? null, rsync ? null
+, bison ? null, flex ? null, rsync ? null
 , writeTextFile
 }:
 
 assert stdenvNoCC.hostPlatform.isAndroid ->
-  (flex != null && bison != null && python != null && rsync != null);
+  (flex != null && bison != null && rsync != null);
 
 let
 
@@ -50,7 +50,7 @@ let
     nativeBuildInputs = [
       perl elf-header
     ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-      flex bison python rsync
+      flex bison rsync
     ] ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin &&
                         stdenvNoCC.hostPlatform.isMips) [
       darwin-endian-h
