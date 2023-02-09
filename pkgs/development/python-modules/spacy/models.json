@@ -42,6 +42,12 @@
     "license": "cc-by-sa-40"
   },
   {
+    "pname": "da_core_news_trf",
+    "version": "3.5.0",
+    "sha256": "0b8mxr1ajyw8ccm0khmcp4n3jcxl4syfrmiy9kzf3cp4hcrnqnxy",
+    "license": "cc-by-sa-40"
+  },
+  {
     "pname": "de_core_news_lg",
     "version": "3.5.0",
     "sha256": "0l3sg853xfkab7mj41n370x37iksp79nrjp7s60hhajpfbl546a0",
@@ -132,6 +138,24 @@
     "license": "gpl3"
   },
   {
+    "pname": "fi_core_news_lg",
+    "version": "3.5.0",
+    "sha256": "0j3r01a0yqgj8apfjv1wkblhqg86yp2nzxv51nf99pi2nmh81jzx",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "fi_core_news_md",
+    "version": "3.5.0",
+    "sha256": "09qfzwyw6wfdmw1bgd1kfg1gdbmzal5z1r240djivxygzn6f1ixs",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "fi_core_news_sm",
+    "version": "3.5.0",
+    "sha256": "1ly71cacy0gr62acvc3vl8dxh2czd6zkm7ijprisdblw17ik9yln",
+    "license": "cc-by-sa-40"
+  },
+  {
     "pname": "fr_core_news_lg",
     "version": "3.5.0",
     "sha256": "1zjf348c60xf35zaldgykrlskvrryxv9vdaz49xlwq9caw0yzyh4",
@@ -156,6 +180,24 @@
     "license": "lgpllr"
   },
   {
+    "pname": "hr_core_news_lg",
+    "version": "3.5.0",
+    "sha256": "1fvkzfi539fmp6jy3hjcrwvdxw5k6zc3h351s887xidlw3gs1kr3",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "hr_core_news_md",
+    "version": "3.5.0",
+    "sha256": "1mi6k9qjxbigrl2fa60blyyz8b54jda5hc1s96vn9rykg4rni8cr",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "hr_core_news_sm",
+    "version": "3.5.0",
+    "sha256": "1s22mx7y5h135ry5l49az30l7mw7fdrz53s4a9gaxfsp9rzs474g",
+    "license": "cc-by-sa-40"
+  },
+  {
     "pname": "it_core_news_lg",
     "version": "3.5.0",
     "sha256": "1z64s632wbjlqmnmppcnpf2pfrjbml30gbil7mk0qln2i2hrh0qq",
@@ -172,6 +214,24 @@
     "version": "3.5.0",
     "sha256": "1fw262m7bl3g31gz0jb6fxrd385p67q82wfrsff6z9daxi3pi6ip",
     "license": "cc-by-nc-sa-30"
+  },
+  {
+    "pname": "ko_core_news_lg",
+    "version": "3.5.0",
+    "sha256": "1q314wb114ynkf455cm8jd9jsx3yb6y0rrgf820ww31jlk5jzaa9",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "ko_core_news_md",
+    "version": "3.5.0",
+    "sha256": "0dy7kk4bvjl944vv2m4hcvppar7clwq28y2rk40i3022jbqh2nxq",
+    "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "ko_core_news_sm",
+    "version": "3.5.0",
+    "sha256": "1i5q8dpyfa2sy80hr81r6s9dqpawp36ni8slz035b0wd9sq3i73v",
+    "license": "cc-by-sa-40"
   },
   {
     "pname": "lt_core_news_lg",
@@ -334,6 +394,30 @@
     "version": "3.5.0",
     "sha256": "1c0w85xn8lnx394qmmnv3px68w0pha7fxx0qlqa74r2mfi3sv6s7",
     "license": "cc-by-sa-40"
+  },
+  {
+    "pname": "uk_core_news_lg",
+    "version": "3.5.0",
+    "sha256": "0hl9xjnxslckc6wvfgkj30r3py8q95yj7mrxdb6m5gvknlq72kp2",
+    "license": "mit"
+  },
+  {
+    "pname": "uk_core_news_md",
+    "version": "3.5.0",
+    "sha256": "05mg719ra5khm61yr7xhfcsh3apl29s3h2wkq0v87gkyqn13812p",
+    "license": "mit"
+  },
+  {
+    "pname": "uk_core_news_sm",
+    "version": "3.5.0",
+    "sha256": "1dkbmjbyhf6vsr7c4m4njgi969sfhbdnp73skl3k206dign5qgnz",
+    "license": "mit"
+  },
+  {
+    "pname": "uk_core_news_trf",
+    "version": "3.5.0",
+    "sha256": "02bhvcivalifrxd3vl118799wvg6hgykj31wwfdsgnq68lwc28fb",
+    "license": "mit"
   },
   {
     "pname": "xx_ent_wiki_sm",
