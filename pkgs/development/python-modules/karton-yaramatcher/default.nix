@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , karton-core
 , unittestCheckHook
+, pythonOlder
 , yara-python
 }:
 
