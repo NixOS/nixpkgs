@@ -5,7 +5,7 @@
 ## various stuff that can be plugged in
 , ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
-, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
+, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire, firefoxpwa
 , tridactyl-native
 , fx-cast-bridge
 , keepassxc
@@ -78,6 +78,7 @@ let
           ++ deprecatedNativeMessagingHost "enableGnomeExtensions" gnome-browser-connector
           ++ deprecatedNativeMessagingHost "enableUgetIntegrator" uget-integrator
           ++ deprecatedNativeMessagingHost "enablePlasmaBrowserIntegration" plasma5Packages.plasma-browser-integration
+          ++ lib.optional (cfg.enableFirefoxPwa or false) firefoxpwa.unwrapped # firefoxpwa needs to be in PATH too, so we cannot deprecate this option
           ++ deprecatedNativeMessagingHost "enableFXCastBridge" fx-cast-bridge
           ++ deprecatedNativeMessagingHost "enableKeePassXC" keepassxc
           ++ (if extraNativeMessagingHosts != []
@@ -244,7 +245,6 @@ let
       nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
-
       buildCommand = ''
         if [ ! -x "${browser}/bin/${applicationName}" ]
         then
@@ -406,6 +406,12 @@ let
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
+        ${lib.optionalString (cfg.enableFirefoxPwa or false) ''
+          # firefoxpwa needs to be in PATH too to have the generated .desktop entries working
+          makeWrapper ${firefoxpwa.fhs}/bin/firefoxpwa $out/bin/firefoxpwa \
+          --prefix LD_LIBRARY_PATH ':' "$libs" \
+          --suffix-each GTK_PATH ':' "$gtk_modules"
+        ''}
       '';
 
       preferLocalBuild = true;
