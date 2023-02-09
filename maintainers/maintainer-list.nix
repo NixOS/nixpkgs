@@ -14864,7 +14864,7 @@
   };
   toastal = {
     email = "toastal+nix@posteo.net";
-    matrix = "@toastal:matrix.org";
+    matrix = "@toastal:chat.mozilla.org";
     github = "toastal";
     githubId = 561087;
     name = "toastal";
