@@ -31285,7 +31285,7 @@ with pkgs;
 
   xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
-  xmrig = callPackage ../applications/misc/xmrig { };
+  xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
   xmrig-mo = callPackage ../applications/misc/xmrig/moneroocean.nix { };
 
@@ -38023,6 +38023,8 @@ with pkgs;
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
+
+  pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
 
   pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
