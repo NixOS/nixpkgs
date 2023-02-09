@@ -761,6 +761,36 @@ rec {
         writeDirectReferencesToFile (writeText "string-file" string);
 
 
+  /**
+   * Write the references (i.e. the runtime dependencies in the Nix store) of the elements in `paths' to a file.
+   * The elements are sorted according to their hashes, and duplicated lines are removed.
+   */
+  writeMultipleReferencesToFile = paths: runCommand "runtime-deps-multiple" {
+    # Uniquely sort the input paths to reduce unnessesary rebuilds
+    referencesFiles = map writeReferencesToFile (lib.pipe (map toString paths) [ (builtins.sort builtins.lessThan) lib.unique ]);
+  } ''
+    touch "$out"
+    declare -A referencesDict=()
+    for refFile in $referencesFiles; do
+      while read ref; do
+        if [[ "''${ref:0:${toString (lib.stringLength builtins.storeDir + 1)}}" == "${builtins.storeDir}/" ]]; then
+          refHash="''${ref:${toString (lib.stringLength builtins.storeDir + 1)}:32}"
+          refTail="$(stripHash "$ref")"
+          # Set if not set before
+          : "''${referencesDict["$refHash"]="$refTail"}"
+        fi
+      done < "$refFile"
+    done
+    if (( "''${#referencesDict[@]}" )); then
+      declare -a hashesSorted
+      IFS=$'\n' hashesSorted=( $(sort <<<"''${!referencesDict[*]}") )
+      for refHash in ''${hashesSorted[@]}; do
+        echo "${builtins.storeDir}/$refHash-''${referencesDict[$refHash]}" >> "$out"
+      done
+    fi
+  '';
+
+
   /* Print an error message if the file with the specified name and
     hash doesn't exist in the Nix store. This function should only
     be used by non-redistributable software with an unfree license
