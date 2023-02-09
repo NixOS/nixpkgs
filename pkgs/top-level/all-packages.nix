@@ -38145,6 +38145,14 @@ with pkgs;
 
   sailsd = callPackage ../misc/sailsd { };
 
+  sail-riscv-rv32 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV32";
+  };
+
+  sail-riscv-rv64 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV64";
+  };
+
   shc = callPackage ../tools/security/shc { };
 
   shellz = callPackage ../tools/security/shellz { };
