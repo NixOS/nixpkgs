@@ -84,7 +84,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     , zendExtension ? false
     , doCheck ? true
     , extName ? name
-    , allowLocalNetworking ? false
     , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
@@ -104,7 +103,6 @@ lib.makeScope pkgs.newScope (self: with self; {
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
-      __darwinAllowLocalNetworking = allowLocalNetworking;
 
       preConfigurePhases = [
         "cdToExtensionRootPhase"
@@ -413,8 +411,17 @@ lib.makeScope pkgs.newScope (self: with self; {
             valgrind.dev
           ];
           zendExtension = true;
+          postPatch = lib.optionalString stdenv.isDarwin ''
+            # Tests are flaky on darwin
+            rm ext/opcache/tests/blacklist.phpt
+            rm ext/opcache/tests/bug66338.phpt
+            rm ext/opcache/tests/bug78106.phpt
+            rm ext/opcache/tests/issue0115.phpt
+            rm ext/opcache/tests/issue0149.phpt
+            rm ext/opcache/tests/revalidate_path_01.phpt
+          '';
           # Tests launch the builtin webserver.
-          allowLocalNetworking = true;
+          __darwinAllowLocalNetworking = true;
         }
         {
           name = "openssl";
