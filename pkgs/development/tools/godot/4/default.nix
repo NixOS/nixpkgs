@@ -44,11 +44,12 @@ in
 stdenv.mkDerivation rec {
   pname = "godot";
   version = "4.1-stable";
+  commitHash = "970459615f6b2b4151742ec6d7ef8559f87fd5c5";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = version;
+    rev = commitHash;
     hash = "sha256-v9qKrPYQz4c+xkSu/2ru7ZE5EzKVyXhmrxyHZQkng2U=";
   };
 
@@ -85,6 +86,28 @@ stdenv.mkDerivation rec {
   ++ lib.optional withUdev udev;
 
   enableParallelBuilding = true;
+
+  # Set the build name which is part of the version. In official downloads, this
+  # is set to 'official'. When not specified explicitly, it is set to
+  # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
+  # etc.) usually set this to their name as well.
+  #
+  # See also 'methods.py' in the Godot repo and 'build' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+  BUILD_NAME = "nixpkgs";
+
+  # Required for the commit hash to be included in the version number.
+  #
+  # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+  # refs. Since we just write the hash directly, there is no need to emulate any
+  # other parts of the .git directory.
+  #
+  # See also 'hash' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+  preConfigure = ''
+    mkdir -p .git
+    echo ${commitHash} > .git/HEAD
+  '';
 
   sconsFlags = mkSconsFlagsFromAttrSet {
     # Options from 'SConstruct'
