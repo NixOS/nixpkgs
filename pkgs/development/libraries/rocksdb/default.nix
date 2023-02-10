@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -8,7 +9,9 @@
 , snappy
 , zlib
 , zstd
-, enableJemalloc ? false, jemalloc
+, windows
+, enableJemalloc ? false
+, jemalloc
 , enableLite ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
@@ -29,7 +32,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
-  buildInputs = lib.optional enableJemalloc jemalloc;
+  buildInputs = lib.optional enableJemalloc jemalloc
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
 
   outputs = [
     "out"
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $tools/bin
-    cp tools/{ldb,sst_dump} $tools/bin/
+    cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''
