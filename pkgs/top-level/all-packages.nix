@@ -16103,7 +16103,10 @@ with pkgs;
   };
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
-  tbb = callPackage ../development/libraries/tbb { };
+  tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
+  tbb_2021_8 = callPackage ../development/libraries/tbb { };
+  # many packages still fail with latest version
+  tbb = tbb_2020_3;
 
   terra = callPackage ../development/compilers/terra {
     llvmPackages = llvmPackages_11;
