@@ -19447,6 +19447,10 @@ with pkgs;
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
+  cctag = callPackage ../development/libraries/cctag {
+    tbb = tbb_2021_8;
+  };
+
   cctz = callPackage ../development/libraries/cctz {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
