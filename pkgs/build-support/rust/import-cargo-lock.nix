@@ -183,10 +183,15 @@ let
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
-    inherit lockFileContents;
-    passAsFile = [ "lockFileContents" ];
-  }) ''
+  vendorDir = runCommand "cargo-vendor-dir"
+    (if lockFile == null then {
+      inherit lockFileContents;
+      passAsFile = [ "lockFileContents" ];
+    } else {
+      passthru = {
+        inherit lockFile;
+      };
+    }) ''
     mkdir -p $out/.cargo
 
     ${
