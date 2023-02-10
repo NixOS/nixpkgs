@@ -8772,6 +8772,8 @@ self: super: with self; {
 
   pytap2 = callPackage ../development/python-modules/pytap2 { };
 
+  pytapo = callPackage ../development/python-modules/pytapo { };
+
   pytautulli = callPackage ../development/python-modules/pytautulli { };
 
   pyte = callPackage ../development/python-modules/pyte { };
