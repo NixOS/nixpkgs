@@ -5,6 +5,7 @@
 # use gprbuild-boot since gprbuild proper depends
 # on this xmlada derivation.
 , gprbuild-boot
+, fixGPRBuildDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gnat
     gprbuild-boot
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixGPRBuildDarwinDylibNames ];
+
+  patches = [
+    ./fix-darwin-dylib-names.patch
   ];
 
   meta = with lib; {

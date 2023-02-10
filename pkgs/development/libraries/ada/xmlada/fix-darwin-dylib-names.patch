@@ -1,0 +1,110 @@
+diff --git a/dom/xmlada_dom.gpr b/dom/xmlada_dom.gpr
+index 3dde341..3e76b80 100644
+--- a/dom/xmlada_dom.gpr
++++ b/dom/xmlada_dom.gpr
+@@ -31,8 +31,15 @@ project XmlAda_Dom is
+    for Library_Kind use XmlAda_Shared.Library_Type;
+    for Object_Dir  use "obj/" & Project'Library_Kind;
+    for Library_Dir use "lib/" & Project'Library_Kind;
+-   for Library_Version use "lib" & Project'Library_Name
+-      & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++
++   case XmlAda_Shared.So_Ext is
++      when ".dylib" =>
++         for Library_Version use "lib" & Project'Library_Name
++            & "." & XmlAda_Shared.Version & XmlAda_Shared.So_Ext;
++      when others =>
++         for Library_Version use "lib" & Project'Library_Name
++            & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++   end case;
+ 
+    package Builder  renames XmlAda_Shared.Builder;
+    package Compiler renames XmlAda_Shared.Compiler;
+diff --git a/input_sources/xmlada_input.gpr b/input_sources/xmlada_input.gpr
+index caed6f6..4d79535 100644
+--- a/input_sources/xmlada_input.gpr
++++ b/input_sources/xmlada_input.gpr
+@@ -30,8 +30,15 @@ project XmlAda_Input is
+    for Library_Kind use XmlAda_Shared.Library_Type;
+    for Object_Dir  use "obj/" & Project'Library_Kind;
+    for Library_Dir use "lib/" & Project'Library_Kind;
+-   for Library_Version use "lib" & Project'Library_Name
+-      & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++
++   case XmlAda_Shared.So_Ext is
++      when ".dylib" =>
++         for Library_Version use "lib" & Project'Library_Name
++            & "." & XmlAda_Shared.Version & XmlAda_Shared.So_Ext;
++      when others =>
++         for Library_Version use "lib" & Project'Library_Name
++            & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++   end case;
+ 
+    package Builder  renames XmlAda_Shared.Builder;
+    package Compiler renames XmlAda_Shared.Compiler;
+diff --git a/sax/xmlada_sax.gpr b/sax/xmlada_sax.gpr
+index 3df4151..401f213 100644
+--- a/sax/xmlada_sax.gpr
++++ b/sax/xmlada_sax.gpr
+@@ -31,8 +31,15 @@ project XmlAda_Sax is
+    for Library_Kind use XmlAda_Shared.Library_Type;
+    for Object_Dir  use "obj/" & Project'Library_Kind;
+    for Library_Dir use "lib/" & Project'Library_Kind;
+-   for Library_Version use "lib" & Project'Library_Name
+-      & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++
++   case XmlAda_Shared.So_Ext is
++      when ".dylib" =>
++         for Library_Version use "lib" & Project'Library_Name
++            & "." & XmlAda_Shared.Version & XmlAda_Shared.So_Ext;
++      when others =>
++         for Library_Version use "lib" & Project'Library_Name
++            & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++   end case;
+ 
+    package Builder  renames XmlAda_Shared.Builder;
+    package Compiler renames XmlAda_Shared.Compiler;
+diff --git a/schema/xmlada_schema.gpr b/schema/xmlada_schema.gpr
+index 139d4da..b8b1614 100644
+--- a/schema/xmlada_schema.gpr
++++ b/schema/xmlada_schema.gpr
+@@ -32,8 +32,15 @@ project XmlAda_Schema is
+    for Library_Kind use XmlAda_Shared.Library_Type;
+    for Object_Dir  use "obj/" & Project'Library_Kind;
+    for Library_Dir use "lib/" & Project'Library_Kind;
+-   for Library_Version use "lib" & Project'Library_Name
+-      & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++
++   case XmlAda_Shared.So_Ext is
++      when ".dylib" =>
++         for Library_Version use "lib" & Project'Library_Name
++            & "." & XmlAda_Shared.Version & XmlAda_Shared.So_Ext;
++      when others =>
++         for Library_Version use "lib" & Project'Library_Name
++            & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++   end case;
+ 
+    package Builder  renames XmlAda_Shared.Builder;
+    package Compiler renames XmlAda_Shared.Compiler;
+diff --git a/unicode/xmlada_unicode.gpr b/unicode/xmlada_unicode.gpr
+index bfd3f00..0673f10 100644
+--- a/unicode/xmlada_unicode.gpr
++++ b/unicode/xmlada_unicode.gpr
+@@ -29,8 +29,15 @@ project XmlAda_Unicode is
+    for Library_Kind use XmlAda_Shared.Library_Type;
+    for Object_Dir  use "obj/" & Project'Library_Kind;
+    for Library_Dir use "lib/" & Project'Library_Kind;
+-   for Library_Version use "lib" & Project'Library_Name
+-      & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++
++   case XmlAda_Shared.So_Ext is
++      when ".dylib" =>
++         for Library_Version use "lib" & Project'Library_Name
++            & "." & XmlAda_Shared.Version & XmlAda_Shared.So_Ext;
++      when others =>
++         for Library_Version use "lib" & Project'Library_Name
++            & XmlAda_Shared.So_Ext & "." & XmlAda_Shared.Version;
++   end case;
+ 
+    package Builder  renames XmlAda_Shared.Builder;
+    package Compiler renames XmlAda_Shared.Compiler;
