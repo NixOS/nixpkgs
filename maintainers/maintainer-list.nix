@@ -10529,6 +10529,12 @@
     githubId = 15645854;
     name = "Brad Christensen";
   };
+  paveloom = {
+    email = "paveloom@riseup.net";
+    github = "paveloom";
+    githubId = 49961859;
+    name = "Pavel Sobolev";
+  };
   payas = {
     email = "relekarpayas@gmail.com";
     github = "bhankas";
