@@ -59,6 +59,7 @@ rec {
 
     isBSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
     isDarwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };
+    isAarchDarwin  = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; cpu = { family = "arm"; }; };
     isUnix         = [ isBSD isDarwin isLinux isSunOS isCygwin isRedox ];
 
     isMacOS        = { kernel = kernels.macos; };
