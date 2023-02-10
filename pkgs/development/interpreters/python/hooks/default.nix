@@ -11,7 +11,7 @@ in {
   condaInstallHook = callPackage ({ makePythonHook, gnutar, lbzip2 }:
     makePythonHook {
       name = "conda-install-hook";
-      deps = [ gnutar lbzip2 ];
+      propagatedBuildInputs = [ gnutar lbzip2 ];
       substitutions = {
         inherit pythonSitePackages;
       };
@@ -20,19 +20,19 @@ in {
   condaUnpackHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "conda-unpack-hook";
-      deps = [];
+      propagatedBuildInputs = [];
     } ./conda-unpack-hook.sh) {};
 
   eggBuildHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "egg-build-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
     } ./egg-build-hook.sh) {};
 
   eggInstallHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "egg-install-hook.sh";
-      deps = [ setuptools ];
+      propagatedBuildInputs = [ setuptools ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -41,13 +41,13 @@ in {
   eggUnpackHook = callPackage ({ makePythonHook, }:
     makePythonHook {
       name = "egg-unpack-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh) {};
 
   flitBuildHook = callPackage ({ makePythonHook, flit }:
     makePythonHook {
       name = "flit-build-hook";
-      deps = [ flit ];
+      propagatedBuildInputs = [ flit ];
       substitutions = {
         inherit pythonInterpreter;
       };
@@ -56,7 +56,7 @@ in {
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
-      deps = [ pip wheel ];
+      propagatedBuildInputs = [ pip wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -65,7 +65,7 @@ in {
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
-      deps = [ pip ];
+      propagatedBuildInputs = [ pip ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -74,7 +74,7 @@ in {
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
       name = "pytest-check-hook";
-      deps = [ pytest ];
+      propagatedBuildInputs = [ pytest ];
       substitutions = {
         inherit pythonCheckInterpreter;
       };
@@ -123,7 +123,7 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
-      deps = [ wheel ];
+      propagatedBuildInputs = [ wheel ];
       substitutions = {
         inherit pythonInterpreter;
       };
@@ -145,7 +145,7 @@ in {
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
       name = "setuptools-setup-hook";
-      deps = [ setuptools wheel ];
+      propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages setuppy;
       };
@@ -154,7 +154,7 @@ in {
   setuptoolsCheckHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "setuptools-check-hook";
-      deps = [ setuptools ];
+      propagatedBuildInputs = [ setuptools ];
       substitutions = {
         inherit pythonCheckInterpreter setuppy;
       };
@@ -171,7 +171,7 @@ in {
   venvShellHook = disabledIf (!isPy3k) (callPackage ({ makePythonHook, ensureNewerSourcesForZipFilesHook }:
     makePythonHook {
       name = "venv-shell-hook";
-      deps = [ ensureNewerSourcesForZipFilesHook ];
+      propagatedBuildInputs = [ ensureNewerSourcesForZipFilesHook ];
       substitutions = {
         inherit pythonInterpreter;
       };
@@ -180,7 +180,7 @@ in {
   wheelUnpackHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "wheel-unpack-hook.sh";
-      deps = [ wheel ];
+      propagatedBuildInputs = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 
   wrapPython = callPackage ../wrap-python.nix {
@@ -190,6 +190,6 @@ in {
   sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      deps = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }
