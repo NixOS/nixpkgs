@@ -37,9 +37,7 @@ options, but does not declare any. The structure of full NixOS modules
 is shown in [Example: Structure of NixOS Modules](#ex-module-syntax).
 
 ::: {#ex-module-syntax .example}
-::: {.title}
 **Example: Structure of NixOS Modules**
-:::
 ```nix
 { config, pkgs, ... }:
 
@@ -102,9 +100,7 @@ Exec directives](#exec-escaping-example) for an example. When using these
 functions system environment substitution should *not* be disabled explicitly.
 
 ::: {#locate-example .example}
-::: {.title}
 **Example: NixOS Module for the "locate" Service**
-:::
 ```nix
 { config, lib, pkgs, ... }:
 
@@ -165,9 +161,7 @@ in {
 :::
 
 ::: {#exec-escaping-example .example}
-::: {.title}
 **Example: Escaping in Exec directives**
-:::
 ```nix
 { config, lib, pkgs, utils, ... }:
 

@@ -306,9 +306,15 @@ class ManpageRenderer(Renderer):
             return f'\\fB{man_escape(page)}\\fP\\fR({man_escape(section)})\\fP'
         else:
             raise NotImplementedError("md node not supported yet", token)
-    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        # mdoc knows no anchors so we can drop those, but classes must be rejected.
+        if 'class' in token.attrs:
+            return super().attr_span_begin(token, tokens, i, options, env)
+        return ""
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
-        return "" # mdoc knows no anchors
+        return ""
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported in manpages", token)
