@@ -278,12 +278,12 @@ in {
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "4" "";
-    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    version = rubyVersion "3" "0" "5" "";
+    sha256 = "9afc6380a027a4fe1ae1a3e2eccb6b497b9c5ac0631c12ca56f9b7beb4848776";
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "2" "";
-    sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
+    version = rubyVersion "3" "1" "3" "";
+    sha256 = "5ea498a35f4cd15875200a52dde42b6eb179e1264e17d78732c3a57cd1c6ab9e";
   };
 }
