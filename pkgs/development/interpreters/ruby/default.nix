@@ -34,7 +34,7 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , jemalloc, jemallocSupport ? false
-      # By default, ruby has 3 observed references to stdenv.cc:
+      # By default, ruby has 4 observed references to stdenv.cc:
       #
       # - If you run:
       #     ruby -e "puts RbConfig::CONFIG['configure_args']"
@@ -43,6 +43,7 @@ let
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
+      # - In mkmf.log files for any of the lib/ruby/gems
       , removeReferencesTo, jitSupport ? false
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
@@ -185,6 +186,17 @@ let
                 -t ${stdenv.cc} \
                 $rbConfig
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
+              find "$out/lib/ruby/gems" -name mkmf.log \
+                -exec ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} '{}' +
+            ''
+          }
+          ${
+            lib.optionalString useBaseRuby ''
+              # Get rid of log file references to Ruby.
+              find "$out/lib/ruby/gems" -name mkmf.log \
+                -exec ${removeReferencesTo}/bin/remove-references-to \
+                -t ${baseRuby} '{}' +
             ''
           }
 
