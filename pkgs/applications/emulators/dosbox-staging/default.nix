@@ -1,39 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_net
-, alsa-lib
+{ alsa-lib
 , copyDesktopItems
+, fetchFromGitHub
 , fluidsynth
+, glib
 , gtest
+, lib
 , libGL
 , libGLU
+, libjack2
+, libmt32emu
 , libogg
 , libpng
+, libpulseaudio
 , libslirp
+, libsndfile
 , makeDesktopItem
 , makeWrapper
 , meson
-, libmt32emu
 , ninja
 , opusfile
 , pkg-config
-, libpulseaudio
-, glib
-, libjack2
-, libsndfile
+, irr1
+, SDL2
+, SDL2_image
+, SDL2_net
+, speexdsp
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "dosbox-staging";
-  version = "0.78.1";
+  version = "0.80.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gozFZcJorZtbEK0joksig6qWmAMy03hmBHiyJMONfpk=";
+    hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +49,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2
-    SDL2_net
     alsa-lib
     fluidsynth
     glib
+    irr1
     libGL
     libGLU
     libjack2
@@ -61,11 +63,16 @@ stdenv.mkDerivation rec {
     libslirp
     libsndfile
     opusfile
+    SDL2
+    SDL2_image
+    SDL2_net
+    speexdsp
   ];
 
-   NIX_CFLAGS_COMPILE = [
-     "-I${SDL2_net}/include/SDL2"
-   ];
+  NIX_CFLAGS_COMPILE = [
+    "-I${SDL2_image}/include/SDL2"
+    "-I${SDL2_net}/include/SDL2"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
