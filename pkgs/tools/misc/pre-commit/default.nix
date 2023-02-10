@@ -159,6 +159,9 @@ buildPythonPackage rec {
     "test_sub_staged"
     "test_submodule_does_not_discard_changes"
     "test_submodule_does_not_discard_changes_recurse"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # requires gcc bump
+    "test_rust_hook"
   ];
 
   pythonImportsCheck = [
