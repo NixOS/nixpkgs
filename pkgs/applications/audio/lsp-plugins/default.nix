@@ -29,6 +29,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Provide stable shared library names
+  # https://github.com/sadko4u/lsp-plugins/issues/301
+  postInstall = ''
+    find $out -name '*-${version}${stdenv.hostPlatform.extensions.sharedLibrary}' -print0 | while read -d $'\0' file ; do
+      basename="$(basename $file)"
+      ln -sr "$file" "$(dirname $file)/''${basename/-${version}/}"
+    done
+  '';
+
   meta = with lib;
     { description = "Collection of open-source audio plugins";
       longDescription = ''
