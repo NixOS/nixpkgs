@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "riverwm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-noZ2vo4J0cG3PN2k+2LzMc5WMtj0FEmMttE9obFH/tM=";
+    hash = "sha256-cIcO6owM6eYn+obYVaBOVQpnBx4++KOqQk5Hzo3GcNs=";
     fetchSubmodules = true;
   };
 
