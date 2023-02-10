@@ -1212,6 +1212,12 @@
     githubId = 338268;
     name = "Alexei Robyn";
   };
+  artemis = {
+    email = "git@artemix.org";
+    github = "Arteneko";
+    githubId = 23583792;
+    name = "Artémis";
+  };
   artemist = {
     email = "me@artem.ist";
     github = "artemist";
