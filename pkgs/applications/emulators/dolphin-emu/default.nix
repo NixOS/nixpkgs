@@ -16,13 +16,14 @@
 , libevdev
 , libGL
 , libiconv
-, libpng
 , libpulseaudio
+, libspng
 , libusb1
 , libXdmcp
 , libXext
 , libXrandr
 , mbedtls_2
+, mgba
 , miniupnpc
 , minizip-ng
 , openal
@@ -53,21 +54,15 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-17995";
+  version = "5.0-18498";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "8bad821019721b9b72701b495da95656ace5fea5";
-    sha256 = "sha256-uxHzn+tXRBr11OPpZ4ELBw7DTJH4mnqUBOeyPlXNAh8=";
+    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
+    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # On x86_64-darwin CMake reportedly does not work without this in some cases.
-    # See https://github.com/NixOS/nixpkgs/pull/190373#issuecomment-1241310765
-    ./minizip-external-missing-include.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -85,8 +80,8 @@ stdenv.mkDerivation rec {
     hidapi
     libGL
     libiconv
-    libpng
     libpulseaudio
+    libspng
     libusb1
     libXdmcp
     mbedtls_2
@@ -105,6 +100,7 @@ stdenv.mkDerivation rec {
     libevdev
     libXext
     libXrandr
+    mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
   ] ++ lib.optionals stdenv.isDarwin [
@@ -137,8 +133,6 @@ stdenv.mkDerivation rec {
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
     "--set QT_QPA_PLATFORM xcb"
-    # https://bugs.dolphin-emu.org/issues/12913
-    "--set QT_XCB_NO_XI2 1"
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/201254
