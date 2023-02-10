@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     description = "A library to create panels and other desktop components for Wayland using the Layer Shell protocol";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ eonpatapon ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
