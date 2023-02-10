@@ -417,8 +417,7 @@ with foo_running:
 
 `seconds_interval`
 
-:
-    specifies how often the condition should be polled:
+:   specifies how often the condition should be polled:
 
 ```py
 @polling_condition(seconds_interval=10)
@@ -428,8 +427,7 @@ def foo_running():
 
 `description`
 
-:
-    is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
+:   is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
 ```py
 @polling_condition

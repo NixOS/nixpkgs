@@ -67,7 +67,6 @@ buildPythonApplication rec {
     pyasn1
     pydantic
     pyicu
-    pyjwt
     pymacaroons
     pynacl
     pyopenssl
