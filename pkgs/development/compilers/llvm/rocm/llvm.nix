@@ -19,7 +19,7 @@
 , python3Packages
 , buildDocs ? true
 , buildMan ? true
-, buildTests ? true
+, buildTests ? !stdenv.isAarch64
 , targetName ? "llvm"
 , targetDir ? "llvm"
 , targetProjects ? [ ]
