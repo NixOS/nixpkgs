@@ -118,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
     license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ phile314 illustris ];
+    maintainers = with maintainers; [ illustris ];
     platforms = platforms.all;
   };
 }
