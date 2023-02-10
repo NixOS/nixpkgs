@@ -6,6 +6,7 @@
 , which
 , gnat
 , xmlada
+, fixGPRBuildDarwinDylibNames
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     gnat
     gprbuild-boot
     which
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixGPRBuildDarwinDylibNames ];
 
   propagatedBuildInputs = [
     xmlada
