@@ -82,6 +82,8 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     rm -r powerdnsadmin/static powerdnsadmin/assets.py
     sed -i "s/id:/'id':/" migrations/versions/787bdba9e147_init_db.py
+    # Fix with Flask-Migrate 4: https://github.com/PowerDNS-Admin/PowerDNS-Admin/issues/1376
+    substituteInPlace migrations/env.py --replace "render_as_batch=config.get_main_option('sqlalchemy.url').startswith('sqlite:')," ""
   '';
 
   installPhase = ''
