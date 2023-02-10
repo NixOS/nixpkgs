@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiowinreg";
-  version = "0.0.8";
+  version = "0.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "skelsec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4/xElE70rJKBMS1HdHb6BlcKs4gzNfuEo/6ahN6ixSM=";
+    hash = "sha256-FyrYqNqp0PTEHHit3Rn00jtvPOvgVy+lz3jDRJnsobI=";
   };
 
   propagatedBuildInputs = [
