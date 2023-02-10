@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.33.1";
+  version = "0.33.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8tIvvTTCcIG56VaPZMhdzAKnFRsYV3YC9xcf47nh838=";
+    hash = "sha256-iSSEZgPkK7RrZfU11z7hUk+JbFsCPH/SD16e+/f6TFU=";
   };
 
   propagatedBuildInputs = [
