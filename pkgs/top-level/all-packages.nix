@@ -5438,7 +5438,7 @@ with pkgs;
   river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
-    zig = zig_0_9;
+    zig = zig_0_10;
   };
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };

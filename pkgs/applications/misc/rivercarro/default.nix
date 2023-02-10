@@ -4,25 +4,27 @@
 , zig
 , river
 , wayland
+, wayland-protocols
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "rivercarro";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = pname;
     fetchSubmodules = true;
-    rev = "v${version}";
-    sha256 = "sha256-eATbbwIt5ytEVLPodyq9vFF9Rs5S1xShpvNYQnfwdV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lI1xU7Qw4+XmFLnFxVZvrAPMZs0SNStbcUPBqSYUBak=";
   };
 
   nativeBuildInputs = [
     pkg-config
     river
     wayland
+    wayland-protocols
     zig
   ];
 
