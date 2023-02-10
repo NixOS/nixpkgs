@@ -95,6 +95,9 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [
       "-DWITH_ALEMBIC=ON"
+      # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
+      "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
+      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic.so"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
