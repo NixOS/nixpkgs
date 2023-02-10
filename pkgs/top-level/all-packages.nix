@@ -28881,6 +28881,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  celeste = callPackage ../applications/networking/sync/celeste { };
+
   cyan = callPackage ../applications/graphics/cyan {};
 
   cyanrip = callPackage ../applications/audio/cyanrip { };
