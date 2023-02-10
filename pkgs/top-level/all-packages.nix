@@ -22633,6 +22633,8 @@ with pkgs;
 
   pkgdiff = callPackage ../tools/misc/pkgdiff { };
 
+  pkgtop = callPackage ../tools/misc/pkgtop { };
+
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
   platform-folders = callPackage ../development/libraries/platform-folders { };
