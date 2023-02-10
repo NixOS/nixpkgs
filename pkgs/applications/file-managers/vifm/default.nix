@@ -1,4 +1,5 @@
 { stdenv, fetchurl, makeWrapper
+, perl # used to generate help tags
 , pkg-config
 , ncurses, libX11
 , util-linux, file, which, groff
@@ -17,8 +18,13 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-j+KBPr3Mz+ma7OArBdYqIJkVJdRrDM+67Dr2FMZlVog=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ perl pkg-config makeWrapper ];
   buildInputs = [ ncurses libX11 util-linux file which groff ];
+
+  postPatch = ''
+    # Avoid '#!/usr/bin/env perl' reverences to build help.
+    patchShebangs --build src/helpztags
+  '';
 
   postFixup = let
     path = lib.makeBinPath
