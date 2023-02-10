@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.12.1";
+  version = "6.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u7GVOqVjuqJYfttu+pS/SAWEarAftZbnGMSPmnmpmok=";
+    hash = "sha256-qzMVKDTJX8/E+2Xs1Tyc0b8cmz6tF57dYwQnS4KzSFI=";
   };
 
   postPatch = ''
