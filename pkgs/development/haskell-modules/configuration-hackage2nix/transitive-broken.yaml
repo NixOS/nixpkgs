@@ -464,7 +464,9 @@ dont-distribute-packages:
  - algebra-sql
  - algebraic
  - algolia
+ - algorithmic-composition-basic
  - algorithmic-composition-frequency-shift
+ - algorithmic-composition-overtones
  - align-audio
  - alms
  - alpha
@@ -2543,6 +2545,7 @@ dont-distribute-packages:
  - lapack
  - lapack-comfort-array
  - lapack-hmatrix
+ - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2765,6 +2768,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmsyn6ukr
+ - mmsyn6ukr-array
  - mmsyn7h
  - mmsyn7s
  - mmsyn7ukr
@@ -2998,6 +3002,7 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
+ - pandoc-crossref_0_3_15_0
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3066,8 +3071,15 @@ dont-distribute-packages:
  - phonetic-languages-general
  - phonetic-languages-permutations
  - phonetic-languages-properties
+ - phonetic-languages-simplified-base
  - phonetic-languages-simplified-common
+ - phonetic-languages-simplified-examples-array
+ - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-array
+ - phonetic-languages-simplified-generalized-examples-common
+ - phonetic-languages-simplified-generalized-properties-array
  - phonetic-languages-simplified-lists-examples
+ - phonetic-languages-simplified-properties-array
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
@@ -3745,6 +3757,7 @@ dont-distribute-packages:
  - strict-containers-lens
  - strict-containers-serialise
  - strict-data
+ - string-interpreter
  - string-typelits
  - stripe-haskell
  - stripe-http-client
