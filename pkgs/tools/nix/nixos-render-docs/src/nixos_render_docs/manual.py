@@ -76,10 +76,14 @@ class ManualDocBookRenderer(DocBookRenderer):
         return f"<programlisting>\n{escape(token.content)}</programlisting>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
               env: MutableMapping[str, Any]) -> str:
+        # HACK for temporarily being able to replace md-to-db.sh. pandoc used this syntax to
+        # allow md files to inject arbitrary docbook, and manual chapters use it.
+        if token.info == '{=docbook}':
+            return token.content
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
-class DocBookConverter(BaseConverter):
+class DocBookSectionConverter(BaseConverter):
     __renderer__ = ManualDocBookRenderer
 
     def finalize(self) -> str:
@@ -92,6 +96,29 @@ class DocBookConverter(BaseConverter):
             result.append(f'</section>')
 
         return "\n".join(result)
+
+class ManualFragmentDocBookRenderer(ManualDocBookRenderer):
+    _tag: str = "chapter"
+
+    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
+        (tag, attrs) = super()._heading_tag(token, tokens, i, options, env)
+        if token.tag == 'h1':
+            return (self._tag, attrs | { 'xmlns:xi': "http://www.w3.org/2001/XInclude" })
+        return (tag, attrs)
+
+class DocBookFragmentConverter(Converter):
+    __renderer__ = ManualFragmentDocBookRenderer
+
+    def convert(self, file: Path, tag: str) -> str:
+        assert isinstance(self._md.renderer, ManualFragmentDocBookRenderer)
+        try:
+            with open(file, 'r') as f:
+                self._md.renderer._title_seen = False
+                self._md.renderer._tag = tag
+                return self._render(f.read())
+        except Exception as e:
+            raise RuntimeError(f"failed to render manual {tag} {file}") from e
 
 
 
@@ -124,27 +151,52 @@ class ChaptersAction(argparse.Action):
         if sections is None: raise argparse.ArgumentError(self, "no active section")
         sections[-1].chapters.extend(map(Path, cast(Sequence[str], values)))
 
-def _build_cli_db(p: argparse.ArgumentParser) -> None:
+class SingleFileAction(argparse.Action):
+    def __call__(self, parser: argparse.ArgumentParser, ns: argparse.Namespace,
+                 values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
+        assert isinstance(values, Sequence)
+        chapters = getattr(ns, self.dest) or []
+        chapters.append((Path(values[0]), Path(values[1])))
+        setattr(ns, self.dest, chapters)
+
+def _build_cli_db_section(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument("outfile")
     p.add_argument("--section", dest="contents", action=SectionAction, nargs=0)
     p.add_argument("--section-id", dest="contents", action=SectionIDAction)
     p.add_argument("--chapters", dest="contents", action=ChaptersAction, nargs='+')
 
-def _run_cli_db(args: argparse.Namespace) -> None:
+def _build_cli_db_fragment(p: argparse.ArgumentParser) -> None:
+    p.add_argument('--manpage-urls', required=True)
+    p.add_argument("--chapter", action=SingleFileAction, required=True, nargs=2)
+    p.add_argument("--section", action=SingleFileAction, required=True, nargs=2)
+
+def _run_cli_db_section(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookConverter(json.load(manpage_urls))
+        md = DocBookSectionConverter(json.load(manpage_urls))
         for section in args.contents:
             md.add_section(section.id, section.chapters)
         with open(args.outfile, 'w') as f:
             f.write(md.finalize())
 
+def _run_cli_db_fragment(args: argparse.Namespace) -> None:
+    with open(args.manpage_urls, 'r') as manpage_urls:
+        md = DocBookFragmentConverter(json.load(manpage_urls))
+        for kind in [ 'chapter', 'section' ]:
+            for (target, file) in getattr(args, kind):
+                converted = md.convert(file, kind)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(converted)
+
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
-    _build_cli_db(formats.add_parser('docbook'))
+    _build_cli_db_section(formats.add_parser('docbook-section'))
+    _build_cli_db_fragment(formats.add_parser('docbook-fragment'))
 
 def run_cli(args: argparse.Namespace) -> None:
-    if args.format == 'docbook':
-        _run_cli_db(args)
+    if args.format == 'docbook-section':
+        _run_cli_db_section(args)
+    elif args.format == 'docbook-fragment':
+        _run_cli_db_fragment(args)
     else:
         raise RuntimeError('format not hooked up', args)
