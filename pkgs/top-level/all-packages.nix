@@ -23386,6 +23386,8 @@ with pkgs;
 
   subdl = callPackage ../applications/video/subdl { };
 
+  subtitleedit = callPackage ../applications/video/subtitleedit { };
+
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   suil = darwin.apple_sdk_11_0.callPackage ../development/libraries/audio/suil { };
