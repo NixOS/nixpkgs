@@ -1115,6 +1115,12 @@ with pkgs;
     meta.platforms = lib.platforms.darwin;
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
+  fixGPRBuildDarwinDylibNames = makeSetupHook {
+    name = "fix-gprbuild-darwin-dylib-names-hook";
+    substitutions = { inherit (binutils) targetPrefix; };
+    meta.platforms = lib.platforms.darwin;
+  } ../build-support/setup-hooks/fix-gprbuild-darwin-dylib-names.sh;
+
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
   desktopToDarwinBundle = makeSetupHook {
