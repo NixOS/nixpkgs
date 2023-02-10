@@ -1,0 +1,12 @@
+diff --git a/nix/store/ipz4izl82p822flysklls9bnm686ay14-source/src/CMakeLists.txt b/pkgs/applications/graphics/alice-vision/CMakeLists.txt
+index 118281d65cb..85b15586452 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -178,7 +178,6 @@ endif()
+ set(CMAKE_MODULE_PATH
+   ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ include(OptimizeForArchitecture)
+-OptimizeForArchitecture()
+ set(ALICEVISION_HAVE_SSE 0)
+ if(SSE2_FOUND OR TARGET_ARCHITECTURE STREQUAL "native")
+   if(MSVC AND NOT ${CMAKE_CL_64})

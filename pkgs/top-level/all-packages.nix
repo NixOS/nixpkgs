@@ -19224,6 +19224,8 @@ with pkgs;
 
   alass = callPackage ../applications/video/alass { };
 
+  alice-vision = callPackage ../development/libraries/alice-vision { };
+
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
