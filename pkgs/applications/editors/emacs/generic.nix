@@ -60,7 +60,7 @@ assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (lib.optionalAttrs nativeComp {
+(if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // {
@@ -69,7 +69,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
 
   patches = patches fetchpatch ++ lib.optionals nativeComp [
     (substituteAll {
-      src = if lib.versionOlder version "29"
+      src = if lib.versionOlder finalAttrs.version "29"
             then ./native-comp-driver-options-28.patch
             else ./native-comp-driver-options.patch;
       backendPath = (lib.concatStringsSep " "
@@ -241,7 +241,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
 
   passthru = {
     inherit nativeComp;
-    pkgs = recurseIntoAttrs (emacsPackagesFor emacs);
+    pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
 
@@ -269,5 +269,4 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
       separately.
     '';
   };
-});
-in emacs
+}))
