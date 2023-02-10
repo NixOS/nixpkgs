@@ -17152,6 +17152,8 @@ with pkgs;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
+  rubyfmt = callPackage ../development/tools/rubyfmt { };
+
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
