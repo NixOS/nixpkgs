@@ -1033,6 +1033,8 @@ with pkgs;
       inherit kernel firmware rootModules allowMissing;
     };
 
+  mkBinaryCache = callPackage ../build-support/binary-cache { };
+
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
@@ -5380,7 +5382,9 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts { };
+  pocket-casts = callPackage ../applications/audio/pocket-casts {
+    electron = electron_22;
+  };
 
   pouf = callPackage ../tools/misc/pouf { };
 
@@ -25180,6 +25184,8 @@ with pkgs;
 
   reproxy = callPackage ../servers/reproxy { };
 
+  repro-get = callPackage ../tools/package-management/repro-get { };
+
   restic = callPackage ../tools/backup/restic { };
 
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
@@ -30865,7 +30871,7 @@ with pkgs;
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc12Stdenv;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -31304,7 +31310,7 @@ with pkgs;
 
   xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
-  xmrig = callPackage ../applications/misc/xmrig { };
+  xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
   xmrig-mo = callPackage ../applications/misc/xmrig/moneroocean.nix { };
 
@@ -38041,6 +38047,8 @@ with pkgs;
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
+  pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
+
   pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
@@ -38144,6 +38152,14 @@ with pkgs;
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
   sailsd = callPackage ../misc/sailsd { };
+
+  sail-riscv-rv32 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV32";
+  };
+
+  sail-riscv-rv64 = callPackage ../applications/virtualization/sail-riscv {
+    arch = "RV64";
+  };
 
   shc = callPackage ../tools/security/shc { };
 
@@ -39080,6 +39096,8 @@ with pkgs;
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
+
+  flac2all = callPackage ../applications/audio/flac2all {};
 
   tuner = callPackage ../applications/audio/tuner { };
 

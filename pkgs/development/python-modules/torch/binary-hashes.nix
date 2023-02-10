@@ -9,23 +9,23 @@ version : builtins.getAttr version {
   "1.13.1" = {
     x86_64-linux-37 = {
       name = "torch-1.13.1-cp37-cp37m-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp37-cp37m-linux_x86_64.whl";
-      hash = "sha256-INfG4AgEtr6m9pt3JAxPzfJEzOL2sf9zvv98DfZVPZ0=";
+      url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp37-cp37m-linux_x86_64.whl";
+      hash = "sha256-bXg6H3mHFyTK2jw3TKUJiGNZqMSseNBT34mxQu6QREA=";
     };
     x86_64-linux-38 = {
       name = "torch-1.13.1-cp38-cp38-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp38-cp38-linux_x86_64.whl";
-      hash = "sha256-kzj6oKWg62JeF+OXKfBvsKV0CY16uI2Fa72ky3agtmU=";
+      url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp38-cp38-linux_x86_64.whl";
+      hash = "sha256-u/lUbw0Ni1EmPKR5Y3tCaogzX8oANPQs7GPU0y3uBa8=";
     };
     x86_64-linux-39 = {
       name = "torch-1.13.1-cp39-cp39-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl";
-      hash = "sha256-20V6gi1zYBO2/+UJBTABvJGL3Xj+aJZ7YF9TmEqa+sU=";
+      url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp39-cp39-linux_x86_64.whl";
+      hash = "sha256-s6wTng1KCzA8wW9R63cUbsfRTAsecCrWOGE2KPUIavc=";
     };
     x86_64-linux-310 = {
       name = "torch-1.13.1-cp310-cp310-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp310-cp310-linux_x86_64.whl";
-      hash = "sha256-UdWHDN8FtiCLHHOf4LpRG5d+yjf5UHgpZ1WWrMEbbKQ=";
+      url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp310-cp310-linux_x86_64.whl";
+      hash = "sha256-FMXJ2wnfjPGzlCo0ecd52m4pOoShYtimrHHiveMOMMU=";
     };
     x86_64-darwin-37 = {
       name = "torch-1.13.1-cp37-none-macosx_10_9_x86_64.whl";
@@ -62,6 +62,5 @@ version : builtins.getAttr version {
       url = "https://download.pytorch.org/whl/cpu/torch-1.13.1-cp310-none-macosx_11_0_arm64.whl";
       hash = "sha256-ASKAaxEblJ0h+hpfl2TR/S/MSkfLf4/5FCBP1Px1LtU=";
     };
-
   };
 }
