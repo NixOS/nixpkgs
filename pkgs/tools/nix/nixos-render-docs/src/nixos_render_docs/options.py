@@ -171,7 +171,7 @@ class BaseConverter(Converter):
     @abstractmethod
     def finalize(self) -> str: raise NotImplementedError()
 
-class OptionsDocBookRenderer(DocBookRenderer):
+class OptionDocsRestrictions:
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported in options doc", token)
@@ -179,6 +179,7 @@ class OptionsDocBookRenderer(DocBookRenderer):
                       env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported in options doc", token)
 
+class OptionsDocBookRenderer(OptionDocsRestrictions, DocBookRenderer):
     # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
@@ -287,7 +288,7 @@ class DocBookConverter(BaseConverter):
 
         return "\n".join(result)
 
-class OptionsManpageRenderer(ManpageRenderer):
+class OptionsManpageRenderer(OptionDocsRestrictions, ManpageRenderer):
     pass
 
 class ManpageConverter(BaseConverter):
