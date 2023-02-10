@@ -11,4 +11,5 @@
   gitDependencyTag = callPackage ./git-dependency-tag { };
   gitDependencyBranch = callPackage ./git-dependency-branch { };
   maturin = callPackage ./maturin { };
+  v1 = callPackage ./v1 { };
 }
