@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, markuppy
 , odfpy
 , openpyxl
 , pandas
@@ -16,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pX8ncLjCJf6+wcseZQEqac8w3Si+gQ4P+Y0CR2jH0PE=";
+    hash = "sha256-EeAqb4HSVuBmaHfYOXly0QMCMHpUwE/XFX6S+vdAyxA=";
   };
 
   postPatch = ''
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     all = [
-      # markuppy
+      markuppy
       odfpy
       openpyxl
       pandas
@@ -50,7 +51,7 @@ buildPythonPackage rec {
       tabulate
     ];
     html = [
-      # markuppy
+      markuppy
     ];
     ods = [
       odfpy
@@ -70,7 +71,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pandas
     pytestCheckHook
     unicodecsv

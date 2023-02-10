@@ -97,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-base
     gstreamer
   ] ++ lib.optionals (withGstPlugins) [
+    gst-libav
     gst-plugins-bad
     gst-plugins-good
     gst-plugins-ugly
@@ -118,7 +119,7 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gdk-pixbuf
     glibcLocales

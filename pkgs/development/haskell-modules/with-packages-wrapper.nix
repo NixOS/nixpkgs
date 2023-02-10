@@ -4,6 +4,8 @@
 # platform that has NCG support
 , useLLVM ? false
 , withHoogle ? false
+# Whether to install `doc` outputs for GHC and all included libraries.
+, installDocumentation ? true
 , hoogleWithPackages
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
@@ -54,7 +56,11 @@ let
                   else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
+  paths         = lib.concatLists (
+                    builtins.map
+                      (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ])
+                      (lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages))
+                  );
   hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
@@ -71,7 +77,9 @@ symlinkJoin {
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
-  paths = paths ++ [ghc];
+  paths = paths
+          ++ [ ghc ]
+          ++ lib.optionals installDocumentation [ (lib.getOutput "doc" ghc) ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     # wrap compiler executables with correct env variables
@@ -161,8 +169,8 @@ symlinkJoin {
     ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
+  preferLocalBuild = true;
   passthru = {
-    preferLocalBuild = true;
     inherit (ghc) version meta;
 
     # Inform users about backwards incompatibilities with <= 21.05

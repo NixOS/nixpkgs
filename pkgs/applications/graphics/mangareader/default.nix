@@ -41,9 +41,7 @@ stdenv.mkDerivation rec {
     kconfigwidgets
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Qt manga reader for local files";

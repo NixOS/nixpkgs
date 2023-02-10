@@ -28,7 +28,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     pytest-benchmark
     pytest-mypy

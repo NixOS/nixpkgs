@@ -36,6 +36,9 @@ let
   inherit (lib.types)
     mkOptionType
     ;
+  prioritySuggestion = ''
+   Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+  '';
 in
 rec {
 
@@ -104,8 +107,6 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
-
      The package is specified as a list of strings representing its attribute path in nixpkgs.
 
      Because of this, you need to pass nixpkgs itself as the first argument.
@@ -115,6 +116,8 @@ rec {
      You can also pass an example value, either a literal string or a package's attribute path.
 
      You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string]; example :: null | string | [string]; } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -136,13 +139,18 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "The ${name} package to use.";
+        description = "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = args: name: extra:
+    let option = mkPackageOption args name extra;
+    in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -179,7 +187,7 @@ rec {
     if length defs == 1
     then (head defs).value
     else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times.\n${message}\nDefinition values:${showDefs defs}";
+      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -190,13 +198,13 @@ rec {
     else if length defs == 1 then (head defs).value
     else (foldl' (first: def:
       if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
+        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
       else
         first) (head defs) (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a } ] -> [a]
+     Type: getValues :: [ { value :: a; } ] -> [a]
 
      Example:
        getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
@@ -206,7 +214,7 @@ rec {
 
   /* Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a } ] -> [a]
+     Type: getFiles :: [ { file :: a; } ] -> [a]
 
      Example:
        getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]

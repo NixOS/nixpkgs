@@ -97,7 +97,7 @@ mkDerivation rec {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
     homepage = "https://apps.kde.org/kalendar/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.linux;
   };
 }

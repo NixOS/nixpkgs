@@ -91,7 +91,7 @@ buildPythonPackage rec {
     toolz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     click
     filelock

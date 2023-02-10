@@ -25,14 +25,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.8"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.9.21"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-Q1iHGwkFg0rkunwEgWQIqLEPAGfOLfqA1UpjmCe2x8M=";
+    hash = "sha256-/CMV6eCNm2gF9HhdoTo2TUUy7I4NF9Fb+6l2biGIbkE=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
@@ -110,7 +110,6 @@ with py.pkgs; buildPythonApplication rec {
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
-      attrPath = pname;
       # Excludes 1.x versions from the Github tags list
       extraArgs = [ "--version-regex" "^(2\.(.*))" ];
     };

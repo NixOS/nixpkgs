@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "add_trailing_comma"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

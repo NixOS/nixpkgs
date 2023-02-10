@@ -23,7 +23,7 @@ buildPythonPackage rec {
     unicodecsv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     six
   ];

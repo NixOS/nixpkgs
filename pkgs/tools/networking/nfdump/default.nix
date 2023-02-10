@@ -1,22 +1,40 @@
-{ lib, stdenv, fetchFromGitHub
-, autoconf, automake, libtool, pkg-config
-, bzip2, libpcap, flex, bison }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, bzip2
+, libpcap
+, flex
+, bison
+}:
 
-let version = "1.7.0.1"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nfdump";
-  inherit version;
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
-    rev = "v${version}";
-    sha256 = "sha256-yD/NFGw38ishqQmKhlnHYodXmJuezI09hxNsyObZ1QE=";
+    rev =  "refs/tags/v${version}";
+    hash = "sha256-oCaJPx6+C0NQSuUcsP54sycNLt/zaqe5c81dwHNBcnQ=";
   };
 
-  nativeBuildInputs = [ autoconf automake flex libtool pkg-config bison ];
-  buildInputs = [ bzip2 libpcap ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libtool
+    pkg-config
+    bison
+  ];
+
+  buildInputs = [
+    bzip2
+    libpcap
+  ];
 
   preConfigure = ''
     # The script defaults to glibtoolize on darwin, so we pass the correct
@@ -37,8 +55,9 @@ stdenv.mkDerivation {
       nfdump is a set of tools for working with netflow data.
     '';
     homepage = "https://github.com/phaag/nfdump";
+    changelog = "https://github.com/phaag/nfdump/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.takikawa ];
+    maintainers = with maintainers; [ takikawa ];
     platforms = platforms.unix;
   };
 }

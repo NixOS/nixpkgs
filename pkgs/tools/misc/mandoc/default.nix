@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "regress";
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
   preCheck = "patchShebangs --build regress/regress.pl";
 
   passthru.tests = {

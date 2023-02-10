@@ -7,10 +7,10 @@
     };
   }
   {
-    name = "mpfr-4.1.0.tar.xz";
+    name = "mpfr-4.1.1.tar.xz";
     archive = fetchurl {
-      sha256 = "0zwaanakrqjf84lfr5hfsdr7hncwv9wj0mchlr7cmxigfgqs760c";
-      url = "mirror://gnu/mpfr/mpfr-4.1.0.tar.xz";
+      sha256 = "0gf3ibi7kzz39zj72qc9r607clyhm80gs8wbp71zzfkxasyrblgz";
+      url = "mirror://gnu/mpfr/mpfr-4.1.1.tar.xz";
     };
   }
   {
@@ -35,10 +35,10 @@
     };
   }
   {
-    name = "acpica-unix2-20211217.tar.gz";
+    name = "R10_20_22.tar.gz";
     archive = fetchurl {
-      sha256 = "0521hmaw2zhi0mpgnaf2i83dykfgql4bx98cg7xqy8wmj649z194";
-      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20211217.tar.gz";
+      sha256 = "11iv3jrz27g7bv7ffyxsrgm4cq60cld2gkkl008p3lcwfyqpx88s";
+      url = "https://github.com/acpica/acpica/archive/refs/tags//R10_20_22.tar.gz";
     };
   }
   {

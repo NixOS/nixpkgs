@@ -35,7 +35,7 @@ buildPythonPackage rec {
     inherit (adb-shell.optional-dependencies) usb;
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ]

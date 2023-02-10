@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pyinotify
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     oslotest
     pytestCheckHook

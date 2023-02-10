@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "phockup";
-  version = "1.7.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "ivandokov";
     repo = "phockup";
     rev = version;
-    sha256 = "sha256-Ho9aZjBvSwFMur2NubhP4olPN31SNTEdQGCUV7nX0uE=";
+    sha256 = "sha256-ge34Iv/+B0xdrSNc7w3nZJw0DHBUvuh2k/I8v/RRg10=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

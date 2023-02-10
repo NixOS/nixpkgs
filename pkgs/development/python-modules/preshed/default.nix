@@ -30,7 +30,7 @@ buildPythonPackage rec {
     murmurhash
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -2,8 +2,6 @@
 , AGL, OpenGL
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "glew";
   version = "1.10.0";
@@ -20,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
-    homepage = "http://glew.sourceforge.net/";
+    homepage = "https://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;

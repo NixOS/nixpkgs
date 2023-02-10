@@ -40,7 +40,7 @@ buildPythonPackage rec {
     flux-led
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

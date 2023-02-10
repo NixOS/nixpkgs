@@ -1,16 +1,11 @@
 { stdenv
-, bazel
 , cacert
 , lib
 }:
 
-let
-  bazelPkg = bazel;
-in
-
 args@{
   name ? "${args.pname}-${args.version}"
-, bazel ? bazelPkg
+, bazel
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelTestFlags ? []

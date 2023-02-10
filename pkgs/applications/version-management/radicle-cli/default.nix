@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  checkInputs = [ openssh ];
+  nativeCheckInputs = [ openssh ];
   preCheck = ''
     eval $(ssh-agent)
   '';

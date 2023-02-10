@@ -190,7 +190,13 @@ stdenvNoCC.mkDerivation (args // {
             esac
         done
 
-        export tmp=$(mktemp -td "${pname}-tmp-XXXXXX")
+        if [[ ''${TMPDIR:-} == /run/user/* ]]; then
+           # /run/user is usually a tmpfs in RAM, which may be too small
+           # to store all downloaded dotnet packages
+           TMPDIR=
+        fi
+
+        export tmp=$(mktemp -td "deps-${pname}-XXXXXX")
         HOME=$tmp/home
 
         exitTrap() {

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1ljhjp9pacbrv2phs58vppz1dlxix01p98kfhyclvbml6dgjcr52";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     mv itypes.py itypes.py.hidden
     pytest tests.py

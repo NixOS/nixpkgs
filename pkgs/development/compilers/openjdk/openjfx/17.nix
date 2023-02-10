@@ -4,7 +4,7 @@
 
 let
   major = "17";
-  update = ".0.0.1";
+  update = ".0.5";
   build = "+1";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
@@ -16,9 +16,9 @@ let
 
     src = fetchFromGitHub {
       owner = "openjdk";
-      repo = "jfx";
+      repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-PSiE9KbF/4u9VyBl9PAMLGzKyGFB86/XByeh7vhL6Kw=";
+      sha256 = "sha256-jzLOlWuhkUS0/4+nXtjd1/IYbAHHnJrusFRTh7aPt8U=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];

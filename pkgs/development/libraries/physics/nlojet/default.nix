@@ -13,13 +13,14 @@ stdenv.mkDerivation rec {
     ./nlojet_clang_fix.patch
   ];
 
+  # error: no member named 'finite' in the global namespace; did you mean simply 'finite'?
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+
   meta = {
     homepage    = "http://www.desy.de/~znagy/Site/NLOJet++.html";
     license     = lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

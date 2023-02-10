@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "htmlunit-driver-standalone";
   version = "2.27";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SeleniumHQ/htmlunit-driver";
     description = "A WebDriver server for running Selenium tests on the HtmlUnit headless browser";
     maintainers = with maintainers; [ coconnor offline ];

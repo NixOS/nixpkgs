@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fnotifystat";
-  version = "0.02.08";
+  version = "0.02.09";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-+vNBufCrXfMinEZhXDZJCwoI9zxrcTy0fOEdswoaNkw=";
+    hash = "sha256-YyIk7x0B3JB/iMF9OP767fVEBgcV0duV7xIiHZxpL0w=";
   };
 
   installFlags = [

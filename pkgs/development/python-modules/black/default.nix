@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized aiohttp ];
+  nativeCheckInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"

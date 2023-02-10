@@ -33,7 +33,7 @@ buildPythonPackage rec {
     dissect-cstruct
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

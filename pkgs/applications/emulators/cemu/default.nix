@@ -115,9 +115,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cemu is a Wii U emulator";

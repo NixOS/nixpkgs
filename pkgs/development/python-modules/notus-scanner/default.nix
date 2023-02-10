@@ -32,7 +32,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

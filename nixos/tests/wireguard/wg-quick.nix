@@ -1,9 +1,13 @@
-{ kernelPackages ? null }:
-
-import ../make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? false, ... }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
-    peer = (import ./make-peer.nix) { inherit lib; };
+    peer = import ./make-peer.nix { inherit lib; };
+    commonConfig = {
+      boot.kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
+      networking.nftables.enable = nftables;
+      # Make sure iptables doesn't work with nftables enabled
+      boot.blacklistedKernelModules = lib.mkIf nftables [ "nft_compat" ];
+    };
   in
   {
     name = "wg-quick";
@@ -15,47 +19,51 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
       peer0 = peer {
         ip4 = "192.168.0.1";
         ip6 = "fd00::1";
-        extraConfig = {
-          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-          networking.firewall.allowedUDPPorts = [ 23542 ];
-          networking.wg-quick.interfaces.wg0 = {
-            address = [ "10.23.42.1/32" "fc00::1/128" ];
-            listenPort = 23542;
+        extraConfig = lib.mkMerge [
+          commonConfig
+          {
+            networking.firewall.allowedUDPPorts = [ 23542 ];
+            networking.wg-quick.interfaces.wg0 = {
+              address = [ "10.23.42.1/32" "fc00::1/128" ];
+              listenPort = 23542;
 
-            inherit (wg-snakeoil-keys.peer0) privateKey;
+              inherit (wg-snakeoil-keys.peer0) privateKey;
 
-            peers = lib.singleton {
-              allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+              peers = lib.singleton {
+                allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
 
-              inherit (wg-snakeoil-keys.peer1) publicKey;
+                inherit (wg-snakeoil-keys.peer1) publicKey;
+              };
+
+              dns = [ "10.23.42.2" "fc00::2" "wg0" ];
             };
-
-            dns = [ "10.23.42.2" "fc00::2" "wg0" ];
-          };
-        };
+          }
+        ];
       };
 
       peer1 = peer {
         ip4 = "192.168.0.2";
         ip6 = "fd00::2";
-        extraConfig = {
-          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-          networking.useNetworkd = true;
-          networking.wg-quick.interfaces.wg0 = {
-            address = [ "10.23.42.2/32" "fc00::2/128" ];
-            inherit (wg-snakeoil-keys.peer1) privateKey;
+        extraConfig = lib.mkMerge [
+          commonConfig
+          {
+            networking.useNetworkd = true;
+            networking.wg-quick.interfaces.wg0 = {
+              address = [ "10.23.42.2/32" "fc00::2/128" ];
+              inherit (wg-snakeoil-keys.peer1) privateKey;
 
-            peers = lib.singleton {
-              allowedIPs = [ "0.0.0.0/0" "::/0" ];
-              endpoint = "192.168.0.1:23542";
-              persistentKeepalive = 25;
+              peers = lib.singleton {
+                allowedIPs = [ "0.0.0.0/0" "::/0" ];
+                endpoint = "192.168.0.1:23542";
+                persistentKeepalive = 25;
 
-              inherit (wg-snakeoil-keys.peer0) publicKey;
+                inherit (wg-snakeoil-keys.peer0) publicKey;
+              };
+
+              dns = [ "10.23.42.1" "fc00::1" "wg0" ];
             };
-
-            dns = [ "10.23.42.1" "fc00::1" "wg0" ];
-          };
-        };
+          }
+        ];
       };
     };
 

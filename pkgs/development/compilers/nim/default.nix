@@ -262,7 +262,7 @@ in {
           runHook postBuild
         '';
 
-      wrapperArgs = [
+      wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
         "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
           placeholder "out"
         }/bin"

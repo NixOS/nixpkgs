@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "praat";
-  version = "6.3.03";
+  version = "6.3.07";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${version}";
-    sha256 = "sha256-Fb16sx+LVoXuiFASeiaYUMoNgZJXqKTBrUHFd2YXEJ0=";
+    sha256 = "sha256-hWR6mYD0vBJbX07D/HtFE9qwdbxMliHLCsNDXVYcm1Y=";
   };
 
   configurePhase = ''

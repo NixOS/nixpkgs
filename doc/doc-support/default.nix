@@ -12,6 +12,7 @@ let
     { name = "lists"; description = "list manipulation functions"; }
     { name = "debug"; description = "debugging functions"; }
     { name = "options"; description = "NixOS / nixpkgs option handling"; }
+    { name = "path"; description = "path functions"; }
     { name = "filesystem"; description = "filesystem functions"; }
     { name = "sources"; description = "source filtering functions"; }
     { name = "cli"; description = "command-line serialization functions"; }

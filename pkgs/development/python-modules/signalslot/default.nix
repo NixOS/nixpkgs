@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "weakrefmethod" # needed until https://github.com/Numergy/signalslot/pull/17
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     mock
     pytest-xdist

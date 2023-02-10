@@ -3,17 +3,15 @@
 , fetchFromGitHub
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2022.10";
+  version = "2022.12";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "GIIW+2/1fuHTmYev/QvuO5Yb2ozbyw/45qQkym36US8=";
+    sha256 = "sha256-DPJ1GrqZQyiW2s5JBZszcB/Is0Is2f/O/6Riz/M3wAs=";
   };
 
   installPhase = ''
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''

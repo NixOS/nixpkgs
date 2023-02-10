@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://libdbi-drivers.sourceforge.net/";
+    homepage = "https://libdbi-drivers.sourceforge.net/";
     description = "Database drivers for libdbi";
     platforms = platforms.all;
     license = licenses.lgpl21;

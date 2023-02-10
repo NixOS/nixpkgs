@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pysnmplib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook

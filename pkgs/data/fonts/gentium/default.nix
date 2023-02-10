@@ -1,29 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "gentium";
   version = "6.101";
-in fetchzip rec {
-  name = "gentium-${version}";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    hash = "sha256-iKD1Q7/lsbZCuJQoJqySQHwplrHv8yzmph+QwKpYgMU=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf \
-      -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \
-      \*/FONTLOG.txt \
-      \*/README.txt \
-      -d $out/share/doc/${name}
-    unzip -j $downloadedFile \
-      \*/documentation/\*.html \
-      \*/documentation/\*.txt \
-      -x \*/documentation/source/\* \
-      -d $out/share/doc/${name}/documentation
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${pname}-${version}
+    cp -r documentation $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
-
-  sha256 = "sha256-+T5aUlqQYDWRp4/4AZzsREHgjAnOeUB6qn1GAI0A5hE=";
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";

@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
       --unset SOURCE_DATE_EPOCH
   '';
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   # for debugging
   passthru = {

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastapi
     hiro
     mock

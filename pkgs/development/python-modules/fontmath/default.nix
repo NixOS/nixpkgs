@@ -17,7 +17,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ fonttools ];
-  checkInputs = [ pytest pytest-runner ];
+  nativeCheckInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
     description = "A collection of objects that implement fast font, glyph, etc. math";

@@ -14,7 +14,7 @@
 , texinfo ? null
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , gnatboot ? null
@@ -64,6 +64,13 @@ let majorVersion = "6";
 
     patches = optionals (!stdenv.targetPlatform.isRedox) [
       ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch
+
+      # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
+      (fetchurl {
+        name = "fix-bug-80431.patch";
+        url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
+        sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
+      })
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langAda ../gnat-cflags.patch
@@ -186,44 +193,46 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkg-config)
-    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
-    ++ (optional langAda gnatboot)
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional buildPlatform.isDarwin gnused)
+  inherit (import ../common/dependencies.nix {
+    inherit
+      lib
+      stdenv
+      buildPackages
+      targetPackages
+      crossStageStatic
+      threadsCross
+      version
+      langAda
+      gnatboot
+      flex
+      langJava
+      javaAwtGtk
+      texinfo
+      which
+      gettext
+      pkg-config
+      gnused
+      patchelf
+      gmp
+      mpfr
+      libmpc
+      isl
+      zlib
+      boehmgc
+      zip
+      unzip
+      gtk2
+      libart_lgpl
+      perl
+      xlibs
     ;
-
-  # For building runtime libs
-  depsBuildTarget =
-    (
-      if hostPlatform == buildPlatform then [
-        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-      ] else assert targetPlatform == hostPlatform; [ # build != host == target
-        stdenv.cc
-      ]
-    )
-    ++ optional targetPlatform.isLinux patchelf;
-
-  buildInputs = [
-    gmp mpfr libmpc
-    targetPackages.stdenv.cc.bintools # For linking code at run-time
-  ] ++ (optional (isl != null) isl)
-    ++ (optional (zlib != null) zlib)
-    ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ;
-
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross.package;
+  }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform gnatboot langJava langAda langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -238,7 +247,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib
@@ -258,6 +267,7 @@ stdenv.mkDerivation ({
   };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

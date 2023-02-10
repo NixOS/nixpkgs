@@ -1,30 +1,30 @@
 { lib
 , mkXfceDerivation
 , exo
-, glib-networking
-, gtk3
-, libsoup
+, libxml2
+, libsoup_3
 , libxfce4ui
 , libxfce4util
 , xfce4-panel
+, xfconf
 }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.9.11";
+  version = "1.10.3";
   odd-unstable = false;
 
-  sha256 = "sha256-sW0SEXypCcly7MlO9lnxHTkYwIiRt+gOME5UQ++Y3JQ=";
+  sha256 = "sha256-L+qlxzNgjsoMi+VsbOFG7L/IITbF1iqMWqujhk0rAcA=";
 
   buildInputs = [
     exo
-    glib-networking
-    gtk3
-    libsoup
+    libxml2
+    libsoup_3
     libxfce4ui
     libxfce4util
     xfce4-panel
+    xfconf
   ];
 
   meta = with lib; {

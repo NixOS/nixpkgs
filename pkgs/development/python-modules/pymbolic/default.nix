@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     matchpy
     pytestCheckHook
   ];

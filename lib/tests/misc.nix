@@ -153,6 +153,11 @@ runTests {
     expected = "a,b,c";
   };
 
+  testConcatLines = {
+    expr = concatLines ["a" "b" "c"];
+    expected = "a\nb\nc\n";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -210,6 +215,21 @@ runTests {
   testSplitVersionTriple = {
     expr = versions.splitVersion "1.2.3";
     expected = [ "1" "2" "3" ];
+  };
+
+  testPadVersionLess = {
+    expr = versions.pad 3 "1.2";
+    expected = "1.2.0";
+  };
+
+  testPadVersionLessExtra = {
+    expr = versions.pad 3 "1.3-rc1";
+    expected = "1.3.0-rc1";
+  };
+
+  testPadVersionMore = {
+    expr = versions.pad 3 "1.2.3.4";
+    expected = "1.2.3";
   };
 
   testIsStorePath =  {
@@ -457,6 +477,11 @@ runTests {
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
+  };
+
+  testReplicate = {
+    expr = replicate 3 "a";
+    expected = ["a" "a" "a"];
   };
 
   testToIntShouldConvertStringToInt = {

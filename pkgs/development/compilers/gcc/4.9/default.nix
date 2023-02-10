@@ -12,7 +12,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, libmpc, gettext, which, patchelf
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , cloog ? null, isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkg-config ? null
@@ -178,41 +178,42 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkg-config)
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional buildPlatform.isDarwin gnused)
+  inherit (import ../common/dependencies.nix {
+    inherit
+      lib
+      stdenv
+      buildPackages
+      targetPackages
+      crossStageStatic
+      threadsCross
+      version
+      langJava
+      javaAwtGtk
+      texinfo
+      which
+      gettext
+      pkg-config
+      gnused
+      patchelf
+      gmp
+      mpfr
+      libmpc
+      cloog
+      isl
+      zlib
+      boehmgc
+      zip
+      unzip
+      gtk2
+      libart_lgpl
+      perl
+      xlibs
     ;
-
-  # For building runtime libs
-  depsBuildTarget =
-    (
-      if hostPlatform == buildPlatform then [
-        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-      ] else assert targetPlatform == hostPlatform; [ # build != host == target
-        stdenv.cc
-      ]
-    )
-    ++ optional targetPlatform.isLinux patchelf;
-
-  buildInputs = [
-    gmp mpfr libmpc
-    targetPackages.stdenv.cc.bintools # For linking code at run-time
-  ] ++ (optional (cloog != null) cloog)
-    ++ (optional (isl != null) isl)
-    ++ (optional (zlib != null) zlib)
-    ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ;
-
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross;
+  }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic enableMultilib;
+    inherit version targetPlatform hostPlatform buildPlatform langJava langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -227,7 +228,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross threadsCross
       version
 
-      gmp mpfr libmpc isl
+      binutils gmp mpfr libmpc isl
       cloog
 
       enableLTO
@@ -247,6 +248,7 @@ stdenv.mkDerivation ({
   };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

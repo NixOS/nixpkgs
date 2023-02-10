@@ -13,7 +13,7 @@
     sha256 = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
   };
   nativeBuildInputs = [ setuptools-scm ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   doCheck = false;
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 

@@ -28,18 +28,21 @@ Password:
 ```
 
 … so that it can install a private key used to `ssh` into the build server.
-After that the script will launch the virtual machine:
+After that the script will launch the virtual machine and automatically log you
+in as the `builder` user:
 
 ```
 <<< Welcome to NixOS 22.11.20220901.1bd8d11 (aarch64) - ttyAMA0 >>>
 
 Run 'nixos-help' for the NixOS manual.
 
-nixos login:
+nixos login: builder (automatic login)
+
+
+[builder@nixos:~]$
 ```
 
-> Note: When you need to stop the VM, type `Ctrl`-`a` + `c` to open the `qemu`
-> prompt and then type `quit` followed by `Enter`
+> Note: When you need to stop the VM, run `shutdown now` as the `builder` user.
 
 To delegate builds to the remote builder, add the following options to your
 `nix.conf` file:
@@ -47,7 +50,7 @@ To delegate builds to the remote builder, add the following options to your
 ```
 # - Replace ${ARCH} with either aarch64 or x86_64 to match your host machine
 # - Replace ${MAX_JOBS} with the maximum number of builds (pick 4 if you're not sure)
-builders = ssh-ng://builder@localhost ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo='
+builders = ssh-ng://builder@localhost ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
 
 # Not strictly necessary, but this will reduce your disk utilization
 builders-use-substitutes = true

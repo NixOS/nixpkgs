@@ -42,7 +42,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     build
     pydantic

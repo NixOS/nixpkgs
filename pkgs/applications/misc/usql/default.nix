@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildGoModule
 , unixODBC
@@ -11,18 +10,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.13.4";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-YshGqp27N1iOBWSE9UH1zsQlFar2uKf4Jq2W8kSN0Qc=";
+    hash = "sha256-oNsA9VM6MN2czeZSTFGvmCWX0T3iVaAhQk1mVRyKgWw=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-qHs5Z7NRdQKPOmYSozhSVQfINMxJewVwQ1Gi4SMWT+8=";
+  vendorHash = "sha256-LG5gTHXB1ItDZFbTBHyZGHZLaSYb8wekIHkahTMXzkk=";
   proxyVendor = true;
 
   # Exclude broken impala & hive driver
@@ -60,9 +59,7 @@ buildGoModule rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       inherit version;
       package = usql;

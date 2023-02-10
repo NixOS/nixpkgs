@@ -38,7 +38,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp-wsgi
     pytest-aiohttp
     pytest-asyncio

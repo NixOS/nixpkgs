@@ -16,7 +16,7 @@
 , systemd
 , voms
 , zlib
-, enableTests ? true
+, enableTests ? stdenv.isLinux
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xrootd";
-  version = "5.5.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-PaLT3+5FucPnWLStWxtBBqTKs8hvogKMrZteSNY+xXI=";
+    hash = "sha256-2zVCOcjL8TUbo38Dx7W8431ziouzuAdCfogsIMSOOmQ=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
     openssl
     readline
     zlib
+    fuse
   ]
   ++ lib.optionals stdenv.isLinux [
-    fuse
     systemd
     voms
   ]

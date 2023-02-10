@@ -38,7 +38,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openpaperwork-gtk
   ];
 

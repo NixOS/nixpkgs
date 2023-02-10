@@ -527,9 +527,8 @@ rec {
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
+      echo "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
     '';
 
     buildPhase = ''
@@ -559,9 +558,8 @@ rec {
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
+        echo "Generated RPM/SRPM: $i"
         rpm -qip $i
-        stopNest
       done
 
       eval "$postInstall"
@@ -971,6 +969,40 @@ rec {
           (fetchurl {
             url = "mirror://ubuntu/dists/focal/universe/binary-amd64/Packages.xz";
             sha256 = "sha256-RqdG2seJvZU3rKVNsWgLnf9RwkgVMRE1A4IZnX2WudE=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2204i386 = {
+      name = "ubuntu-22.04-jammy-i386";
+      fullName = "Ubuntu 22.04 Jammy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-i386/Packages.xz";
+            sha256 = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2204x86_64 = {
+      name = "ubuntu-22.04-jammy-amd64";
+      fullName = "Ubuntu 22.04 Jammy (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
           })
         ];
       urlPrefix = "mirror://ubuntu";

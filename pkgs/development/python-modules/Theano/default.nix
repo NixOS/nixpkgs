@@ -82,7 +82,7 @@ in buildPythonPackage rec {
   # the fix for which hasn't been merged yet.
 
   # keep Nose around since running the tests by hand is possible from Python or bash
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   # setuptools needed for cuda support
   propagatedBuildInputs = [
     libgpuarray_

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ boto3 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     moto
   ];

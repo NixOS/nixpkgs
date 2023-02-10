@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools lxml fs ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     pytest-xdist

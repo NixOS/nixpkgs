@@ -1,9 +1,9 @@
 {
   # https://www.aquamaniac.de/rdm/projects/gwenhywfar/files
   gwenhywfar = {
-    version = "5.9.0";
-    hash = "sha256-6Ix9M4Ojy75Gyzsimfcd+55vpWX1oWaLQpc5HIdLDhI=";
-    releaseId = "415";
+    version = "5.10.1";
+    hash = "sha256-ovYKnd5don5X4OXvX4kx9JXB1UGtkKhB4rYjFWVUcWA=";
+    releaseId = "465";
   };
 
   # https://www.aquamaniac.de/rdm/projects/libchipcard/files

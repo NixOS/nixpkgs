@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     moto
     paramiko
     pytestCheckHook

@@ -10,25 +10,30 @@ in
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
-  * `name'.  The attributes in `env' are added to the environment
-  * prior to running the command. By default `runCommand` runs in a
-  * stdenv with no compiler environment. `runCommandCC` uses the default
-  * stdenv, `pkgs.stdenv`.
-  *
-  * Examples:
-  * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
-  *
-  * The `*Local` variants force a derivation to be built locally,
-  * it is not substituted.
-  *
-  * This is intended for very cheap commands (<1s execution time).
-  * It saves on the network roundrip and can speed up a build.
-  *
-  * It is the same as adding the special fields
-  * `preferLocalBuild = true;`
-  * `allowSubstitutes = false;`
-  * to a derivation’s attributes.
+   `name'.  The attributes in `env' are added to the environment
+   prior to running the command. By default `runCommand` runs in a
+   stdenv with no compiler environment. `runCommandCC` uses the default
+   stdenv, `pkgs.stdenv`.
+
+   Example:
+
+
+   runCommand "name" {envVariable = true;} ''echo hello > $out''
+   runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+
+
+   The `*Local` variants force a derivation to be built locally,
+   it is not substituted.
+
+   This is intended for very cheap commands (<1s execution time).
+   It saves on the network roundrip and can speed up a build.
+
+   It is the same as adding the special fields
+
+   `preferLocalBuild = true;`
+   `allowSubstitutes = false;`
+
+   to a derivation’s attributes.
   */
   runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
@@ -53,13 +58,13 @@ rec {
   # We shouldn’t force the user to have a cc in scope.
 
   /* Generalized version of the `runCommand`-variants
-   * which does customized behavior via a single
-   * attribute set passed as the first argument
-   * instead of having a lot of variants like
-   * `runCommand*`. Additionally it allows changing
-   * the used `stdenv` freely and has a more explicit
-   * approach to changing the arguments passed to
-   * `stdenv.mkDerivation`.
+    which does customized behavior via a single
+    attribute set passed as the first argument
+    instead of having a lot of variants like
+    `runCommand*`. Additionally it allows changing
+    the used `stdenv` freely and has a more explicit
+    approach to changing the arguments passed to
+    `stdenv.mkDerivation`.
    */
   runCommandWith =
     let
@@ -91,27 +96,34 @@ rec {
 
 
   /* Writes a text file to the nix store.
-   * The contents of text is added to the file in the store.
-   *
-   * Examples:
-   * # Writes my-file to /nix/store/<store path>
-   * writeTextFile {
-   *   name = "my-file";
-   *   text = ''
-   *     Contents of File
-   *   '';
-   * }
-   * # See also the `writeText` helper function below.
-   *
-   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
-   * writeTextFile {
-   *   name = "my-file";
-   *   text = ''
-   *     Contents of File
-   *   '';
-   *   executable = true;
-   *   destination = "/bin/my-file";
-   * }
+    The contents of text is added to the file in the store.
+
+    Example:
+
+
+    # Writes my-file to /nix/store/<store path>
+    writeTextFile {
+      name = "my-file";
+      text = ''
+        Contents of File
+      '';
+    }
+
+
+    See also the `writeText` helper function below.
+
+
+    # Writes executable my-file to /nix/store/<store path>/bin/my-file
+    writeTextFile {
+      name = "my-file";
+      text = ''
+        Contents of File
+      '';
+      executable = true;
+      destination = "/bin/my-file";
+    }
+
+
    */
   writeTextFile =
     { name # the name of the derivation
@@ -144,29 +156,35 @@ rec {
       '';
 
   /*
-   * Writes a text file to nix store with no optional parameters available.
-   *
-   * Example:
-   * # Writes contents of file to /nix/store/<store path>
-   * writeText "my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+   Writes a text file to nix store with no optional parameters available.
+
+   Example:
+
+
+   # Writes contents of file to /nix/store/<store path>
+   writeText "my-file"
+     ''
+     Contents of File
+     '';
+
+
   */
   writeText = name: text: writeTextFile {inherit name text;};
 
   /*
-   * Writes a text file to nix store in a specific directory with no
-   * optional parameters available.
-   *
-   * Example:
-   * # Writes contents of file to /nix/store/<store path>/share/my-file
-   * writeTextDir "share/my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+    Writes a text file to nix store in a specific directory with no
+    optional parameters available.
+
+    Example:
+
+
+    # Writes contents of file to /nix/store/<store path>/share/my-file
+    writeTextDir "share/my-file"
+     ''
+     Contents of File
+     '';
+
+
   */
   writeTextDir = path: text: writeTextFile {
     inherit text;
@@ -175,48 +193,58 @@ rec {
   };
 
   /*
-   * Writes a text file to /nix/store/<store path> and marks the file as
-   * executable.
-   *
-   * If passed as a build input, will be used as a setup hook. This makes setup
-   * hooks more efficient to create: you don't need a derivation that copies
-   * them to $out/nix-support/setup-hook, instead you can use the file as is.
-   *
-   * Example:
-   * # Writes my-file to /nix/store/<store path> and makes executable
-   * writeScript "my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+    Writes a text file to /nix/store/<store path> and marks the file as
+    executable.
+
+    If passed as a build input, will be used as a setup hook. This makes setup
+    hooks more efficient to create: you don't need a derivation that copies
+    them to $out/nix-support/setup-hook, instead you can use the file as is.
+
+    Example:
+
+
+    # Writes my-file to /nix/store/<store path> and makes executable
+    writeScript "my-file"
+      ''
+      Contents of File
+      '';
+
+
   */
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
 
   /*
-   * Writes a text file to /nix/store/<store path>/bin/<name> and
-   * marks the file as executable.
-   *
-   * Example:
-   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeScriptBin "my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+    Writes a text file to /nix/store/<store path>/bin/<name> and
+    marks the file as executable.
+
+    Example:
+
+
+
+    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+    writeScriptBin "my-file"
+      ''
+      Contents of File
+      '';
+
+
   */
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
   /*
-   * Similar to writeScript. Writes a Shell script and checks its syntax.
-   * Automatically includes interpreter above the contents passed.
-   *
-   * Example:
-   * # Writes my-file to /nix/store/<store path> and makes executable.
-   * writeShellScript "my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+    Similar to writeScript. Writes a Shell script and checks its syntax.
+    Automatically includes interpreter above the contents passed.
+
+    Example:
+
+
+    # Writes my-file to /nix/store/<store path> and makes executable.
+    writeShellScript "my-file"
+      ''
+      Contents of File
+      '';
+
+
   */
   writeShellScript = name: text:
     writeTextFile {
@@ -232,17 +260,20 @@ rec {
     };
 
   /*
-   * Similar to writeShellScript and writeScriptBin.
-   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
-   * Automatically includes interpreter above the contents passed.
-   *
-   * Example:
-   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeShellScriptBin "my-file"
-   *   ''
-   *   Contents of File
-   *   '';
-   *
+    Similar to writeShellScript and writeScriptBin.
+    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
+    Automatically includes interpreter above the contents passed.
+
+    Example:
+
+
+    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+    writeShellScriptBin "my-file"
+      ''
+      Contents of File
+      '';
+
+
   */
   writeShellScriptBin = name : text :
     writeTextFile {
@@ -259,25 +290,29 @@ rec {
     };
 
   /*
-   * Similar to writeShellScriptBin and writeScriptBin.
-   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
-   * checks its syntax with shellcheck and the shell's -n option.
-   * Automatically includes sane set of shellopts (errexit, nounset, pipefail)
-   * and handles creation of PATH based on runtimeInputs
-   *
-   * Note that the checkPhase uses stdenv.shell for the test run of the script,
-   * while the generated shebang uses runtimeShell. If, for whatever reason,
-   * those were to mismatch you might lose fidelity in the default checks.
-   *
-   * Example:
-   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-   * writeShellApplication {
-   *   name = "my-file";
-   *   runtimeInputs = [ curl w3m ];
-   *   text = ''
-   *     curl -s 'https://nixos.org' | w3m -dump -T text/html
-   *    '';
-   * }
+    Similar to writeShellScriptBin and writeScriptBin.
+    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
+    checks its syntax with shellcheck and the shell's -n option.
+    Automatically includes sane set of shellopts (errexit, nounset, pipefail)
+    and handles creation of PATH based on runtimeInputs
+
+    Note that the checkPhase uses stdenv.shell for the test run of the script,
+    while the generated shebang uses runtimeShell. If, for whatever reason,
+    those were to mismatch you might lose fidelity in the default checks.
+
+    Example:
+
+    Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+
+
+    writeShellApplication {
+      name = "my-file";
+      runtimeInputs = [ curl w3m ];
+      text = ''
+        curl -s 'https://nixos.org' | w3m -dump -T text/html
+       '';
+    }
+
   */
   writeShellApplication =
     { name
@@ -334,23 +369,30 @@ rec {
 
 
   /* concat a list of files to the nix store.
-   * The contents of files are added to the file in the store.
-   *
-   * Examples:
-   * # Writes my-file to /nix/store/<store path>
-   * concatTextFile {
-   *   name = "my-file";
-   *   files = [ drv1 "${drv2}/path/to/file" ];
-   * }
-   * # See also the `concatText` helper function below.
-   *
-   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
-   * concatTextFile {
-   *   name = "my-file";
-   *   files = [ drv1 "${drv2}/path/to/file" ];
-   *   executable = true;
-   *   destination = "/bin/my-file";
-   * }
+    The contents of files are added to the file in the store.
+
+    Example:
+
+
+    # Writes my-file to /nix/store/<store path>
+    concatTextFile {
+      name = "my-file";
+      files = [ drv1 "${drv2}/path/to/file" ];
+    }
+
+
+    See also the `concatText` helper function below.
+
+
+    # Writes executable my-file to /nix/store/<store path>/bin/my-file
+    concatTextFile {
+      name = "my-file";
+      files = [ drv1 "${drv2}/path/to/file" ];
+      executable = true;
+      destination = "/bin/my-file";
+    }
+
+
    */
   concatTextFile =
     { name # the name of the derivation
@@ -373,70 +415,81 @@ rec {
 
 
   /*
-   * Writes a text file to nix store with no optional parameters available.
-   *
-   * Example:
-   * # Writes contents of files to /nix/store/<store path>
-   * concatText "my-file" [ file1 file2 ]
-   *
+    Writes a text file to nix store with no optional parameters available.
+
+    Example:
+
+
+    # Writes contents of files to /nix/store/<store path>
+    concatText "my-file" [ file1 file2 ]
+
+
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
-    /*
-   * Writes a text file to nix store with and mark it as executable.
-   *
-   * Example:
-   * # Writes contents of files to /nix/store/<store path>
-   * concatScript "my-file" [ file1 file2 ]
-   *
+  /*
+    Writes a text file to nix store with and mark it as executable.
+
+    Example:
+    # Writes contents of files to /nix/store/<store path>
+    concatScript "my-file" [ file1 file2 ]
+
   */
   concatScript = name: files: concatTextFile { inherit name files; executable = true; };
 
 
   /*
-   * Create a forest of symlinks to the files in `paths'.
-   *
-   * This creates a single derivation that replicates the directory structure
-   * of all the input paths.
-   *
-   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
-   *
-   * Examples:
-   * # adds symlinks of hello to current build.
-   * symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
-   *
-   * # adds symlinks of hello and stack to current build and prints "links added"
-   * symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
-   *
-   * This creates a derivation with a directory structure like the following:
-   *
-   * /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
-   * |-- bin
-   * |   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
-   * |   `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/bin/stack
-   * `-- share
-   *     |-- bash-completion
-   *     |   `-- completions
-   *     |       `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/bash-completion/completions/stack
-   *     |-- fish
-   *     |   `-- vendor_completions.d
-   *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
-   * ...
-   *
-   * symlinkJoin and linkFarm are similar functions, but they output
-   * derivations with different structure.
-   *
-   * symlinkJoin is used to create a derivation with a familiar directory
-   * structure (top-level bin/, share/, etc), but with all actual files being symlinks to
-   * the files in the input derivations.
-   *
-   * symlinkJoin is used many places in nixpkgs to create a single derivation
-   * that appears to contain binaries, libraries, documentation, etc from
-   * multiple input derivations.
-   *
-   * linkFarm is instead used to create a simple derivation with symlinks to
-   * other derivations.  A derivation created with linkFarm is often used in CI
-   * as a easy way to build multiple derivations at once.
+    Create a forest of symlinks to the files in `paths'.
+
+    This creates a single derivation that replicates the directory structure
+    of all the input paths.
+
+    BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
+
+    Example:
+
+
+    # adds symlinks of hello to current build.
+    symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
+
+
+
+
+    # adds symlinks of hello and stack to current build and prints "links added"
+    symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+
+
+    This creates a derivation with a directory structure like the following:
+
+
+    /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
+    |-- bin
+    |   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
+    |   `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/bin/stack
+    `-- share
+        |-- bash-completion
+        |   `-- completions
+        |       `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/bash-completion/completions/stack
+        |-- fish
+        |   `-- vendor_completions.d
+        |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
+    ...
+
+
+    symlinkJoin and linkFarm are similar functions, but they output
+    derivations with different structure.
+
+    symlinkJoin is used to create a derivation with a familiar directory
+    structure (top-level bin/, share/, etc), but with all actual files being symlinks to
+    the files in the input derivations.
+
+    symlinkJoin is used many places in nixpkgs to create a single derivation
+    that appears to contain binaries, libraries, documentation, etc from
+    multiple input derivations.
+
+    linkFarm is instead used to create a simple derivation with symlinks to
+    other derivations.  A derivation created with linkFarm is often used in CI
+    as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
     args_@{ name
@@ -456,35 +509,40 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
+          ${lndir}/bin/lndir $i $out
+        done 2>&1 | sed 's/^/symlinkJoin: warning: keeping existing file: /'
         ${postBuild}
       '';
 
   /*
-   * Quickly create a set of symlinks to derivations.
-   *
-   * This creates a simple derivation with symlinks to all inputs.
-   *
-   * entries can be a list of attribute sets like
-   * [ { name = "name" ; path = "/nix/store/..."; } ]
-   *
-   * or an attribute set name -> path like:
-   * { name = "/nix/store/..."; other = "/nix/store/..."; }
-   *
-   * Example:
-   *
-   * # Symlinks hello and stack paths in store to current $out/hello-test and
-   * # $out/foobar.
-   * linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
-   *
-   * This creates a derivation with a directory structure like the following:
-   *
-   * /nix/store/qc5728m4sa344mbks99r3q05mymwm4rw-myexample
-   * |-- foobar -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1
-   * `-- hello-test -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10
-   *
-   * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
+    Quickly create a set of symlinks to derivations.
+
+    This creates a simple derivation with symlinks to all inputs.
+
+    entries can be a list of attribute sets like
+
+    [ { name = "name" ; path = "/nix/store/..."; } ]
+
+
+    or an attribute set name -> path like:
+
+    { name = "/nix/store/..."; other = "/nix/store/..."; }
+
+
+    Example:
+
+    # Symlinks hello and stack paths in store to current $out/hello-test and
+    # $out/foobar.
+    linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
+
+    This creates a derivation with a directory structure like the following:
+
+    /nix/store/qc5728m4sa344mbks99r3q05mymwm4rw-myexample
+    |-- foobar -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1
+    `-- hello-test -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10
+
+
+    See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
    */
   linkFarm = name: entries:
   let
@@ -510,56 +568,67 @@ rec {
   '';
 
   /*
-   * Easily create a linkFarm from a set of derivations.
-   *
-   * This calls linkFarm with a list of entries created from the list of input
-   * derivations.  It turns each input derivation into an attribute set
-   * like { name = drv.name ; path = drv }, and passes this to linkFarm.
-   *
-   * Example:
-   *
-   * # Symlinks the hello, gcc, and ghc derivations in $out
-   * linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
-   *
-   * This creates a derivation with a directory structure like the following:
-   *
-   * /nix/store/m3s6wkjy9c3wy830201bqsb91nk2yj8c-myexample
-   * |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
-   * |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
-   * `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
-   */
+    Easily create a linkFarm from a set of derivations.
+
+    This calls linkFarm with a list of entries created from the list of input
+    derivations.  It turns each input derivation into an attribute set
+    like { name = drv.name ; path = drv }, and passes this to linkFarm.
+
+    Example:
+
+    # Symlinks the hello, gcc, and ghc derivations in $out
+    linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
+
+    This creates a derivation with a directory structure like the following:
+
+
+    /nix/store/m3s6wkjy9c3wy830201bqsb91nk2yj8c-myexample
+    |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
+    |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
+    `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
+
+  */
   linkFarmFromDrvs = name: drvs:
     let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
 
   /*
-   * Make a package that just contains a setup hook with the given contents.
-   * This setup hook will be invoked by any package that includes this package
-   * as a buildInput. Optionally takes a list of substitutions that should be
-   * applied to the resulting script.
-   *
-   * Examples:
-   * # setup hook that depends on the hello package and runs ./myscript.sh
-   * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
-   *
-   * # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
-   * # bash interpreter.
-   * myhellohookSub = makeSetupHook {
-   *                 deps = [ hello ];
-   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-   *                 meta.platforms = lib.platforms.linux;
-   *               } ./myscript.sh;
-   *
-   * # setup hook with a package test
-   * myhellohookTested = makeSetupHook {
-   *                 deps = [ hello ];
-   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-   *                 meta.platforms = lib.platforms.linux;
-   *                 passthru.tests.greeting = callPackage ./test { };
-   *               } ./myscript.sh;
+    Make a package that just contains a setup hook with the given contents.
+    This setup hook will be invoked by any package that includes this package
+    as a buildInput. Optionally takes a list of substitutions that should be
+    applied to the resulting script.
+
+    Examples:
+    # setup hook that depends on the hello package and runs ./myscript.sh
+    myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
+
+    # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
+    # bash interpreter.
+    myhellohookSub = makeSetupHook {
+                   name = "myscript-hook";
+                   deps = [ hello ];
+                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+                   meta.platforms = lib.platforms.linux;
+                 } ./myscript.sh;
+
+    # setup hook with a package test
+    myhellohookTested = makeSetupHook {
+                   name = "myscript-hook";
+                   deps = [ hello ];
+                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+                   meta.platforms = lib.platforms.linux;
+                   passthru.tests.greeting = callPackage ./test { };
+                 } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
+  makeSetupHook =
+    { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
+    , deps ? []
+    , substitutions ? {}
+    , meta ? {}
+    , passthru ? {}
+    }:
+    script:
     runCommand name
       (substitutions // {
         inherit meta;
@@ -627,27 +696,27 @@ rec {
 
 
   /*
-   * Extract a string's references to derivations and paths (its
-   * context) and write them to a text file, removing the input string
-   * itself from the dependency graph. This is useful when you want to
-   * make a derivation depend on the string's references, but not its
-   * contents (to avoid unnecessary rebuilds, for example).
-   *
-   * Note that this only works as intended on Nix >= 2.3.
+    Extract a string's references to derivations and paths (its
+    context) and write them to a text file, removing the input string
+    itself from the dependency graph. This is useful when you want to
+    make a derivation depend on the string's references, but not its
+    contents (to avoid unnecessary rebuilds, for example).
+
+    Note that this only works as intended on Nix >= 2.3.
    */
   writeStringReferencesToFile = string:
     /*
-    * The basic operation this performs is to copy the string context
-    * from `string' to a second string and wrap that string in a
-    * derivation. However, that alone is not enough, since nothing in the
-    * string refers to the output paths of the derivations/paths in its
-    * context, meaning they'll be considered build-time dependencies and
-    * removed from the wrapper derivation's closure. Putting the
-    * necessary output paths in the new string is however not very
-    * straightforward - the attrset returned by `getContext' contains
-    * only references to derivations' .drv-paths, not their output
-    * paths. In order to "convert" them, we try to extract the
-    * corresponding paths from the original string using regex.
+     The basic operation this performs is to copy the string context
+     from `string' to a second string and wrap that string in a
+     derivation. However, that alone is not enough, since nothing in the
+     string refers to the output paths of the derivations/paths in its
+     context, meaning they'll be considered build-time dependencies and
+     removed from the wrapper derivation's closure. Putting the
+     necessary output paths in the new string is however not very
+     straightforward - the attrset returned by `getContext' contains
+     only references to derivations' .drv-paths, not their output
+     paths. In order to "convert" them, we try to extract the
+     corresponding paths from the original string using regex.
     */
     let
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
@@ -709,18 +778,19 @@ rec {
 
 
   /* Print an error message if the file with the specified name and
-   * hash doesn't exist in the Nix store. This function should only
-   * be used by non-redistributable software with an unfree license
-   * that we need to require the user to download manually. It produces
-   * packages that cannot be built automatically.
-   *
-   * Examples:
-   *
-   * requireFile {
-   *   name = "my-file";
-   *   url = "http://example.com/download/";
-   *   sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
-   * }
+    hash doesn't exist in the Nix store. This function should only
+    be used by non-redistributable software with an unfree license
+    that we need to require the user to download manually. It produces
+    packages that cannot be built automatically.
+
+    Example:
+
+    requireFile {
+      name = "my-file";
+      url = "http://example.com/download/";
+      sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
+    }
+
    */
   requireFile = { name ? null
                 , sha256 ? null
@@ -767,30 +837,36 @@ rec {
     };
 
 
-  # Copy a path to the Nix store.
-  # Nix automatically copies files to the store before stringifying paths.
-  # If you need the store path of a file, ${copyPathToStore <path>} can be
-  # shortened to ${<path>}.
+  /*
+    Copy a path to the Nix store.
+    Nix automatically copies files to the store before stringifying paths.
+    If you need the store path of a file, ${copyPathToStore <path>} can be
+    shortened to ${<path>}.
+  */
   copyPathToStore = builtins.filterSource (p: t: true);
 
 
-  # Copy a list of paths to the Nix store.
+  /*
+    Copy a list of paths to the Nix store.
+  */
   copyPathsToStore = builtins.map copyPathToStore;
 
   /* Applies a list of patches to a source directory.
-   *
-   * Examples:
-   *
-   * # Patching nixpkgs:
-   * applyPatches {
-   *   src = pkgs.path;
-   *   patches = [
-   *     (pkgs.fetchpatch {
-   *       url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
-   *       sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
-   *     })
-   *   ];
-   * }
+
+    Example:
+
+    # Patching nixpkgs:
+
+    applyPatches {
+      src = pkgs.path;
+      patches = [
+        (pkgs.fetchpatch {
+          url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
+          sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
+        })
+      ];
+    }
+
    */
   applyPatches =
     { src

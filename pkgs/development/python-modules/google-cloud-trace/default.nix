@@ -2,34 +2,34 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, google-cloud-core
 , google-cloud-testutils
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.7.3";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HFntFmPn3FPhCrB+nnJlBD9zqG2jDsP2naEl2IxhRqE=";
+    hash = "sha256-aU6XD+uj/X9Gs8z2vP0rhTlaqkg7u4H9CV/CJl2b7ak=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    google-cloud-core
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Trace API client library";
     homepage = "https://github.com/googleapis/python-trace";
+    changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = "http://freeglut.sourceforge.net/";
+    homepage = "https://freeglut.sourceforge.net/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

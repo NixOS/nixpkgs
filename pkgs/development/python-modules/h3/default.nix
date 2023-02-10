@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   nativeBuildInputs = [
     scikit-build cmake cython

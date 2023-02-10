@@ -79,6 +79,7 @@ let
       plasma-settings = callPackage ./plasma-settings.nix {};
       plasmatube = callPackage ./plasmatube {};
       spacebar = callPackage ./spacebar.nix { inherit srcs; };
+      tokodon = callPackage ./tokodon.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

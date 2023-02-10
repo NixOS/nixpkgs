@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # Segfaults...
 

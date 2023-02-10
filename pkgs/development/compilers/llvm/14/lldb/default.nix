@@ -106,8 +106,15 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
-    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+        echo "ERROR: python files not installed where expected!";
+        return 1;
+    fi
+    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+        echo "ERROR: lua files not installed where expected!";
         return 1;
     fi
   '';

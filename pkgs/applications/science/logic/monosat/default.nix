@@ -89,7 +89,7 @@ let
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
 
-    checkInputs = [ pytestCheckHook ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     disabledTests = [
       "test_assertAtMostOne"

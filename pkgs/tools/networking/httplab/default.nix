@@ -1,21 +1,30 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "httplab";
   version = "0.4.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/gchaincl/httplab";
 
   src = fetchFromGitHub {
-    owner = "gchaincl";
+    owner = "qustavo";
     repo = "httplab";
-    inherit rev;
-    sha256 = "0442nnpxyfl2gi9pilv7q6cxs2cd98wblg8d4nw6dx98yh4h99zs";
+    rev = "v${version}";
+    hash = "sha256-+qcECfQo9Wa4JQ09ujhKjQndmcFn03hTfII636+1ghA=";
   };
 
+  vendorHash = null;
+
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/qustavo/httplab/commit/80680bebc83f1ed19216f60339c62cd9213d736b.patch";
+      hash = "sha256-y4KO3FGwKNAfM+4uR3KDbV90d/4JeBGvWtfirDJrWZk=";
+    })
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
   meta = with lib; {
-    homepage = "https://github.com/gchaincl/httplab";
+    homepage = "https://github.com/qustavo/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];

@@ -31,11 +31,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.49.0";
+  version = "1.51.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-LNTbfXX3FJQVMknL6UoJLaTG7NdCQPirGM9kTZ1l9u4=";
+    sha256 = "sha256-6z6m9bYMbT7b8GXgT0NOjtYpGlyxoHkZxBcwqx/MAOA=";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ]
@@ -58,11 +58,14 @@ stdenv.mkDerivation rec {
     "--disable-examples"
     (lib.enableFeature enableApp "app")
   ] ++ lib.optionals (enableAsioLib) [ "--enable-asio-lib" "--with-boost-libdir=${boost}/lib" ]
-    ++ lib.optionals (enablePython) [ "--with-cython=${python3Packages.cython}/bin/cython" ];
+    ++ lib.optionals (enablePython) [
+      "--enable-python-bindings"
+      "--with-cython=${python3Packages.cython}/bin/cython"
+    ];
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  checkInputs = lib.optionals (enableTests) [ cunit tzdata ];
+  nativeCheckInputs = lib.optionals (enableTests) [ cunit tzdata ];
   preCheck = lib.optionalString (enableTests) ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';
@@ -82,6 +85,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit curl libsoup;
+    python-nghttp2 = python3Packages.nghttp2;
   };
 
   meta = with lib; {

@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-colorama";
-  version = "0.4.15.4";
+  version = "0.4.15.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YPfWJXkTE1IYVkzxudLpZ4wM5ywFHZ/6oadMdpBOWAg=";
+    hash = "sha256-2oToq+lcLhGtKyi6VXq45dyAhjvW+HOefBkWyVB1WvQ=";
   };
 
   # Module has no tests

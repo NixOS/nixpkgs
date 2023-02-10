@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
 
-  checkInputs = [ procps ];
+  nativeCheckInputs = [ procps ];
 
   doCheck = interactive
     && !stdenv.isDarwin

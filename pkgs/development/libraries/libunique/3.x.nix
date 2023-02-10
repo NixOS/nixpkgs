@@ -3,7 +3,6 @@
 , gtk-doc, docbook_xml_dtd_45, docbook_xsl
 , libxslt, libxml2 }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   majorVer = "3.0";
@@ -23,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 }

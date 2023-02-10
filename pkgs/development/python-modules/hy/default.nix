@@ -37,7 +37,7 @@ buildPythonPackage rec {
     astor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

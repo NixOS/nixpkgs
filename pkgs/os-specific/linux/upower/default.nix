@@ -69,13 +69,13 @@ stdenv.mkDerivation rec {
     libusb1
     udev
     systemd
-    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
   ] ++ lib.optionals useIMobileDevice [
     libimobiledevice
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.dbus-python
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3

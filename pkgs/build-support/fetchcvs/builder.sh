@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 (echo "#!$SHELL"; \
@@ -23,5 +24,3 @@ else
 fi
 (cd export && cvs -f -z0 -d "$cvsRoot" export $tag "$module")
 mv export/* $out
-
-stopNest

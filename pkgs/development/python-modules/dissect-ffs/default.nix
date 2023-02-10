@@ -35,7 +35,7 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

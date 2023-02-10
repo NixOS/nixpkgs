@@ -1,8 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
 , common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
-with lib;
-
 let
   repo = "git@github.com:scala/scala.git";
 
@@ -102,7 +100,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "A general purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express

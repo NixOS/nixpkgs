@@ -16,12 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jabcode-${subproject}";
-  version = "unstable-2021-02-16";
+  version = "unstable-2022-06-17";
   src = fetchFromGitHub {
     repo = "jabcode";
     owner = "jabcode";
-    rev = "e342b647525fa294127930d836b54a6b21957cdc";
-    sha256 = "04ngw5aa43q7kxfn1v8drmir2i2qakvq0ni0lgf0zw8150mww52x";
+    rev = "ee0e4c88b9f3c1da46d6f679ee8b69c547907c20";
+    hash = "sha256-GjRkDWefQFdT4i9hRcQhYsY4beMUIXxy38I5lsQytyA=";
   };
 
   nativeBuildInputs =

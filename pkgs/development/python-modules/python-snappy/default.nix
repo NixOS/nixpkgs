@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional isPyPy cffi;
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";

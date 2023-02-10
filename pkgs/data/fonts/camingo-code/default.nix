@@ -1,19 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "camingo-code";
   version = "1.0";
-in fetchzip rec {
-  name = "camingo-code-${version}";
 
-  url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
-  postFetch = ''
-    install -Dm644 $out/camingo-code/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 $out/camingo-code/*.txt -t $out/share/doc/${name}
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+  src = fetchzip {
+    url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
+    hash = "sha256-oo5pWDq6h0bmyGvfF9Bkh7WyjKX4dG8uclfIsWLhDw8=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 camingo-code/*.ttf -t $out/share/fonts/truetype
+    install -Dm644 camingo-code/*.txt -t $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
-  sha256 = "sha256-/vDNuR034stmiCZ9jUH5DlTQJn0WccLY5treoziXOJo=";
 
   meta = with lib; {
     homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";

@@ -6,6 +6,7 @@
 , chardet
 , charset-normalizer
 , fetchPypi
+, fetchpatch
 , idna
 , pysocks
 , pytest-mock
@@ -17,14 +18,16 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.28.1";
+  version = "2.28.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
+    hash = "sha256-mLGyeC48bEkEk4uEwOuTJyEGnf25E0MTvv98g8LfJL8=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -84,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
+    changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -17,7 +17,8 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
+  useGccGoBootstrap = stdenv.buildPlatform.isMusl || stdenv.buildPlatform.isRiscV;
+  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap116.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo119Module; };
 
@@ -45,11 +46,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.19.4";
+  version = "1.19.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-7adNtKxJSACj5m7nhOSVv7ubjlNd+SSosBsagCi382g=";
+    sha256 = "sha256-jkhujoWigfxc4/C+3FudLb9idtfbCyXT7ANPMT2gN18=";
   };
 
   strictDeps = true;
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild

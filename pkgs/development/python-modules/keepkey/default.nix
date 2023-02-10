@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ecdsa hidapi libusb1 mnemonic protobuf ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # tests requires hardware
   doCheck = false;

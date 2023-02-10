@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
 
   # autogen.sh:9
   preAutoreconf = "cp ${gettext}/share/gettext/config.rpath .";

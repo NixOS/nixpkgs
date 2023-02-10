@@ -56,7 +56,7 @@ let
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
     mkdir -p $out/{datasources,dashboards,notifiers,alerting}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
-    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashbaord"; }}
+    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
     ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
     ${ln { src = rulesFileOrDir;         dir = "alerting";    filename = "rules"; }}
     ${ln { src = contactPointsFileOrDir; dir = "alerting";    filename = "contactPoints"; }}
@@ -364,9 +364,15 @@ in {
             };
 
             http_addr = mkOption {
-              description = lib.mdDoc "Listening address.";
-              default = "";
               type = types.str;
+              default = "127.0.0.1";
+              description = lib.mdDoc ''
+                Listening address.
+
+                ::: {.note}
+                This setting intentionally varies from upstream's default to be a bit more secure by default.
+                :::
+              '';
             };
 
             http_port = mkOption {

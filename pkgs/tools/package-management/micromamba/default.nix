@@ -2,19 +2,21 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, bzip2
 , cli11
 , cmake
 , curl
 , ghc_filesystem
 , libarchive
 , libsolv
-, libyamlcpp
+, yaml-cpp
 , nlohmann_json
 , python3
 , reproc
 , spdlog
 , termcolor
 , tl-expected
+, fmt_9
 }:
 
 let
@@ -34,33 +36,39 @@ let
   });
 
   spdlog' = spdlog.overrideAttrs (oldAttrs: {
-    # Required for header files. See alse:
-    # https://github.com/gabime/spdlog/pull/1241 (current solution)
-    # https://github.com/gabime/spdlog/issues/1897 (previous solution)
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DSPDLOG_FMT_EXTERNAL=OFF"
-    ];
+    # Use as header-only library.
+    #
+    # Spdlog 1.11 requires fmt version 8 while micromamba requires
+    # version 9. spdlog may use its bundled version of fmt,
+    # though. Micromamba is not calling spdlog functions with
+    # fmt-types in their signature. I.e. we get away with removing
+    # fmt_8 from spdlog's propagated dependencies and using fmt_9 for
+    # micromamba itself.
+    dontBuild = true;
+    cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DSPDLOG_FMT_EXTERNAL=OFF" ];
+    propagatedBuildInputs = [];
   });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    sha256 = "sha256-t1DfLwBGW6MfazuFludn6/fdYWFaMnkhXva6bvus694=";
+    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bzip2
     cli11
     nlohmann_json
     curl
     libarchive
-    libyamlcpp
+    yaml-cpp
     libsolv'
     reproc
     spdlog'
@@ -68,6 +76,7 @@ stdenv.mkDerivation rec {
     ghc_filesystem
     python3
     tl-expected
+    fmt_9
   ];
 
   cmakeFlags = [

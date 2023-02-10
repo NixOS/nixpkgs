@@ -6,6 +6,7 @@
 , libusb1
 , libGL
 , qmake
+, wrapGAppsHook
 , wrapQtAppsHook
 , mkDerivation
 
@@ -44,6 +45,7 @@ mkDerivation {
     pkg-config
     qmake
     qttools
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -69,6 +71,8 @@ mkDerivation {
     "CONFIG+=qtquickcompiler"
   ];
 
+  dontWrapGApps = true;
+
   postPatch = ''
     substituteInPlace qflipper_common.pri \
         --replace 'GIT_VERSION = unknown' 'GIT_VERSION = "${version}"' \
@@ -88,9 +92,7 @@ mkDerivation {
     cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;
@@ -100,5 +102,4 @@ mkDerivation {
     maintainers = with maintainers; [ cab404 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
   };
-
 }

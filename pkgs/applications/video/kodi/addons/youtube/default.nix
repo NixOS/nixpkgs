@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";
-  version = "6.8.23+matrix.1";
+  version = "6.8.24+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "GIPgw1exAgw/D5vNpQQkUnTye66jfLLI5/asrthEDPQ=";
+    sha256 = "/yQML2iK5jcIhN6RJC+WJ8EnH640qFJFdaaVeGPEg9U=";
   };
 
   propagatedBuildInputs = [

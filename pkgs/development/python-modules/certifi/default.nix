@@ -35,7 +35,7 @@ buildPythonPackage rec {
     cacert
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

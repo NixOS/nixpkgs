@@ -1,12 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , bison
 , libevent
 , ncurses
 , pkg-config
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
 , withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 }:
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
+
+  patches = [
+    ./CVE-2022-47016.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config

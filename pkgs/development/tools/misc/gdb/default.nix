@@ -1,7 +1,7 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
+    # backport readline=8.2 support
+    (fetchpatch {
+      name = "readline-8.2.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff_plain;h=1add37b567a7dee39d99f37b37802034c3fce9c4";
+      hash = "sha256-KmQXylPAWNGXF8wtXCCArhUzHi+GUY8ii2Xpx8R08jE=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   # Does not nave to be conditional. We apply it conditionally
@@ -141,7 +147,8 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    platforms = with platforms; linux ++ cygwin ++ darwin;
+    # GDB upstream does not support ARM darwin
+    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
     maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

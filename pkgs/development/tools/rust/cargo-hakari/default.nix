@@ -1,15 +1,20 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
-  version = "0.9.17";
+  version = "0.9.23";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-FgG9sdXZhSlX4p3I9WL5ORN7FCg4Zgt/Y+GRCWhIoP8=";
+  src = fetchFromGitHub {
+    owner = "guppy-rs";
+    repo = "guppy";
+    rev = "cargo-hakari-${version}";
+    sha256 = "sha256-Ewki2Ux233WEW7x3jgpdeMH6xoMYJQ9X3vP8CqY+0hc=";
   };
 
-  cargoHash = "sha256-pYjjiQUnBfZ9wQgXhm4c+A7zMAF9k/Mzl5ccPX407/A=";
+  cargoHash = "sha256-IpTWyp0o6OKS8h0U8ybC2Io3Tbs592UBzAWmd8zEm2I=";
+
+  cargoBuildFlags = [ "-p" "cargo-hakari" ];
+  cargoTestFlags = [ "-p" "cargo-hakari" ];
 
   meta = with lib; {
     description = "Manage workspace-hack packages to speed up builds in large workspaces.";

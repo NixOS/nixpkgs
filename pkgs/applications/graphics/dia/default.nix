@@ -1,37 +1,68 @@
-{ lib, stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkg-config, perlPackages,
-libxml2, gettext, python2, libxml2Python, docbook5, docbook_xsl,
-libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
-gtk-mac-integration-gtk2 }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, appstream-glib
+, cmake
+, dblatex
+, desktop-file-utils
+, graphene
+, gtk2
+, gtk-mac-integration-gtk2
+, intltool
+, libxml2
+, libxslt
+, meson
+, ninja
+, pkg-config
+, poppler
+, python3
+  # Building with docs are failing in unstable-2022-12-14
+, withDocs ? false
+}:
 
 stdenv.mkDerivation {
   pname = "dia";
-  version = "0.97.3.20170622";
+  version = "unstable-2022-12-14";
 
-  src = fetchgit {
-    url = "https://gitlab.gnome.org/GNOME/dia.git";
-    rev = "b86085dfe2b048a2d37d587adf8ceba6fb8bc43c";
-    sha256 = "1fyxfrzdcs6blxhkw3bcgkksaf3byrsj4cbyrqgb4869k3ynap96";
+  src = fetchFromGitLab {
+    owner = "GNOME";
+    repo = "dia";
+    domain = "gitlab.gnome.org";
+    rev = "4a619ec7cc93be5ddfbcc48d9e1572d04943bcad";
+    hash = "sha256-xi45Ak4rlDQjs/FNkdkm145mx76GNHjE6Nrs1dc94ww=";
   };
 
-  patches = [
-    ./CVE-2019-19451.patch
-  ];
-
-  buildInputs =
-    [ gtk2 libxml2 gettext python2 libxml2Python docbook5
-      libxslt docbook_xsl libart_lgpl ]
-      ++ lib.optional withGNOME libgnomeui
-      ++ lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
-
-  nativeBuildInputs = [ autoconf automake libtool pkg-config intltool ]
-    ++ (with perlPackages; [ perl XMLParser ]);
+  patches = [ ./poppler-22_09-build-fix.patch ];
 
   preConfigure = ''
-    NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
+    patchShebangs .
   '';
-  configureFlags = lib.optional withGNOME "--enable-gnome";
 
-  hardeningDisable = [ "format" ];
+  buildInputs = [
+    graphene
+    gtk2
+    libxml2
+    python3
+    poppler
+  ] ++
+  lib.optionals withDocs [
+    libxslt
+  ] ++
+  lib.optionals stdenv.isDarwin [
+    gtk-mac-integration-gtk2
+  ];
+
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    intltool
+    meson
+    ninja
+    pkg-config
+  ] ++
+  lib.optionals withDocs [
+    dblatex
+  ];
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";
@@ -39,7 +70,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

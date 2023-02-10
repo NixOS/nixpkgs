@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.7";
+  version = "5.15.8";
   overrides = {};
 
   mk = name: args:
@@ -14,7 +14,7 @@ let
         fetchgit {
           inherit (args) url rev sha256;
           fetchLFS = false;
-          fetchSubmodules = false;
+          fetchSubmodules = true;
           deepClone = false;
           leaveDotGit = false;
         };

@@ -34,7 +34,7 @@ buildPythonPackage {
   buildInputs = [ check cppunit ];
   propagatedBuildInputs = [ testtools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     testscenarios
     hypothesis
     fixtures

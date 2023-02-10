@@ -33,7 +33,7 @@ buildPythonPackage rec {
     watchdog
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess

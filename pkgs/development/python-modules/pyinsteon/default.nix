@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async_generator
     pytest-asyncio
     pytest-timeout

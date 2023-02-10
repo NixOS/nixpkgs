@@ -25,8 +25,6 @@ buildDunePackage rec {
     ocaml-freestanding
   ];
 
-  strictDeps = !doCheck;
-
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";
     description = "Simple symmetric cryptography for the modern age";

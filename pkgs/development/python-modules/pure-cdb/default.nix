@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-7zxQO+oTZJhXfM2yijGXchLixiQRuFTOSESVlEc+T0s=";
   };
 
-  checkInputs = [ flake8 ];
+  nativeCheckInputs = [ flake8 ];
 
   pythonImportsCheck = [ "cdblib" ];
 

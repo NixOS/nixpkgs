@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bracex" ];
 

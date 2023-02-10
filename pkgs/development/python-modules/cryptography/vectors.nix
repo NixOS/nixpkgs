@@ -4,6 +4,7 @@ buildPythonPackage rec {
   pname = "cryptography-vectors";
   # The test vectors must have the same version as the cryptography package
   inherit (cryptography) version;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "cryptography_vectors";

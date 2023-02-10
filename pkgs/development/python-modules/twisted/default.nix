@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , fetchpatch
@@ -56,6 +57,23 @@ buildPythonPackage rec {
     extension = "tar.gz";
     hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/pull/11787.diff";
+      hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
+    })
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/pull/11734.diff";
+      excludes = [ ".github/workflows/*" ];
+      hash = "sha256-Td08pDxHwl7fPLCA6rUySuXpy8YmZfvXPHGsBpdcmSo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/commit/00bf5be704bee022ba4d9b24eb6c2c768b4a1921.patch";
+      hash = "sha256-fnBzczm3OlhbjRcePIQ7dSX6uldlCZ9DJTS+UFO2nAQ=";
+    })
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -122,10 +140,11 @@ buildPythonPackage rec {
     $out/bin/twistd --help > /dev/null
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     glibcLocales
-    hypothesis
+    # "hypothesis" indirectly depends on twisted to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch

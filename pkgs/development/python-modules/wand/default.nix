@@ -2,17 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , imagemagickBig
+, py
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "wand";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchPypi {
     pname = "Wand";
     inherit version;
-    sha256 = "sha256-Nz9KfyhmyGjDHOkQ4fmzapLRMmQKIAaOwXzqMoT+3Fc=";
+    sha256 = "sha256-tmFwDan48ekx5Scm5PxkOlZblRT1iD1Bt3Pjw3yfqZU=";
   };
 
   postPatch = ''
@@ -21,7 +22,8 @@ buildPythonPackage rec {
       "magick_home = '${imagemagickBig}'"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
   ];
 
@@ -36,9 +38,10 @@ buildPythonPackage rec {
   passthru.imagemagick = imagemagickBig;
 
   meta = with lib; {
+    changelog = "https://docs.wand-py.org/en/${version}/changes.html";
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ infinisil dotlambda ];
   };
 }

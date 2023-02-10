@@ -21,9 +21,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("Enable case sensitivity and normalization sensitivity"):
       machine.succeed(
           "mkapfs -s -z /dev/vdb",
-          # Triggers a bug, see https://github.com/linux-apfs/linux-apfs-rw/issues/15
-          # "mount -o cknodes,readwrite /dev/vdb /tmp/mnt",
-          "mount -o readwrite /dev/vdb /tmp/mnt",
+          "mount -o cknodes,readwrite /dev/vdb /tmp/mnt",
           "echo 'Hello World 1' > /tmp/mnt/test.txt",
           "[ ! -f /tmp/mnt/TeSt.TxT ] || false", # Test case sensitivity
           "echo 'Hello World 1' | diff - /tmp/mnt/test.txt",
@@ -36,13 +34,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("Disable case sensitivity and normalization sensitivity"):
       machine.succeed(
           "mkapfs /dev/vdb",
-          "mount -o readwrite /dev/vdb /tmp/mnt",
+          "mount -o cknodes,readwrite /dev/vdb /tmp/mnt",
           "echo 'bla bla bla' > /tmp/mnt/Test.txt",
           "echo -n 'Hello World' > /tmp/mnt/test.txt",
           "echo ' 1' >> /tmp/mnt/TEST.TXT",
           "umount /tmp/mnt",
           "apfsck /dev/vdb",
-          "mount -o readwrite /dev/vdb /tmp/mnt",
+          "mount -o cknodes,readwrite /dev/vdb /tmp/mnt",
           "echo 'Hello World 1' | diff - /tmp/mnt/TeSt.TxT", # Test case insensitivity
           "echo 'Hello World 2' > /tmp/mnt/\u0061\u0301.txt",
           "echo 'Hello World 2' | diff - /tmp/mnt/\u0061\u0301.txt",

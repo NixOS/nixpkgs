@@ -4,7 +4,9 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk19-bootstrap
 , ensureNewerSourcesForZipFilesHook
 , setJavaClassPath
-, headless ? false
+# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+# which should be fixable, this is a no-rebuild workaround for GHC.
+, headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? openjfx.meta.available, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
@@ -147,12 +149,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)

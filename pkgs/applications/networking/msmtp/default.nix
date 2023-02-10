@@ -17,7 +17,7 @@
 , Security
 , withKeyring ? true
 , libsecret
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 
@@ -128,4 +128,5 @@ symlinkJoin {
   name = "msmtp-${version}";
   inherit version meta;
   paths = [ binaries scripts ];
+  passthru = { inherit binaries scripts; };
 }

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

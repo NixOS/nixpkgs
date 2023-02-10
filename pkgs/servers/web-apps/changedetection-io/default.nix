@@ -83,7 +83,7 @@ py.pkgs.buildPythonApplication rec {
   # tests can currently not be run in one pytest invocation and without docker
   doCheck = false;
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytest-flask
     pytestCheckHook
   ];

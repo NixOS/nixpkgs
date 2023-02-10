@@ -1,8 +1,10 @@
 { abiCompat ? null,
+  callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool,
+  automake, autoconf, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
-  libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
+  libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
+  ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
@@ -11,7 +13,6 @@
 
 let
   inherit (stdenv) isDarwin;
-  inherit (lib) overrideDerivation;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -23,23 +24,26 @@ let
 in
 self: super:
 {
+  wrapWithXFileSearchPathHook = callPackage ({ makeBinaryWrapper, makeSetupHook, writeScript }: makeSetupHook {
+      name = "wrapWithXFileSearchPathHook";
+      deps = [ makeBinaryWrapper ];
+    } (writeScript "wrapWithXFileSearchPathHook.sh" ''
+      wrapWithXFileSearchPath() {
+        paths=(
+          "$out/share/X11/%T/%N"
+          "$out/include/X11/%T/%N"
+          "${xorg.xbitmaps}/include/X11/%T/%N"
+        )
+        for exe in $out/bin/*; do
+          wrapProgram "$exe" \
+            --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+        done
+      }
+      postInstallHooks+=(wrapWithXFileSearchPath)
+  '')) {};
+
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
-  bitmap = super.bitmap.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
-    postInstall = ''
-      paths=(
-        "$out/share/X11/%T/%N"
-        "$out/include/X11/%T/%N"
-        "${xorg.xbitmaps}/include/X11/%T/%N"
-      )
-      wrapProgram "$out/bin/bitmap" \
-        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
-        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
-    '';
   });
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -138,6 +142,14 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
   });
   libdmx = super.libdmx.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libFS = super.libFS.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -302,6 +314,7 @@ self: super:
   libXpm = super.libXpm.overrideAttrs (attrs: {
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
+    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
@@ -313,16 +326,17 @@ self: super:
   });
 
   libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
-    name = "libxshmfence-1.3";
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
-      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
-    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    meta = attrs.meta // { platforms = lib.platforms.linux; };
+    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+
+    meta = attrs.meta // {
+      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
+      platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
+        [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+    };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
@@ -706,10 +720,6 @@ self: super:
       postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
     });
 
-  xload = super.xload.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
-  });
-
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
     meta = attrs.meta // { license = lib.licenses.mit; };
   });
@@ -761,7 +771,7 @@ self: super:
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
+      darwinOtherX = xorgserver.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -1024,7 +1034,7 @@ self: super:
       rev = "31486f40f8e8f8923ca0799aea84b58799754564";
       sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXfixes xorg.libXv xorg.pixman xorg.utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
 
@@ -1067,6 +1077,13 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
+    patches = [
+      (fetchpatch {
+        name = "add-aarch64-darwin-support.patch";
+        url = "https://gitlab.freedesktop.org/xorg/util/cf/-/commit/8d88c559b177e832b581c8ac0aa383b6cf79e0d0.patch";
+        sha256 = "sha256-wCijdmlUtVgOh9Rp/LJrg1ObYm4OPTke5Xwu0xC0ap4=";
+      })
+    ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
@@ -1089,17 +1106,6 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
-    '';
-  });
-
-  xcalc = super.xcalc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [] ++ [
-      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/bin/xcalc \
-        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 

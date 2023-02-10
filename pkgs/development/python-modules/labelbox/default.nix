@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.33.1";
+  version = "3.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-lYhgBELeVtNUp6ZvcSTIeKp2YkaGt6MH8BbzSERGHXw=";
+    hash = "sha256-x/XvcGiFS//f/le3JAd2n/tuUy9MBrCsISpkIkCCNis=";
   };
 
   postPatch = ''
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cases
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;

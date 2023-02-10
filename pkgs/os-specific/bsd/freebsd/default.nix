@@ -1,8 +1,8 @@
 { stdenv, lib, stdenvNoCC
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, buildPackages, splicePackages, newScope
+, makeScopeWithSplicing, generateSplicesForMkScope
+, buildPackages
 , bsdSetupHook, makeSetupHook
-, fetchgit, fetchurl, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
+, fetchgit, fetchzip, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
 , zlib, expat, libmd
 , runCommand, writeShellScript, writeText, symlinkJoin
 }:
@@ -23,14 +23,6 @@ let
   freebsdSetupHook = makeSetupHook {
     name = "freebsd-setup-hook";
   } ./setup-hook.sh;
-
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.freebsd;
-    selfBuildHost = pkgsBuildHost.freebsd;
-    selfBuildTarget = pkgsBuildTarget.freebsd;
-    selfHostHost = pkgsHostHost.freebsd;
-    selfTargetTarget = pkgsTargetTarget.freebsd or {}; # might be missing
-  };
 
   mkBsdArch = stdenv':  {
     x86_64 = "amd64";
@@ -74,16 +66,19 @@ let
     done
   '';
 
-in lib.makeScopeWithSplicing
-  splicePackages
-  newScope
-  otherSplices
+in makeScopeWithSplicing
+  (generateSplicesForMkScope "freebsd")
   (_: {})
   (_: {})
   (self: let
     inherit (self) mkDerivation;
   in {
   inherit freebsdSrc;
+
+  ports = fetchzip {
+    url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";
+    sha256 = "BpHqJfnGOeTE7tkFJBx0Wk8ryalmf4KNTit/Coh026E=";
+  };
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   # See note in ../netbsd/default.nix.
@@ -396,6 +391,12 @@ in lib.makeScopeWithSplicing
       ln -s ./binstall $out/bin/install
     '';
     outputs = [ "out" "man" "test" ];
+  };
+
+  sed = mkDerivation {
+    path = "usr.bin/sed";
+    TESTSRC = "${freebsdSrc}/contrib/netbsd-tests";
+    MK_TESTS = "no";
   };
 
   # Don't add this to nativeBuildInputs directly.  Use statHook instead.

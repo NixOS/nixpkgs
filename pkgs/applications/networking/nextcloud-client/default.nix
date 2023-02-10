@@ -26,7 +26,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.6.4";
+  version = "3.7.1";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-ZtDgm9xlBQflVXsxjt4bFmRby6ni0wjaGYaoiEWH9Q0=";
+    sha256 = "sha256-MbxGS1Msb3xCW0z8FrIZEY3XaBa4BmN+JFBkV/Pf79A=";
   };
 
   patches = [

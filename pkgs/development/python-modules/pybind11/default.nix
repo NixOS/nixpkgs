@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.1";
+  version = "2.10.3";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9NS0/fLW2zEmEXhI9GfNN3C/CeI5xibFHwMoUebI90U=";
+    hash = "sha256-Rlr6Ec6BEujTxQkQ9UP+6u0cYeFsJlj7U346MtRM6QM=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch
     numpy
     pytestCheckHook
@@ -76,6 +76,12 @@ buildPythonPackage rec {
     "tests/extra_python_package/test_files.py"
     # tests that try to parse setuptools stdout
     "tests/extra_setuptools/test_setuphelper.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # expects KeyError, gets RuntimeError
+    # https://github.com/pybind/pybind11/issues/4243
+    "test_cross_module_exception_translator"
   ];
 
   meta = with lib; {

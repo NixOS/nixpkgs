@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "-include algorithm"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch2_3
   ];
 

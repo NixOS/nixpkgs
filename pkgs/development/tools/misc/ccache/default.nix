@@ -47,7 +47,7 @@ let ccache = stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
@@ -110,9 +110,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";

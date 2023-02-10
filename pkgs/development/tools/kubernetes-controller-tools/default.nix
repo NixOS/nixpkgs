@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "controller-tools";
-  version = "0.10.0";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-244o+QZ0BGVe8t8AWf1wU6VHgYyzkATpr5ZTbZezk10=";
+    sha256 = "sha256-F+cGJbxXIHrgn9OcIMh2am9g4PBLkdC037tV/9znPSg=";
   };
 
   patches = [ ./version.patch ];
 
-  vendorSha256 = "sha256-sVdSKu6TDGIDV2o+kuCvGCItbFe9MwlM2Qjiz8n2rZU=";
+  vendorHash = "sha256-nZyDoME5fVqRoAeLADjrQ7i6mVf3ujGN2+BUfrSHck8=";
 
   ldflags = [
     "-s"

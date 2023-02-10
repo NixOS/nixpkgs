@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # enable these dependencies when doInstallCheck is false because we're
     # unconditionally building tests and benchmarks
     #
-    # when doInstallCheck is true, these deps are added to installCheckInputs
+    # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
     gbenchmark
     gtest
   ];
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installCheckInputs = lib.optionals doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     gbenchmark
     gtest
   ];

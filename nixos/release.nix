@@ -181,11 +181,19 @@ in rec {
     inherit system;
   });
 
-  # A variant with a more recent (but possibly less stable) kernel
-  # that might support more hardware.
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # This variant keeps zfs support enabled, hoping it will build and work.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # ZFS support disabled since it is unlikely to support the latest kernel.
+  iso_minimal_new_kernel_no_zfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix;
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 
@@ -203,6 +211,14 @@ in rec {
         aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  sd_image_new_kernel_no_zfs = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-no-zfs-installer.nix;
+      }.${system};
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 

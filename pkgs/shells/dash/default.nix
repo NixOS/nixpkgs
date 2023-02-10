@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-libedit" ];
   preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
-    export LIBS="$(pkg-config --libs --static libedit)"
+    export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 
   enableParallelBuilding = true;

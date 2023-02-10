@@ -42,7 +42,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     filelock
     toml
     pytest-mock

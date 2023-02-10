@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.11.0";
-  format = "setuptools";
+  version = "6.12.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kMXcFQ44VuRGO4HMyZMHzPlVTl24OT6yc3BcsLj3HGA=";
+    hash = "sha256-i5A2lt9FmLENRpAm75mVxfmodLQW6I56IUiE6+SnAkU=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];

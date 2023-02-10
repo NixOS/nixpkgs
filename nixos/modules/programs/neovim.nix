@@ -7,7 +7,7 @@ let
 
   runtime' = filter (f: f.enable) (attrValues cfg.runtime);
 
-  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
+  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = "etc/${x.target}"; path = x.source; }) runtime');
 
 in {
   options.programs.neovim = {

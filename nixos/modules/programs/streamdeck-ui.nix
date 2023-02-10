@@ -15,7 +15,7 @@ in
       description = lib.mdDoc "Whether streamdeck-ui should be started automatically.";
     };
 
-    package = mkPackageOption pkgs "streamdeck-ui" {
+    package = mkPackageOptionMD pkgs "streamdeck-ui" {
       default = [ "streamdeck-ui" ];
     };
 

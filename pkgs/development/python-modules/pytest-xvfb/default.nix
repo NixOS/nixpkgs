@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, virtual-display
+, PyVirtualDisplay
 , isPy27
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    virtual-display
+    PyVirtualDisplay
   ];
 
   meta = with lib; {

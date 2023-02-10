@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mypy
     pytestCheckHook

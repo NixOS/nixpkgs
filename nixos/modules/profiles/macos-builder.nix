@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   keysDirectory = "/var/keys";
@@ -9,8 +9,19 @@ let
 
 in
 
-{ imports = [
+{
+  imports = [
     ../virtualisation/qemu-vm.nix
+
+    # Avoid a dependency on stateVersion
+    {
+      disabledModules = [
+        ../virtualisation/nixos-containers.nix
+        ../services/x11/desktop-managers/xterm.nix
+      ];
+      config = { };
+      options.boot.isContainer = lib.mkOption { default = false; internal = true; };
+    }
   ];
 
   # The builder is not intended to be used interactively
@@ -48,10 +59,14 @@ in
     trusted-users = [ "root" user ];
   };
 
-  services.openssh = {
-    enable = true;
+  services = {
+    getty.autologinUser = user;
 
-    authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
+    openssh = {
+      enable = true;
+
+      authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
+    };
   };
 
   system.build.macos-builder-installer =
@@ -62,7 +77,7 @@ in
 
       # This installCredentials script is written so that it's as easy as
       # possible for a user to audit before confirming the `sudo`
-      installCredentials = pkgs.writeShellScript "install-credentials" ''
+      installCredentials = hostPkgs.writeShellScript "install-credentials" ''
         KEYS="''${1}"
         INSTALL=${hostPkgs.coreutils}/bin/install
         "''${INSTALL}" -g nixbld -m 600 "''${KEYS}/${user}_${keyType}" ${privateKey}
@@ -71,8 +86,7 @@ in
 
       hostPkgs = config.virtualisation.host.pkgs;
 
-    in
-      hostPkgs.writeShellScriptBin "create-builder" ''
+      script = hostPkgs.writeShellScriptBin "create-builder" ''
         KEYS="''${KEYS:-./keys}"
         ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
         PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
@@ -87,11 +101,42 @@ in
         KEYS="$(nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
       '';
 
-  system.stateVersion = "22.05";
+    in
+    script.overrideAttrs (old: {
+      meta = (old.meta or { }) // {
+        platforms = lib.platforms.darwin;
+      };
+    });
 
-  users.users."${user}"= {
+  system = {
+    # To prevent gratuitous rebuilds on each change to Nixpkgs
+    nixos.revision = null;
+
+    stateVersion = lib.mkDefault (throw ''
+      The macOS linux builder should not need a stateVersion to be set, but a module
+      has accessed stateVersion nonetheless.
+      Please inspect the trace of the following command to figure out which module
+      has a dependency on stateVersion.
+
+        nix-instantiate --attr darwin.builder --show-trace
+    '');
+  };
+
+  users.users."${user}" = {
     isNormalUser = true;
   };
+
+  security.polkit.enable = true;
+
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (action.id === "org.freedesktop.login1.power-off" && subject.user === "${user}") {
+        return "yes";
+      } else {
+        return "no";
+      }
+    })
+  '';
 
   virtualisation = {
     diskSize = 20 * 1024;

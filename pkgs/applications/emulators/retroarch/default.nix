@@ -10,6 +10,7 @@
 , alsa-lib
 , dbus
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg_4
 , flac
 , freetype
@@ -32,12 +33,15 @@
 , nvidia_cg_toolkit
 , pkg-config
 , python3
+, qtbase
 , retroarch-assets
 , SDL2
+, spirv-tools
 , substituteAll
 , udev
 , vulkan-loader
 , wayland
+, wrapQtAppsHook
 , zlib
 }:
 
@@ -57,18 +61,20 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  patches = lib.optional withAssets
-    (substituteAll {
-      src = ./move-retroarch-assets-to-retroarch_assets_path.patch;
-      retroarch_assets_path = retroarch-assets;
+  patches = [
+    ./use-default-values-for-libretro_info_path-assets_directory.patch
+    # TODO: remove those two patches in the next RetroArch release
+    (fetchpatch {
+      url = "https://github.com/libretro/RetroArch/commit/894c44c5ea7f1eada9207be3c29e8d5c0a7a9e1f.patch";
+      hash = "sha256-ThB6jd9pmsipT8zjehz7znK/s0ofHHCJeEYBKur6sO8=";
     })
-  ++ lib.optional withCoreInfo
-    (substituteAll {
-      src = ./use-fixed-path-for-libretro_core_info.patch;
-      libretro_info_path = libretro-core-info;
-    });
+    (fetchpatch {
+      url = "https://github.com/libretro/RetroArch/commit/c5bfd52159cf97312bb28fc42203c39418d1bbbd.patch";
+      hash = "sha256-rb1maAvCSUgq2VtJ67iqUY+Fz00Fchl8YGG0EPm0+F0=";
+    })
+  ];
 
-  nativeBuildInputs = [ pkg-config ] ++
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
@@ -81,7 +87,9 @@ stdenv.mkDerivation rec {
     libxml2
     mbedtls_2
     python3
+    qtbase
     SDL2
+    spirv-tools
     zlib
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
@@ -113,9 +121,11 @@ stdenv.mkDerivation rec {
   ] ++
   lib.optionals withAssets [
     "--disable-update_assets"
-    # TODO: investigate why we also need this patch:
-    # ./move-retroarch-assets-to-retroarch_assets_path.patch
-    "--with-assets_dir=${retroarch-assets}"
+    "--with-assets_dir=${retroarch-assets}/share"
+  ] ++
+  lib.optionals withCoreInfo [
+    "--disable-update_core_info"
+    "--with-core_info_dir=${libretro-core-info}/share"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"
@@ -126,9 +136,16 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
+  '' +
+  lib.optionalString enableNvidiaCgToolkit ''
+    wrapProgram $out/bin/retroarch-cg2glsl \
+      --prefix PATH ':' ${lib.makeBinPath [ nvidia_cg_toolkit ]}
   '';
 
-  preFixup = "rm $out/bin/retroarch-cg2glsl";
+  preFixup = lib.optionalString (!enableNvidiaCgToolkit) ''
+    rm $out/bin/retroarch-cg2glsl
+    rm $out/share/man/man6/retroarch-cg2glsl.6*
+  '';
 
   passthru.tests = nixosTests.retroarch;
 

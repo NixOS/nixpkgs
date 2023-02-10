@@ -21,30 +21,21 @@
 , withExtraFeatures ? true
 , testers
 , nushell
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.72.1";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-OVJr+usN+47yBHFAy94rIVlU2F+Klo6xdrV2MwUoKUE=";
+    sha256 = "sha256-u8/SvuR/RpJaBX4Dr3Onrk0AVpIAeVb+399+NUpgkfI=";
   };
 
-  patches = [
-    # https://github.com/nushell/nushell/pull/7423: make tests
-    # more resilient (less dependent on env).
-    # Already merged upstream, so can be dropped in the next version
-    (fetchpatch {
-      url = "https://github.com/nushell/nushell/commit/87631e7068bfc6635d5b31413856f0a791994527.patch";
-      hash = "sha256-9vrcmBe5gXLLodynb3jyarwi/a0YiurJ6WsDxXl2vjo=";
-    })
-  ];
-
-  cargoSha256 = "sha256-v6mPr+gOT64rKYuog+hS7/AqUZDailoOBXX3Sfeo+sk=";
+  cargoSha256 = "sha256-hnSumfZd9ylEx3dkTGW2s4VSv107MHOn21ytOcimhPw=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
@@ -99,5 +90,6 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion {
       package = nushell;
     };
+    updateScript = nix-update-script { };
   };
 }

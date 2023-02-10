@@ -8,7 +8,7 @@
 , gsl
 , lhapdf
 , libarchive
-, libyamlcpp
+, yaml-cpp
 , python3
 , sqlite
 , swig
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gsl
     lhapdf
     libarchive
-    libyamlcpp
+    yaml-cpp
     python3
     python3.pkgs.numpy
     sqlite

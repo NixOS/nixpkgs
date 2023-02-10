@@ -27,7 +27,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     nose
     numpy

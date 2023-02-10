@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  checkInputs = [ git perl ];
+  nativeCheckInputs = [ git perl ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do

@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, fmt, bigstringaf, angstrom, alcotest }:
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, fmt
+, bigstringaf
+, angstrom
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "encore";

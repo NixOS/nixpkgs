@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       special effects by "spectral smoothing" the sounds.
       It can transform any sound/music to a texture.
     '';
-    homepage = "http://hypermammut.sourceforge.net/paulstretch/";
+    homepage = "https://hypermammut.sourceforge.net/paulstretch/";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

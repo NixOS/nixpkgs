@@ -105,7 +105,7 @@ in stdenv.mkDerivation {
       --replace /usr/bin/tar ${gnutar}/bin/tar
 
     substituteInPlace src/input/mpegts/scanfile.c \
-      --replace /usr/share/dvb ${dtv-scan-tables}/dvbv5
+      --replace /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
 
     # the version detection script `support/version` reads this file if it
     # exists, so let's just use that

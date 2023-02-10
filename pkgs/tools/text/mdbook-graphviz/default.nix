@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  checkInputs = [ graphviz ];
+  nativeCheckInputs = [ graphviz ];
 
   meta = with lib; {
     description = "A preprocessor for mdbook, rendering Graphviz graphs to HTML at build time.";

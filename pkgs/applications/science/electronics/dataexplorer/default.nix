@@ -2,18 +2,17 @@
 , stdenv
 , fetchurl
 , jdk
-, jre
 , ant
 , makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "dataexplorer";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
-    sha256 = "sha256-cqvlPV4i9m0x3hbruC5y2APsyjfI5y9RT8XVzsDaT/Q=";
+    sha256 = "sha256-bghI7Hun7ZKUVEj7T58K0oaclnhUGd4z+eIqZF3eXHQ=";
   };
 
   nativeBuildInputs = [ ant makeWrapper ];
@@ -37,11 +36,11 @@ stdenv.mkDerivation rec {
     # but it hardcodes bash shebang and does not pin the java path.
     # So we create our own wrapper, using similar cmdline args as upstream.
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/DataExplorer \
+    makeWrapper ${jdk}/bin/java $out/bin/DataExplorer \
       --add-flags "-Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
       --set SWT_GTK3 0
 
-    makeWrapper ${jre}/bin/java $out/bin/DevicePropertiesEditor \
+    makeWrapper ${jdk}/bin/java $out/bin/DevicePropertiesEditor \
       --add-flags "-Xms32m -Xmx512m -classpath $out/share/DataExplorer/DataExplorer.jar gde.ui.dialog.edit.DevicePropertiesEditor" \
       --set SWT_GTK3 0 \
       --set LIBOVERLAY_SCROLLBAR 0

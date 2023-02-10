@@ -33,7 +33,7 @@ buildPythonPackage rec {
     numba
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

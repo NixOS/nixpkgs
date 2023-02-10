@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bundlewrap" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # only unit tests as integration tests need a OpenSSH client/server setup

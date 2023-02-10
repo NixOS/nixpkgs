@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   # require a typical building environment (including C compiler and stuff).
   # Just for the sake of documentation, the next lines are maintained here.
   doCheck = false;
-  checkInputs = [ ninja pkg-config ];
+  nativeCheckInputs = [ ninja pkg-config ];
   checkPhase = ''
     python ./run_project_tests.py
   '';

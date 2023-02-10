@@ -23,7 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import bashlex'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

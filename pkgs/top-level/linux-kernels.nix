@@ -40,6 +40,7 @@ let
       };
       argsOverride = {
         inherit version;
+        modDirVersion = modDirVersion' + kernelPatches.hardened.${kernel.meta.branch}.extra;
         src = fetchurl {
           url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
           inherit sha256;
@@ -48,7 +49,6 @@ let
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = modDirVersion' + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   };
 in {
@@ -151,18 +151,19 @@ in {
       ];
     };
 
-    linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
+    linux_rt_5_15 = callPackage ../os-specific/linux/kernel/linux-rt-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.export-rt-sched-migrate
+      ];
+    };
 
     linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
 
     linux_5_19 = throw "linux 5.19 was removed because it has reached its end of life upstream";
 
-    linux_6_0 = callPackage ../os-specific/linux/kernel/linux-6.0.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    linux_6_0 = throw "linux 6.0 was removed because it has reached its end of life upstream";
 
     linux_6_1 = callPackage ../os-specific/linux/kernel/linux-6.1.nix {
       kernelPatches = [
@@ -183,9 +184,18 @@ in {
        then latest
        else testing;
 
-    linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_6_0;
-      kernelPatches = kernel.kernelPatches;
+    linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
+      # Pinned on the last version which Kent's commits can be cleany rebased up.
+      kernel = buildLinux rec {
+        version = "6.1.3";
+        modDirVersion = lib.versions.pad 3 version;
+        extraMeta.branch = lib.versions.majorMinor version;
+        src = fetchurl {
+          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+          hash = "sha256-bcia56dRPkM8WXxzRu1/9L/RFepDo7XiemvbOMVYAxc=";
+        };
+      };
+      kernelPatches = linux_6_1.kernelPatches;
    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
@@ -240,7 +250,8 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
-    linux_6_0_hardened = hardenedKernelFor kernels.linux_6_0 { };
+    linux_6_0_hardened = throw "linux 6.0 was removed because it has reached its end of life upstream";
+    linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -523,10 +534,9 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-    linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
-    linux_6_0 = recurseIntoAttrs (packagesFor kernels.linux_6_0);
+    linux_6_0 = throw "linux 6.0 was removed because it reached its end of life upstream"; # Added 2023-01-20
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
   };
 
@@ -534,6 +544,7 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
+     linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
   };
 
   rpiPackages = {
@@ -567,7 +578,8 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
-    linux_6_0_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_0 { });
+    linux_6_0_hardened = throw "linux 6.0 was removed because it has reached its end of life upstream";
+    linux_6_1_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_1 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -593,11 +605,11 @@ in {
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
-  manualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
+  manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
 
-  customPackage = { version, src, configfile, allowImportFromDerivation ? true }:
+  customPackage = { version, src, modDirVersion ? lib.versions.pad 3 version, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (packagesFor (manualConfig {
-      inherit version src configfile lib stdenv allowImportFromDerivation;
+      inherit version src modDirVersion configfile allowImportFromDerivation;
     }));
 
   # Derive one of the default .config files

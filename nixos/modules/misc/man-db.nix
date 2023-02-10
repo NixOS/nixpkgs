@@ -13,11 +13,21 @@ in
         example = false;
       };
 
+      skipPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        internal = true;
+        description = lib.mdDoc ''
+          Packages to *not* include in the man-db.
+          This can be useful to avoid unnecessary rebuilds due to packages that change frequently, like nixos-version.
+        '';
+      };
+
       manualPages = lib.mkOption {
         type = lib.types.path;
         default = pkgs.buildEnv {
           name = "man-paths";
-          paths = config.environment.systemPackages;
+          paths = lib.subtractLists cfg.skipPackages config.environment.systemPackages;
           pathsToLink = [ "/share/man" ];
           extraOutputsToInstall = [ "man" ]
             ++ lib.optionals config.documentation.dev.enable [ "devman" ];

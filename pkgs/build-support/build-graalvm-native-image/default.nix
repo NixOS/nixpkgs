@@ -10,7 +10,6 @@
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
     "-jar" jar
-    "-H:CLibraryPath=${lib.getLib graalvm}/lib"
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
     "-H:Name=${executable}"
     "--verbose"
@@ -49,6 +48,8 @@ stdenv.mkDerivation (args // {
 
     runHook postInstall
   '';
+
+  disallowedReferences = [ graalvmDrv ];
 
   meta = {
     # default to graalvm's platforms

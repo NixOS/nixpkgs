@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 fixupOutputHooks+=('convertDesktopFiles $prefix')
 
 # Get a param out of a desktop file. First parameter is the file and the second

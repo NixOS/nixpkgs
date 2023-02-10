@@ -107,7 +107,7 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.pytest-xdist
     python3.pkgs.pytestCheckHook
 

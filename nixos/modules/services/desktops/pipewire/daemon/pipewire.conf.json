@@ -70,6 +70,14 @@
     },
     {
       "name": "libpipewire-module-session-manager"
+    },
+    {
+      "name": "libpipewire-module-x11-bell",
+      "args": {},
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
     }
   ],
   "context.objects": [

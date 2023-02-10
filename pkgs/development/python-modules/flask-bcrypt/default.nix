@@ -22,7 +22,7 @@ buildPythonPackage rec {
     bcrypt
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "flask_bcrypt"

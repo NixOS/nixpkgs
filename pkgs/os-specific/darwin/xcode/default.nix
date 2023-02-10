@@ -1,10 +1,10 @@
-{ buildPlatform, requireFile, targetPlatform, lib }:
+{ stdenv, requireFile, lib }:
 
 let requireXcode = version: sha256:
   let
     xip = "Xcode_" + version +  ".xip";
     # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
-    unxip = if buildPlatform.isDarwin
+    unxip = if stdenv.buildPlatform.isDarwin
             then ''
               open -W ${xip}
               rm -rf ${xip}
@@ -66,6 +66,6 @@ in lib.makeExtensible (self: {
   xcode_12_1 = requireXcode "12.1" "1widy74dk43wx8iqgd7arzf6q4kzdmaz8pfwymzs8chnq9dqr3wp";
   xcode_12_2 = requireXcode "12.2" "17i0wf4pwrxwfgjw7rpw9mcd59nkmys1k5h2rqsw81snzyxy9j0v";
   xcode_12_3 = requireXcode "12.3" "0kwf1y4llysf1p0nsbqyzccn7d77my0ldagr5fi3by4k0xy3d189";
-  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (targetPlatform ? xcodeVer) then targetPlatform.xcodeVer else "12.3")}";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })
 

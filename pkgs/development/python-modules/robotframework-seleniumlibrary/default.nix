@@ -30,7 +30,7 @@ buildPythonPackage rec {
     selenium
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     approvaltests
     pytest-mockito
     pytestCheckHook

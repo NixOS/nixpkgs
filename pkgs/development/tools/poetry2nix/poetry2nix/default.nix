@@ -1,6 +1,5 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, poetry ? null
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
@@ -72,7 +71,7 @@ let
         )
       );
       nativeBuildInputs = mkInput "nativeBuildInputs" [ ];
-      checkInputs = mkInput "checkInputs" (
+      nativeCheckInputs = mkInput "nativeCheckInputs" (
         getDeps (pyProject.tool.poetry."dev-dependencies" or { })  # <poetry-1.2.0
         # >=poetry-1.2.0 dependency groups
         ++ lib.flatten (map (g: getDeps (pyProject.tool.poetry.group.${g}.dependencies or { })) checkGroups)
@@ -143,7 +142,7 @@ lib.makeScope pkgs.newScope (self: {
       };
       getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-      poetryPkg = poetry.override { inherit python; };
+      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; };
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
@@ -249,7 +248,7 @@ lib.makeScope pkgs.newScope (self: {
                 }
             )
 
-            # Fix infinite recursion in a lot of packages because of checkInputs
+            # Fix infinite recursion in a lot of packages because of nativeCheckInputs
             (self: super: lib.mapAttrs
               (name: value: (
                 if lib.isDerivation value && lib.hasAttr "overridePythonAttrs" value

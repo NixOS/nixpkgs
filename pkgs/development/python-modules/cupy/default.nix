@@ -1,20 +1,29 @@
-{ lib, buildPythonPackage
-, fetchPypi, isPy3k, cython
-, fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, fastrlock
+, numpy
+, wheel
+, pytestCheckHook
+, mock
+, setuptools
 , cudaPackages
 , addOpenGLRunpath
+, pythonOlder
 }:
 
 let
   inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
 in buildPythonPackage rec {
   pname = "cupy";
-  version = "11.2.0";
-  disabled = !isPy3k;
+  version = "11.5.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wzNh8RejR6Y/aZbql0RtF/HAOPGh9TPlAkZCNQdpI+I=";
+    hash = "sha256-S8hWW97SLMibIQ/Z+0il1TFvMHAeErsjhSpgMU4fn24=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
@@ -42,12 +51,11 @@ in buildPythonPackage rec {
     nccl
     fastrlock
     numpy
-    six
     setuptools
     wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
   ];
@@ -67,6 +75,7 @@ in buildPythonPackage rec {
   meta = with lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
+    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];

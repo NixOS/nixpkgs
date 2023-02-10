@@ -7,8 +7,6 @@ assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-with lib;
-
 mkDerivation rec {
   pname = "fmit";
   version = "1.2.14";
@@ -22,9 +20,9 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
   buildInputs = [ fftw qtbase qtmultimedia ]
-    ++ optionals alsaSupport [ alsa-lib ]
-    ++ optionals jackSupport [ libjack2 ]
-    ++ optionals portaudioSupport [ portaudio ];
+    ++ lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals jackSupport [ libjack2 ]
+    ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
@@ -32,13 +30,13 @@ mkDerivation rec {
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags \
-      CONFIG+=${optionalString alsaSupport "acs_alsa"} \
-      CONFIG+=${optionalString jackSupport "acs_jack"} \
-      CONFIG+=${optionalString portaudioSupport "acs_portaudio"} \
+      CONFIG+=${lib.optionalString alsaSupport "acs_alsa"} \
+      CONFIG+=${lib.optionalString jackSupport "acs_jack"} \
+      CONFIG+=${lib.optionalString portaudioSupport "acs_portaudio"} \
       PREFIXSHORTCUT=$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free Musical Instrument Tuner";
     longDescription = ''
       FMIT is a graphical utility for tuning musical instruments, with error

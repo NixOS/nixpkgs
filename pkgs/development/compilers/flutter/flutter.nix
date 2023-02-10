@@ -85,7 +85,7 @@ let
     '';
 
     doInstallCheck = true;
-    installCheckInputs = [ which ];
+    nativeInstallCheckInputs = [ which ];
     installCheckPhase = ''
       runHook preInstallCheck
 

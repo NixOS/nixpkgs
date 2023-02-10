@@ -19,7 +19,7 @@ if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
 
     # Print a greeting.
     echo
-    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+    echo -e "\e[1;32m<<< @distroName@ Stage 2 >>>\e[0m"
     echo
 
 

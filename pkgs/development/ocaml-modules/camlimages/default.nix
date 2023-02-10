@@ -17,8 +17,6 @@ buildDunePackage rec {
     sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator graphics lablgtk stdio ];
 

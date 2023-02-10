@@ -55,7 +55,7 @@ let
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
-      bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
+      bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
       users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       theme = f cfg.theme;
@@ -759,6 +759,7 @@ in
             src = ./install-grub.pl;
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
+            inherit (config.system.nixos) distroName;
           };
           perl = pkgs.perl.withPackages (p: with p; [
             FileSlurp FileCopyRecursive

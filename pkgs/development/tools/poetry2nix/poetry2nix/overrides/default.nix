@@ -1669,7 +1669,6 @@ lib.composeManyExtensions [
 
             propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
               pkgs.cairo
-              pkgs.xlibsWrapper
             ];
 
             mesonFlags = [ "-Dpython=${if self.isPy3k then "python3" else "python"}" ];

@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     cd build
   '';
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}c++"
+  ];
+
   installPhase = ''
     install -D SoliCurses.out $out/bin/solicurses
   '';
@@ -33,7 +37,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ laalsaas ];
     license = licenses.gpl3Only;
     inherit (ncurses.meta) platforms;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
   };
 }

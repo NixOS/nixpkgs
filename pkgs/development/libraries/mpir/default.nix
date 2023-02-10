@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchurl, m4, which, yasm }:
+{ lib, stdenv, fetchurl, m4, which, yasm, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mpir";
   version = "3.0.0";
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ m4 which yasm ];
 

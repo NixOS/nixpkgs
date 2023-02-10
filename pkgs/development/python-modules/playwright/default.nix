@@ -193,6 +193,8 @@ buildPythonPackage rec {
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   # Skip tests because they require network access.
   doCheck = false;
 

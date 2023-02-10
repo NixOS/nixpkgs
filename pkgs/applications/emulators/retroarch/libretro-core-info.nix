@@ -14,7 +14,12 @@ stdenvNoCC.mkDerivation rec {
     rev = "v${version}";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    # By default install in $(PREFIX)/share/libretro/info
+    # that is not in RetroArch's core info path
+    "INSTALLDIR=$(PREFIX)/share/retroarch/cores"
+  ];
 
   dontBuild = true;
 

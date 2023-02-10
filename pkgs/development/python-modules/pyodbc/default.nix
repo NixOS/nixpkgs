@@ -18,6 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-krmvSOi5KEVbyLlL89oFdR+uwJMqEe7iN8GJxtQ55cg=";
   };
 
+  nativeBuildInputs = [
+    unixODBC  # for odbc_config
+  ];
+
   buildInputs = [
     unixODBC
   ];

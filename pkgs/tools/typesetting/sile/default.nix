@@ -1,5 +1,4 @@
 { lib, stdenv
-, gnumake42
 , darwin
 , fetchurl
 , makeWrapper
@@ -13,6 +12,8 @@
 , libiconv
 , makeFontsConf
 , gentium
+, runCommand
+, sile
 }:
 
 let
@@ -44,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.14.5";
+  version = "0.14.8";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "01wf0rihksk2ldxgci5vzl3j575vnp6wgk12yd28mwzxkss6n39g";
+    sha256 = "0r00s7c8ycc9haqf7p141gj5jn3k0kxpjdzb538f1jpwkgi6mjh9";
   };
 
   configureFlags = [
@@ -60,7 +61,6 @@ stdenv.mkDerivation rec {
     gitMinimal
     pkg-config
     makeWrapper
-    gnumake42
   ];
   buildInputs = [
     luaEnv
@@ -71,12 +71,20 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
-  checkInputs = [
-    poppler_utils
-  ];
   passthru = {
     # So it will be easier to inspect this environment, in comparison to others
     inherit luaEnv;
+    # Copied from Makefile.am
+    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
+      runCommand "${pname}-test"
+        {
+          nativeBuildInputs = [ poppler_utils sile ];
+          inherit FONTCONFIG_FILE;
+        } ''
+        output=$(mktemp -t selfcheck-XXXXXX.pdf)
+        echo "<sile>foo</sile>" | sile -o $output -
+        pdfinfo $output | grep "SILE v${version}" > $out
+      '');
   };
 
   postPatch = ''
@@ -93,8 +101,6 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  doCheck = true;
-
   enableParallelBuilding = true;
 
   preBuild = lib.optionalString stdenv.cc.isClang ''
@@ -108,7 +114,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
