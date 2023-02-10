@@ -16103,7 +16103,8 @@ with pkgs;
   };
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
-  tbb = callPackage ../development/libraries/tbb { };
+  inherit (callPackages ../development/libraries/tbb { })
+    tbb tbb_2020_3 tbb_2021_8;
 
   terra = callPackage ../development/compilers/terra {
     llvmPackages = llvmPackages_11;
