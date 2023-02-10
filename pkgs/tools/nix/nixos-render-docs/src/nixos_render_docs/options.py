@@ -178,6 +178,12 @@ class OptionDocsRestrictions:
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported in options doc", token)
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported in options doc", token)
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported in options doc", token)
 
 class OptionsDocBookRenderer(OptionDocsRestrictions, DocBookRenderer):
     # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
