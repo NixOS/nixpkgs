@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "29.0.0";
+  version = "29.0.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "sha256-c+G02k4AACaYfa5Zhsanr6AU3vNbopDMcYtuny/d25Y=";
+    sha256 = "sha256-TIUSjyPEsKRNTSLQXuLJGEgD989hJ5GhOsqJ4nkKVsY=";
     fetchSubmodules = true;
   };
 
