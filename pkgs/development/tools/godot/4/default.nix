@@ -36,20 +36,10 @@
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
 
 let
-  options = {
-    # Options from 'godot/SConstruct'
-    platform = withPlatform;
-    target = withTarget;
-    precision = withPrecision; # Floating-point precision level
-
-    # Options from 'godot/platform/linuxbsd/detect.py'
-    pulseaudio = withPulseaudio; # Use PulseAudio
-    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
-    fontconfig = withFontconfig; # Use fontconfig for system fonts support
-    udev = withUdev; # Use udev for gamepad connection callbacks
-    touch = withTouch; # Enable touch events
-  };
+  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (k: v:
+    if builtins.isString v
+    then "${k}=${v}"
+    else "${k}=${builtins.toJSON v}");
 in
 stdenv.mkDerivation rec {
   pname = "godot";
@@ -96,14 +86,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Options from 'godot/SConstruct' and 'godot/platform/linuxbsd/detect.py'
-  sconsFlags = [ "production=true" ];
-  preConfigure = ''
-    sconsFlags+=" ${
-      lib.concatStringsSep " "
-      (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)
-    }"
-  '';
+  sconsFlags = mkSconsFlagsFromAttrSet {
+    # Options from 'SConstruct'
+    production = true; # Set defaults to build Godot for use in production
+    platform = withPlatform;
+    target = withTarget;
+    precision = withPrecision; # Floating-point precision level
+
+    # Options from 'platform/linuxbsd/detect.py'
+    pulseaudio = withPulseaudio; # Use PulseAudio
+    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
+    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
+    fontconfig = withFontconfig; # Use fontconfig for system fonts support
+    udev = withUdev; # Use udev for gamepad connection callbacks
+    touch = withTouch; # Enable touch events
+  };
 
   outputs = [ "out" "man" ];
 
