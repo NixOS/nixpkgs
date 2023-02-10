@@ -875,11 +875,11 @@
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-LcSrs4FUrtp/4tp1xlBPKkfQ3J8FlZ/peL9NcC7XQy4=",
+    "hash": "sha256-xims3nYFVSS38FIMJhUhtK7lKpnRzzlojYZY6t57owA=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.26.0",
+    "rev": "v0.27.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
