@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
 - Tests need `qemu` and `getopt` (from `util-linux`) on `$PATH`, these must be added to `nativeCheckInputs`.
 - Some dependencies are injected directly in the shell code of phases: `syslinux`, `dosfstools`, `mtools`, and `parted`.
 In this specific case, they will end up in the output of the derivation (`$out` here).
-As Nix marks dependencies whose absolute path is present in the output as runtime dependencies, adding `syslinux` etc. to `buildInputs` is unnecessary.
+As Nix marks dependencies whose absolute path is present in the output as runtime dependencies, adding them to `buildInputs` is not required.
 
 For more complex cases, like libraries linked into an executable which is then executed as part of the build system, see [](#ssec-stdenv-dependencies-reference).
 
