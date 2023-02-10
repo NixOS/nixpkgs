@@ -169,6 +169,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  _9999years = {
+    email = "rbt@fastmail.com";
+    github = "9999years";
+    githubId = 15312184;
+    name = "Rebecca Turner";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
