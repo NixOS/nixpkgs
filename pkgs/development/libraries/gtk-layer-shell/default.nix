@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+    wayland-scanner
     vala
     wayland-scanner
   ];
