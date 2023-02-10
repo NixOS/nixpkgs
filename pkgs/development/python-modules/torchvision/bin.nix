@@ -13,14 +13,13 @@
 }:
 
 let
+  pname = "torchvision";
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
-  unsupported = throw "Unsupported system";
+  unsupported = throw "Unsupported system ${stdenv.system} for package ${pname}-bin";
   version = "0.14.1";
 in buildPythonPackage {
-  inherit version;
-
-  pname = "torchvision";
+  inherit pname version;
 
   format = "wheel";
 

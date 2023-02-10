@@ -17,16 +17,14 @@
 }:
 
 let
+  pname = "torch";
+  version = "1.13.1"; # Don't forget to update torch to the same version.
+
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
-  unsupported = throw "Unsupported system";
-  version = "1.13.1";
+  unsupported = throw "Unsupported system ${stdenv.system} for package ${pname}-bin";
 in buildPythonPackage {
-  inherit version;
-
-  pname = "torch";
-  # Don't forget to update torch to the same version.
-
+  inherit pname version;
   format = "wheel";
 
   disabled = !(isPy37 || isPy38 || isPy39 || isPy310);

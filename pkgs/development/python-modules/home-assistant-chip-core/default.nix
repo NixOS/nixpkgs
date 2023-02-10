@@ -39,7 +39,7 @@ buildPythonPackage rec {
         name = "x86_64";
         hash = "sha256-zXxbDGfyFUXuEnaH4a8R4LXH0gfbMCkKPBJJGp77xHM=";
       };
-    }.${stdenv.system} or (throw "Unsupported system");
+    }.${stdenv.system} or (throw "Unsupported system ${stdenv.system} for package ${pname}");
   in fetchPypi {
     pname = "home_assistant_chip_core";
     inherit version format;

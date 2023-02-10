@@ -21,8 +21,10 @@
 }:
 
 let
+  pname = "playwright";
+
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  throwSystem = throw "Unsupported system ${system} for package ${pname}";
 
   driverVersion = "1.27.1";
 
@@ -135,7 +137,7 @@ let
   '');
 in
 buildPythonPackage rec {
-  pname = "playwright";
+  inherit pname;
   version = "1.27.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";

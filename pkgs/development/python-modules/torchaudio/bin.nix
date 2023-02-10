@@ -18,9 +18,10 @@ buildPythonPackage rec {
   format = "wheel";
 
   src =
-    let pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-        unsupported = throw "Unsupported system";
-        srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
+    let
+     pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
+     unsupported = throw "Unsupported system ${stdenv.system} for package ${pname}-bin";
+     srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in fetchurl srcs;
 
   disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
