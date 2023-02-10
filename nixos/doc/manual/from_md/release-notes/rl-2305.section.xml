@@ -916,6 +916,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.xserver.desktopManager.plasma5.phononBackend</literal>
+          now defaults to vlc according to
+          <link xlink:href="https://community.kde.org/Distributions/Packaging_Recommendations#Non-Plasma_packages">upstrean
+          recommendation</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zramSwap</literal> is now implemented with
           <literal>zram-generator</literal>, and the option
           <literal>zramSwap.numDevices</literal> for using ZRAM devices
