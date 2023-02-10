@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     qtcharts
     qtsensors
     qtsvg
+    qt3d
   ]) ++ (with python.pkgs; [
     setuptools
   ]) ++ (lib.optionals (python.pythonOlder "3.9") [
