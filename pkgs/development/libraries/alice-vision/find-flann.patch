@@ -1,0 +1,23 @@
+--- /dev/null	2023-04-03 16:53:39.918168848 +0200
++++ b/modules/FindFlann.cmake	2023-04-03 21:33:25.433754406 +0200
+@@ -0,0 +1,20 @@
++find_package(PkgConfig REQUIRED)
++if(PKG_CONFIG_FOUND)
++  pkg_check_modules(PC_FLANN REQUIRED IMPORTED_TARGET flann)
++  pkg_check_modules(PC_LZ4 REQUIRED IMPORTED_TARGET liblz4)
++
++  add_library(flann::flann_cpp ALIAS PkgConfig::PC_FLANN)
++  set(FLANN_LIBRARY flann::flann_cpp)
++
++  set(FLANN_VERSION ${PC_FLANN_VERSION})
++endif()
++
++find_path(FLANN_INCLUDE_DIRS
++          NAMES flann/flann.hpp
++          HINTS ${PC_FLANN_INCLUDE_DIRS})
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Flann
++  REQUIRED_VARS FLANN_INCLUDE_DIRS
++  VERSION_VAR FLANN_VERSION
++  )
