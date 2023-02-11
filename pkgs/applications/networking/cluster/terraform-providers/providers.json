@@ -355,14 +355,13 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-hU0mqMuB3yvLWJ6ggDvATQeSFdpsEfs/hmvLV6A2Md4=",
+    "hash": "sha256-aah3f/5Bd+IgXbyJpDhcyklIYHlK3yy16UkYlOprh0c=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
-    "proxyVendor": true,
     "repo": "terraform-provider-equinix",
-    "rev": "v1.11.1",
+    "rev": "v1.12.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-NLvw606QxUwCDViLbR5LjoWGZnk48/zG0NownEATYKM="
+    "vendorHash": "sha256-Zi2e/Vg9iKTrU8Mb37Y8xHYIBL+IfDnWMUUg5Vqrbfo="
   },
   "exoscale": {
     "hash": "sha256-48msmXj7SFmi5TA0/QYm66oIETymWi5ayF+yExyp+hk=",
@@ -821,11 +820,11 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-wKs5XRyyCda6pljtuo8ukAQl5ZZxeDSyt0CQWe8eXqY=",
+    "hash": "sha256-UMQ1YEXYdaLwYZBhGzbikhExW/HT/u4QSNk08vhmbwA=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v3.41.0",
+    "rev": "v3.42.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-KWSHVI51YHHF3HXpyd1WB5Za721ak+cFhwDIfvC/ax4="
   },
@@ -1091,11 +1090,11 @@
     "vendorHash": "sha256-2wPmLpjhG6QgG+BUCO0oIzHjBOWIOYuptgdtSIm9TZw="
   },
   "tencentcloud": {
-    "hash": "sha256-yVI1f86Gpkwl3jCAs5d54rZS8lM7cjbwWq+HUXwi8EU=",
+    "hash": "sha256-NglAzuZr3OqLHunMbmLm7Cnh24otQXRP1y3ZaDFrXAc=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.79.8",
+    "rev": "v1.79.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1228,11 +1227,11 @@
     "vendorHash": "sha256-guUjkk7oW+Gvu015LUAxGqUwZF4H+4xmmOaMqKixZaI="
   },
   "vultr": {
-    "hash": "sha256-DfiJgN1R7qW3c13hBabsMizY3mYamIq8AGms1q9kdVU=",
+    "hash": "sha256-5pI/jLG8UdMxgubvp5SJDW49C6iHKXOtlnr3EuzwtsQ=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.12.0",
+    "rev": "v2.12.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
