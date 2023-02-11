@@ -19,6 +19,7 @@
 , gtk3
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libwebp
 , libwpe
 , libwpe-fdo
@@ -124,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # for gdbus-codegen
     unifdef
   ] ++ lib.optionals stdenv.isLinux [
-    wayland # for wayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [
