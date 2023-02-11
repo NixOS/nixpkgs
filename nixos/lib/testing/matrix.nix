@@ -323,7 +323,7 @@ in
         nextDecision = (lib.head sortedEnable).name;
       in
       if sortedEnable == [ ]
-      then config
+      then config.callTest config
       else
         lib.recurseIntoAttrs
           (

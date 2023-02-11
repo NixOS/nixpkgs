@@ -63,7 +63,7 @@ let
           // exposeIntermediateAttrs tree
         else callTest tree;
 
-      runTest = arg: let r = doRunTest arg; in findTests r;
+      runTest = arg: let r = doRunTest arg; in r;
       runTestOn = systems: arg:
         if elem system systems then runTest arg
         else {};

@@ -2,10 +2,9 @@
 let
 
   evalTest = module: lib.evalModules { modules = testModules ++ [ module ]; };
-  runTest = module: (evalTest ({ config, ... }: { imports = [ module ]; result = config.test; })).config.result;
+  runTest = module: (evalTest ({ lib, config, ... }: { imports = [ module ]; })).config.result;
 
   testModules = [
-    ./call-test.nix
     ./driver.nix
     ./interactive.nix
     ./legacy.nix
