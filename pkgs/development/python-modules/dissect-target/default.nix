@@ -24,6 +24,7 @@
 , flow-record
 , fusepy
 , ipython
+, pycryptodome
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -36,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.4";
+  version = "3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-QwEznweETwDTuTctOnq0n27JYXC9BO5l6BYpXsMRVq4=";
+    hash = "sha256-jFQ8BxCC4PW135igfXA5EmlWYIZ0zF12suiUMiLbArA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    defusedxml
     dissect-cstruct
     dissect-eventlog
     dissect-evidence
@@ -71,7 +73,6 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     full = [
       asn1crypto
-      defusedxml
       dissect-cim
       dissect-clfs
       dissect-esedb
@@ -84,6 +85,7 @@ buildPythonPackage rec {
       dissect-xfs
       fusepy
       ipython
+      pycryptodome
       pyyaml
       yara-python
       zstandard
@@ -101,6 +103,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires rdump
     "test_exec_target_command"
+    # Issue with tar file
+    "test_tar_sensitive_drive_letter"
   ];
 
   meta = with lib; {
