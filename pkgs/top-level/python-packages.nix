@@ -5110,6 +5110,8 @@ self: super: with self; {
 
   hickle = callPackage ../development/python-modules/hickle { };
 
+  highdicom = callPackage ../development/python-modules/highdicom { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
