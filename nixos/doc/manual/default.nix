@@ -143,35 +143,26 @@ let
     ''
       cp -r --no-preserve=all $inputs/* .
 
-      declare -a convert_args
-      while read -r mf; do
-        if [[ "$mf" = *.chapter.md ]]; then
-          convert_args+=("--chapter")
-        else
-          convert_args+=("--section")
-        fi
+      substituteInPlace ./manual.md \
+        --replace '@NIXOS_VERSION@' "${version}"
+      substituteInPlace ./configuration/configuration.md \
+        --replace \
+            '@MODULE_CHAPTERS@' \
+            ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+      substituteInPlace ./nixos-options.md \
+        --replace \
+          '@NIXOS_OPTIONS_JSON@' \
+          ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
+      substituteInPlace ./development/writing-nixos-tests.section.md \
+        --replace \
+          '@NIXOS_TEST_OPTIONS_JSON@' \
+          ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
 
-        convert_args+=("from_md/''${mf%.md}.xml" "$mf")
-      done < <(find . -type f -name '*.md')
-
-      nixos-render-docs manual docbook-fragment \
+      nixos-render-docs manual docbook \
         --manpage-urls ${manpageUrls} \
-        "''${convert_args[@]}"
-
-      mkdir ./generated
-      ln -s ${optionsDoc.optionsDocBook} ./generated/options-db.xml
-      ln -s ${testOptionsDoc.optionsDocBook} ./generated/test-options-db.xml
-      printf "%s" "${version}" > ./generated/version
-      chmod -R u+w .
-
-      nixos-render-docs manual docbook-section \
-        --manpage-urls ${manpageUrls} \
-        ./generated/modules.xml \
-        --section \
-          --section-id modules \
-          --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
-
-      xmllint --xinclude --output ./manual-combined.xml ./manual.xml
+        --revision ${lib.escapeShellArg revision} \
+        ./manual.md \
+        ./manual-combined.xml
 
       ${linterFunctions}
 

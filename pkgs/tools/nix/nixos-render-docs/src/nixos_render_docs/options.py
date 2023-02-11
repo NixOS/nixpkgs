@@ -231,10 +231,11 @@ class DocBookConverter(BaseConverter):
     def _decl_def_footer(self) -> list[str]:
         return [ "</simplelist>" ]
 
-    def finalize(self) -> str:
+    def finalize(self, *, fragment: bool = False) -> str:
         result = []
 
-        result.append('<?xml version="1.0" encoding="UTF-8"?>')
+        if not fragment:
+            result.append('<?xml version="1.0" encoding="UTF-8"?>')
         if self._document_type == 'appendix':
             result += [
                 '<appendix xmlns="http://docbook.org/ns/docbook"',
