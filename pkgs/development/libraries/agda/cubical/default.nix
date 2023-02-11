@@ -1,25 +1,25 @@
-{ lib, mkDerivation, fetchFromGitHub, ghc, glibcLocales }:
+{ lib, mkDerivation, fetchFromGitHub, ghc }:
 
 mkDerivation rec {
-
-  # Version 0.2 is meant to be used with the Agda 2.6.1 compiler.
   pname = "cubical";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
     rev = "v${version}";
-    sha256 = "07qlp2f189jvzbn3aqvpqk2zxpkmkxhhkjsn62iq436kxqj3z6c2";
+    hash = "sha256-bnHz5uZXZnn1Zd36tq/veA4yT7dhJ1c+AYpgdDfSRzE=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  LC_ALL = "C.UTF-8";
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc glibcLocales ];
+  nativeBuildInputs = [ ghc ];
   buildPhase = ''
+    runHook preBuild
     make
+    runHook postBuild
   '';
 
   meta = with lib; {
@@ -28,6 +28,6 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice ryanorendorff ];
+    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier ];
   };
 }

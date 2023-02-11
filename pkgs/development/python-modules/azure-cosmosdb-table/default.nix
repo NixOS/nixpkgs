@@ -5,7 +5,7 @@
 , azure-common
 , azure-storage-common
 , azure-cosmosdb-nspkg
-, futures
+, futures ? null
 , isPy3k
 }:
 
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Log Analytics Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

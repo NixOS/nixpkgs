@@ -1,10 +1,10 @@
-{ stdenv, git, clang,
+{ lib, git, clang,
   fetchFromGitHub, requireFile,
   openssl, xz, gnutar,
   automake, autoconf, libtool, clangStdenv } :
 
 clangStdenv.mkDerivation rec {
-  name = "ios-cross-compile-${version}";
+  pname = "ios-cross-compile";
   version = "9.2";
   sdk = "iPhoneOS9.2.sdk";
   cctools_port = fetchFromGitHub {
@@ -51,15 +51,16 @@ clangStdenv.mkDerivation rec {
       and run this installation again.
    '';
   };
-  buildInputs = [ git xz gnutar openssl automake autoconf libtool clang ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ git xz gnutar openssl libtool clang ];
   alt_wrapper = ./alt_wrapper.c;
   builder = ./9.2_builder.sh;
   meta = {
     description =
     "Provides an iOS cross compiler from 7.1 up to iOS-${version} and ldid";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ fxfactorial ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ fxfactorial ];
+    license = lib.licenses.gpl2;
   };
 }

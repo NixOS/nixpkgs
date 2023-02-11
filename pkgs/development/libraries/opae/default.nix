@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , libuuid, json_c
-, doxygen, perl, python2, python2Packages
+, doxygen, perl, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=address-of-packed-member"
+    "-Wno-array-bounds"
   ];
 
-  nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
-  buildInputs = [ libuuid json_c python2 ];
+  nativeBuildInputs = [ cmake doxygen perl python3.pkgs.sphinx ];
+  buildInputs = [ libuuid json_c python3 ];
 
   # Set the Epoch to 1980; otherwise the Python wheel/zip code
   # gets very angry
@@ -37,9 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DBUILD_ASE=1" ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Programmable Acceleration Engine SDK";
     homepage    = "https://01.org/opae";
     license     = licenses.bsd3;

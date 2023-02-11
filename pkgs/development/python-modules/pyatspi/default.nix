@@ -1,32 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome3 }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome, python }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.36.0";
+  version = "2.46.0";
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pg1zzjl167iavin6xzzm20mh3m6dvl7d8h1r571s44yj6zw2dji";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1FSJzz1HqhULGjXolJs7MQNfjCB15YjSa278Yllwxi4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     at-spi2-core
     pygobject3
   ];
 
+  configureFlags = [
+    "PYTHON=${python.pythonForBuild.interpreter}"
+  ];
+
+  postPatch = ''
+    # useless python existence check for us
+    substituteInPlace configure \
+      --replace '&& ! which' '&& false'
+  '';
+
   disabled = !isPy3k;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = "https://wiki.linuxfoundation.org/accessibility/d-bus";
     license = licenses.gpl2;

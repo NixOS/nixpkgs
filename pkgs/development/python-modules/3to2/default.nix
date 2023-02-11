@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "fef50b2b881ef743f269946e1090b77567b71bb9a9ce64b7f8e699b562ff685c";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test lib3to2/tests
@@ -23,8 +23,6 @@ buildPythonPackage rec {
 
   # Test failing due to upstream issue (https://bitbucket.org/amentajo/lib3to2/issues/50/testsuite-fails-with-new-python-35)
   doCheck = false;
-
-  dontUsePythonRecompileBytecode = true;
 
   meta = {
     homepage = "https://bitbucket.org/amentajo/lib3to2";

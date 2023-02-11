@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bash, python3, yosys
-, yices, boolector, aiger
+, yices, boolector, z3, aiger
 }:
 
 stdenv.mkDerivation {
   pname = "symbiyosys";
-  version = "2020.05.18";
+  version = "2021.11.30";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "SymbiYosys";
-    rev    = "13fef4a710d0e2cf0f109ca75a94fb7253ba6838";
-    sha256 = "152nyxddiqbxvbd06cmwavvgi931v6i35zj9sh3z04m737grvb3d";
+    owner = "YosysHQ";
+    repo  = "SymbiYosys";
+    rev   = "b409b1179e36d2a3fff66c85b7d4e271769a2d9e";
+    hash  = "sha256-S7of2upntiMkSdh4kf1RsrjriS31Eh8iEcVvG36isQg=";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [ ];
   patchPhase = ''
     patchShebangs .
 
@@ -26,14 +26,18 @@ stdenv.mkDerivation {
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
       --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace ': "btormc"'       ': "${boolector}/bin/btormc"' \
-      --replace ': "yosys"'        ': "${yosys}/bin/yosys"' \
-      --replace ': "yosys-smtbmc"' ': "${yosys}/bin/yosys-smtbmc"' \
-      --replace ': "yosys-abc"'    ': "${yosys}/bin/yosys-abc"' \
-      --replace ': "aigbmc"'       ': "${aiger}/bin/aigbmc"' \
+      --replace ', "btormc"'             ', "${boolector}/bin/btormc"' \
+      --replace ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+
+    substituteInPlace sbysrc/sby_core.py \
+      --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
+
+    substituteInPlace sbysrc/sby.py \
+      --replace '/usr/bin/env python3' '${python3}/bin/python'
   '';
 
   buildPhase = "true";
+
   installPhase = ''
     mkdir -p $out/bin $out/share/yosys/python3
 
@@ -43,11 +47,16 @@ stdenv.mkDerivation {
     chmod +x $out/bin/sby
   '';
 
+  doCheck = false; # not all provers are yet packaged...
+  nativeCheckInputs = [ python3 yosys boolector yices z3 aiger ];
+  checkPhase = "make test";
+
   meta = {
     description = "Tooling for Yosys-based verification flows";
     homepage    = "https://symbiyosys.readthedocs.io/";
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    mainProgram = "sby";
+    platforms   = lib.platforms.all;
   };
 }

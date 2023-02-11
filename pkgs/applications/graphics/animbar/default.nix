@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Create your own animation on paper and transparancy";
     longDescription = ''
-	Animbar lets you easily create your own animation on paper and
-	transparancy. From a set of input images two output images are
-	computed, that are printed one on paper and one on
-	transparency. By moving the transparency over the paper you
-	create a fascinating animation effect. This kind of animation
-	technique is hundreds of years old and known under several
-	names: picket fence animation, barrier grid animation, Moiré
-	animation, to name a few.
+      Animbar lets you easily create your own animation on paper and
+      transparancy. From a set of input images two output images are
+      computed, that are printed one on paper and one on
+      transparency. By moving the transparency over the paper you
+      create a fascinating animation effect. This kind of animation
+      technique is hundreds of years old and known under several
+      names: picket fence animation, barrier grid animation, Moiré
+      animation, to name a few.
     '';
     homepage = "http://animbar.mnim.org";
     maintainers = with maintainers; [ leenaars ];

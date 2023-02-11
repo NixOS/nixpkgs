@@ -2,20 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, packaging
+, pythonOlder
+, typing-extensions
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.7.5";
+  version = "1.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bbd25453dc04704d77d854c80acb5537ecb18b9de8a5572e5f22649a2160aaf";
+    sha256 = "sha256-3I7oVAc0dK15rhaNkML2iThU9Yk2z6GPNYfK2uDTaW0=";
   };
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    packaging
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -25,6 +34,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/originell/jpype/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     description = "A Python to Java bridge";
   };

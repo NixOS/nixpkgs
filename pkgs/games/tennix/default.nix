@@ -1,22 +1,24 @@
-{stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
+{ lib, stdenv, fetchgit, which, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python3 } :
 
 stdenv.mkDerivation rec {
-  name = "tennix-1.1";
-  src = fetchurl {
-    url = "https://icculus.org/tennix/downloads/${name}.tar.gz";
-    sha256 = "0np5kw1y7i0z0dsqx4r2nvmq86qj8hv3mmgavm3hxraqnds5z8cm";
+  pname = "tennix";
+  version = "1.3.1";
+
+  src = fetchgit {
+    url = "git://repo.or.cz/tennix.git";
+    rev = "refs/tags/tennix-${version}";
+    sha256 = "sha256-U5+S1jEeg+7gdM1++dln6ePTqxZu2Zt0oUrH3DIlkgk=";
   };
 
-  buildInputs = [ python SDL SDL_mixer SDL_image SDL_ttf SDL_net ];
+  nativeBuildInputs = [ which ];
 
-  patches = [ ./fix_FTBFS.patch ];
+  buildInputs = [ python3 SDL SDL_mixer SDL_image SDL_ttf SDL_net ];
 
-  preConfigure = ''
-    makeFlags="PREFIX=$out"
-    installFlags="PREFIX=$out install"
+  configurePhase = ''
+    ./configure --prefix $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
     license = licenses.gpl2Plus;

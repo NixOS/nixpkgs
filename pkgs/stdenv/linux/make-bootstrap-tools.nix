@@ -1,9 +1,6 @@
-{ localSystem ? { system = builtins.currentSystem; }
-, crossSystem ? null
-}:
+{ pkgs ? import ../../.. {} }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
@@ -37,7 +34,7 @@ in with pkgs; rec {
   bootBinutils = binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
-    gold = false;
+    enableGold = false;
     # bootstrap is easier w/static
     enableShared = false;
   };
@@ -46,6 +43,12 @@ in with pkgs; rec {
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
+
+      meta = {
+        # Increase priority to unblock nixpkgs-unstable
+        # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+        schedulingPriority = 200;
+      };
 
       nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
@@ -67,6 +70,9 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libnss*.so* $out/lib
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
         cp -d ${libc.out}/lib/crt?.o $out/lib
+
+        # Hacky compat with our current unpack-bootstrap-tools.sh
+        ln -s librt.so "$out"/lib/librt-dummy.so
 
         cp -rL ${libc.dev}/include $out
         chmod -R u+w "$out"
@@ -109,7 +115,7 @@ in with pkgs; rec {
         cp ${gawk.out}/bin/gawk $out/bin
         cp -d ${gawk.out}/bin/awk $out/bin
         cp ${tarMinimal.out}/bin/tar $out/bin
-        cp ${gzip.out}/bin/gzip $out/bin
+        cp ${gzip.out}/bin/.gzip-wrapped $out/bin/gzip
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake.out}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
@@ -146,13 +152,17 @@ in with pkgs; rec {
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
-        cp -d ${libelf}/lib/libelf.so* $out/lib
 
       '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_17.out}/lib/libisl*.so* $out/lib
+        cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
+
+      '' + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
+        # libatomic is required on RiscV platform for C/C++ atomics and pthread
+        # even though they may be translated into native instructions.
+        cp -d ${bootGCC.out}/lib/libatomic.a* $out/lib
 
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
@@ -161,7 +171,7 @@ in with pkgs; rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${bootBinutils.out}/bin/$i $out/bin
         done
-        cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
+        cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
         chmod -R u+w $out
 
@@ -175,9 +185,10 @@ in with pkgs; rec {
 
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
+        nuke-refs $out/lib/*/*
         nuke-refs $out/libexec/gcc/*/*/*
         nuke-refs $out/lib/gcc/*/*/*
-        nuke-refs $out/lib/gcc/*/*/include-fixed/*/*
+        nuke-refs $out/lib/gcc/*/*/include-fixed/*{,/*}
 
         mkdir $out/.pack
         mv $out/* $out/.pack
@@ -199,6 +210,12 @@ in with pkgs; rec {
   dist = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
+    meta = {
+      # Increase priority to unblock nixpkgs-unstable
+      # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+      schedulingPriority = 200;
+    };
+
     buildCommand = ''
       mkdir -p $out/nix-support
       echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
@@ -212,15 +229,24 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
+  bootstrapTools =
+    let extraAttrs = lib.optionalAttrs
+      config.contentAddressedByDefault
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+    in
+    if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else throw "unsupported libc";
 
@@ -246,16 +272,17 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/${builtins.unsafeDiscardStringContext /* only basename */ (builtins.baseNameOf binutils.dynamicLinker)})
+      libc_includes=${bootstrapTools}/include-glibc
     '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
+      libc_includes=${bootstrapTools}/include-libc
     '' + ''
+      # path to version-specific libraries, like libstdc++.so
+      cxx_libs=$(echo ${bootstrapTools}/lib/gcc/*/*)
+      export CPP="cpp -idirafter $libc_includes -B${bootstrapTools}"
+      export  CC="gcc -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
+      export CXX="g++ -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <limits.h>' >> foo.c

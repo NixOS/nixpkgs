@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkgconfig, shntool, flac
-, opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain, gtk3, qtbase
+{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
+, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain, gtk3, qtbase
 , qttools, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "flacon";
-  version = "6.0.0";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "0p5z6rwckda0lkljrrvx6i90fazj53cxg9pasfmi8154j1z72dj2";
+    sha256 = "sha256-59p5x+d7Vmxx+bdBDxrlf4+NRIdUBuRk+DqohV98XYY=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
-  buildInputs = [ qtbase qttools libuchardet ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  buildInputs = [ qtbase qttools libuchardet taglib ];
 
   bin_path = lib.makeBinPath [
     shntool
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$bin_path";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Extracts audio tracks from an audio CD image to separate tracks";
     homepage = "https://flacon.github.io/";

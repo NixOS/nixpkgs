@@ -5,24 +5,25 @@
 , pytest
 , pylint
 , six
-, pytestrunner
+, pytest-runner
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pytest-pylint";
-  version = "0.17.0";
+  version = "0.19.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0c177d63f6e3f5b82fa2720a6570dd2ecff1616c26ed6d02d0cbf75fd98ddf9";
+    sha256 = "sha256-2I6DwQI8ZBVIqew1Z3B87udhZjKphq8TNCbUp00GaTI=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    pytest
     pylint
     six
     toml

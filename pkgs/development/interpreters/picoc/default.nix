@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, readline }:
+{ lib, stdenv, fetchFromGitHub, readline }:
 
 stdenv.mkDerivation rec {
   pname = "picoc";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ readline ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   postPatch = ''
     substituteInPlace Makefile --replace '`svnversion -n`' "${version}"
@@ -31,7 +33,8 @@ stdenv.mkDerivation rec {
     install -m644 *.h $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Very small C interpreter for scripting";
     longDescription = ''
       PicoC is a very small C interpreter for scripting. It was originally
@@ -46,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zsaleeba/picoc";
     downloadPage = "https://code.google.com/p/picoc/downloads/list";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

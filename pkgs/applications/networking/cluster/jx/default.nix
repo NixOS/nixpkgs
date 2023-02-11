@@ -1,28 +1,41 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "jx";
-  version = "2.1.65";
+  version = "2.1.155";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "0zkp0z5qpqw44bjnl20xna7s251k7jsxccqnqkdqqrzmqjpkkwgx";
+    sha256 = "sha256-kwcmZSOA26XuSgNSHitGaMohalnLobabXf4z3ybSJtk=";
   };
 
-  vendorSha256 = "0zi2n8fywzy87yfwcx7di74s8mx0468zmg6kwjln7mwhr6q23adf";
+  vendorSha256 = "sha256-ZtcCBXcJXX9ThzY6T0MhNfDDzRC9PYzRB1VyS4LLXLs=";
+
+  doCheck = false;
 
   subPackages = [ "cmd/jx" ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [
+    "-s -w"
+    "-X github.com/jenkins-x/jx/pkg/version.Version=${version}"
+    "-X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}"
+    "-X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean"
+  ];
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/jx completion $shell > jx.$shell
+      installShellCompletion jx.$shell
+    done
   '';
 
   meta = with lib; {
-    description = "JX is a command line tool for installing and using Jenkins X.";
+    broken = stdenv.isDarwin;
+    description = "Command line tool for installing and using Jenkins X";
     homepage = "https://jenkins-x.io";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview

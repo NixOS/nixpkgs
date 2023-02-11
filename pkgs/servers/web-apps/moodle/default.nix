@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, writeText }:
+{ lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
 
 let
-  version = "3.8.3";
-  stableVersion = builtins.substring 0 2 (builtins.replaceStrings ["."] [""] version);
-in
+  version = "4.1.1";
 
-stdenv.mkDerivation rec {
+  versionParts = lib.take 2 (lib.splitVersion version);
+  # 4.2 -> 402, 3.11 -> 311
+  stableVersion = lib.removePrefix "0" (lib.concatMapStrings
+    (p: if (lib.toInt p) < 10 then (lib.concatStrings ["0" p]) else p)
+    versionParts);
+
+in stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
 
   src = fetchurl {
     url = "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "1anjv4gvbb6833j04a1b4aaysnl4h0x96sr1hhm4nm5kq2fimjd1";
+    sha256 = "sha256-w6N/jFYieL+yJXlDr1/9AATChSqiatx+aJl0XSOSL0s=";
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('MOODLE_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('MOODLE_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -27,14 +31,41 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/moodle
     cp ${phpConfig} $out/share/moodle/config.php
 
+    ${lib.concatStringsSep "\n" (map (p:
+      let
+        dir = if p.pluginType == "mod" then
+          "mod"
+        else if p.pluginType == "theme" then
+          "theme"
+        else if p.pluginType == "block" then
+          "blocks"
+        else if p.pluginType == "question" then
+          "question/type"
+        else if p.pluginType == "course" then
+          "course/format"
+        else if p.pluginType == "report" then
+          "admin/report"
+        else
+          throw "unknown moodle plugin type";
+        # we have to copy it, because the plugins have refrences to .. inside
+      in ''
+        mkdir -p $out/share/moodle/${dir}/${p.name}
+        cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
+      '') plugins)}
+
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    description = "Free and open-source learning management system (LMS) written in PHP";
+  passthru.tests = {
+    inherit (nixosTests) moodle;
+  };
+
+  meta = with lib; {
+    description =
+      "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }

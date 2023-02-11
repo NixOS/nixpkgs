@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, lib
 , python
 , isPy27
 , enum34
@@ -11,21 +10,21 @@
 
 buildPythonPackage rec {
   pname = "serpent";
-  version = "1.30.2";
+  version = "1.41";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72753820246a7d8486e8b385353e3bbf769abfceec2e850fa527a288b084ff7a";
+    sha256 = "sha256-BAcDX+PGZEOH1Iz/FGfVqp/v+BTQc3K3hnftDuPtcJU=";
   };
 
   propagatedBuildInputs = lib.optionals isPy27 [ enum34 ];
 
-  checkInputs = [ attrs pytz ];
+  nativeCheckInputs = [ attrs pytz ];
   checkPhase = ''
     ${python.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple serialization library based on ast.literal_eval";
     homepage = "https://github.com/irmen/Serpent";
     license = licenses.mit;

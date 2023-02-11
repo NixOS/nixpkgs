@@ -1,0 +1,55 @@
+diff --git a/cursive/Cargo.toml b/cursive/Cargo.toml
+index 8cc0c1e..815c170 100644
+--- a/cursive/Cargo.toml
++++ b/cursive/Cargo.toml
+@@ -20,8 +20,9 @@ gettext = "0.4.0"
+ lazy_static = "1.4.0"
+ toml = "0.5.9"
+ term_size = "0.3.2"
+-wl-clipboard-rs = "0.7.0"
+ hex = "0.4.3"
++[target.'cfg(target_os = "linux")'.dependencies]
++wl-clipboard-rs = "0.7.0"
+ 
+ [dependencies.config]
+ version = "0.11.0"
+diff --git a/cursive/src/helpers.rs b/cursive/src/helpers.rs
+index 7c2f733..9d63760 100644
+--- a/cursive/src/helpers.rs
++++ b/cursive/src/helpers.rs
+@@ -23,6 +23,7 @@ use cursive::{
+ };
+ use pass::Result;
+ use ripasso::{crypto::CryptoImpl, pass};
++#[cfg(target_os = "linux")]
+ use wl_clipboard_rs::copy::{MimeType, Options, Source};
+ 
+ /// Displays an error in a cursive dialog
+@@ -48,7 +49,8 @@ pub fn errorbox(ui: &mut Cursive, err: &pass::Error) {
+ 
+ /// Copies content to the clipboard.
+ /// It first tries to copy to a wayland clipboard, and if that's not availible due to that the
+-/// user runs x11/mac/windows we instead try the more generic clipboard crate.
++/// user runs x11 we instead try the more generic clipboard crate.
++#[cfg(target_os = "linux")]
+ pub fn set_clipboard(content: String) -> Result<()> {
+     let opts = Options::new();
+     let result = opts.copy(
+@@ -62,6 +64,17 @@ pub fn set_clipboard(content: String) -> Result<()> {
+     Ok(())
+ }
+ 
++/// Copies content to the clipboard.
++/// It first tries to copy to a wayland clipboard, and if that's not availible due to that the
++/// user runs mac/windows we instead try the more generic clipboard crate.
++#[cfg(not(target_os = "linux"))]
++pub fn set_clipboard(content: String) -> Result<()> {
++    let mut ctx = clipboard::ClipboardContext::new()?;
++    ctx.set_contents(content)?;
++
++    Ok(())
++}
++
+ pub fn get_value_from_input(s: &mut Cursive, input_name: &str) -> Option<std::rc::Rc<String>> {
+     let mut password = None;
+     s.call_on_name(input_name, |e: &mut EditView| {

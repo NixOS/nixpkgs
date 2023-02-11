@@ -1,21 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "fira";
   version = "4.202";
-in fetchFromGitHub {
-  name = "fira-${version}";
 
-  owner = "mozilla";
-  repo = "Fira";
-  rev = version;
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "Fira";
+    rev = version;
+    hash = "sha256-HLReqgL0PXF5vOpwLN0GiRwnzkjGkEVEyOEV2Z4R0oQ=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
     cp otf/*.otf $out/share/fonts/opentype
-  '';
 
-  sha256 = "1iwxbp7kw5kghh5nbycb05zby7p2ib61mywva3h6giv2wd4lpxnz";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://mozilla.github.io/Fira/";

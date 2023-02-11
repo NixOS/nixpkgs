@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "ipyvue";
-  version = "1.3.2";
+  version = "1.8.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24ed221dcc3878e70daebdbdffdf7fd2b2111164008ba4b5de6785b72eabf91f";
+    sha256 = "sha256-0qjvArC8xEr9MSecuAKMBr49fA60FYRyicAADy93N7c=";
   };
 
   propagatedBuildInputs = [ ipywidgets ];

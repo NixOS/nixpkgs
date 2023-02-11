@@ -6,7 +6,7 @@
 #   3. nginx doesn't restart on configuration changes (only reloads)
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nginx";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ mbbx6spp danbst ];
   };
 
@@ -56,11 +56,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       specialisation.reloadRestartSystem.configuration = {
-        services.nginx.package = pkgs.nginxUnstable;
+        services.nginx.package = pkgs.nginxMainline;
       };
 
       specialisation.reloadWithErrorsSystem.configuration = {
-        services.nginx.package = pkgs.nginxUnstable;
+        services.nginx.package = pkgs.nginxMainline;
         services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
       };
     };

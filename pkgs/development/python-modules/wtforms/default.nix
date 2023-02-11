@@ -1,24 +1,33 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , markupsafe
+, babel
+, pytestCheckHook
+, email-validator
 }:
 
 buildPythonPackage rec {
-  version = "2.3.1";
-  pname = "WTForms";
+  version = "3.0.1";
+  pname = "wtforms";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0whrd9cqhlibm31yqhvhp9illddxf0cpgcn3v806f7ajmsri66l6";
+    pname = "WTForms";
+    inherit version;
+    sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
   };
 
-  propagatedBuildInputs = [ markupsafe ];
+  propagatedBuildInputs = [ markupsafe babel ];
 
-  # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
-  doCheck = false;
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    email-validator
+  ];
+
+  pythonImportsCheck = [ "wtforms" ];
+
+  meta = with lib; {
     description = "A flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";

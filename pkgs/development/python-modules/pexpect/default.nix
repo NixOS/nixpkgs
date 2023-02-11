@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , ptyprocess
-, isPy3k
 }:
 
 buildPythonPackage (rec {
@@ -41,8 +40,4 @@ buildPythonPackage (rec {
       any platform that supports the standard Python pty module.
     '';
   };
-# TODO: move into main set, this was to avoid a rebuild
-} // lib.optionalAttrs (!isPy3k ) {
-  # syntax error in _async module, likely intended only for Python 3.
-  dontUsePythonRecompileBytecode = !isPy3k;
 })

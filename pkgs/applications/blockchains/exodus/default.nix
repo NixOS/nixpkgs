@@ -1,30 +1,24 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
+{ stdenv, lib, fetchzip, glib, systemd, nss, nspr, gtk3-x11, pango,
+atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
+cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "20.1.30";
+  version = "22.8.12";
 
-  src = fetchurl {
-    url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "0jns5zqjm0gqn18ypghbgk6gb713mh7p44ax1r8y4vcwijlp5nql";
+  src = fetchzip {
+    url = "https://downloads.exodus.com/releases/${pname}-linux-x64-${version}.zip";
+    sha256 = "sha256-jNzHh4zYhFzpFZAC9rHmwjTdFkbpROSEN3qpL7geiOU=";
   };
-
-  sourceRoot = ".";
-  unpackCmd = ''
-      ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
-  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
-    cd Exodus-linux-x64
     cp -r . $out
     ln -s $out/Exodus $out/bin/Exodus
     ln -s $out/bin/Exodus $out/bin/exodus
     ln -s $out/exodus.desktop $out/share/applications
     substituteInPlace $out/share/applications/exodus.desktop \
-          --replace 'Exec=bash -c "cd `dirname %k` && ./Exodus"' "Exec=Exodus"
+          --replace 'Exec=bash -c "cd \`dirname %k\` && ./Exodus %u"' "Exec=Exodus %u"
   '';
 
   dontPatchELF = true;
@@ -36,7 +30,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       gtk3-x11
-      gnome2.pango
+      pango
       atk
       cairo
       gdk-pixbuf
@@ -49,12 +43,13 @@ stdenv.mkDerivation rec {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrender
+      xorg.libxshmfence
       xorg.libXtst
       xorg_sys_opengl
-      utillinux
+      util-linux
       xorg.libXrandr
       xorg.libXScrnSaver
-      alsaLib
+      alsa-lib
       dbus.lib
       at-spi2-atk
       at-spi2-core
@@ -62,6 +57,8 @@ stdenv.mkDerivation rec {
       libpulseaudio
       systemd
       vivaldi-ffmpeg-codecs
+      libxkbcommon
+      mesa
     ];
   in ''
     patchelf \
@@ -70,11 +67,12 @@ stdenv.mkDerivation rec {
       $out/Exodus
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
 }

@@ -88,10 +88,21 @@ rec {
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
 
-    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
+    microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
+
+    mips          = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel        = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mipsisa32r6   = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsisa32r6el = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64        = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el      = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mipsisa64r6   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mipsisa64r6el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+
+    mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
+
+    m68k     = { bits = 32; significantByte = bigEndian; family = "m68k"; };
 
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
@@ -101,6 +112,9 @@ rec {
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
 
+    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
+    s390x    = { bits = 64; significantByte = bigEndian; family = "s390"; };
+
     sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
     sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };
 
@@ -109,23 +123,42 @@ rec {
 
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 
+    rx       = { bits = 32; significantByte = littleEndian; family = "rx"; };
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
+    or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
-  # Determine where two CPUs are compatible with each other. That is,
-  # can we run code built for system b on system a? For that to
-  # happen, then the set of all possible possible programs that system
-  # b accepts must be a subset of the set of all programs that system
-  # a accepts. This compatibility relation forms a category where each
-  # CPU is an object and each arrow from a to b represents
-  # compatibility. CPUs with multiple modes of Endianness are
-  # isomorphic while all CPUs are endomorphic because any program
-  # built for a CPU can run on that CPU.
+  # GNU build systems assume that older NetBSD architectures are using a.out.
+  gnuNetBSDDefaultExecFormat = cpu:
+    if (cpu.family == "arm" && cpu.bits == 32) ||
+       (cpu.family == "sparc" && cpu.bits == 32) ||
+       (cpu.family == "m68k" && cpu.bits == 32) ||
+       (cpu.family == "x86" && cpu.bits == 32)
+    then execFormats.aout
+    else execFormats.elf;
+
+  # Determine when two CPUs are compatible with each other. That is,
+  # can code built for system B run on system A? For that to happen,
+  # the programs that system B accepts must be a subset of the
+  # programs that system A accepts.
+  #
+  # We have the following properties of the compatibility relation,
+  # which must be preserved when adding compatibility information for
+  # additional CPUs.
+  # - (reflexivity)
+  #   Every CPU is compatible with itself.
+  # - (transitivity)
+  #   If A is compatible with B and B is compatible with C then A is compatible with C.
+  #
+  # Note: Since 22.11 the archs of a mode switching CPU are no longer considered
+  # pairwise compatible. Mode switching implies that binaries built for A
+  # and B respectively can't be executed at the same time.
   isCompatible = a: b: with cpuTypes; lib.any lib.id [
     # x86
     (b == i386 && isCompatible a i486)
@@ -167,22 +200,13 @@ rec {
     (b == aarch64 && a == armv8a)
     (b == armv8a && isCompatible a aarch64)
 
-    (b == aarch64 && a == aarch64_be)
-    (b == aarch64_be && isCompatible a aarch64)
-
     # PowerPC
     (b == powerpc && isCompatible a powerpc64)
-    (b == powerpcle && isCompatible a powerpc)
-    (b == powerpc && a == powerpcle)
-    (b == powerpc64le && isCompatible a powerpc64)
-    (b == powerpc64 && a == powerpc64le)
+    (b == powerpcle && isCompatible a powerpc64le)
 
     # MIPS
     (b == mips && isCompatible a mips64)
-    (b == mips && a == mipsel)
-    (b == mipsel && isCompatible a mips)
-    (b == mips64 && a == mips64el)
-    (b == mips64el && isCompatible a mips64)
+    (b == mipsel && isCompatible a mips64el)
 
     # RISCV
     (b == riscv32 && isCompatible a riscv64)
@@ -267,19 +291,25 @@ rec {
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
-    # the nnormalized name for macOS.
-    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
-    ios     = { execFormat = macho;   families = { inherit darwin; }; };
-    freebsd = { execFormat = elf;     families = { inherit bsd; }; };
-    linux   = { execFormat = elf;     families = { }; };
-    netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
-    none    = { execFormat = unknown; families = { }; };
-    openbsd = { execFormat = elf;     families = { inherit bsd; }; };
-    solaris = { execFormat = elf;     families = { }; };
-    wasi    = { execFormat = wasm;    families = { }; };
-    windows = { execFormat = pe;      families = { }; };
-    ghcjs   = { execFormat = unknown; families = { }; };
-    genode  = { execFormat = elf;     families = { }; };
+    # the normalized name for macOS.
+    macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios      = { execFormat = macho;   families = { inherit darwin; }; };
+    # A tricky thing about FreeBSD is that there is no stable ABI across
+    # versions. That means that putting in the version as part of the
+    # config string is paramount.
+    freebsd12 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 12; };
+    freebsd13 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 13; };
+    linux    = { execFormat = elf;     families = { }; };
+    netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
+    none     = { execFormat = unknown; families = { }; };
+    openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    solaris  = { execFormat = elf;     families = { }; };
+    wasi     = { execFormat = wasm;    families = { }; };
+    redox    = { execFormat = elf;     families = { }; };
+    windows  = { execFormat = pe;      families = { }; };
+    ghcjs    = { execFormat = unknown; families = { }; };
+    genode   = { execFormat = elf;     families = { }; };
+    mmixware = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -331,16 +361,31 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
+        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+          message = ''
+            The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
+          '';
+        }
       ];
     };
     gnuabi64     = { abi = "64"; };
+    muslabi64    = { abi = "64"; };
+
+    # NOTE: abi=n32 requires a 64-bit MIPS chip!  That is not a typo.
+    # It is basically the 64-bit abi with 32-bit pointers.  Details:
+    # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
+    gnuabin32    = { abi = "n32"; };
+    muslabin32   = { abi = "n32"; };
+
+    gnuabielfv2  = { abi = "elfv2"; };
+    gnuabielfv1  = { abi = "elfv1"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
     musl         = {};
 
-    uclibceabihf = { float = "soft"; };
-    uclibceabi   = { float = "hard"; };
+    uclibceabi   = { float = "soft"; };
+    uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
     unknown = {};
@@ -381,23 +426,29 @@ rec {
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "3" = # Awkwards hacks, beware!
-      if elemAt l 1 == "apple"
-        then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
-      else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
-        then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
-      else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
-      else if (elemAt l 2 == "wasi")
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
-      else if hasPrefix "netbsd" (elemAt l 2)
-        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
-      else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
-        then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 1; abi = elemAt l 2; }
-      else if (elemAt l 2 == "ghcjs")
-        then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 2; }
-      else if hasPrefix "genode" (elemAt l 2)
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; }
+    "3" =
+      # cpu-kernel-environment
+      if elemAt l 1 == "linux" ||
+         elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
+      then {
+        cpu    = elemAt l 0;
+        kernel = elemAt l 1;
+        abi    = elemAt l 2;
+        vendor = "unknown";
+      }
+      # cpu-vendor-os
+      else if elemAt l 1 == "apple" ||
+              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              hasPrefix "freebsd" (elemAt l 2) ||
+              hasPrefix "netbsd" (elemAt l 2) ||
+              hasPrefix "genode" (elemAt l 2)
+      then {
+        cpu    = elemAt l 0;
+        vendor = elemAt l 1;
+        kernel = if elemAt l 2 == "mingw32"
+                 then "windows"  # autotools breaks on -gnu for window
+                 else elemAt l 2;
+      }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
@@ -434,6 +485,8 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
+          # Default ppc64 BE to ELFv2
+          else if isPower64 parsed && isBigEndian parsed then abis.gnuabielfv2
           else abis.gnu
         else                     abis.unknown;
     };
@@ -442,14 +495,21 @@ rec {
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
+  kernelName = kernel:
+    kernel.name + toString (kernel.version or "");
+
   doubleFromSystem = { cpu, kernel, abi, ... }:
     /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
     else if kernel.families ? darwin then "${cpu.name}-darwin"
-    else "${cpu.name}-${kernel.name}";
+    else "${cpu.name}-${kernelName kernel}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
+    optExecFormat =
+      lib.optionalString (kernel.name == "netbsd" &&
+                          gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
+        kernel.execFormat.name;
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
-  in "${cpu.name}-${vendor.name}-${kernel.name}${optAbi}";
+  in "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 

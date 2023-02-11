@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xbdi679ryb2zg412xy6zkh22l20pmbl92m3qhfgzjvgybna8z2a";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $prefix/lib
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Shared files for Pharo";
-    homepage = "http://pharo.org";
-    license = stdenv.lib.licenses.mit;
+    homepage = "https://pharo.org";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

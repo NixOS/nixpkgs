@@ -1,34 +1,35 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.2.7";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ww5q7pk269l2s7d2svkkyd7hb7g4hqmwjn09b287pmjcirnmqn9";
+    sha256 = "sha256-pljMWAfmDQUxQEyFGVhXqLjRq6P7D+YUB/e1h66WnDE=";
   };
 
-  cargoSha256 = "0jdbxshvm9hdxdjr3sy1kgszhfs9v4r6gp0nwvv2n92m3z8zri9y";
+  cargoSha256 = "sha256-kFDyjiupjN1cuhzE16v6JP/yyXdtwL3srZVtSimnahA=";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bundle any web page into a single HTML file";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

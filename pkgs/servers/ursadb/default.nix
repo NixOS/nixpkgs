@@ -1,35 +1,37 @@
-{ stdenv, fetchurl, cmake, zeromq, cppzmq }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation {
-  name = "ursadb";
-  version = "1.2.0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ursadb";
+  version = "1.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/CERT-Polska/ursadb/archive/v1.2.0.tar.gz";
-    sha256 = "10dax3mswq0x4cfrpi31b7ii7bxl536wz1j11b7f5c0zw9pjxzym";
+  src = fetchFromGitHub {
+    owner = "CERT-Polska";
+    repo = "ursadb";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5kVci9o1jUDpbTgMuach8AjXCKhTglcgsywHt3yoo2Y=";
+    fetchSubmodules = true;
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ursadb $out/bin/
-    cp ursadb_new $out/bin/
-    cp ursadb_trim $out/bin/
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_executable(ursadb_test src/Tests.cpp)" "" \
+      --replace "target_link_libraries(ursadb_test ursa)" "" \
+      --replace "target_enable_ipo(ursadb_test)" "" \
+      --replace "target_clangformat_setup(ursadb_test)" "" \
+      --replace 'target_include_directories(ursadb_test PUBLIC ${"$"}{CMAKE_SOURCE_DIR})' "" \
+      --replace "ursadb_test" ""
   '';
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs = [
-    zeromq
-    cppzmq
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/CERT-Polska/ursadb";
     description = "Trigram database written in C++, suited for malware indexing";
     license = licenses.bsd3;
     maintainers = with maintainers; [ msm ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})

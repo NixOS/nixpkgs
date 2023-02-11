@@ -1,49 +1,51 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, openssl
+, withALSA ? true
+, alsa-lib
+, withPortAudio ? false
+, portaudio
+, withPulseAudio ? false
+, libpulseaudio
 , withRodio ? true
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.1.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "1sdbjv8w2mfpv82rx5iy4s532l1767vmlrg9d8khnvh8vrm2lshy";
+    sha256 = "sha256-DtF6asSlLdC2m/0JTBo4YUx9HgsojpfiqVdqaIwniKA=";
   };
 
-  cargoSha256 = "0zi50imjvalwl6pxl35qrmbg74j5xdfaws8v69am4g9agbfjvlms";
+  cargoSha256 = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
 
-  cargoBuildFlags = with stdenv.lib; [
-    "--no-default-features"
-    "--features"
-    (concatStringsSep "," (filter (x: x != "") [
-      (optionalString withRodio "rodio-backend")
-      (optionalString withALSA "alsa-backend")
-      (optionalString withPulseAudio "pulseaudio-backend")
-      (optionalString withPortAudio "portaudio-backend")
-
-    ]))
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
-
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional withALSA alsaLib
-    ++ stdenv.lib.optional withPulseAudio libpulseaudio
-    ++ stdenv.lib.optional withPortAudio portaudio;
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional withPulseAudio libpulseaudio;
 
-  doCheck = false;
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withRodio "rodio-backend"
+    ++ lib.optional withALSA "alsa-backend"
+    ++ lib.optional withPortAudio "portaudio-backend"
+    ++ lib.optional withPulseAudio "pulseaudio-backend";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";
     homepage = "https://github.com/librespot-org/librespot";
+    changelog = "https://github.com/librespot-org/librespot/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.unix;
   };
 }

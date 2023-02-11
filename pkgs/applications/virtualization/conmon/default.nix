@@ -1,32 +1,44 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , glib
 , glibc
+, libseccomp
 , systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.18";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f32g048jamfhrds68vzirx8iqizr45wf2d4bfvdsk176amrj4k0";
+    hash = "sha256-vmZSt0k6h4Zpbf+/Nq19QIkG3Fzjj3K031XnivFDA2s=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib systemd ]
-  ++ stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  buildInputs = [ glib libseccomp systemd ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  # manpage requires building the vendored go-md2man
+  makeFlags = [ "bin/conmon" ];
 
-  passthru.tests.podman = nixosTests.podman;
+  installPhase = ''
+    runHook preInstall
+    install -D bin/conmon -t $out/bin
+    runHook postInstall
+  '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+  strictDeps = true;
+
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
+
+  meta = with lib; {
     homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;

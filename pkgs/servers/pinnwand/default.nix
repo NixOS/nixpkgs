@@ -1,44 +1,50 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
+}:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "6.0.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1p5n7sw4580pkybywg93p8ddqdj9lhhy72rzswfa801vlidx9qhg";
-        };
-      });
-    };
-  };
-in with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.1.2";
+  version = "1.4.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0iincxkfyyx85ggx9ilms2f8aq4lcbg3rkqgrr4wlsflzhljqd0p";
+  src = fetchFromGitHub {
+    owner = "supakeen";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zJH2ojLQChElRvU2TWg4lW+Mey+wP0XbLJhVF16nvss=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     click
     docutils
-    tornado
+    pygments
     pygments-better-html
-    toml
     sqlalchemy
+    token-bucket
+    tomli
+    tornado
   ];
 
-  # tests are only available when fetching from GitHub, where they in turn don't have a setup.py :(
-  checkPhase = ''
-    $out/bin/pinnwand --help > /dev/null
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = nixosTests.pinnwand;
 
   meta = with lib; {
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+    description = "A Python pastebin that tries to keep it simple";
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
-    description = "A Python pastebin that tries to keep it simple.";
     maintainers = with maintainers; [ hexa ];
   };
 }

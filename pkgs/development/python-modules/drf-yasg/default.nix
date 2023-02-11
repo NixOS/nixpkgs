@@ -1,40 +1,58 @@
-{
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  inflection,
-  ruamel_yaml,
-  setuptools_scm,
-  six,
-  coreapi,
-  djangorestframework,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, inflection
+, ruamel-yaml
+, setuptools-scm
+, six
+, coreapi
+, djangorestframework
+, pytestCheckHook
+, pytest-django
+, datadiff
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.17.1";
+  version = "1.21.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5572e9d5baab9f6b49318169df9789f7399d0e3c7bdac8fdb8dfccf1d5d2b1ca";
+    sha256 = "sha256-iHyfeeZPRqpIl0I05hApsb6msS6mKKj8ijaXWJrdHT4=";
   };
 
+  postPatch = ''
+    # https://github.com/axnsan12/drf-yasg/pull/710
+    sed -i "/packaging/d" requirements/base.txt
+  '';
+
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     six
     inflection
-    ruamel_yaml
+    ruamel-yaml
     coreapi
     djangorestframework
   ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+    datadiff
+  ];
+
+  # ImportError: No module named 'testproj.settings'
+  doCheck = false;
+
+  pythonImportsCheck = [ "drf_yasg" ];
+
+  meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

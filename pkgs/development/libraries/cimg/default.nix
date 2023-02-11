@@ -1,28 +1,35 @@
-{ stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    sha256 = "0vl7dscbms4834gm1000sp17pr714pbqwicn40pbl85mxr3pnjp3";
+    hash = "sha256-laLi3ks5r0C61LDoCEgVqmqZ7/C18qQKxPm4zmQrw78=";
   };
-
-  installPhase = ''
-    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
-
-    install -m 644 CImg.h $out/include/
-    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
-    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
-    cp README.txt $doc/share/doc/cimg/
-  '';
 
   outputs = [ "out" "doc" ];
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    runHook preInstall
+
+    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
+    install -m 644 CImg.h $out/include/
+    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
+    cp README.txt $doc/share/doc/cimg/
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    homepage = "http://cimg.eu/";
     description = "A small, open source, C++ toolkit for image processing";
     longDescription = ''
       CImg stands for Cool Image. It is easy to use, efficient and is intended
@@ -30,7 +37,6 @@ stdenv.mkDerivation rec {
       C++. Due to its generic conception, it can cover a wide range of image
       processing applications.
     '';
-    homepage = "http://cimg.eu/";
     license = licenses.cecill-c;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

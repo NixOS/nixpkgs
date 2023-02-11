@@ -1,57 +1,68 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , patchelf
 , cmake
-, pkgconfig
-
+, pkg-config
 , intel-gmmlib
 , intel-graphics-compiler
+, level-zero
 , libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "20.02.15268";
+  version = "22.43.24595.41";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "138gi92w85bn6haw5x38k39pgiyvvzfhiwpvz6hqlx2j03n8cs2k";
+    sha256 = "sha256-AdAQX8wurZjXHf3z8IPxnW57CDOwwYlgJ09dNNDhUYQ=";
   };
 
-  # Build script tries to write the ICD to /etc
-  patches = [ ./etc-dir.patch ];
+  patches = [
+    # fix compile with level-zero 1.9.4
+    (fetchpatch {
+      url = "https://github.com/intel/compute-runtime/commit/dce17d319f91b39806b2cd39b6eecd5c5cff2a68.patch";
+      excludes = [ "manifests/manifest.yml" ];
+      sha256 = "sha256-YGzS4LeNO8FO1GXowD2gARj0TL6tBFaeZJNLZOwSsWQ=";
+    })
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
+  buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
-
     "-DIGC_DIR=${intel-graphics-compiler}"
-    "-DETC_DIR=${placeholder "out"}/etc"
-
+    "-DOCL_ICD_VENDORDIR=${placeholder "out"}/etc/OpenCL/vendors"
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  outputs = [ "out" "drivers" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
+
+    mkdir -p $drivers/lib
+    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva ]} \
+    patchelf --set-rpath ${lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib ]} \
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = "https://github.com/intel/compute-runtime";
-    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond.";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ gloaming ];
+  meta = with lib; {
+    homepage = "https://github.com/intel/compute-runtime";
+    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

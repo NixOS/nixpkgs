@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, autoSignDarwinBinariesHook, cctools }:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -8,24 +8,25 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "3ed344dd784ecbbc5855e613786f3a1238823e56";
-    sha256 = "00s2arfvw78d9k9fmangqlkvkmkpqzrin3g91vfab4wr8srb09dx";
+    rev = "728c689574fba7e53305b475cd57f196c1a21226";
+    hash = "sha256-BAgDQosiO3e4yy2DpQ6SjrJNrHTUDSduHFRvzWvd4v0=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "323a81fc5e30e43a04e5e22af4cba98ca2a161e6";
-    sha256 = "1kwyh95l02w3v1ra55c836wayzw8d0m14ab7wf0ynhhyp3k2p9hv";
+    rev = "d9446130d5165f7fafcb3599252a22e264c7d4bd";
+    hash = "sha256-fuYhzfkWXDm1icLHifc32XZCNQ6Dj5f5WJslT2JoMbc=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "204cd131c42b90d129073719f2766293ce35c081";
-    sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
+    rev = "c214f6f2d1a7253bb0e9f195c2dc5b0659dc99ef";
+    hash = "sha256-/9EDOiqN6ZzDhRKP/Kv8D/BT2Cs7G8wyzEsGATLpmrA=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "shaderc";
-  version = "2019.1";
+  version = "2022.4";
 
   outputs = [ "out" "lib" "bin" "dev" "static" ];
 
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
     owner = "google";
     repo = "shaderc";
     rev = "v${version}";
-    sha256 = "0x514rpignnb4vvl7wmijfakqc59986knjw3dh1zx0ah42xa7x37";
+    hash = "sha256-/p2gJ7Lnh8IfvwBwHPDtmfLJ8j+Rbv+Oxu9lxY6fxfk=";
   };
 
   patchPhase = ''
@@ -42,7 +43,9 @@ in stdenv.mkDerivation rec {
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
   '';
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake python3 ]
+    ++ lib.optionals stdenv.isDarwin [ cctools ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -50,9 +53,17 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
-  meta = with stdenv.lib; {
+  # Fix the paths in .pc, even though it's unclear if all these .pc are really useful.
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$dev/$dev/" "$dev/"
+  '';
+
+  meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation.";
+    description = "A collection of tools, libraries and tests for shader compilation";
+    platforms = platforms.all;
     license = [ licenses.asl20 ];
   };
 }

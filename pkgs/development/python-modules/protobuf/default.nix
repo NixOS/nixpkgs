@@ -1,68 +1,68 @@
-{ stdenv, fetchpatch, python, buildPythonPackage, isPy37
-, protobuf, google_apputils, pyext, libcxx, isPy27
-, disabled, doCheck ? true }:
+{ buildPackages
+, lib
+, buildPythonPackage
+, protobuf
+, isPyPy
+, fetchpatch
+, pythonAtLeast
+}:
 
-with stdenv.lib;
-
+let
+  versionMajor = lib.versions.major protobuf.version;
+  versionMinor = lib.versions.minor protobuf.version;
+  versionPatch = lib.versions.patch protobuf.version;
+in
 buildPythonPackage {
-  inherit (protobuf) name src version;
-  inherit disabled;
-  doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
+  inherit (protobuf) pname src;
 
-  NIX_CFLAGS_COMPILE = toString (
-    # work around python distutils compiling C++ with $CC
-    optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
-    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98"
-  );
+  # protobuf 3.21 coresponds with its python library 4.21
+  version =
+    if lib.versionAtLeast protobuf.version "3.21"
+    then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
+    else protobuf.version;
 
-  propagatedBuildInputs = [ google_apputils ];
-  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
-  nativeBuildInputs = [ google_apputils pyext ];
-  buildInputs = [ protobuf ];
+  disabled = isPyPy;
 
-  patches = optional (isPy37 && (versionOlder protobuf.version "3.6.1.2"))
-    # Python 3.7 compatibility (not needed for protobuf >= 3.6.1.2)
+  sourceRoot = "source/python";
+
+  patches = lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {
-      url = "https://github.com/protocolbuffers/protobuf/commit/0a59054c30e4f0ba10f10acfc1d7f3814c63e1a7.patch";
-      sha256 = "09hw22y3423v8bbmc9xm07znwdxfbya6rp78d4zqw6fisdvjkqf1";
-      stripLen = 1;
+      url = "https://github.com/protocolbuffers/protobuf/commit/da973aff2adab60a9e516d3202c111dbdde1a50f.patch";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-a/12C6yIe1tEKjsMxcfDAQ4JHolA8CzkN7sNG8ZspPs=";
     })
-  ;
+  ];
 
   prePatch = ''
-    while [ ! -d python ]; do
-      cd *
-    done
-    cd python
+    if [[ "$(<../version.json)" != *'"python": "'"$version"'"'* ]]; then
+      echo "Python library version mismatch. Derivation version: $version, actual: $(<../version.json)"
+      exit 1
+    fi
   '';
 
-  preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-  '';
+  buildInputs = [ protobuf ];
 
-  preBuild = ''
-    # Workaround for https://github.com/google/protobuf/issues/2895
-    ${python.interpreter} setup.py build
-  '' + optionalString (versionAtLeast protobuf.version "2.6.0") ''
-    ${python.interpreter} setup.py build_ext --cpp_implementation
-  '';
+  propagatedNativeBuildInputs = [
+    # For protoc of the same version.
+    buildPackages."protobuf${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}"
+  ];
 
-  installFlags = optional (versionAtLeast protobuf.version "2.6.0")
-    "--install-option='--cpp_implementation'";
+  setupPyGlobalFlags = [ "--cpp_implementation" ];
 
-  # the _message.so isn't installed, so we'll do that manually.
-  # if someone can figure out a less hacky way to get the _message.so to
-  # install, please do replace this.
-  postInstall = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-    cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
-  '';
+  pythonImportsCheck = [
+    "google.protobuf"
+    "google.protobuf.internal._api_implementation" # Verify that --cpp_implementation worked
+  ];
 
-  meta = {
+  passthru = {
+    inherit protobuf;
+  };
+
+  meta = with lib; {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ knedlsepp ];
   };
-
-  passthru.protobuf = protobuf;
 }

@@ -1,69 +1,87 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib
 , alembic
+, buildPythonPackage
 , click
 , cloudpickle
-, requests
-, six
-, flask
-, numpy
-, pandas
-, python-dateutil
-, protobuf
-, GitPython
-, pyyaml
-, querystring_parser
-, simplejson
-, docker
 , databricks-cli
+, docker
 , entrypoints
-, sqlparse
-, sqlalchemy
+, fetchpatch
+, fetchPypi
+, flask
+, gitpython
 , gorilla
 , gunicorn
-, pytest
+, importlib-metadata
+, numpy
+, packaging
+, pandas
+, prometheus-flask-exporter
+, protobuf
+, python-dateutil
+, pythonOlder
+, pyyaml
+, querystring_parser
+, requests
+, scipy
+, simplejson
+, six
+, sqlalchemy
+, sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.8.0";
-  disabled = isPy27;
+  version = "1.30.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bab1b95da17ffb1856fec35fc1a0bc9d16e1811e41610a97c2c955884eb6ac53";
+    hash = "sha256-Ln1R9uLcbMIxbnLc9BNSF8WByPTx+d3hBmqrqeCyLHo=";
   };
-
-  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
-  doCheck = false;
 
   propagatedBuildInputs = [
     alembic
     click
     cloudpickle
-    requests
-    six
-    flask
-    numpy
-    pandas
-    python-dateutil
-    protobuf
-    GitPython
-    pyyaml
-    querystring_parser
-    simplejson
-    docker
     databricks-cli
+    docker
     entrypoints
-    sqlparse
-    sqlalchemy
+    flask
+    gitpython
     gorilla
     gunicorn
+    importlib-metadata
+    numpy
+    packaging
+    pandas
+    prometheus-flask-exporter
+    protobuf
+    python-dateutil
+    pyyaml
+    querystring_parser
+    requests
+    scipy
+    simplejson
+    six
+    sqlalchemy
+    sqlparse
   ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/mlflow/mlflow";
+  pythonImportsCheck = [
+    "mlflow"
+  ];
+
+  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
+  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  doCheck = false;
+
+  meta = with lib; {
     description = "Open source platform for the machine learning lifecycle";
+    homepage = "https://github.com/mlflow/mlflow";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };

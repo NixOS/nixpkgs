@@ -15,7 +15,7 @@ let
 in
 {
   name = "upnp";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bobvanderlinden ];
   };
 
@@ -47,7 +47,7 @@ in
 
       client1 =
         { pkgs, nodes, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 pkgs.netcat ];
+        { environment.systemPackages = [ pkgs.miniupnpc pkgs.netcat ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway = internalRouterAddress;
           networking.interfaces.eth1.ipv4.addresses = [
@@ -65,7 +65,7 @@ in
 
       client2 =
         { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 ];
+        { environment.systemPackages = [ pkgs.miniupnpc ];
           virtualisation.vlans = [ 1 ];
           networking.interfaces.eth1.ipv4.addresses = [
             { address = externalClient2Address; prefixLength = 24; }
@@ -90,7 +90,7 @@ in
       client1.succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP")
 
       client1.wait_for_unit("httpd")
-      client2.wait_until_succeeds("curl http://${externalRouterAddress}:9000/")
+      client2.wait_until_succeeds("curl -f http://${externalRouterAddress}:9000/")
     '';
 
 })

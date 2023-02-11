@@ -1,24 +1,43 @@
-{ stdenv, fetchPypi, buildPythonPackage, click, redis }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, click
+, redis
+}:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.4.2";
+  version = "1.12.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f680c52c7079266465d5e5c49679fab0d14db11d70fec6f1470423408b6bbcf6";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "rq";
+    repo = "rq";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hV9Rntgt1Y4TBWGlunoXDKy8A2/9tum8aII8kFIZznU=";
   };
 
-  # test require a running redis rerver, which is something we can't do yet
+  propagatedBuildInputs = [
+    click
+    redis
+  ];
+
+  # Tests require a running Redis rerver
   doCheck = false;
 
-  propagatedBuildInputs = [ click redis ];
+  pythonImportsCheck = [
+    "rq"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A simple, lightweight library for creating background jobs, and processing them";
+  meta = with lib; {
+    description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    maintainers = with maintainers; [ mrmebelman ];
+    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ mrmebelman ];
   };
 }
 

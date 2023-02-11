@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "miniball";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1piap5v8wqq0aachrq6j50qkr01gzpyndl6vf661vyykrfq0nnd2";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/include
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Smallest Enclosing Balls of Points";
     homepage = "https://www.inf.ethz.ch/personal/gaertner/miniball.html";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.erikryb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.erikryb ];
+    platforms = lib.platforms.unix;
   };
 }

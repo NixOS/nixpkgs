@@ -1,43 +1,59 @@
-{ stdenv, python3, beancount }:
+{ lib, python3 }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.14";
+  version = "1.23.1";
+  format = "pyproject";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "181ypq2p7aaq2b76s55hxxbm1hykzf45mjjgm500h4dsaa167dqy";
+    sha256 = "sha256-Uw8UIJa+Dtsy+o31I1ynLyhZrFNX42NFRXu1O2ISbzU=";
   };
 
-  checkInputs = [ python3.pkgs.pytest ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ 
-      Babel
-      cheroot
-      flaskbabel
-      flask
-      jinja2
-      beancount
-      click
-      markdown2
-      ply
-      simplejson
-      werkzeug
-      jaraco_functools
-    ];
+  patches = [
+    ./flask-babel.patch
+  ];
 
-  # CLI test expects fava on $PATH.  Not sure why static_url fails.
-  checkPhase = ''
-    py.test tests -k 'not cli and not static_url'
+  pythonRelaxDeps = [
+    "cheroot"
+    "Flask-Babel"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm pythonRelaxDepsHook ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    babel
+    beancount
+    cheroot
+    click
+    flask
+    flask-babel
+    jaraco_functools
+    jinja2
+    markdown2
+    ply
+    simplejson
+    werkzeug
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TEMPDIR
   '';
 
-  meta = {
-    homepage = "https://beancount.github.io/fava";
+  disabledTests = [
+    # runs fava in debug mode, which tries to interpret bash wrapper as Python
+    "test_cli"
+  ];
+
+  meta = with lib; {
     description = "Web interface for beancount";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    homepage = "https://beancount.github.io/fava";
+    changelog = "https://beancount.github.io/fava/changelog.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

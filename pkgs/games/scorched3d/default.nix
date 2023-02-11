@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU, libGL, glew, pkgconfig, openalSoft, freealut, wxGTK, libogg
+{ lib, stdenv, fetchurl, libGLU, libGL, glew, pkg-config, openalSoft, freealut, wxGTK32, libogg
 , freetype, libvorbis, fftwSinglePrec, SDL, SDL_net, expat, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
@@ -10,17 +10,21 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libGLU libGL glew openalSoft freealut wxGTK libogg freetype libvorbis
+    [ libGLU libGL glew openalSoft freealut wxGTK32 libogg freetype libvorbis
       SDL SDL_net expat libjpeg libpng fftwSinglePrec
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     ./file-existence.patch
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/games-strategy/scorched3d/files/scorched3d-44-fix-c++14.patch?id=1bbcfc9ae3dfdfcbdd35151cb7b6050776215e4d";
       sha256 = "1farmjxbc2wm4scsdbdnvh29fipnb6mp6z85hxz4bx6n9kbc8y7n";
+    })
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/s/scorched3d/44%2Bdfsg-7/debian/patches/wx3.0-compat.patch";
+      sha256 = "sha256-Y5U5yYNT5iMqhdRaDMFtZ4K7aD+pugFZP0jLh7rdDp8=";
     })
   ];
 
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lopenal";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://scorched3d.co.uk/";
     description = "3D Clone of the classic Scorched Earth";
     license = licenses.gpl2Plus;

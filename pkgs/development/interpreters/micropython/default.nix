@@ -1,44 +1,63 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, libffi, python3, readline }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, python3
+, libffi
+, readline
+}:
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.12";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
-    owner  = "micropython";
-    repo   = "micropython";
-    rev    = "v${version}";
-    sha256 = "1fsigdahnv5yn0mc7dr1y6h7g8ywg084pcgj6d64kb39w641n8j5";
+    owner = "micropython";
+    repo = "micropython";
+    rev = "v${version}";
+    sha256 = "sha256-BoX3Z3Zr/AQqkgRrq+UVgdoDqNESDTNsY9AtrElpzfA=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig python3 ];
+  nativeBuildInputs = [ pkg-config python3 ];
 
   buildInputs = [ libffi readline ];
 
-  doCheck = true;
-
   buildPhase = ''
+    runHook preBuild
     make -C mpy-cross
     make -C ports/unix
+    runHook postBuild
   '';
 
+  doCheck = true;
+
+  skippedTests = ""
+    + lib.optionalString (stdenv.isDarwin) " -e uasyncio_basic -e uasyncio_heaplock -e uasyncio_wait_task"
+    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback"
+    + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
+  ;
+
   checkPhase = ''
+    runHook preCheck
     pushd tests
-    MICROPY_MICROPYTHON=../ports/unix/micropython ${python3.interpreter} ./run-tests
+    ${python3.interpreter} ./run-tests.py ${skippedTests}
     popd
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    install -Dm755 ports/unix/micropython $out/bin/micropython
+    install -Dm755 ports/unix/micropython -t $out/bin
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A lean and efficient Python implementation for microcontrollers and constrained systems";
     homepage = "https://micropython.org";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ sgo ];
+    maintainers = with maintainers; [ prusnak sgo ];
   };
 }

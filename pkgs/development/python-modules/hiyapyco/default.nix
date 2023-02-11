@@ -6,27 +6,32 @@
 }:
 
 buildPythonPackage rec {
-  pname = "HiYaPyCo";
-  version = "0.4.16";
+  pname = "hiyapyco";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "1ams9dp05yhgbg6255wrjgchl2mqg0s34d8b8prvql9lsh59s1fj";
+    rev = "refs/tags/release-${version}";
+    sha256 = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
   };
 
-  propagatedBuildInputs = [ pyyaml jinja2 ];
+  propagatedBuildInputs = [
+    pyyaml
+    jinja2
+  ];
 
   checkPhase = ''
     set -e
     find test -name 'test_*.py' -exec python {} \;
   '';
 
+  pythonImportsCheck = [ "hiyapyco" ];
+
   meta = with lib; {
-    description = "A simple python lib allowing hierarchical overlay of config files in YAML syntax, offering different merge methods and variable interpolation based on jinja2.";
+    description = "Python library allowing hierarchical overlay of config files in YAML syntax";
     homepage = "https://github.com/zerwes/hiyapyco";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veehaitch ];
   };
 }

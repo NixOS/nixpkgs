@@ -1,17 +1,18 @@
-{ lib, fetchurl, sqlite, pkgconfig, buildDunePackage }:
+{ lib, fetchurl, sqlite, pkg-config, buildDunePackage, dune-configurator }:
 
 buildDunePackage rec {
   pname = "sqlite3";
-  version = "5.0.1";
-  minimumOCamlVersion = "4.05";
+  version = "5.1.0";
+  duneVersion = "3";
+  minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/${version}/sqlite3-${version}.tbz";
-    sha256 = "0iymkszrs6qwak0vadfzc8yd8jfwn06zl08ggb4jr2mgk2c8mmsn";
+    hash = "sha256-uw23EWkajfok/insTstpEkRK2Q4PTER6+Jgx5tHf/qU=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ sqlite ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator sqlite ];
 
   meta = with lib; {
     homepage = "http://mmottl.github.io/sqlite3-ocaml/";

@@ -1,12 +1,13 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , ffmpegthumbnailer
 , gdk-pixbuf
 , glib
 , freetype
 , libgsf
 , poppler
-, libjpeg
 , gst_all_1
+, libxfce4util
 }:
 
 # TODO: add libopenraw
@@ -14,11 +15,12 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "0.2.8";
+  version = "4.18.0";
 
-  sha256 = "1y9sphaz3izal96v53lps692xxzp5pad1d09kxsmmpm7pic4n1r2";
+  sha256 = "sha256-qxbS0PMhwVk2I3fbblJEeIuI72xSWVsQx5SslhOvg+c=";
 
   buildInputs = [
+    libxfce4util
     ffmpegthumbnailer
     freetype
     gdk-pixbuf
@@ -33,7 +35,8 @@ mkXfceDerivation {
     wrapProgram $out/lib/tumbler-1/tumblerd "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A D-Bus thumbnailer service";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

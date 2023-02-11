@@ -1,28 +1,27 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , openssl
 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "btcdeb";
-  version = "0.2.19";
+  version = "unstable-2022-04-03";
 
   src = fetchFromGitHub {
-    owner = "kallewoof";
-    repo = pname;
-    rev = "fb2dace4cd115dc9529a81515cee855b8ce94784";
-    sha256 = "0l0niamcjxmgyvc6w0wiygfgwsjam3ypv8mvjglgsj50gyv1vnb3";
+    owner = "bitcoin-core";
+    repo = "btcdeb";
+    rev = "3ba1ec7f4d37f7d2ff0544403465004c6e12036e";
+    hash = "sha256-l/PGXXX288mnoSFZ32t2Xd13dC6JCU5wDHoDxb+fcp0=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl ];
 
-  meta = {
+  meta = with lib; {
     description = "Bitcoin Script Debugger";
-    homepage = "https://github.com/kallewoof/btcdeb";
+    homepage = "https://github.com/bitcoin-core/btcdeb";
     license = licenses.mit;
     maintainers = with maintainers; [ akru ];
     platforms = platforms.unix;

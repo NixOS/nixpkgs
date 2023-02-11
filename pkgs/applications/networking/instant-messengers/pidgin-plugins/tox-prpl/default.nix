@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtoxcore, pidgin, autoreconfHook, libsodium }:
+{ lib, stdenv, fetchFromGitHub, libtoxcore, pidgin, autoreconfHook, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "tox-prpl";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtoxcore pidgin libsodium ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true; # unmaintained and not compatible with current Tox API.
     homepage = "https://github.com/jin-eld/tox-prpl";
     description = "Tox plugin for Pidgin / libpurple";
     license = licenses.gpl3;

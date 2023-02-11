@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , python
 }:
 
@@ -16,7 +16,7 @@ python.pkgs.buildPythonPackage rec {
     matplotlib # needed for plotting memory usage
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A module for monitoring memory usage of a process";
     longDescription = ''
       This is a python module for monitoring memory consumption of a process as

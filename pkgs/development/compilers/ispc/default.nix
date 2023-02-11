@@ -1,30 +1,29 @@
-{ stdenv, fetchFromGitHub
-, cmake, which, m4, python3, bison, flex, llvmPackages
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses
 
   # the default test target is sse4, but that is not supported by all Hydra agents
-, testedTargets ? [ "sse2" ]
+, testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.13.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1l74xkpwwxc38k2ngg7mpvswziiy91yxslgfad6688hh1n5jvayd";
+    sha256 = "sha256-WBAVgjQjW4x9JGx6xotPoTVOePsPjBJEyBYA7TCTBvc=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ];
   buildInputs = with llvmPackages; [
-    # we need to link against libclang, so we need the unwrapped
-    llvm llvmPackages.clang-unwrapped
+    libllvm libclang openmp ncurses
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace curses ncurses
+      --replace CURSES_CURSES_LIBRARY CURSES_NCURSES_LIBRARY
     substituteInPlace cmake/GenerateBuiltins.cmake \
       --replace 'bit 32 64' 'bit 64'
   '';
@@ -54,17 +53,20 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
+    "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    "-DARM_ENABLED=FALSE"
+    ("-DARM_ENABLED=" + (if stdenv.isAarch64 || stdenv.isAarch32 then "TRUE" else "FALSE"))
+    ("-DX86_ENABLED=" + (if stdenv.isx86_64 || stdenv.isx86_32 then "TRUE" else "FALSE"))
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
+    maintainers = with maintainers; [ aristid thoughtpolice athas ];
   };
 }

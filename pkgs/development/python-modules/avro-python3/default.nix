@@ -1,15 +1,16 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro-python3";
-  version = "1.9.2.1";
+  version = "1.10.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca1e77a3da5ac98e8833588f71fb2e170b38e34787ee0e04920de0e9470b7d32";
+    sha256 = "3b63f24e6b04368c3e4a6f923f484be0230d821aad65ac36108edbff29e9aaab";
   };
 
+  buildInputs = [ pycodestyle isort ];
   doCheck = false;        # No such file or directory: './run_tests.py
 
   meta = with lib; {

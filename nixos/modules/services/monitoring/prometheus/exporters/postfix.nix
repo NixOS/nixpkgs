@@ -8,10 +8,19 @@ in
 {
   port = 9154;
   extraOpts = {
+    group = mkOption {
+      type = types.str;
+      description = lib.mdDoc ''
+        Group under which the postfix exporter shall be run.
+        It should match the group that is allowed to access the
+        `showq` socket in the `queue/public/` directory.
+        Defaults to `services.postfix.setgidGroup` when postfix is enabled.
+      '';
+    };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };
@@ -19,50 +28,59 @@ in
       type = types.path;
       default = "/var/log/postfix_exporter_input.log";
       example = "/var/log/mail.log";
-      description = ''
+      description = lib.mdDoc ''
         Path where Postfix writes log entries.
         This file will be truncated by this exporter!
       '';
     };
     showqPath = mkOption {
       type = types.path;
-      default = "/var/spool/postfix/public/showq";
-      example = "/var/lib/postfix/queue/public/showq";
-      description = ''
-        Path where Postfix places it's showq socket.
+      default = "/var/lib/postfix/queue/public/showq";
+      example = "/var/spool/postfix/public/showq";
+      description = lib.mdDoc ''
+        Path where Postfix places its showq socket.
       '';
     };
     systemd = {
-      enable = mkEnableOption ''
-        reading metrics from the systemd-journal instead of from a logfile
-      '';
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to enable reading metrics from the systemd journal instead of from a logfile
+        '';
+      };
       unit = mkOption {
         type = types.str;
         default = "postfix.service";
-        description = ''
+        description = lib.mdDoc ''
           Name of the postfix systemd unit.
         '';
       };
       slice = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Name of the postfix systemd slice.
-          This overrides the <option>systemd.unit</option>.
+          This overrides the {option}`systemd.unit`.
         '';
       };
       journalPath = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the systemd journal.
         '';
       };
     };
   };
   serviceOpts = {
+    after = mkIf cfg.systemd.enable [ cfg.systemd.unit ];
     serviceConfig = {
       DynamicUser = false;
+      # By default, each prometheus exporter only gets AF_INET & AF_INET6,
+      # but AF_UNIX is needed to read from the `showq`-socket.
+      RestrictAddressFamilies = [ "AF_UNIX" ];
+      SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

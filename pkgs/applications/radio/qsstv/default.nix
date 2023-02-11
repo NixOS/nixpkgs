@@ -1,36 +1,34 @@
-{ mkDerivation, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
-  libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
+{ mkDerivation, lib, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
+  libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
-  version = "9.4.4";
+  version = "9.5.8";
   pname = "qsstv";
 
   src = fetchurl {
     url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
-    sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
+    sha256 = "0s3sivc0xan6amibdiwfnknrl3248wzgy98w6gyxikl0qsjpygy0";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
   ];
 
-  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
+  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsa-lib hamlib libv4l
                   fftwFloat ];
 
   postInstall = ''
     # Install desktop icon
-    install -D qsstv/icons/qsstv.png $out/share/pixmaps/qsstv.png
+    install -D icons/qsstv.png $out/share/pixmaps/qsstv.png
+    install -D qsstv.desktop $out/share/applications/qsstv.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based slow-scan TV and fax";
     homepage = "http://users.telenet.be/on4qz/";
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ hax404 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
 }
-

@@ -2,11 +2,11 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
   name = "systemd-analyze";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ raskin ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
       sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then

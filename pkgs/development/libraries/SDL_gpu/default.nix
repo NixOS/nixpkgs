@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, libGLU }:
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, libGLU }:
 
 stdenv.mkDerivation {
   pname = "SDL_gpu-unstable";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     sed -ie '213s#''${OUTPUT_DIR}/lib#''${CMAKE_INSTALL_LIBDIR}#' src/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for high-performance, modern 2D graphics with SDL written in C";
     homepage = "https://github.com/grimfang4/sdl-gpu";
     license = licenses.mit;

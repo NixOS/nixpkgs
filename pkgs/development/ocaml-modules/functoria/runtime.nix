@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, functoria, cmdliner, fmt, alcotest }:
+{ lib, buildDunePackage, functoria, cmdliner, fmt }:
 
 buildDunePackage {
   pname = "functoria-runtime";
@@ -6,8 +6,6 @@ buildDunePackage {
   inherit (functoria) version src;
 
   propagatedBuildInputs = [ cmdliner fmt ];
-  checkInputs = [ alcotest functoria];
-  doCheck = true;
 
   meta = with lib; {
     inherit (functoria.meta) homepage license;

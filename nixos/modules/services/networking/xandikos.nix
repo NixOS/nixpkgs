@@ -9,19 +9,19 @@ in
 
   options = {
     services.xandikos = {
-      enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
+      enable = mkEnableOption (lib.mdDoc "Xandikos CalDAV and CardDAV server");
 
       package = mkOption {
         type = types.package;
         default = pkgs.xandikos;
-        defaultText = "pkgs.xandikos";
-        description = "The Xandikos package to use.";
+        defaultText = literalExpression "pkgs.xandikos";
+        description = lib.mdDoc "The Xandikos package to use.";
       };
 
       address = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           The IP address on which Xandikos will listen.
           By default listens on localhost.
         '';
@@ -30,13 +30,13 @@ in
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = "The port of the Xandikos web application";
+        description = lib.mdDoc "The port of the Xandikos web application";
       };
 
       routePrefix = mkOption {
         type = types.str;
         default = "/";
-        description = ''
+        description = lib.mdDoc ''
           Path to Xandikos.
           Useful when Xandikos is behind a reverse proxy.
         '';
@@ -45,21 +45,21 @@ in
       extraOptions = mkOption {
         default = [];
         type = types.listOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           [ "--autocreate"
             "--defaults"
             "--current-user-principal user"
             "--dump-dav-xml"
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra command line arguments to pass to xandikos.
         '';
       };
 
       nginx = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Configuration for nginx reverse proxy.
         '';
 
@@ -68,14 +68,14 @@ in
             enable = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Configure the nginx reverse proxy settings.
               '';
             };
 
             hostName = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 The hostname use to setup the virtualhost configuration
               '';
             };
@@ -90,7 +90,7 @@ in
   config = mkIf cfg.enable (
     mkMerge [
       {
-        meta.maintainers = [ lib.maintainers."0x4A6F" ];
+        meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
         systemd.services.xandikos = {
           description = "A Simple Calendar and Contact Server";
@@ -122,7 +122,7 @@ in
             ExecStart = ''
               ${cfg.package}/bin/xandikos \
                 --directory /var/lib/xandikos \
-                --listen_address ${cfg.address} \
+                --listen-address ${cfg.address} \
                 --port ${toString cfg.port} \
                 --route-prefix ${cfg.routePrefix} \
                 ${lib.concatStringsSep " " cfg.extraOptions}

@@ -1,49 +1,60 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder, cython
 , attrs, click, cligj, click-plugins, six, munch, enum34
-, pytest, boto3, mock, giflib
-, gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
+, pytestCheckHook, boto3, mock, giflib, pytz
+, gdal, certifi
 }:
 
 buildPythonPackage rec {
-  pname = "Fiona";
-  version = "1.8.13.post1";
+  pname = "fiona";
+  version = "1.9.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "00366f2j21b5r4r8310sadf7jjhdr44s0381dhjqkw2nzpwjnhqs";
+    pname = "Fiona";
+    inherit version;
+    hash = "sha256-bkh8v7pahJ+98G5FFp/X4fFmL0Tz1xerS5RgRrJFfq4=";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   nativeBuildInputs = [
-    gdal_2 # for gdal-config
+    cython
+    gdal # for gdal-config
   ];
 
   buildInputs = [
-    gdal_2
+    gdal
   ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
 
   propagatedBuildInputs = [
     attrs
+    certifi
     click
     cligj
     click-plugins
     six
     munch
+    pytz
   ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
     boto3
   ] ++ lib.optional (pythonOlder "3.4") mock;
 
-  checkPhase = ''
+  preCheck = ''
     rm -r fiona # prevent importing local fiona
-    # Some tests access network, others test packaging
-    pytest -k "not test_*_http \
-           and not test_*_https \
-           and not test_*_wheel"
+    # disable gdal deprecation warnings
+    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
+
+  disabledTests = [
+    # Some tests access network, others test packaging
+    "http" "https" "wheel"
+    # https://github.com/Toblerity/Fiona/issues/1164
+    "test_no_append_driver_cannot_append"
+  ];
+
+  pythonImportsCheck = [ "fiona" ];
 
   meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";

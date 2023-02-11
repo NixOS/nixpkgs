@@ -2,7 +2,7 @@
 , cmake
 , extra-cmake-modules
 , fcitx
-, pkgconfig
+, pkg-config
 , qtbase
 }:
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "0860v3rxsh054wkkbawvyin5mk0flp4cwfcpmcpq147lvdm5lq2i";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [ fcitx qtbase ];
 

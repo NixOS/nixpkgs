@@ -8,16 +8,6 @@ let
     let
       callPackage = newScope self;
 
-      prefer = version: path:
-        let
-          packages = callPackage path { };
-
-        in
-          packages."${version}".overrideAttrs (_: {
-              passthru = packages;
-            }
-          );
-
       buildDhallPackage =
         callPackage ../development/interpreters/dhall/build-dhall-package.nix { };
 
@@ -27,21 +17,34 @@ let
       buildDhallDirectoryPackage =
         callPackage ../development/interpreters/dhall/build-dhall-directory-package.nix { };
 
+      buildDhallUrl =
+        callPackage ../development/interpreters/dhall/build-dhall-url.nix { };
+
+      generateDhallDirectoryPackage =
+        callPackage ../development/interpreters/dhall/generate-dhall-directory-package.nix { };
+
     in
       { inherit
+          callPackage
           buildDhallPackage
           buildDhallGitHubPackage
           buildDhallDirectoryPackage
+          buildDhallUrl
+          generateDhallDirectoryPackage
         ;
 
-        dhall-kubernetes =
-          prefer "3.0.0" ../development/dhall-modules/dhall-kubernetes.nix;
+        lib = import ../development/dhall-modules/lib.nix { inherit lib; };
 
-        dhall-packages =
-          prefer "0.11.1" ../development/dhall-modules/dhall-packages.nix;
+        dhall-cloudformation = callPackage ../development/dhall-modules/dhall-cloudformation.nix { };
+
+        dhall-grafana =
+          callPackage ../development/dhall-modules/dhall-grafana.nix { };
+
+        dhall-kubernetes =
+          callPackage ../development/dhall-modules/dhall-kubernetes.nix { };
 
         Prelude =
-          prefer "13.0.0" ../development/dhall-modules/Prelude.nix;
+          callPackage ../development/dhall-modules/Prelude.nix { };
       };
 
 in

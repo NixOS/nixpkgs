@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "sogo";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ajs124 das_j ];
   };
 
@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       services.mysql = {
         enable = true;
-        package = pkgs.mysql;
+        package = pkgs.mariadb;
         ensureDatabases = [ "sogo" ];
         ensureUsers = [{
           name = "sogo";

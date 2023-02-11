@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
-, pkgconfig
+, pkg-config
+, gobject-introspection
 , meson
 , ninja
 , perl
@@ -11,9 +12,10 @@
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_412
+, fetchurl
 , glib
+, gusb
 , dbus
-, dbus-glib
 , polkit
 , nss
 , pam
@@ -24,41 +26,30 @@
 
 stdenv.mkDerivation rec {
   pname = "fprintd";
-  version = "1.90.1";
+  version = "1.94.2";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libfprint";
     repo = pname;
-    rev = version;
-    sha256 = "0mbzk263x7f58i9cxhs44mrngs7zw5wkm62j5r6xlcidhmfn03cg";
+    rev = "v${version}";
+    sha256 = "sha256-ePhcIZyXoGr8XlBuzKjpibU9D/44iCXYBlpVR9gcswQ=";
   };
 
   patches = [
-    # Fixes issue with ":" when there is multiple paths (might be the case on NixOS)
-    # https://gitlab.freedesktop.org/libfprint/fprintd/-/merge_requests/50
+    # backport upstream patch fixing tests
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/d7fec03f24d10f88d34581c72f0eef201f5eafac.patch";
-      sha256 = "0f88dhizai8jz7hpm5lpki1fx4593zcy89iwi4brsqbqc7jp9ls0";
-    })
-
-    # Fix locating libpam_wrapper for tests
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/merge_requests/40.patch";
-      sha256 = "0qqy090p93lzabavwjxzxaqidkcb3ifacl0d3yh1q7ms2a58yyz3";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/f401f399a85dbeb2de165b9b9162eb552ab6eea7.patch";
-      sha256 = "1bc9g6kc95imlcdpvp8qgqjsnsxg6nipr6817c1pz5i407yvw1iy";
+      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/ae04fa989720279e5558c3b8ff9ebe1959b1cf36.patch";
+      sha256 = "sha256-jW5vlzrbZQ1gUDLBf7G50GnZfZxhlnL2Eu+9Bghdwdw=";
     })
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
-    perl
+    perl # for pod2man
     gettext
     gtk-doc
     libxslt
@@ -69,7 +60,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    dbus-glib
     polkit
     nss
     pam
@@ -77,12 +67,14 @@ stdenv.mkDerivation rec {
     libfprint
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
+    gobject-introspection # for setup hook
     python-dbusmock
     dbus-python
     pygobject3
     pycairo
     pypamtest
+    gusb # Required by libfprint’s typelib
   ];
 
   mesonFlags = [
@@ -98,19 +90,21 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
 
   # FIXME: Ugly hack for tests to find libpam_wrapper.so
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+  LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
 
   doCheck = true;
 
   postPatch = ''
-    patchShebangs po/check-translations.sh
+    patchShebangs \
+      po/check-translations.sh \
+      tests/unittest_inspector.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar elyhaka ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

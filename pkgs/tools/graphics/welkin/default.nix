@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jre, makeWrapper }:
+{ lib, stdenv, fetchsvn, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "welkin";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "welkin-r9638/tags/${version}";
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/{bin,share}
@@ -26,11 +27,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An RDF visualizer";
-    maintainers = with stdenv.lib.maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.free;
-    platforms = with stdenv.lib.platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.free;
+    platforms = with lib.platforms; unix;
   };
 }

@@ -4,7 +4,7 @@ let
   cfg = config.hardware.uinput;
 in {
   options.hardware.uinput = {
-    enable = lib.mkEnableOption "uinput support";
+    enable = lib.mkEnableOption (lib.mdDoc "uinput support");
   };
 
   config = lib.mkIf cfg.enable {

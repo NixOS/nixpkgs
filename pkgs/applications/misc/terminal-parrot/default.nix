@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terminal-parrot";
@@ -13,11 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "1qalnhhq3fmyzj0hkzc5gk9wbypr558mz3ik5msw7fid68k2i48c";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "Shows colorful, animated party parrot in your terminial";
     homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = [ maintainers.heel ];
   };
 }

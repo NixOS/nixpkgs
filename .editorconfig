@@ -43,32 +43,55 @@ indent_style = space
 # Disable file types or individual files
 # some of these files may be auto-generated and/or require significant changes
 
+[*.{c,h}]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[*.{asc,key,ovpn}]
+insert_final_newline = unset
+end_of_line = unset
+trim_trailing_whitespace = unset
+
 [*.lock]
 indent_size = unset
 
-[gemset.nix]
+# Although Markdown/CommonMark allows using two trailing spaces to denote
+# a hard line break, we do not use that feature in nixpkgs since
+# it forces the surrounding paragraph to become a <literallayout> which
+# does not wrap reasonably.
+# Instead of a hard line break, start a new paragraph by inserting a blank line.
+[*.md]
+trim_trailing_whitespace = true
+
+# binaries
+[*.nib]
+end_of_line = unset
 insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset
 
-[pkgs/applications/editors/emacs-modes/recipes-archive-melpa.json]
-indent_size = unset
+[eggs.nix]
+trim_trailing_whitespace = unset
 
-[pkgs/development/lisp-modules/quicklisp-to-nix.nix]
-indent_size = unset
+[nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
+trim_trailing_whitespace = unset
+
+[pkgs/build-support/dotnetenv/Wrapper/**]
+end_of_line = unset
+indent_style = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[pkgs/development/compilers/elm/registry.dat]
+end_of_line = unset
+insert_final_newline = unset
 
 [pkgs/development/haskell-modules/hackage-packages.nix]
 indent_style = unset
-indent_size = unset
 trim_trailing_whitespace = unset
-
-[pkgs/development/mobile/androidenv/generated/{addons,packages}.nix]
-trim_trailing_whitespace = unset
-
-[pkgs/development/node-packages/node-packages.nix]
-insert_final_newline = unset
 
 [pkgs/servers/dict/wordnet_structures.py]
-indent_size = unset
 trim_trailing_whitespace = unset
 
-[pkgs/top-level/perl-packages.nix]
-indent_size = unset
+[pkgs/tools/misc/timidity/timidity.cfg]
+trim_trailing_whitespace = unset

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "wadllib";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e995691713d3c795d2b36278de8e212241870f46bec6ecba91794ea3cc5bd67d";
+    sha256 = "acd9ad6a2c1007d34ca208e1da6341bbca1804c0e6850f954db04bdd7666c5fc";
   };
 
   propagatedBuildInputs = [ setuptools lazr-uri ];

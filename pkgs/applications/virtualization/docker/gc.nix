@@ -3,24 +3,24 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "docker-gc-${rev}";
-  rev = "b0cc52aa3da2e2ac0080794e0be6e674b1f063fc";
+  pname = "docker-gc";
+  version = "unstable-2015-10-5";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "spotify";
     repo = "docker-gc";
+    rev = "b0cc52aa3da2e2ac0080794e0be6e674b1f063fc";
     sha256 = "07wf9yn0f771xkm3x12946x5rp83hxjkd70xgfgy35zvj27wskzm";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp docker-gc $out/bin
     chmod +x $out/bin/docker-gc
     wrapProgram $out/bin/docker-gc \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
+        --prefix PATH : "${lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
   '';
 
   meta = {

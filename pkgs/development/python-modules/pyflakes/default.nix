@@ -1,20 +1,34 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2 }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "2.2.0";
+  version = "3.0.1";
+
+  disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8";
+    hash = "sha256-7IsnamtgvYDe/tJa3X5DmIHBnmSFCv2bNGKD1BZf0P0=";
   };
 
-  checkInputs = [ unittest2 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://launchpad.net/pyflakes";
+  pythonImportsCheck = [ "pyflakes" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/PyCQA/pyflakes";
+    changelog = "https://github.com/PyCQA/pyflakes/blob/${version}/NEWS.rst";
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

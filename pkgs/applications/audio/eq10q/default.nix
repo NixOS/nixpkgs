@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkg-config
 , xorg }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
   patches = [
     (fetchpatch {
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "LV2 EQ plugins and more, with 64 bit processing";
     longDescription = ''
       Up to 10-Bands parametric equalizer with mono and stereo versions.
@@ -43,9 +44,9 @@ stdenv.mkDerivation rec {
       64 bits floating point internal audio processing.
       Nice GUI with powerful metering for every plugin.
     '';
-    homepage = "http://eq10q.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://eq10q.sourceforge.net/";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure a setcap wrapper for traceroute.
         '';
       };
@@ -19,8 +19,10 @@ in {
 
   config = mkIf cfg.enable {
     security.wrappers.traceroute = {
-      source = "${pkgs.traceroute}/bin/traceroute";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_raw+p";
+      source = "${pkgs.traceroute}/bin/traceroute";
     };
   };
 }

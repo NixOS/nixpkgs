@@ -1,33 +1,34 @@
-{ stdenv, fetchFromGitHub }:
+{ lib
+, fetchurl
+, stdenvNoCC
+}:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "1.5.1";
+  version = "2.2.4";
 
-  src = fetchFromGitHub {
-    owner = "thesofproject";
-    repo = "sof-bin";
-    rev = "ae61d2778b0a0f47461a52da0d1f191f651e0763";
-    sha256 = "0j6bpwz49skvdvian46valjw4anwlrnkq703n0snkbngmq78prba";
+  src = fetchurl {
+    url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-v${version}.tar.gz";
+    sha256 = "sha256-zoquuhA6pWqCZiVSsPM/M6hZqhAI2L+8LCLwzPyMazo=";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontFixup = true; # binaries must not be stripped or patchelfed
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/firmware/intel
-
-    sed -i 's/ROOT=.*$/ROOT=$out/g' go.sh
-    sed -i 's/VERSION=.*$/VERSION=v${version}/g' go.sh
-
-    ./go.sh
+    cp -av sof-v${version} $out/lib/firmware/intel/sof
+    cp -av sof-tplg-v${version} $out/lib/firmware/intel/sof-tplg
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${version}";
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
     license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden ];
+    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
     platforms = with platforms; linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

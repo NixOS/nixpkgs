@@ -1,74 +1,57 @@
-{ autoconf-archive
-, autoreconfHook
-, dbus-glib
+{ stdenv
+, lib
 , fetchFromGitHub
 , gobject-introspection
-, pkgconfig
-, stdenv
-, wrapGAppsHook
-, python3
+, pkg-config
 , cairo
-, gnome3
-, xapps
-, keybinder3
-, upower
-, callPackage
 , glib
-, libffi
-, gtk3
 , readline
+, spidermonkey_78
+, meson
+, dbus
+, ninja
+, which
+, libxml2
 }:
-
-let
-
-  # https://github.com/linuxmint/cjs/issues/80
-  spidermonkey_52 = callPackage ./spidermonkey_52.nix {};
-
-in
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "4.4.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cjs";
     rev = version;
-    sha256 = "0q5h2pbwysc6hwq5js3lwi6zn7i5qjjy070ynfhfn3z69lw5iz2d";
+    hash = "sha256-f9esbQi5WWSMAGlEs9HJFToOvmOrbP2lDW1gGh/48gw=";
   };
 
-  propagatedBuildInputs = [
-    glib
-
-    # bindings
-    gnome3.caribou
-    keybinder3
-    upower
-    xapps
-  ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
-    wrapGAppsHook
-    pkgconfig
+    meson
+    ninja
+    pkg-config
+    which # for locale detection
+    libxml2 # for xml-stripblanks
   ];
 
   buildInputs = [
-    # from .pc
     gobject-introspection
-    libffi
-    spidermonkey_52 # mozjs-52
-    cairo # +cairo-gobject
-    gtk3
-
-    # other
-
-    dbus-glib
+    cairo
     readline
+    spidermonkey_78
+    dbus # for dbus-run-session
   ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = [
+    "-Dprofiler=disabled"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 
@@ -77,12 +60,13 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-     gpl2Plus
-     lgpl2Plus
-     mit
-     mpl11
-   ];
+      gpl2Plus
+      lgpl2Plus
+      mit
+      mpl11
+    ];
+
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

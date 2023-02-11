@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoPatchelfHook
 , buildFHSUserEnv
 , dpkg
@@ -9,8 +9,8 @@
 , extraPkgs ? []
 }:
 let
-  majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.6.9";
+  majMin = lib.versions.majorMinor version;
+  version = "7.6.21";
 
   fahclient = stdenv.mkDerivation rec {
     inherit version;
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${majMin}/fahclient_${version}_amd64.deb";
-      sha256 = "1v4yijjjdq9qx1fp60flp9ya6ywl9qdsgkzwmzjzp8sd5gfvhyr6";
+      sha256 = "2827f05f1c311ee6c7eca294e4ffb856c81957e8f5bfc3113a0ed27bb463b094";
     };
 
     nativeBuildInputs = [
@@ -52,8 +52,9 @@ buildFHSUserEnv {
   meta = {
     description = "Folding@home client";
     homepage = "https://foldingathome.org/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];
   };
 }

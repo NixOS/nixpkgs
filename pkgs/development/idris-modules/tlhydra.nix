@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "tlhydra";
+  pname = "tlhydra";
   version = "2017-13-26";
 
   idrisDeps = [ effects contrib lightyear ];

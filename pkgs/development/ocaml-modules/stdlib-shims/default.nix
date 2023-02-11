@@ -2,11 +2,12 @@
 
 buildDunePackage rec {
   pname = "stdlib-shims";
-  version = "0.1.0";
+  version = "0.3.0";
   src = fetchurl {
     url = "https://github.com/ocaml/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1jv6yb47f66239m7hsz7zzw3i48mjpbvfgpszws48apqx63wjwsk";
+    sha256 = "0jnqsv6pqp5b5g7lcjwgd75zqqvcwcl5a32zi03zg1kvj79p5gxs";
   };
+  useDune2 = lib.versionAtLeast ocaml.version "4.08";
   minimumOCamlVersion = "4.02";
   doCheck = true;
   meta = {

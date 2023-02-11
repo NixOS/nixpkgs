@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ecos";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp -r include $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight conic solver for second-order cone programming";
     homepage = "https://www.embotech.com/ECOS";
     downloadPage = "https://github.com/embotech/ecos/releases";

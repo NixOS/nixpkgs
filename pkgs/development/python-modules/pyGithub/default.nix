@@ -1,38 +1,44 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , cryptography
 , deprecated
 , fetchFromGitHub
-, httpretty
-, isPy3k
-, parameterized
+, pynacl
 , pyjwt
-, pytestCheckHook
-, requests }:
+, pythonOlder
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "PyGithub";
-  version = "1.51";
-  disabled = !isPy3k;
+  version = "1.57";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
-    rev = "v${version}";
-    sha256 = "1hz5fc3rkryl4vzxmmwx75p25wk0ida54lf6bz7261rm5hb05r7j";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7CNvSOwDXXcJ082/Fmgr6OtTQeA30yDjt/Oq2nx4vEk=";
   };
 
-  checkInputs = [ httpretty parameterized pytestCheckHook ];
-  propagatedBuildInputs = [ cryptography deprecated pyjwt requests ];
+  propagatedBuildInputs = [
+    cryptography
+    deprecated
+    pynacl
+    pyjwt
+    requests
+  ];
 
   # Test suite makes REST calls against github.com
   doCheck = false;
+  pythonImportsCheck = [ "github" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
-    description = "A Python (2 and 3) library to access the GitHub API v3";
-    platforms = platforms.all;
-    license = licenses.gpl3;
+    changelog = "https://github.com/PyGithub/PyGithub/raw/v${version}/doc/changes.rst";
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jhhuh ];
   };
 }

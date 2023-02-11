@@ -1,25 +1,52 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytest, pytest-benchmark, pytest-mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, py
+, pytest-benchmark
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.8.2";
+  version = "0.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
-    repo = "getmac";
-    rev = version;
-    sha256 = "08d4iv5bjl1s4i9qhzf3pzjgj1rgbwi0x26qypf3ycgdj0a6gvh2";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-n4WpEbkaYUS0aGdZKO5T/cuDr5OxauiuOAAdK56/+AM=";
   };
 
-  checkInputs = [ pytest pytest-benchmark pytest-mock ];
-  checkPhase = ''
-    pytest --ignore tests/test_cli.py
-  '';
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+    pytest-benchmark
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # Disable CLI tests
+    "test_cli_main_basic"
+    "test_cli_main_verbose"
+    "test_cli_main_debug"
+    "test_cli_multiple_debug_levels"
+    # Disable test that require network access
+    "test_uuid_lanscan_iface"
+  ];
+
+  pythonImportsCheck = [
+    "getmac"
+  ];
 
   meta = with lib; {
+    description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
-    description = "Pure-Python package to get the MAC address of network interfaces and hosts on the local network.";
+    changelog = "https://github.com/GhostofGoes/getmac/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };

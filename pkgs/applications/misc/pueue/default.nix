@@ -1,34 +1,61 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, SystemConfiguration
+, installShellFiles
+, libiconv
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.6.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
-    repo = pname;
+    repo = "pueue";
     rev = "v${version}";
-    sha256 = "06jxj89ya91grrwxfs7l1ahy46y993kxsc8gpkxajc0j5ihax2al";
+    hash = "sha256-xUTkjj/PdlgDEp2VMwBuRtF/9iGGiN4FZizdOdcbTag=";
   };
 
-  cargoSha256 = "191j3lpd24ycissw0y2hv65i1cjzf24draamq3sxv7hv0sxcjw4d";
+  cargoSha256 = "sha256-7VdPu+9RYoj4Xfb3J6GLOji7Fqxkk+Fswi4C4q33+jk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkFlagsArray = [ "--skip=test_single_huge_payload" ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    SystemConfiguration
+    libiconv
+  ];
+
+  checkFlags = [
+    "--test client_tests"
+    "--skip=test_single_huge_payload"
+    "--skip=test_create_unix_socket"
+  ];
 
   postInstall = ''
-    # zsh completion generation fails. See: https://github.com/Nukesor/pueue/issues/57
-    for shell in bash fish; do
+    for shell in bash fish zsh; do
       $out/bin/pueue completions $shell .
-      installShellCompletion pueue.$shell
     done
+    installShellCompletion pueue.{bash,fish} _pueue
   '';
 
   meta = with lib; {
-    description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
+    description = "A daemon for managing long running shell commands";
+    longDescription = ''
+      Pueue is a command-line task management tool for sequential and parallel
+      execution of long-running tasks.
+
+      Simply put, it's a tool that processes a queue of shell commands. On top
+      of that, there are a lot of convenient features and abstractions.
+
+      Since Pueue is not bound to any terminal, you can control your tasks from
+      any terminal on the same machine. The queue will be continuously
+      processed, even if you no longer have any active ssh sessions.
+    '';
+    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

@@ -2,13 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytest
-, pytestcov
 , flaky
 , numpy
 , pandas
-, pytorch
-, scikitlearn
+, torch
+, scikit-learn
 , scipy
 , tabulate
 , tqdm
@@ -16,21 +14,35 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.8.0";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l576dws9drjakfsn0pfpbr48b21vpxv3vd3dz8lkbn8q71zs22r";
+    hash = "sha256-fjNbNY/Dr7lgVGPrHJTvPGuhyPR6IVS7ohBQMI+J1+k=";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
+  propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
+  nativeCheckInputs = [ flaky pandas pytestCheckHook ];
 
-  # on CPU, these expect artifacts from previous GPU run
+  # patch out pytest-cov dep/invocation
+  postPatch = ''
+    substituteInPlace setup.cfg  \
+      --replace "--cov=skorch" ""  \
+      --replace "--cov-report=term-missing" ""  \
+      --replace "--cov-config .coveragerc" ""
+  '';
+
   disabledTests = [
+    # on CPU, these expect artifacts from previous GPU run
     "test_load_cuda_params_to_cpu"
+    # failing tests
     "test_pickle_load"
   ];
+
+  # tries to import `transformers` and download HuggingFace data
+  disabledTestPaths = [ "skorch/tests/test_hf.py" ];
+
+  pythonImportsCheck = [ "skorch" ];
 
   meta = with lib; {
     description = "Scikit-learn compatible neural net library using Pytorch";

@@ -6,13 +6,13 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "05y8sy6v9km1dwvpjzkjxpfzv95g6yzac1b5blac2f1r2kw167p8";
+    sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
   };
 
   buildInputs = [ ruby bundler ];
@@ -28,7 +28,6 @@ buildRubyGem rec {
   '';
 
   meta = {
-    inherit version;
     description = "Creates Nix packages from Gemfiles";
     longDescription = ''
       This is a tool that converts Gemfile.lock files to nix expressions.
@@ -38,7 +37,7 @@ buildRubyGem rec {
     '';
     homepage = "https://github.com/manveru/bundix";
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru qyliss zimbatm ];
+    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
   };
 }

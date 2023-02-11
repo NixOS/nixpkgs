@@ -6,7 +6,8 @@ with lib;
     gtk.iconCache.enable = mkOption {
       type = types.bool;
       default = config.services.xserver.enable;
-      description = ''
+      defaultText = literalExpression "config.services.xserver.enable";
+      description = lib.mdDoc ''
         Whether to build icon theme caches for GTK applications.
       '';
     };
@@ -51,10 +52,8 @@ with lib;
 
     environment.extraSetup = ''
       # For each icon theme directory ...
-
-      find $out/share/icons -mindepth 1 -maxdepth 1 -print0 | while read -d $'\0' themedir
+      find $out/share/icons -exec test -d {} ';' -mindepth 1 -maxdepth 1 -print0 | while read -d $'\0' themedir
       do
-
         # In order to build the cache, the theme dir should be
         # writable. When the theme dir is a symbolic link to somewhere
         # in the nix store it is not writable and it means that only

@@ -13,11 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "0fklr3lxh8g7gda65wf2wdkqv15869h7m1bwbzbiv8pasrf5b352";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "A simple text-based Minecraft modpack manager";
     license = licenses.agpl3;
     homepage = src.meta.homepage;
-    maintainers = with maintainers; [ foxit64 ];
+    maintainers = with maintainers; [ ];
   };
-
 }

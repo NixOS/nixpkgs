@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bfr-1.6";
+  pname = "bfr";
   version = "1.6";
 
   src = fetchurl {
@@ -11,16 +11,16 @@ stdenv.mkDerivation rec {
 
   patches =
     [ (fetchurl {
-        url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-misc/bfr/files/bfr-1.6-perl.patch?revision=1.1";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-misc/bfr/files/bfr-1.6-perl.patch";
         sha256 = "1pk9jm3c1qzs727lh0bw61w3qbykaqg4jblywf9pvq5bypk88qfj";
       })
     ];
 
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A general-purpose command-line pipe buffer";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };

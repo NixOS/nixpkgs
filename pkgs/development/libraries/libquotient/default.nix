@@ -1,24 +1,35 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, qtmultimedia }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, olm, openssl, qtmultimedia, qtkeychain }:
 
 mkDerivation rec {
   pname = "libquotient";
-  version = "0.5.3.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "0gkwr3yw6k2m0j8cc085b5p2q788rf5nhp1p5hc5d55pc7mci2qs";
+    hash = "sha256-3xnv1dcyeX3Kl5EH2Tlf6nXobLG1zXsFmYstnvmSAXA=";
   };
 
-  buildInputs = [ qtbase qtmultimedia ];
+  buildInputs = [ olm openssl qtmultimedia qtkeychain ];
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DQuotient_ENABLE_E2EE=ON"
+  ];
+
+  # https://github.com/quotient-im/libQuotient/issues/551
+  postPatch = ''
+    substituteInPlace Quotient.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
-    description = "A Qt5 library to write cross-platfrom clients for Matrix";
+    description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://matrix.org/docs/projects/sdk/quotient";
-    maintainers = with maintainers; [ colemickens ];
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ colemickens ];
   };
 }

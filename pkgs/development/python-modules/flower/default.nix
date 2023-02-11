@@ -1,42 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, Babel
 , celery
-, future
 , humanize
-, importlib-metadata
-, mock
 , pytz
 , tornado
+, prometheus-client
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.4";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25782840f7ffc25dcf478d94535a2d815448de4aa6c71426be6abfa9ca417448";
+    sha256 = "46493c7e8d9ca2167e8a46eb97ae8d280997cb40a81993230124d74f0fe40bac";
   };
 
-  # flower and humanize aren't listed in setup.py but imported
+  postPatch = ''
+    # rely on using example programs (flowers/examples/tasks.py) which
+    # are not part of the distribution
+    rm tests/load.py
+  '';
+
   propagatedBuildInputs = [
-    Babel
     celery
-    future
-    importlib-metadata
+    humanize
+    prometheus-client
     pytz
     tornado
-    humanize
   ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "flower"
+  ];
 
   meta = with lib; {
-    description = "Celery Flower";
+    description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

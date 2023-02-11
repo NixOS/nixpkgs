@@ -1,25 +1,25 @@
 { buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
-, pytestcov, pytestrunner, stdenv, stringcase
+, pytest-cov, pytest-runner, lib, stringcase
 }:
 
 buildPythonApplication rec {
   pname = "zfs-replicate";
-  version = "1.1.14";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iqyk6q112ylcqrhrgvgbgqqvaikhwk0sb5kc7kg2wwqdc9rfwys";
+    sha256 = "b2cb9d4670a6e12d14a446c10d857862e91af6e4526f607e08b41bde89953bb8";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mypy
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   buildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonApplication rec {
     pytest --doctest-modules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/alunduil/zfs-replicate";
     description = "ZFS Snapshot Replication";
     license = licenses.bsd2;

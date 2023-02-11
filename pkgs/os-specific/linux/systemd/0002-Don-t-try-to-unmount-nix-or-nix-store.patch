@@ -1,34 +1,34 @@
-From bdd3ff777dd8253ff5732118dd6de0fa9a9b95fe Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
-Subject: [PATCH 02/18] Don't try to unmount /nix or /nix/store
+Subject: [PATCH] Don't try to unmount /nix or /nix/store
 
 They'll still be remounted read-only.
 
 https://github.com/NixOS/nixos/issues/126
 ---
- src/core/mount.c      | 2 ++
- src/shutdown/umount.c | 2 ++
+ src/shared/fstab-util.c | 2 ++
+ src/shutdown/umount.c   | 2 ++
  2 files changed, 4 insertions(+)
 
-diff --git a/src/core/mount.c b/src/core/mount.c
-index 1c4aefd734..a5553226f8 100644
---- a/src/core/mount.c
-+++ b/src/core/mount.c
-@@ -412,6 +412,8 @@ static bool mount_is_extrinsic(Mount *m) {
- 
-         if (PATH_IN_SET(m->where,  /* Don't bother with the OS data itself */
-                         "/",       /* (strictly speaking redundant: should already be covered by the perpetual flag check above) */
+diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
+index f683f05981..5a04c2c2a6 100644
+--- a/src/shared/fstab-util.c
++++ b/src/shared/fstab-util.c
+@@ -40,6 +40,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+         /* Don't bother with the OS data itself */
+         if (PATH_IN_SET(mount,
+                         "/",
 +                        "/nix",
 +                        "/nix/store",
                          "/usr",
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 8a5e80eeaa..fab35ed6f3 100644
+index e650b82170..5d0d41aa28 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -414,6 +414,8 @@ static int delete_dm(dev_t devnum) {
+@@ -522,6 +522,8 @@ static int delete_md(MountPoint *m) {
  
  static bool nonunmountable_path(const char *path) {
          return path_equal(path, "/")
@@ -37,6 +37,3 @@ index 8a5e80eeaa..fab35ed6f3 100644
  #if ! HAVE_SPLIT_USR
                  || path_equal(path, "/usr")
  #endif
--- 
-2.26.2
-

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL }:
+{ lib, stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "linuxconsoletools";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=\"\"" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "A set of tools for joysticks and serial peripherals";
     license = licenses.gpl2Plus;

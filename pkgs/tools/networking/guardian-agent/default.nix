@@ -20,6 +20,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/StanfordSNR/guardian-agent";
 
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   postInstall = ''
@@ -29,9 +30,9 @@ buildGoPackage rec {
   '';
 
   postFixup = ''
-		wrapProgram $out/bin/sga-guard \
-			--prefix PATH : "$out/bin" \
-			--prefix PATH : "${autossh}/bin"
+    wrapProgram $out/bin/sga-guard \
+      --prefix PATH : "$out/bin" \
+      --prefix PATH : "${autossh}/bin"
   '';
 
   meta = with lib; {

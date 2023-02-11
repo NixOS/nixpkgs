@@ -1,23 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi, pam }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pam
+, six
+, toml
+}:
 
 buildPythonPackage rec {
   pname = "python-pam";
-  version = "1.8.4";
+  version = "2.0.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "16whhc0vr7gxsbzvsnq65nq8fs3wwmx755cavm8kkczdkz4djmn8";
+  src = fetchFromGitHub {
+    owner = "FirefighterBlu3";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
   postPatch = ''
-    substituteInPlace pam.py --replace 'find_library("pam")' \
-      '"${pam}/lib/libpam${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    substituteInPlace src/pam/__internals.py \
+      --replace 'find_library("pam")' '"${pam}/lib/libpam.so"' \
+      --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
 
-  meta = with stdenv.lib; {
-    description = "Python PAM module using ctypes";
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  buildInputs = [
+    pam
+  ];
+
+  propagatedBuildInputs = [
+    six
+    toml
+  ];
+
+  pythonImportsCheck = [ "pam" ];
+
+  meta = with lib; {
+    description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
-    maintainers = with maintainers; [ abbradar ];
     license = licenses.mit;
+    maintainers = with maintainers; [ abbradar mkg20001 ];
   };
 }

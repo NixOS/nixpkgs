@@ -1,44 +1,41 @@
-{ stdenv, fetchFromGitHub, pythonPackages, fetchpatch, installShellFiles }:
+{ lib, fetchFromGitHub, python3, installShellFiles, fetchpatch }:
 
-with pythonPackages;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "watson";
-  version = "1.9.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "TailorDev";
     repo = "Watson";
     rev = version;
-    sha256 = "0f0ldwadjf0xncx3m4w4wwqddd4wjwcsrbhby8vgsnqsn48dnfcx";
+    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
   patches = [
-    # https://github.com/TailorDev/Watson/pull/380
-    # The nixpkgs' arrow version is too new / not supported by Watson's latest release.
+    # https://github.com/TailorDev/Watson/pull/473
     (fetchpatch {
-      url = "https://github.com/TailorDev/Watson/commit/69b9ad25551525d52060f7fb2eef3653e872a455.patch";
-      sha256 = "0zrswgr0y219f92zi41m7cymfaspkhmlada4v9ijnsjjdb4bn2c9";
+      name = "fix-completion.patch";
+      url = "https://github.com/TailorDev/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
+      sha256 = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
     })
   ];
-
-  checkPhase = ''
-    pytest -vs tests
-  '';
 
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
   '';
 
-  checkInputs = [ py pytest pytest-datafiles pytest-mock pytestrunner ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
   propagatedBuildInputs = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner nathyong ];
+    maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };
 }

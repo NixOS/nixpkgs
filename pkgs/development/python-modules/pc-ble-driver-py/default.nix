@@ -1,47 +1,60 @@
-{ stdenv, buildPythonPackage, fetchpatch, fetchFromGitHub,
-  python, cmake, git, swig, boost, udev,
-  setuptools, enum34, wrapt, future }:
+{ lib
+, boost
+, buildPythonPackage
+, cmake
+, cryptography
+, fetchFromGitHub
+, git
+, pc-ble-driver
+, pythonAtLeast
+, pythonOlder
+, scikit-build
+, setuptools
+, swig
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
-  version = "0.11.4";
-  disabled = python.isPy3k;
+  version = "0.17.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver-py";
     rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "0lgmcnrlcivmawmlcwnn4pdp6afdbnf3fyfgq22xzs6v72m9gp81";
+    sha256 = "sha256-brC33ar2Jq3R2xdrklvVsQKf6pcnKwD25PO4TIvXgTg=";
   };
 
-  nativeBuildInputs = [ cmake swig git setuptools ];
-  buildInputs = [ boost udev ];
-  propagatedBuildInputs = [ enum34 wrapt future ];
-
-  patches = [
-    # build system expects case-insensitive file system
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/NordicSemiconductor/pc-ble-driver-py/pull/84.patch";
-      sha256 = "0ibx5g2bndr5h9sfnx51bk9b62q4jvpdwhxadbnj3da8kvcz13cy";
-    })
+  nativeBuildInputs = [
+    cmake
+    swig
+    git
+    setuptools
+    scikit-build
   ];
 
-  postPatch = ''
-    # do not force static linking of boost
-    sed -i /Boost_USE_STATIC_LIBS/d pc-ble-driver/cmake/*.cmake
+  buildInputs = [
+    boost
+    pc-ble-driver
+  ];
 
-    cd python
-  '';
+  propagatedBuildInputs = [
+    cryptography
+    wrapt
+  ];
 
-  preBuild = ''
-    pushd ../build
-    cmake ..
-    make -j $NIX_BUILD_CORES
-    popd
-  '';
+  dontUseCmakeConfigure = true;
 
-  meta = with stdenv.lib; {
+  # doCheck tries to write to the global python directory to install things
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pc_ble_driver_py"
+  ];
+
+  meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver-py";
     license = licenses.unfreeRedistributable;

@@ -1,29 +1,55 @@
-{ stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmocka
 
-stdenv.mkDerivation rec {
+# for passthru.tests
+, libfido2
+, mysql80
+, openssh
+, systemd
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "unstable-2019-07-25";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = pname;
-    rev = "82512d851205fbc7f65d96a0b4a8e1bad2e4f3c6";
-    sha256 = "01hy7n21gxz4gp3gdwm2ywz822p415bj2k9ccxgwz3plvncs4xa1";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-YJSIZ7o191/0QJf1fH6LUYykS2pvP17knSeRO2WcDeM=";
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cmocka ];
 
-  doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DBUILD_SHARED_LIBS=on"
+  ] ++ lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON";
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+  # 2 tests are not 32-bit clean: overflow size_t:
+  #   https://github.com/PJK/libcbor/issues/263
+  doCheck =
+    !stdenv.hostPlatform.is32bit
+    && (!stdenv.hostPlatform.isStatic)
+    && stdenv.hostPlatform == stdenv.buildPlatform;
+  nativeCheckInputs = [ cmocka ];
 
-  NIX_CFLAGS_COMPILE = "-fno-lto";
+  passthru.tests = {
+    inherit libfido2 mysql80;
+    openssh = (openssh.override { withFIDO = true; });
+    systemd = (systemd.override {
+      withFido2 = true;
+      withCryptsetup = true;
+    });
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
-}
+})

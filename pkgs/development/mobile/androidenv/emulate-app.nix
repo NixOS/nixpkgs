@@ -1,4 +1,4 @@
-{ composeAndroidPackages, stdenv, lib }:
+{ composeAndroidPackages, stdenv, lib, runtimeShell }:
 { name, app ? null
 , platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
 , enableGPU ? false, extraAVDFiles ? []
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     cat > $out/bin/run-test-emulator << "EOF"
-    #! ${stdenv.shell} -e
+    #!${runtimeShell} -e
 
     # We need a TMPDIR
     if [ "$TMPDIR" = "" ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
 
     export ANDROID_SERIAL="emulator-$port"
 
-    # Create a virtual android device for testing if it does not exists
+    # Create a virtual android device for testing if it does not exist
     ${sdk}/libexec/android-sdk/tools/bin/avdmanager list target
 
     if [ "$(${sdk}/libexec/android-sdk/tools/android list avd | grep 'Name: device')" = "" ]

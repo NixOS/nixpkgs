@@ -9,7 +9,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , groff
@@ -101,7 +101,7 @@ let
                                else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
     stripRoot = false;
     # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
-    extraPostFetch = lib.optionalString (!withPEPatterns) ''
+    postFetch = lib.optionalString (!withPEPatterns) ''
       rm -r "$out/generic/yara_patterns/static-code/pe"
     '';
   } // {
@@ -135,8 +135,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "avast-tl";
-    repo = "retdec";
-    name = "retdec-${version}";
+    repo = pname;
     rev = "refs/tags/v${version}";
     sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
   };
@@ -146,7 +145,7 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     bison
     flex
     groff
@@ -216,8 +215,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/retdec-config.py --replace /usr/bin/time ${time}/bin/time
     substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
   '';
-
-  enableParallelBuilding = true;
 
   doInstallCheck = true;
   installCheckPhase = ''

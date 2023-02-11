@@ -1,34 +1,37 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
 , capnproto
 , cython
+, fetchFromGitHub
+, isPy27
 , isPyPy
-, isPy3k
+, pkgconfig
 }:
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "0.6.4";
-  disabled = isPyPy || isPy3k;
+  version = "1.1.0";
+  disabled = isPyPy || isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "44e14a5ace399cf1753acb8bbce558b8c895c48fd2102d266c34eaff286824cf";
+  src = fetchFromGitHub {
+    owner = "capnproto";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
   };
 
-  buildInputs = [ capnproto cython ];
+  nativeBuildInputs = [ cython pkgconfig ];
 
-  # import setuptools as soon as possible, to minimize monkeypatching mayhem.
-  postConfigure = ''
-    sed -i '3iimport setuptools' setup.py
-  '';
+  buildInputs = [ capnproto ];
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ cstrahan ];
+  # Tests depend on schema_capnp which fails to generate
+  doCheck = false;
+
+  pythonImportsCheck = [ "capnp" ];
+
+  meta = with lib; {
+    homepage = "https://capnproto.github.io/pycapnp/";
+    maintainers = with maintainers; [ cstrahan lukeadams ];
     license = licenses.bsd2;
-    homepage = "http://jparyani.github.io/pycapnp/index.html";
-    broken = true; # 2018-04-11
   };
-
 }

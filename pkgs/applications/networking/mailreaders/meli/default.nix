@@ -2,12 +2,12 @@
 , lib
 , fetchgit
 , rustPlatform
-, pkgconfig
+, pkg-config
 , openssl
 , dbus
 , sqlite
 , file
-, gzip
+, makeWrapper
 , notmuch
   # Build with support for notmuch backend
 , withNotmuch ? true
@@ -15,36 +15,45 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.5.1";
+  version = "alpha-0.7.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = version;
-    sha256 = "1y5567hdm1s2s272drxvmp6x4y1jpyl7423iz58hgqcsjm9085zv";
+    sha256 = "sha256-cbigEJhX6vL+gHa40cxplmPsDhsqujkzQxe0Dr6+SK0=";
   };
 
-  cargoSha256 = "040dfr09bg5z5pn68dy323hcppd599d3f6k7zxqw5f8n4whnlc9y";
+  cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
-  cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
-
-  nativeBuildInputs = [ pkgconfig gzip ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
+
+  buildFeatures = lib.optionals withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1
-    gzip < meli.1 > $out/share/man/man1/meli.1.gz
+    gzip < docs/meli.1 > $out/share/man/man1/meli.1.gz
     mkdir -p $out/share/man/man5
-    gzip < meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
+    gzip < docs/meli-themes.5 > $out/share/man/man5/meli-themes.5.gz
+  '' + lib.optionalString withNotmuch ''
+    # Fixes this runtime error when meli is started with notmuch configured:
+    # $ meli
+    # libnotmuch5 was not found in your system. Make sure it is installed and
+    # in the library paths.
+    # notmuch is not a valid mail backend
+    wrapProgram $out/bin/meli --set LD_LIBRARY_PATH ${notmuch}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ maintainers."0x4A6F" matthiasbeyer erictapen ];
+    maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
     platforms = platforms.linux;
   };
 }

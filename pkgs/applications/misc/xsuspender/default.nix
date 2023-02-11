@@ -1,33 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
-, glib, libwnck3, procps }:
-
-with lib;
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
+, glib, libwnck, procps }:
 
 stdenv.mkDerivation rec {
   pname = "xsuspender";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "kernc";
     repo = "xsuspender";
     rev = version;
-    sha256 = "03lbga68dxg89d227sdwk1f5xj4r1pmj0qh2kasi2cqh8ll7qv4b";
+    sha256 = "1c6ab1s9bbkjbmcfv2mny273r66dlz7sgxsmzfwi0fm2vcb2lwim";
   };
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ glib libwnck3 ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [ glib libwnck ];
 
   postInstall = ''
     wrapProgram $out/bin/xsuspender \
-      --prefix PATH : "${makeBinPath [ procps ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps ]}"
   '';
 
-  meta = {
-    description = "Auto-suspend inactive X11 applications.";
+  meta = with lib; {
+    description = "Auto-suspend inactive X11 applications";
     homepage = "https://kernc.github.io/xsuspender/";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ offline ];

@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 
@@ -37,6 +38,9 @@ if test "$noSysDirs" = "1"; then
             # Figure out what extra flags when linking to pass to the gcc
             # compilers being generated to make sure that they use our libc.
             extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
+            if [ -e ${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
+                extraLDFlags=-dynamic-linker=$(< ${!curBintools}/nix-support/dynamic-linker)
+            fi
 
             # The path to the Libc binaries such as `crti.o'.
             libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
@@ -61,7 +65,7 @@ if test "$noSysDirs" = "1"; then
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
             # Figure out what extra compiling flags to pass to the gcc compilers
             # being generated to make sure that they use our libc.
-            extraFlags=($(< "${!curCC}/nix-support/libc-cflags"))
+            extraFlags=($(< "${!curCC}/nix-support/libc-crt1-cflags") $(< "${!curCC}/nix-support/libc-cflags"))
 
             # The path to the Libc headers
             libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
@@ -144,11 +148,6 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if test -n "${targetConfig-}"; then
-    # The host strip will destroy some important details of the objects
-    dontStrip=1
-fi
-
 eval "$oldOpts"
 
 providedPreConfigure="$preConfigure";
@@ -166,15 +165,6 @@ preConfigure() {
         # the target libgcc as target libraries.
         # See 'configure:5370'
         rm -Rf zlib
-    fi
-
-    if test -f "$NIX_CC/nix-support/orig-libc"; then
-        # Patch the configure script so it finds glibc headers.  It's
-        # important for example in order not to get libssp built,
-        # because its functionality is in glibc already.
-        sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
-            gcc/configure
     fi
 
     if test -n "$crossMingw" -a -n "$crossStageStatic"; then
@@ -204,9 +194,25 @@ preInstall() {
     mkdir -p "$out/${targetConfig}/lib"
     mkdir -p "${!outputLib}/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
-    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+    if [ -n "$linkLib64toLib" ]; then
         ln -s lib "$out/${targetConfig}/lib64"
         ln -s lib "${!outputLib}/${targetConfig}/lib64"
+    fi
+    # Make ‘lib32’ symlinks to ‘lib’.
+    if [ -n "$linkLib32toLib" ]; then
+        ln -s lib "$out/${targetConfig}/lib32"
+        ln -s lib "${!outputLib}/${targetConfig}/lib32"
+    fi
+
+    # cc-wrappers uses --sysroot=/nix/store/does/not/exist as a way to
+    # drop default sysheaders search path. Unfortunately that switches
+    # clang++ into searching libraries in gcc in cross-compiler paths:
+    #   from ${!outputLib}/lib (native)
+    #   to ${!outputLib}/${targetPlatformConfig}/lib
+    # We create the symlink to make both native and cross paths
+    # available even if the toolchain is not the cross-compiler.
+    if [ ! -e ${!outputLib}/${targetPlatformConfig} ] ; then
+        ln -s . ${!outputLib}/${targetPlatformConfig}
     fi
 }
 
@@ -218,6 +224,10 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "${!outputLib}"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
     moveToOutput "share/gcc-*/python" "${!outputLib}"
+
+    if [ -z "$enableShared" ]; then
+        moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "${!outputLib}"
+    fi
 
     for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "${!outputLib}"
@@ -241,17 +251,8 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if type "patchelf"; then
-        # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-        for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-    fi
-
     if type "install_name_tool"; then
-        for i in "${!outputLib}"/lib/*.*.dylib; do
+        for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
               new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`
@@ -277,7 +278,12 @@ postInstall() {
     done
 
     # Two identical man pages are shipped (moving and compressing is done later)
-    ln -sf gcc.1 "$out"/share/man/man1/g++.1
+    for i in "$out"/share/man/man1/*g++.1; do
+        if test -e "$i"; then
+            man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
+            ln -sf "$man_prefix"gcc.1 "$i"
+        fi
+    done
 }
 
 genericBuild

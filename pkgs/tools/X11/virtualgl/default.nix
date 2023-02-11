@@ -4,7 +4,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "virtualgl-${lib.getVersion virtualglLib}";
+  pname = "virtualgl";
+  version = lib.getVersion virtualglLib;
 
   paths = [ virtualglLib ];
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     inherit (virtualglLib.meta) license;
   };
 }

@@ -55,7 +55,10 @@ let
   rotateKeys = ''
     # check if keys are not expired
     keyValid() {
-      fingerprint=$(dnscrypt-wrapper --show-provider-publickey | awk '{print $(NF)}')
+      fingerprint=$(dnscrypt-wrapper \
+        --show-provider-publickey \
+        --provider-publickey-file=${publicKey} \
+        | awk '{print $(NF)}')
       dnscrypt-proxy --test=${toString (cfg.keys.checkInterval + 1)} \
         --resolver-address=127.0.0.1:${toString cfg.port} \
         --provider-name=${cfg.providerName} \
@@ -80,7 +83,7 @@ let
   # correctly implement key rotation of dnscrypt-wrapper ephemeral keys.
   dnscrypt-proxy1 = pkgs.callPackage
     ({ stdenv, fetchFromGitHub, autoreconfHook
-    , pkgconfig, libsodium, ldns, openssl, systemd }:
+    , pkg-config, libsodium, ldns, openssl, systemd }:
 
     stdenv.mkDerivation rec {
       pname = "dnscrypt-proxy";
@@ -95,7 +98,7 @@ let
 
       configureFlags = optional stdenv.isLinux "--with-systemd";
 
-      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      nativeBuildInputs = [ autoreconfHook pkg-config ];
 
       # <ldns/ldns.h> depends on <openssl/ssl.h>
       buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
@@ -121,20 +124,20 @@ in {
   ###### interface
 
   options.services.dnscrypt-wrapper = {
-    enable = mkEnableOption "DNSCrypt wrapper";
+    enable = mkEnableOption (lib.mdDoc "DNSCrypt wrapper");
 
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will bind to this IP address.
       '';
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 5353;
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will listen for DNS queries on this port.
       '';
     };
@@ -142,10 +145,11 @@ in {
     providerName = mkOption {
       type = types.str;
       default = "2.dnscrypt-cert.${config.networking.hostName}";
+      defaultText = literalExpression ''"2.dnscrypt-cert.''${config.networking.hostName}"'';
       example = "2.dnscrypt-cert.myresolver";
-      description = ''
+      description = lib.mdDoc ''
         The name that will be given to this DNSCrypt resolver.
-        Note: the resolver name must start with <literal>2.dnscrypt-cert.</literal>.
+        Note: the resolver name must start with `2.dnscrypt-cert.`.
       '';
     };
 
@@ -153,7 +157,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/public.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider public key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -163,7 +167,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/secret.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider secret key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -172,15 +176,15 @@ in {
     upstream.address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The IP address of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
 
     upstream.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
-      description = ''
+      description = lib.mdDoc ''
         The port of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
@@ -188,7 +192,7 @@ in {
     keys.expiration = mkOption {
       type = types.int;
       default = 30;
-      description = ''
+      description = lib.mdDoc ''
         The duration (in days) of the time-limited secret key.
         This will be automatically rotated before expiration.
       '';
@@ -197,7 +201,7 @@ in {
     keys.checkInterval = mkOption {
       type = types.int;
       default = 1440;
-      description = ''
+      description = lib.mdDoc ''
         The time interval (in minutes) between key expiration checks.
       '';
     };
@@ -214,6 +218,7 @@ in {
       home = "${dataDir}";
       createHome = true;
       isSystemUser = true;
+      group = "dnscrypt-wrapper";
     };
     users.groups.dnscrypt-wrapper = { };
 

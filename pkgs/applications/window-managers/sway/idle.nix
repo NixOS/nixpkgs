@@ -1,30 +1,33 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, systemd
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config, scdoc, wayland-scanner
+, wayland, wayland-protocols, runtimeShell
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "swayidle";
-  version = "1.6";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "1nd3v8r9549lykdwh4krldfl59lzaspmmai5k1icy7dvi6kkr18r";
+    sha256 = "sha256-/U6Y9H5ZqIJph3TZVcwr9+Qfd6NZNYComXuC1D9uGHg=";
   };
 
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols ]
+                ++ lib.optionals systemdSupport [ systemd ];
+
+  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
+
   postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '1.5'" "version: '${version}'"
+    substituteInPlace main.c \
+      --replace '"sh"' '"${runtimeShell}"'
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
-  buildInputs = [ wayland wayland-protocols systemd ];
-
-  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Idle management daemon for Wayland";
     longDescription = ''
       Sway's idle management daemon. It is compatible with any Wayland

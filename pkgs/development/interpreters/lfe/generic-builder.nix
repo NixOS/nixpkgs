@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
+{ lib, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
 
 { baseName ? "lfe"
 , version
@@ -10,7 +10,7 @@
 }:
 
 let
-  inherit (stdenv.lib)
+  inherit (lib)
     assertMsg makeBinPath optionalString
     getVersion versionAtLeast versionOlder versions;
 
@@ -37,9 +37,9 @@ buildRebar3 {
 
   inherit src version;
 
-  buildInputs = [ erlang makeWrapper ];
+  nativeBuildInputs = [ makeWrapper erlang ];
   beamDeps    = [ proper ];
-  patches     = [ ./no-test-deps.patch ./dedup-ebins.patch ] ++ patches;
+  patches     = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
   doCheck     = true;
   checkTarget = "travis";
 
@@ -75,7 +75,7 @@ buildRebar3 {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "The best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
@@ -83,11 +83,11 @@ buildRebar3 {
       code. An LFE evaluator and shell is also included.
     '';
 
-    homepage     = "http://lfe.io";
+    homepage     = "https://lfe.io";
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license      = licenses.asl20;
-    maintainers  = with maintainers; [ yurrriq ankhers ];
+    maintainers  = teams.beam.members;
     platforms    = platforms.unix;
   };
 }

@@ -1,20 +1,27 @@
-{ stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, autoreconfHook,
-  libpng, glew, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, libpng
+, glew, dejavu_fonts, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
-  version = "11.3l";
+  version = "12.1i";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     rev = "v${version}";
-    sha256 = "0fniyaf9mgg99s03wbdc36zg909kshpdfk9pn8pkai0x99lghkwb";
+    sha256 = "sha256-TMPumyTEzDbV/31UgwXJwr7zt7ufENX3ESxlcBEnaSc=";
   };
 
-  CPPFLAGS = "-I${SDL.dev}/include/SDL";
+  CXXFLAGS = [
+    "-I${lib.getDev SDL}/include/SDL"
+    "-DHYPERPATH='\"${placeholder "out"}/share/hyperrogue/\"'"
+    "-DRESOURCEDESTDIR=HYPERPATH"
+    "-DHYPERFONTPATH='\"${dejavu_fonts}/share/fonts/truetype/\"'"
+  ];
+  HYPERROGUE_USE_GLEW = 1;
+  HYPERROGUE_USE_PNG = 1;
 
-  buildInputs = [ autoreconfHook SDL SDL_ttf SDL_gfx SDL_mixer libpng glew ];
+  buildInputs = [ SDL SDL_ttf SDL_gfx SDL_mixer libpng glew ];
 
   desktopItem = makeDesktopItem {
     name = "hyperrogue";
@@ -23,10 +30,17 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "hyperrogue";
     exec = "hyperrogue";
-    categories = "Game;AdventureGame;";
+    categories = [ "Game" "AdventureGame" ];
   };
 
-  postInstall = ''
+  installPhase = ''
+    install -d $out/share/hyperrogue/{sounds,music}
+
+    install -m 555 -D hyperrogue $out/bin/hyperrogue
+    install -m 444 -D hyperrogue-music.txt *.dat $out/share/hyperrogue
+    install -m 444 -D music/* $out/share/hyperrogue/music
+    install -m 444 -D sounds/* $out/share/hyperrogue/sounds
+
     install -m 444 -D ${desktopItem}/share/applications/hyperrogue.desktop \
       $out/share/applications/hyperrogue.desktop
     install -m 444 -D hyperroid/app/src/main/res/drawable-ldpi/icon.png \
@@ -45,7 +59,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.roguetemple.com/z/hyper/";
     description = "A roguelike game set in hyperbolic geometry";
     maintainers = with maintainers; [ rardiol ];

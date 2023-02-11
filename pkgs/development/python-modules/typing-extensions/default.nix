@@ -1,26 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, python, typing }:
-let
-  testDir = if isPy3k then "src_py3" else "src_py2";
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, python
+, pythonOlder
+}:
 
-in buildPythonPackage rec {
-  pname = "typing_extensions";
-  version = "3.7.4.2";
+buildPythonPackage rec {
+  pname = "typing-extensions";
+  version = "4.4.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "79ee589a3caca649a9bfd2a8de4709837400dfa00b6cc81962a1e6a1815969ae";
+    pname = "typing_extensions";
+    inherit version;
+    hash = "sha256-FRFDS7kr+N0ZjBKxzIEugA1Bgc/LhnZ04PgnnMkwh6o=";
   };
 
-  checkInputs = lib.optional (pythonOlder "3.5") typing;
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  # Error for Python3.6: ImportError: cannot import name 'ann_module'
-  # See https://github.com/python/typing/pull/280
-  doCheck = pythonOlder "3.6";
+  # Tests are not part of PyPI releases. GitHub source can't be used
+  # as it ends with an infinite recursion
+  doCheck = false;
 
-  checkPhase = ''
-    cd ${testDir}
-    ${python.interpreter} -m unittest discover
-  '';
+  pythonImportsCheck = [
+    "typing_extensions"
+  ];
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python 3.5+";

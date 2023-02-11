@@ -1,12 +1,13 @@
---- a/m4/sasl2.m4	2018-11-18 22:33:29.902625600 +0300
-+++ b/m4/sasl2.m4	2018-11-18 22:33:59.828746176 +0300
-@@ -339,7 +339,8 @@
- ],	
- 	[ AC_DEFINE(HAVE_GSS_SPNEGO,,[Define if your GSSAPI implementation supports SPNEGO])
- 	AC_MSG_RESULT(yes) ],
--	AC_MSG_RESULT(no))
-+	AC_MSG_RESULT(no),
-+    AC_MSG_RESULT(no))
-   LIBS="$cmu_save_LIBS"
+diff --git a/m4/sasl2.m4 b/m4/sasl2.m4
+index 098c853a..91d98def 100644
+--- a/m4/sasl2.m4
++++ b/m4/sasl2.m4
+@@ -350,7 +350,7 @@ int main(void)
  
- else
+     return (!have_spnego);  // 0 = success, 1 = failure
+ }
+-],[ac_cv_gssapi_supports_spnego=yes],[ac_cv_gssapi_supports_spnego=no])
++],[ac_cv_gssapi_supports_spnego=yes],[ac_cv_gssapi_supports_spnego=no],[ac_cv_gssapi_supports_spnego=no])
+     LIBS="$cmu_save_LIBS"
+   ])
+   AS_IF([test "$ac_cv_gssapi_supports_spnego" = yes],[

@@ -1,27 +1,33 @@
 {
   msgpack = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0031gd2mjyba6jb7m97sqa149zjkr0vzn2s2gpb3m9nb67gqkm13";
+      sha256 = "sha256-fPWiGi0w4OFlMZOIf3gd21jyeYhg5t/VdLz7kK9fD8Q=";
       type = "gem";
     };
-    version = "1.2.6";
+    version = "1.5.1";
   };
   multi_json = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rl0qy4inf1mp8mybfk56dfga0mvx97zwpmq5xmiwl5r770171nv";
+      sha256 = "sha256-H9BBOLbkqQAX6NG4BMA5AxOZhm/z+6u3girqNnx4YV0=";
       type = "gem";
     };
-    version = "1.13.1";
+    version = "1.15.0";
   };
   neovim = {
     dependencies = ["msgpack" "multi_json"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07scrdfk7pyn5jgx5m2yajdqpbdv42833vbw568qqag6xp99j3yk";
+      sha256 = "sha256-hRI43XGHGeqxMvpFjp0o79GGReiLXTkhwh5LYq6AQL4=";
       type = "gem";
     };
-    version = "0.8.0";
+    version = "0.9.0";
   };
 }

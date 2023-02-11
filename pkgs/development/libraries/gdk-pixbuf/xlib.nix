@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf-xlib";
-  version = "2019-10-19-unstable";
+  version = "2.40.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gdk-pixbuf-xlib";
-    rev = "19482794a621d542b223219940e836257d4ae2c9";
-    sha256 = "7Qv6tyjR0/iFXYHx5jPhvLLLt0Ms2nzpyWw02oXTkZc=";
+    rev = version;
+    hash = "sha256-b4EUaYzg2NlBMU90dGQivOvkv9KKSzES/ymPqzrelu8=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deprecated API for integrating GdkPixbuf with Xlib data types";
     homepage = "https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib";
     maintainers = teams.gnome.members;

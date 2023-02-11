@@ -1,45 +1,91 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, attrs
+, exceptiongroup
+, pexpect
+, doCheck ? true
+, pytestCheckHook
+, pytest-xdist
 , sortedcontainers
+, pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, sphinx-hoverxref
+, sphinx-codeautolink
+# Used to break internal dependency loop.
+, enableDocumentation ? true
 }:
+
 buildPythonPackage rec {
-  # https://hypothesis.readthedocs.org/en/latest/packaging.html
-
-  # Hypothesis has optional dependencies on the following libraries
-  # pytz fake_factory django numpy pytest
-  # If you need these, you can just add them to your environment.
-
-  version = "5.11.0";
   pname = "hypothesis";
+  version = "6.61.0";
+  outputs = [ "out" ] ++ lib.optional enableDocumentation "doc";
+  format = "setuptools";
 
-  # Use github tarballs that includes tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
-    repo = "hypothesis-python";
+    repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    sha256 = "1ca2dwih65s4r8vazwqm963ywngdr3v854ldnfyny7bvx1v28m8k";
+    hash = "sha256-gTcdJaOgP8Nc4fN8UH6+sLedivq5ZNxMRULajFOVnSo=";
   };
+
+  # I tried to package sphinx-selective-exclude, but it throws
+  # error about "module 'sphinx' has no attribute 'directives'".
+  #
+  # It probably has to do with monkey-patching internals of Sphinx.
+  # On bright side, this extension does not introduces new commands,
+  # only changes "::only" command, so we probably okay with stock
+  # implementation.
+  #
+  # I wonder how upstream of "hypothesis" builds documentation.
+  postPatch = ''
+    sed -i -e '/sphinx_selective_exclude.eager_only/ d' docs/conf.py
+  '';
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
+  nativeBuildInputs = lib.optionals enableDocumentation [
+    sphinxHook
+    sphinx-rtd-theme
+    sphinx-hoverxref
+    sphinx-codeautolink
+  ];
+
   propagatedBuildInputs = [
     attrs
-    coverage
     sortedcontainers
-  ] ++ lib.optional (!isPy3k) enum34;
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ];
 
-  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
+  nativeCheckInputs = [
+    pexpect
+    pytest-xdist
+    pytestCheckHook
+  ];
+
   inherit doCheck;
 
-  checkPhase = ''
-    rm tox.ini # This file changes how py.test runs and breaks it
-    py.test tests/cover
+  # This file changes how pytest runs and breaks it
+  preCheck = ''
+    rm tox.ini
   '';
 
+  pytestFlagsArray = [
+    "tests/cover"
+  ];
+
+  pythonImportsCheck = [
+    "hypothesis"
+  ];
+
   meta = with lib; {
-    description = "A Python library for property based testing";
+    description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

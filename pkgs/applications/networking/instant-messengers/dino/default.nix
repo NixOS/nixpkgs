@@ -1,12 +1,11 @@
-{ stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+{ lib, stdenv, fetchFromGitHub
+, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
-, fetchpatch
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -14,33 +13,26 @@
 , pcre
 , qrencode
 , icu
+, gspell
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
  }:
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.1.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
+    sha256 = "sha256-wjSgs1mUMV7j/8ZeXqWs8aOeWvJHwKziUfbtOC1HS3s=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Allow newer versions of libsignal-protocol-c
-      url = "https://github.com/dino/dino/commit/fbd70ceaac5ebbddfa21a580c61165bf5b861303.patch";
-      sha256 = "0ydpwsmwrzfsry89fsffkfalhki4n1dw99ixjvpiingdrhjmwyl2";
-      excludes = [ "plugins/signal-protocol/libsignal-protocol-c" ];
-    })
-  ];
 
   nativeBuildInputs = [
     vala
     cmake
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
   ];
@@ -51,7 +43,7 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3
@@ -60,23 +52,60 @@ stdenv.mkDerivation rec {
     libgcrypt
     libsoup
     pcre
-    xorg.libxcb
-    xorg.libpthreadstubs
-    libXdmcp
-    libxkbcommon
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
     icu
     libsignal-protocol-c
     librsvg
+    gspell
+    srtp
+    libnice
+    gnutls
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    webrtc-audio-processing
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    xorg.libxcb
+    xorg.libpthreadstubs
+    libXdmcp
+    libxkbcommon
   ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = ["-DBUILD_TESTS=yes"];
+
+  # Undefined symbols for architecture arm64: "_gpg_strerror"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lgpg-error";
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./xmpp-vala-test
+    ./signal-protocol-vala-test
+    runHook postCheck
+  '';
+
+  # Dino looks for plugins with a .so filename extension, even on macOS where
+  # .dylib is appropriate, and despite the fact that it builds said plugins with
+  # that as their filename extension
+  #
+  # Therefore, on macOS rename all of the plugins to use correct names that Dino
+  # will load
+  #
+  # See https://github.com/dino/dino/wiki/macOS
+  postFixup = lib.optionalString (stdenv.isDarwin) ''
+    cd "$out/lib/dino/plugins/"
+    for f in *.dylib; do
+      mv "$f" "$(basename "$f" .dylib).so"
+    done
+  '';
+
+  meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 qyliss ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
 }

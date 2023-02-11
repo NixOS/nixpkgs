@@ -1,21 +1,20 @@
 { lib, fetchurl, buildDunePackage
-, ppx_sexp_conv
+, ppx_sexp_conv, ounit
 }:
 
 buildDunePackage rec {
   pname = "macaddr";
-  version = "3.1.0";
+  version = "5.3.0";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-ipaddr/archive/v${version}.tar.gz";
-    sha256 = "1hi3v5dzg6h4qb268ch3h6v61gsc8bv21ajhb35z37v5nsdmyzbh";
+    url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-${version}.tbz";
+    sha256 = "0mdp38mkvk2f5h2q7nb9fc70a8hyssblnl7kam0d8r5lckgrx5rn";
   };
 
-  propagatedBuildInputs = [ ppx_sexp_conv ];
-
-  doCheck = false; # ipaddr and macaddr tests are together, which requires mutual dependency
+  checkInputs = [ ppx_sexp_conv ounit ];
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-ipaddr";

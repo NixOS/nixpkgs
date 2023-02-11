@@ -1,15 +1,22 @@
 { lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
-  version = "0.1";
+  version = "0.1.7.1";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
-    rev = "release/v${version}";
-    sha256 = "0m4pjy92jg6zfziyv0bxv5if03g8k4413ld8c3ii2xa8bzfn04m2";
+    rev = "v${version}";
+    sha256 = "1acb693ad2nrmnn6jxsyrlkc0di3kk2ksj2w9wnyfxrgvfsil7rn";
   };
+
+  # Remove this once new version of agda-categories is released which
+  # directly references standard-library-1.7.1
+  postPatch = ''
+    substituteInPlace agda-categories.agda-lib \
+      --replace 'standard-library-1.7' 'standard-library-1.7.1'
+  '';
 
   buildInputs = [ standard-library ];
 
@@ -18,11 +25,6 @@ mkDerivation rec {
     description = "A new Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    # agda categories takes a lot of memory to build.
-    # This can be removed if this is eventually fixed upstream.
-    hydraPlatforms = [];
-    # Waiting for release 0.2 for this to work
-    broken = true;
     maintainers = with maintainers; [ alexarice turion ];
   };
 }

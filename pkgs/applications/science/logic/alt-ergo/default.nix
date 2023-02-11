@@ -1,42 +1,47 @@
-{ fetchurl, lib, which, ocamlPackages }:
+{ fetchFromGitHub, fetchpatch, lib, which, ocamlPackages }:
 
 let
   pname = "alt-ergo";
-  version = "2.3.2";
+  version = "2.4.2";
 
-  src = fetchurl {
-    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-${version}/alt-ergo-${version}.tar.gz";
-    sha256 = "130hisjzkaslygipdaaqib92spzx9rapsd45dbh5ssczjn5qnhb9";
+  configureScript = "ocaml unix.cma configure.ml";
+
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
   };
-
-  preConfigure = "patchShebangs ./configure";
-
-  nativeBuildInputs = [ which ];
-
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src preConfigure nativeBuildInputs;
-  configureFlags = pname;
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+  inherit version src configureScript;
+  configureFlags = [ pname ];
+  nativeBuildInputs = [ which ];
+  buildInputs = with ocamlPackages; [ dune-configurator ];
+  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
+  preBuild = ''
+    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
+  '';
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src preConfigure nativeBuildInputs;
-  configureFlags = pname;
-  buildInputs = with ocamlPackages; [ menhir ];
+  inherit version src configureScript;
+  configureFlags = [ pname ];
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src preConfigure nativeBuildInputs;
+  inherit pname version src configureScript;
 
-  configureFlags = pname;
+  configureFlags = [ pname ];
 
-  buildInputs = [ alt-ergo-parsers ocamlPackages.menhir ];
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

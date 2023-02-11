@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , testtools
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
   };
 
-  checkInputs = [ testresources ];
+  nativeCheckInputs = [ testresources ];
   buildInputs = [ pbr ];
   propagatedBuildInputs = [ fixtures subunit testtools ];
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} ./testr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database of test results which can be used as part of developer workflow";
     homepage = "https://pypi.python.org/pypi/testrepository";
     license = licenses.bsd2;

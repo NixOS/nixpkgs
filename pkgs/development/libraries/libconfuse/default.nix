@@ -1,15 +1,39 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, flex }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, flex
+}:
 
 stdenv.mkDerivation rec {
   pname = "libconfuse";
-  version = "3.2.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
-    sha256 = "0djjq7j9iiyqxqqrlzm476xkibjasqvgzjwkalgj1l3f2smi53aw";
+    sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
     rev = "v${version}";
     repo = "libconfuse";
     owner = "martinh";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-40320.patch";
+      urls = [
+        "https://sources.debian.org/data/main/libc/libconfuse/3.3-3/debian/patches/CVE-2022-40320.patch"
+        # files on sources.debian.org can disappear
+        "https://web.archive.org/web/20230107133212/https://sources.debian.org/data/main/libc/libconfuse/3.3-3/debian/patches/CVE-2022-40320.patch"
+      ];
+      sha256 = "sha256-ftfE9JFz4nyRSOb2xHb9BAtgWn5Yv2WLm4RegDLtiBw=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/Makefile.am \
+      --replace 'TESTS            += empty_string' "" \
+      --replace 'TESTS            += print_filter' ""
+  '';
 
   nativeBuildInputs = [ autoreconfHook flex ];
 
@@ -19,7 +43,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Small configuration file parser library for C";
     longDescription = ''

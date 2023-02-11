@@ -1,20 +1,22 @@
-# Crystal
+# Crystal {#crystal}
 
-## Building a Crystal package
+## Building a Crystal package {#building-a-crystal-package}
 
 This section uses [Mint](https://github.com/mint-lang/mint) as an example for how to build a Crystal package.
 
-If the Crystal project has any dependencies, the first step is to get a `shards.nix` file encoding those. Get a copy of the project and go to its root directory such that its `shard.lock` file is in the current directory, then run `crystal2nix` in it
+If the Crystal project has any dependencies, the first step is to get a `shards.nix` file encoding those. Get a copy of the project and go to its root directory such that its `shard.lock` file is in the current directory. Executable projects should usually commit the `shard.lock` file, but sometimes that's not the case, which means you need to generate it yourself. With an existing `shard.lock` file, `crystal2nix` can be run.
 ```bash
 $ git clone https://github.com/mint-lang/mint
 $ cd mint
 $ git checkout 0.5.0
+$ if [ ! -f shard.lock ]; then nix-shell -p shards --run "shards lock"; fi
 $ nix-shell -p crystal2nix --run crystal2nix
 ```
 
 This should have generated a `shards.nix` file.
 
 Next create a Nix file for your derivation and use `pkgs.crystal.buildCrystalPackage` as follows:
+
 ```nix
 with import <nixpkgs> {};
 crystal.buildCrystalPackage rec {
@@ -25,7 +27,7 @@ crystal.buildCrystalPackage rec {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "0vxbx38c390rd2ysvbwgh89v2232sh5rbsp3nk9wzb70jybpslvl";
+    hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 
   # Insert the path to your shards.nix file here
@@ -60,7 +62,7 @@ crystal.buildCrystalPackage rec {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "0vxbx38c390rd2ysvbwgh89v2232sh5rbsp3nk9wzb70jybpslvl";
+    hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 
   shardsFile = ./shards.nix;

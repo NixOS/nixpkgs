@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, pkgconfig
+{ lib, stdenv, fetchFromGitLab, pkg-config
 , qmake, qtbase, qtdeclarative, wrapQtAppsHook
 , glib, gobject-introspection
-, genericUpdater, common-updater-scripts
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     gobject-introspection
     wrapQtAppsHook
@@ -55,13 +55,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
+  passthru.updateScript = gitUpdater {
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to access GSettings from Qt";
     homepage = "https://gitlab.com/ubports/core/gsettings-qt";
     license = licenses.lgpl3;

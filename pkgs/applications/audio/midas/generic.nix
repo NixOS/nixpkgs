@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, lib, libX11, libXext, alsaLib, freetype, brand, type, version, homepage, sha256, ... }:
+{ stdenv, fetchurl, lib, libX11, libXext, alsa-lib, freetype, brand, type, version, homepage, url, sha256, ... }:
 stdenv.mkDerivation rec {
-  inherit type;
-  baseName = "${type}-Edit";
-  name = "${lib.toLower baseName}-${version}";
+  pname = "${lib.toLower type}-edit";
+  inherit version;
 
   src = fetchurl {
-    url = "http://downloads.music-group.com/software/behringer/${type}/${type}-Edit_LINUX_64bit_${version}.tar.gz";
+    inherit url;
     inherit sha256;
   };
 
@@ -15,14 +14,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${baseName} $out/bin
+    cp ${pname} $out/bin
   '';
   preFixup = let
     # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
     libPath = lib.makeLibraryPath [
       libX11           # libX11.so.6
       libXext          # libXext.so.6
-      alsaLib          # libasound.so.2
+      alsa-lib          # libasound.so.2
       freetype         # libfreetype.so.6
       stdenv.cc.cc.lib # libstdc++.so.6
     ];
@@ -30,12 +29,13 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
-      $out/bin/${baseName}
+      $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit homepage;
     description = "Editor for the ${brand} ${type} digital mixer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];

@@ -1,24 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , python
 , isPyPy
 , six
-, lib
 , filetype
 , deprecation
-, dataclasses
 }:
 
 buildPythonPackage rec {
-  version = "0.9.5";
+  version = "0.9.7";
   pname    = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "faf5806197f2093e82c2830d41f2378f07b3a9da07a16fafb14fc6fbdebac50a";
+    sha256 = "sha256-k7GOk5M3akURT5QJ18yhGftvT5o31LaXtQCvSLTFzw8=";
   };
 
   # requires special test data:
@@ -26,8 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    six filetype deprecation
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+    deprecation
+    filetype
+    six
+  ];
 
   postInstall = ''
     for prog in "$out/bin/"*; do
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python module and command line program for processing ID3 tags";
     homepage    = "https://eyed3.nicfit.net/";
     license     = licenses.gpl2;

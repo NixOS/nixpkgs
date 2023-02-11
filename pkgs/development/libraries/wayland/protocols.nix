@@ -1,19 +1,29 @@
-{ lib, stdenv, fetchurl, pkgconfig
-, wayland
+{ lib, stdenv, fetchurl
+, pkg-config
+, meson, ninja, wayland-scanner
+, python3, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
-  version = "1.20";
+  version = "1.31";
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && wayland.withLibraries;
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1rsdgvkkvxs3cjhpl6agvbkm53vm7k8rg127j9y2vn33m2hvg0lp";
+    url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-oH+nIu2HZ27AINhncUvJovJMRk2nORLzlwbu71IZ4jg=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = lib.optionalString doCheck ''
+    patchShebangs tests/
+  '';
 
-  buildInputs = [ wayland ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja wayland-scanner ];
+  nativeCheckInputs = [ python3 wayland ];
+
+  mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";
@@ -26,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
     license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
+    platforms   = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos ];
   };
 

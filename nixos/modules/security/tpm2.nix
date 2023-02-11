@@ -17,21 +17,20 @@ let
 
 in {
   options.security.tpm2 = {
-    enable = lib.mkEnableOption "Trusted Platform Module 2 support";
+    enable = lib.mkEnableOption (lib.mdDoc "Trusted Platform Module 2 support");
 
     tssUser = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Name of the tpm device-owner and service user, set if applyUdevRules is
         set.
       '';
       type = lib.types.nullOr lib.types.str;
       default = if cfg.abrmd.enable then "tss" else "root";
-      defaultText = ''"tss" when using the userspace resource manager,'' +
-                    ''"root" otherwise'';
+      defaultText = lib.literalExpression ''if config.security.tpm2.abrmd.enable then "tss" else "root"'';
     };
 
     tssGroup = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Group of the tpm kernel resource manager (tpmrm) device-group, set if
         applyUdevRules is set.
       '';
@@ -40,7 +39,7 @@ in {
     };
 
     applyUdevRules = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to make the /dev/tpm[0-9] devices accessible by the tssUser, or
         the /dev/tpmrm[0-9] by tssGroup respectively
       '';
@@ -49,56 +48,46 @@ in {
     };
 
     abrmd = {
-      enable = lib.mkEnableOption ''
+      enable = lib.mkEnableOption (lib.mdDoc ''
         Trusted Platform 2 userspace resource manager daemon
-      '';
+      '');
 
       package = lib.mkOption {
-        description = "tpm2-abrmd package to use";
+        description = lib.mdDoc "tpm2-abrmd package to use";
         type = lib.types.package;
         default = pkgs.tpm2-abrmd;
-        defaultText = "pkgs.tpm2-abrmd";
+        defaultText = lib.literalExpression "pkgs.tpm2-abrmd";
       };
     };
 
     pkcs11 = {
-      enable = lib.mkEnableOption ''
+      enable = lib.mkEnableOption (lib.mdDoc ''
         TPM2 PKCS#11 tool and shared library in system path
-        (<literal>/run/current-system/sw/lib/libtpm2_pkcs11.so</literal>)
-      '';
+        (`/run/current-system/sw/lib/libtpm2_pkcs11.so`)
+      '');
 
       package = lib.mkOption {
-        description = "tpm2-pkcs11 package to use";
+        description = lib.mdDoc "tpm2-pkcs11 package to use";
         type = lib.types.package;
         default = pkgs.tpm2-pkcs11;
-        defaultText = "pkgs.tpm2-pkcs11";
+        defaultText = lib.literalExpression "pkgs.tpm2-pkcs11";
       };
     };
 
     tctiEnvironment = {
       enable = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Set common TCTI environment variables to the specified value.
           The variables are
-          <itemizedlist>
-            <listitem>
-              <para>
-                <literal>TPM2TOOLS_TCTI</literal>
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                <literal>TPM2_PKCS11_TCTI</literal>
-              </para>
-            </listitem>
-          </itemizedlist>
+          - `TPM2TOOLS_TCTI`
+          - `TPM2_PKCS11_TCTI`
         '';
         type = lib.types.bool;
         default = false;
       };
 
       interface = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The name of the TPM command transmission interface (TCTI) library to
           use.
         '';
@@ -107,24 +96,24 @@ in {
       };
 
       deviceConf = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Configuration part of the device TCTI, e.g. the path to the TPM device.
           Applies if interface is set to "device".
           The format is specified in the
-          <link xlink:href="https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options">
-          tpm2-tools repository</link>.
+          [
+          tpm2-tools repository](https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options).
         '';
         type = lib.types.str;
         default = "/dev/tpmrm0";
       };
 
       tabrmdConf = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Configuration part of the tabrmd TCTI, like the D-Bus bus name.
           Applies if interface is set to "tabrmd".
           The format is specified in the
-          <link xlink:href="https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options">
-          tpm2-tools repository</link>.
+          [
+          tpm2-tools repository](https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options).
         '';
         type = lib.types.str;
         default = "bus_name=com.intel.tss2.Tabrmd";
@@ -146,6 +135,7 @@ in {
       # Create the tss user and group only if the default value is used
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
         isSystemUser = true;
+        group = "tss";
       };
       users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
 
@@ -170,10 +160,9 @@ in {
           Restart = "always";
           RestartSec = 30;
           BusName = "com.intel.tss2.Tabrmd";
-          StandardOutput = "syslog";
           ExecStart = "${cfg.abrmd.package}/bin/tpm2-abrmd";
           User = "tss";
-          Group = "nogroup";
+          Group = "tss";
         };
       };
 

@@ -1,42 +1,55 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig, gnutls
-, libgcrypt, libtasn1, glib, libplist, libusbmuxd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gnutls
+, libgcrypt
+, libplist
+, libtasn1
+, libusbmuxd
+, libimobiledevice-glue
+, SystemConfiguration
+, CoreFoundation
+}:
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "2020-01-20";
-
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "61babf5f54e7734ebf3044af4c6294524d4b29b5";
-    sha256 = "02dnq6xza72li52kk4p2ak0gq2js3ssfp2fpjlgsv0bbn5mkg2hi";
-  };
+  version = "1.3.0+date=2022-05-22";
 
   outputs = [ "out" "dev" ];
 
+  src = fetchFromGitHub {
+    owner = "libimobiledevice";
+    repo = pname;
+    rev = "12394bc7be588be83c352d7441102072a89dd193";
+    hash = "sha256-2K4gZrFnE4hlGlthcKB4n210bTK3+6NY4TYVIoghXJM=";
+  };
+
+  postPatch = ''
+    echo '${version}' > .tarball-version
+  '';
+
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkgconfig
+    autoreconfHook
+    pkg-config
   ];
+
   propagatedBuildInputs = [
-    glib
     gnutls
     libgcrypt
     libplist
     libtasn1
     libusbmuxd
+    libimobiledevice-glue
+  ] ++ lib.optionals stdenv.isDarwin [
+    SystemConfiguration
+    CoreFoundation
   ];
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  configureFlags = [ "--with-gnutls" "--without-cython" ];
 
-  configureFlags = [
-    "--disable-openssl"
-    "--without-cython"
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
     description = "A software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''
@@ -52,7 +65,7 @@ stdenv.mkDerivation rec {
       devices to the Linux Desktop.
     '';
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ infinisil ];
   };
 }

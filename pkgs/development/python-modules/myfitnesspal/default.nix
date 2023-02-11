@@ -1,27 +1,69 @@
-{ lib, fetchPypi, buildPythonPackage
-, blessed, keyring, keyrings-alt, lxml, measurement, python-dateutil, requests, six
-, mock, nose }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, blessed
+, browser-cookie3
+, keyring
+, keyrings-alt
+, lxml
+, measurement
+, python-dateutil
+, requests
+, rich
+, typing-extensions
+, pytestCheckHook
+, mock
+, nose
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.14.0";
+  version = "2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66bf61c3d782cd80f380d3856da5f635f5b8de032e62d916c26d48dc322846a6";
+    sha256 = "sha256-wlQ/mo9MBQo0t1p0h6/TJir3I87DKYAUc022T3hZjH8=";
   };
 
-  # Remove overly restrictive version constraints on keyring and keyrings.alt
+  propagatedBuildInputs = [
+    blessed
+    browser-cookie3
+    keyring
+    keyrings-alt
+    lxml
+    measurement
+    python-dateutil
+    requests
+    rich
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    mock
+    nose
+    pytestCheckHook
+  ];
+
   postPatch = ''
-    sed -i 's/keyring>=.*/keyring/' requirements.txt
-    sed -i 's/keyrings.alt>=.*/keyrings.alt/' requirements.txt
+    # Remove overly restrictive version constraints
+    sed -i -e "s/>=.*//" requirements.txt
   '';
 
-  checkInputs = [ mock nose ];
-  propagatedBuildInputs = [ blessed keyring keyrings-alt lxml measurement python-dateutil requests six ];
+  disabledTests = [
+    # Integration tests require an account to be set
+    "test_integration"
+  ];
+
+  pythonImportsCheck = [
+    "myfitnesspal"
+  ];
 
   meta = with lib; {
-    description = "Access your meal tracking data stored in MyFitnessPal programatically";
+    description = "Python module to access meal tracking data stored in MyFitnessPal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

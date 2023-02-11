@@ -33,7 +33,7 @@ let
 in
 
 {
-  config = mkIf (cfg.enable && kerberos == pkgs.krb5Full) {
+  config = mkIf (cfg.enable && kerberos == pkgs.krb5) {
     systemd.services.kadmind = {
       description = "Kerberos Administration Daemon";
       wantedBy = [ "multi-user.target" ];

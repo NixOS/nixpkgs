@@ -1,17 +1,37 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.1.0";
+  version = "5.2.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1d057645db16ca7fe1f3bd953558897603d6f0b9c51ed9d11eb4d071ec4e2aab";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "tkem";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1B/vAfGroGABijMWuiKmIkMyjNSp2B3VkH7s1NMlbw0=";
   };
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "cachetools"
+  ];
+
+  meta = with lib; {
     description = "Extensible memoizing collections and decorators";
     homepage = "https://github.com/tkem/cachetools";
-    license = licenses.mit;
+    changelog = "https://github.com/tkem/cachetools/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

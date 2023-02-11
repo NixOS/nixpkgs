@@ -1,71 +1,95 @@
 { stdenv
-, fetchurl
+, lib
+, callPackage
 , fetchFromGitHub
-, rust
 , rustPlatform
 , installShellFiles
+, tinycc
+, libiconv
+, libobjc
 , Security
 , CoreServices
+, Metal
+, Foundation
+, QuartzCore
+, librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
-let
-  deps = import ./deps.nix { };
-  arch = rust.toRustTarget stdenv.hostPlatform;
-  rustyV8Lib = with deps.rustyV8Lib; fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch}.a";
-    sha256 = sha256s."${stdenv.hostPlatform.system}";
-    meta = { inherit version; };
-  };
-in
+
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.1.0";
+  version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11rxfnjam1kr8piiw0s4r0qg8rj4qfpppp6dixk1hhsq2iwbnzj6";
-    fetchSubmodules = true;
+    sha256 = "sha256-Dg4ZX1CpjZuCXDu3GxbaRIwdhDuJ50j53b6XETfFGAU=";
   };
-  cargoSha256 = "107i9zvlwiwad58c7lmh6zl9iwlqn1h8qk7zf7x68b6498p8nh7d";
+  cargoSha256 = "sha256-6V9djLUmPEQDewKEN0ND7zyXSrKdakXZdYSRsyXWNuE=";
 
-  # Install completions post-install
-  nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = with stdenv.lib; [ ]
-    ++ optionals stdenv.isDarwin [ Security CoreServices ];
-
-  # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and place it in the locations it will require it in advance
-  preBuild = ''
-    _rusty_v8_setup() {
-      for v in "$@"; do
-        dir="target/$v/gn_out/obj"
-        mkdir -p "$dir" && cp "${rustyV8Lib}" "$dir/librusty_v8.a"
-      done
-    }
-
-    # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
-    _rusty_v8_setup "debug" "release" "${arch}/release"
+  postPatch = ''
+    # upstream uses lld on aarch64-darwin for faster builds
+    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
+    substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+
+  buildAndTestSubdir = "cli";
+
+  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
+  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
+  RUSTY_V8_ARCHIVE = librusty_v8;
+
+  # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
+  # To avoid this we point it to our copy (dir)
+  # In the future tinycc will be replaced with asm
+  libtcc = tinycc.overrideAttrs (oa: {
+    makeFlags = [ "libtcc.a" ];
+    # tests want tcc binary
+    doCheck = false;
+    outputs = [ "out" ];
+    installPhase = ''
+      mkdir -p $out/lib/
+      mv libtcc.a $out/lib/
+    '';
+    # building the whole of tcc on darwin is broken in nixpkgs
+    # but just building libtcc.a works fine so mark this as unbroken
+    meta.broken = false;
+  });
+  TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
   doCheck = false;
 
-  # TODO: Move to enhanced installShellCompletion when merged: PR #83630
+  preInstall = ''
+    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  '';
+
   postInstall = ''
-    $out/bin/deno completions bash > deno.bash
-    $out/bin/deno completions fish > deno.fish
-    $out/bin/deno completions zsh  > _deno
-    installShellCompletion deno.{bash,fish} --zsh _deno
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/deno --help
+    $out/bin/deno --version | grep "deno ${version}"
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update/update.ts;
+  passthru.tests = callPackage ./tests { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://deno.land/";
-    changelog = "${src.meta.homepage}/releases/tag/v${version}";
+    changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
     description = "A secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
@@ -78,6 +102,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

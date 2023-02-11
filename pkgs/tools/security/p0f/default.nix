@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, bash }:
+{ lib, stdenv, fetchurl, libpcap, bash }:
 
 stdenv.mkDerivation rec {
   pname = "p0f";
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Passive network reconnaissance and fingerprinting tool";
     homepage    = "https://lcamtuf.coredump.cx/p0f3/";
-    license     = stdenv.lib.licenses.lgpl21;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.lgpl21;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

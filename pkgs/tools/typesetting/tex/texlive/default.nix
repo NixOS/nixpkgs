@@ -3,30 +3,29 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python, ruby, perl
+, callPackage, ghostscript_headless, harfbuzz
+, makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
+, libfaketime
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    poppler = poppler_min; # otherwise depend on various X stuff
-    ghostscript = ghostscriptX;
+    ghostscript = ghostscript_headless;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
   };
 
   # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python ruby perl;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
+      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
+    ghostscript = ghostscript_headless;
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
@@ -57,6 +56,30 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
+
+      # override cyclic dependency until #167226 is fixed
+      xecjk = orig.xecjk // {
+        deps = removeAttrs orig.xecjk.deps [ "ctex" ];
+      };
+
+      texdoc = orig.texdoc // {
+        # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
+        postUnpack = ''
+          if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
+            unxz --stdout "${tlpdb}" > texlive.tlpdb
+
+            # create dummy doc file to ensure that texdoc does not return an error
+            mkdir -p support/texdoc
+            touch support/texdoc/NEWS
+
+            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
+              -c texlive_tlpdb=texlive.tlpdb -lM texdoc
+
+            cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
+          fi
+        '';
+      };
     }); # overrides
 
     # tl =
@@ -66,7 +89,7 @@ let
 
   flatDeps = pname: attrs:
     let
-      version = attrs.version or bin.texliveYear;
+      version = attrs.version or (builtins.toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
           sha512 = attrs.sha512.${tlType};
@@ -78,8 +101,13 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+            # the fake derivations are used for filtering of hyphenation patterns and formats
+          else {
+            inherit pname version;
+            tlType = "run";
+            hasFormats = attrs.hasFormats or false;
+            hasHyphens = attrs.hasHyphens or false;
+          }
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
@@ -87,6 +115,23 @@ let
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
     };
+
+  # for daily snapshots
+  snapshot = {
+    year = "2022";
+    month = "12";
+    day = "27";
+  };
+
+  tlpdb = fetchurl {
+    # use the same mirror(s) as urlPrefixes below
+    urls = [
+      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
+    ];
+    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
+  };
 
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
@@ -97,12 +142,7 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-        lib.concatMap
-          (up: [
-            "${up}/${urlName}.r${toString revision}.tar.xz"
-            "${up}/${urlName}.tar.xz" # TODO To be removed for telive 2020
-          ])
-          urlPrefixes);
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
       # The tarballs on CTAN mirrors for the current release are constantly
       # receiving updates, so we can't use those directly. Stable snapshots
@@ -111,51 +151,35 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        "ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        #https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
+        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
-      src = fetchurl { inherit urls sha512; };
-
-      passthru = {
-        inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
-      unpackCmd = file: ''
-        tar -xf ${file} \
-          '--strip-components=${toString stripPrefix}' \
-          -C "$out" --anchored --exclude=tlpkg --keep-old-files
-      '' + postUnpack;
-
-    in if sha512 == "" then
-      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
-      fetchurl {
-        inherit urls;
-        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
-          else fixedHash;
-        name = tlName;
-        recursiveHash = true;
-        downloadToTemp = true;
-        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
-        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-     }
-        // passthru
-
-    else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
-          preferLocalBuild = true; allowSubstitutes = false;
-          inherit passthru;
+    in runCommand "texlive-${tlName}"
+      ( {
+          src = fetchurl { inherit urls sha512; };
+          inherit stripPrefix;
+          # metadata for texlive.combine
+          passthru = {
+            inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
+            hasHyphens = args.hasHyphens or false;
+          };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
-          outputHashAlgo = "sha1";
+          outputHashAlgo = "sha256";
           outputHashMode = "recursive";
         }
       )
       ( ''
           mkdir "$out"
-        '' + unpackCmd "'${src}'"
+          tar -xf "$src" \
+          --strip-components="$stripPrefix" \
+          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+        '' + postUnpack
       );
 
   # combine a set of TL packages into a single TL meta-package
@@ -174,13 +198,13 @@ in
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
-            hydraPlatforms = lib.optionals
-              (!lib.elem pname ["scheme-infraonly"]) platforms;
             maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            #extraVersion = "-final";
+            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)

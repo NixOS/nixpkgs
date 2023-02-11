@@ -1,7 +1,8 @@
 import ./make-test-python.nix (
   {
+    name = "corerad";
     nodes = {
-      router = {config, pkgs, ...}: { 
+      router = {config, pkgs, ...}: {
         config = {
           # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
           boot.kernel.sysctl = {
@@ -80,7 +81,7 @@ import ./make-test-python.nix (
           ), "SLAAC temporary address was not configured on client after router advertisement"
 
       with subtest("Verify HTTP debug server is configured"):
-          out = router.succeed("curl localhost:9430/metrics")
+          out = router.succeed("curl -f localhost:9430/metrics")
 
           assert (
               "corerad_build_info" in out

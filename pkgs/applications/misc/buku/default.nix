@@ -1,63 +1,64 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, withServer ? false }:
 
-with python3.pkgs; buildPythonApplication rec {
-  version = "4.3";
-  pname = "buku";
-
-  src = fetchFromGitHub {
-    owner = "jarun";
-    repo = "buku";
-    rev = "v${version}";
-    sha256 = "1cq508ymak3g5fhi1n4bdiiqkc86s2l3k4dvzw842vv2x0441cac";
-  };
-
-  checkInputs = [
-    pytestcov
-    hypothesis
-    pytest
-    pylint
-    flake8
-    pyyaml
-    mypy-extensions
-  ];
-
-  propagatedBuildInputs = [
-    cryptography
-    beautifulsoup4
+let
+  serverRequire = with python3.pkgs; [
     requests
-    urllib3
     flask
     flask-admin
     flask-api
     flask-bootstrap
     flask-paginate
     flask-reverse-proxy-fix
-    flask_wtf
+    flask-wtf
     arrow
     werkzeug
     click
-    html5lib
     vcrpy
+    toml
+  ];
+in
+with python3.pkgs; buildPythonApplication rec {
+  version = "4.7";
+  pname = "buku";
+
+  src = fetchFromGitHub {
+    owner = "jarun";
+    repo = "buku";
+    rev = "v${version}";
+    sha256 = "sha256-7piJK1hz9h6EWiU/q5MAS1PSvHFxnW7rZBKxq+wda1c=";
+  };
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest
+    pytest-vcr
+    pyyaml
+    mypy-extensions
+    click
+    pylint
+    flake8
+    pytest-cov
+    pyyaml
   ];
 
-  postPatch = ''
-    # Jailbreak problematic dependencies
-    sed -i \
-      -e "s,'PyYAML.*','PyYAML',g" \
-      setup.py
-  '';
+  propagatedBuildInputs = [
+    cryptography
+    beautifulsoup4
+    certifi
+    urllib3
+    html5lib
+  ] ++ lib.optionals withServer serverRequire;
 
   preCheck = ''
-    # Fixes two tests for wrong encoding
-    export PYTHONIOENCODING=utf-8
-
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
-      --replace "self.assertEqual(url, 'https://www.google.com')" ""
+      --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
+      --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
+  '' + lib.optionalString (!withServer) ''
+    rm tests/test_{server,views}.py
   '';
 
   postInstall = ''
@@ -67,14 +68,15 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/zsh/* $out/share/zsh/site-functions
     cp auto-completion/bash/* $out/share/bash-completion/completions
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
+  '' + lib.optionalString (!withServer) ''
+    rm $out/bin/bukuserver
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private cmdline bookmark manager";
     homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthiasbeyer infinisil ma27 ];
   };
 }
-

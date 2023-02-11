@@ -4,12 +4,12 @@
 , cmake
 , unzip
 , makeWrapper
-, boost
+, boost169
+, pinnedBoost ? boost169
 , llvmPackages
 , llvmPackages_5
 , gmp
 , emacs
-, emacs25-nox
 , jre_headless
 , tcl
 , tk
@@ -33,6 +33,8 @@ in stdenv.mkDerivation rec {
     url = "https://github.com/layus/mozart2/releases/download/v2.0.0-beta.1/bootcompiler.jar";
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
+
+  patches = [ ./patch-limits.diff ];
 
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
@@ -61,28 +63,28 @@ in stdenv.mkDerivation rec {
     # gcc together as compilers and we need clang for the sources generation.
     # However, clang emits tons of warnings about gcc's atomic-base library.
     "-DCMAKE_CXX_FLAGS=-Wno-braced-scalar-init"
-  ] ++ lib.optional stdenv.isDarwin "-DCMAKE_FIND_FRAMEWORK=LAST";
+  ];
 
   fixupPhase = ''
     wrapProgram $out/bin/oz --set OZEMACS ${emacs}/bin/emacs
   '';
 
   buildInputs = [
-    boost
+    pinnedBoost
     llvmPackages_5.llvm
     llvmPackages_5.clang
     llvmPackages_5.clang-unwrapped
     gmp
-    emacs25-nox
+    emacs
     jre_headless
     tcl
     tk
   ];
 
-  meta = {
-    description = "An open source implementation of Oz 3.";
-    maintainers = [ lib.maintainers.layus ];
-    license = lib.licenses.bsd2;
+  meta = with lib; {
+    description = "An open source implementation of Oz 3";
+    maintainers = with maintainers; [ layus h7x4 ];
+    license = licenses.bsd2;
     homepage = "https://mozart.github.io";
   };
 

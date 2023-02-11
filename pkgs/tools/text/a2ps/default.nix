@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
 
 stdenv.mkDerivation rec {
-  name = "a2ps-4.14";
+  pname = "a2ps";
+  version = "4.14";
+
   src = fetchurl {
-    url = "mirror://gnu/a2ps/${name}.tar.gz";
+    url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
     sha256 = "195k78m1h03m961qn7jr120z815iyb93gwi159p1p9348lyqvbpk";
   };
 
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf file bison perl ];
   buildInputs = [ libpaper gperf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Anything to PostScript converter and pretty-printer";
     longDescription = ''
       GNU a2ps converts files into PostScript for printing or viewing. It uses a nice default format,

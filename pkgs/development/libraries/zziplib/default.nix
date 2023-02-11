@@ -1,92 +1,81 @@
-{ stdenv
-, cmake
-, pkg-config
-, ninja
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, zip
-, unzip
+, cmake
+, perl
+, pkg-config
 , python3
 , xmlto
+, zip
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
-  version = "0.13.71";
+  version = "0.13.72";
 
   src = fetchFromGitHub {
     owner = "gdraheim";
-    repo = "zziplib";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "P+7D57sc2oIABhk3k96aRILpGnsND5SLXHh2lqr9O4E=";
+    hash = "sha256-Ht3fBgdrTm4mCi5uhgQPNtpGzADoRVOpSuGPsIS6y0Q=";
   };
 
   patches = [
-    # Fix ninja parsing
+    # apply https://github.com/gdraheim/zziplib/pull/113
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/75e22f3c365b62acbad8d8645d5404242800dfba.patch";
-      sha256 = "IB0am3K0x4+Ug1CKvowTtkS8JD6zHJJ247A7guJOw80=";
+      url = "https://github.com/gdraheim/zziplib/commit/82a7773cd17828a3b0a4f5f552ae80c1cc8777c7.diff";
+      sha256 = "0ifqdzxwb5d19mziy9j6lhl8wj95jpxzm0d2c6y3bgwa931avd3y";
     })
-
-    # Install man pages
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/5583ccc7a247ee27556ede344e93d3ac1dc72e9b.patch";
-      sha256 = "wVExEZN8Ml1/3GicB0ZYsLVS3KJ8BSz8i4Gu46naz1Y=";
-      excludes = [ "GNUmakefile" ];
+      url = "https://github.com/gdraheim/zziplib/commit/1cd611514c5f9559eb9dfc191d678dfc991f66db.diff";
+      sha256 = "11w9qa46xq49l113k266dnv8izzdk1fq4y54yy5w8zps8zd3xfny";
     })
-
-    # Fix man page formatting
     (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/22ed64f13dc239f86664c60496261f544bce1088.patch";
-      sha256 = "ScFVWLc4LQPqkcHn9HK/VkLula4b5HzuYl0b5vi4Ikc=";
+      url = "https://github.com/gdraheim/zziplib/commit/e47b1e1da952a92f917db6fb19485b8a0b1a42f3.diff";
+      sha256 = "0d032hkmi3s3db12z2zbppl2swa3gdpbj0c6w13ylv2g2ixglrwg";
     })
   ];
 
   nativeBuildInputs = [
     cmake
+    perl
     pkg-config
-    ninja # make fails, unable to find test2.zip
-    zip
     python3
     xmlto
+    zip
   ];
-
   buildInputs = [
     zlib
   ];
 
-  checkInputs = [
-    unzip
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-  ];
-
-  # tests are broken (https://github.com/gdraheim/zziplib/issues/20),
-  # and test/zziptests.py requires network access
+  # test/zziptests.py requires network access
   # (https://github.com/gdraheim/zziplib/issues/24)
-  doCheck = false;
-  checkTarget = "check";
+  cmakeFlags = [
+    "-DZZIP_TESTCVE=OFF"
+    "-DBUILD_SHARED_LIBS=True"
+    "-DBUILD_STATIC_LIBS=False"
+    "-DBUILD_TESTS=OFF"
+    "-DMSVC_STATIC_RUNTIME=OFF"
+    "-DZZIPSDL=OFF"
+    "-DZZIPTEST=OFF"
+    "-DZZIPWRAP=OFF"
+    "-DBUILDTESTS=OFF"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/gdraheim/zziplib";
     description = "Library to extract data from files archived in a zip file";
-
     longDescription = ''
-      The zziplib library is intentionally lightweight, it offers the ability
-      to easily extract data from files archived in a single zip
-      file.  Applications can bundle files into a single zip archive and
-      access them.  The implementation is based only on the (free) subset of
-      compression with the zlib algorithm which is actually used by the
-      zip/unzip tools.
+      The zziplib library is intentionally lightweight, it offers the ability to
+      easily extract data from files archived in a single zip file.
+      Applications can bundle files into a single zip archive and access them.
+      The implementation is based only on the (free) subset of compression with
+      the zlib algorithm which is actually used by the zip/unzip tools.
     '';
-
     license = with licenses; [ lgpl2Plus mpl11 ];
-
-    homepage = "http://zziplib.sourceforge.net/";
-
-    maintainers = [ ];
-    platforms = python3.meta.platforms;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

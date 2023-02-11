@@ -1,17 +1,17 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  cyrus_sasl, ki18n, kio, kmbox, openldap
+  cyrus_sasl, ki18n, kio, kmbox, libsecret, openldap, qtkeychain
 }:
 
 mkDerivation {
-  name = "kldap";
+  pname = "kldap";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ ki18n kio kmbox ];
+  buildInputs = [ ki18n kio kmbox libsecret qtkeychain ];
   propagatedBuildInputs = [ cyrus_sasl openldap ];
   outputs = [ "out" "dev" ];
 }

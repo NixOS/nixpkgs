@@ -1,39 +1,91 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, ase
+, buildPythonPackage
 , cython
 , datamodeldict
+, fetchFromGitHub
 , matplotlib
 , numericalunits
 , numpy
 , pandas
+, phonopy
+, potentials
+, pymatgen
 , pytest
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+, requests
 , scipy
+, setuptools
 , toolz
 , xmltodict
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
+  version = "1.4.6";
   pname = "atomman";
-  disabled = isPy27;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
-    repo  = "atomman";
+    repo = "atomman";
     rev = "v${version}";
-    sha256 = "09pfykd96wmw00s3kgabghykjn8b4yjml4ybpi7kwy7ygdmzcx51";
+    hash = "sha256-tcsxtFbBdMC6+ixzqhnR+5UNwcQmnPQSvuyNA2IYelI=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ xmltodict datamodeldict numpy matplotlib scipy pandas cython numericalunits toolz ];
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
 
-  checkPhase = ''
-    py.test tests -k 'not test_atomic'
+  propagatedBuildInputs = [
+    cython
+    datamodeldict
+    matplotlib
+    numericalunits
+    numpy
+    pandas
+    potentials
+    requests
+    scipy
+    toolz
+    xmltodict
+  ];
+
+  pythonRelaxDeps = [ "potentials" ];
+
+  preCheck = ''
+    # By default, pytestCheckHook imports atomman from the current directory
+    # instead of from where `pip` installs it and fails due to missing Cython
+    # modules. Fix this by removing atomman from the current directory.
+    #
+    rm -r atomman
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/usnistgov/atomman/";
+  nativeCheckInputs = [
+    ase
+    phonopy
+    pymatgen
+    pytest
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_unique_shifts_prototype" # needs network access to download database files
+  ];
+
+  pythonImportsCheck = [
+    "atomman"
+  ];
+
+  meta = with lib; {
     description = "Atomistic Manipulation Toolkit";
+    homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

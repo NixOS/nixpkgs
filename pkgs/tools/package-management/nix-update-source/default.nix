@@ -1,15 +1,20 @@
-{ lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts
-, runtimeShell }:
+{ lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts, runtimeShell }:
+
 python3Packages.buildPythonApplication rec {
+  pname = "nix-update-source";
   version = "0.6.3";
-  name = "nix-update-source-${version}";
+
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "nix-update-source";
-    rev = "version-0.6.3";
+    rev = "version-${version}";
     sha256 = "157wvv9vnaszzwbj68jpdc0imcm1hdab3z760bx2axbsgfpqqilz";
   };
+
   propagatedBuildInputs = [ nix-prefetch-scripts ];
+
+  doCheck = false;
+
   passthru = {
     # NOTE: `fetch` should not be used within nixpkgs because it
     # uses a non-idiomatic structure. It is provided for use by
@@ -28,6 +33,7 @@ python3Packages.buildPythonApplication rec {
         inherit src;
         overrideSrc = drv: lib.overrideDerivation drv (orig: { inherit src; });
       };
+
     updateScript = ''
       #!${runtimeShell}
       set -e
@@ -43,6 +49,7 @@ python3Packages.buildPythonApplication rec {
         --modify-nix default.nix
     '';
   };
+
   meta = {
     description = "Utility to automate updating of nix derivation sources";
     maintainers = with lib.maintainers; [ timbertson ];

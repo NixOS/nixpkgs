@@ -1,15 +1,19 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, libxfce4util }:
+{ lib, mkXfceDerivation, gobject-introspection, gtk3, libxfce4ui, libxfce4util }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "garcon";
-  version = "0.6.4";
+  version = "4.18.0";
 
-  sha256 = "0pamhp1wffiw638s66nws2mpzmwkhvhb6iwccfy8b0kyr57wipjv";
+  sha256 = "sha256-l1wGitD8MM1GrR4FyyPIxHSqK+AqKKyjTIN7VOaVzpM=";
+
+  nativeBuildInputs = [ gobject-introspection ];
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 
-  meta = {
+  meta = with lib; {
     description = "Xfce menu support library";
+    license = with licenses; [ lgpl2Only fdl11Only ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

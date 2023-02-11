@@ -1,25 +1,35 @@
-{ lib, fetchFromGitHub, buildDunePackage, pkg-config, configurator, stdio, R }:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, dune-configurator, stdio, R
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "ocaml-r";
-  version = "0.2.0";
+  version = "0.6.0";
+
+  duneVersion = "3";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09gljccwjsw9693m1hm9hcyvgp3p2fvg3cfn18yyidpc2f81a4fy";
+    sha256 = "sha256-jPyVMxjeh9+xu0dD1gelAxcOhxouKczyvzVoKZ5oSrs=";
   };
 
-  # Without the following patch, stub generation fails with:
-  # > Fatal error: exception (Failure "not supported: osVersion")
-  preConfigure = ''
-    substituteInPlace stubgen/stubgen.ml --replace  \
-    'failwithf "not supported: %s" name ()' \
-    'sprintf "(* not supported: %s *)" name'
-  '';
+  # Finds R and Rmathlib separatley
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pveber/ocaml-r/commit/aa96dc5.patch";
+      sha256 = "sha256-xW33W2ciesyUkDKEH08yfOXv0wP0V6X80or2/n2Nrb4=";
+    })
+  ];
 
-  buildInputs = [ configurator pkg-config R stdio ];
+  nativeBuildInputs = [ pkg-config R ];
+  buildInputs = [ dune-configurator stdio R ];
+
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "OCaml bindings for the R interpreter";

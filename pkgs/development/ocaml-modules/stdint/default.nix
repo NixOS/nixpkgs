@@ -1,17 +1,32 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, ocaml, qcheck }:
 
 buildDunePackage rec {
   pname = "stdint";
-  version = "0.6.0";
+  version = "0.7.2";
 
-  minimumOCamlVersion = "4.07";
+  duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner = "andrenth";
-    repo = "ocaml-stdint";
-    rev = version;
-    sha256 = "19ccxs0vij81vyc9nqc9kbr154ralb9dgc2y2nr71a5xkx6xfn0y";
+  minimalOCamlVersion = "4.03";
+
+  src = fetchurl {
+    url = "https://github.com/andrenth/ocaml-stdint/releases/download/${version}/stdint-${version}.tbz";
+    sha256 = "sha256-FWAZjYvJx68+qVLEDavoJmZpQhDsw/35u/60MhHpd+Y=";
   };
+
+  # 1. disable remaining broken tests, see
+  #    https://github.com/andrenth/ocaml-stdint/issues/59
+  # 2. fix tests to liberal test range
+  #    https://github.com/andrenth/ocaml-stdint/pull/61
+  postPatch = ''
+    substituteInPlace tests/stdint_test.ml \
+      --replace 'test "An integer should perform left-shifts correctly"' \
+                'skip "An integer should perform left-shifts correctly"' \
+      --replace 'test "Logical shifts must not sign-extend"' \
+                'skip "Logical shifts must not sign-extend"'
+  '';
+
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ qcheck ];
 
   meta = {
     description = "Various signed and unsigned integers for OCaml";

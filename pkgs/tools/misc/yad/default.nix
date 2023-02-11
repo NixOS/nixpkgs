@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, autoreconfHook, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, autoreconfHook, wrapGAppsHook
 , gtk3, hicolor-icon-theme, netpbm }:
 
 stdenv.mkDerivation rec {
   pname = "yad";
-  version = "6.0";
+  version = "12.3";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
     rev = "v${version}";
-    sha256 = "07myjv0g0iwgclc6q9wkj25myhlc86ahy2lqma8vgv9i3rgy03p7";
+    sha256 = "sha256-VaeA83Wk5N3uLf8Eb606w3KPwV/3be5D39wW2JuSdp0=";
   };
 
   configureFlags = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config intltool wrapGAppsHook ];
 
   postPatch = ''
     sed -i src/file.c -e '21i#include <glib/gprintf.h>'
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''

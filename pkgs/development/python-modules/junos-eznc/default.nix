@@ -1,40 +1,70 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, six
-, scp
-, pyserial
-, paramiko
-, netaddr
-, ncclient
-, lxml
+, fetchpatch
+, fetchFromGitHub
+
+# propagates
 , jinja2
+, lxml
+, ncclient
+, netaddr
+, ntc-templates
+, paramiko
+, pyparsing
+, pyserial
 , pyyaml
+, scp
+, six
+, transitions
+, yamlordereddictloader
+
+# tests
+, mock
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.4.1";
+  version = "2.6.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8f3ecf06ab4d630f27e7ed7a7b605122ee5c5e5386b1f5186f6cb52810750b18";
+  src = fetchFromGitHub {
+    owner = "Juniper";
+    repo = "py-junos-eznc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0JF9/lSIquXp25bM3GESqLC//aorSVT0hHccaOmQuM8=";
   };
 
-
-  checkInputs = [ nose ];
-
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    jinja2
+    lxml
+    ncclient
+    netaddr
+    ntc-templates
+    paramiko
+    pyparsing
+    pyserial
+    pyyaml
+    scp
+    six
+    transitions
+    yamlordereddictloader
+  ];
+
+  nativeCheckInputs = [
+    mock
+    nose
   ];
 
   checkPhase = ''
-    nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
+    nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.github.com/Juniper/py-junos-eznc";
+  pythonImportsCheck = [ "jnpr.junos" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

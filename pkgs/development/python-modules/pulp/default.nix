@@ -1,28 +1,49 @@
-{ stdenv
-, fetchPypi
+{ lib
+, amply
 , buildPythonPackage
+, fetchFromGitHub
 , pyparsing
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "PuLP";
-  version = "2.1";
+  pname = "pulp";
+  version = "2.7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06swbi7wygh7y0kxc85q1pdhzk662375d9a5jnahgr76hkwwkybn";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "coin-or";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-j0f6OiscJyTqPNyLp0qWRjCGLWuT3HdU1S/sxpnsiMo=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  propagatedBuildInputs = [
+    amply
+    pyparsing
+  ];
 
-  # only one test that requires an extra
-  doCheck = false;
-  pythonImportsCheck = [ "pulp" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "pulp"
+  ];
+
+  disabledTests = [
+    # The solver is not available
+    "PULP_CBC_CMDTest"
+    "test_examples"
+  ];
+
+  meta = with lib; {
+    description = "Module to generate  generate MPS or LP files";
     homepage = "https://github.com/coin-or/pulp";
-    description = "PuLP is an LP modeler written in python";
-    maintainers = with maintainers; [ teto ];
     license = licenses.mit;
+    maintainers = with maintainers; [ teto ];
   };
 }

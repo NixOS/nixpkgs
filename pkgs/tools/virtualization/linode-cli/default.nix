@@ -1,41 +1,40 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
-, terminaltables
+, buildPythonApplication
 , colorclass
-, requests
+, installShellFiles
 , pyyaml
+, requests
 , setuptools
+, terminaltables
 }:
 
 let
-
+  sha256 = "0r5by5d6wr5zbsaj211s99qg28nr7wm8iri6jxnksx5b375dah6g";
+  # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  specVersion = "4.140.0";
+  specSha256 = "0ay54m4aa8bmmpjc7s66rfzqzk4w25h48b9a665y29g67ybb432g";
   spec = fetchurl {
-    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.63.1/openapi.yaml";
-    sha256 = "03ngzbq24zazfqmfd7xjmxixkcb9vv1jgamplsj633j7sjj708s0";
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
+    sha256 = specSha256;
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "2.14.1";
+  version = "5.26.1";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "1hpdmbzs182iag471yvq3kwd1san04a58sczzbmw6vjv2kswn1c2";
+    inherit sha256;
   };
 
   patches = [
-    # make enum34 depend on python version
-    ( fetchpatch {
-        url = "https://github.com/linode/linode-cli/pull/184/commits/4cf55759c5da33fbc49b9ba664698875d67d4f76.patch";
-        sha256 = "04n9a6yh0abyyymvfzajhav6qxwvzjl2vs8jnqp3yqrma7kl0slj";
-    })
+    ./remove-update-check.patch
   ];
 
   # remove need for git history
@@ -45,11 +44,11 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    terminaltables
     colorclass
-    requests
     pyyaml
+    requests
     setuptools
+    terminaltables
   ];
 
   postConfigure = ''
@@ -57,14 +56,22 @@ buildPythonApplication rec {
     cp data-3 linodecli/
   '';
 
-  # requires linode access token for unit tests, and running executable
-  doCheck = false;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd linode-cli --bash <($out/bin/linode-cli --skip-config completion bash)
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    homepage = "https://github.com/linode/linode-cli";
     description = "The Linode Command Line Interface";
+    homepage = "https://github.com/linode/linode-cli";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ryantm ];
   };
-
 }

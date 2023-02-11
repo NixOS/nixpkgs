@@ -1,22 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "protozero";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "protozero";
     rev = "v${version}";
-    sha256 = "0fdihfl5j68wayjjxvpvhvnjq1anzcfnfl09f68wpzbkg3zmhblz";
+    sha256 = "sha256-R8lGewsEOxPNbKlkIeiM4yIwUcTzi2Dm0+xJ2WrBTBQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalistic protocol buffer decoder and encoder in C++";
     homepage = "https://github.com/mapbox/protozero";
     license = with licenses; [ bsd2 asl20 ];
+    changelog = [
+      "https://github.com/mapbox/protozero/releases/tag/v${version}"
+      "https://github.com/mapbox/protozero/blob/v${version}/CHANGELOG.md"
+    ];
     maintainers = with maintainers; [ das-g ];
   };
 }

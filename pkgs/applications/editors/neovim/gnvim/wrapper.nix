@@ -23,9 +23,7 @@ stdenv.mkDerivation {
     cp -r '${gnvim-unwrapped}/share/applications' "$out/share/applications"
     # Sed needs a writable directory to do inplace modifications
     chmod u+rw "$out/share/applications"
-    for file in $out/share/applications/*.desktop; do
-      sed -e "s|Exec=.\\+gnvim\\>|Exec=$out/bin/gnvim|" -i "$file"
-    done
+    sed -e "s|Exec=.\\+gnvim\\>|Exec=gnvim|" -i $out/share/applications/*.desktop
   '';
 
   preferLocalBuild = true;

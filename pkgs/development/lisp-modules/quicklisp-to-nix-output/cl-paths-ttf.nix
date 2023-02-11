@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-paths-ttf'';
-  version = ''cl-vectors-20180228-git'';
+  baseName = "cl-paths-ttf";
+  version = "cl-vectors-20180228-git";
 
-  description = ''cl-paths-ttf: vectorial paths manipulation'';
+  description = "cl-paths-ttf: vectorial paths manipulation";
 
   deps = [ args."cl-paths" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-vectors/2018-02-28/cl-vectors-20180228-git.tgz'';
-    sha256 = ''0fcypjfzqra8ryb4nx1vx1fqy7fwvyz3f443qkjg2z81akhkscly'';
+    url = "http://beta.quicklisp.org/archive/cl-vectors/2018-02-28/cl-vectors-20180228-git.tgz";
+    sha256 = "0fcypjfzqra8ryb4nx1vx1fqy7fwvyz3f443qkjg2z81akhkscly";
   };
 
   packageName = "cl-paths-ttf";

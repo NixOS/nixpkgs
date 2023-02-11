@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yz3k6dg15q4911x8kjy396dccfgrs50mjz278l09p6zmm71llax";
+    sha256 = "sha256-4BXCOLW5e7RuZEzyD+oRmS2I4oT2W3oTcH4ZPxwKKvU=";
   };
 
   postPatch = ''
@@ -15,12 +15,17 @@ buildPythonPackage rec {
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
 
+  # No tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "buildbot_pkg" ];
+
   disabled = !isPy3k;
 
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+    maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 }

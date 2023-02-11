@@ -1,16 +1,16 @@
-{stdenv, python3Packages, gettext, qt5, fetchFromGitHub}:
+{ stdenv, lib, python3Packages, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
-  version = "4.0.4";
+  version = "4.1.1";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = "${version}";
-    sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
+    rev = version;
+    sha256 = "sha256-0lJocrNQHTrpslbPE6xjZDWhzza8cAt2js35LvicZKg=";
     fetchSubmodules = true;
   };
 
@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonPath = with python3Packages; [
     pyqt5
+    pyqt5_sip
     send2trash
     sphinx
     polib
@@ -29,34 +30,38 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "NO_VENV=1"
   ];
 
-  # TODO: package pytest-monkeyplus for running tests
-  # https://github.com/NixOS/nixpkgs/pull/75054/files#r357690123
-  doCheck = false;
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
 
+  # TODO: A bug in python wrapper
+  # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
   preFixup = ''
-    # TODO: A bug in python wrapper
-    # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
     makeWrapperArgs="''${qtWrapperArgs[@]}"
   '';
 
+  # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
+  # so wrapPythonPrograms hook does not handle it automatically.
   postFixup = ''
-    # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
-    # so wrapPythonPrograms hook does not handle it automatically.
     wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.novoxudonoser ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.novoxd ];
   };
 }

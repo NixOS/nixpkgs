@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , azure-common
 , azure-core
 , msrest
@@ -6,13 +9,15 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-secrets";
-  version = "4.1.0";
-  disabled = isPy27;
+  version = "4.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "4f3bfac60e025e01dd1c1998b73649d45d706975356c0cf147174cf5a6ddf8be";
+    hash = "sha256-+owR1P9XpAteQgegJSx90p0Kk5logFa0nX4rTENtOlo=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +26,9 @@ buildPythonPackage rec {
     msrest
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  pythonNamespaces = [
+    "azure.keyvault"
+  ];
 
   # requires checkout from mono-repo
   doCheck = false;

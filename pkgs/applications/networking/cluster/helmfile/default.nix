@@ -1,37 +1,39 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-let version = "0.118.6"; in
-
-buildGoModule {
+buildGoModule rec {
   pname = "helmfile";
-  inherit version;
+  version = "0.145.2";
 
   src = fetchFromGitHub {
-    owner = "roboll";
+    owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "0zbvz8kn52c1q4yn8n9z4rrf761h495fhjw72x9q1nh44hr7npwd";
+    sha256 = "sha256-ipGMGby7qUoFJNc+7+Gq+JaBUdxm19NwhklWsTpslVI=";
   };
 
-  goPackagePath = "github.com/roboll/helmfile";
+  vendorSha256 = "sha256-031Xdr3u35uirDBZhExdh8PMAZa1gfMTC2II8VMbr6Q=";
 
-  vendorSha256 = "0xj14f0yx7x9ziijd1yka1n6kbmmhbibsk3ppp8cn1pqrwgqk7pr";
+  doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  subPackages = [ "." ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=${version}
-  '';
+  ldflags = [ "-s" "-w" "-X github.com/helmfile/helmfile/pkg/app/version.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    wrapProgram $out/bin/helmfile \
-      --prefix PATH : ${lib.makeBinPath [ kubernetes-helm ]}
+    installShellCompletion --cmd helmfile \
+      --bash ./autocomplete/helmfile_bash_autocomplete  \
+      --zsh ./autocomplete/helmfile_zsh_autocomplete
   '';
 
   meta = {
-    description = "Deploy Kubernetes Helm charts";
-    homepage = "https://github.com/roboll/helmfile";
+    description = "Declarative spec for deploying Helm charts";
+    longDescription = ''
+      Declaratively deploy your Kubernetes manifests, Kustomize configs,
+      and charts as Helm releases in one shot.
+    '';
+    homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
     platforms = lib.platforms.unix;

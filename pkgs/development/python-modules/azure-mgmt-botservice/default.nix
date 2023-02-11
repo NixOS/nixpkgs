@@ -1,21 +1,27 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "2.0.0";
   pname = "azure-mgmt-botservice";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10sxllwvybjlp35h5mjdxhkw2wzpl4b03i08p4jnv8cswrc8h7dj";
+    sha256 = "sha256-hsBNJ8UnwZ2WAKiCFfriulJNxnRFU4ew0OUXIrWm1ro=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
   # no tests included
   doCheck = false;

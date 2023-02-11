@@ -1,32 +1,67 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, chardet
+, cryptography
+, feedparser
 , fetchPypi
-, isPy27
-, pkgs
+, mock
+, pysocks
+, pytestCheckHook
+, python-dateutil
+, python-gnupg
+, pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2020.04.11";
-  disabled = isPy27; # abandoned upstream
+  version = "2023.1.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41e27cae66aeb1e811bebe64140a9b5eb3ccb208103a0f42ac61369d9a7ca339";
+    hash = "sha256-V3DkIsnVv/HekWuOnIKnMHhccDGWun7mF7AcBSEsy6o=";
   };
 
-  patchPhase = ''
-    sed -i 's/version=version/version="${version}"/' setup.py
+  propagatedBuildInputs = [
+    chardet
+    cryptography
+    feedparser
+    mock
+    pysocks
+    python-dateutil
+    python-gnupg
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    pytz
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=version" 'version="${version}"'
   '';
-  buildInputs = [ pkgs.git ];
 
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
+    export PATH="$PATH:$out/bin";
+    supybot-test test -v --no-network
+    runHook postCheck
+  '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    # Uses the same names as Supybot
+    "supybot"
+  ];
+
+  meta = with lib; {
     description = "A modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

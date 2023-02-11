@@ -3,74 +3,111 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+# install_requires
 , attrs
-, chardet
+, charset-normalizer
 , multidict
 , async-timeout
 , yarl
-, idna-ssl
+, frozenlist
+, aiosignal
+, aiodns
+, brotli
+, cchardet
+, asynctest
 , typing-extensions
-, pytestrunner
-, pytestCheckHook
-, gunicorn
+, idna-ssl
+# tests_require
 , async_generator
-, pytest_xdist
-, pytestcov
-, pytest-mock
-, trustme
-, brotlipy
 , freezegun
-, isPy38
+, gunicorn
+, pytest-mock
+, pytestCheckHook
+, re-assert
+, trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.6.2";
-  # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
-  disabled = pythonOlder "3.5";
+  version = "3.8.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
+    sha256 = "3828fb41b7203176b82fe5d699e0d845435f2374750a44b480ea6b930f6be269";
   };
 
-  checkInputs = [
-    pytestrunner pytestCheckHook gunicorn async_generator pytest_xdist
-    pytest-mock pytestcov trustme brotlipy freezegun
+  postPatch = ''
+    sed -i '/--cov/d' setup.cfg
+
+    substituteInPlace setup.cfg \
+      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
+  '';
+
+  propagatedBuildInputs = [
+    attrs
+    charset-normalizer
+    multidict
+    async-timeout
+    yarl
+    typing-extensions
+    frozenlist
+    aiosignal
+    aiodns
+    brotli
+    cchardet
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    idna-ssl
   ];
 
-  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
+  nativeCheckInputs = [
+    async_generator
+    freezegun
+    gunicorn
+    pytest-mock
+    pytestCheckHook
+    re-assert
+  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+    # Optional test dependency. Depends indirectly on pyopenssl, which is
+    # broken on aarch64-darwin.
+    trustme
+  ];
 
   disabledTests = [
-    # disable tests which attempt to do loopback connections
-    "get_valid_log_format_exc"
-    "test_access_logger_atoms"
-    "aiohttp_request_coroutine"
-    "server_close_keepalive_connection"
-    "connector"
-    "client_disconnect"
-    "handle_keepalive_on_closed_connection"
-    "proxy_https_bad_response"
-    "partially_applied_handler"
-    "middleware"
+    # Disable tests that require network access
+    "test_client_session_timeout_zero"
+    "test_mark_formdata_as_processed"
+    "test_requote_redirect_url_default"
+    # Disable tests that trigger deprecation warnings in pytest
+    "test_async_with_session"
+    "test_session_close_awaitable"
+    "test_close_run_until_complete_not_deprecated"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
-  ] ++ lib.optionals isPy38 [
-    # Python 3.8  https://github.com/aio-libs/aiohttp/issues/4525
-    "test_read_boundary_with_incomplete_chunk"
-    "test_read_incomplete_chunk"
-    "test_request_tracing_exception"
   ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572
+    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
     "test_close"
   ];
+
+  disabledTestPaths = [
+    "test_proxy_functional.py" # FIXME package proxy.py
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   # aiohttp in current folder shadows installed version
   # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
     cd tests
-  '';
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+   '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";

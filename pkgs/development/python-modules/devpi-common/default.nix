@@ -1,30 +1,34 @@
 { lib, buildPythonPackage, fetchPypi
 , requests
 , py
-, pytest
-, pytest-flake8
+, pytestCheckHook
 , lazy
 }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.5.0";
+  version = "3.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f1eb1bf85a5dabd4f4ecc11ad99588e01cc204989a9f424c2dbe5809c6c3745";
+    sha256 = "sha256-kHiYknmteenBgce63EpzhGBEUYcQHrDLreZ1k01eRkQ=";
   };
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
 
   propagatedBuildInputs = [
     requests
     py
     lazy
   ];
-  checkInputs = [ pytest pytest-flake8 ];
 
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";

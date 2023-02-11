@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, libsodium, ncurses, curl
-, libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig, libopus
+{ lib, stdenv, fetchFromGitHub, libsodium, ncurses, curl
+, libtoxcore, openal, libvpx, freealut, libconfig, pkg-config, libopus
 , qrencode, gdk-pixbuf, libnotify }:
 
 stdenv.mkDerivation rec {
   pname = "toxic";
-  version = "0.8.3";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner  = "Tox";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "09l2j3lwvrq7bf3051vjsnml9w63790ly3iylgf26gkrmld6k31w";
+    sha256 = "sha256-BabRY9iu5ccEXo5POrWkWaIWAeQU4MVlMK8I+Iju6aQ=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];
@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtoxcore libsodium ncurses curl gdk-pixbuf libnotify
-  ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+  ] ++ lib.optionals (!stdenv.isAarch32) [
     openal libopus libvpx freealut qrencode
   ];
-  nativeBuildInputs = [ pkgconfig libconfig ];
+  nativeBuildInputs = [ pkg-config libconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; src.meta // {
     description = "Reference CLI for Tox";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
 }

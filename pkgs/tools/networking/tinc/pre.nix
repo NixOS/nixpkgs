@@ -1,24 +1,17 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "tinc";
-  version = "1.1pre17";
+  version = "1.1pre18";
 
-  src = fetchgit {
-    rev = "refs/tags/release-${version}";
-    url = "git://tinc-vpn.org/tinc";
-    sha256 = "12abmx9qglchgn94a1qwgzldf2kaz77p8705ylpggzyncxv6bw2q";
+  src = fetchFromGitHub {
+    owner = "gsliepen";
+    repo = "tinc";
+    rev = "release-${version}";
+    hash = "sha256-1anjTUlVLx57FlUqGwBd590lfkZ2MmrM1qRcMl4P7Sg=";
   };
 
   outputs = [ "out" "man" "info" ];
-
-  patches = [
-    (fetchpatch {
-      name = "tinc-openssl-1.0.2r.patch";
-      url = "http://git.tinc-vpn.org/git/browse?p=tinc;a=patch;h=2b0aeec02d64bb4724da9ff1dbc19b7d35d7c904";
-      sha256 = "0kidzlmgl0cin4g54ygcxa0jbq9vwlk3dyq5f65nkjd8yvayfzi8";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];
@@ -36,7 +29,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VPN daemon with full mesh routing";
     longDescription = ''
       tinc is a Virtual Private Network (VPN) daemon that uses tunnelling and
@@ -47,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage="http://www.tinc-vpn.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz lassulus ];
+    maintainers = with maintainers; [ lassulus mic92 ];
   };
 }

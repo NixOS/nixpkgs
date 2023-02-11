@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -14,7 +14,7 @@ buildPythonPackage {
     sha256 = "18g3n7kfrark30l4vzykh0gdbnfv5wb1zvvjbs17sj6yampypn38";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python imaging library with Python 2.6, 2.7, 3.1+ support";
     homepage    = "http://pymaging.rtfd.org";
     license     = licenses.mit;

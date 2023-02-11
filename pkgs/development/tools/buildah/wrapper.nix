@@ -1,37 +1,51 @@
 { buildah-unwrapped
 , runCommand
 , makeWrapper
+, symlinkJoin
 , lib
+, stdenv
 , extraPackages ? []
-, buildah
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
-, utillinux # nsenter
-, cni-plugins # not added to path
+, util-linux # nsenter
 , iptables
+, aardvark-dns
+, netavark
 }:
 
 let
-  buildah = buildah-unwrapped;
-
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
     slirp4netns
     fuse-overlayfs
-    utillinux
+    util-linux
     iptables
   ] ++ extraPackages);
 
-in runCommand buildah.name {
-  name = "${buildah.pname}-wrapper-${buildah.version}";
-  inherit (buildah) pname version;
+  helpersBin = symlinkJoin {
+    name = "${buildah-unwrapped.pname}-helper-binary-wrapper-${buildah-unwrapped.version}";
 
-  meta = builtins.removeAttrs buildah.meta [ "outputsToInstall" ];
+    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    paths = [
+    ] ++ lib.optionals stdenv.isLinux [
+      aardvark-dns
+      netavark
+    ];
+  };
+
+in runCommand buildah-unwrapped.name {
+  name = "${buildah-unwrapped.pname}-wrapper-${buildah-unwrapped.version}";
+  inherit (buildah-unwrapped) pname version;
+
+  preferLocalBuild = true;
+
+  meta = builtins.removeAttrs buildah-unwrapped.meta [ "outputsToInstall" ];
 
   outputs = [
     "out"
@@ -43,10 +57,11 @@ in runCommand buildah.name {
   ];
 
 } ''
-  ln -s ${buildah.man} $man
+  ln -s ${buildah-unwrapped.man} $man
 
   mkdir -p $out/bin
   ln -s ${buildah-unwrapped}/share $out/share
   makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
+    --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
     --prefix PATH : ${binPath}
 ''

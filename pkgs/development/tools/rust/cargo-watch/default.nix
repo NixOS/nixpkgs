@@ -1,29 +1,30 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Cocoa, CoreServices, Foundation, rust, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "7.4.1";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
-    owner = "passcod";
+    owner = "watchexec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nq7sfdxvqldj94laz562y4cvgagm67b6a5b7bzxdip0sf1l11f8";
+    hash = "sha256-2keI5hTWglqh+mLeGzRCxpfnUt6kur0I9fefYwZr5l4=";
   };
 
-  cargoSha256 = "1rjx3k8li8ck5cdygm4pd2i5wkslr6d9z9vl2vp0x6hqv1gcv5zh";
+  cargoHash = "sha256-kR12j0Z7nXfwh9nPT35/LpkK56a8D1gvVkl9/2s6rIQ=";
 
-  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa CoreServices Foundation libiconv ];
 
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)
-  checkPhase = "PATH=target/debug:$PATH cargo test";
+  preCheck = ''
+    export PATH="$(pwd)/target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH"
+  '';
 
   meta = with lib; {
     description = "A Cargo subcommand for watching over Cargo project's source";
     homepage = "https://github.com/passcod/cargo-watch";
     license = licenses.cc0;
-    platforms = platforms.all;
     maintainers = with maintainers; [ xrelkd ivan ];
   };
 }

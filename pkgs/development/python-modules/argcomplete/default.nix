@@ -3,28 +3,28 @@
 , importlib-metadata
 , pexpect
 , prettytable
-, requests_toolbelt
+, requests-toolbelt
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "1.11.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h1przxffrhqvi46k40pzjsvdrq4zc3sl1pc96kkigqppq0vdrss";
+    sha256 = "6372ad78c89d662035101418ae253668445b391755cfe94ea52f1b9d22425b20";
   };
 
   doCheck = false; # meant to be ran with interactive interpreter
 
   # re-enable if we are able to make testing work
-  # checkInputs = [ bashInteractive coverage flake8 ];
+  # nativeCheckInputs = [ bashInteractive coverage flake8 ];
 
   propagatedBuildInputs = [
     dicttoxml
     importlib-metadata
     pexpect
     prettytable
-    requests_toolbelt
+    requests-toolbelt
   ];
 
   pythonImportsCheck = [ "argcomplete" ];

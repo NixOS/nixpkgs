@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, luajit, openssl, perl }:
+{ lib, stdenv, fetchFromGitHub, luajit, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "wrk";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "wg";
     repo = "wrk";
     rev = version;
-    sha256 = "0dblb3qdg8mbgb8iiks0g420pza13npbr33b2xkc5dgv7kcwmvqj";
+    sha256 = "sha256-nCfA444p7krXOB3qRtDKWxWj9tsrDZsGf03ThtE1dXM=";
   };
 
   buildInputs = [ luajit openssl perl ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp wrk $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP benchmarking tool";
     homepage = "https://github.com/wg/wrk";
     longDescription = ''

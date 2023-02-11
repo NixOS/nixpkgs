@@ -1,17 +1,53 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ stdenv
+, lib
+, bcrypt
+, buildPythonPackage
 , cryptography
-, bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
-, openssl, openssh }:
+, fetchPypi
+, fido2
+, gssapi
+, libnacl
+, libsodium
+, nettle
+, openssh
+, openssl
+, pyopenssl
+, pytestCheckHook
+, python-pkcs11
+, pythonOlder
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.2.1";
-  disabled = pythonOlder "3.4";
+  version = "2.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "baf9f1aa397a104a0c3923bae927796ca57063ce62330767131b418cd833338e";
+    hash = "sha256-vn4ctHIl3JiZ5WRy/cTarANYSmhDZ1MpwM5nF5yyDik=";
   };
+
+  propagatedBuildInputs = [
+    bcrypt
+    cryptography
+    fido2
+    gssapi
+    libnacl
+    libsodium
+    nettle
+    pyopenssl
+    python-pkcs11
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    openssh
+    openssl
+    pytestCheckHook
+  ];
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -23,30 +59,30 @@ buildPythonPackage rec {
     ./fix-sftp-chmod-test-nixos.patch
   ];
 
-  propagatedBuildInputs = [
-    bcrypt
-    cryptography
-    gssapi
-    libnacl
-    libsodium
-    nettle
-    pyopenssl
+  disabledTestPaths = [
+    # Disables windows specific test (specifically the GSSAPI wrapper for Windows)
+    "tests/sspi_stub.py"
   ];
 
-  checkInputs = [
-    openssh
-    openssl
+  disabledTests = [
+    # No PIN set
+    "TestSKAuthCTAP2"
+    # Requires network access
+    "test_connect_timeout_exceeded"
+    # Fails in the sandbox
+    "test_forward_remote"
   ];
 
-  # Disables windows specific test (specifically the GSSAPI wrapper for Windows)
-  postPatch = ''
-    rm tests/sspi_stub.py
-  '';
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework";
-    homepage = "https://asyncssh.readthedocs.io/en/latest";
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "Asynchronous SSHv2 Python client and server library";
+    homepage = "https://asyncssh.readthedocs.io/";
+    changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 }

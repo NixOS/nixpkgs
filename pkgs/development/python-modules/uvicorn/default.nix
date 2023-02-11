@@ -1,52 +1,76 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , click
 , h11
 , httptools
+, python-dotenv
+, pyyaml
+, typing-extensions
 , uvloop
+, watchfiles
 , websockets
-, wsproto
-, pytest
-, requests
-, isPy27
+, hatchling
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.11.5";
-  disabled = isPy27;
+  version = "0.20.0";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0cf0vw6kzxwlkvk5gw85wv3kg1kdil0wkq3s7rmxpvrk6gjk8jvq";
+    hash = "sha256-yca6JI3/aqdZF7SxFeYr84GOeQnLBmbm1dIXjngX9Ng=";
   };
+
+  outputs = [
+    "out"
+    "testsout"
+  ];
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     click
     h11
-    httptools
-    uvloop
-    websockets
-    wsproto
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11==0.8.*" "h11" \
-      --replace "httptools==0.0.13" "httptools"
+  passthru.optional-dependencies.standard = [
+    httptools
+    python-dotenv
+    pyyaml
+    uvloop
+    watchfiles
+    websockets
+  ];
+
+  postInstall = ''
+    mkdir $testsout
+    cp -R tests $testsout/tests
   '';
 
-  checkInputs = [ pytest requests ];
-  # watchgod required the watchgod package, which isn't available in nixpkgs
-  checkPhase = ''
-    pytest --ignore=tests/supervisors/test_watchgodreload.py
-  '';
+  pythonImportsCheck = [
+    "uvicorn"
+  ];
+
+  # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
+  doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

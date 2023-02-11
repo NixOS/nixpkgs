@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Download patches from debian project
 # Usage $0 debian-patches.txt debian-patches.nix
-# An example input and output files can be found in applications/graphics/xara/
+# An example input and output files can be found in tools/graphics/plotutils
 
 DEB_URL=https://sources.debian.org/data/main
 declare -a deb_patches

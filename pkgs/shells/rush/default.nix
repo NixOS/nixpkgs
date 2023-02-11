@@ -1,17 +1,26 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv, bash, perl }:
 
 stdenv.mkDerivation rec {
   pname = "rush";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "17i4mggr3rnfz0xbhqvd86jqva40c535fhlwkb2l4hjcbpg8blcf";
+    sha256 = "sha256-57gBYfZsKdK1moXBC52KgxKv/MIeQK6tDu+fznXLZ+Y=";
   };
+
+  strictDeps = true;
+  buildInputs = [ bash ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/rush-po \
+      --replace "exec perl" "exec ${lib.getExe perl}"
+  '';
 
   doCheck = true;
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Restricted User Shell";
 
     longDescription =
@@ -29,10 +38,10 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "https://www.gnu.org/software/rush/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 
   passthru = {

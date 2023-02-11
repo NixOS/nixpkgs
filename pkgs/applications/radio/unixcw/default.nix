@@ -1,5 +1,6 @@
-{stdenv, fetchurl, libpulseaudio, alsaLib , pkgconfig, qt5}:
-stdenv.mkDerivation rec {
+{ lib, mkDerivation, fetchurl, libpulseaudio, alsa-lib , pkg-config, qtbase }:
+
+mkDerivation rec {
   pname = "unixcw";
   version = "3.5.1";
   src = fetchurl {
@@ -9,10 +10,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-use-of-dlopen.patch
   ];
-  buildInputs = [libpulseaudio alsaLib pkgconfig qt5.qtbase];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libpulseaudio alsa-lib qtbase ];
   CFLAGS   ="-lasound -lpulse-simple";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "sound characters as Morse code on the soundcard or console speaker";
     longDescription = ''
        unixcw is a project providing libcw library and a set of programs

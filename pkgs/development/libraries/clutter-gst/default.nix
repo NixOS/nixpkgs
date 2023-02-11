@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3, gdk-pixbuf }:
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "clutter-gst";
@@ -7,18 +7,29 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17czmpl92dzi4h3rn5rishk015yi3jwiw29zv8qan94xcmnbssgy";
   };
 
+  patches = [
+    # Add patch from Arch Linux to fix corrupted display with Cheese
+    # https://gitlab.gnome.org/GNOME/cheese/-/issues/51
+    # https://github.com/archlinux/svntogit-packages/tree/packages/clutter-gst/trunk
+    (fetchpatch {
+      url = "https://github.com/archlinux/svntogit-packages/raw/c4dd0bbda35aa603ee790676f6e15541f71b6d36/trunk/0001-video-sink-Remove-RGBx-BGRx-support.patch";
+      sha256 = "sha256-k1fCiM/u7q81UrDYgbqhN/C+q9DVQ+qOyq6vmA3hbSQ=";
+    })
+  ];
+
   propagatedBuildInputs = [ clutter gtk3 glib cogl gdk-pixbuf ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -27,9 +38,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://www.clutter-project.org/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ lethalman ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

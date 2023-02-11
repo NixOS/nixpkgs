@@ -1,31 +1,52 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , boltons
 , attrs
 , face
-, pytest
+, pytestCheckHook
 , pyyaml
-, isPy37
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "20.5.0";
+  version = "22.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e753d2e8d16647ffcd9f0f99ac85d3db523ff0a1f097cf0a154a60702bca7e42";
+    hash = "sha256-FRDGWHqPnGSiRmQbcAM8vF696Z8CrSRWk2eAOOghrrU=";
   };
 
-  propagatedBuildInputs = [ boltons attrs face ];
+  propagatedBuildInputs = [
+    boltons
+    attrs
+    face
+  ];
 
-  checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
+  preCheck = ''
+    # test_cli.py checks the output of running "glom"
+    export PATH=$out/bin:$PATH
+  '';
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Test is outdated (was made for PyYAML 3.x)
+    "test_main_yaml_target"
+  ];
+
+  pythonImportsCheck = [
+    "glom"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''

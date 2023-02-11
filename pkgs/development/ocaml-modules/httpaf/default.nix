@@ -1,19 +1,23 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, angstrom, faraday, alcotest }:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, ocaml
+, angstrom, faraday, alcotest
+}:
 
 buildDunePackage rec {
   pname = "httpaf";
-  version = "0.4.1";
+  version = "0.7.1";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "0i2r004ihj00hd97475y8nhjqjln58xx087zcjl0dfp0n7q80517";
+    sha256 = "0zk78af3qyvf6w66mg8sxygr6ndayzqw5s3zfxibvn121xwni26z";
   };
 
-  checkInputs = lib.optional doCheck alcotest;
+  checkInputs = [ alcotest ];
   propagatedBuildInputs = [ angstrom faraday ];
-  doCheck = lib.versions.majorMinor ocaml.version != "4.07";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "A high-performance, memory-efficient, and scalable web server for OCaml";

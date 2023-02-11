@@ -2,9 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
+, pythonOlder
 , sdcc
-, nmigen
+, amaranth
 , fx2
 , libusb1
 , aiohttp
@@ -18,22 +19,23 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2020-02-08";
+  version = "unstable-2021-12-12";
+  disabled = pythonOlder "3.7";
   # python software/setup.py --version
-  realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "2a8bfc981b90ba5d86c310911dbd6ffe71acd498";
-    sha256 = "01v5269bv09ggvmq6lqyhr5am51hzmwya1p5n62h84b7rdwd8q9m";
+    rev = "e640a778c446b7e9812727e73c560d12aeb41d7c";
+    sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm sdcc ];
+  nativeBuildInputs = [ setuptools-scm sdcc ];
 
   propagatedBuildInputs = [
     setuptools
-    nmigen
+    amaranth
     fx2
     libusb1
     aiohttp
@@ -42,7 +44,7 @@ buildPythonPackage rec {
     crcmod
   ];
 
-  checkInputs = [ yosys icestorm nextpnr ];
+  nativeCheckInputs = [ yosys icestorm nextpnr ];
 
   enableParallelBuilding = true;
 
@@ -70,6 +72,6 @@ buildPythonPackage rec {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily thoughtpolice ];
   };
 }

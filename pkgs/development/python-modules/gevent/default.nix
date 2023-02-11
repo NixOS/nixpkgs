@@ -1,35 +1,55 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPyPy
+, python
+, libev
+, greenlet
+, setuptools
+, zope_event
 , zope_interface
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "20.5.2";
+  version = "22.10.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2756de36f56b33c46f6cc7146a74ba65afcd1471922c95b6771ce87b279d689c";
+    hash = "sha256-HKAdoXbuN7NSeicC99QNvJ/7jPx75aA7+k+e7EXlXEY=";
   };
 
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [
-    zope_interface
-  ] ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkPhase = ''
-    cd greentest
-    ${python.interpreter} testrunner.py
-  '';
+  buildInputs = [
+    libev
+  ];
+
+  propagatedBuildInputs = [
+    zope_event
+    zope_interface
+  ] ++ lib.optionals (!isPyPy) [
+    greenlet
+  ];
 
   # Bunch of failures.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "gevent"
+  ];
+
+  meta = with lib; {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.unix;
   };
 }

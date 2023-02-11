@@ -1,8 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, ctypes, libsodium }:
-
-if stdenv.lib.versionAtLeast ocaml.version "4.10"
-then throw "sodium is not available for OCaml ${ocaml.version}"
-else
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, ctypes, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-sodium";
@@ -15,17 +11,24 @@ stdenv.mkDerivation rec {
     sha256 = "124gpi1jhac46x05gp5viykyrafnlp03v1cmkl13c6pgcs8w04pv";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  patches = [
+    # ctypes.stubs no longer pulls in bigarray automatically
+    ./lib-gen-link-bigarray.patch
+  ];
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ctypes libsodium ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dsheets/ocaml-sodium";
     description = "Binding to libsodium 1.0.9+";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.rixed ];
   };
 }

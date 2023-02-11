@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest
-, pytest_xdist
+, pytest-xdist
 , six }:
 
 buildPythonPackage rec {
@@ -12,9 +12,9 @@ buildPythonPackage rec {
     sha256 = "0gca9xj60qr3aprj9qdc66crr4r7hl8wzv6gc9y40nclazwawj91";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    pytest_xdist
+    pytest-xdist
   ];
 
   propagatedBuildInputs = [
@@ -26,9 +26,9 @@ buildPythonPackage rec {
     pytest --boxed
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "lazy_import provides a set of functions that load modules, and related attributes, in a lazy fashion.";
-    homepage = https://github.com/mnmelo/lazy_import;
+    homepage = "https://github.com/mnmelo/lazy_import";
     license = licenses.gpl3;
     maintainers = [ maintainers.marenz ];
   };

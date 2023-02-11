@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
+{ lib, stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
 
 let
   version = "1.2-0";
 
   libstdcpp5 = fetchurl {
-    url = "http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-3.3/libstdc++5_3.3.6-17ubuntu1_i386.deb";
+    url = "mirror://ubuntu/pool/universe/g/gcc-3.3/libstdc++5_3.3.6-17ubuntu1_i386.deb";
     sha256 = "10f8zcmqaa7skvg2bz94mnlgqpan4iscvi8913r6iawjh7hiisjy";
   };
 in
@@ -13,8 +13,8 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "http://a1227.g.akamai.net/f/1227/40484/7d/download.ebz.epson.net/dsc/f/01/00/01/58/65/cd71929d2bf41ebf7e96f68fa9f1279556545ef1/Epson-ALC1100-filter-1.2.tar.gz";
-      sha256 = "0q0bf4dfm4v69l7xg6sgkh7rwb0h77i8j9kplq1dfkd208g7y81p";
+      url = "https://download3.ebz.epson.net/dsc/f/03/00/11/33/07/4027e99517b5c388d444b8444d719b4b77f7e9db/Epson-ALC1100-filter-1.2.tar.gz";
+      sha256 = "1dfw75a3kj2aa4iicvlk9kz3jarrsikpnpd4cdpw79scfc5mwm2p";
     };
 
     patches = [ ./cups-data-dir.patch ./ppd.patch ];
@@ -33,12 +33,12 @@ in
 
     postFixup = ''
       patchelf --set-interpreter ${pkgsi686Linux.glibc}/lib/ld-linux.so.2 \
-        --set-rpath "${stdenv.lib.makeLibraryPath [
+        --set-rpath "${lib.makeLibraryPath [
           pkgsi686Linux.glibc
           "$out"
         ]}" $out/bin/alc1100
 
-      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [
+      patchelf --set-rpath "${lib.makeLibraryPath [
           pkgsi686Linux.glibc
         ]}" $out/lib/libstdc++.so.5.0.7
 
@@ -49,7 +49,7 @@ in
         --suffix PATH : "\$PATH:${psutils}/bin:${ghostscript}/bin:${bash}/bin:/var/lib/cups/path/bin"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
       description = "Epson AcuLaser C1100 Driver";
       longDescription = ''
@@ -63,6 +63,7 @@ in
           };
       '';
 
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = with licenses; [ mit eapl ];
       maintainers = [ maintainers.eperuffo ];
       platforms = platforms.linux;

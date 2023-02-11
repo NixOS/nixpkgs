@@ -1,4 +1,0 @@
-url https://sourceforge.net/projects/libdmtx/files/libdmtx/
-SF_version_dir
-version_link 'dmtx-utils-.*[.]tar[.][a-z0-9]+/download$'
-SF_redirect

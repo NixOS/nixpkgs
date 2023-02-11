@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , pkgs
 }:
@@ -19,7 +19,7 @@ buildPythonPackage {
   # No test suite
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python wrapper around libmagic";
     homepage = "http://www.darwinsys.com/file/";
     license = licenses.lgpl2;

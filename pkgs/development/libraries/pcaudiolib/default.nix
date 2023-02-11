@@ -1,30 +1,53 @@
-{ config, stdenv, lib, fetchFromGitHub
-, autoconf, automake, which, libtool, pkgconfig
-, portaudio, alsaLib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, autoconf
+, automake
+, libpulseaudio
+, libtool
+, pkg-config
+, portaudio
+, which
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcaudiolib";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
-    owner = "rhdunn";
-    repo = "pcaudiolib";
-    rev = "${version}";
-    sha256 = "0c55hlqqh0m7bcb3nlgv1s4a22s5bgczr1cakjh3767rjb10khi0";
+    owner = "espeak-ng";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-ZG/HBk5DHaZP/H3M01vDr3M2nP9awwsPuKpwtalz3EE=";
   };
 
-  nativeBuildInputs = [ autoconf automake which libtool pkgconfig ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    which
+  ];
 
-  buildInputs = [ portaudio alsaLib ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs = [
+    portaudio
+  ]
+  ++ lib.optional stdenv.isLinux alsa-lib
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  preConfigure = "./autogen.sh";
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/espeak-ng/pcaudiolib";
     description = "Provides a C API to different audio devices";
-    homepage = "https://github.com/rhdunn/pcaudiolib";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aske ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
   };
-}
+})

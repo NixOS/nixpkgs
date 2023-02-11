@@ -20,20 +20,20 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable cachefilesd network filesystems caching daemon.";
+        description = lib.mdDoc "Whether to enable cachefilesd network filesystems caching daemon.";
       };
 
       cacheDir = mkOption {
         type = types.str;
         default = "/var/cache/fscache";
-        description = "Directory to contain filesystem cache.";
+        description = lib.mdDoc "Directory to contain filesystem cache.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         example = "brun 10%";
-        description = "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
+        description = lib.mdDoc "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
       };
 
     };
@@ -43,17 +43,21 @@ in
 
   config = mkIf cfg.enable {
 
+    boot.kernelModules = [ "cachefiles" ];
+
     systemd.services.cachefilesd = {
       description = "Local network file caching management daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.kmod pkgs.cachefilesd ];
-      script = ''
-        modprobe -qab cachefiles
-        mkdir -p ${cfg.cacheDir}
-        chmod 700 ${cfg.cacheDir}
-        exec cachefilesd -n -f ${cfgFile}
-      '';
+      serviceConfig = {
+        Type = "exec";
+        ExecStart = "${pkgs.cachefilesd}/bin/cachefilesd -n -f ${cfgFile}";
+        Restart = "on-failure";
+        PrivateTmp = true;
+      };
     };
 
+    systemd.tmpfiles.rules = [
+      "d ${cfg.cacheDir} 0700 root root - -"
+    ];
   };
 }

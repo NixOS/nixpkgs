@@ -1,19 +1,50 @@
-{ rustPlatform, fetchFromGitHub, lib, nasm }:
+{ lib
+, rust
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, cargo-c
+, libgit2
+, nasm
+, zlib
+, libiconv
+, Security
+}:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.3";
+  version = "0.6.1";
 
-  src = fetchFromGitHub {
-    owner = "xiph";
-    repo = "rav1e";
-    rev = "v${version}";
-    sha256 = "0a9dryag4x35a2c45qiq1j5xk9ydcpw1g6kici85d2yrc2z3hwrx";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-70O9/QRADaEYVvZjEfuBOxPF8lCZ138L2fbFWpj3VUw=";
   };
 
-  cargoSha256 = "1xaincrmpicp0skf9788w5631x1hxvifvq06hh5ribdz79zclzx3";
+  cargoHash = "sha256-iHOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkgCdgw=";
 
-  nativeBuildInputs = [ nasm ];
+  auditable = true; # TODO: remove when this is the default
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ cargo-c libgit2 nasm zlib ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
+
+  checkType = "debug";
+
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+  '';
+
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
@@ -23,10 +54,9 @@ rustPlatform.buildRustPackage rec {
       libaom (the reference encoder) is too slow.
       Features: https://github.com/xiph/rav1e#features
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
+    maintainers = [ ];
   };
 }

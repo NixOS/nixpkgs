@@ -1,27 +1,51 @@
-{ buildGoModule, fetchgit, stdenv }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles, testers, cue }:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.2.0";
+  version = "0.4.3";
 
-  src = fetchgit {
-    url = "https://cue.googlesource.com/cue";
+  src = fetchFromGitHub {
+    owner = "cue-lang";
+    repo = "cue";
     rev = "v${version}";
-    sha256 = "06kag5dwkq4zsh1b52b74g3slsxlwwiap2w3709qjhrgda8w2zn3";
+    hash = "sha256-v9MYrijnbtJpTgRZ4hmkaekisOyujldGewCRNbkVzWw=";
   };
 
-  vendorSha256 = "1lhjd98n9j1cq36b5lhscb7k32qmyqg7zs6zc8yab494bm8sz89g";
+  postPatch = ''
+    # Disable script tests
+    rm -f cmd/cue/cmd/script_test.go
+  '';
 
-  subPackages = [ "cmd/cue" ];
+  vendorHash = "sha256-jTfV8DJlr5LxS3HjOEBkVzBvZKiySrmINumXSUIq2mI=";
 
-  buildFlagsArray = [
-    "-ldflags=-X cuelang.org/go/cmd/cue/cmd.version=${version}"
-  ];
+  excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
 
-  meta = {
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}" ];
+
+  postInstall = ''
+    # Completions
+    installShellCompletion --cmd cue \
+      --bash <($out/bin/cue completion bash) \
+      --fish <($out/bin/cue completion fish) \
+      --zsh <($out/bin/cue completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/cue eval - <<<'a: "all good"' > /dev/null
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = cue;
+    command = "cue version";
+  };
+
+  meta = with lib;  {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    maintainers = with stdenv.lib.maintainers; [ solson ];
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

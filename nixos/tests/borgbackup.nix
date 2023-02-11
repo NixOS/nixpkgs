@@ -36,14 +36,14 @@ let
 
 in {
   name = "borgbackup";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
   nodes = {
     client = { ... }: {
       services.borgbackup.jobs = {
-        
+
         local = {
           paths = dataDir;
           repo = localRepo;
@@ -81,14 +81,46 @@ in {
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
         };
 
+        commandSuccess = {
+          dumpCommand = pkgs.writeScript "commandSuccess" ''
+            echo -n test
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
+        commandFail = {
+          dumpCommand = "${pkgs.coreutils}/bin/false";
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
+        sleepInhibited = {
+          inhibitsSleep = true;
+          # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
+          dumpCommand = pkgs.writeScript "sleepInhibited" ''
+            cat /dev/zero
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
       };
     };
 
     server = { ... }: {
       services.openssh = {
         enable = true;
-        passwordAuthentication = false;
-        challengeResponseAuthentication = false;
+        settings = {
+          PasswordAuthentication = false;
+          KbdInteractiveAuthentication = false;
+        };
       };
 
       services.borgbackup.repos.repo1 = {
@@ -171,5 +203,28 @@ in {
         client.fail("{} list borg\@server:wrong".format(borg))
 
         # TODO: Make sure that data is not actually deleted
+
+    with subtest("commandSuccess"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandSuccess")
+        client.fail("systemctl is-failed borgbackup-job-commandSuccess")
+        id = client.succeed("borg-job-commandSuccess list | tail -n1 | cut -d' ' -f1").strip()
+        client.succeed(f"borg-job-commandSuccess extract ::{id} stdin")
+        assert "test" == client.succeed("cat stdin")
+
+    with subtest("commandFail"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandFail")
+        client.succeed("systemctl is-failed borgbackup-job-commandFail")
+
+    with subtest("sleepInhibited"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.fail("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("start borgbackup-job-sleepInhibited")
+        client.wait_until_succeeds("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("stop borgbackup-job-sleepInhibited")
   '';
 })

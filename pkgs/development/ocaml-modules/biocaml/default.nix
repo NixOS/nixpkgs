@@ -1,33 +1,31 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, fetchpatch
+{ lib, buildDunePackage, fetchFromGitHub, fetchpatch
 , ounit, async, base64, camlzip, cfstream
-, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
+, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm
+}:
 
 buildDunePackage rec {
   pname = "biocaml";
-  version = "0.10.1";
+  version = "0.11.2";
 
-  owner = "biocaml";
-
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.11";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "1f19nc8ld0iv45jjnsvaah3ddj88s2n9wj8mrz726kzg85cfr8xj";
+    owner = "biocaml";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "01yw12yixs45ya1scpb9jy2f7dw1mbj7741xib2xpq3kkc1hc21s";
   };
 
-  # fix compilation without and disable -unsafe-string, needed for Ocaml 4.10:
-  patches = [ (fetchpatch {
-      url = "https://github.com/biocaml/biocaml/commit/597fa7b0d203684e45ffe03f56c74335b6173ffc.patch";
-      sha256 = "0b8jdg215cv2k4y3ww7vak2ag5v6v9w8b76qjivr5d1qxz47mqxv";
-  }) ];
+  patches = fetchpatch {
+    url = "https://github.com/biocaml/biocaml/commit/3ef74d0eb4bb48d2fb7dd8b66fb3ad8fe0aa4d78.patch";
+    sha256 = "0rcvf8gwq7sz15mghl9ing722rl2zpnqif9dfxrnpdxiv0rl0731";
+  };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
   checkInputs = [ ounit ];
   propagatedBuildInputs = [ async base64 camlzip cfstream core rresult uri xmlm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bioinformatics library for Ocaml";
     homepage = "http://${pname}.org";
     maintainers = [ maintainers.bcdarwin ];

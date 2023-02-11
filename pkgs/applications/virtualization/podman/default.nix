@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
@@ -12,26 +13,34 @@
 , systemd
 , go-md2man
 , nixosTests
+, python3
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "1.9.3";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "libpod";
+    repo = "podman";
     rev = "v${version}";
-    sha256 = "0gbp12xn1vliyawkw2w2bpn6b5h2cm41g3nj72vk4jyhis0igq1s";
+    hash = "sha256-Uha5ueOGNmG2f+1I89uFQKA3pSSp1d02FGy86Fc2eWE=";
   };
 
-  vendorSha256 = null;
+  patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ];
 
-  outputs = [ "out" "man" ];
+  vendorHash = null;
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  doCheck = false;
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+  outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
+
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
     gpgme
     libapparmor
@@ -42,27 +51,55 @@ buildGoModule rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
-    ${if stdenv.isDarwin
-      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make podman docs"}
+    ${if stdenv.isDarwin then ''
+      make podman-remote # podman-mac-helper uses FHS paths
+    '' else ''
+      make bin/podman bin/rootlessport
+    ''}
+    make docs
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm555 bin/podman $out/bin/podman
-    installShellCompletion --bash completions/bash/podman
-    installShellCompletion --zsh completions/zsh/_podman
+    runHook preInstall
+    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
+    ${if stdenv.isDarwin then ''
+      mv bin/{darwin/podman,podman}
+    '' else ''
+      install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+      for s in contrib/systemd/**/*.in; do
+        substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
+      done
+      PREFIX=$out make install.systemd
+      install -Dm555 bin/rootlessport -t $rootlessport/bin
+    ''}
+    install -Dm555 bin/podman -t $out/bin
+    PREFIX=$out make install.completions
     MANDIR=$man/share/man make install.man
+    runHook postInstall
   '';
 
-  passthru.tests.podman = nixosTests.podman;
+  postFixup = lib.optionalString stdenv.isLinux ''
+    RPATH=$(patchelf --print-rpath $out/bin/podman)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
+  '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
+  };
+
+  meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

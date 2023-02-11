@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2}:
+{lib, stdenv, fetchFromGitHub, pkg-config, libltc, libsndfile, jack2}:
 
 stdenv.mkDerivation rec {
   pname = "ltc-tools";
@@ -11,11 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0vp25b970r1hv5ndzs4di63rgwnl31jfaj3jz5dka276kx34q4al";
   };
 
-  buildInputs = [ pkgconfig libltc libsndfile jack2 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libltc libsndfile jack2 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/x42/ltc-tools";
     description = "Tools to deal with linear-timecode (LTC)";
     license = licenses.gpl2;

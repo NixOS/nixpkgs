@@ -1,12 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   kconfig, kwidgetsaddons, qtbase, qttools
 }:
 
 mkDerivation {
-  name = "kcompletion";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kcompletion";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfig kwidgetsaddons qttools ];
   propagatedBuildInputs = [ qtbase ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "rw";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sortix.org/rw";
     description = "Block device and byte copying program similar to dd";
     longDescription = ''
@@ -22,7 +22,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = with maintainers; [ dtzWill ];
-
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

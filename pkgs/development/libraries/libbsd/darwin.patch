@@ -1,35 +1,57 @@
 diff --git a/configure.ac b/configure.ac
-index 6e9496d..60b6e4c 100644
+index 5b6d22b..98c449b 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -44,6 +44,8 @@ AC_SUBST([TESTU01_LIBS])
- AM_CONDITIONAL([HAVE_LIBTESTU01],
-                [test "x$ac_cv_lib_testu01_unif01_CreateExternGenBits" = "xyes"])
- 
-+AX_CHECK_VSCRIPT
-+
- is_windows=no
- AS_CASE([$host_os],
-   [*-gnu*], [
-@@ -68,7 +70,7 @@ AS_CASE([$host_os],
+@@ -145,7 +145,7 @@ AS_CASE([$host_os],
  AM_CONDITIONAL([OS_WINDOWS], [test "x$is_windows" = "xyes"])
  
  # Checks for header files.
--AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h grp.h])
-+AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h grp.h nlist.h])
+-AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h pwd.h grp.h])
++AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h pwd.h grp.h nlist.h])
  
  # Checks for typedefs, structures, and compiler characteristics.
  AC_C_INLINE
-@@ -169,7 +171,8 @@ AC_LINK_IFELSE(
+@@ -245,7 +245,9 @@ AC_LINK_IFELSE(
  
  AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
                  getauxval getentropy getexecname getline \
 -                pstat_getproc sysconf])
 +                pstat_getproc sysconf \
-+		strlcpy strlcat strnstr strmode fpurge])
++		strlcpy strlcat strnstr strmode fpurge \
++		user_from_uid group_from_gid])
  AM_CONDITIONAL([HAVE_GETENTROPY], [test "x$ac_cv_func_getentropy" = "xtrue"])
  
- AC_CONFIG_FILES([
+ AC_SUBST([MD5_LIBS])
+diff --git a/include/bsd/grp.h b/include/bsd/grp.h
+index b2705e5..c9423a2 100644
+--- a/include/bsd/grp.h
++++ b/include/bsd/grp.h
+@@ -44,8 +44,10 @@
+ __BEGIN_DECLS
+ int
+ gid_from_group(const char *, gid_t *);
++#if !HAVE_GROUP_FROM_GID
+ const char *
+ group_from_gid(gid_t, int);
++#endif
+ __END_DECLS
+ 
+ #endif
+diff --git a/include/bsd/pwd.h b/include/bsd/pwd.h
+index 798af4b..6ae5244 100644
+--- a/include/bsd/pwd.h
++++ b/include/bsd/pwd.h
+@@ -44,8 +44,10 @@
+ __BEGIN_DECLS
+ int
+ uid_from_user(const char *, uid_t *);
++#if !HAVE_USER_FROM_UID
+ const char *
+ user_from_uid(uid_t, int);
++#endif
+ __END_DECLS
+ 
+ #endif
 diff --git a/include/bsd/string.h b/include/bsd/string.h
 index f987fee..a1e17ed 100644
 --- a/include/bsd/string.h
@@ -56,173 +78,8 @@ index f987fee..a1e17ed 100644
  
  #if !defined(__GLIBC__) || \
      (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
-diff --git a/m4/ax_check_vscript.m4 b/m4/ax_check_vscript.m4
-new file mode 100644
-index 0000000..9851f32
---- /dev/null
-+++ b/m4/ax_check_vscript.m4
-@@ -0,0 +1,142 @@
-+# ===========================================================================
-+#     https://www.gnu.org/software/autoconf-archive/ax_check_vscript.html
-+# ===========================================================================
-+#
-+# SYNOPSIS
-+#
-+#   AX_CHECK_VSCRIPT
-+#
-+# DESCRIPTION
-+#
-+#   Check whether the linker supports version scripts.  Version scripts are
-+#   used when building shared libraries to bind symbols to version nodes
-+#   (helping to detect incompatibilities) or to limit the visibility of
-+#   non-public symbols.
-+#
-+#   Output:
-+#
-+#   If version scripts are supported, VSCRIPT_LDFLAGS will contain the
-+#   appropriate flag to pass to the linker.  On GNU systems this would
-+#   typically be "-Wl,--version-script", and on Solaris it would typically
-+#   be "-Wl,-M".
-+#
-+#   Two Automake conditionals are also set:
-+#
-+#    HAVE_VSCRIPT is true if the linker supports version scripts with
-+#    entries that use simple wildcards, like "local: *".
-+#
-+#    HAVE_VSCRIPT_COMPLEX is true if the linker supports version scripts with
-+#    pattern matching wildcards, like "global: Java_*".
-+#
-+#   On systems that do not support symbol versioning, such as Mac OS X, both
-+#   conditionals will be false.  They will also be false if the user passes
-+#   "--disable-symvers" on the configure command line.
-+#
-+#   Example:
-+#
-+#    configure.ac:
-+#
-+#     AX_CHECK_VSCRIPT
-+#
-+#    Makefile.am:
-+#
-+#     if HAVE_VSCRIPT
-+#     libfoo_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/libfoo.map
-+#     endif
-+#
-+#     if HAVE_VSCRIPT_COMPLEX
-+#     libbar_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/libbar.map
-+#     endif
-+#
-+# LICENSE
-+#
-+#   Copyright (c) 2014 Kevin Cernekee <cernekee@gmail.com>
-+#
-+#   Copying and distribution of this file, with or without modification, are
-+#   permitted in any medium without royalty provided the copyright notice
-+#   and this notice are preserved. This file is offered as-is, without any
-+#   warranty.
-+
-+#serial 2
-+
-+# _AX_CHECK_VSCRIPT(flag, global-sym, action-if-link-succeeds, [junk-file=no])
-+AC_DEFUN([_AX_CHECK_VSCRIPT], [
-+  AC_LANG_PUSH([C])
-+  ax_check_vscript_save_flags="$LDFLAGS"
-+  echo "V1 { global: $2; local: *; };" > conftest.map
-+  AS_IF([test x$4 = xyes], [
-+    echo "{" >> conftest.map
-+  ])
-+  LDFLAGS="$LDFLAGS -Wl,$1,conftest.map"
-+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[int show, hide;]], [])], [$3])
-+  LDFLAGS="$ax_check_vscript_save_flags"
-+  rm -f conftest.map
-+  AC_LANG_POP([C])
-+]) dnl _AX_CHECK_VSCRIPT
-+
-+AC_DEFUN([AX_CHECK_VSCRIPT], [
-+
-+  AC_ARG_ENABLE([symvers],
-+    AS_HELP_STRING([--disable-symvers],
-+                   [disable library symbol versioning [default=auto]]),
-+    [want_symvers=$enableval],
-+    [want_symvers=yes]
-+  )
-+
-+  AS_IF([test x$want_symvers = xyes], [
-+
-+    dnl First test --version-script and -M with a simple wildcard.
-+
-+    AC_CACHE_CHECK([linker version script flag], ax_cv_check_vscript_flag, [
-+      ax_cv_check_vscript_flag=unsupported
-+      _AX_CHECK_VSCRIPT([--version-script], [show], [
-+        ax_cv_check_vscript_flag=--version-script
-+      ])
-+      AS_IF([test x$ax_cv_check_vscript_flag = xunsupported], [
-+        _AX_CHECK_VSCRIPT([-M], [show], [ax_cv_check_vscript_flag=-M])
-+      ])
-+
-+      dnl The linker may interpret -M (no argument) as "produce a load map."
-+      dnl If "-M conftest.map" doesn't fail when conftest.map contains
-+      dnl obvious syntax errors, assume this is the case.
-+
-+      AS_IF([test x$ax_cv_check_vscript_flag != xunsupported], [
-+        _AX_CHECK_VSCRIPT([$ax_cv_check_vscript_flag], [show],
-+	                  [ax_cv_check_vscript_flag=unsupported], [yes])
-+      ])
-+    ])
-+
-+    dnl If the simple wildcard worked, retest with a complex wildcard.
-+
-+    AS_IF([test x$ax_cv_check_vscript_flag != xunsupported], [
-+      ax_check_vscript_flag=$ax_cv_check_vscript_flag
-+      AC_CACHE_CHECK([if version scripts can use complex wildcards],
-+                     ax_cv_check_vscript_complex_wildcards, [
-+        ax_cv_check_vscript_complex_wildcards=no
-+        _AX_CHECK_VSCRIPT([$ax_cv_check_vscript_flag], [sh*], [
-+        ax_cv_check_vscript_complex_wildcards=yes])
-+      ])
-+      ax_check_vscript_complex_wildcards="$ax_cv_check_vscript_complex_wildcards"
-+    ], [
-+      ax_check_vscript_flag=
-+      ax_check_vscript_complex_wildcards=no
-+    ])
-+  ], [
-+    AC_MSG_CHECKING([linker version script flag])
-+    AC_MSG_RESULT([disabled])
-+
-+    ax_check_vscript_flag=
-+    ax_check_vscript_complex_wildcards=no
-+  ])
-+
-+  AS_IF([test x$ax_check_vscript_flag != x], [
-+    VSCRIPT_LDFLAGS="-Wl,$ax_check_vscript_flag"
-+    AC_SUBST([VSCRIPT_LDFLAGS])
-+  ])
-+
-+  AM_CONDITIONAL([HAVE_VSCRIPT],
-+    [test x$ax_check_vscript_flag != x])
-+  AM_CONDITIONAL([HAVE_VSCRIPT_COMPLEX],
-+    [test x$ax_check_vscript_complex_wildcards = xyes])
-+
-+]) dnl AX_CHECK_VSCRIPT
-diff --git a/src/Makefile.am b/src/Makefile.am
-index 8384b92..e2c8e15 100644
---- a/src/Makefile.am
-+++ b/src/Makefile.am
-@@ -65,8 +65,11 @@ libbsd_la_LIBADD = \
- 	$(ARC4RANDOM_ATFORK_LIBS) \
- 	$(nil)
- libbsd_la_LDFLAGS = \
--	-Wl,--version-script=$(srcdir)/libbsd.map \
- 	-version-number $(LIBBSD_ABI)
-+if HAVE_VSCRIPT
-+libbsd_la_LDFLAGS += $(VSCRIPT_LDFLAGS),@srcdir@/libbsd.map
-+endif
-+
- libbsd_la_SOURCES = \
- 	arc4random.c \
- 	arc4random.h \
 diff --git a/src/fpurge.c b/src/fpurge.c
-index 462535a..a8941db 100644
+index 350f364..ff7f01e 100644
 --- a/src/fpurge.c
 +++ b/src/fpurge.c
 @@ -26,9 +26,10 @@
@@ -275,7 +132,7 @@ index 462535a..a8941db 100644
  #error "Function fpurge() needs to be ported."
  #endif
 diff --git a/src/funopen.c b/src/funopen.c
-index 1e05c7e..65ba5a8 100644
+index 1e6f43a..3a3af6a 100644
 --- a/src/funopen.c
 +++ b/src/funopen.c
 @@ -143,6 +143,7 @@ funopen(const void *cookie,
@@ -286,62 +143,30 @@ index 1e05c7e..65ba5a8 100644
  #else
  #error "Function funopen() needs to be ported or disabled."
  #endif
-diff --git a/src/hash/sha512.h b/src/hash/sha512.h
-index 4f368a1..7632e25 100644
---- a/src/hash/sha512.h
-+++ b/src/hash/sha512.h
-@@ -29,7 +29,11 @@
- #ifndef _SHA512_H_
- #define _SHA512_H_
- 
-+#ifdef __MACH__
-+#include <stdint.h>
-+#else
- #include <sys/types.h>
-+#endif
- 
- #define SHA512_DIGEST_LENGTH		64
- 
-diff --git a/src/hash/sha512c.c b/src/hash/sha512c.c
-index b3c8d5e..602f54e 100644
---- a/src/hash/sha512c.c
-+++ b/src/hash/sha512c.c
-@@ -25,7 +25,12 @@
-  */
- 
- #include <sys/cdefs.h>
-+
-+#ifdef __MACH__
-+#include <machine/endian.h>
-+#else
- #include <sys/endian.h>
-+#endif
- #include <sys/types.h>
- 
- #include <string.h>
 diff --git a/src/local-link.h b/src/local-link.h
-index 0d4351a..fc520af 100644
+index 6782d9a..fb76098 100644
 --- a/src/local-link.h
 +++ b/src/local-link.h
-@@ -27,6 +27,11 @@
- #ifndef LIBBSD_LOCAL_LINK_H
- #define LIBBSD_LOCAL_LINK_H
+@@ -29,6 +29,12 @@
+ 
+ #include <sys/cdefs.h>
  
 +#ifdef __MACH__
 +#define libbsd_link_warning(symbol, msg)
 +#define libbsd_symver_default(alias, symbol, version)
 +#define libbsd_symver_variant(alias, symbol, version)
++#define libbsd_symver_weak(alias, symbol, version)
 +#else
  #define libbsd_link_warning(symbol, msg) \
  	static const char libbsd_emit_link_warning_##symbol[] \
- 		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg;
-@@ -45,3 +50,4 @@
+ 		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg
+@@ -68,3 +74,4 @@
  #endif
  
  #endif
 +#endif
 diff --git a/src/nlist.c b/src/nlist.c
-index 228c220..46c2d77 100644
+index 1cb9d18..b476f1e 100644
 --- a/src/nlist.c
 +++ b/src/nlist.c
 @@ -41,6 +41,7 @@
@@ -351,12 +176,42 @@ index 228c220..46c2d77 100644
 +#if !HAVE_NLIST_H
  #include "local-elf.h"
  
- #define SIZE_T_MAX 0xffffffffU
-@@ -280,3 +281,4 @@ nlist(const char *name, struct nlist *list)
+ /* Note: This function is used by libkvm0, so we need to export it.
+@@ -277,3 +278,4 @@ nlist(const char *name, struct nlist *list)
  	(void)close(fd);
  	return (n);
  }
 +#endif
+diff --git a/src/pwcache.c b/src/pwcache.c
+index d54daa0..74fde9f 100644
+--- a/src/pwcache.c
++++ b/src/pwcache.c
+@@ -191,6 +191,7 @@ grptb_start(void)
+ 	return 0;
+ }
+ 
++#if !HAVE_USER_FROM_UID
+ /*
+  * user_from_uid()
+  *	caches the name (if any) for the uid. If noname clear, we always
+@@ -251,7 +252,9 @@ user_from_uid(uid_t uid, int noname)
+ 	}
+ 	return ptr->name;
+ }
++#endif
+ 
++#if !HAVE_USER_FROM_UID
+ /*
+  * group_from_gid()
+  *	caches the name (if any) for the gid. If noname clear, we always
+@@ -312,6 +315,7 @@ group_from_gid(gid_t gid, int noname)
+ 	}
+ 	return ptr->name;
+ }
++#endif
+ 
+ /*
+  * uid_from_user()
 diff --git a/src/readpassphrase.c b/src/readpassphrase.c
 index f9f6195..2bc5fb4 100644
 --- a/src/readpassphrase.c
@@ -377,7 +232,7 @@ index f9f6195..2bc5fb4 100644
  
  static void handler(int);
 diff --git a/src/setproctitle.c b/src/setproctitle.c
-index ff32aa3..51ed833 100644
+index d3e1087..0e5f64c 100644
 --- a/src/setproctitle.c
 +++ b/src/setproctitle.c
 @@ -33,6 +33,10 @@
@@ -391,7 +246,7 @@ index ff32aa3..51ed833 100644
  static struct {
  	/* Original value. */
  	const char *arg0;
-@@ -287,7 +291,8 @@ libbsd_symver_default(setproctitle, setproctitle_impl, LIBBSD_0.5);
+@@ -291,7 +295,8 @@ libbsd_symver_default(setproctitle, setproctitle_impl, LIBBSD_0.5);
   * in 0.5, make the implementation available in the old version as an alias
   * for code linking against that version, and change the default to use the
   * new version, so that new code depends on the implemented version. */

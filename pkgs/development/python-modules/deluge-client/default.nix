@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "deluge-client";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # it will try to connect to a running instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight pure-python rpc client for deluge";
     homepage = "https://github.com/JohnDoee/deluge-client";
     license = licenses.mit;

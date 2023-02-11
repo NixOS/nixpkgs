@@ -1,26 +1,31 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
 buildGoModule rec {
   pname = "libgen-cli";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ahqwrlsvgiig73dwlbjgkarf3a0z3xaihj8psd2ci5i0i07nm5v";
+    sha256 = "sha256-Ga9C4h1dcjIdsLJLgZ9s1Fnq4ejI5q0gUtapg/FpLcM=";
   };
 
-  vendorSha256 = "15ch0zfl4a7qvwszsfkfgw5v9492wjk4l4i324iq9b50g70lgyhd";
+  vendorSha256 = "sha256-uHu0BfF26COL/S/yswdcVJVYwozl8Pl3RXHSctYQi+s=";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
 
+  ldflags = [ "-s" "-w" ];
+
   postInstall = ''
-    for shell in bash zsh; do
-      $out/bin/libgen-cli completion $shell > libgen-cli.$shell || :
-      installShellCompletion libgen-cli.$shell
-    done
+    installShellCompletion --cmd libgen-cli \
+      --bash <($out/bin/libgen-cli completion bash) \
+      --fish <($out/bin/libgen-cli completion fish) \
+      --zsh <($out/bin/libgen-cli completion zsh)
   '';
 
   meta = with lib; {
@@ -33,7 +38,6 @@ buildGoModule rec {
       contents.
     '';
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ zaninime ];
   };
 }

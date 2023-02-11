@@ -1,39 +1,48 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib
+, go
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "alertmanager";
-  version = "0.21.0";
+  version = "0.25.0";
   rev = "v${version}";
-
-  goPackagePath = "github.com/prometheus/alertmanager";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "0zrzyaqs73pz4rmj4xaj15x4n1542m0nb7jqm2j77k07j75r5w41";
+    hash = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
   };
 
-  buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=${src.rev}
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${stdenv.lib.getVersion go}
-  '';
+  vendorHash = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
+
+  subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
+
+  ldflags = let t = "github.com/prometheus/common/version"; in [
+    "-X ${t}.Version=${version}"
+    "-X ${t}.Revision=${src.rev}"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.GoVersion=${lib.getVersion go}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     $out/bin/amtool --completion-script-bash > amtool.bash
     installShellCompletion amtool.bash
+    $out/bin/amtool --completion-script-zsh > amtool.zsh
+    installShellCompletion amtool.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
+    changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
     platforms = platforms.unix;

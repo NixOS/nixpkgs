@@ -4,21 +4,27 @@
 , termcolor
 , pytest
 , packaging
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.3";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1630b5b7ea3624919b73fde37cffb87965c5087a4afab8a43074ff44e0d810c4";
+    sha256 = "sha256-xHk0lfPDLhFPD1QWKQlGwxbrlq1aNoTc2t2pJn5Zsrg=";
   };
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     termcolor
-    pytest
     packaging
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {

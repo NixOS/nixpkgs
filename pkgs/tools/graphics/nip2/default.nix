@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome2,
-fftw, gsl, goffice, libgsf }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, libxml2
+, flex
+, bison
+, vips
+, gtk2
+, fftw
+, gsl
+, goffice
+, libgsf
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "nip2";
@@ -10,12 +24,29 @@ stdenv.mkDerivation rec {
     sha256 = "0l7n427njif53npqn02gfjjly8y3khbrkzqxp10j5vp9h97psgiw";
   };
 
-  buildInputs =
-  [ pkgconfig glib libxml2 flex bison vips
-    gnome2.gtk fftw gsl goffice libgsf
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+    makeWrapper
   ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    glib
+    libxml2
+    vips
+    gtk2
+    fftw
+    gsl
+    goffice
+    libgsf
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/nip2 --set VIPSHOME "$out"
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/libvips/nip2";
     description = "Graphical user interface for VIPS image processing system";
     license = licenses.gpl2Plus;

@@ -1,99 +1,78 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
+, pkg-config
 , python3
-, libgee
-, clutter-gtk
-, json-glib
-, libgda
-, libgpod
-, libnotify
-, libpeas
-, libsoup
-, zeitgeist
-, gst_all_1
-, taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
+, vala
+, wrapGAppsHook4
+, elementary-gtk-theme
 , elementary-icon-theme
-, wrapGAppsHook
+, glib
+, granite7
+, gst_all_1
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.5";
-
-  repoName = "music";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
-    sha256 = "0cb0mwsp5w2bmjq8ap9mi0jvaqr9fgq00gfrkj0mzb5x5c26hrnw";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-PttmC1Z3rX2XWCECc320HMs692hSBsxkmnh1Q8a/Mg8=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
-  buildInputs = with gst_all_1; [
-    clutter-gtk
+  buildInputs = [
     elementary-icon-theme
-    granite
+    glib
+    granite7
+    gtk4
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libdbusmenu
-    libgda
-    libgee
-    libgpod
-    libnotify
-    libpeas
-    libsignon-glib
-    libsoup
-    taglib
-    zeitgeist
-  ];
-
-  mesonFlags = [
-    "-Dplugins=lastfm,audioplayer,cdrom,ipod"
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Music player and library designed for elementary OS";
     homepage = "https://github.com/elementary/music";
-    license = licenses.lgpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.music";
   };
 }

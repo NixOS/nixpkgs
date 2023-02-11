@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
+{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
 
 stdenv.mkDerivation rec {
   pname = "blugon";
@@ -13,9 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 libX11 libXrandr ];
 
+  # Remove at next release
+  # https://github.com/jumper149/blugon/commit/d262cd05
+  postPatch = ''
+    sed -i 's,CC = gcc,CC ?= gcc,g' backends/scg/Makefile
+  '';
+
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and configurable Blue Light Filter for X";
     longDescription = ''
       blugon is a simple and fast Blue Light Filter, that is highly configurable and provides a command line interface.

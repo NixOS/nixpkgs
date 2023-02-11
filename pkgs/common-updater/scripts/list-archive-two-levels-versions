@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# lists all available versions listed for a package in a site (http)
+
+pname=""  # package name
+attr_path=""  # package attribute path
+url=""  # directory listing url
+file=""  # file for writing debugging information
+
+while (( $# > 0 )); do
+    flag="$1"
+    shift 1
+    case "$flag" in
+        --pname=*)
+            pname="${flag#*=}"
+            ;;
+        --attr-path=*)
+            attr_path="${flag#*=}"
+            ;;
+        --url=*)
+            url="${flag#*=}"
+            ;;
+        --file=*)
+            file="${flag#*=}"
+            ;;
+        *)
+            echo "$0: unknown option ‘${flag}’"
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -z "$pname" ]]; then
+    pname="$UPDATE_NIX_PNAME"
+fi
+
+if [[ -z "$attr_path" ]]; then
+    attr_path="$UPDATE_NIX_ATTR_PATH"
+fi
+
+# by default set url to the base dir of the first url in src.urls
+if [[ -z "$url" ]]; then
+    url="$(nix-instantiate $systemArg --eval -E \
+               "with import ./. {}; dirOf (dirOf (lib.head $attr_path.src.urls))" \
+            | tr -d '"')"
+fi
+
+# print a debugging message
+if [[ -n "$file" ]]; then
+    echo "# Listing versions for '$pname' at $url" >> $file
+fi
+
+# list all major-minor versions from url
+tags1=$(curl -sS "$url/")
+tags1=$(echo "$tags1" | sed -rne 's,^<a href="([0-9]+\.[0-9]+)/">.*,\1,p')
+
+# print available versions
+for tag in $tags1; do
+    tags2=$(curl -sS "$url/$tag/")
+    tags2=$(echo "$tags2" | sed -rne "s,^<a href=\"$pname-([0-9.]+)\\.[^0-9].*\">.*,\\1,p")
+    echo "$tags2"
+done

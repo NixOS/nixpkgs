@@ -1,9 +1,4 @@
----
-title: iOS
-author: Sander van der Burg
-date: 2019-11-10
----
-# iOS
+# iOS {#ios}
 
 This component is basically a wrapper/workaround that makes it possible to
 expose an Xcode installation as a Nix package by means of symlinking to the
@@ -25,8 +20,8 @@ Hydra.
 
 The Xcode build environment implements a number of features.
 
-Deploying a proxy component wrapper exposing Xcode
---------------------------------------------------
+## Deploying a proxy component wrapper exposing Xcode {#deploying-a-proxy-component-wrapper-exposing-xcode}
+
 The first use case is deploying a Nix package that provides symlinks to the Xcode
 installation on the host system. This package can be used as a build input to
 any build function implemented in the Nix expression language that requires
@@ -60,8 +55,8 @@ lrwxr-xr-x  1 sander  staff  61  1 jan  1970 xcodebuild -> /Applications/Xcode.a
 lrwxr-xr-x  1 sander  staff  14  1 jan  1970 xcrun -> /usr/bin/xcrun
 ```
 
-Building an iOS application
----------------------------
+## Building an iOS application {#building-an-ios-application}
+
 We can build an iOS app executable for the simulator, or an IPA/xcarchive file
 for release purposes, e.g. ad-hoc, enterprise or store installations, by
 executing the `xcodeenv.buildApp {}` function:
@@ -104,6 +99,7 @@ xcodeenv.buildApp {
 ```
 
 The above function takes a variety of parameters:
+
 * The `name` and `src` parameters are mandatory and specify the name of the app
   and the location where the source code resides
 * `sdkVersion` specifies which version of the iOS SDK to use.
@@ -156,8 +152,8 @@ the `xcodeenv.composeXcodeWrapper {}` function takes. For example, the
 `xcodeBaseDir` parameter can be overridden to refer to a different Xcode
 version.
 
-Spawning simulator instances
-----------------------------
+## Spawning simulator instances {#spawning-simulator-instances}
+
 In addition to building iOS apps, we can also automatically spawn simulator
 instances:
 
@@ -218,8 +214,8 @@ xcode.simulateApp {
 By providing the result of an `xcode.buildApp {}` function and configuring the
 app bundle id, the app gets deployed automatically and started.
 
-Troubleshooting
----------------
+## Troubleshooting {#troubleshooting}
+
 In some rare cases, it may happen that after a failure, changes are not picked
 up. Most likely, this is caused by a derived data cache that Xcode maintains.
 To wipe it you can run:

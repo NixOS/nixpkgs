@@ -20,7 +20,7 @@ with lib;
 
     programs.seahorse = {
 
-      enable = mkEnableOption "Seahorse, a GNOME application for managing encryption keys and passwords in the GNOME Keyring";
+      enable = mkEnableOption (lib.mdDoc "Seahorse, a GNOME application for managing encryption keys and passwords in the GNOME Keyring");
 
     };
 
@@ -31,14 +31,14 @@ with lib;
 
   config = mkIf config.programs.seahorse.enable {
 
-    programs.ssh.askPassword = mkDefault "${pkgs.gnome3.seahorse}/libexec/seahorse/ssh-askpass";
+    programs.ssh.askPassword = mkDefault "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
 
     environment.systemPackages = [
-      pkgs.gnome3.seahorse
+      pkgs.gnome.seahorse
     ];
 
     services.dbus.packages = [
-      pkgs.gnome3.seahorse
+      pkgs.gnome.seahorse
     ];
 
   };

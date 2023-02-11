@@ -1,15 +1,33 @@
-{
-  mkDerivation, extra-cmake-modules,
-  kcoreaddons, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, knotifications,
-  kwidgetsaddons, kwindowsystem, polkit-qt
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kcoreaddons
+, kconfig
+, kcrash
+, kdbusaddons
+, ki18n
+, kiconthemes
+, knotifications
+, kwidgetsaddons
+, kwindowsystem
+, polkit-qt
+, qtbase
 }:
 
 mkDerivation {
-  name = "polkit-kde-agent";
+  pname = "polkit-kde-agent";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
-    kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes
-    knotifications kwindowsystem polkit-qt
+    kdbusaddons
+    kwidgetsaddons
+    kcoreaddons
+    kcrash
+    kconfig
+    ki18n
+    kiconthemes
+    knotifications
+    kwindowsystem
+    polkit-qt
   ];
   outputs = [ "out" "dev" ];
 }

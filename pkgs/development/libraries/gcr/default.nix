@@ -1,6 +1,7 @@
 { stdenv
+, lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -11,51 +12,52 @@
 , libtasn1
 , gtk3
 , pango
+, libsecret
+, openssh
+, systemd
 , gobject-introspection
-, makeWrapper
-, libxslt
+, wrapGAppsHook
+, gi-docgen
 , vala
-, gnome3
+, gnome
 , python3
 , shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.36.0";
+  version = "3.41.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00b6bzpr8rj8mvj66r2273r417wg2y21m6n88mhkq9m22z8bxyda";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "u3Eoo8L+u/7pwDuQ131JjQzrI3sHiYAtYBhcccS+ok8=";
   };
 
-  postPatch = ''
-    patchShebangs build/ gcr/fixtures/
-
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     python3
     ninja
     gettext
     gobject-introspection
-    libxslt
-    makeWrapper
+    gi-docgen
+    wrapGAppsHook
     vala
     shared-mime-info
+    gnupg
+    openssh
   ];
 
   buildInputs = [
-    gnupg
     libgcrypt
     libtasn1
     pango
+    libsecret
+    openssh
+  ] ++ lib.optionals stdenv.isLinux [
+    systemd
   ];
 
   propagatedBuildInputs = [
@@ -64,31 +66,44 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=false"
+    # We are still using ssh-agent from gnome-keyring.
+    # https://github.com/NixOS/nixpkgs/issues/140824
+    "-Dssh_agent=false"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd=disabled"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  enableParallelBuilding = true;
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
-  preFixup = ''
-    wrapProgram "$out/bin/gcr-viewer" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  postPatch = ''
+    patchShebangs gcr/fixtures/
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
     };
   };
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
+  meta = with lib; {
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";

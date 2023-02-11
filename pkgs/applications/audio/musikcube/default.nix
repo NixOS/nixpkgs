@@ -1,56 +1,83 @@
-{ cmake
+{ lib
+, stdenv
+, cmake
 , pkg-config
-, alsaLib
-, boost
 , curl
+, asio
 , fetchFromGitHub
-, ffmpeg_3
+, fetchpatch
+, ffmpeg
+, gnutls
 , lame
 , libev
+, game-music-emu
 , libmicrohttpd
+, libopenmpt
+, mpg123
 , ncurses
-, pulseaudio
-, stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+# Linux Dependencies
+, alsa-lib
+, pulseaudio
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.92.1";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "0l4ncxqxvp5m014j7vlglhzxhhrxl0c2m71xn0i0a27hn4nc72mr";
+    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsaLib
-    boost
+    asio
     curl
-    ffmpeg_3
+    ffmpeg
+    gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
-    pulseaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  meta = with stdenv.lib; {
+  postFixup = lib.optionals stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
+
+  meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse srapenne ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

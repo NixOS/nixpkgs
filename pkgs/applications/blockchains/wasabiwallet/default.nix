@@ -1,8 +1,11 @@
-{ stdenv
+{ lib, stdenv
+, autoPatchelfHook
+, makeWrapper
 , fetchurl
 , makeDesktopItem
 , curl
-, dotnet-netcore
+, dotnetCorePackages
+, lttng-ust_2_12
 , fontconfig
 , krb5
 , openssl
@@ -11,28 +14,31 @@
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  # These libraries are dynamically loaded by the application,
+  # and need to be present in LD_LIBRARY_PATH
+  runtimeLibs = [
     curl
-    dotnet-netcore
     fontconfig.lib
     krb5
     openssl
     stdenv.cc.cc.lib
     xorg.libX11
+    xorg.libICE
+    xorg.libSM
     zlib
   ];
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "1.1.11.1";
+  version = "2.0.2.1";
 
   src = fetchurl {
-    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/WasabiLinux-${version}.tar.gz";
-    sha256 = "04v8f2h67aqvcb5a8vmzbp2sqnq7g4m0v1ng52ccb4ii668ya8hy";
+    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
+    sha256 = "sha256-kvUwWRZZmalJQL65tRNdgTg7ZQHhmIbfmsfHbHBYz7w=";
   };
 
   dontBuild = true;
-  dontPatchELF = true;
 
   desktopItem = makeDesktopItem {
     name = "wasabi";
@@ -40,25 +46,29 @@ stdenv.mkDerivation rec {
     desktopName = "Wasabi";
     genericName = "Bitcoin wallet";
     comment = meta.description;
-    categories = "Application;Network;Utility;";
+    categories = [ "Network" "Utility" ];
   };
+
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  buildInputs = runtimeLibs ++ [
+    lttng-ust_2_12
+  ];
 
   installPhase = ''
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
     cp -Rv . $out/opt/${pname}
-    cd $out/opt/${pname}
-    for i in $(find . -type f -name '*.so') wassabee
-      do
-        patchelf --set-rpath ${libPath} $i
-      done
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" wassabee
-    ln -s $out/opt/${pname}/wassabee $out/bin/${pname}
+
+    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}" \
+      --add-flags "$out/opt/${pname}/WalletWasabi.Fluent.Desktop.dll" \
+      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mmahut ];

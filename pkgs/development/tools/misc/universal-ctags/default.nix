@@ -1,47 +1,83 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv, jansson }:
+{ lib
+, stdenv
+, autoreconfHook
+, buildPackages
+, coreutils
+, fetchFromGitHub
+, jansson
+, libiconv
+, perl
+, pkg-config
+, python3
+, libseccomp
+, libyaml
+, pcre2
+, libxml2
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "universal-ctags";
-  version = "unstable-2019-07-30";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "920e7910146915e5cae367bc9f135ffd8b042042";
-    sha256 = "14n3ix77rkhq6vq6kspmgjrmm0kg0f8cxikyqdq281sbnfq8bajn";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XlqBndo8g011SDGp3zM7S+AQ0aCp6rpQlqJF6e5Dd6w=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
-  buildInputs = [ jansson ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
 
-  # to generate makefile.in
-  autoreconfPhase = ''
-    ./autogen.sh
-  '';
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    (python3.withPackages (p: [ p.docutils ]))
+  ];
+
+  buildInputs = [
+    libyaml
+    pcre2
+    libxml2
+    jansson
+  ]
+  ++ lib.optional stdenv.isDarwin libiconv
+  ++ lib.optional stdenv.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 
-  postPatch = ''
-    # Remove source of non-determinism
-    substituteInPlace main/options.c \
-      --replace "printf (\"  Compiled: %s, %s\n\", __DATE__, __TIME__);" ""
-  '';
+  patches = [
+    ./000-nixos-specific.patch
+  ];
 
-  postConfigure = ''
-    sed -i 's|/usr/bin/env perl|${perl}/bin/perl|' misc/optlib2c
+  postPatch = ''
+    substituteInPlace Tmain/utils.sh \
+      --replace /bin/echo ${coreutils}/bin/echo
+
+    patchShebangs misc/*
   '';
 
   doCheck = true;
 
-  checkFlags = [ "units" ];
+  checkFlags = [
+    "man-test" "tlib" "tmain" "tutil" "units"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://docs.ctags.io/en/latest/";
     description = "A maintained ctags implementation";
-    homepage = "https://ctags.io/";
+    longDescription = ''
+      Universal Ctags (abbreviated as u-ctags) is a maintained implementation of
+      ctags. ctags generates an index (or tag) file of language objects found in
+      source files for programming languages. This index makes it easy for text
+      editors and other tools to locate the indexed items.
+    '';
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    # universal-ctags is preferred over emacs's ctags
-    priority = 1;
-    maintainers = [ maintainers.mimame ];
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.all;
+    mainProgram = "ctags";
+    priority = 1; # over the emacs implementation
   };
-}
+})

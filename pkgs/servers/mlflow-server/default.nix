@@ -3,7 +3,7 @@
 let
   py = python3.pkgs;
 in
-py.toPythonApplication 
+py.toPythonApplication
   (py.mlflow.overridePythonAttrs(old: rec {
     pname = "mlflow-server";
 

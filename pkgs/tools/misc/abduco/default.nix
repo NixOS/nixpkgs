@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, writeText, conf ? null }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub, writeText, conf ? null }:
 
 stdenv.mkDerivation rec {
-  name = "abduco-2018-05-16";
+  pname = "abduco";
+  version = "2020-04-30";
 
   src = fetchFromGitHub {
     owner = "martanne";
     repo = "abduco";
-    rev = "8f80aa8044d7ecf0e43a0294a09007d056b20e4c";
-    sha256 = "0wqcif633nbgnznn46j0sng9l0wncppw1x1c42f75b4p9hrph203";
+    rev = "8c32909a159aaa9484c82b71f05b7a73321eb491";
+    sha256 = "0a3p8xljhpk7zh203s75248blfir15smgw5jmszwbmdpy4mqzd53";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  preBuild = lib.optionalString (conf != null)
+    "cp ${writeText "config.def.h" conf} config.def.h";
 
-  CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  installFlags = [ "install-completion" ];
+  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://brain-dump.org/projects/abduco";
     license = licenses.isc;
     description = "Allows programs to be run independently from its controlling terminal";

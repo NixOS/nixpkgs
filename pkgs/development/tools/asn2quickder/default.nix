@@ -1,31 +1,43 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
-, pytestrunner, pytest, six, pyparsing, asn1ate }:
+{ lib
+, buildPythonApplication
+, fetchFromGitLab
+, makeWrapper
+, cmake
+, six
+, pyparsing
+, asn1ate
+, colored
+}:
 
 buildPythonApplication rec {
   pname = "asn2quickder";
-  version = "1.3.0";
+  version = "1.7.1";
 
-  src = fetchFromGitHub {
-    sha256 = "15lxv8vcjnsjxg7ywcac5p6mj5vf5pxq1219yap653ci4f1liqfr";
-    rev = "version-${version}";
-    owner = "vanrein";
+  src = fetchFromGitLab {
+    owner = "arpa2";
     repo = "quick-der";
+    rev = "v${version}";
+    sha256 = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
   postPatch = ''
     patchShebangs ./python/scripts/*
+
+    # Unpin pyparsing 3.0.0. Issue resolved in latest version.
+    substituteInPlace setup.py --replace 'pyparsing==3.0.0' 'pyparsing'
   '';
 
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
-  checkInputs = [ pytestrunner pytest ];
 
-  propagatedBuildInputs = [ pyparsing asn1ate six ];
+  propagatedBuildInputs = [ pyparsing asn1ate six colored ];
 
-  meta = with stdenv.lib; {
+  doCheck = false; # Flaky tests
+
+  meta = with lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";
-    homepage = "https://github.com/vanrein/asn2quickder";
+    homepage = "https://gitlab.com/arpa2/quick-der";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

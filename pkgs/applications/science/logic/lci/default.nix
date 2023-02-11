@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}: 
+{lib, stdenv, fetchurl, readline}:
 stdenv.mkDerivation rec {
   version = "0.6";
   pname = "lci";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [readline];
   meta = {
-    description = ''Lambda calculus interpreter'';
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.gpl3;
+    description = "Lambda calculus interpreter";
+    maintainers = with lib.maintainers; [raskin];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.gpl3;
   };
 }

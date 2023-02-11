@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib
 , fetchFromGitHub
 , qtbase
 , qtsvg
@@ -29,7 +29,7 @@ mkDerivation {
     printf "INSTALLS += target\ntarget.path = $out/bin" >>  qt-box-editor.pro
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor of tesseract-ocr box files";
     homepage = "https://github.com/zdenop/qt-box-editor";
     license = licenses.asl20;

@@ -1,18 +1,20 @@
 /*  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
     and out-of-tree mod packages (mod.nix).
 */
-{ stdenv, makeSetupHook, curl, unzip, dos2unix, pkgconfig, makeWrapper
-, lua, mono, dotnetPackages, python
+{ lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
+, lua, mono, dotnetPackages, python3
 , libGL, freetype, openal, SDL2
 , zenity
 }:
 
-with stdenv.lib;
+with lib;
 
 let
-  path = makeBinPath ([ mono python ] ++ optional (zenity != null) zenity);
+  path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
-  mkdirp = makeSetupHook { } ./mkdirp.sh;
+  mkdirp = makeSetupHook {
+    name = "openra-mkdirp-hook";
+  } ./mkdirp.sh;
 
 in {
   patchEngine = dir: version: ''
@@ -34,7 +36,7 @@ in {
       --set TERM xterm
 
     makeWrapper $out/lib/openra${openraSuffix}/launch-game.sh $(mkdirp $out/bin)/openra${openraSuffix} \
-      --run "cd $out/lib/openra${openraSuffix}"
+      --chdir "$out/lib/openra${openraSuffix}"
   '';
 
   packageAttrs = {
@@ -62,11 +64,11 @@ in {
       curl
       unzip
       dos2unix
-      pkgconfig
+      pkg-config
       makeWrapper
       mkdirp
       mono
-      python
+      python3
     ];
 
     makeFlags = [ "prefix=$(out)" ];

@@ -1,38 +1,27 @@
-{ rsync, buildGoModule, fetchFromGitHub, lib, runCommand, enableStatic ? false }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 buildGoModule rec {
   pname = "gobetween";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "yyyar";
     repo = "gobetween";
     rev = version;
-    sha256 = "f01593509ccece063acd47002c4fc52261fbbbcdbf14b088d813b7d8e38fcca8";
+    sha256 = "0bxf89l53sqan9qq23rwawjkcanv9p61sw56zjqhyx78f0bh0zbc";
   };
-  patches = [ ./gomod.patch ];
 
-  deleteVendor = true;
+  patches = [
+    ./gomod.patch
+  ];
 
   buildPhase = ''
     make -e build${lib.optionalString enableStatic "-static"}
   '';
 
-  lxd = fetchFromGitHub {
-    owner = "lxc";
-    repo = "lxd";
-    rev = "41efd98813f3b42f1752ff6c2c7569a054924623";
-    sha256 = "02vnvjjkzl7b0i2cn03f1lb3jgj5rd3wdkii4pqi9bvmhzszg0l2";
-  };
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      rm -r vendor/github.com/lxc/lxd
-      cp -r --reflink=auto ${lxd} vendor/github.com/lxc/lxd
-      '';
-    });
-
-  vendorSha256 = "1pd0zrjwpw6yv2s86a818yy2ma2fkazd3sb2h6zfp9mvyixgxgri";
+  vendorSha256 = null; #vendorSha256 = "";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -43,8 +32,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Modern & minimalistic load balancer for the Сloud era";
-    homepage = "http://gobetween.io";
+    homepage = "https://gobetween.io";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

@@ -37,11 +37,12 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkEnableOption "Deluge daemon";
+        enable = mkEnableOption (lib.mdDoc "Deluge daemon");
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
-          description = ''
+          type = types.either types.int types.str;
+          description = lib.mdDoc ''
             Number of files to allow deluged to open.
           '';
         };
@@ -49,7 +50,7 @@ in {
         config = mkOption {
           type = types.attrs;
           default = {};
-          example = literalExample ''
+          example = literalExpression ''
             {
               download_location = "/srv/torrents/";
               max_upload_speed = "1000.0";
@@ -59,25 +60,25 @@ in {
               listen_ports = [ ${toString listenPortsDefault} ];
             }
           '';
-          description = ''
+          description = lib.mdDoc ''
             Deluge core configuration for the core.conf file. Only has an effect
-            when <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>. String values must be quoted, integer and
+            when {option}`services.deluge.declarative` is set to
+            `true`. String values must be quoted, integer and
             boolean values must not. See
-            <link xlink:href="https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41"/>
-            for the availaible options.
+            <https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41>
+            for the available options.
           '';
         };
 
         declarative = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to use a declarative deluge configuration.
-            Only if set to <literal>true</literal>, the options
-            <option>services.deluge.config</option>,
-            <option>services.deluge.openFirewall</option> and
-            <option>services.deluge.authFile</option> will be
+            Only if set to `true`, the options
+            {option}`services.deluge.config`,
+            {option}`services.deluge.openFirewall` and
+            {option}`services.deluge.authFile` will be
             applied.
           '';
         };
@@ -85,15 +86,15 @@ in {
         openFirewall = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Whether to open the firewall for the ports in
-            <option>services.deluge.config.listen_ports</option>. It only takes effet if
-            <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>.
+            {option}`services.deluge.config.listen_ports`. It only takes effet if
+            {option}`services.deluge.declarative` is set to
+            `true`.
 
             It does NOT apply to the daemon port nor the web UI port. To access those
             ports secuerly check the documentation
-            <link xlink:href="https://dev.deluge-torrent.org/wiki/UserGuide/ThinClient#CreateSSHTunnel"/>
+            <https://dev.deluge-torrent.org/wiki/UserGuide/ThinClient#CreateSSHTunnel>
             or use a VPN or configure certificates for deluge.
           '';
         };
@@ -101,7 +102,7 @@ in {
         dataDir = mkOption {
           type = types.path;
           default = "/var/lib/deluge";
-          description = ''
+          description = lib.mdDoc ''
             The directory where deluge will create files.
           '';
         };
@@ -109,21 +110,21 @@ in {
         authFile = mkOption {
           type = types.path;
           example = "/run/keys/deluge-auth";
-          description = ''
+          description = lib.mdDoc ''
             The file managing the authentication for deluge, the format of this
             file is straightforward, each line contains a
             username:password:level tuple in plaintext. It only has an effect
-            when <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>.
-            See <link xlink:href="https://dev.deluge-torrent.org/wiki/UserGuide/Authentication"/> for
-            more informations.
+            when {option}`services.deluge.declarative` is set to
+            `true`.
+            See <https://dev.deluge-torrent.org/wiki/UserGuide/Authentication> for
+            more information.
           '';
         };
 
         user = mkOption {
           type = types.str;
           default = "deluge";
-          description = ''
+          description = lib.mdDoc ''
             User account under which deluge runs.
           '';
         };
@@ -131,7 +132,7 @@ in {
         group = mkOption {
           type = types.str;
           default = "deluge";
-          description = ''
+          description = lib.mdDoc ''
             Group under which deluge runs.
           '';
         };
@@ -139,7 +140,7 @@ in {
         extraPackages = mkOption {
           type = types.listOf types.package;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             Extra packages available at runtime to enable Deluge's plugins. For example,
             extraction utilities are required for the built-in "Extractor" plugin.
             This always contains unzip, gnutar, xz and bzip2.
@@ -148,20 +149,20 @@ in {
 
         package = mkOption {
           type = types.package;
-          example = literalExample "pkgs.deluge-1_x";
-          description = ''
+          example = literalExpression "pkgs.deluge-2_x";
+          description = lib.mdDoc ''
             Deluge package to use.
           '';
         };
       };
 
       deluge.web = {
-        enable = mkEnableOption "Deluge Web daemon";
+        enable = mkEnableOption (lib.mdDoc "Deluge Web daemon");
 
         port = mkOption {
           type = types.port;
           default = 8112;
-          description = ''
+          description = lib.mdDoc ''
             Deluge web UI port.
           '';
         };
@@ -169,7 +170,7 @@ in {
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Open ports in the firewall for deluge web daemon
           '';
         };
@@ -183,6 +184,13 @@ in {
       if versionAtLeast config.system.stateVersion "20.09" then
         pkgs.deluge-2_x
       else
+        # deluge-1_x is no longer packaged and this will resolve to an error
+        # thanks to the alias for this name.  This is left here so that anyone
+        # using NixOS older than 20.09 receives that error when they upgrade
+        # and is forced to make an intentional choice to switch to deluge-2_x.
+        # That might be slightly inconvenient but there is no path to
+        # downgrade from 2.x to 1.x so NixOS should not automatically perform
+        # this state migration.
         pkgs.deluge-1_x
     );
 

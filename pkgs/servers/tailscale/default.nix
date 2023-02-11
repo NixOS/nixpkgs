@@ -1,38 +1,39 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
 
 buildGoModule rec {
   pname = "tailscale";
-  # Tailscale uses "git describe" as version numbers. 0.99.1-0 means
-  # "tag v0.99.1 plus 0 commits", which corresponds to rev="v0.99.1"
-  # below.
-  version = "0.99.1-0";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "v0.99.1";
-    sha256 = "1kq4x5xknv0qq6n78xj5wjbf6svbdyw4nzs7z5gjb3ylj2vl97pb";
+    rev = "v${version}";
+    sha256 = "sha256-xTfMq8n9Io99qg/cc7SAWelcxXaWr21IQhsICeDCDNU=";
   };
+  vendorSha256 = "sha256-xdZlwv/2knOE7xaGeNHYNdztflhLLmirGzPOJpDvk3s=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  goPackagePath = "tailscale.com";
-  vendorSha256 = "0yf2zdpd12w4qf4sbv7bkr40hw5faqynr6lb84v7w6v0az0nfzds";
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/tailscaled --prefix PATH : ${
-      lib.makeBinPath [ iproute iptables ]
-    }
+  ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
+
+  doCheck = false;
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/tailscaled --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]}
+    wrapProgram $out/bin/tailscale --suffix PATH : ${lib.makeBinPath [ procps ]}
+
+    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   meta = with lib; {
     homepage = "https://tailscale.com";
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
-    platforms = platforms.linux;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danderson mbaillie ];
+    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk ];
   };
 }

@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
 , pkg-config
-, fetchpatch
+, runtimeShell
+, installShellFiles
 
 , platform-tools
-, ffmpeg_3
+, ffmpeg
+, libusb1
 , SDL2
 }:
 
 let
-  version = "1.14";
+  version = "1.25";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "082n57a9lw39lfjxybgim09qf0id9m0rpfb3zmqng58fp2i1h6qx";
+    sha256 = "sha256-zgMGx7vQaucvbQb37A7jN3SZWmXeceCoOBPstnrsm9s=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w06gsvgjdbpb9lvvhpjwmysxjl0daiigjfh3cxfgz88447bgw7j";
+    sha256 = "sha256-4U/ChooesjhZSvxvk9dZrpZ/X0lf62+LEn72Ubrm2eM=";
   };
 
   # postPatch:
@@ -36,29 +38,35 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg_3 SDL2 ];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace $out/share/applications/scrcpy-console.desktop \
+      --replace "/bin/bash" "${runtimeShell}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # server
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

@@ -1,24 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib
+, buildPythonPackage
+, chardet
+, fetchPypi
+, flask
+, ldapdomaindump
+, pyasn1
+, pycryptodomex
+, pyopenssl
+, pythonOlder
+, setuptools
+, six
+}:
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.9.21";
+  version = "0.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "912f812564e87c31a162cfe0626f3a6cbc5b6864deedbfefc31f6d321859ade3";
+    hash = "sha256-uOsCCiy7RxRmac/jHGS7Ln1kmdBJxJPWQYuXFvXHRYM=";
   };
 
-  disabled = isPy3k;
+  propagatedBuildInputs = [
+    chardet
+    flask
+    ldapdomaindump
+    pyasn1
+    pycryptodomex
+    pyopenssl
+    setuptools
+    six
+  ];
 
-  # no tests
+  # RecursionError: maximum recursion depth exceeded
   doCheck = false;
+
+  pythonImportsCheck = [
+    "impacket"
+  ];
 
   meta = with lib; {
     description = "Network protocols Constructors and Dissectors";
-    homepage = "https://github.com/CoreSecurity/impacket";
+    homepage = "https://github.com/SecureAuthCorp/impacket";
     # Modified Apache Software License, Version 1.1
     license = licenses.free;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

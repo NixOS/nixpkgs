@@ -1,36 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, callPackage
 , flit
-, isPy3k
-, pytoml
 }:
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "2.3.0";
-  disabled = !isPy3k;
-
+  inherit (flit) version;
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "flit_core";
-    sha256 = "a50bcd8bf5785e3a7d95434244f30ba693e794c5204ac1ee908fc07c4acdbf80";
-  };
-
-  propagatedBuildInputs = [
-    pytoml
+  outputs = [
+    "out"
+    "testsout"
   ];
+
+  inherit (flit) src patches;
+
+  preConfigure = ''
+    cd flit_core
+  '';
+
+  postInstall = ''
+    mkdir $testsout
+    cp -R ../tests $testsout/tests
+  '';
+
+  # check in passthru.tests.pytest to escape infinite recursion with setuptools-scm
+  doCheck = false;
 
   passthru.tests = {
     inherit flit;
+    pytest = callPackage ./tests.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Distribution-building parts of Flit. See flit package for more information";
-    homepage = "https://github.com/takluyver/flit";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.fridh ];
+    homepage = "https://github.com/pypa/flit";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh SuperSandro2000 ];
   };
 }

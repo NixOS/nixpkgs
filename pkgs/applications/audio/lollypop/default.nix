@@ -1,13 +1,15 @@
 { lib
-, fetchgit
+, fetchFromGitLab
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , gst_all_1
+, libhandy
 , libsecret
-, libsoup
+, libsoup_3
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
@@ -23,16 +25,17 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.2.35";
+  version = "1.4.37";
 
   format = "other";
-  doCheck = false;
 
-  src = fetchgit {
-    url = "https://gitlab.gnome.org/World/lollypop";
-    rev = "refs/tags/${version}";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = pname;
+    rev = version;
     fetchSubmodules = true;
-    sha256 = "19nw9qh17yyi9ih1nwngbbwjx1vr26haqhmzsdqf0yjgsgf9vldx";
+    sha256 = "sha256-3GPmGNbbSxvLq0t3F9q1x64BwNQCEvFQWLb0bSO9KUY=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +44,7 @@ python3.pkgs.buildPythonApplication rec  {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -56,7 +59,8 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    libsoup
+    libhandy
+    libsoup_3
     pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
@@ -91,12 +95,16 @@ python3.pkgs.buildPythonApplication rec  {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     description = "A modern music player for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Lollypop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
   };
 }

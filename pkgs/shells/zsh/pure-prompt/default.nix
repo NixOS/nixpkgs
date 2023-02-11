@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
-  version = "1.12.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "1h04z7rxmca75sxdfjgmiyf1b5z2byfn6k4srls211l0wnva2r5y";
+    sha256 = "sha256-YfasTKCABvMtncrfoWR1Su9QxzCqPED18/BTXaJHttg=";
   };
 
+  strictDeps = true;
   installPhase = ''
     OUTDIR="$out/share/zsh/site-functions"
     mkdir -p "$OUTDIR"
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pretty, minimal and fast ZSH prompt";
-    homepage = https://github.com/sindresorhus/pure;
+    homepage = "https://github.com/sindresorhus/pure";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien pablovsky ];

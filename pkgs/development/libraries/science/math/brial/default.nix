@@ -1,21 +1,21 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , boost
 , m4ri
 , gd
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.8";
+  version = "1.2.12";
   pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";
     repo = "BRiAl";
     rev = version;
-    sha256 = "0qhgckd4fvbs40jw14mvw89rccv94d3df27kipd27hxd4cx7y80y";
+    sha256 = "sha256-y6nlqRBJRWohGDAKe/F37qBP1SgtFHR1HD+erFJReOM=";
   };
 
   # FIXME package boost-test and enable checks
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BRiAl/BRiAl";
     description = "Legacy version of PolyBoRi maintained by sagemath developers";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

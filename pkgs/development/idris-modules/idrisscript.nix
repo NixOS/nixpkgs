@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "idrisscript";
+  pname = "idrisscript";
   version = "2017-07-01";
 
   src = fetchFromGitHub {

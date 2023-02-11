@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, imagemagick, libpng }:
+{ lib, stdenv, fetchurl, imagemagick, libpng }:
 
 stdenv.mkDerivation {
   pname = "optar";
@@ -18,15 +18,15 @@ stdenv.mkDerivation {
       --replace /usr/local $out
 
     substituteInPlace pgm2ps \
-      --replace 'convert ' "${stdenv.lib.getBin imagemagick}/bin/convert "
+      --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
   '';
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    description = "Optar stands for OPTical ARchiver - it's a codec for encoding data on paper";
+  meta = with lib; {
+    description = "OPTical ARchiver - it's a codec for encoding data on paper";
     homepage = "http://ronja.twibright.com/optar/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

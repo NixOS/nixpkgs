@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "documize";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];
 
     services.documize = {
@@ -47,9 +47,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
             " --data 'dbhash={}'"
             " --data 'title=NixOS'"
             " --data 'message=Docs'"
-            " --data 'firstname=John'"
-            " --data 'lastname=Doe'"
-            " --data 'email=john.doe@nixos.org'"
+            " --data 'firstname=Bob'"
+            " --data 'lastname=Foobar'"
+            " --data 'email=bob.foobar@nixos.org'"
             " --data 'password=verysafe'"
             " -f localhost:3000/api/setup"
         ).format(dbhash)

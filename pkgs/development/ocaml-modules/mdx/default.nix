@@ -1,35 +1,43 @@
-{ lib, fetchurl, buildDunePackage, opaline, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml, findlib
 , alcotest
-, astring, cmdliner, cppo, fmt, logs, ocaml-migrate-parsetree, ocaml-version, ocaml_lwt, pandoc, re }:
+, astring, cppo, fmt, logs, ocaml-version, odoc-parser, lwt, re, csexp
+, gitUpdater
+}:
 
 buildDunePackage rec {
   pname = "mdx";
-  version = "1.6.0";
+  version = "2.2.1";
+
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    sha256 = "18m4ay226dwbgnwp3ia6bfcm033dvp9yby0lbddqn8ak374m2k3b";
+    hash = "sha256-8J7XM/5EYWBfApdzdIpjU9Ablb5l65hrzOF9bdr1Cdg=";
   };
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ cmdliner ];
-  propagatedBuildInputs = [ astring fmt logs ocaml-migrate-parsetree ocaml-version re ];
-  checkInputs = [ alcotest ocaml_lwt pandoc ];
+  propagatedBuildInputs = [ astring fmt logs csexp ocaml-version odoc-parser re findlib ];
+  checkInputs = [ alcotest lwt ];
 
   doCheck = true;
-
-  dontStrip = lib.versions.majorMinor ocaml.version == "4.04";
 
   outputs = [ "bin" "lib" "out" ];
 
   installPhase = ''
-    ${opaline}/bin/opaline -prefix $bin -libdir $lib/lib/ocaml/${ocaml.version}/site-lib
+    runHook preInstall
+    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib ${pname}
+    runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
-    homepage = "https://github.com/realworldocaml/mdx";
     description = "Executable OCaml code blocks inside markdown files";
+    homepage = "https://github.com/realworldocaml/mdx";
+    changelog = "https://github.com/realworldocaml/mdx/raw/${version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "ocaml-mdx";
   };
 }

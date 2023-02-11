@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
+{ lib, stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
 
 stdenv.mkDerivation {
   pname = "rsstail";
@@ -8,11 +8,11 @@ stdenv.mkDerivation {
     sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
     rev = "6f2436185372b3f945a4989406c4b6a934fe8a95";
     repo = "rsstail";
-    owner = "flok99";
+    owner = "folkertvanheusden";
   };
 
-  buildInputs = [ libmrss ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
-  checkInputs = [ cppcheck ];
+  buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeCheckInputs = [ cppcheck ];
 
   postPatch = ''
     substituteInPlace Makefile --replace -liconv_hook ""
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitor RSS feeds for new entries";
     longDescription = ''
       RSSTail is more or less an RSS reader: it monitors an RSS feed and if it
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.vanheusden.com/rsstail/";
     license = licenses.gpl2Plus;
+    maintainers = [ maintainers.Necior ];
     platforms = platforms.unix;
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, allegro, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, allegro, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "dumb";
   version = "2.0.3";
-  enableParallelBuilding = true;
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ allegro SDL2 ];
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_EXAMPLES='OFF'"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kode54/dumb";
     description = "Module/tracker based music format parser and player library";
     license = licenses.free;  # Derivative of GPL
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
   };
 }

@@ -14,12 +14,12 @@ let
     operator = const [ ];
   });
 
-  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; type = drv.outputHashAlgo; name = drv.name; }) fetchurlDependencies;
+  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; isPatch = (drv?postFetch && drv.postFetch != ""); type = drv.outputHashAlgo; name = drv.name; }) fetchurlDependencies;
 
   fetchurlDependencies =
     filter
       (drv: drv.outputHash or "" != "" && drv.outputHashMode or "flat" == "flat"
-          && drv.postFetch or "" == "" && (drv ? url || drv ? urls))
+          && (drv ? url || drv ? urls))
       dependencies;
 
   dependencies = map (x: x.value) (genericClosure {
@@ -37,7 +37,7 @@ let
   keyDrv = drv: if canEval drv.drvPath then { key = drv.drvPath; value = drv; } else { };
 
   immediateDependenciesOf = drv:
-    concatLists (mapAttrsToList (n: v: derivationsIn v) (removeAttrs drv ["meta" "passthru"]));
+    concatLists (mapAttrsToList (n: v: derivationsIn v) (removeAttrs drv (["meta" "passthru"] ++ optionals (drv?passthru) (attrNames drv.passthru))));
 
   derivationsIn = x:
     if !canEval x then []

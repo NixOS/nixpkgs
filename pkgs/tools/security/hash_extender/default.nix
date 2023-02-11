@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
   pname = "hash_extender";
@@ -21,10 +21,10 @@ stdenv.mkDerivation {
     cp hash_extender $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to automate hash length extension attacks";
     homepage = "https://github.com/iagox86/hash_extender";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

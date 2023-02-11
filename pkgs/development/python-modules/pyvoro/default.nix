@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # No tests in package
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/joe-jordan/pyvoro";
     description = "2D and 3D Voronoi tessellations: a python entry point for the voro++ library";
     license = licenses.mit;

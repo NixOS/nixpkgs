@@ -4,20 +4,19 @@
 # Example how to work with the `lib.maintainers` attrset.
 # Can be used to check whether all user handles are still valid.
 
-set -e
-
-# nixpkgs='<nixpkgs>'
-# if [ -n "$1" ]; then
+set -o errexit -o noclobber -o nounset -o pipefail
+shopt -s failglob inherit_errexit
 
 function checkCommits {
-    local user="$1"
-    local tmp=$(mktemp)
+    local ret status tmp user
+    user="$1"
+    tmp=$(mktemp)
     curl --silent -w "%{http_code}" \
          "https://github.com/NixOS/nixpkgs/commits?author=$user" \
          > "$tmp"
     # the last line of tmp contains the http status
-    local status=$(tail -n1 "$tmp")
-    local ret=
+    status=$(tail -n1 "$tmp")
+    ret=
     case $status in
         200) if <"$tmp" grep -i "no commits found" > /dev/null; then
                  ret=1
@@ -31,7 +30,7 @@ function checkCommits {
              checkCommits "$user"
              ret=$?
              ;;
-        *)   printf "BAD STATUS: $(tail -n1 $tmp) for %s\n" "$user"; ret=1
+        *)   printf "BAD STATUS: $(tail -n1 "$tmp") for %s\n" "$user"; ret=1
              ret=1
              ;;
     esac
@@ -63,4 +62,5 @@ nix-instantiate -A lib.maintainers --eval --strict --json \
     | jq -r '.[]|.github|select(.)' \
     | parallel -j5 checkUser
 
+# To check some arbitrary users:
 # parallel -j100 checkUser ::: "eelco" "profpatsch" "Profpatsch" "a"

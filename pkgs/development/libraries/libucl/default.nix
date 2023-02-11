@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
@@ -25,18 +25,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = pname;
     rev = version;
-    sha256 = "1h52ldxankyhbbm1qbqz1f2q0j03c1b4mig7343bs3mc6fpm18gf";
+    sha256 = "sha256-rpTc0gq8HquDow4NEkRSjyESEMrv8dAhX98yKKu/Fsk=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     concatLists (
       mapAttrsToList (feat: enabled:
         optionals enabled (featureDeps."${feat}" or [])
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
     mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
     license = licenses.bsd2;

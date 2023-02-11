@@ -1,29 +1,44 @@
-{ stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, openssl
+, libsamplerate
+, alsa-lib
+, AppKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.10";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "1aklicpgwc88578k03i5d5cm5h8mfm7hmx8vfprchbmaa2p8f4z0";
+    sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
   };
 
   patches = [
     ./fix-aarch64.patch
+    (fetchpatch {
+      name = "CVE-2022-23537.patch";
+      url = "https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1.patch";
+      sha256 = "sha256-7ueQCHIiJ7MLaWtR4+GmBc/oKaP+jmEajVnEYqiwLRA=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-23547.patch";
+      url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
+      sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
+    })
   ];
 
   buildInputs = [ openssl libsamplerate ]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''
     export LD=$CC
-  '' # Fixed on master, remove with 2.11
-     + stdenv.lib.optionalString stdenv.isDarwin ''
-    NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 
   postInstall = ''
@@ -36,11 +51,13 @@ stdenv.mkDerivation rec {
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];
+    mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

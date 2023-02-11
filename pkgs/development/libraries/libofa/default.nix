@@ -1,12 +1,9 @@
-{ stdenv, fetchurl, expat, curl, fftw }:
+{ lib, stdenv, fetchurl, expat, curl, fftw }:
 
-let
-  version = "0.9.3";
-  deb_patch = "5";
-in
 stdenv.mkDerivation rec {
   pname = "libofa";
-  inherit version;
+  version = "0.9.3";
+  deb_patch = "5";
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${pname}-${version}.tar.gz";
@@ -28,7 +25,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat curl fftw ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''

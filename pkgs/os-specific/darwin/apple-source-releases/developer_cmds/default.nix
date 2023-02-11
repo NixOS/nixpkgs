@@ -1,12 +1,24 @@
-{ stdenv, appleDerivation, xcbuildHook }:
+{ lib, appleDerivation, xcbuildHook, llvmPackages, makeWrapper }:
 
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
+  nativeBuildInputs = [ xcbuildHook makeWrapper ];
 
-  patchPhase = ''
+  patches = [
+    # The following copied from
+    # https://github.com/Homebrew/homebrew-core/commit/712ed3e948868e17f96b7e59972b5f45d4faf688
+    # is needed to build libvirt.
+    ./rpcgen-support-hyper-and-quad-types.patch
+  ];
+
+  postPatch = ''
+    makeWrapper ${llvmPackages.clang}/bin/clang $out/bin/clang-cpp --add-flags "--driver-mode=cpp"
     substituteInPlace rpcgen/rpc_main.c \
-      --replace "/usr/bin/cpp" "${stdenv.cc}/bin/cpp"
+      --replace "/usr/bin/cpp" "$out/bin/clang-cpp"
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   duplicate symbol '_btype_2' in:args.o pr_comment.o
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
@@ -23,7 +35,7 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

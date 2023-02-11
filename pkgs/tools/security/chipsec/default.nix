@@ -1,29 +1,62 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, nasm, libelf
-, kernel ? null, withDriver ? false }:
-pythonPackages.buildPythonApplication rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel ? null
+, libelf
+, nasm
+, python3
+, withDriver ? false
+}:
+
+python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.5.1";
+  version = "1.8.1";
+
+  disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "1rxr9i08a22m15slvlkrhnki30jixi2ds096kmmc2nqzfr9yibmb";
+    hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
   };
 
+  patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
+
+  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+
   nativeBuildInputs = [
-    nasm libelf
+    libelf
+    nasm
   ];
 
-  setupPyBuildFlags = lib.optional (!withDriver) "--skip-driver";
+  nativeCheckInputs = with python3.pkgs; [
+    distro
+    pytestCheckHook
+  ];
 
-  checkPhase = "python setup.py build "
-             + lib.optionalString (!withDriver) "--skip-driver "
-             + "test";
+  preBuild = lib.optionalString withDriver ''
+    export CHIPSEC_BUILD_LIB=$(mktemp -d)
+    mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
+  '';
 
-  KERNEL_SRC_DIR = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  preInstall = lib.optionalString withDriver ''
+    mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
+    mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
+      $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
+  '';
 
-  meta = with stdenv.lib; {
+  setupPyBuildFlags = [
+    "--build-lib=$CHIPSEC_BUILD_LIB"
+  ] ++ lib.optionals (!withDriver) [
+    "--skip-driver"
+  ];
+
+  pythonImportsCheck = [
+    "chipsec"
+  ];
+
+  meta = with lib; {
     description = "Platform Security Assessment Framework";
     longDescription = ''
       CHIPSEC is a framework for analyzing the security of PC platforms
@@ -32,9 +65,9 @@ pythonPackages.buildPythonApplication rec {
       interfaces, and forensic capabilities. It can be run on Windows, Linux,
       Mac OS X and UEFI shell.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
-    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, pkgs }:
+{ lib, pkgs, stdenv }:
 let
   inherit (import ./semver.nix { inherit lib ireplace; }) satisfiesSemver;
   inherit (builtins) genList length;
@@ -8,8 +8,16 @@ let
     genList (i: if i == idx then value else (builtins.elemAt list i)) (length list)
   );
 
-  # Do some canonicalisation of module names
-  moduleName = name: lib.toLower (lib.replaceStrings [ "_" "." ] [ "-" "-" ] name);
+  # Normalize package names as per PEP 503
+  normalizePackageName = name:
+    let
+      parts = builtins.split "[-_.]+" name;
+      partsWithoutSeparator = builtins.filter (x: builtins.typeOf x == "string") parts;
+    in
+    lib.strings.toLower (lib.strings.concatStringsSep "-" partsWithoutSeparator);
+
+  # Normalize an entire attrset of packages
+  normalizePackageSet = lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair (normalizePackageName name) value);
 
   # Get a full semver pythonVersion from a python derivation
   getPythonVersion = python:
@@ -79,6 +87,7 @@ let
     if lib.strings.hasInfix "manylinux1" f then { pkg = [ ml.manylinux1 ]; str = "1"; }
     else if lib.strings.hasInfix "manylinux2010" f then { pkg = [ ml.manylinux2010 ]; str = "2010"; }
     else if lib.strings.hasInfix "manylinux2014" f then { pkg = [ ml.manylinux2014 ]; str = "2014"; }
+    else if lib.strings.hasInfix "manylinux_" f then { pkg = [ ml.manylinux2014 ]; str = "pep600"; }
     else { pkg = [ ]; str = null; };
 
   # Predict URL from the PyPI index.
@@ -93,25 +102,27 @@ let
   );
 
 
-  # Fetch the wheels from the PyPI index.
-  # We need to first get the proper URL to the wheel.
+  # Fetch from the PyPI index.
+  # At first we try to fetch the predicated URL but if that fails we
+  # will use the Pypi API to determine the correct URL.
   # Args:
   #   pname: package name
   #   file: filename including extension
+  #   version: the version string of the dependency
   #   hash: SRI hash
   #   kind: Language implementation and version tag
-  fetchWheelFromPypi = lib.makeOverridable (
-    { pname, file, hash, kind, curlOpts ? "" }:
+  fetchFromPypi = lib.makeOverridable (
+    { pname, file, version, hash, kind, curlOpts ? "" }:
     let
-      version = builtins.elemAt (builtins.split "-" file) 2;
+      predictedURL = predictURLFromPypi { inherit pname file hash kind; };
     in
     (pkgs.stdenvNoCC.mkDerivation {
       name = file;
       nativeBuildInputs = [
-        pkgs.curl
-        pkgs.jq
+        pkgs.buildPackages.curl
+        pkgs.buildPackages.jq
       ];
-      isWheel = true;
+      isWheel = lib.strings.hasSuffix "whl" file;
       system = "builtin";
 
       preferLocalBuild = true;
@@ -119,47 +130,54 @@ let
         "NIX_CURL_FLAGS"
       ];
 
-      predictedURL = predictURLFromPypi { inherit pname file hash kind; };
-      inherit pname file version curlOpts;
+      inherit pname file version curlOpts predictedURL;
 
-      builder = ./fetch-wheel.sh;
+      builder = ./fetch-from-pypi.sh;
 
       outputHashMode = "flat";
       outputHashAlgo = "sha256";
       outputHash = hash;
+
+      passthru = {
+        urls = [ predictedURL ]; # retain compatibility with nixpkgs' fetchurl
+      };
     })
   );
 
-  # Fetch the artifacts from the PyPI index. Since we get all
-  # info we need from the lock file we don't use nixpkgs' fetchPyPi
-  # as it modifies casing while not providing anything we don't already
-  # have.
-  #
-  # Args:
-  #   pname: package name
-  #   file: filename including extension
-  #   hash: SRI hash
-  #   kind: Language implementation and version tag https://www.python.org/dev/peps/pep-0427/#file-name-convention
-  fetchFromPypi = lib.makeOverridable (
-    { pname, file, hash, kind }:
-    if lib.strings.hasSuffix "whl" file then fetchWheelFromPypi { inherit pname file hash kind; }
-    else
-      pkgs.fetchurl {
-        url = predictURLFromPypi { inherit pname file hash kind; };
-        inherit hash;
-      }
+  fetchFromLegacy = lib.makeOverridable (
+    { python, pname, url, file, hash }:
+    let
+      pathParts =
+        (builtins.filter
+          ({ prefix, path }: "NETRC" == prefix)
+          builtins.nixPath);
+      netrc_file = if (pathParts != [ ]) then (builtins.head pathParts).path else "";
+    in
+    pkgs.runCommand file
+      {
+        nativeBuildInputs = [ python ];
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+        outputHashMode = "flat";
+        outputHashAlgo = "sha256";
+        outputHash = hash;
+        NETRC = netrc_file;
+      } ''
+      python ${./fetch_from_legacy.py} ${url} ${pname} ${file}
+      mv ${file} $out
+    ''
   );
+
   getBuildSystemPkgs =
     { pythonPackages
     , pyProject
     }:
     let
-      buildSystem = lib.attrByPath [ "build-system" "build-backend" ] "" pyProject;
-      drvAttr = moduleName (builtins.elemAt (builtins.split "\\.|:" buildSystem) 0);
+      missingBuildBackendError = "No build-system.build-backend section in pyproject.toml. "
+        + "Add such a section as described in https://python-poetry.org/docs/pyproject/#poetry-and-pep-517";
+      requires = lib.attrByPath [ "build-system" "requires" ] (throw missingBuildBackendError) pyProject;
+      requiredPkgs = builtins.map (n: lib.elemAt (builtins.match "([^!=<>~[]+).*" n) 0) requires;
     in
-    if buildSystem == "" then [ ] else (
-      [ pythonPackages.${drvAttr} or (throw "unsupported build system ${buildSystem}") ]
-    );
+    builtins.map (drvAttr: pythonPackages.${drvAttr} or (throw "unsupported build system requirement ${drvAttr}")) requiredPkgs;
 
   # Find gitignore files recursively in parent directory stopping with .git
   findGitIgnores = path:
@@ -170,14 +188,14 @@ let
       hasGitIgnore = builtins.pathExists gitIgnore;
       gitIgnores = if hasGitIgnore then [ gitIgnore ] else [ ];
     in
-    lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
+    lib.optionals (builtins.pathExists path && builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
 
   /*
-  Provides a source filtering mechanism that:
+    Provides a source filtering mechanism that:
 
-  - Filters gitignore's
-  - Filters pycache/pyc files
-  - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
+    - Filters gitignore's
+    - Filters pycache/pyc files
+    - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
   */
   cleanPythonSources = { src }:
     let
@@ -194,18 +212,38 @@ let
         inherit src;
       };
     };
+
+  # Maps Nixpkgs CPU values to target machines known to be supported for manylinux* wheels.
+  # (a.k.a. `uname -m` output from CentOS 7)
+  #
+  # This is current as of manylinux2014 (PEP-0599), and is a superset of manylinux2010 / manylinux1.
+  # s390x is not supported in Nixpkgs, so we don't map it.
+  manyLinuxTargetMachines = {
+    x86_64 = "x86_64";
+    i686 = "i686";
+    aarch64 = "aarch64";
+    armv7l = "armv7l";
+    powerpc64 = "ppc64";
+    powerpc64le = "ppc64le";
+  };
+
+  # Machine tag for our target platform (if available)
+  getTargetMachine = stdenv: manyLinuxTargetMachines.${stdenv.targetPlatform.parsed.cpu.name} or null;
+
 in
 {
   inherit
     fetchFromPypi
-    fetchWheelFromPypi
+    fetchFromLegacy
     getManyLinuxDeps
     isCompatible
     readTOML
     getBuildSystemPkgs
     satisfiesSemver
     cleanPythonSources
-    moduleName
+    normalizePackageName
+    normalizePackageSet
     getPythonVersion
+    getTargetMachine
     ;
 }

@@ -1,19 +1,22 @@
-{ stdenv, perlPackages, fetchFromGitHub, shortenPerlShebang }:
+{ lib, stdenv, perlPackages, fetchFromGitHub, shortenPerlShebang }:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "4.3";
+  version = "5.5";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    sha256 = "0n8ydj01nmnkd8glzjb0yrsyax1pmdfvaxb5xj4pkb2mf6zm94qy";
+    hash = "sha256-4KtrsckO9Q9H0yIM0877YvWaDW02CQVAQiOKD919e9w=";
   };
 
   outputs = [ "out" ];
 
   makeMakerFlags = [ "INSTALLDIRS=vendor" ];
+
+  # Avoid creating perllocal.pod, which contains a timestamp
+  installTargets = [ "pure_install" ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
   patchPhase = ''
@@ -24,18 +27,19 @@ perlPackages.buildPerlPackage rec {
       --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
   '';
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/pg_format
   '';
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
     maintainers = [ maintainers.marsam ];
     license = [ licenses.postgresql licenses.artistic2 ];
+    mainProgram = "pg_format";
   };
 }

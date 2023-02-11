@@ -12,21 +12,31 @@ in {
   meta.maintainers = with maintainers; [ das_j ];
 
   options.services.icingaweb2 = with types; {
-    enable = mkEnableOption "the icingaweb2 web interface";
+    enable = mkEnableOption (lib.mdDoc "the icingaweb2 web interface");
 
     pool = mkOption {
       type = str;
       default = poolName;
-      description = ''
+      description = lib.mdDoc ''
          Name of existing PHP-FPM pool that is used to run Icingaweb2.
          If not specified, a pool will automatically created with default values.
+      '';
+    };
+
+    libraryPaths = mkOption {
+      type = attrsOf package;
+      default = { };
+      description = lib.mdDoc ''
+        Libraries to add to the Icingaweb2 library path.
+        The name of the attribute is the name of the library, the value
+        is the package to add.
       '';
     };
 
     virtualHost = mkOption {
       type = nullOr str;
       default = "icingaweb2";
-      description = ''
+      description = lib.mdDoc ''
         Name of the nginx virtualhost to use and setup. If null, no virtualhost is set up.
       '';
     };
@@ -35,26 +45,26 @@ in {
       type = str;
       default = "UTC";
       example = "Europe/Berlin";
-      description = "PHP-compliant timezone specification";
+      description = lib.mdDoc "PHP-compliant timezone specification";
     };
 
     modules = {
-      doc.enable = mkEnableOption "the icingaweb2 doc module";
-      migrate.enable = mkEnableOption "the icingaweb2 migrate module";
-      setup.enable = mkEnableOption "the icingaweb2 setup module";
-      test.enable = mkEnableOption "the icingaweb2 test module";
-      translation.enable = mkEnableOption "the icingaweb2 translation module";
+      doc.enable = mkEnableOption (lib.mdDoc "the icingaweb2 doc module");
+      migrate.enable = mkEnableOption (lib.mdDoc "the icingaweb2 migrate module");
+      setup.enable = mkEnableOption (lib.mdDoc "the icingaweb2 setup module");
+      test.enable = mkEnableOption (lib.mdDoc "the icingaweb2 test module");
+      translation.enable = mkEnableOption (lib.mdDoc "the icingaweb2 translation module");
     };
 
     modulePackages = mkOption {
       type = attrsOf package;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Name-package attrset of Icingaweb 2 modules packages to enable.
 
         If you enable modules manually (e.g. via the web ui), they will not be touched.
@@ -74,7 +84,7 @@ in {
           level = "CRITICAL";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         config.ini contents.
         Will automatically be converted to a .ini file.
         If you don't set global.module_path, the module will take care of it.
@@ -98,7 +108,7 @@ in {
           dbname = "icingaweb2";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         resources.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -117,7 +127,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         authentication.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -135,7 +145,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         groups.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -153,7 +163,7 @@ in {
           permissions = "*";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         roles.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -167,8 +177,11 @@ in {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         user = "icingaweb2";
+        phpEnv = {
+          ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths));
+        };
+        phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
         phpOptions = ''
-          extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
           date.timezone = "${cfg.timezone}"
         '';
         settings = mapAttrs (name: mkDefault) {
@@ -182,6 +195,11 @@ in {
           "pm.max_spare_servers" = 10;
         };
       };
+    };
+
+    services.icingaweb2.libraryPaths = {
+      ipl = pkgs.icingaweb2-ipl;
+      thirdparty = pkgs.icingaweb2-thirdparty;
     };
 
     systemd.services."phpfpm-${poolName}".serviceConfig.ReadWritePaths = [ "/etc/icingaweb2" ];

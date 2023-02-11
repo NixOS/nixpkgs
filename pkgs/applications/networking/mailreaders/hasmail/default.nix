@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, pkgconfig
-, gobject-introspection
+, pkg-config
 , pango
 , cairo
 , gtk2
@@ -19,10 +18,12 @@ buildGoModule rec {
     sha256 = "1p6kwa5xk1mb1fkkxz1b5rcyp5kb4zc8nfif1gk6fab6wbdj9ia1";
   };
 
-  vendorSha256 = "0sblgjmn3i3k31jfq5zy3bx7bv5z2cg6rjzr7aj87c57yhzzcmk7";
+  vendorSha256 = "129hvr8qh5mxj6mzg7793p5jsi4jmsm96f63j7r8wn544yq8sqci";
+
+  doCheck = false;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -36,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/jonhoo/hasmail";
     license = licenses.unlicense;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 }

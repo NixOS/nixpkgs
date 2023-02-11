@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "xerces-c";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "mirror://apache/xerces/c/3/sources/${pname}-${version}.tar.gz";
-    sha256 = "0zicsydx6s7carwr7q0csgkg1xncibd6lfp5chg2v2gvn54zr5pv";
+    sha256 = "sha256-PY7Bx/lOOP7g5Mpa0eHZ2yPL86ELumJva0r6Le2v5as=";
   };
 
   # Disable SSE2 extensions on platforms for which they are not enabled by default
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://xerces.apache.org/xerces-c/";
     description = "Validating XML parser written in a portable subset of C++";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

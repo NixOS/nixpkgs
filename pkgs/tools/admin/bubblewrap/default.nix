@@ -1,21 +1,55 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, libcap }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, docbook_xsl
+, libxslt
+, meson
+, ninja
+, pkg-config
+, bash-completion
+, libcap
+, libselinux
+}:
 
 stdenv.mkDerivation rec {
   pname = "bubblewrap";
-  version = "0.4.1";
+  version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/containers/bubblewrap/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "00ycgi6q2yngh06bnz50wkvar6r2jnjf3j158grhi9k13jdrpimr";
+  src = fetchFromGitHub {
+    owner = "containers";
+    repo = "bubblewrap";
+    rev = "v${version}";
+    hash = "sha256-ddxEtBw6JcSsZCN5uKyuBMVkWwSoThfxrcvHZGZzFr4=";
   };
 
-  nativeBuildInputs = [ libxslt docbook_xsl ];
-  buildInputs = [ libcap ];
+  postPatch = ''
+    substituteInPlace tests/libtest.sh \
+      --replace "/var/tmp" "$TMPDIR"
+  '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    docbook_xsl
+    libxslt
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    bash-completion
+    libcap
+    libselinux
+  ];
+
+  # incompatible with Nix sandbox
+  doCheck = false;
+
+  meta = with lib; {
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
+    mainProgram = "bwrap";
   };
 }

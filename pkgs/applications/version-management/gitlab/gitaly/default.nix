@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
-  bundlerEnv, pkgconfig, libgit2_0_27 }:
+{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+, bundlerEnv, pkg-config
+# libgit2 + dependencies
+, libgit2, openssl, zlib, pcre, http-parser }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -7,57 +9,66 @@ let
     inherit ruby;
     copyGemFiles = true;
     gemdir = ./.;
-    gemset =
-      let x = import (gemdir + "/gemset.nix");
-      in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ../fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
-      };
   };
-in buildGoPackage rec {
-  version = "13.0.6";
+
+  version = "15.8.1";
+  package_version = "v${lib.versions.major version}";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
+
+  commonOpts = {
+    inherit version;
+
+    src = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitaly";
+      rev = "v${version}";
+      sha256 = "sha256-TolduUm8OhpubHXMCyy0vQhj65lauh5eST5UDvdWNVE=";
+    };
+
+    vendorSha256 = "sha256-8P5X/bqeI1hY45IGsvEWOg3GuetEQF/XtZzUMdX22pA=";
+
+    ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
+
+    tags = [ "static,system_libgit2" ];
+
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
+
+    doCheck = false;
+  };
+
+  auxBins = buildGoModule ({
+    pname = "gitaly-aux";
+
+    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go" "cmd/gitaly-lfs-smudge" ];
+  } // commonOpts);
+in
+buildGoModule ({
   pname = "gitaly";
-
-  src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitaly";
-    rev = "v${version}";
-    sha256 = "14vp73z9f0p3m1bjykkfzrmw9miyjxiqm79rns477xbm2dbmwa4s";
-  };
-
-  # Fix a check which assumes that hook files are writeable by their
-  # owner.
-  patches = [
-    ./fix-executable-check.patch
-  ];
-
-  goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
-  goDeps = ./deps.nix;
-  preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
+  subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
+
+  preConfigure = ''
+    mkdir -p _build/bin
+    cp -r ${auxBins}/bin/* _build/bin
+  '';
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,proto,git-hooks,gitlab-shell} $ruby
+    cp -rv $src/ruby/{bin,lib} $ruby
   '';
 
   outputs = [ "out" "ruby" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ roblabla globin fpletz talyz ];
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
+    maintainers = with maintainers; [ roblabla globin talyz yayayayaka ];
     license = licenses.mit;
   };
-}
+} // commonOpts)

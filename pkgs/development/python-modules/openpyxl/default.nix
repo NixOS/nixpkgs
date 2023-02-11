@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "openpyxl";
-  version = "3.0.3";
+  version = "3.0.10";
   disabled = isPy27; # 2.6.4 was final python2 release
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "547a9fc6aafcf44abe358b89ed4438d077e9d92e4f182c87e2dc294186dc4b64";
+    sha256 = "sha256-5HgFYnrrz4YO207feYexMJwbNjLzdQU47ZYrvMO9dEk=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ jdcal et_xmlfile lxml ];
 
   postPatch = ''
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
     homepage = "https://openpyxl.readthedocs.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lihop sjourdois ];
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

@@ -1,22 +1,21 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 with pythonPackages; buildPythonApplication rec {
   pname = "greg";
-  version = "0.4.7";
+  version = "0.4.8";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "manolomartinez";
     repo = pname;
-    rev = "v" + version;
-    sha256 = "0bdzgh2k1ppgcvqiasxwp3w89q44s4jgwjidlips3ixx1bzm822v";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 
-  buildInputs = with pythonPackages; [ feedparser ];
-  propagatedBuildInputs = buildInputs;
+  propagatedBuildInputs = [ setuptools feedparser ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/manolomartinez/greg";
     description = "A command-line podcast aggregator";
     license = licenses.gpl3;

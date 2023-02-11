@@ -1,33 +1,34 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, utillinux, systemd, keyutils
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+, asciidoc, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
+, json_c, kmod, which, util-linux, udev, keyutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "68";
+  version = "71.1";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "0xmim7z4qp6x2ggndnbwd940c73pa1qlf3hxyn3qh5pyr69nh9y8";
+    sha256 = "sha256-osux3DiKRh8ftHwyfFI+WSFx20+yJsg1nVx5nuoKJu4=";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ autoreconfHook asciidoctor pkgconfig xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    [ autoreconfHook asciidoc pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
       which
     ];
 
   buildInputs =
-    [ json_c kmod utillinux systemd keyutils
+    [ json_c kmod util-linux udev keyutils
     ];
 
   configureFlags =
     [ "--without-bash"
       "--without-systemd"
+      "--disable-asciidoctor" # depends on ruby 2.7, use asciidoc instead
     ];
 
   patchPhase = ''
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for managing the Linux Non-Volatile Memory Device sub-system";
     homepage    = "https://github.com/pmem/ndctl";
     license     = licenses.lgpl21;

@@ -1,22 +1,45 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pdm-pep517
+, flask
+, mock
+, sqlalchemy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
-  version = "2.4.3";
+  version = "3.0.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b656fbf87c5f24109d859bafa791d29751fabbda2302b606881ae5485b557a5";
+    hash = "sha256-FhmfWz3ftp4N8vUq5Mdq7b/sgjRiNJ2rshobLgorZek=";
   };
 
-  propagatedBuildInputs = [ flask sqlalchemy ];
-  checkInputs = [ mock pytest ];
+  nativeBuildInputs = [
+    pdm-pep517
+  ];
 
-  checkPhase = ''
-    pytest
-  '';
+  propagatedBuildInputs = [
+    flask
+    sqlalchemy
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # flaky
+    "test_session_scoping_changing"
+    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
+    "test_persist_selectable"
+  ];
+
+  meta = with lib; {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
     license = licenses.bsd3;

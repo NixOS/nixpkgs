@@ -22,11 +22,11 @@ index 08afb85..dbeb691 100644
  	"RANLIB = ranlib" \
  	"LIBS = -L. -ltachyon $(MISCLIB) -lm -lpthread"
  
-+# Linux Arm using gcc, with threads
-+linux-arm-thr:
++# Linux Arm using gcc
++linux-arm:
 +	$(MAKE) all \
-+	"ARCH = linux-arm-thr" \
-+	"CFLAGS = -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux -DTHR -D_REENTRANT $(MISCFLAGS)" \
++	"ARCH = linux-arm" \
++	"CFLAGS = -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux $(MISCFLAGS)" \
 +	"ARFLAGS = r" \
 +	"STRIP = strip" \
 +	"RANLIB = ranlib" \

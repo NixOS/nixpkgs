@@ -1,21 +1,34 @@
-{ stdenv, fetchurl, zlib, automake, autoconf, libtool }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "kssd";
-  version = "1.0";
+  version = "1.1";
 
-  src = fetchurl {
-    url = "https://github.com/yhg926/public_${pname}/archive/v${version}.tar.gz";
-    sha256 = "a5dcaf520049a962bef625cb59a567ea2b4252d4dc9be28dd06123d340e03919";
+  src = fetchFromGitHub {
+    owner = "yhg926";
+    repo = "public_kssd";
+    rev = "v${version}";
+    sha256 = "sha256-8jzYqo9LXF66pQ1EIusm+gba2VbTYpJz2K3NVlA3QxY=";
   };
 
-  buildInputs = [ zlib automake autoconf libtool ];
+  patches = [
+    # Pull upstream patch for -fno-common toolchain support:
+    #   https://github.com/yhg926/public_kssd/pull/9
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/yhg926/public_kssd/commit/cdd1e8aae256146f5913a3b4c723b638d53bdf27.patch";
+      sha256 = "sha256-HhaTRqPfKR+ouh0PwEH6u22pbuqbX2OypRzw8BXm0W4=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ zlib libtool ];
 
   installPhase = ''
       install -vD kssd $out/bin/kssd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "K-mer substring space decomposition";
     license     = licenses.asl20;
     homepage    = "https://github.com/yhg926/public_kssd";

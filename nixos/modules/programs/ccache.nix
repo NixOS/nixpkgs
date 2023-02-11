@@ -6,18 +6,18 @@ let
 in {
   options.programs.ccache = {
     # host configuration
-    enable = mkEnableOption "CCache";
+    enable = mkEnableOption (lib.mdDoc "CCache");
     cacheDir = mkOption {
       type = types.path;
-      description = "CCache directory";
+      description = lib.mdDoc "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
     packageNames = mkOption {
       type = types.listOf types.str;
-      description = "Nix top-level packages to be compiled using CCache";
+      description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
-      example = [ "wxGTK30" "qt48" "ffmpeg_3_3" "libav_all" ];
+      example = [ "wxGTK30" "ffmpeg" "libav_all" ];
     };
   };
 
@@ -28,7 +28,9 @@ in {
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
+        owner = "root";
         group = "nixbld";
+        setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
           #!${pkgs.perl}/bin/perl

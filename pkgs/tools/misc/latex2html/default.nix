@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , ghostscript, netpbm, perl }:
 # TODO: withTex
 
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2020";
+  version = "2022.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z53pdf8pvarlqb3kbdz0w2r6922mv7mcdna5qp5z24wspfmv3zn";
+    sha256 = "sha256-Vl7ozawd4Ra+yDarRpmPhjF7deJELaxo07L4/qVV4fw=";
   };
 
   buildInputs = [ ghostscript netpbm perl ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LaTeX-to-HTML translator";
     longDescription = ''
       A Perl program that translates LaTeX into HTML (HyperText Markup

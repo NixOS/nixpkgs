@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, libchewing, pkgconfig }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext, libchewing, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-chewing";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w5smp5zvjx681cp1znjypyr9sw5x6v0wnsk8a7ncwxi9q9wf4xk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fcitx gettext libchewing ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx gettext libchewing ];
 
   preInstall = ''
    substituteInPlace src/cmake_install.cmake \
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-chewing";
     downloadPage  = "http://download.fcitx-im.org/fcitx-chewing/";

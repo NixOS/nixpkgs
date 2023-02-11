@@ -1,22 +1,39 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tfsec";
-  version = "0.21.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
-    owner = "liamg";
+    owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mmh161zwrkjwpw01zcgh7hsap7lgdxhg191bajzig6vlq287jyh";
+    hash = "sha256-44DN3lV9BLBFr6kkD3IcamQg+t+xUqqao83f0nBKZvI=";
   };
 
-  goPackagePath = "github.com/liamg/tfsec";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/aquasecurity/tfsec/version.Version=v${version}"
+    ## not sure if this is needed (https://github.com/aquasecurity/tfsec/blob/master/.goreleaser.yml#L6)
+    # "-extldflags '-fno-PIC -static'"
+  ];
+
+  vendorSha256 = "sha256-NQUDeNAWSWcIoSZjdbaFQTB3nMFGbLZLUDNFHMk6Enw=";
+
+  subPackages = [
+    "cmd/tfsec"
+    "cmd/tfsec-docs"
+    "cmd/tfsec-checkgen"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/liamg/tfsec";
-    description = "Static analysis powered security scanner for your terraform code";
+    description = "Static analysis powered security scanner for terraform code";
+    homepage = "https://github.com/aquasecurity/tfsec";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ fab marsam peterromfeldhk ];
   };
 }

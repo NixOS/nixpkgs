@@ -7,24 +7,12 @@ let
   pkg = pkgs.nzbget;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
-  configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${value}") nixosOpts);
-
-  nixosOpts = {
-    # allows nzbget to run as a "simple" service
-    OutputMode = "loggable";
-    # use journald for logging
-    WriteLog = "none";
-    ErrorTarget = "screen";
-    WarningTarget = "screen";
-    InfoTarget = "screen";
-    DetailTarget = "screen";
-    # required paths
-    ConfigTemplate = "${pkg}/share/nzbget/nzbget.conf";
-    WebDir = "${pkg}/share/nzbget/webui";
-    # nixos handles package updates
-    UpdateCheck = "none";
-  };
-
+  configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}") cfg.settings);
+  toStr = v:
+    if v == true then "yes"
+    else if v == false then "no"
+    else if isInt v then toString v
+    else v;
 in
 {
   imports = [
@@ -37,18 +25,31 @@ in
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption "NZBGet";
+      enable = mkEnableOption (lib.mdDoc "NZBGet");
 
       user = mkOption {
         type = types.str;
         default = "nzbget";
-        description = "User account under which NZBGet runs";
+        description = lib.mdDoc "User account under which NZBGet runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "nzbget";
-        description = "Group under which NZBGet runs";
+        description = lib.mdDoc "Group under which NZBGet runs";
+      };
+
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool int str ]);
+        default = {};
+        description = lib.mdDoc ''
+          NZBGet configuration, passed via command line using switch -o. Refer to
+          <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>
+          for details on supported values.
+        '';
+        example = {
+          MainDir = "/data";
+        };
       };
     };
   };
@@ -56,6 +57,22 @@ in
   # implementation
 
   config = mkIf cfg.enable {
+    services.nzbget.settings = {
+      # allows nzbget to run as a "simple" service
+      OutputMode = "loggable";
+      # use journald for logging
+      WriteLog = "none";
+      ErrorTarget = "screen";
+      WarningTarget = "screen";
+      InfoTarget = "screen";
+      DetailTarget = "screen";
+      # required paths
+      ConfigTemplate = "${pkg}/share/nzbget/nzbget.conf";
+      WebDir = "${pkg}/share/nzbget/webui";
+      # nixos handles package updates
+      UpdateCheck = "none";
+    };
+
     systemd.services.nzbget = {
       description = "NZBGet Daemon";
       after = [ "network.target" ];
@@ -64,6 +81,7 @@ in
         unrar
         p7zip
       ];
+
       preStart = ''
         if [ ! -f ${configFile} ]; then
           ${pkgs.coreutils}/bin/install -m 0700 ${pkg}/share/nzbget/nzbget.conf ${configFile}

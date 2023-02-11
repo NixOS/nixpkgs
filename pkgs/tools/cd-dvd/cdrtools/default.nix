@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, acl, libcap, Carbon, IOKit }:
+{ lib, stdenv, fetchurl, m4, acl, libcap, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "cdrtools";
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sed "/\.mk3/d" -i libschily/Targets.man
     substituteInPlace man/Makefile --replace "man4" ""
     substituteInPlace RULES/rules.prg --replace "/bin/" ""
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-cc.rul
+    ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-clang.rul
+    ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-clang64.rul
   '';
 
   dontConfigure = true;
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
-  meta = with stdenv.lib; {
-    homepage = "http://cdrtools.sourceforge.net/private/cdrecord.html";
+  meta = with lib; {
+    homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ cddl gpl2 lgpl21 ];
     platforms = with platforms; linux ++ darwin;

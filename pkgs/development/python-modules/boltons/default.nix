@@ -1,26 +1,52 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "20.1.0";
+  version = "21.0.0";
+  format = "setuptools";
 
-  # No tests in PyPi Tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
     rev = version;
-    sha256 = "0mbxc2n10mlmpbwhg0byddl1i0s6rlrr6z9xm8zzmkv62136irqh";
+    hash = "sha256-8HO7X2PQEbQIQsCa2cMHQI3rlofVT22GYrWNXY34MLk=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  patches = lib.optionals (pythonAtLeast "3.10") [
+    # pprint has no attribute _safe_repr, https://github.com/mahmoud/boltons/issues/294
+    (fetchpatch {
+      name = "fix-pprint-attribute.patch";
+      url = "https://github.com/mahmoud/boltons/commit/270e974975984f662f998c8f6eb0ebebd964de82.patch";
+      sha256 = "sha256-pZLfr6SRCw2aLwZeYaX7bzfJeZC4cFUILEmnVsKR6zc=";
+    })
+  ];
+
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "boltons"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/mahmoud/boltons";
-    description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
+    description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
-      Boltons is a set of over 220 BSD-licensed, pure-Python utilities
-      in the same spirit as — and yet conspicuously missing from — the
+      Boltons is a set of over 200 BSD-licensed, pure-Python utilities
+      in the same spirit as - and yet conspicuously missing from - the
       standard library, including:
 
       - Atomic file saving, bolted on with fileutils

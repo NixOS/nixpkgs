@@ -1,21 +1,45 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm
-, six, jaraco_classes, jaraco_text
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, jaraco_classes
+, jaraco_text
 }:
 
 buildPythonPackage rec {
   pname = "jaraco.collections";
-  version = "3.0.0";
+  version = "3.8.0";
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be570ef4f2e7290b757449395238fa63d70a9255574624e73c5ff9f1ee554721";
+    sha256 = "sha256-VjBP1L1OuNWFzgys4KyAQYeRsUCFHjdIElQbCqJ8kdA=";
   };
 
-  doCheck = false;
-  buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six jaraco_classes jaraco_text ];
-
-  # break dependency cycle
-  patchPhase = ''
-    sed -i "/'jaraco.text',/d" setup.py
+  postPatch = ''
+    # break dependency cycle
+    sed -i "/'jaraco.text',/d" setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    jaraco_classes
+    jaraco_text
+  ];
+
+  pythonNamespaces = [ "jaraco" ];
+
+  doCheck = false;
+
+  pythonImportsCheck = [ "jaraco.collections" ];
+
+  meta = with lib; {
+    description = "Models and classes to supplement the stdlib 'collections' module";
+    homepage = "https://github.com/jaraco/jaraco.collections";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

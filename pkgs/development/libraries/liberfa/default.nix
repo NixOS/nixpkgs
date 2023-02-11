@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "erfa";
-  version = "1.7.0";
+  version = "2.0.0";
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "liberfa";
     repo = "erfa";
     rev = "v${version}";
-    sha256 = "1z4k2phrw6wwi0kax6ac80jk9c036gi7pmhmg6gaf3lk81k6xz2r";
+    sha256 = "sha256-xBE8mWwmvlu0v3Up5y6J8jMhToMSACdKeQzPJoG8LWk=";
   };
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Essential Routines for Fundamental Astronomy";
     homepage = "https://github.com/liberfa/erfa";
     maintainers = with maintainers; [ mir06 ];

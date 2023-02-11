@@ -2,23 +2,26 @@
 , lib
 , fetchPypi
 , buildPythonPackage
-, isPy3k
-, isPy38
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "docutils";
-  version = "0.16";
+  version = "0.19";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc";
+    hash = "sha256-M5laZ1PDC39Xf+v8LFBBH+xqrH9//rfEz+WZEHLc+eY=";
   };
 
   # Only Darwin needs LANG, but we could set it in general.
   # It's done here conditionally to prevent mass-rebuilds.
-  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + ''
+  checkPhase = lib.optionalString stdenv.isDarwin ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + ''
     ${python.interpreter} test/alltests.py
   '';
 
@@ -29,9 +32,10 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = {
-    description = "Docutils -- Python Documentation Utilities";
+  meta = with lib; {
+    description = "Python Documentation Utilities";
     homepage = "http://docutils.sourceforge.net/";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with licenses; [ publicDomain bsd2 psfl gpl3Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

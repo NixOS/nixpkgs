@@ -27,7 +27,7 @@ in
               popd
             '';
           diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
+          buildInputs = [ pkgs.util-linux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
         }
@@ -103,7 +103,7 @@ in
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "prohibit-password";
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";
@@ -119,7 +119,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      path = [ pkgs.wget pkgs.iproute ];
+      path = [ pkgs.wget pkgs.iproute2 ];
 
       script =
         ''

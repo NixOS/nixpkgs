@@ -1,34 +1,34 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 let
-  generic = { subPackages, pname, postInstall ? "" }:
+  generic = { subPackages, pname, postInstall ? "", mainProgram }:
     buildGoModule rec {
       inherit pname;
-      version = "5.20.1";
+      version = "6.9.1";
       shortRev = "3a1ac58"; # for internal version info
-
-      goPackagePath = "github.com/sensu/sensu-go";
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "0wrcchz878sq7zhkb8p0s93k92xppihv5yyvkl363xs6519xzm7m";
+        sha256 = "sha256-vw5A5Cg4envrDfLsdauSONgd6rPZSu5wPiPOoNIcS9w=";
       };
 
       inherit subPackages postInstall;
 
-  vendorSha256 = "03lkra5vf07zicd2aipvmkrda56ys5swwj6lq5hnp324ndajfcya";
+      vendorSha256 = "sha256-zrwTdMlDfG1RudOfV52qOP9NMU3/XYb5TND6xyglJ0I=";
 
-      buildFlagsArray = let
+      doCheck = false;
+
+      ldflags = let
         versionPkg = "github.com/sensu/sensu-go/version";
-      in ''
-        -ldflags=
-          -X ${versionPkg}.Version=${version}
-          -X ${versionPkg}.BuildSHA=${shortRev}
-      '';
+      in [
+        "-X ${versionPkg}.Version=${version}"
+        "-X ${versionPkg}.BuildSHA=${shortRev}"
+      ];
 
       meta = {
+        inherit mainProgram;
         homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
         license = lib.licenses.mit;
@@ -55,15 +55,18 @@ in
       ) > ''${!outputBin}/share/zsh/site-functions/_sensuctl
 
     '';
+    mainProgram = "sensuctl";
   };
 
   sensu-go-backend = generic {
     pname = "sensu-go-backend";
     subPackages = [ "cmd/sensu-backend" ];
+    mainProgram = "sensu-backend";
   };
 
   sensu-go-agent = generic {
     pname = "sensu-go-agent";
     subPackages = [ "cmd/sensu-agent" ];
+    mainProgram = "sensu-agent";
   };
 }

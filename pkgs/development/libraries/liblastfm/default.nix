@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, which, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, which, cmake
 , fftwSinglePrec, libsamplerate, qtbase
 , darwin }:
 
@@ -19,16 +19,22 @@ stdenv.mkDerivation rec {
     sha256 = "04r14prydxshjgfws3pjajjmp2msszhjjs1mjh8s66yg29vq620l";
   })];
 
-  nativeBuildInputs = [ pkgconfig which cmake ];
+  nativeBuildInputs = [ pkg-config which cmake ];
   buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
-  meta = with stdenv.lib; {
+  NIX_CFLAGS_COMPILE =
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+      "-std=c++11"
+    ];
+
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     homepage = "https://github.com/lastfm/liblastfm";
-    repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
     platforms = platforms.unix;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

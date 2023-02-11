@@ -23,7 +23,7 @@ mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-  
+
   nativeBuildInputs = [ imagemagick autoPatchelfHook desktop-file-utils ];
   buildInputs = [ qtmultimedia stdenv.cc.cc ];
 
@@ -52,8 +52,10 @@ mkDerivation rec {
   meta = with lib; {
     description = "Official Qt SoulSeek client";
     homepage = "https://www.slsknet.org";
+    mainProgram = "SoulseekQt";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

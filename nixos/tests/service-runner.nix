@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "service-runner";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ roberth ];
   };
 
@@ -24,12 +24,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed(
             """
             mkdir -p /run/nginx /var/log/nginx /var/cache/nginx
-            ${nodes.machine.config.systemd.services.nginx.runner} &
+            ${nodes.machine.config.systemd.services.nginx.runner} >&2 &
             echo $!>my-nginx.pid
             """
         )
         machine.wait_for_open_port(80)
-        machine.succeed(f"curl {url}")
+        machine.succeed(f"curl -f {url}")
         machine.succeed("kill -INT $(cat my-nginx.pid)")
         machine.wait_for_closed_port(80)
   '';

@@ -1,12 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   karchive, kcoreaddons, kservice, qtbase,
 }:
 
 mkDerivation {
-  name = "kemoticons";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kemoticons";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive kcoreaddons ];
   propagatedBuildInputs = [ kservice qtbase ];

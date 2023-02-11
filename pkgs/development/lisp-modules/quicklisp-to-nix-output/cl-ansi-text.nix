@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-ansi-text'';
-  version = ''20150804-git'';
+  baseName = "cl-ansi-text";
+  version = "20211020-git";
 
-  description = ''ANSI control string characters, focused on color'';
+  description = "ANSI control string characters, focused on color";
 
-  deps = [ args."alexandria" args."anaphora" args."cl-colors" args."let-plus" ];
+  deps = [ args."alexandria" args."cl-colors2" args."cl-ppcre" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-ansi-text/2015-08-04/cl-ansi-text-20150804-git.tgz'';
-    sha256 = ''112w7qg8yp28qyc2b5c7km457krr3xksxyps1icmgdpqf9ccpn2i'';
+    url = "http://beta.quicklisp.org/archive/cl-ansi-text/2021-10-20/cl-ansi-text-20211020-git.tgz";
+    sha256 = "1lmxmdf4sm7apkczp0y07rlsayc5adyv2i85r6p7s60w6sianjr6";
   };
 
   packageName = "cl-ansi-text";
@@ -19,11 +20,11 @@ rec {
 }
 /* (SYSTEM cl-ansi-text DESCRIPTION
     ANSI control string characters, focused on color SHA256
-    112w7qg8yp28qyc2b5c7km457krr3xksxyps1icmgdpqf9ccpn2i URL
-    http://beta.quicklisp.org/archive/cl-ansi-text/2015-08-04/cl-ansi-text-20150804-git.tgz
-    MD5 70aa38b40377a5e89a7f22bb68b3f796 NAME cl-ansi-text FILENAME
+    1lmxmdf4sm7apkczp0y07rlsayc5adyv2i85r6p7s60w6sianjr6 URL
+    http://beta.quicklisp.org/archive/cl-ansi-text/2021-10-20/cl-ansi-text-20211020-git.tgz
+    MD5 5411766beeb4180218b449454b67837f NAME cl-ansi-text FILENAME
     cl-ansi-text DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
-     (NAME cl-colors FILENAME cl-colors) (NAME let-plus FILENAME let-plus))
-    DEPENDENCIES (alexandria anaphora cl-colors let-plus) VERSION 20150804-git
-    SIBLINGS (cl-ansi-text-test) PARASITES NIL) */
+    ((NAME alexandria FILENAME alexandria)
+     (NAME cl-colors2 FILENAME cl-colors2) (NAME cl-ppcre FILENAME cl-ppcre))
+    DEPENDENCIES (alexandria cl-colors2 cl-ppcre) VERSION 20211020-git SIBLINGS
+    (cl-ansi-text.test) PARASITES NIL) */

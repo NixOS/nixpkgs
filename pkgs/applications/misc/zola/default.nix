@@ -1,36 +1,60 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, CoreServices }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, openssl
+, oniguruma
+, CoreServices
+, installShellFiles
+, libsass
+, zola
+, testers
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.11.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = pname;
+    repo = "zola";
     rev = "v${version}";
-    sha256 = "137ak9gzcn3689fmcb90wa4szw43rh2m51mf26l77a5gksn5y6cn";
+    sha256 = "sha256-VkR7fM2WeI1itGq5kl54CVLnNW+NxIodkVKeGv8HoaU=";
   };
 
-  cargoSha256 = "0v40bcqh48dlhdc0kz7wm3q9r3i1m6j9s74bfiv237dqx5dymmsg";
+  cargoSha256 = "sha256-74QVFjDlT3ewx4sCK4/r5In0muqboBFEpMFBv2L5YaM=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+    oniguruma
+    libsass
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
+
+  RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = ''
-    install -D -m 444 completions/zola.bash \
-      -t $out/share/bash-completion/completions
-    install -D -m 444 completions/_zola \
-      -t $out/share/zsh/site-functions
-    install -D -m 444 completions/zola.fish \
-      -t $out/share/fish/vendor_completions.d
+    installShellCompletion --cmd zola \
+      --fish completions/zola.fish \
+      --zsh completions/_zola \
+      --bash completions/zola.bash
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests.version = testers.testVersion { package = zola; };
+
+  meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
+    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
   };
 }

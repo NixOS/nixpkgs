@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, packaging
+, pytestCheckHook
 , nose
-, pytest
 , numpy
 , h5py
 , pydicom
@@ -12,27 +13,29 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "3.1.0";
+  version = "4.0.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "774adcff834f22915afb68c6cdd7acbcb5d0240b7f87f6da6c63ff405480884b";
+    sha256 = "sha256-RcSbU0k1G0X2wEWpGqArTw02dob/MoRjLvlaxluTB4Y=";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py pydicom ];
+  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
 
-  checkInputs = [ nose pytest ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  disabledTests = [
+    # https://github.com/nipy/nibabel/issues/951
+    "test_filenames"
+  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
-    platforms = platforms.x86_64;  # https://github.com/nipy/nibabel/issues/861
   };
 }

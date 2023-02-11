@@ -2,17 +2,19 @@
 
 let
   pname = "publicsuffix-list";
-  version = "2019-05-24";
+  version = "2021-09-03";
 in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "publicsuffix";
   repo = "list";
-  rev = "a1db0e898956e126de65be1a5e977fbbbbeebe33";
-  sha256 = "092153w2jr7nx28p9wc9k6b5azi9c39ghnqfnfiwfzv1j8jm3znq";
+  rev = "2533d032871e1ef1f410fc0754b848d4587c8021";
+  sha256 = "sha256-Q8uIXM1CMu8dlWcVoL17M1XRGu3kG7Y7jpx0oHQh+2I=";
 
   postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -Dm0444 public_suffix_list.dat tests/test_psl.txt -t $out/share/publicsuffix
+    install -Dm0444 $out/public_suffix_list.dat $out/tests/test_psl.txt -t $out/share/publicsuffix
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
   meta = with lib; {

@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , extra-cmake-modules
 , kactivities
@@ -10,22 +9,20 @@
 
 mkDerivation rec {
   pname = "KSmoothDock";
-  version = "6.2";
+  version = "6.3";
 
   src = fetchFromGitHub {
     owner = "dangvd";
     repo = "ksmoothdock";
     rev = "v${version}";
-    sha256 = "182x47cymgnp5xisa0xx93hmd5wrfigy8zccrr23p4r9hp8xbnam";
+    sha256 = "sha256-hO7xgjFMFrEhQs3oc2peFTjSVEDsl7Ma/TeVybEZMEk=";
   };
 
-  patches = [
-    # Fixed hard coded installation path to use CMAKE_INSTALL_BINDIR and CMAKE_INSTALL_PREFIX instead
-    (fetchpatch {
-      url = "https://github.com/dangvd/ksmoothdock/commit/00799bef8a1c1fe61ef9274866267d9fe9194041.patch";
-      sha256 = "1nmb7gf1ggzicxz8k4fd67xhwjy404myqzjpgjym66wqxm0arni4";
-    })
-  ];
+  # Upstream seems dead and there are new deprecation warnings in KF5.100
+  # Remember, kids: friends don't let friends build with -Werror
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt --replace "-Werror" ""
+  '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
 

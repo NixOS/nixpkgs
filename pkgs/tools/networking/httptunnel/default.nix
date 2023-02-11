@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mn5s6p68n32xzadz6ds5i6bp44dyxzkq68r1yljlv470jr84bql";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Creates a bidirectional virtual data connection tunnelled in HTTP requests";
     homepage    = "http://www.nocrew.org/software/httptunnel";
     license     = licenses.gpl2;

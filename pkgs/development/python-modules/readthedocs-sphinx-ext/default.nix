@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "readthedocs-sphinx-ext";
-  version = "1.0.4";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33dbb135373d539233f7fbdb5e8dcfa07d41254300ee23719eb9caa8c68a40ae";
+    sha256 = "sha256-5e/82CWBYRGjd6t6iXuBkhUTj45eisyG+ZIYMo+VckA=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ pytest mock sphinx ];
+  nativeCheckInputs = [ pytest mock sphinx ];
 
   checkPhase = ''
     py.test

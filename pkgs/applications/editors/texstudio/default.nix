@@ -1,18 +1,18 @@
 { lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
-  wrapQtAppsHook, poppler, zlib, pkgconfig }:
+  wrapQtAppsHook, poppler, zlib, pkg-config }:
 
 mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.22";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";
     repo = pname;
     rev = version;
-    sha256 = "037jvsfln8wav17qj9anxz2a7p51v7ky85wmhdj2hgwp40al651g";
+    hash = "sha256-QBPWelCqh8Ggp0IjH37QGYGu5Ya2fpsiSEkKh3Ee7PM=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkgconfig ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
   buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
@@ -24,9 +24,10 @@ mkDerivation rec {
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
     '';
-    homepage = "http://texstudio.sourceforge.net";
+    homepage = "https://texstudio.org";
+    changelog = "https://github.com/texstudio-org/texstudio/blob/${version}/utilities/manual/CHANGELOG.txt";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 cfouche ];
   };
 }

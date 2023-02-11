@@ -1,24 +1,48 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes}:
+{ stdenv
+, lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, lz4
+, keyring
+, pbkdf2
+, pycryptodomex
+, pyaes
+}:
+
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.11.1";
+  version = "0.17.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d1f825fc9cc6f98fe0ee3f97cdb4947c22d59ac8a11643da5837ebd8c873f05";
+    hash = "sha256-fyyZ7pkNlD6MH1+SRUYjU0mXMUsZJ3qhOqJrcmJ/hgc=";
   };
 
-  disabled = !isPy3k;
-
-  propagatedBuildInputs = [ keyring pbkdf2 pyaes ];
+  propagatedBuildInputs = [
+    lz4
+    keyring
+    pbkdf2
+    pyaes
+    pycryptodomex
+  ];
 
   # No tests implemented
   doCheck = false;
 
+  pythonImportsCheck = [
+    "browser_cookie3"
+  ];
+
   meta = with lib; {
     description = "Loads cookies from your browser into a cookiejar object";
-    maintainers = with maintainers; [ borisbabic ];
     homepage = "https://github.com/borisbabic/browser_cookie3";
-    license = licenses.gpl3;
+    changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ borisbabic ];
+    broken = stdenv.isDarwin;
   };
 }

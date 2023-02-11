@@ -1,38 +1,43 @@
-{ stdenv, fetchFromGitHub, nixosTests
-, libnfnetlink, libnl, net-snmp, openssl
-, pkgconfig, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, nixosTests
+, file, libmnl, libnftnl, libnl
+, net-snmp, openssl, pkg-config
+, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
-  version = "2.0.20";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${version}";
-    sha256 = "0ijzw56hbac24dhrgjd0hjgf45072imyzq3mcgsirdl3xqjc6x12";
+    sha256 = "sha256-erpYC4klkgvZ9D+4qM/qIHajsyOGKRbX7lhs6lfWFTQ=";
   };
 
   buildInputs = [
-    libnfnetlink
+    file
+    libmnl
+    libnftnl
     libnl
     net-snmp
     openssl
   ];
 
+  enableParallelBuilding = true;
+
   passthru.tests.keepalived = nixosTests.keepalived;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   configureFlags = [
     "--enable-sha1"
     "--enable-snmp"
  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

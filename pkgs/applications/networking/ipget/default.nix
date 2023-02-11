@@ -1,19 +1,26 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ipget";
-  version = "0.6.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
     rev = "v${version}";
-    sha256 = "14ygij6hj6bd4g4aw6jgfbi1fgpal0jgf1hr22zxm16dpx3vva6b";
+    sha256 = "sha256-JGG3DsmFXmWFOFvJ8pKVhQMRgZ0cbkdtmBjMkLYqOwU=";
   };
 
-  vendorSha256 = "0vy21pdqk6q5fw7wlcv51myhh9y79n2qhvy61rmblwhxlrkh6sdv";
+  vendorSha256 = "sha256-scrueQoqr9nUONnpitUontcX3Xe0KmmUmvxOcpxK7M8=";
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    # main module (github.com/ipfs/ipget) does not contain package github.com/ipfs/ipget/sharness/dependencies
+    rm -r sharness/dependencies/
+  '';
+
+  doCheck = false;
+
+  meta = with lib; {
     description = "Retrieve files over IPFS and save them locally";
     homepage = "https://ipfs.io/";
     license = licenses.mit;

@@ -1,27 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, slixmpp, async-timeout, aiohttp }:
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, slixmpp
+}:
 
 buildPythonPackage rec {
   pname = "aioharmony";
-  version = "0.2.3";
+  version = "0.2.9";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "445323810978454ba3b32be53ba6b43cf9948586de3f9734b8743b55858b3cc7";
+    sha256 = "sha256-T30pLzPWD+5pb0ShkpNdiBFO45RdiMYgCOSg8rx+t+Y=";
   };
 
-  disabled = !isPy3k;
+  propagatedBuildInputs = [
+    aiohttp
+    async-timeout
+    slixmpp
+  ];
 
-  #aioharmony does not seem to include tests
+  # aioharmony does not seem to include tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aioharmony.harmonyapi" "aioharmony.harmonyclient" ];
-
-  propagatedBuildInputs = [ slixmpp async-timeout aiohttp ];
+  pythonImportsCheck = [
+    "aioharmony.harmonyapi"
+    "aioharmony.harmonyclient"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ehendrix23/aioharmony";
-    description =
-      "Asyncio Python library for connecting to and controlling the Logitech Harmony";
+    description = "Python library for interacting the Logitech Harmony devices";
     license = licenses.asl20;
     maintainers = with maintainers; [ oro ];
   };

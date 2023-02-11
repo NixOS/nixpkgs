@@ -9,6 +9,9 @@
 , ffmpeg
 , libmysqlclient
 , postgresql
+, spandsp3
+, sofia_sip
+, libks
 }:
 
 let
@@ -68,7 +71,7 @@ in
     snom = mk "applications/mod_snom" [];
     sonar = mk "applications/mod_sonar" [];
     soundtouch = mk "applications/mod_soundtouch" [];
-    spandsp = mk "applications/mod_spandsp" [];
+    spandsp = mk "applications/mod_spandsp" [ spandsp3 ];
     spy = mk "applications/mod_spy" [];
     stress = mk "applications/mod_stress" [];
     translate = mk "applications/mod_translate" [];
@@ -136,8 +139,8 @@ in
     rtc = mk "endpoints/mod_rtc" [];
     rtmp = mk "endpoints/mod_rtmp" [];
     skinny = mk "endpoints/mod_skinny" [];
-    sofia = mk "endpoints/mod_sofia" [];
-    verto = mk "endpoints/mod_verto" [];
+    sofia = mk "endpoints/mod_sofia" [ sofia_sip ];
+    verto = mk "endpoints/mod_verto" [ libks ];
   };
 
   event_handlers = {

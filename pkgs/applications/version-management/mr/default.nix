@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl }:
+{ lib, stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation {
   pname = "mr";
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
       other version control systems can easily be added.
     '';
     homepage = "http://myrepos.branchable.com/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ antono henrytill ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ antono henrytill ];
   };
 }

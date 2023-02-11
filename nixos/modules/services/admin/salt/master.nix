@@ -20,11 +20,11 @@ in
 {
   options = {
     services.salt.master = {
-      enable = mkEnableOption "Salt master service";
+      enable = mkEnableOption (lib.mdDoc "Salt master service");
       configuration = mkOption {
         type = types.attrs;
         default = {};
-        description = "Salt master configuration as Nix attribute set.";
+        description = lib.mdDoc "Salt master configuration as Nix attribute set.";
       };
     };
   };
@@ -45,7 +45,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = with pkgs; [
-        utillinux  # for dmesg
+        util-linux  # for dmesg
       ];
       serviceConfig = {
         ExecStart = "${pkgs.salt}/bin/salt-master";
@@ -59,5 +59,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa ];
+  meta.maintainers = with lib.maintainers; [ Flakebi ];
 }

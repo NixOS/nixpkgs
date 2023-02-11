@@ -1,37 +1,43 @@
 { lib
-, fetchurl
+, fetchFromGitLab
 , mkDerivation
-, kdeApplications
-, kinit
-, kdelibs4support
-, solid
-, kxmlgui
-, karchive
-, kfilemetadata
-, khtml
-, knewstuff
-, libksane
 , cmake
 , exempi
 , extra-cmake-modules
-, libcdio
-, poppler
-, makeWrapper
+, karchive
 , kdoctools
+, kfilemetadata
+, khtml
+, kitemmodels
+, knewstuff
+, kxmlgui
+, libcdio
+, libkcddb
+, libksane
+, makeWrapper
+, poppler
+, qtcharts
+, qtwebengine
+, solid
+, taglib
 }:
 
 mkDerivation rec {
-  name = "tellico";
-  version = "3.3.0";
+  pname = "tellico";
+  version = "3.4.5";
 
-  src = fetchurl {
-    url = "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz";
-    sha256 = "1digkpvzrsbv5znf1cgzs6zkmysfz6lzs12n12mrrpgkcdxc426y";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "office";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-XWzSbtyxOkASTwT5b7+hIEwaKe2bEo6ij+CnPbYNEc0=";
   };
 
-  patches = [
-    ./hex.patch
-  ];
+  postPatch = ''
+    substituteInPlace src/gui/imagewidget.h \
+      --replace ksane_version.h KF5/ksane_version.h
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -41,27 +47,28 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    kdelibs4support
-    solid
-    kxmlgui
+    exempi
     karchive
     kfilemetadata
     khtml
+    kitemmodels
     knewstuff
-    libksane
-    cmake
-    exempi
-    extra-cmake-modules
+    kxmlgui
     libcdio
-    kdeApplications.libkcddb
+    libkcddb
+    libksane
     poppler
+    qtcharts
+    qtwebengine
+    solid
+    taglib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection management software, free and simple";
     homepage = "https://tellico-project.org/";
-    maintainers = with lib.maintainers; [ numkem ];
-    license = with lib.licenses; [ gpl2 gpl3 ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
+    maintainers = with maintainers; [ numkem ];
+    platforms = platforms.linux;
   };
 }

@@ -1,34 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , decorator
-, appdirs
-, six
 , numpy
-, pytest
+, platformdirs
+, typing-extensions
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2020.2";
+  version = "2022.1.14";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3cacefed54148aafb07502c7c907cae8d9327ea35df16e3366c883a706ed5601";
+    sha256 = "sha256-QQFzcWELsqA2hVl8UoUgXmWXx/F3OD2VyLhxJEsSwU4=";
   };
-
-  checkInputs = [ pytest ];
 
   propagatedBuildInputs = [
     decorator
-    appdirs
-    six
     numpy
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
   ];
 
-  checkPhase = ''
-    py.test -k 'not test_persistent_dict'
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pytools"
+    "pytools.batchjob"
+    "pytools.lex"
+  ];
 
   meta = {
     homepage = "https://github.com/inducer/pytools/";

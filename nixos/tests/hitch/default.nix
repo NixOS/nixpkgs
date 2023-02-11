@@ -1,10 +1,10 @@
 import ../make-test-python.nix ({ pkgs, ... }:
 {
   name = "hitch";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ jflanglois ];
   };
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.curl ];
     services.hitch = {
       enable = true;
@@ -28,6 +28,6 @@ import ../make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("hitch.service")
       machine.wait_for_open_port(443)
-      assert "We are all good!" in machine.succeed("curl -k https://localhost:443/index.txt")
+      assert "We are all good!" in machine.succeed("curl -fk https://localhost:443/index.txt")
     '';
 })

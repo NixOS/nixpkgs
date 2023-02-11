@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ostree
 , rpm
@@ -6,7 +6,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , cargo
 , rustc
 , gobject-introspection
@@ -29,28 +29,29 @@
 , bubblewrap
 , pcre
 , check
-, python
+, python3
 , json_c
 , zchunk
 , libmodulemd
-, utillinux
+, util-linux
 , sqlite
 , cppunit
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.2";
+  version = "2023.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "nuEBEVFqr9J+Nf98GZkvNNYOtpMUjKzYrzCc1T2cR3A=";
+    hash = "sha256-JNLp1IHbIRpe3Au2iUsx7x065rirQlzT9bg7CoqHCyg=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    python3
+    pkg-config
     which
     autoconf
     automake
@@ -82,14 +83,13 @@ stdenv.mkDerivation rec {
     librepo
     pcre
     check
-    python
 
     # libdnf # vendored unstable branch
     # required by vendored libdnf
     json_c
     zchunk
     libmodulemd
-    utillinux # for smartcols.pc
+    util-linux # for smartcols.pc
     sqlite
     cppunit
   ];
@@ -114,9 +114,12 @@ stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+
+  meta = with lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage = "https://rpm-ostree.readthedocs.io/en/latest/";
+    homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;

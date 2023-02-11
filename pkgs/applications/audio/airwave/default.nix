@@ -1,9 +1,19 @@
-{ stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, qt5, requireFile, unzip, wine
+{ lib,
+  stdenv,
+  multiStdenv,
+  fetchFromGitHub,
+  requireFile,
+  unzip,
+  wine,
+  cmake,
+  makeWrapper,
+  wrapQtAppsHook,
+  file,
+  libX11,
+  qt5
 }:
 
 let
-
   version = "1.3.3";
 
   airwave-src = fetchFromGitHub {
@@ -14,15 +24,15 @@ let
   };
 
   vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk368_08_11_2017_build_121";
+    name = "vstsdk369_01_03_2018_build_132";
     src = requireFile {
       name = "${name}.zip";
       url = "http://www.steinberg.net/en/company/developers.html";
-      sha256 = "e0f235d8826d70f1ae0ae5929cd198acae1ecff74612fde5c60cbfb45c2f4a70";
+      sha256 = "0r29fv6yhm2m5yznn8m4my7fq01w1lpphax4sshagy6b1dgjlv3w";
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   };
 
   wine-wow64 = wine.override {
@@ -38,13 +48,23 @@ let
 in
 
 multiStdenv.mkDerivation {
-  name = "airwave-${version}";
+  pname = "airwave";
+  inherit version;
 
   src = airwave-src;
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ file libX11 qt5.qtbase wine-xembed ];
+  buildInputs = [
+    file
+    libX11
+    qt5.qtbase
+    wine-xembed
+  ];
 
   postPatch = ''
     # Binaries not used directly should land in libexec/.
@@ -73,7 +93,7 @@ multiStdenv.mkDerivation {
     wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${wine-xembed}/bin/wine64
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WINE-based VST bridge for Linux VST hosts";
     longDescription = ''
       Airwave is a wine based VST bridge, that allows for the use of

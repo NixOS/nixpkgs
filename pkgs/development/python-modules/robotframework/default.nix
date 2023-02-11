@@ -1,16 +1,23 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage, jsonschema }:
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "3.2.1";
+  version = "6.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d693e6d06b17f48669e2a8c4cb6c1f0d56e5f1a74835d18b8ea2118da7bf2d79";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
   };
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [ jsonschema ];
+
+  checkPhase = ''
+    python3 utest/run.py
+  '';
+
+  meta = with lib; {
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
     license = licenses.asl20;

@@ -1,13 +1,13 @@
---- bmake/unit-tests/unexport-env.mk.orig       2019-02-19 10:24:14.356713136 -0800
-+++ bmake/unit-tests/unexport-env.mk    2019-02-19 10:25:43.838775388 -0800
-@@ -3,8 +3,8 @@
- # pick up a bunch of exported vars
+--- bmake/unit-tests/unexport-env.mk.orig	2021-05-27 14:44:45.263392298 +0200
++++ bmake/unit-tests/unexport-env.mk	2021-05-27 14:46:46.188881996 +0200
+@@ -4,8 +4,8 @@
+ FILTER_CMD=	grep ^UT_
  .include "export.mk"
  
 -# an example of setting up a minimal environment.
--PATH = /bin:/usr/bin:/sbin:/usr/sbin
+-PATH=	/bin:/usr/bin:/sbin:/usr/sbin
 +# preserve PATH so commands used in the "all" target are still available
-+PATH := ${PATH}
++PATH :=	${PATH}
  
  # now clobber the environment to just PATH and UT_TEST
- UT_TEST = unexport-env
+ UT_TEST=	unexport-env

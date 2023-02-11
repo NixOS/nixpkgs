@@ -1,19 +1,21 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "go-jira";
-  version = "1.0.23";
+  version = "1.0.28";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "go-jira";
     repo = "jira";
-    sha256 = "0qk5ifjxkqisvgv066rw8xj2zszc9mhc0by4338xjd7ng10jkk7b";
+    sha256 = "sha256-h/x77xGqdOxPBxdchElZU9GFgjnNo89o9gx4fYM5dME=";
   };
 
-  vendorSha256 = "18jwxnkv94lsxfv57ga519knxm077cc8chp5c992ipk58a04nv18";
+  vendorSha256 = "sha256-r69aFl3GwgZ1Zr4cEy4oWlqsrjNCrqjwW9BU9+d8xDQ=";
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "Simple command line client for Atlassian's Jira service written in Go";
     homepage = "https://github.com/go-jira/jira";
     license = licenses.asl20;

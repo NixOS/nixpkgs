@@ -1,20 +1,20 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "waitress";
-  version = "1.4.4";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bb436508a7487ac6cb097ae7a7fe5413aefca610550baf58f0940e51ecfb261";
+    sha256 = "780a4082c5fbc0fde6a2fcfe5e26e6efc1e8f425730863c04085769781f51eba";
   };
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      homepage = "https://github.com/Pylons/waitress";
      description = "Waitress WSGI server";
      license = licenses.zpl20;

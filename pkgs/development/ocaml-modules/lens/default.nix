@@ -1,20 +1,23 @@
-{ lib, ocaml, fetchzip, ppx_deriving, ppxfind, buildDunePackage }:
-
-if lib.versionAtLeast ocaml.version "4.10"
-then throw "lens is not available for OCaml ${ocaml.version}"
-else
+{ lib, fetchFromGitHub, ppx_deriving, ppxlib, buildDunePackage, ounit }:
 
 buildDunePackage rec {
   pname = "lens";
-  version = "1.2.3";
+  version = "1.2.5";
 
-  src = fetchzip {
-    url = "https://github.com/pdonadeo/ocaml-lens/archive/v${version}.tar.gz";
-    sha256 = "09k2vhzysx91syjhgv6w1shc9mgzi0l4bhwpx1g5pi4r4ghjp07y";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "pdonadeo";
+    repo = "ocaml-lens";
+    rev = "v${version}";
+    sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
   };
 
-  minimumOCamlVersion = "4.04.1";
-  buildInputs = [ ppx_deriving ppxfind ];
+  minimalOCamlVersion = "4.10";
+  buildInputs = [ ppx_deriving ppxlib ];
+
+  doCheck = true;
+  checkInputs = [ ounit ];
 
   meta = with lib; {
     homepage = "https://github.com/pdonadeo/ocaml-lens";

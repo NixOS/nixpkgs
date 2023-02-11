@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/komuw/sewer";
     description = "ACME client";
     license = licenses.mit;

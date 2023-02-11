@@ -1,41 +1,73 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, codecov, coverage
-, flake8
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, fetchpatch
 , matplotlib
 , mock
 , numpy
 , pillow
-, pytest
-, pytestcov
-, pytest-sugar
-, setuptools
-, twine
-, wheel
+, pytestCheckHook
+, pythonOlder
 }:
-  
-buildPythonPackage rec {
-  pname = "word_cloud";
-  version = "1.6.0";
 
-  # tests are not included in pypi tarball
+buildPythonPackage rec {
+  pname = "wordcloud";
+  version = "1.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "amueller";
     repo = pname;
     rev = version;
-    sha256 = "1ncjr90m3w3b4zi23kw6ai11gxahdyah96x8jb2yn2x4573022x2";
+    hash = "sha256-4EFQfv+Jn9EngUAyDoJP0yv9zr9Tnbrdwq1YzDacB9Q=";
   };
 
-  propagatedBuildInputs = [ matplotlib numpy pillow ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  # Tests require extra dependencies
-  checkInputs = [ codecov coverage flake8 mock pytest pytestcov pytest-sugar setuptools twine wheel ];
-  # skip tests which make assumptions about installation
-  checkPhase = ''
-    pytest -k 'not cli_as_executable'
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pillow
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/amueller/word_cloud/pull/616
+      url = "https://github.com/amueller/word_cloud/commit/858a8ac4b5b08494c1d25d9e0b35dd995151a1e5.patch";
+      sha256 = "sha256-+aDTMPtOibVwjPrRLxel0y4JFD5ERB2bmJi4zRf/asg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report xml --tb=short" ""
   '';
-  
-  meta = with stdenv.lib; {
-    description = "A little word cloud generator in Python";
+
+  preCheck = ''
+    cd test
+  '';
+
+  pythonImportsCheck = [
+    "wordcloud"
+  ];
+
+  disabledTests = [
+    # Don't tests CLI
+    "test_cli_as_executable"
+  ];
+
+  meta = with lib; {
+    description = "Word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];

@@ -1,18 +1,26 @@
 { lib, fetchurl, buildDunePackage
-, ppx_sexp_conv
-, bos, ctypes, fmt, logs, rresult, sexplib
+, dune-configurator
+, bos, ctypes, fmt, logs
+, mdx, alcotest, crowbar, junit_alcotest, ezjsonm
 }:
 
 buildDunePackage rec {
   pname = "yaml";
-  version = "2.0.1";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-v${version}.tbz";
-    sha256 = "1r8jj572h416g2zliwmxj2j9hkv73nxnpfb9gmbj9gixg24lskx0";
+    url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-${version}.tbz";
+    sha256 = "sha256-0KngriGEpp5tcgK/43B9EEOdMacSQYYCNLGfAgRS7Mc=";
   };
 
-  propagatedBuildInputs = [ bos ctypes fmt logs ppx_sexp_conv rresult sexplib ];
+  minimalOCamlVersion = "4.13";
+
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ bos ctypes ];
+
+  doCheck = true;
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [ fmt logs alcotest crowbar junit_alcotest ezjsonm ];
 
   meta = {
     description = "Parse and generate YAML 1.1 files";

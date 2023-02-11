@@ -1,0 +1,57 @@
+diff --git a/src/dbus.cpp b/src/dbus.cpp
+index 3b3cccb..1405725 100644
+--- a/src/dbus.cpp
++++ b/src/dbus.cpp
+@@ -152,7 +152,7 @@ bool dbus_manager::get_media_player_metadata(metadata& meta, std::string name) {
+ }
+ 
+ bool dbus_manager::init_internal() {
+-    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("libdbus-1.so.3")) {
++    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("@libdbus@/lib/libdbus-1.so.3")) {
+         SPDLOG_ERROR("Could not load libdbus-1.so.3");
+         return false;
+     }
+diff --git a/src/loaders/loader_x11.cpp b/src/loaders/loader_x11.cpp
+index 4db6f78..c60d08c 100644
+--- a/src/loaders/loader_x11.cpp
++++ b/src/loaders/loader_x11.cpp
+@@ -89,4 +89,4 @@ void libx11_loader::CleanUp(bool unload) {
+ 
+ }
+ 
+-std::shared_ptr<libx11_loader> g_x11(new libx11_loader("libX11.so.6"));
++std::shared_ptr<libx11_loader> g_x11(new libx11_loader("@libX11@/lib/libX11.so.6"));
+diff --git a/src/logging.cpp b/src/logging.cpp
+index 1668226..f0c8df5 100644
+--- a/src/logging.cpp
++++ b/src/logging.cpp
+@@ -24,7 +24,11 @@ string exec(string command) {
+ #endif
+     std::array<char, 128> buffer;
+     std::string result;
++
++    char* originalPath = getenv("PATH");
++    setenv("PATH", "@path@", 1);
+     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
++    setenv("PATH", originalPath, 1);
+     if (!pipe) {
+       return "popen failed!";
+     }
+diff --git a/src/pci_ids.cpp b/src/pci_ids.cpp
+index feec222..6baa707 100644
+--- a/src/pci_ids.cpp
++++ b/src/pci_ids.cpp
+@@ -24,11 +24,9 @@ std::istream& get_uncommented_line(std::istream& is, std::string &line)
+ void parse_pciids()
+ {
+     std::ifstream file;
+-    file.open("/usr/share/hwdata/pci.ids");
++    file.open("@hwdata@/share/hwdata/pci.ids");
+     if (file.fail()){
+-        file.open("/usr/share/misc/pci.ids");
+-        if (file.fail())
+-            SPDLOG_ERROR("can't find file pci.ids");
++        SPDLOG_ERROR("can't find file pci.ids");
+     }
+ 
+     std::string line;

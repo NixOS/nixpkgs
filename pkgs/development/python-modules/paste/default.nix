@@ -1,34 +1,42 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , six
-, pytestrunner
-, pytest
 }:
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.4.0";
+  version = "3.5.0";
 
-  src = fetchPypi {
-    pname = "Paste";
-    inherit version;
-    sha256 = "16sichvhyci1gaarkjs35mai8vphh7b244qm14hj1isw38nx4c03";
+  src = fetchFromGitHub {
+    owner = "cdent";
+    repo = "paste";
+    rev = version;
+    sha256 = "sha256-yaOxbfQ8rdViepxhdF0UzlelC/ozdsP1lOdU5w4OPEQ=";
   };
+
+  postPatch = ''
+    patchShebangs tests/cgiapp_data/
+  '';
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  # Certain tests require network
-  checkPhase = ''
-    py.test -k "not test_cgiapp and not test_proxy"
-  '';
+  disabledTests = [
+    # broken test
+    "test_file_cache"
+    # requires network connection
+    "test_proxy_to_website"
+  ];
 
-  meta = with stdenv.lib; {
+  pythonNamespaces = [ "paste" ];
+
+  meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "http://pythonpaste.org/";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

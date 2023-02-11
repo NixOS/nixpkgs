@@ -1,26 +1,31 @@
 { lib, fetchurl, buildDunePackage
-, checkseum, cmdliner
-, alcotest, bos, camlzip, mmap, re
+, checkseum, optint, cmdliner
+, bigstringaf, alcotest, camlzip, base64, ctypes, fmt, crowbar, rresult
+, astring, bos
 }:
 
 buildDunePackage rec {
-	version = "0.9.0";
-	pname = "decompress";
+  pname = "decompress";
+  version = "1.5.2";
 
-	src = fetchurl {
-		url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-v${version}.tbz";
-		sha256 = "0fryhcvv96vfca51c7kqdn3n3canqsbbvfbi75ya6lca4lmpipbh";
-	};
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-	buildInputs = [ cmdliner ];
-	propagatedBuildInputs = [ checkseum ];
-	checkInputs = lib.optionals doCheck [ alcotest bos camlzip mmap re ];
-	doCheck = true;
+  src = fetchurl {
+    url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-${version}.tbz";
+    hash = "sha256-qMmmuhMlFNVq02JvvV55EkhEg2AQNQ7hYdQ7spv1di4=";
+  };
 
-	meta = {
-		description = "Pure OCaml implementation of Zlib";
-		license = lib.licenses.mit;
-		maintainers = [ lib.maintainers.vbgl ];
-		homepage = "https://github.com/mirage/decompress";
-	};
+  buildInputs = [ cmdliner ];
+  propagatedBuildInputs = [ optint checkseum ];
+  checkInputs = [ alcotest astring bigstringaf bos ctypes fmt camlzip base64 crowbar rresult ];
+  doCheck = true;
+
+  meta = {
+    description = "Pure OCaml implementation of Zlib";
+    homepage = "https://github.com/mirage/decompress";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "decompress.pipe";
+  };
 }

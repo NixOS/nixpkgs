@@ -17,16 +17,13 @@ let
   };
 
   setTensorflowSourceRoot = dir: drv:
-    (overrideCabal drv (drv: { src = tensorflow-haskell; }))
+    (overrideCabal (drv: { src = tensorflow-haskell; }) drv)
       .overrideAttrs (_oldAttrs: {sourceRoot = "source/${dir}";});
 in
 {
   tensorflow-proto = doJailbreak (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
 
-  tensorflow = (setTensorflowSourceRoot "tensorflow" super.tensorflow).override {
-    # the "regular" Python package does not seem to include the binary library
-    libtensorflow = pkgs.libtensorflow-bin;
-  };
+  tensorflow = setTensorflowSourceRoot "tensorflow" super.tensorflow;
 
   tensorflow-core-ops = setTensorflowSourceRoot "tensorflow-core-ops" super.tensorflow-core-ops;
 

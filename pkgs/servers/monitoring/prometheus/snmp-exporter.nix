@@ -1,17 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, net-snmp, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, net-snmp, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "snmp_exporter";
-  version = "0.18.0";
-
-  goPackagePath = "github.com/prometheus/snmp_exporter";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "snmp_exporter";
     rev = "v${version}";
-    sha256 = "1zdkb036zy2sw1drlp2m2z1yb7857d2y3yn2y3l0a1kkd4zcqkk4";
+    sha256 = "sha256-ko2PApbz8kL0n6IEsRKLwMq9WmAdvfwI6o7ZH/BTd6c=";
   };
+
+  vendorSha256 = "sha256-nbJXiZ+vHN/EnvAPTJUKotCE+nwdrXtWHhGfugm+CQQ=";
 
   buildInputs = [ net-snmp ];
 
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) snmp; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SNMP Exporter for Prometheus";
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;

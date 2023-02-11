@@ -4,7 +4,7 @@ let
 
   client =
     { pkgs, ... }:
-    { fileSystems = pkgs.lib.mkVMOverride
+    { virtualisation.fileSystems =
         { "/data" =
            { # nfs4 exports the export with fsid=0 as a virtual root directory
              device = if (version == 4) then "server:/" else "server:/data";
@@ -19,7 +19,7 @@ in
 
 {
   name = "nfs";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
@@ -66,7 +66,7 @@ in
           client2.succeed("time flock -n -s /data/lock true")
 
       with subtest("client 2 fails to acquire lock held by client 1"):
-          client1.succeed("flock -x /data/lock -c 'touch locked; sleep 100000' &")
+          client1.succeed("flock -x /data/lock -c 'touch locked; sleep 100000' >&2 &")
           client1.wait_for_file("locked")
           client2.fail("flock -n -s /data/lock true")
 

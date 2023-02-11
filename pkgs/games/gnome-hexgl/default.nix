@@ -1,39 +1,39 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , ninja
 , meson
-, pkgconfig
+, pkg-config
 , gthree
 , gsound
-, epoxy
+, libepoxy
 , gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-hexgl";
-  version = "0.2.0";
+  version = "unstable-2020-07-24";
 
   src = fetchFromGitHub {
     owner = "alexlarsson";
     repo = "gnome-hexgl";
-    rev = version;
-    sha256 = "08iy2iciscd2wbhh6v4cpghx8r94v1ffbgla9yb3bcsdhlag0iw4";
+    rev = "f47a351055a235730795341dcd6b2397cc4bfa0c";
+    sha256 = "yZWGymaSUfnCP8VAEdDH64w0muSnRK/XPi1/IqTrE4k=";
   };
 
   nativeBuildInputs = [
     ninja
     meson
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     gthree
     gsound
-    epoxy
+    libepoxy
     gtk3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gthree port of HexGL";
     homepage = "https://github.com/alexlarsson/gnome-hexgl";
     license = licenses.mit;

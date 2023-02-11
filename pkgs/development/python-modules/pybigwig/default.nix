@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pyBigWig";
-  version = "0.3.17";
+  version = "0.3.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "157x6v48y299zm382krf1dw08fdxg95im8lnabhp5vc94s04zxj1";
+    sha256 = "4c2a8c571b4100ad7c4c318c142eb48558646be52aaab28215a70426f5be31bc";
   };
 
   buildInputs = [ zlib ];
 
-  checkInputs = [ numpy pytest ];
+  nativeCheckInputs = [ numpy pytest ];
 
   meta = with lib; {
     homepage = "https://github.com/deeptools/pyBigWig";

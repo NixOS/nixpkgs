@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin }:
+{ lib, stdenv, fetchurl, xorg, pixman, pkg-config, AppKit, Foundation, Xplugin }:
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
@@ -12,6 +12,7 @@ in stdenv.mkDerivation {
     ./no_title_crash.patch
     ./extern-patch.patch
   ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libXinerama
     xorg.libAppleWM
@@ -19,10 +20,9 @@ in stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
-    pkgconfig
     AppKit Xplugin Foundation
   ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk-engine-murrine }:
+{ lib, stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation {
   version = "2017-04-24";
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Gray variation of Numix theme";
     homepage = "https://www.gnome-look.org/p/1117412/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.sauyon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sauyon ];
   };
 }

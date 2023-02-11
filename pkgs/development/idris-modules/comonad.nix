@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "comonad";
+  pname = "comonad";
   version = "2018-02-26";
 
   src = fetchFromGitHub {

@@ -1,17 +1,18 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkg-config, opensc }:
 
 mkDerivation rec {
   pname = "chrome-token-signing";
-  version = "1.1.2";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "chrome-token-signing";
     rev = "v${version}";
-    sha256 = "0fqgci4336fbnd944zx9w37d5ky7i27n6wvlp5zv3hj955ldbh7g";
+    sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 
-  buildInputs = [ qmake pcsclite pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ qmake pcsclite ];
   dontUseQmakeConfigure = true;
 
   patchPhase = ''
@@ -28,7 +29,7 @@ mkDerivation rec {
     install -D -t $out/lib/mozilla/native-messaging-hosts host-linux/ff/ee.ria.esteid.json
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chrome and Firefox extension for signing with your eID on the web";
     homepage = "https://github.com/open-eid/chrome-token-signing/wiki";
     license = licenses.lgpl21;

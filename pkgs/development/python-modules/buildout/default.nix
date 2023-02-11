@@ -1,18 +1,37 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pip
+, setuptools
+, wheel
+}:
 
 buildPythonPackage rec {
-  pname = "zc.buildout";
-  version = "2.13.3";
+  pname = "zc-buildout";
+  version = "3.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1dyc5g3yv7wm3hf3fcsh6y1wivzjj1bspafr5qqb653z9a31lsfn";
+  src = fetchFromGitHub {
+    owner = "buildout";
+    repo = "buildout";
+    rev = version;
+    sha256 = "J/ymUCFhl7EviHMEYSUCTky0ULRT8aL4gNCGxrbqJi0=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.buildout.org";
+  propagatedBuildInputs = [
+    setuptools
+    pip
+    wheel
+  ];
+
+  doCheck = false; # Missing package & BLOCKED on "zc.recipe.egg"
+
+  pythonImportsCheck = [ "zc.buildout" ];
+
+  meta = with lib; {
     description = "A software build and configuration system";
+    downloadPage = "https://github.com/buildout/buildout";
+    homepage = "https://www.buildout.org";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gotcha ];
   };
 }

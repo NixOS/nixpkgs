@@ -1,40 +1,64 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, mock
-, cmarkgfm
 , bleach
+, buildPythonPackage
+, cmarkgfm
 , docutils
-, future
+, fetchPypi
+, mock
 , pygments
-, six
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "readme_renderer";
-  version = "26.0";
+  pname = "readme-renderer";
+  version = "37.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "cbe9db71defedd2428a1589cdc545f9bd98e59297449f69d721ef8f1cfced68d";
+    pname = "readme_renderer";
+    inherit version;
+    sha256 = "sha256-zWUxht/HMFVlbwkPIn9csioEbX9xqEHfowX1XJpRMnM=";
   };
 
-  checkInputs = [ pytest mock ];
-
   propagatedBuildInputs = [
-    bleach cmarkgfm docutils future pygments six
+    bleach
+    cmarkgfm
+    docutils
+    pygments
   ];
 
-  checkPhase = ''
-    # disable one failing test case
-    # fixtures test is failing for incorrect class name
-    py.test -k "not test_invalid_link and not fixtures"
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cmarkgfm>=0.5.0,<0.7.0" "cmarkgfm>=0.5.0,<1"
   '';
 
-  meta = {
-    description = "readme_renderer is a library for rendering readme descriptions for Warehouse";
+  disabledTests = [
+    # https://github.com/pypa/readme_renderer/issues/221
+    "test_GFM_"
+    # Relies on old distutils behaviour removed by setuptools (TypeError: dist must be a Distribution instance)
+    "test_valid_rst"
+    "test_invalid_rst"
+    "test_malicious_rst"
+    "test_invalid_missing"
+    "test_invalid_empty"
+  ];
+
+  pythonImportsCheck = [
+    "readme_renderer"
+  ];
+
+  meta = with lib; {
+    description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
-    license = lib.licenses.asl20;
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

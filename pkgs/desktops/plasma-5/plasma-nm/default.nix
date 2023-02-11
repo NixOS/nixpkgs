@@ -1,28 +1,77 @@
-{
-  mkDerivation, substituteAll,
-  extra-cmake-modules, kdoctools,
-  kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
-  kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews, knotifications,
-  kservice, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
-  mobile-broadband-provider-info, modemmanager-qt, networkmanager-qt,
-  openconnect, openvpn, plasma-framework, qca-qt5, qtdeclarative, qttools, solid
+{ mkDerivation
+, lib
+, substituteAll
+, extra-cmake-modules
+, kdoctools
+, kcmutils
+, kcompletion
+, kconfigwidgets
+, kcoreaddons
+, kdbusaddons
+, kdeclarative
+, ki18n
+, kiconthemes
+, kinit
+, kio
+, kitemviews
+, knotifications
+, kservice
+, kwallet
+, kwidgetsaddons
+, kwindowsystem
+, kxmlgui
+, plasma-framework
+, prison
+, solid
+, mobile-broadband-provider-info
+, openconnect
+, openvpn
+, modemmanager-qt
+, networkmanager-qt
+, qca-qt5
+, qtbase
+, qtdeclarative
+, qttools
 }:
 
 mkDerivation {
-  name = "plasma-nm";
+  pname = "plasma-nm";
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
-    kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
-    qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
-    kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
-    mobile-broadband-provider-info modemmanager-qt networkmanager-qt openconnect
-    qca-qt5 solid
+    kdeclarative
+    ki18n
+    kio
+    kwindowsystem
+    plasma-framework
+    kcompletion
+    kcmutils
+    kconfigwidgets
+    kcoreaddons
+    kdbusaddons
+    kiconthemes
+    kinit
+    kitemviews
+    knotifications
+    kservice
+    kwallet
+    kwidgetsaddons
+    kxmlgui
+    prison
+    solid
+
+    qtdeclarative
+    modemmanager-qt
+    networkmanager-qt
+    qca-qt5
+    mobile-broadband-provider-info
+    openconnect
   ];
+
+  cmakeFlags = [
+    "-DBUILD_MOBILE=ON"
+  ];
+
   patches = [
-    (substituteAll {
-      src = ./0001-mobile-broadband-provider-info-path.patch;
-      mobile_broadband_provider_info = mobile-broadband-provider-info;
-    })
     (substituteAll {
       src = ./0002-openvpn-binary-path.patch;
       inherit openvpn;

@@ -1,0 +1,63 @@
+diff --git i/cyacas/yacas-kernel/CMakeLists.txt w/cyacas/yacas-kernel/CMakeLists.txt
+index fe1600aa..dcc329f8 100644
+--- i/cyacas/yacas-kernel/CMakeLists.txt
++++ w/cyacas/yacas-kernel/CMakeLists.txt
+@@ -22,8 +22,9 @@ find_library (ZEROMQ_LIBRARY NAMES zmq)
+ find_path (ZMQPP_INCLUDE_DIR zmqpp.hpp)
+ find_library (ZMQPP_LIBRARY NAMES zmqpp)
+ 
+-find_path (JSONCPP_INCLUDE_DIR json.h)
+-find_library (JSONCPP_LIBRARY NAMES jsoncpp)
++# https://github.com/open-source-parsers/jsoncpp/wiki/Building#another-approach-for-cmake
++find_package(jsoncpp REQUIRED)
++get_target_property(JSON_INC_PATH jsoncpp_lib INTERFACE_INCLUDE_DIRECTORIES)
+ 
+ find_package (OpenSSL)
+ find_package (Boost REQUIRED date_time filesystem)
+@@ -31,6 +32,6 @@ find_package (Boost REQUIRED date_time filesystem)
+ include_directories (include)
+ 
+ add_executable (yacas-kernel src/main.cpp src/yacas_kernel.cpp src/yacas_engine.cpp src/hmac_sha256.cpp src/base64.cpp)
+-target_link_libraries (yacas-kernel libyacas ${ZMQPP_LIBRARY} ${ZEROMQ_LIBRARY} ${JSONCPP_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${Boost_LIBRARIES} pthread ${CMAKE_DL_LIBS})
++target_link_libraries (yacas-kernel libyacas ${ZMQPP_LIBRARY} ${ZEROMQ_LIBRARY} jsoncpp_lib ${OPENSSL_CRYPTO_LIBRARY} ${Boost_LIBRARIES} pthread ${CMAKE_DL_LIBS})
+ 
+ install (TARGETS yacas-kernel DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git i/cyacas/yacas-kernel/include/yacas_kernel.hpp w/cyacas/yacas-kernel/include/yacas_kernel.hpp
+index 91d36ac0..d12f905c 100644
+--- i/cyacas/yacas-kernel/include/yacas_kernel.hpp
++++ w/cyacas/yacas-kernel/include/yacas_kernel.hpp
+@@ -29,7 +29,7 @@
+ #include "yacas_engine.hpp"
+ 
+ #include <boost/uuid/random_generator.hpp>
+-#include <jsoncpp/json/json.h>
++#include <json/json.h>
+ #include <zmqpp/zmqpp.hpp>
+ 
+ #include <map>
+diff --git i/cyacas/yacas-kernel/src/main.cpp w/cyacas/yacas-kernel/src/main.cpp
+index c31f17f2..832e9128 100644
+--- i/cyacas/yacas-kernel/src/main.cpp
++++ w/cyacas/yacas-kernel/src/main.cpp
+@@ -24,7 +24,7 @@
+ 
+ #include "yacas_kernel.hpp"
+ 
+-#include <jsoncpp/json/json.h>
++#include <json/json.h>
+ 
+ #include <boost/dll/runtime_symbol_info.hpp>
+ 
+diff --git i/cyacas/yacas-kernel/src/yacas_engine.cpp w/cyacas/yacas-kernel/src/yacas_engine.cpp
+index 6ed60ca3..18e9b3fd 100644
+--- i/cyacas/yacas-kernel/src/yacas_engine.cpp
++++ w/cyacas/yacas-kernel/src/yacas_engine.cpp
+@@ -22,7 +22,7 @@
+  * Created on November 7, 2015, 12:52 PM
+  */
+ 
+-#include <jsoncpp/json/writer.h>
++#include <json/writer.h>
+ 
+ #include "yacas_engine.hpp"
+ 

@@ -1,28 +1,39 @@
 # builder for Emacs packages built for packages.el
 
-{ lib, stdenv, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo, writeText, gcc }:
 
 with lib;
 
 { pname
 , version
 , src
+, meta ? {}
 , ...
 }@args:
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+let
 
-  phases = "installPhase fixupPhase distPhase";
+  defaultMeta = {
+    homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
+  };
+
+in
+
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
+
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
     emacs --batch -Q -l ${./elpa2nix.el} \
         -f elpa2nix-install-package \
-        "${src}" "$out/share/emacs/site-lisp/elpa"
+        "$src" "$out/share/emacs/site-lisp/elpa"
 
     runHook postInstall
   '';
+
+  meta = defaultMeta // meta;
 }
 
 // removeAttrs args [ "files" "fileSpecs"

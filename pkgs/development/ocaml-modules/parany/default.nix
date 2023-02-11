@@ -1,19 +1,34 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ocamlnet, cpu }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, cpu, domainslib }:
+
+let params =
+  if lib.versionAtLeast ocaml.version "5.00" then {
+    version = "13.0.1";
+    hash = "sha256-OYa0uLsDyzjmXZgWcYUxLhqco4Kp/icfDamNe3En5JQ=";
+    propagatedBuildInputs = [ domainslib ];
+  } else {
+    version = "12.2.2";
+    hash = "sha256-woZ4XJqqoRr/7mDurXYvTbSUUcLBEylzVYBQp1BAOqc=";
+    propagatedBuildInputs = [ cpu ];
+  }
+; in
 
 buildDunePackage rec {
   pname = "parany";
-  version = "8.0.0";
+  inherit (params) version;
+
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "19yz1yqyqx6gawy93jlh3x6vji2p9qsy6nsbj65q5pii8p1fjlsm";
+    repo = pname;
+    rev = "v${version}";
+    inherit (params) hash;
   };
 
-  propagatedBuildInputs = [ ocamlnet cpu ];
+  inherit (params) propagatedBuildInputs;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Generalized map/reduce for multicore computing";
     maintainers = [ maintainers.bcdarwin ];

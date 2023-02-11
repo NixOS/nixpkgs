@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
 stdenv.mkDerivation {
   version = "0.4.10";
@@ -13,22 +13,37 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs =
+  strictDeps = true;
+
+  nativeBuildInputs =
     [
       ocaml findlib ocamlbuild ocamlmod ocamlify
     ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  buildInputs = [ ocamlbuild ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://oasis.forge.ocamlcore.org/";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out
+    runHook postConfigure
+  '';
+  buildPhase = ''
+    runHook preBuild
+    ocaml setup.ml -build
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Configure, build and install system for OCaml projects";
+    homepage = "http://oasis.forge.ocamlcore.org/";
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl maggesi ];
+    mainProgram = "oasis";
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [
-      vbgl maggesi
-    ];
   };
 }

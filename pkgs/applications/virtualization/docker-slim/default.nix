@@ -1,50 +1,40 @@
-{ stdenv
-, buildGoPackage
-, fetchFromGitHub
-, makeWrapper
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-slim";
-  version = "1.29.0";
-
-  goPackagePath = "github.com/docker-slim/docker-slim";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
-    owner = "docker-slim";
-    repo = "docker-slim";
+    owner = "slimtoolkit";
+    repo = "slim";
     rev = version;
-    sha256 = "0qfjmwqxgghp9pqj4s2z71cmn8mi1l6655z6nbhh72yqaxh5a6ia";
+    sha256 = "sha256-KbwkZIGkAdzPPo5CrWKnKzFsD8OUONk6JWo1wzwti3s=";
   };
 
-  subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
+  vendorSha256 = null;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  subPackages = [ "cmd/slim" "cmd/slim-sensor" ];
 
-  buildFlagsArray = [
-    ''-ldflags=
-        -s -w -X ${goPackagePath}/pkg/version.appVersionTag=${version}
-              -X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}
-    ''
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/docker-slim/docker-slim/pkg/version.appVersionTag=${version}"
+    "-X github.com/docker-slim/docker-slim/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix
   # store), so we set it to use the working directory at the time of invocation
   postInstall = ''
-    wrapProgram "$out/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
+    wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minify and secure Docker containers";
-    homepage = "https://dockersl.im/";
+    homepage = "https://slimtoolkit.org/";
+    changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 marsam mbrgm ];
-    # internal/app/sensor/monitors/ptrace/monitor.go:151:16: undefined:
-    #     system.CallNumber
-    # internal/app/sensor/monitors/ptrace/monitor.go:161:15: undefined:
-    #     system.CallReturnValue
-    badPlatforms = [ "aarch64-linux" ];
+    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
   };
 }

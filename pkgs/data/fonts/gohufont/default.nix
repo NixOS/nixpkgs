@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, mkfontscale, bdf2psf, bdftopcf
-, fonttosfnt, libfaketime
+{ lib, stdenv, fetchurl, fetchFromGitHub
+, xorg, bdf2psf, bdftopcf
+, libfaketime
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ mkfontscale bdf2psf bdftopcf
-      fonttosfnt libfaketime
+    [ xorg.mkfontscale bdf2psf bdftopcf
+      xorg.fonttosfnt libfaketime
     ];
 
   buildPhase = ''
@@ -52,25 +52,18 @@ stdenv.mkDerivation rec {
     fontDir="$out/share/consolefonts"
     install -D -m 644 -t "$fontDir" psf/*.psf
 
-    # install the pcf fonts (for xorg applications)
+    # install the pcf and otb fonts (for X11,GTK applications)
     fontDir="$out/share/fonts/misc"
-    install -D -m 644 -t "$fontDir" *.pcf
-    mkfontdir "$fontDir"
-
-    # install the otb fonts (for gtk applications)
-    fontDir="$otb/share/fonts/misc"
-    install -D -m 644 -t "$fontDir" *.otb
+    install -D -m 644 -t "$fontDir" *.pcf *.otb
     mkfontdir "$fontDir"
   '';
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
     homepage    = "https://font.gohu.org/";
     license     = licenses.wtfpl;
-    maintainers = with maintainers; [ epitrochoid rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

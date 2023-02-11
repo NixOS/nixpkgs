@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bison, readline }:
 
 stdenv.mkDerivation {
@@ -10,16 +10,16 @@ stdenv.mkDerivation {
   meta = {
     description = "A Computer algebra package for Lie group computations";
     homepage = "http://wwwmathlabo.univ-poitiers.fr/~maavl/LiE/";
-    license = stdenv.lib.licenses.lgpl3; # see the website
+    license = lib.licenses.lgpl3; # see the website
 
     longDescription = ''
       LiE is a computer algebra system that is specialised in computations
       involving (reductive) Lie groups and their representations. It is
-      publically available for free in source code. For a description of its
+      publicly available for free in source code. For a description of its
       characteristics, we refer to the following sources of information.
     ''; # take from the website
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ]; # this package is probably not going to change anyway
   };
 

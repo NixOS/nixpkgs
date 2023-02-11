@@ -2,24 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, setuptools_scm
+, setuptools-scm
 , toml
 , importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "1.4.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8d4b7cd0bd6826001a74377df1079a76ad8bae0f909282de2554164c837c8ba";
+    sha256 = "sha256-AyU4gEeV5zuU6tQQgArDh/223pj4iCrJV/zSR+OoUgA=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     toml
   ];
 

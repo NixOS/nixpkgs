@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.77";
+  version = "1.80";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb1936e9ca9e7af8de1050e84375f23328e04b801063edf0ad73733494d8ec42";
+    sha256 = "sha256-UoBemviHZ+RQ4t+BE7W8Welk4uinu4A6g1cL27UcDkM=";
   };
 
   disabled = !isPy3k;

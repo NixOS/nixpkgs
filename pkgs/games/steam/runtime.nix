@@ -1,14 +1,18 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl
+
+# for update script
+, writeShellScript, curl, nix-update
+}:
 
 stdenv.mkDerivation rec {
 
-  name = "steam-runtime";
-  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
-  version = "0.20200417.0";
+  pname = "steam-runtime";
+  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt
+  version = "0.20220601.1";
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
-    sha256 = "0d4dfl6i31i8187wj8rr9yvmrg32bx96bsgs2ya21b00czf070sy";
+    sha256 = "sha256-uYauNtbUlvrnATGks7hWy1zt4Y7AEeADrCr1eVylPbY=";
     name = "scout-runtime-${version}.tar.gz";
   };
 
@@ -17,7 +21,14 @@ stdenv.mkDerivation rec {
     tar -C $out --strip=1 -x -f $src
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = writeShellScript "update.sh" ''
+      version=$(${curl}/bin/curl https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt)
+      ${nix-update}/bin/nix-update --version "$version" steamPackages.steam-runtime
+    '';
+  };
+
+  meta = with lib; {
     description = "The official runtime used by Steam";
     homepage = "https://github.com/ValveSoftware/steam-runtime";
     license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "bpp-core";
@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/src
-  '';
-
   postFixup = ''
     substituteInPlace $out/lib/cmake/bpp-core/bpp-core-targets.cmake  \
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
@@ -26,7 +22,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://biopp.univ-montp2.fr/wiki/index.php/Main_Page";
     changelog = "https://github.com/BioPP/bpp-core/blob/master/ChangeLog";
     description = "C++ bioinformatics libraries and tools";

@@ -1,6 +1,6 @@
 { pkgs, ctags }:
 
-with pkgs.stdenv.lib;
+with pkgs.lib;
 
 # define some ctags wrappers adding support for some not that common languages
 # customization:

@@ -1,29 +1,45 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, pytestrunner, hypothesis }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hypothesis
+, pythonOlder
+, pytestCheckHook
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "chardet";
-  version = "3.0.4";
+  version = "5.1.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
+    hash = "sha256-DWJxK5VrwVT4X7CiZuKjxZE8KWfgA0hwGzJBHW3vMeU=";
   };
 
-  patches = [
-    # Add pytest 4 support. See: https://github.com/chardet/chardet/pull/174
-    (fetchpatch {
-      url = "https://github.com/chardet/chardet/commit/0561ddcedcd12ea1f98b7ddedb93686ed8a5ffa4.patch";
-      sha256 = "1y1xhjf32rdhq9sfz58pghwv794f3w2f2qcn8p6hp4pc8jsdrn2q";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkInputs = [ pytest pytestrunner hypothesis ];
+  nativeCheckInputs = [
+    # "hypothesis" indirectly depends on chardet to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/chardet/chardet";
+  disabledTests = [
+    # flaky; https://github.com/chardet/chardet/issues/256
+    "test_detect_all_and_detect_one_should_agree"
+  ];
+
+  pythonImportsCheck = [ "chardet" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/chardet/chardet/releases/tag/${version}";
     description = "Universal encoding detector";
-    license = licenses.lgpl2;
+    homepage = "https://github.com/chardet/chardet";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ domenkozar ];
   };
 }

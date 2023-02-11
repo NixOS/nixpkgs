@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket_client
+    gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket-client
     gevent-websocket rencode bitcoinlib maxminddb pyopenssl
   ];
 
@@ -32,10 +32,14 @@ python3Packages.buildPythonApplication rec {
       --set PATH ${python3Packages.python}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decentralized websites using Bitcoin crypto and BitTorrent network";
     homepage = "https://zeronet.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    knownVulnerabilities = [ ''
+      Unmaintained. Probable XSS/code injection vulnerability.
+      Switching to the maintained zeronet-conservancy package is recommended
+    '' ];
   };
 }

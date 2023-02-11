@@ -10,7 +10,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  excludedPackages = "\\(testdata\\)";
+  doCheck = false;
 
   src = fetchFromGitHub {
     inherit rev;

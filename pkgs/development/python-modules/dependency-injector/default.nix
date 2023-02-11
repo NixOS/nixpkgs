@@ -1,31 +1,81 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
-
-let
-  testPath =
-    if isPy3k
-    then "test_*_py3.py"
-    else "test_*_py2_py3.py";
-in
+{ lib
+, aiohttp
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, flask
+, httpx
+, mypy-boto3-s3
+, numpy
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
+, six
+}:
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.15.6";
+  version = "4.41.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fcca1464f567d902983bff507b9e2e3fda0f932ee009e36f74ed5b8c348d17f4";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ets-labs";
+    repo = "python-dependency-injector";
+    rev = version;
+    hash = "sha256-U3U/L8UuYrfpm4KwVNmViTbam7QdZd2vp1p+ENtOJlw=";
   };
 
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ unittest2 ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkPhase = ''
-    unit2 discover -s tests/unit -p "${testPath}"
-  '';
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    pydantic = [
+      pydantic
+    ];
+    flask = [
+      flask
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [
+    fastapi
+    httpx
+    mypy-boto3-s3
+    numpy
+    pytest-asyncio
+    pytestCheckHook
+    scipy
+  ] ++ passthru.optional-dependencies.aiohttp
+  ++ passthru.optional-dependencies.pydantic
+  ++ passthru.optional-dependencies.yaml
+  ++ passthru.optional-dependencies.flask;
+
+  pythonImportsCheck = [
+    "dependency_injector"
+  ];
+
+  disabledTestPaths = [
+    # Exclude tests for EOL Python releases
+    "tests/unit/ext/test_aiohttp_py35.py"
+    "tests/unit/wiring/test_*_py36.py"
+  ];
+
+  meta = with lib; {
     description = "Dependency injection microframework for Python";
     homepage = "https://github.com/ets-labs/python-dependency-injector";
+    changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${version}/docs/main/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

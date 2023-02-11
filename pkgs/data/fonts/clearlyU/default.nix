@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fonttosfnt, mkfontscale, libfaketime }:
+{ lib, stdenv, fetchurl, xorg, libfaketime }:
 
 stdenv.mkDerivation rec {
   pname = "clearlyU";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xn14jbv3m1khy7ydvad9ydkn7yygdbhjy9wm1v000jzjwr3lv21";
   };
 
-  nativeBuildInputs = [ fonttosfnt mkfontscale libfaketime ];
+  nativeBuildInputs = [ xorg.fonttosfnt xorg.mkfontscale libfaketime ];
 
   buildPhase = ''
     # convert bdf fonts to otb
@@ -20,20 +20,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    # install bdf fonts
+    # install otb and bdf fonts
     fontDir="$out/share/fonts"
-    install -m 644 -D *.bdf -t "$fontDir"
-    mkfontdir "$fontDir"
-
-    # install otb fonts
-    fontDir="$otb/share/fonts"
-    install -m 644 -D *.otb -t "$fontDir"
+    install -m 644 -D *.bdf *.otb -t "$fontDir"
     mkfontdir "$fontDir"
   '';
 
-  outputs = [ "out"  "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Unicode font";
     license = licenses.mit;
     maintainers = [ maintainers.raskin ];

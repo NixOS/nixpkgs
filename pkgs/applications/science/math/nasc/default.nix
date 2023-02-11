@@ -1,60 +1,73 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
-, pkgconfig
+, pkg-config
+, python3
+, meson
+, ninja
 , vala
 , gtk3
 , glib
 , pantheon
-, libsoup
 , gtksourceview
 , libgee
-, cmake
+, nix-update-script
+, webkitgtk
 , libqalculate
-, cln
+, intltool
+, gnuplot
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "nasc";
-  version = "0.5.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
     repo = pname;
     rev = version;
-    sha256 = "036v3dx8yasp19j88lflibqnpfi5d0nk7qkcnr80zn1lvawf4wgn";
+    sha256 = "02b9a59a9fzsb6nn3ycwwbcbv04qfzm6x7csq2addpzx5wak6dd8";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    # fix build with gcc9
-    (fetchpatch {
-      url = "https://github.com/parnold-x/nasc/commit/46b9b80e228b6b86001bded45d85e073a9411549.patch";
-      sha256 = "1sm2aw0xhw2chk036r231nmp2f2ypxcmzggwljkn7wfzgg3h1mx3";
-    })
-  ];
-
   nativeBuildInputs = [
-    cmake
+    glib # post_install.py
+    gtk3 # post_install.py
+    intltool # for libqalculate
+    meson
+    ninja
+    pkg-config
+    python3
     vala
-    pkgconfig
     wrapGAppsHook
   ];
 
   buildInputs = [
-    cln
-    libsoup
-    gtk3
     glib
+    gtk3
     gtksourceview
     libgee
-    libqalculate
-    pantheon.elementary-icon-theme
     pantheon.granite
-  ];
+    webkitgtk
+    # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
+  ] ++ libqalculate.buildInputs ++ libqalculate.propagatedBuildInputs;
 
-  meta = with stdenv.lib; {
-    description = "Do maths like a normal person";
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+
+    # patch subproject. same code in libqalculate expression
+    substituteInPlace subprojects/libqalculate/libqalculate/Calculator-plot.cc \
+      --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+      --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
+    description = "Do maths like a normal person, designed for elementary OS";
     longDescription = ''
       It’s an app where you do maths like a normal person. It lets you
       type whatever you want and smartly figures out what is math and
@@ -63,8 +76,10 @@ stdenv.mkDerivation rec {
       the equations it’s used in.
     '';
     homepage = "https://github.com/parnold-x/nasc";
-    maintainers = with maintainers; [ samdroid-apps ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.parnold_x.nasc";
+    broken = true; # at 2022-09-23
   };
 }

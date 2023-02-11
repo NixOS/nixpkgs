@@ -1,17 +1,13 @@
-{ stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, gsl, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.1";
+  version = "3.1.6";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "1cgr9jyfd9r7dwbk8fr3rys5dc74cmbx368441jvqngqymmb563w";
+    hash = "sha256-HPbrtqedGBxEHR0MfG1iPEI4F8YQk/NvIa2q4j5nkJA=";
   };
-
-  patches = [
-    ./darwin.patch # configure relies on impure sw_vers to -Dunix
-  ];
 
   latex = texlive.combine { inherit (texlive)
     scheme-basic
@@ -22,6 +18,7 @@ stdenv.mkDerivation rec {
     mathastext
     pgf
     relsize
+    sansmath
     sfmath
     siunitx
     xcolor
@@ -60,7 +57,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-fastjet=${fastjet}"
     "--with-yoda=${yoda}"
-  ] ++ (if stdenv.lib.versions.major hepmc.version == "3" then [
+  ] ++ (if lib.versions.major hepmc.version == "3" then [
     "--with-hepmc3=${hepmc}"
   ] else [
     "--with-hepmc=${hepmc}"
@@ -74,7 +71,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
     license     = licenses.gpl3;
     homepage    = "https://rivet.hepforge.org";

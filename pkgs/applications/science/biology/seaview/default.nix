@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, coreutils, fltk, libjpeg }:
+{ lib, stdenv, fetchurl, coreutils, fltk, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.2";
+  version = "5.0.5";
   pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "0bad0nd18a36g6ysx28j68rbnwqn33ra8inx2lv2igqqcs6i5kif";
+    sha256 = "sha256-zo9emLpHiDv6kekbx55NOibxWN2Zg7XngzGkUqSx+PI=";
   };
 
   buildInputs = [ fltk libjpeg ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
   installPhase = "mkdir -p $out/bin; cp seaview $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for molecular phylogeny";
     longDescription = ''
       SeaView is a multiplatform, graphical user interface for multiple sequence alignment and molecular phylogeny.

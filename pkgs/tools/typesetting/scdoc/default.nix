@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromSourcehut, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "scdoc";
-  version = "1.11.0";
+  version = "1.11.2";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "17cjh3lcfppyl2mzpanylla93gdgdv5spc8jldshvayzizhfghwa";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = pname;
+    rev = version;
+    sha256 = "07c2vmdgqifbynm19zjnrk7h102pzrriv73izmx8pmd7b3xl5mfq";
   };
 
   postPatch = ''
@@ -15,9 +17,13 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOST_SCDOC=${buildPackages.scdoc}/bin/scdoc"
+  ];
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple man page generator";
     longDescription = ''
       scdoc is a simple man page generator written for POSIX systems written in

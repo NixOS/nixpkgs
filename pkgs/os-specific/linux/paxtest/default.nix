@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, paxctl }:
+{ lib, stdenv, fetchurl, paxctl }:
 
 stdenv.mkDerivation rec {
   pname = "paxtest";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags    = [ "PAXBIN=${paxctl}/bin/paxctl" "BINDIR=$(out)/bin" "RUNDIR=$(out)/lib/paxtest" ];
   installFlags = [ "DESTDIR=\"\"" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test various memory protection measures";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

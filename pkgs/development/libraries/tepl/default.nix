@@ -1,28 +1,45 @@
-{ stdenv, fetchurl
-, amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
-let
-  version = "4.4.0";
+{ lib, stdenv
+, fetchurl
+, meson
+, ninja
+, amtk
+, gnome
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, icu
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+}:
+
+stdenv.mkDerivation rec {
   pname = "tepl";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "6.4.0";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mm2z849hnni7597an05mrv0dckrxjngpf2xfa0g5s17i8x6gxp6";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "XlayBmnQzwX6HWS1jIw0LFkVgSLcUYEA0JPVnfm4cyE=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    meson
+    ninja
+    gobject-introspection
+    pkg-config
+    gtk-doc
+    docbook-xsl-nons
   ];
 
   buildInputs = [
-    libxml2
+    icu
   ];
 
   propagatedBuildInputs = [
     amtk
     gtksourceview4
-    libuchardet
     gtk3
   ];
 
@@ -33,13 +50,16 @@ in stdenv.mkDerivation {
   # correctly installed or GVfs metadata are not supported on this platform. In
   # the latter case, you should configure Tepl with --disable-gvfs-metadata.
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+    versionPolicy = "odd-unstable";
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = [ maintainers.manveru ];
-    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };
 }

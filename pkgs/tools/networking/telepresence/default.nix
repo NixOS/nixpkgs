@@ -1,32 +1,23 @@
-{ lib, pythonPackages, fetchgit, fetchFromGitHub, makeWrapper, git
+{ lib, pythonPackages, fetchFromGitHub, makeWrapper, git
 , sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
 , iptables, bash }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
-    src = fetchgit {
-      url = "https://github.com/datawire/sshuttle.git";
-      rev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
-      sha256 = "1q20lnljndwcpgqv2qrf1k0lbvxppxf98a4g5r9zd566znhcdhx3";
-    };
-
-    nativeBuildInputs = p.nativeBuildInputs ++ [ git ];
-
-    postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.104";
+  version = "0.109";
 
   src = fetchFromGitHub {
-    owner = "datawire";
+    owner = "telepresenceio";
     repo = "telepresence";
     rev = version;
-    sha256 = "0fccbd54ryd9rcbhfh5lx8qcc3kx3k9jads918rwnzwllqzjf7sg";
+    sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/telepresence \

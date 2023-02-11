@@ -1,62 +1,73 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , libtool
 , libpcap
-
+, libcdada
 # Optional Dependencies
-, zlib ? null
-, withJansson ? true, jansson ? null
-, withNflog ? true, libnetfilter_log ? null
-, withSQLite ? true, sqlite ? null
-, withPgSQL ? true, postgresql ? null
-, withMysql ? true, libmysqlclient ? null }:
-
-assert withJansson -> jansson != null;
-assert withNflog -> libnetfilter_log != null;
-assert withSQLite -> sqlite != null;
-assert withPgSQL -> postgresql != null;
-assert withMysql -> libmysqlclient != null;
-
-let inherit (stdenv.lib) optional; in
+, withJansson ? true, jansson
+, withNflog ? true, libnetfilter_log
+, withSQLite ? true, sqlite
+, withPgSQL ? true, postgresql
+, withMysql ? true, libmysqlclient, zlib, numactl
+, gnutlsSupport ? false, gnutls
+, testers
+, pmacct
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.8";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
-    repo = pname;
+    repo = "pmacct";
     rev = "v${version}";
-    sha256 = "0j5qmkya67q7jvaddcj00blmaac37bkir1zb3m1xmm95gm5lf2p5";
+    sha256 = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
-  buildInputs = [ libpcap ]
-    ++ optional withJansson jansson
-    ++ optional withNflog libnetfilter_log
-    ++ optional withSQLite sqlite
-    ++ optional withPgSQL postgresql
-    ++ optional withMysql [ libmysqlclient zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    libtool
+  ];
+  buildInputs = [
+    libcdada
+    libpcap
+  ] ++ lib.optional withJansson jansson
+  ++ lib.optional withNflog libnetfilter_log
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withPgSQL postgresql
+  ++ lib.optionals withMysql [ libmysqlclient zlib numactl ]
+  ++ lib.optional gnutlsSupport gnutls;
+
+  MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
 
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
-  ] ++ optional withJansson "--enable-jansson"
-    ++ optional withNflog "--enable-nflog"
-    ++ optional withSQLite "--enable-sqlite3"
-    ++ optional withPgSQL "--enable-pgsql"
-    ++ optional withMysql "--enable-mysql";
+  ] ++ lib.optional withJansson "--enable-jansson"
+  ++ lib.optional withNflog "--enable-nflog"
+  ++ lib.optional withSQLite "--enable-sqlite3"
+  ++ lib.optional withPgSQL "--enable-pgsql"
+  ++ lib.optional withMysql "--enable-mysql"
+  ++ lib.optional gnutlsSupport "--enable-gnutls";
 
-  meta = with stdenv.lib; {
-    description = "pmacct is a small set of multi-purpose passive network monitoring tools";
+  passthru.tests = {
+    version = testers.testVersion { package = pmacct; command = "pmacct -V"; };
+  };
+
+  meta = with lib; {
+    description = "A small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]
     '';
     homepage = "http://www.pmacct.net/";
+    changelog = "https://github.com/pmacct/pmacct/blob/v${version}/ChangeLog";
     license = licenses.gpl2;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };
 }

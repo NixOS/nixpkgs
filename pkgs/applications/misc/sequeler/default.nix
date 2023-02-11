@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+{ lib, stdenv, fetchFromGitHub, nix-update-script
+, vala, meson, ninja, pkg-config, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
@@ -11,16 +11,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.7.91";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "071vfx7bdf7hfa4784xz97vrj9x5aipgjbp30r00kg2zhg8wa2ls";
+    sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
   buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
@@ -30,12 +30,10 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Friendly SQL Client";
     longDescription = ''
       Sequeler is a native Linux SQL client built in Vala and Gtk. It allows you
@@ -45,7 +43,8 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.alecaddd.sequeler";
   };
 }

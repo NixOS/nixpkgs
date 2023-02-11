@@ -3,13 +3,13 @@
 rec {
 
 
-  /* `overrideDerivation drv f' takes a derivation (i.e., the result
-     of a call to the builtin function `derivation') and returns a new
+  /* `overrideDerivation drv f` takes a derivation (i.e., the result
+     of a call to the builtin function `derivation`) and returns a new
      derivation in which the attributes of the original are overridden
-     according to the function `f'.  The function `f' is called with
+     according to the function `f`.  The function `f` is called with
      the original derivation attributes.
 
-     `overrideDerivation' allows certain "ad-hoc" customisation
+     `overrideDerivation` allows certain "ad-hoc" customisation
      scenarios (e.g. in ~/.config/nixpkgs/config.nix).  For instance,
      if you want to "patch" the derivation returned by a package
      function in Nixpkgs to build another version than what the
@@ -27,23 +27,34 @@ rec {
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
      virtual machine.
+
+     Note that in order to preserve evaluation errors, the new derivation's
+     outPath depends on the old one's, which means that this function cannot
+     be used in circular situations when the old derivation also depends on the
+     new one.
+
+     You should in general prefer `drv.overrideAttrs` over this function;
+     see the nixpkgs manual for more information on overriding.
   */
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip (extendDerivation true) newDrv (
+    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
       //
       (drv.passthru or {})
       //
-      (if (drv ? crossDrv && drv ? nativeDrv)
-       then {
-         crossDrv = overrideDerivation drv.crossDrv f;
-         nativeDrv = overrideDerivation drv.nativeDrv f;
-       }
-       else { }));
+      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
+      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
+        crossDrv = overrideDerivation drv.crossDrv f;
+        nativeDrv = overrideDerivation drv.nativeDrv f;
+      })
+      //
+      lib.optionalAttrs (drv ? __spliced) {
+        __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      });
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
@@ -93,10 +104,10 @@ rec {
       else result;
 
 
-  /* Call the package function in the file `fn' with the required
+  /* Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
-    arguments `args', but any missing arguments are obtained from
-    `autoArgs'.  This function is intended to be partially
+    arguments `args`, but any missing arguments are obtained from
+    `autoArgs`.  This function is intended to be partially
     parameterised, e.g.,
 
       callPackage = callPackageWith pkgs;
@@ -105,9 +116,9 @@ rec {
         libbar = callPackage ./bar.nix { };
       };
 
-    If the `libbar' function expects an argument named `libfoo', it is
+    If the `libbar` function expects an argument named `libfoo`, it is
     automatically passed as an argument.  Overrides or missing
-    arguments can be supplied in `args', e.g.
+    arguments can be supplied in `args`, e.g.
 
       libbar = callPackage ./bar.nix {
         libfoo = null;
@@ -117,8 +128,55 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
-    in makeOverridable f (auto // args);
+      fargs = lib.functionArgs f;
+
+      # All arguments that will be passed to the function
+      # This includes automatic ones and ones passed explicitly
+      allArgs = builtins.intersectAttrs fargs autoArgs // args;
+
+      # A list of argument names that the function requires, but
+      # wouldn't be passed to it
+      missingArgs = lib.attrNames
+        # Filter out arguments that have a default value
+        (lib.filterAttrs (name: value: ! value)
+        # Filter out arguments that would be passed
+        (removeAttrs fargs (lib.attrNames allArgs)));
+
+      # Get a list of suggested argument names for a given missing one
+      getSuggestions = arg: lib.pipe (autoArgs // args) [
+        lib.attrNames
+        # Only use ones that are at most 2 edits away. While mork would work,
+        # levenshteinAtMost is only fast for 2 or less.
+        (lib.filter (lib.strings.levenshteinAtMost 2 arg))
+        # Put strings with shorter distance first
+        (lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg))
+        # Only take the first couple results
+        (lib.take 3)
+        # Quote all entries
+        (map (x: "\"" + x + "\""))
+      ];
+
+      prettySuggestions = suggestions:
+        if suggestions == [] then ""
+        else if lib.length suggestions == 1 then ", did you mean ${lib.elemAt suggestions 0}?"
+        else ", did you mean ${lib.concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+
+      errorForArg = arg:
+        let
+          loc = builtins.unsafeGetAttrPos arg fargs;
+          # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
+          # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
+          loc' = if loc != null then loc.file + ":" + toString loc.line
+            else if ! lib.isFunction fn then
+              toString fn + lib.optionalString (lib.sources.pathIsDirectory fn) "/default.nix"
+            else "<unknown location>";
+        in "Function called without required argument \"${arg}\" at "
+        + "${loc'}${prettySuggestions (getSuggestions arg)}";
+
+      # Only show the error for the first missing argument
+      error = errorForArg (lib.head missingArgs);
+
+    in if missingArgs == [] then makeOverridable f allArgs else throw error;
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -152,6 +210,7 @@ rec {
         { name = outputName;
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
+            outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           };
@@ -159,7 +218,6 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
     in commonAttrs // {
-      outputUnspecified = true;
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
@@ -194,16 +252,17 @@ rec {
       outputsList = map makeOutput outputs;
 
       drv' = (lib.head outputsList).value;
-    in lib.deepSeq drv' drv';
+    in if drv == null then null else
+      lib.deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
-     with the provided `callPackage' will be evaluated with the same
+     with the provided `callPackage` will be evaluated with the same
      arguments. Any package in the set may depend on any other. The
      `overrideScope'` function allows subsequent modification of the package
      set in a consistent way, i.e. all packages in the set will be
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
-     provided by `newScope' and the set provides a `newScope' attribute
+     provided by `newScope` and the set provides a `newScope` attribute
      which can form the parent scope for later package sets. */
   makeScope = newScope: f:
     let self = f self // {
@@ -215,6 +274,35 @@ rec {
           overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
           packages = f;
         };
+    in self;
+
+  /* Like the above, but aims to support cross compilation. It's still ugly, but
+     hopefully it helps a little bit. */
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+    let
+      spliced0 = splicePackages {
+        pkgsBuildBuild = otherSplices.selfBuildBuild;
+        pkgsBuildHost = otherSplices.selfBuildHost;
+        pkgsBuildTarget = otherSplices.selfBuildTarget;
+        pkgsHostHost = otherSplices.selfHostHost;
+        pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
+        pkgsTargetTarget = otherSplices.selfTargetTarget;
+      };
+      spliced = extra spliced0 // spliced0 // keep self;
+      self = f self // {
+        newScope = scope: newScope (spliced // scope);
+        callPackage = newScope spliced; # == self.newScope {};
+        # N.B. the other stages of the package set spliced in are *not*
+        # overridden.
+        overrideScope = g: makeScopeWithSplicing
+          splicePackages
+          newScope
+          otherSplices
+          keep
+          extra
+          (lib.fixedPoints.extends g f);
+        packages = f;
+      };
     in self;
 
 }

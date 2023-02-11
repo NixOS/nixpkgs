@@ -1,16 +1,16 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
-libGLU, libGL, freetype, xclip, inotify-tools, procps }:
+{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
+libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "32";
+  version = "33";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "1h1zysm5cz8laq8li49djl6929cnrjlflag9hw0c1dcr4zaxk32y";
+    sha256 = "0shqzhaflm2yhkx6c0csq9lxp1s1r7lh5kgpx9q5k06xya2a7yvs";
     fetchSubmodules = false;
   };
 
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
     src = ./fix-build-bash.patch;
   });
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml ];
+  buildInputs = [ mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
 
   dontStrip = true;
 
@@ -47,11 +49,14 @@ stdenv.mkDerivation rec {
         --prefix PATH ":" "${procps}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repo.or.cz/w/llpp.git";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub enzime ];
+    # Project is unmaintained and fails to build:
+    # link.c:987:27: error: invalid operands to binary >= (have 'fz_location' and 'int')
+    broken = true;
+    maintainers = with maintainers; [ pSub ];
     license = licenses.gpl3;
   };
 }

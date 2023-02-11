@@ -1,59 +1,85 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
 , glib
+, gtk3
+, gtk4
+, libsForQt5
+, variant ? null
 }:
 
+assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5";
+
 stdenv.mkDerivation rec {
-  pname = "libportal";
-  version = "0.3";
+  pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
+  version = "0.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = pname;
+    repo = "libportal";
     rev = version;
-    sha256 = "1s3g17zbbmq3m5jfs62fl94p4irln9hfhpybj7jb05z0p1939rk3";
+    sha256 = "sha256-wDDE43UC6FBgPYLS+WWExeheURCH/3fCKu5oJg7GM+A=";
   };
 
+  # TODO: remove on 0.7
   patches = [
-    # Fix build and .pc file
-    # https://github.com/flatpak/libportal/pull/20
+    # https://github.com/flatpak/libportal/pull/107
     (fetchpatch {
-      url = "https://github.com/flatpak/libportal/commit/7828be4ec8f05f8de7b129a1e35b5039d8baaee3.patch";
-      sha256 = "04nadcxx69mbnzljwjrzm88cgapn14x3mghpkhr8b9yrjn7yj86h";
+      name = "check-presence-of-sys-vfs-h.patch";
+      url = "https://github.com/flatpak/libportal/commit/e91a5d2ceb494ca0dd67295736e671b0142c7540.patch";
+      sha256 = "sha256-uFyhlU2fJgW4z0I31fABdc+pimLFYkqM4lggSIFs1tw=";
     })
-    (fetchpatch {
-      url = "https://github.com/flatpak/libportal/commit/bf5de2f6fefec65f701b4ec8712b48b29a33fb71.patch";
-      sha256 = "1v0b09diq49c01j5gg2bpvn5f5gfw1a5nm1l8grc4qg4z9jck1z8";
-    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_45
+    pkg-config
+    gi-docgen
+  ] ++ lib.optionals (variant != "qt5") [
+    gobject-introspection
+    vala
   ];
 
   propagatedBuildInputs = [
     glib
+  ] ++ lib.optionals (variant == "gtk3") [
+    gtk3
+  ] ++ lib.optionals (variant == "gtk4") [
+    gtk4
+  ] ++ lib.optionals (variant == "qt5") [
+    libsForQt5.qtbase
   ];
 
-  meta = with stdenv.lib; {
+  mesonFlags = [
+    "-Dbackends=${lib.optionalString (variant != null) variant}"
+    "-Dvapi=${if variant != "qt5" then "true" else "false"}"
+    "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
+  meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

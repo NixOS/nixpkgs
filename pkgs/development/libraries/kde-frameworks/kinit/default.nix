@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore, writeScript,
+  mkDerivation, lib, writeScript,
   extra-cmake-modules, kdoctools,
   kconfig, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework
 }:
@@ -7,15 +7,13 @@
 let inherit (lib) getLib; in
 
 mkDerivation {
-  name = "kinit";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kinit";
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kcrash ki18n kio kservice kwindowsystem
   ];
   patches = [
-    ./0001-kinit-libpath.patch
     ./0002-start_kdeinit-path.patch
     ./0003-kdeinit-extra-libs.patch
     ./0004-start_kdeinit-environ-hard-limit.patch

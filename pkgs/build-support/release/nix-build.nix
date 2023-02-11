@@ -12,7 +12,7 @@
 , doCoverityAnalysis ? false
 , lcovFilter ? []
 , lcovExtraTraceFiles ? []
-, src, stdenv
+, src, lib, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , failureHook ? null
 , prePhases ? []
@@ -69,23 +69,22 @@ stdenv.mkDerivation (
         fi
       '';
 
-    failureHook = (stdenv.lib.optionalString (failureHook != null) failureHook) +
+    failureHook = (lib.optionalString (failureHook != null) failureHook) +
     ''
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
-              header "Copying build directory to $KEEPBUILDDIR"
+              echo "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
               cp -R "$TMPDIR/"* $KEEPBUILDDIR
-              stopNest
           fi
       fi
     '';
   }
 
-  // args //
+  // removeAttrs args [ "lib" ] # Propagating lib causes the evaluation to fail, because lib is a function that can't be converted to a string
 
-  {
+  // {
     name = name + (if src ? version then "-" + src.version else "");
 
     postHook = ''
@@ -124,7 +123,7 @@ stdenv.mkDerivation (
       echo "$system" > $out/nix-support/system
 
       if [ -z "${toString doingAnalysis}" ]; then
-          for i in $outputs; do
+          for i in $(getAllOutputNames); do
               if [ "$i" = out ]; then j=none; else j="$i"; fi
               mkdir -p ''${!i}/nix-support
               echo "nix-build $j ''${!i}" >> ''${!i}/nix-support/hydra-build-products
@@ -136,10 +135,10 @@ stdenv.mkDerivation (
 
     buildInputs =
       buildInputs ++
-      (stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport) ++
-      (stdenv.lib.optional doClangAnalysis args.clang-analyzer) ++
-      (stdenv.lib.optional doCoverityAnalysis args.cov-build) ++
-      (stdenv.lib.optional doCoverityAnalysis args.xz);
+      (lib.optional doCoverageAnalysis args.makeGCOVReport) ++
+      (lib.optional doClangAnalysis args.clang-analyzer) ++
+      (lib.optional doCoverityAnalysis args.cov-build) ++
+      (lib.optional doCoverityAnalysis args.xz);
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 

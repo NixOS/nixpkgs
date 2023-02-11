@@ -1,18 +1,32 @@
-{ stdenv, buildPythonPackage, isPy27, fetchPypi }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, substituteAll
+, pkgs
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "libevdev";
-  version = "0.7";
+  version = "0.11";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10gwj08kn2rs4waq7807mq34cbavgkpg8fpir8mvnba601b8q4r4";
+    sha256 = "sha256-6coAak3ySIpgvZp0ABHulI2BkEviNk8BflYBaVCPVg8=";
   };
 
-  doCheck = false;
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libevdev = lib.getLib pkgs.libevdev;
+    })
+  ];
 
-  meta = with stdenv.lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     description = "Python wrapper around the libevdev C library";
     homepage = "https://gitlab.freedesktop.org/libevdev/python-libevdev";
     license = licenses.mit;

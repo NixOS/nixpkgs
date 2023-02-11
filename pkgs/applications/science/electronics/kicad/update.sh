@@ -1,7 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils git nix curl
+# shellcheck shell=bash enable=all
 
 set -e
+shopt -s inherit_errexit
 
 # this script will generate versions.nix in the right location
 # this should contain the versions' revs and hashes
@@ -25,10 +27,12 @@ export TMPDIR=/tmp
 # remove items left in /nix/store?
 
 # get the latest tag that isn't an RC or *.99
-latest_tag="$(git ls-remote --tags --sort -version:refname \
-  https://gitlab.com/kicad/code/kicad.git \
-  | grep -o 'refs/tags/[0-9]*\.[0-9]*\.[0-9]*$' \
-  | grep -v ".99" | head -n 1 | cut -d '/' -f 3)"
+latest_tags="$(git ls-remote --tags --sort -version:refname https://gitlab.com/kicad/code/kicad.git)"
+# using a scratch variable to ensure command failures get caught (SC2312)
+scratch="$(grep -o 'refs/tags/[0-9]*\.[0-9]*\.[0-9]*$' <<< "${latest_tags}")"
+scratch="$(grep -ve '\.99' -e '\.9\.9' <<< "${scratch}")"
+scratch="$(head -n 1 <<< "${scratch}")"
+latest_tag="$(cut -d '/' -f 3 <<< "${scratch}")"
 
 all_versions=( "${latest_tag}" master )
 
@@ -58,21 +62,21 @@ file="${here}/versions.nix"
 # just in case this runs in parallel
 tmp="${here}/,versions.nix.${RANDOM}"
 
-# libraries currently on github, move to $gitlab/libraries planned
 libs=( symbols templates footprints packages3d )
 
-get_rev="git ls-remote --heads --tags"
+get_rev() {
+  if [[ ${version} == "master" ]]; then
+    git ls-remote --heads "$@"
+  else
+    git ls-remote --tags "$@"
+  fi
+}
 
 gitlab="https://gitlab.com/kicad"
 # append commit hash or tag
-gitlab_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/archive.tar.gz?sha="
-
-# append "-$lib/archive/[hash or tag].tar.gz
-github="https://github.com/kicad/kicad"
-
-# not a lib, but separate and already moved to gitlab
-i18n="${gitlab}/code/kicad-i18n.git"
-i18n_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad-i18n/repository/archive.tar.gz?sha="
+src_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/archive.tar.gz?sha="
+lib_pre="https://gitlab.com/api/v4/projects/kicad%2Flibraries%2Fkicad-"
+lib_mid="/repository/archive.tar.gz?sha="
 
 count=0
 
@@ -112,16 +116,19 @@ for version in "${all_versions[@]}"; do
         printf "%6ssrc = {\n" ""
 
     echo "Checking src" >&2
-    src_rev="$(${get_rev} "${gitlab}"/code/kicad.git "${version}" | cut -f1)"
+    scratch="$(get_rev "${gitlab}"/code/kicad.git "${version}")"
+    src_rev="$(cut -f1 <<< "${scratch}")"
     has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
-    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256")"
+    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256" || true)"
+
     if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
       echo "Reusing old ${pname}.src.sha256, already latest .rev" >&2
-      grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "rev" -A 1
+      scratch=$(grep -sm 1 "\"${pname}\"" -A 5 "${file}")
+      grep -sm 1 "rev" -A 1 <<< "${scratch}"
     else
+          prefetched="$(${prefetch} "${src_pre}${src_rev}")"
           printf "%8srev =\t\t\t\"%s\";\n" "" "${src_rev}"
-          printf "%8ssha256 =\t\t\"%s\";\n" \
-            "" "$(${prefetch} "${gitlab_pre}${src_rev}")"
+          printf "%8ssha256 =\t\t\"%s\";\n" "" "${prefetched}"
           count=$((count+1))
     fi
         printf "%6s};\n" ""
@@ -131,37 +138,26 @@ for version in "${all_versions[@]}"; do
         printf "%6sversion =\t\t\t\"%s\";\n" "" "${today}"
         printf "%6slibSources = {\n" ""
 
-        echo "Checking i18n" >&2
-        i18n_rev="$(${get_rev} "${i18n}" "${version}" | cut -f1)"
-        has_rev="$(grep -sm 1 "\"${pname}\"" -A 11 "${file}" | grep -sm 1 "${i18n_rev}" || true)"
-        has_hash="$(grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n.sha256")"
-        if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-          echo "Reusing old kicad-i18n-${today}.src.sha256, already latest .rev" >&2
-          grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n" -A 1
-        else
-          printf "%8si18n.rev =\t\t\"%s\";\n" "" "${i18n_rev}"
-          printf "%8si18n.sha256 =\t\t\"%s\";\n" "" \
-            "$(${prefetch} "${i18n_pre}${i18n_rev}")"
-          count=$((count+1))
-        fi
-
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
-            url="${github}-${lib}.git"
-            lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1)"
+            url="${gitlab}/libraries/kicad-${lib}.git"
+            scratch="$(get_rev "${url}" "${version}")"
+            scratch="$(cut -f1 <<< "${scratch}")"
+            lib_rev="$(tail -n1 <<< "${scratch}")"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
-            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256")"
+            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256" || true)"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
               echo "Reusing old kicad-${lib}-${today}.src.sha256, already latest .rev" >&2
-              grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}" -A 1
+              scratch="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}")"
+              grep -sm 1 "${lib}" -A 1 <<< "${scratch}"
             else
+              prefetched="$(${prefetch} "${lib_pre}${lib}${lib_mid}${lib_rev}")"
               printf "%8s%s.rev =\t" "" "${lib}"
               case "${lib}" in
                 symbols|templates) printf "\t" ;; *) ;;
               esac
               printf "\"%s\";\n" "${lib_rev}"
-              printf "%8s%s.sha256 =\t\"%s\";\n" "" \
-              "${lib}" "$(${prefetch} "${github}-${lib}/archive/${lib_rev}.tar.gz")"
+              printf "%8s%s.sha256 =\t\"%s\";\n" "" "${lib}" "${prefetched}"
               count=$((count+1))
             fi
           done
@@ -170,15 +166,15 @@ for version in "${all_versions[@]}"; do
     printf "%2s};\n" ""
   else
     printf "\nReusing old %s\n" "${pname}" >&2
-    grep -sm 1 "\"${pname}\"" -A 23 "${file}"
+    grep -sm 1 "\"${pname}\"" -A 21 "${file}"
   fi
-done 
+done
 printf "}\n"
 } > "${tmp}"
 
 if grep '""' "${tmp}"; then
-	echo "empty value detected, out of space?" >&2
-	exit "1"
+  echo "empty value detected, out of space?" >&2
+  exit "1"
 fi
 
 mv "${tmp}" "${file}"

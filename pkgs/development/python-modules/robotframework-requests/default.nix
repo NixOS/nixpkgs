@@ -1,28 +1,49 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, unittest2
-, robotframework
+, fetchFromGitHub
 , lxml
+, pytestCheckHook
+, pythonOlder
 , requests
+, robotframework
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
   pname = "robotframework-requests";
+  version = "0.9.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "da7bf998f9cbf8261199db7c96b95be1bf29d1db7f59dfbc77c435761698dc75";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "MarketSquare";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XjcR29dH9K9XEnJZlQ4UUDI1MG92dRO1puiB6fcN58k=";
   };
 
-  buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ robotframework lxml requests ];
+  propagatedBuildInputs = [
+    lxml
+    requests
+    robotframework
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "RequestsLibrary"
+  ];
+
+  pytestFlagsArray = [
+    "utests"
+  ];
+
+  meta = with lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
     homepage = "https://github.com/bulkan/robotframework-requests";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

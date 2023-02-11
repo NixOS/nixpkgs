@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, angstrom }:
+{ lib, fetchFromGitHub, buildDunePackage, angstrom }:
 
 buildDunePackage rec {
   pname = "angstrom-unix";
 
-  inherit (angstrom) version src;
+  inherit (angstrom) version useDune2 src;
 
   minimumOCamlVersion = "4.03";
 
@@ -14,6 +14,6 @@ buildDunePackage rec {
   meta = {
     inherit (angstrom.meta) homepage license;
     description = "Unix support for Angstrom";
-    maintainers = with stdenv.lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

@@ -1,29 +1,50 @@
 { stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, IOKit
 , Security
+, DiskArbitration
+, Foundation
+, nixosTests
 }:
 
-rustPlatform.buildRustPackage rec {
+let version = "1.0.0";
+in
+rustPlatform.buildRustPackage {
   pname = "meilisearch";
-  version = "0.9.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "00i5vsbcyrbsvhr5n1b3pxa87v0kfw6pg931i2kzyf4wh021k6sw";
+    hash = "sha256-XWPJldWxe8iply7XtmDem1gfbNuuaWuFdMfuCbcU6tc=";
   };
 
-  cargoSha256 = "0axjygk8a7cykpa5skk4a6mkm8rndkr76l10h3z3gjdc88b17qcz";
+  cargoHash = "sha256-v8P4pbTJ/t9TgB07tyhn3y8q65xILFTbBgziw5kuxUQ=";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit Security ];
+  # Default features include mini dashboard which downloads something from the internet.
+  buildNoDefaultFeatures = true;
 
-  meta = with stdenv.lib; {
-    description = "Ultra relevant and instant full-text search API";
-    homepage = "https://meilisearch.com/";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    DiskArbitration
+    Foundation
+  ];
+
+  passthru.tests = {
+    meilisearch = nixosTests.meilisearch;
+  };
+
+  # Tests will try to compile with mini-dashboard features which downloads something from the internet.
+  doCheck = false;
+
+  meta = with lib; {
+    description = "Powerful, fast, and an easy to use search engine ";
+    homepage = "https://docs.meilisearch.com/";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ happysalada ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }

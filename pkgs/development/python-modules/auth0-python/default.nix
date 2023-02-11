@@ -1,43 +1,57 @@
 { lib
+, aiohttp
+, aioresponses
 , buildPythonPackage
+, callee
 , fetchPypi
-, requests
 , mock
+, pyjwt
 , pytestCheckHook
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.10.0";
+  version = "3.24.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e02525fd60d4b1e7e08bdc539b536db635da28ee25cc882412be4296802d0281";
+    hash = "sha256-iNe86UcjQud/LyX9iwYIGbNVcADjpD4mGM16D+UhLHE=";
   };
 
   propagatedBuildInputs = [
     requests
-  ];
+    pyjwt
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    aiohttp
+    aioresponses
+    callee
     mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # jwt package is not available in nixpkgs
-    "--ignore=auth0/v3/test/authentication/test_token_verifier.py"
+  disabledTests = [
+    # Tries to ping websites (e.g. google.com)
+    "can_timeout"
+    "test_options_are_created_by_default"
+    "test_options_are_used_and_override"
   ];
 
-  # tries to ping websites (e.g. google.com)
-  disabledTests = [
-    "can_timeout"
+  pythonImportsCheck = [
+    "auth0"
   ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

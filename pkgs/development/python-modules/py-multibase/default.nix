@@ -4,18 +4,18 @@
 , lib
 , morphys
 , pytest
-, pytestrunner
+, pytest-runner
 , python-baseconv
 , six
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
-  version = "1.0.1";
+  version = "1.0.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version ;
-    sha256 = "6ed706ea321b487ba82e4172a9c82d61dacd675c865f576a937a94bca1a23443";
+    sha256 = "d28a20efcbb61eec28f55827a0bf329c7cea80fffd933aecaea6ae8431267fe4";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     python-baseconv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

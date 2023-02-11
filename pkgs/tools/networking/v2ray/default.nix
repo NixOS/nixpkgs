@@ -1,36 +1,61 @@
-{ callPackage, fetchFromGitHub, fetchurl
-, assetOverrides ? {}
-, ... } @ args:
+{ lib, fetchFromGitHub, symlinkJoin, buildGoModule, makeWrapper, nixosTests
+, nix-update-script
+, v2ray-geoip, v2ray-domain-list-community
+, assets ? [ v2ray-geoip v2ray-domain-list-community ]
+}:
 
-callPackage ./generic.nix (rec {
-  version = "4.23.3";
+buildGoModule rec {
+  pname = "v2ray-core";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
-    owner = "v2ray";
+    owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "1b0cxrpgkmgas7pwxglsvgcig8rnhffkf990b42z7awji5lw055v";
+    hash = "sha256-LLvAoPA3rLGfhrWD37OVyWd4tC9mwgpE1WjK2pY27xU=";
   };
 
-  assets = {
-    # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202005270003";
-      geoipSha256 = "10gf69hr32p4bpl5j8r46v8xzhpcgm70xbcdxm1a8l0jwyj0infs";
-    in fetchurl {
-      url = "https://github.com/v2ray/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
+  # `nix-update` doesn't support `vendorHash` yet.
+  # https://github.com/Mic92/nix-update/pull/95
+  vendorSha256 = "sha256-xBNVyPN9PRkraPRzZXOguGemYPm+Jw8hl04vWV8TZaA=";
 
-    # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "202005292154";
-      geositeSha256 = "0w6l0q8y14in5f4a406blpprqq6p438gpclnlfz7y2hkh5zf36cr";
-    in fetchurl {
-      url = "https://github.com/v2ray/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
+  ldflags = [ "-s" "-w" "-buildid=" ];
 
-  } // assetOverrides;
+  subPackages = [ "main" ];
 
-} // args)
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 "$GOPATH"/bin/main $out/bin/v2ray
+    install -Dm444 release/config/systemd/system/v2ray{,@}.service -t $out/lib/systemd/system
+    install -Dm444 release/config/*.json -t $out/etc/v2ray
+    runHook postInstall
+  '';
+
+  assetsDrv = symlinkJoin {
+    name = "v2ray-assets";
+    paths = assets;
+  };
+
+  postFixup = ''
+    wrapProgram $out/bin/v2ray \
+      --suffix XDG_DATA_DIRS : $assetsDrv/share
+    substituteInPlace $out/lib/systemd/system/*.service \
+      --replace User=nobody DynamicUser=yes \
+      --replace /usr/local/bin/ $out/bin/ \
+      --replace /usr/local/etc/ /etc/
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.simple-vmess-proxy-test = nixosTests.v2ray;
+  };
+
+  meta = {
+    homepage = "https://www.v2fly.org/en_US/";
+    description = "A platform for building proxies to bypass network restrictions";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ servalcatty ];
+  };
+}

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_ocsp";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0wy5363m4gq1w08iny2b3sh925bnznlln88pr9lgj9vgbn8pqnrn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service modules of OCSP Online Certificate Validation";
 
     homepage = "https://redwax.eu";

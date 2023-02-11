@@ -1,19 +1,24 @@
-{ lib, fetchurl, pkgconfig, buildDunePackage, gtk3, cairo2 }:
+{ lib, fetchFromGitHub, pkg-config, buildDunePackage, dune-configurator
+, gtk3, cairo2
+, camlp-streams
+}:
 
 buildDunePackage rec {
-  version = "3.1.0";
+  version = "3.1.3";
   pname = "lablgtk3";
 
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
-  src = fetchurl {
-    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
-    sha256 = "1fn04qwgkwc86jndlrnv4vxcmasjsp1mmcgfznahj1ccc7bv47sv";
+  src = fetchFromGitHub {
+    owner = "garrigue";
+    repo = "lablgtk";
+    rev = version;
+    sha256 = "sha256-1kXJP+tKudP3qfosTgZAQueNK46H9aLevEj6wxPKDWY=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 ];
-  propagatedBuildInputs = [ cairo2 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator camlp-streams ];
+  propagatedBuildInputs = [ gtk3 cairo2 ];
 
   meta = {
     description = "OCaml interface to GTK 3";

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "arguments";
-  name  = "${pname}-2015-11-30";
+  version = "unstable-2015-11-30";
 
   owner = "BIC-MNI";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   # internal_volume_io.h: No such file or directory
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/${owner}/${pname}";
     description = "Library for argument handling for MINC programs";
     maintainers = with maintainers; [ bcdarwin ];

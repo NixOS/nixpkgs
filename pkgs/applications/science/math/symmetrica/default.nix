@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , autoreconfHook
 }:
 stdenv.mkDerivation rec {
@@ -27,9 +26,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = ''A collection of routines for representation theory and combinatorics'';
+    description = "A collection of routines for representation theory and combinatorics";
     license = licenses.isc;
-    maintainers = with maintainers; [raskin timokau];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };

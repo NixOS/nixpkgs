@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
-, runCommand
 , gpgme
 , lvm2
 , btrfs-progs
@@ -10,48 +10,61 @@
 , installShellFiles
 , makeWrapper
 , fuse-overlayfs
-, nixosTests
+, dockerTools
+, runCommand
 }:
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.1.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "1cxhwfrp5cjdq56vzy7gmidvm1z02f0rz2r1lv0d9ymnjlsjp9s3";
+    hash = "sha256-P556Is03BeC0Tf+kNv+Luy0KASgTXsyZ/MrPaPFUHE8=";
   };
 
   outputs = [ "out" "man" ];
 
-  vendorSha256 = null;
+  vendorHash = null;
+
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
-    make binary-local
+    make bin/skopeo completions docs
+    runHook postBuild
   '';
 
   installPhase = ''
-    make install-binary PREFIX=$out
-    make install-docs MANINSTALLDIR="$man/share/man"
-    installShellCompletion --bash completions/bash/skopeo
-  '';
-
-  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+    runHook preInstall
+    PREFIX=$out make install-binary install-completions
+    PREFIX=$man make install-docs
+    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
+      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  '' + ''
+    runHook postInstall
   '';
 
-  passthru.tests.docker-tools = nixosTests.docker-tools;
+  passthru = {
+    policy = runCommand "policy" { } ''
+      install ${src}/default-policy.json -Dt $out
+    '';
+    tests = {
+      inherit (dockerTools.examples) testNixFromDockerHub;
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
     maintainers = with maintainers; [ lewo ] ++ teams.podman.members;

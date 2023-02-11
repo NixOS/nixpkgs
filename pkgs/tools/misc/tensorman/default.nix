@@ -1,4 +1,4 @@
-{ pkgconfig, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
+{ pkg-config, lib, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tensorman";
@@ -11,14 +11,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0ywb53snvymmwh10hm6whckz7dwmpqa4rxiggd24y178jdfrm2ns";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
-  cargoSha256 = "0vckay4jhg02xg68mvh7ys0yjj0p30m6wsjriqc8k24wjsrhiw9k";
+  cargoSha256 = "1lza3kc43581a09ss82bb5p0r74dy7si2x07cj4cb8dizl60b71v";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for easy management of Tensorflow containers";
     homepage = "https://github.com/pop-os/tensorman/";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms =  [ "x86_64-linux" ];
     maintainers = with maintainers; [ thefenriswolf ];
   };

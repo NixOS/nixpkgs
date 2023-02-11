@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gobject-introspection
 , wrapGAppsHook
@@ -11,7 +11,7 @@ let
     pygobject3
     (toPythonModule ibus)
     pyxdg
-    python-Levenshtein
+    levenshtein
   ]);
 in stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
@@ -42,8 +42,8 @@ in stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
-    "SYSCONFDIR=${placeholder ''out''}/etc"
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
     "PYTHON=${python.interpreter}"
   ];
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     wrapGApp $out/share/ibus-uniemoji/uniemoji.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "Input method (ibus) for entering unicode symbols and emoji by name";
     homepage = "https://github.com/salty-horse/ibus-uniemoji";

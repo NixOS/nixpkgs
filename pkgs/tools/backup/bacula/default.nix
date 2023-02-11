@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
+{ lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+, CoreFoundation, IOKit
+}:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.6.5";
+  pname = "bacula";
+  version = "13.0.1";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "0yn7qwkzix78bs811vmrn5gbywy7ggnsv72mdjz2lirqc6w3a3si";
+    url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    sha256 = "sha256-1jhI1pWsFcHM/BF4knUzFLy5IyqFLEDjLMqIwOkYl4o=";
   };
 
+  # libtool.m4 only matches macOS 10.*
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    substituteInPlace configure \
+      --replace "10.*)" "*)"
+  '';
+
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      IOKit
+    ]
     # acl relies on attr, which I can't get to build on darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.isDarwin) acl;
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
@@ -18,7 +31,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ] ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"
@@ -30,11 +43,11 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = "http://bacula.org/";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
+    license     = with licenses; [ agpl3Only bsd2 ];
+    maintainers = with maintainers; [ lovek323 eleanor ];
     platforms   = platforms.all;
   };
 }

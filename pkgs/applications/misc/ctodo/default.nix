@@ -1,25 +1,24 @@
-{ stdenv, cmake, fetchurl, ncurses, readline }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses, readline }:
 
 stdenv.mkDerivation rec {
   pname = "ctodo";
   version = "1.3";
 
-  src = fetchurl {
-    url = "https://github.com/Acolarh/ctodo/archive/v${version}.tar.gz";
-    sha256 = "1k3raigcgpwa0h8zkv5x9rycnn2iqkb9qim4q9ydqy9wbv3m32jb";
+  src = fetchFromGitHub {
+    owner = "Acolarh";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0mqy5b35cbdwfpbs91ilsgz3wc4cky38xfz9pnr4q88q1vybigna";
   };
 
-  buildInputs = [ stdenv cmake ncurses readline ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ ncurses readline ];
 
-  configurePhase = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out .
-  '';
-
-  meta = {
+  meta = with lib; {
     homepage = "http://ctodo.apakoh.dk/";
     description = "A simple ncurses-based task list manager";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.unix;
   };
 }

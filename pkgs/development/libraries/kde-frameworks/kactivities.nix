@@ -1,12 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   boost, kconfig, kcoreaddons, kio, kwindowsystem, qtbase, qtdeclarative,
 }:
 
 mkDerivation {
-  name = "kactivities";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kactivities";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     boost kconfig kcoreaddons kio kwindowsystem qtdeclarative

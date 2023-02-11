@@ -1,31 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , isPyPy
+, objgraph
+, psutil
+, pytestCheckHook
 }:
 
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "0.4.16";
-  disabled = isPyPy;  # builtin for pypy
+  version = "2.0.1";
+  format = "setuptools";
+  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e06eac722676797e8fce4adb8ad3dc57a1bb3adfb0dd3fdf8306c055a38456c";
+    hash = "sha256-QuYCVkRg2g6O5ny21yNjY+5eExqhWUO2Zw5E5cLtD2c=";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeCheckInputs = [
+    objgraph
+    psutil
+    pytestCheckHook
+  ];
 
-  # see https://github.com/python-greenlet/greenlet/issues/85
-  preCheck = ''
-    rm tests/test_leaks.py
-  '';
+  doCheck = false; # installed tests need to be executed, not sure how to accomplish that
 
-  meta = {
-    homepage = "https://pypi.python.org/pypi/greenlet";
+  meta = with lib; {
+    homepage = "https://github.com/python-greenlet/greenlet";
     description = "Module for lightweight in-process concurrent programming";
-    license = lib.licenses.lgpl2;
+    license = with licenses; [
+      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+      mit
+    ];
   };
 }

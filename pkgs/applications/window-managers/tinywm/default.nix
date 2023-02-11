@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libX11 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    ${stdenv.cc}/bin/cc -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+    $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
   '';
 
   installPhase = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -m644 annotated.c README -t $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "A tiny window manger for X11";
     longDescription = ''
 

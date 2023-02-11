@@ -1,13 +1,13 @@
 { callPackage, fetchFromGitHub, gambit-unstable, gambit-support }:
 
 callPackage ./build.nix rec {
-  version = "unstable-2020-05-17";
-  git-version = "0.16-1-g36a31050";
+  version = "unstable-2020-11-05";
+  git-version = "0.16-152-g808929ae";
   src = fetchFromGitHub {
     owner = "vyzo";
     repo = "gerbil";
-    rev = "36a31050f6c80e7e1a49dfae96a57b2ad0260698";
-    sha256 = "0k3fypam9qx110sjxgzxa1mdf5b631w16s9p5v37cb8ll26vqfiv";
+    rev = "808929aeb8823959191f35df53bc0c0150911b4b";
+    sha256 = "0d9k2gkrs9qvlnk7xa3gjzs3gln3ydds7yd2313pvbw4q2lcz8iw";
   };
   inherit gambit-support;
   gambit = gambit-unstable;

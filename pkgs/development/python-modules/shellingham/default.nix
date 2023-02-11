@@ -1,18 +1,38 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "shellingham";
-  version = "1.3.2";
+  version = "1.5.0";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e";
+  src = fetchFromGitHub {
+    owner = "sarugaku";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-CIO5mBFph+5cO7U4NRjMRtQCTbopJDEGlAGBkxjieFw=";
   };
 
-  meta = with stdenv.lib; {
-    description = "Tool to Detect Surrounding Shell";
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "shellingham" ];
+
+  meta = with lib; {
+    description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
     license = licenses.isc;
     maintainers = with maintainers; [ mbode ];

@@ -3,7 +3,12 @@
 with lib;
 let
   cfg = config.services.undervolt;
-  cliArgs = lib.cli.toGNUCommandLineShell {} {
+
+  mkPLimit = limit: window:
+    if (isNull limit && isNull window) then null
+    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+      "${toString limit} ${toString window}";
+  cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
       verbose
       temp
@@ -21,17 +26,23 @@ let
 
     temp-bat = cfg.tempBat;
     temp-ac = cfg.tempAc;
+
+    power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
+    power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
   };
 in
 {
   options.services.undervolt = {
-    enable = mkEnableOption
-      "Intel CPU undervolting service (WARNING: may permanently damage your hardware!)";
+    enable = mkEnableOption (lib.mdDoc ''
+       Undervolting service for Intel CPUs.
+
+       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
+    '');
 
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable verbose logging.
       '';
     };
@@ -39,8 +50,8 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.undervolt;
-      defaultText = "pkgs.undervolt";
-      description = ''
+      defaultText = literalExpression "pkgs.undervolt";
+      description = lib.mdDoc ''
         undervolt derivation to use.
       '';
     };
@@ -48,7 +59,7 @@ in
     coreOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset the CPU cores by.
       '';
     };
@@ -56,7 +67,7 @@ in
     gpuOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset the GPU by.
       '';
     };
@@ -64,7 +75,7 @@ in
     uncoreOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset uncore by.
       '';
     };
@@ -72,7 +83,7 @@ in
     analogioOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset analogio by.
       '';
     };
@@ -80,7 +91,7 @@ in
     temp = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target in Celsius degrees.
       '';
     };
@@ -88,7 +99,7 @@ in
     tempAc = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target on AC power in Celsius degrees.
       '';
     };
@@ -96,8 +107,53 @@ in
     tempBat = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target on battery power in Celsius degrees.
+      '';
+    };
+
+    p1.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = lib.mdDoc ''
+        The P1 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p1.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = lib.mdDoc ''
+        The P1 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
+    p2.limit = mkOption {
+      type = with types; nullOr int;
+      default = null;
+      description = lib.mdDoc ''
+        The P2 Power Limit in Watts.
+        Both limit and window must be set.
+      '';
+    };
+    p2.window = mkOption {
+      type = with types; nullOr (oneOf [ float int ]);
+      default = null;
+      description = lib.mdDoc ''
+        The P2 Time Window in seconds.
+        Both limit and window must be set.
+      '';
+    };
+
+    useTimer = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to set a timer that applies the undervolt settings every 30s.
+        This will cause spam in the journal but might be required for some
+        hardware under specific conditions.
+        Enable this if your undervolt settings don't hold.
       '';
     };
   };
@@ -108,17 +164,20 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.undervolt = {
-      path = [ pkgs.undervolt ];
-
       description = "Intel Undervolting Service";
+
+      # Apply undervolt on boot, nixos generation switch and resume
+      wantedBy = [ "multi-user.target" "post-resume.target" ];
+      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
-        ExecStart = "${pkgs.undervolt}/bin/undervolt ${cliArgs}";
+        ExecStart = "${cfg.package}/bin/undervolt ${toString cliArgs}";
       };
     };
 
-    systemd.timers.undervolt = {
+    systemd.timers.undervolt = mkIf cfg.useTimer {
       description = "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
       wantedBy = [ "multi-user.target" ];

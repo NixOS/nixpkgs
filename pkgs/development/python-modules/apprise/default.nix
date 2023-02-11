@@ -1,31 +1,79 @@
-{ lib, buildPythonPackage, fetchPypi
-, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml
-, pytestrunner, coverage, flake8, mock, pytest, pytestcov, tox
+{ lib
+, babel
+, buildPythonPackage
+, click
+, cryptography
+, fetchPypi
+, gntp
+, installShellFiles
+, markdown
+, paho-mqtt
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.8.5";
+  version = "1.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aacdd54640a9c66d1c84c8f4390f63feb5a7a8741867a6b451f82ff74c8c792c";
+    hash = "sha256-Z+DCJ+7O4mAACYDbv4uh5e69vklPRzCAgpfJ5kXANXk=";
   };
 
-  nativeBuildInputs = [ Babel ];
-
-  propagatedBuildInputs = [
-    requests requests_oauthlib six click markdown pyyaml
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
-  checkInputs = [
-    pytestrunner coverage flake8 mock pytest pytestcov tox
+  propagatedBuildInputs = [
+    click
+    cryptography
+    markdown
+    pyyaml
+    requests
+    requests-oauthlib
+  ];
+
+  nativeCheckInputs = [
+    babel
+    gntp
+    paho-mqtt
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_apprise_cli_nux_env"
+    "test_plugin_mqtt_general"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
+  ];
+
+  postInstall = ''
+    installManPage packaging/man/apprise.1
+  '';
+
+  pythonImportsCheck = [
+    "apprise"
   ];
 
   meta = with lib; {
+    description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    description = "Push Notifications that work with just about every platform!";
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

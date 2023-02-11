@@ -2,6 +2,7 @@
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
+, wrapQtAppsHook
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -15,27 +16,32 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "1970izjaa60r5cg9i35rzz9lk5c5d8q1vw1rh2skvfbf63z1hnzv";
   };
 
+  patches = [
+    ./spyder4.patch
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     cadquery
     Logbook
     pyqt5
     pyparsing
     pyqtgraph
-    spyder_3
-    pathpy
+    spyder
+    path
     qtconsole
     requests
   ];
 
-  postFixup = ''
-    wrapQtApp "$out/bin/cq-editor"
+  nativeBuildInputs = [ wrapQtAppsHook ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     pytest-xvfb
     pytest-mock
-    pytestcov
+    pytest-cov
     pytest-repeat
     pytest-qt
   ];

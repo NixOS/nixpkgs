@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
+, jdk, perl
 }:
 
 let
-  version = "12.0";
+  version = "16";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
     comment = "Integrated Development Environment";
     desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
-    categories = "Application;Development;";
+    categories = [ "Development" ];
     icon = "netbeans";
   };
 in
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "91030c9628a08acd85f1a58a7f71eec2e57dc85841c1c475cc6311335b5d8cdc10c1198274b9668b7f61a28d04b07661247dc1c3e36b8e29214aec3748e499e4";
+    hash = "sha512-k+Zj6TKW0tOSYvM6V1okF4Qz62gZMETC6XG98W23Vtz3+vdiaddd8BC2DBg7p9Z1CofRq8sbwtpeTJM3FaXv0g==";
   };
 
   buildCommand = ''
@@ -27,14 +27,17 @@ stdenv.mkDerivation {
     unzip $src
     patchShebangs .
 
+    rm netbeans/bin/*.exe
+
     # Copy to installation directory and create a wrapper capable of starting
     # it.
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
-      --add-flags "--jdkhome ${jdk.home}"
+      --add-flags "--jdkhome ${jdk.home} \
+      -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.
@@ -54,13 +57,18 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  buildInputs = [ makeWrapper perl python unzip libicns imagemagick ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ perl libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sander rszibele asbachb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    maintainers = with lib.maintainers; [ sander rszibele asbachb ];
+    platforms = lib.platforms.unix;
   };
 }

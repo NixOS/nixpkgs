@@ -5,7 +5,7 @@
 , dnspython
 , requests
 , pytest
-, pytestcov
+, pytest-cov
 , isPy3k
 }:
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$TEMPDIR";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   meta = with lib; {

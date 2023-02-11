@@ -1,17 +1,17 @@
-{ stdenv, makeWrapper, fetchFromGitHub, gawk }:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "lynis";
-  version = "2.7.5";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = pname;
     rev = version;
-    sha256 = "1lkkbvxm0rgrrlx0szaxmf8ghc3d26wal96sgqk84m37mvs1f7p0";
+    sha256 = "sha256-fPQX/Iz+dc3nF3xMPt0bek4JC2XSHe4aC4O0tZwLf6Y=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postPatch = ''
     grep -rl '/usr/local/lynis' ./ | xargs sed -i "s@/usr/local/lynis@$out/share/lynis@g"
@@ -21,13 +21,17 @@ stdenv.mkDerivation rec {
     install -d $out/bin $out/share/lynis/plugins
     cp -r include db default.prf $out/share/lynis/
     cp -a lynis $out/bin
-    wrapProgram "$out/bin/lynis" --prefix PATH : ${stdenv.lib.makeBinPath [ gawk ]}
+    wrapProgram "$out/bin/lynis" --prefix PATH : ${lib.makeBinPath [ gawk ]}
+
+    installManPage lynis.8
+    installShellCompletion --bash --name lynis.bash \
+      extras/bash_completion.d/lynis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Security auditing tool for Linux, macOS, and UNIX-based systems";
     homepage = "https://cisofy.com/lynis/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.ryneeverett ];
   };

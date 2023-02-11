@@ -1,36 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, libpcap, pcre, libnl, zlib, libmicrohttpd
-, sqlite, protobuf, protobufc, libusb1, libcap, binutils, elfutils
-, withNetworkManager ? false, glib, networkmanager
-, withPython ? false, python3
-, withSensors ? false, lm_sensors}:
-
-# couldn't get python modules to build correctly,
-# waiting for some other volunteer to fix it
-assert !withPython;
+{ lib
+, stdenv
+, binutils
+, elfutils
+, fetchurl
+, glib
+, libcap
+, libmicrohttpd
+, libnl
+, libpcap
+, libusb1
+, libwebsockets
+, lm_sensors
+, networkmanager
+, pcre
+, pkg-config
+, openssl
+, protobuf
+, protobufc
+, python3
+, sqlite
+, withNetworkManager ? false
+, withPython ? true
+, withSensors ? false
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "kismet";
-  version = "2020-04-R2";
+  version = "2022-08-R1";
 
   src = fetchurl {
     url = "https://www.kismetwireless.net/code/${pname}-${version}.tar.xz";
-    sha256 = "0hxmaln0y6bk9m1rshr4swmg0sqy3ic693vfk8haj7f5gnph96cm";
+    hash = "sha256-IUnM6sVSZQhlP00C3PemlOPaPcAAojcqHuS/mYgnl4E=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [
-    libpcap pcre libmicrohttpd libnl zlib sqlite protobuf protobufc
-    libusb1 libcap binutils elfutils
-  ] ++ stdenv.lib.optionals withNetworkManager [ networkmanager glib ]
-    ++ stdenv.lib.optional withSensors lm_sensors
-    ++ stdenv.lib.optional withPython (python3.withPackages(ps: [ ps.setuptools ps.protobuf
-                                                                  ps.numpy ps.pyserial ]));
-
-  configureFlags = []
-    ++ stdenv.lib.optional (!withNetworkManager) "--disable-libnm"
-    ++ stdenv.lib.optional (!withPython) "--disable-python-tools"
-    ++ stdenv.lib.optional (!withSensors) "--disable-lmsensors";
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace "-m 4550" ""
+  '';
 
   postConfigure = ''
     sed -e 's/-o $(INSTUSR)//' \
@@ -40,12 +47,60 @@ stdenv.mkDerivation rec {
         -i Makefile
   '';
 
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals withPython [
+    python3
+  ];
+
+  buildInputs = [
+    binutils
+    elfutils
+    libcap
+    libmicrohttpd
+    libnl
+    libpcap
+    openssl
+    libusb1
+    libwebsockets
+    pcre
+    protobuf
+    protobufc
+    sqlite
+    zlib
+  ] ++ lib.optionals withNetworkManager [
+    networkmanager
+    glib
+  ] ++ lib.optionals withSensors [
+    lm_sensors
+  ];
+
+  propagatedBuildInputs = [
+  ] ++ lib.optionals withPython [
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.protobuf
+      ps.pyserial
+      ps.setuptools
+      ps.websockets
+    ]))
+  ];
+
+  configureFlags = [
+  ] ++ lib.optionals (!withNetworkManager) [
+    "--disable-libnm"
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python-tools"
+  ] ++ lib.optionals (!withSensors) [
+    "--disable-lmsensors"
+  ];
+
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wireless network sniffer";
     homepage = "https://www.kismetwireless.net/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "gtts";
-  version = "2.1.1";
+  version = "2.3.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
-    rev = "v${version}";
-    sha256 = "1d0r6dnb8xvgyvxz7nfj4q4xqmpmvcwcsjghxrh76m6p364lh1hj";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-dbIcx6U5TIy3CteUGrZqcWqOJoZD2HILaJmKDY+j/II=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     twine
   ];
 
-  checkInputs = [ pytest mock testfixtures ];
+  nativeCheckInputs = [ pytest mock testfixtures ];
 
   # majority of tests just try to call out to Google's Translate API endpoint
   doCheck = false;
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python library and CLI tool to interface with Google Translate text-to-speech API";
     homepage = "https://gtts.readthedocs.io";
+    changelog = "https://gtts.readthedocs.io/en/latest/changelog.html";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];
   };

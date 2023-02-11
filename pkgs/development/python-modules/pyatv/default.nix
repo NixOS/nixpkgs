@@ -1,54 +1,107 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
 , aiohttp
-, aiozeroconf
-, asynctest
+, bitarray
+, chacha20poly1305-reuseable
 , cryptography
 , deepdiff
+, fetchFromGitHub
+, mediafile
+, miniaudio
 , netifaces
 , protobuf
-, pytest
 , pytest-aiohttp
 , pytest-asyncio
-, pytestrunner
+, pytest-timeout
+, pytestCheckHook
+, pythonRelaxDepsHook
+, pythonOlder
+, requests
 , srptools
+, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.6.1";
+  version = "0.10.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f9wj1ggllwpjd9nh6nsrck7m4gbz29q6vqbrhbkc2kz6waqkgwc";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "postlund";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
 
-  nativeBuildInputs = [ pytestrunner];
-
-  propagatedBuildInputs = [
-    aiozeroconf
-    srptools
-    aiohttp
-    protobuf
-    cryptography
-    netifaces
-  ];
-
-  checkInputs = [
-    deepdiff
-    pytest
-    pytest-aiohttp
-    pytest-asyncio
-  ];
-
-  # just run vanilla pytest to avoid inclusion of coverage reports and xdist
-  checkPhase = ''
-    pytest
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
   '';
 
-  meta = with stdenv.lib; {
-    description = "A python client library for the Apple TV";
+  pythonRelaxDeps = [
+    "aiohttp"
+    "async_timeout"
+    "bitarray"
+    "chacha20poly1305-reuseable"
+    "cryptography"
+    "ifaddr"
+    "mediafile"
+    "miniaudio"
+    "protobuf"
+    "requests"
+    "srptools"
+    "zeroconf"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+    bitarray
+    chacha20poly1305-reuseable
+    cryptography
+    mediafile
+    miniaudio
+    netifaces
+    protobuf
+    requests
+    srptools
+    zeroconf
+  ];
+
+  nativeCheckInputs = [
+    deepdiff
+    pytest-aiohttp
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
+  disabledTestPaths = [
+    # Test doesn't work in the sandbox
+    "tests/protocols/companion/test_companion_auth.py"
+    "tests/protocols/mrp/test_mrp_auth.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "pyatv"
+  ];
+
+  meta = with lib; {
+    description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
+    changelog = "https://github.com/postlund/pyatv/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "ascii";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -vp "$out/bin" "$out/share/man/man1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive ASCII name and synonym chart";
     homepage = "http://www.catb.org/~esr/ascii/";
     license = licenses.bsd3;

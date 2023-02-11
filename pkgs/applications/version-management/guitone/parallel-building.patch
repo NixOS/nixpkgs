@@ -1,7 +1,0 @@
-Without this `make tmp/AttributesView.o` fails with
-src/view/dialogs/AddEditAttribute.h:22:35: fatal error: ui_add_edit_attribute.h: No such file or directory
---- a/guitone.pro
-+++ b/guitone.pro
-@@ -215 +215,2 @@ help.commands = @echo Available targets: $${QMAKE_EXTRA_TARGETS}
- QMAKE_EXTRA_TARGETS += help
-+CONFIG += depend_includepath

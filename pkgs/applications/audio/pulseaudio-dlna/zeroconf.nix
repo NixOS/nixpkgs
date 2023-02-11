@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , ifaddr
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ netifaces six enum-compat ifaddr ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure python implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = licenses.lgpl21;

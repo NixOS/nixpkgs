@@ -1,5 +1,8 @@
-{ pkgs, stdenv }:
+{ __splicedPackages, lib }:
 
+let
+  pkgs = __splicedPackages;
+in
 rec {
 
   /* Similar to callPackageWith/callPackage, but without makeOverridable
@@ -7,7 +10,7 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if pkgs.lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (stdenv.lib.functionArgs f) autoArgs;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
     in f (auto // args);
 
   callPackage = callPackageWith pkgs;

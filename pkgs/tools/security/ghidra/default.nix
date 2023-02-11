@@ -1,6 +1,15 @@
-{ stdenv, fetchzip, lib, makeWrapper, autoPatchelfHook
-, openjdk11, pam, makeDesktopItem, icoutils
-}: let
+{ stdenv
+, fetchzip
+, lib
+, makeWrapper
+, autoPatchelfHook
+, openjdk17
+, pam
+, makeDesktopItem
+, icoutils
+}:
+
+let
 
   pkg_path = "$out/lib/ghidra";
 
@@ -10,24 +19,24 @@
     icon = "ghidra";
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
-
-in stdenv.mkDerivation {
-
-  name = "ghidra-9.1.2";
+in stdenv.mkDerivation rec {
+  pname = "ghidra";
+  version = "10.2.2";
+  versiondate = "20221115";
 
   src = fetchzip {
-    url = "https://ghidra-sre.org/ghidra_9.1.2_PUBLIC_20200212.zip";
-    sha256 = "0j48pijypg44bw06azbrgfqjkigb13ljfdxib70sxwyqia3vkbbm";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "sha256-0OcSdCN8vWUgTgFdgNtiI0OfHmfa/WD9IoaJUl+llqI=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    autoPatchelfHook
     icoutils
-  ];
+  ]
+  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     stdenv.cc.cc.lib
@@ -53,16 +62,19 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+    ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+
+    wrapProgram "${pkg_path}/support/launch.sh" \
+      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
-    homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" ];
+    homepage = "https://github.com/NationalSecurityAgency/ghidra";
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = with maintainers; [ ck3d govanify mic92 ];
   };
 
 }

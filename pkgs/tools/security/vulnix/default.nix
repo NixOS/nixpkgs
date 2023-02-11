@@ -1,22 +1,30 @@
-{ stdenv, python3Packages, nix, ronn }:
+{ lib
+, python3Packages
+, nix
+, ronn
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "06dpdsnz1ih0syas3x25s557qpw0f4kmypvxwaffm734djg8klmi";
+    sha256 = "07v3ddvvhi3bslwrlin45kz48i3va2lzd6ny0blj5i2z8z40qcfm";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--flake8" ""
+  '';
 
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pytest
-    pytestcov
-    pytest-flake8
+    pytest-cov
   ];
 
   propagatedBuildInputs = [
@@ -44,7 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NixOS vulnerability scanner";
     homepage = "https://github.com/flyingcircusio/vulnix";
     license = licenses.bsd3;

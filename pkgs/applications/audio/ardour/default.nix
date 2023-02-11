@@ -1,6 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchgit
-, alsaLib
+, fetchzip
+, alsa-lib
 , aubio
 , boost
 , cairomm
@@ -8,21 +10,19 @@
 , curl
 , dbus
 , doxygen
-, ffmpeg_3
+, ffmpeg
 , fftw
 , fftwSinglePrec
 , flac
-, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
-, hidapi
+, harvid
 , itstool
 , libarchive
 , libjack2
 , liblo
-, libltc
 , libogg
 , libpulseaudio
 , librdf_raptor
@@ -38,30 +38,41 @@
 , lilv
 , lrdf
 , lv2
+, makeWrapper
 , pango
 , perl
 , pkg-config
 , python3
-, qm-dsp
 , readline
 , rubberband
 , serd
 , sord
+, soundtouch
 , sratom
 , suil
 , taglib
 , vamp-plugin-sdk
 , wafHook
+, xjadeo
+, videoSupport ? true
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.0";
+  version = "7.1";
 
-  # don't fetch releases from the GitHub mirror, they are broken
+  # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
+  # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "162jd96zahl05fdmjwvpdfjxbhd6ifbav6xqa0vv6rsdl4zk395q";
+    hash = "sha256-eLF9n71tjdPA+ks0B8UonmPZqRgcZEA7ok79+m9PioU=";
+  };
+
+  bundledContent = fetchzip {
+    url = "https://web.archive.org/web/20221026200824/http://stuff.ardour.org/loops/ArdourBundledMedia.zip";
+    hash = "sha256-IbPQWFeyMuvCoghFl1ZwZNNcSvLNsH84rGArXnw+t7A=";
+    # archive does not contain a single folder at the root
+    stripRoot = false;
   };
 
   patches = [
@@ -69,10 +80,22 @@ stdenv.mkDerivation rec {
     ./as-flags.patch
   ];
 
+  # Ardour's wscript requires git revision and date to be available.
+  # Since they are not, let's generate the file manually.
+  postPatch = ''
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
+    patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+  '';
+
   nativeBuildInputs = [
     doxygen
     graphviz # for dot
     itstool
+    makeWrapper
     perl
     pkg-config
     python3
@@ -80,26 +103,23 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm
     cppunit
     curl
     dbus
-    ffmpeg_3
+    ffmpeg
     fftw
     fftwSinglePrec
     flac
-    fluidsynth
     glibmm
     gtkmm2
-    hidapi
     itstool
     libarchive
     libjack2
     liblo
-    libltc
     libogg
     libpulseaudio
     librdf_raptor
@@ -118,16 +138,16 @@ stdenv.mkDerivation rec {
     pango
     perl
     python3
-    qm-dsp
     readline
     rubberband
     serd
     sord
+    soundtouch
     sratom
     suil
     taglib
     vamp-plugin-sdk
-  ];
+  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
   wafConfigureFlags = [
     "--cxx11"
@@ -136,39 +156,35 @@ stdenv.mkDerivation rec {
     "--no-phone-home"
     "--optimize"
     "--ptformat"
-    "--qm-dsp-include=${qm-dsp}/include/qm-dsp"
     "--run-tests"
     "--test"
-    "--use-external-libs"
   ];
-
-  # Ardour's wscript requires git revision and date to be available.
-  # Since they are not, let's generate the file manually.
-  postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
-    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
-    patchShebangs ./tools/
-    substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg_3}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg_3}/bin/ffprobe");'
-  '';
+  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
+  # "--use-external-libs"
 
   postInstall = ''
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+
+    # install additional bundled beats, chords and progressions
+    cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
+  '' + lib.optionalString videoSupport ''
+    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+    wrapProgram "$out/bin/ardour${lib.versions.major version}" \
+      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
   LINKFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to
@@ -180,8 +196,8 @@ stdenv.mkDerivation rec {
       https://community.ardour.org/donate
     '';
     homepage = "https://ardour.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon ];
+    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
 }

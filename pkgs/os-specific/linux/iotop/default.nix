@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, python3Packages, fetchpatch }:
+{ lib, fetchurl, python3Packages, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
-  name = "iotop-0.6";
+  pname = "iotop";
+  version = "0.6";
 
   src = fetchurl {
-    url = "http://guichaz.free.fr/iotop/files/${name}.tar.bz2";
+    url = "http://guichaz.free.fr/iotop/files/iotop-${version}.tar.bz2";
     sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
@@ -17,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;

@@ -1,26 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "1.4.5";
   pname = "elementpath";
-  disabled = isPy27; # uses incompatible class syntax
+  version = "4.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "v${version}";
-    sha256 = "1hqvi7ibhdz812dsjbyyz3rysc6242hi1k9187wwnjmilbbngi3c";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BEnSPRuQUnKXtPAJfjxS+fwE0rpPj1U2yRK8eImKMYw=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
   pythonImportsCheck = [
-    "elementpath.xpath1_parser"
-    "elementpath.xpath2_parser"
-    "elementpath.xpath2_functions"
-    "elementpath.xpath_context"
-    "elementpath.xpath_selectors"
+    "elementpath"
   ];
 
   meta = with lib; {

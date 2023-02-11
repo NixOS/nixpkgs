@@ -1,37 +1,50 @@
-{ stdenv, fetchFromGitHub,
-  meson, ninja, pkgconfig, scdoc,
-  wayland, wayland-protocols, libxkbcommon,
-  cairo, gdk-pixbuf, pam
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libxkbcommon
+, cairo
+, gdk-pixbuf
+, pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "v1.6-0";
+  version = "1.6.11";
 
   src = fetchFromGitHub {
-    owner = "mortie";
+    owner = "jirutka";
     repo = "swaylock-effects";
-    rev = version;
-    sha256 = "15lshqq3qj9m3yfac65hjcciaf9zdfh3ir7hgh0ach7gpi3rbk13";
-
+    rev = "v${version}";
+    sha256 = "sha256-MKmWVYssO9HAcP5uqwpy9kDa6/kfZyV2NI7ibozt7Ug=";
   };
 
   postPatch = ''
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
-    "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dpam=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screen locker for Wayland";
     longDescription = ''
-      swaylock-effects is a screen locking utility for Wayland compositors.
+      Swaylock, with fancy effects
     '';
+    mainProgram = "swaylock";
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;

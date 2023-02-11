@@ -5,25 +5,26 @@
 
 buildDunePackage rec {
   pname = "webmachine";
-  version = "0.6.1";
+  version = "0.7.0";
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-webmachine";
-    rev = "${version}";
-    sha256 = "0kpbxsvjzylbxmxag77k1c8m8mwn4f4xscqk2i7fc591llgq9fp3";
+    rev = version;
+    sha256 = "03ynb1l2jjqba88m9r8m5hwlm8izpfp617r4vcab5kmdim1l2ffx";
   };
 
   propagatedBuildInputs = [ cohttp dispatch ptime ];
 
-  checkInputs = lib.optional doCheck ounit;
+  checkInputs = [ ounit ];
 
   doCheck = true;
 
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/inhabitedtype/ocaml-webmachine";
     license = lib.licenses.bsd3;
     description = "A REST toolkit for OCaml";
     maintainers = [ lib.maintainers.vbgl ];

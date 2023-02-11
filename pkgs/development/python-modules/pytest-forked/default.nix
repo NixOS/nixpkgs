@@ -1,32 +1,58 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, setuptools_scm
+, fetchpatch
+, setuptools-scm
+, py
 , pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "1.1.3";
+  version = "1.4.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1805699ed9c9e60cb7a8179b8d4fa2b8898098e82d229b0825d8095f0f261100";
+    sha256 = "sha256-i2dYfI+Yy7rf3YBFOe1UVbbtA4AiA0hd0vU8FCLXRA4=";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  patches = [
+    # pytest 7.2.0 compat, remove after 1.4.0
+    (fetchpatch {
+      url = "https://github.com/pytest-dev/pytest-forked/commit/c3c753e96916a4bc5a8a37699e75c6cbbd653fa2.patch";
+      hash = "sha256-QPgxBeMQ0eKJyHXYZyBicVbE+JyKPV/Kbjsb8gNJBGA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pytest-dev/pytest-forked/commit/de584eda15df6db7912ab6197cfb9ff23024ef23.patch";
+      hash = "sha256-VLE32xZRwFK0nEgCWuSoMW/yyFHEURtNFU9Aa9haLhk=";
+    })
+  ];
 
-  # Do not function
-  doCheck = false;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkPhase = ''
-    py.test testing
-  '';
+  buildInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    py
+  ];
+
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+  ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "Run tests in isolated forked subprocesses";
     homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-
 }

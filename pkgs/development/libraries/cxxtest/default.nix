@@ -1,10 +1,8 @@
-{ stdenv, fetchFromGitHub, python2Packages}:
+{ lib, python3Packages, fetchFromGitHub }:
 
-let
+python3Packages.buildPythonApplication rec {
   pname = "cxxtest";
   version = "4.4";
-in python2Packages.buildPythonApplication {
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "CxxTest";
@@ -13,16 +11,37 @@ in python2Packages.buildPythonApplication {
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
-  setSourceRoot = ''
-    sourceRoot=$(echo */python)
+  sourceRoot = "source/python";
+
+  nativeCheckInputs = [ python3Packages.ply ];
+
+  preCheck = ''
+    cd ../
   '';
 
-  meta = with stdenv.lib; {
+  postCheck = ''
+    cd python3
+    python scripts/cxxtestgen --error-printer -o build/GoodSuite.cpp ../../test/GoodSuite.h
+    $CXX -I../../ -o build/GoodSuite build/GoodSuite.cpp
+    build/GoodSuite
+  '';
+
+  preInstall = ''
+    cd python3
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/include"
+    cp -r ../../cxxtest "$out/include"
+  '';
+
+  dontWrapPythonPrograms = true;
+
+  meta = with lib; {
     homepage = "http://cxxtest.com";
     description = "Unit testing framework for C++";
-    platforms = platforms.unix ;
     license = licenses.lgpl3;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ juliendehos ];
   };
 }
-

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pylint }:
+{ lib, buildPythonPackage, fetchPypi, pylint }:
 
 buildPythonPackage rec {
   pname = "setuptools-lint";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pylint ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package to expose pylint as a lint command into setup.py";
     homepage = "https://github.com/johnnoone/setuptools-pylint";
     license = licenses.bsdOriginal;

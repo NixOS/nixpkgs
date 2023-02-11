@@ -1,32 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen }:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "ogdf";
-  version = "2020.02";
+  version = "2022.02";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "catalpa-202002";
-    sha256 = "0drrs8zh1097i5c60z9g658vs9k1iinkav8crlwk722ihfm1vxqd";
+    rev = "dogwood-202202";
+    sha256 = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
   };
 
   nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-fPIC" ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DOGDF_WARNING_ERRORS=OFF"
+  ];
 
-  # Without disabling hardening for format, the build fails with
-  # the following error.
-  #> /build/source/src/coin/CoinUtils/CoinMessageHandler.cpp:766:35: error: format not a string literal and no format arguments [-Werror=format-security]
-  #> 766 |      sprintf(messageOut_,format_+2);
-  hardeningDisable = [ "format" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
     homepage = "http://www.ogdf.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
-    platforms = platforms.i686 ++ platforms.x86_64;
+    platforms = platforms.all;
     longDescription = ''
       OGDF stands both for Open Graph Drawing Framework (the original name) and
       Open Graph algorithms and Data structures Framework.

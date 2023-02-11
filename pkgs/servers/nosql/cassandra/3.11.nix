@@ -1,6 +1,7 @@
 { callPackage, ... } @ args:
-
-callPackage ./generic.nix (args // {
-  version = "3.11.4";
-  sha256 = "11wr0vcps8w8g2sd8qwp1yp8y873c4q32azc041xpi7zqciqwnax";
-})
+callPackage ./generic.nix (
+  args
+  // builtins.fromJSON (builtins.readFile ./3.11.json)
+  // {
+    generation = "3_11";
+  })

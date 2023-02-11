@@ -2,9 +2,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "solr";
-  meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
+  meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { config, pkgs, ... }:
     {
       # Ensure the virtual machine has enough memory for Solr to avoid the following error:

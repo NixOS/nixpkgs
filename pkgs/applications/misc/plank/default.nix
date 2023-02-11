@@ -1,19 +1,19 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , vala
 , atk
 , cairo
 , dconf
 , glib
-, gnome3
+, gnome
 , gtk3
-, libwnck3
+, libwnck
 , libX11
 , libXfixes
 , libXi
 , pango
 , gettext
-, pkgconfig
+, pkg-config
 , libxml2
 , bamf
 , gdk-pixbuf
@@ -23,7 +23,6 @@
 , libgee
 , wrapGAppsHook
 , autoreconfHook
-, pantheon
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +37,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    gnome3.gnome-common
+    gnome.gnome-common
     libxml2 # xmllint
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     libXi
     libdbusmenu-gtk3
     libgee
-    libwnck3
+    libwnck
     pango
   ];
 
@@ -79,11 +78,11 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

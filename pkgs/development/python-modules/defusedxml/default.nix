@@ -1,11 +1,28 @@
-{ buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+}:
 
 buildPythonPackage rec {
   pname = "defusedxml";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5";
+    sha256 = "1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69";
+  };
+
+  checkPhase = ''
+    ${python.interpreter} tests.py
+  '';
+
+  pythonImportsCheck = [ "defusedxml" ];
+
+  meta = with lib; {
+    description = "Python module to defuse XML issues";
+    homepage = "https://github.com/tiran/defusedxml";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ fab ];
   };
 }

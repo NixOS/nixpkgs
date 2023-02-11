@@ -5,12 +5,12 @@
 , pkgs
 }:
 build-idris-package  {
-  name = "glfw";
+  pname = "glfw";
   version = "2016-12-05";
 
   idrisDeps = [ effects ];
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   extraBuildInputs = [ pkgs.glfw ];
 
   postPatch = ''

@@ -1,14 +1,26 @@
-{ python3Packages, fetchurl, lib,
-  yubikey-personalization, libu2f-host, libusb1 }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps
+, stdenv }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "3.1.0";
+  version = "5.0.1";
+  format = "pyproject";
 
-  srcs = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0nb3qzpggyp61lchvprnklby5mf5n0xpn9z8vlhh99pz1k9sqdq1";
+  src = fetchFromGitHub {
+    repo = "yubikey-manager";
+    rev = "refs/tags/${version}";
+    owner = "Yubico";
+    sha256 = "sha256-Dj3ftyFeVgM0YMFI8cbiH5dmc8SKi2SBbScnc0+ad0M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'fido2 = ">=0.9, <1.0"' 'fido2 = ">*"'
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace 'pkill' '${if stdenv.isLinux then "${procps}" else "/usr"}/bin/pkill'
+  '';
+
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs =
     with python3Packages; [
@@ -16,9 +28,9 @@ python3Packages.buildPythonPackage rec {
       cryptography
       pyscard
       pyusb
-      pyopenssl
       six
       fido2
+      keyring
     ] ++ [
       libu2f-host
       libusb1
@@ -42,15 +54,15 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/29169
-  doCheck = false;
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook makefun ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    description = "Command line tool for configuring any YubiKey over all USB transports.";
+    description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley mic92 ];
+    maintainers = with maintainers; [ benley lassulus pinpox ];
+    mainProgram = "ykman";
   };
 }

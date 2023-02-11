@@ -1,29 +1,29 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , zope_testrunner
 , manuel
 , docutils
-, pythonAtLeast
+, pygments
 }:
 
 buildPythonPackage rec {
   pname = "ZConfig";
-  version = "3.5.0";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s7aycxna07a04b4rswbkj4y5qh3gxy2mcsqb9dmy0iimj9f9550";
+    sha256 = "sha256-RCLH1mOvdizXeVd1NmvGpnq0QKGreW6w90JbDpA08HY=";
   };
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
+  patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ pygments ];
 
-  disabled = pythonAtLeast "3.8"; # 3.6.0 introduces compatibility for 3.8 and 3.9
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Structured Configuration Library";
     homepage = "https://pypi.python.org/pypi/ZConfig";
     license = licenses.zpl20;

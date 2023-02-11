@@ -1,21 +1,36 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gevent
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.1.0";
+  version = "1.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06116628e9cb7b2c34c8f248d0e4859fa5943e1e07381ad2b234ae9c7ed6f4cc";
+  src = fetchFromGitHub {
+    owner = "jgehrcke";
+    repo = "gipc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T5TqLanODyzJGyjDZz+75bbz3THxoobYnfJFQxAB76E=";
   };
 
-  propagatedBuildInputs = [ gevent ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "gevent>=1.5,<=21.12.0" "gevent>=1.5"
+  '';
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    gevent
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered

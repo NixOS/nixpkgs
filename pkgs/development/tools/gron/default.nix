@@ -1,22 +1,19 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gron";
-  version = "0.6.0";
-
-  owner = "tomnomnom";
-  repo = "gron";
-  goPackagePath = "github.com/${owner}/${repo}";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
-    inherit owner repo;
+    owner = "tomnomnom";
+    repo = "gron";
     rev = "v${version}";
-    sha256 = "05f3w4zr15wd7xk75l12y5kip4gnv719a2x9w2hy23q3pnss9wk0";
+    sha256 = "sha256-ZkAfAQsaFX7npyDcBDFS4Xa8kOMVH6yGfxGD7c0iQ+o=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make JSON greppable!";
     longDescription = ''
       gron transforms JSON into discrete assignments to make it easier to grep
@@ -26,7 +23,7 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/tomnomnom/gron";
     license = licenses.mit;
-    maintainers = [ maintainers.fgaz ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
+    platforms = platforms.unix;
   };
 }

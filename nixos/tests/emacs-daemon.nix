@@ -1,12 +1,12 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "emacs-daemon";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
   };
 
   enableOCR = true;
 
-  machine =
+  nodes.machine =
     { ... }:
 
     { imports = [ ./common/x11.nix ];
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       )
 
       # connects to the daemon
-      machine.succeed("emacsclient --create-frame $EDITOR &")
+      machine.succeed("emacsclient --no-wait --frame-parameters='((display . \"'\"$DISPLAY\"'\"))' --create-frame $EDITOR >&2")
 
       # checks that Emacs shows the edited filename
       machine.wait_for_text("emacseditor")

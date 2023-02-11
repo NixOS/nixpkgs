@@ -13,9 +13,11 @@
 , gnugrep
 , gnused
 , libtiff
+, libxcrypt
+, openssl
 , psmisc
 , sharutils
-, utillinux
+, util-linux
 , zlib
 ## optional packages (using `null` disables some functionality)
 , jbigkit ? null
@@ -29,12 +31,12 @@
 
 let
 
-  name = "hylafaxplus-${version}";
-  version = "7.0.2";
-  sha256 = "17vym1gz5ppy3q6zbw2y4nkq1dspn31k12zcmva44fnw9diwvsfb";
+  pname = "hylafaxplus";
+  version = "7.0.7";
+  hash = "sha512-nUvt+M0HBYN+MsGskuuDt1j0nI5Dk8MbfK/OVxP2FCDby3eiDg0eDtcpIxlOe4o0klko07zDRIb06zqh8ABuKA==";
 
   configSite = substituteAll {
-    name = "hylafaxplus-config.site";
+    name = "${pname}-config.site";
     src = ./config.site;
     config_maxgid = lib.optionalString (maxgid!=null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
     ghostscript_version = ghostscript.version;
@@ -43,7 +45,7 @@ let
   };
 
   postPatch = substituteAll {
-    name = "hylafaxplus-post-patch.sh";
+    name = "${pname}-post-patch.sh";
     src = ./post-patch.sh;
     inherit configSite;
     maxuid = lib.optionalString (maxuid!=null) (builtins.toString maxuid);
@@ -54,7 +56,7 @@ let
   };
 
   postInstall = substituteAll {
-    name = "hylafaxplus-post-install.sh";
+    name = "${pname}-post-install.sh";
     src = ./post-install.sh;
     inherit fakeroot libfaketime;
   };
@@ -62,11 +64,15 @@ let
 in
 
 stdenv.mkDerivation {
-  inherit name version;
+  inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
+  patches = [
+    # adjust configure check to work with libtiff > 4.1
+    ./libtiff-4.patch
+  ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and
   # hardcode their absolute paths in the new package.
@@ -74,20 +80,27 @@ stdenv.mkDerivation {
     file  # for `file` command
     ghostscript
     libtiff
+    libxcrypt
+    openssl
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command
-    utillinux  # for `agetty` command
+    util-linux  # for `agetty` command
     zlib
     jbigkit  # optional
     lcms2  # optional
     openldap  # optional
     pam  # optional
   ];
-  postPatch = ''. ${postPatch}'';
+  # Disable parallel build, errors:
+  #  *** No rule to make target '../util/libfaxutil.so.7.0.4', needed by 'faxmsg'.  Stop.
+  enableParallelBuilding = false;
+
+  postPatch = ". ${postPatch}";
   dontAddPrefix = true;
-  postInstall = ''. ${postInstall}'';
-  postInstallCheck = ''. ${./post-install-check.sh}'';
+  postInstall = ". ${postInstall}";
+  postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
+    changelog = "https://hylafax.sourceforge.io/news/${version}.php";
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";

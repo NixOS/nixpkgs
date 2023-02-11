@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, zeromq }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zeromq }:
 
 stdenv.mkDerivation rec {
   pname = "zmqpp";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   propagatedBuildInputs = [ zeromq ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "C++ wrapper for czmq. Aims to be minimal, simple and consistent";
     license = licenses.lgpl3;

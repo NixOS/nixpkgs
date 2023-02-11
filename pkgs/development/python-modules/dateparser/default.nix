@@ -1,61 +1,81 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose
-, parameterized
-, mock
-, flake8
-, glibcLocales
-, six
-, jdatetime
-, dateutil
-, umalqurra
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, python-dateutil
 , pytz
-, tzlocal
 , regex
-, ruamel_yaml
-, python
-, isPy3k
+, tzlocal
+, hijri-converter
+, convertdate
+, fasttext
+, langdetect
+, parameterized
+, pytestCheckHook
+, gitpython
+, parsel
+, requests
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.4";
+  version = "1.1.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fb5bfde4795fa4b179fe05c2c25b3981f785de26bec37e247dee1079c63d5689";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "scrapinghub";
+    repo = "dateparser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KQCjXuBDBZduNYJITwk1qx7mBp8CJ95ZbFlhrFMkE8w=";
   };
 
-  checkInputs = [
-    flake8
-    nose
-    mock
-    parameterized
-    six
-    glibcLocales
-  ];
-  preCheck =''
-    # skip because of missing convertdate module, which is an extra requirement
-    rm tests/test_jalali.py
-  '';
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
-
-  # Strange
-  # AttributeError: 'module' object has no attribute 'config'
-  doCheck = false;
-
   propagatedBuildInputs = [
-    # install_requires
-    dateutil pytz regex tzlocal
-    # extra_requires
-    jdatetime ruamel_yaml umalqurra
+    python-dateutil
+    pytz
+    regex
+    tzlocal
   ];
+
+  passthru.optional-dependencies = {
+    calendars = [ hijri-converter convertdate ];
+    fasttext = [ fasttext ];
+    langdetect = [ langdetect ];
+  };
+
+  nativeCheckInputs = [
+    parameterized
+    pytestCheckHook
+    gitpython
+    parsel
+    requests
+    ruamel-yaml
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    export HOME="$TEMPDIR"
+  '';
+
+  # Upstream only runs the tests in tests/ in CI, others use git clone
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # access network
+    "test_custom_language_detect_fast_text_0"
+    "test_custom_language_detect_fast_text_1"
+  ];
+
+  pythonImportsCheck = [ "dateparser" ];
 
   meta = with lib; {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

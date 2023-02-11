@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
@@ -33,8 +33,12 @@ let
   redisImage = pkgs.dockerTools.buildImage {
     name = "redis";
     tag = "latest";
-    contents = [ pkgs.redis pkgs.bind.host ];
-    config.Entrypoint = "/bin/redis-server";
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.redis pkgs.bind.host ];
+    };
+    config.Entrypoint = ["/bin/redis-server"];
   };
 
   probePod = pkgs.writeText "probe-pod.json" (builtins.toJSON {
@@ -54,15 +58,18 @@ let
   probeImage = pkgs.dockerTools.buildImage {
     name = "probe";
     tag = "latest";
-    contents = [ pkgs.bind.host pkgs.busybox ];
-    config.Entrypoint = "/bin/tail";
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.bind.host pkgs.busybox ];
+    };
+    config.Entrypoint = ["/bin/tail"];
   };
 
-  extraConfiguration = { config, pkgs, ... }: {
+  extraConfiguration = { config, pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.bind.host ];
-    # virtualisation.docker.extraOptions = "--dns=${config.services.kubernetes.addons.dns.clusterIp}";
     services.dnsmasq.enable = true;
-    services.dnsmasq.servers = [
+    services.dnsmasq.settings.server = [
       "/cluster.local/${config.services.kubernetes.addons.dns.clusterIp}#53"
     ];
   };
@@ -77,7 +84,7 @@ let
       # prepare machine1 for test
       machine1.wait_until_succeeds("kubectl get node machine1.${domain} | grep -w Ready")
       machine1.wait_until_succeeds(
-          "docker load < ${redisImage}"
+          "${pkgs.gzip}/bin/zcat ${redisImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
       machine1.wait_until_succeeds(
           "kubectl create -f ${redisPod}"
@@ -86,7 +93,7 @@ let
           "kubectl create -f ${redisService}"
       )
       machine1.wait_until_succeeds(
-          "docker load < ${probeImage}"
+          "${pkgs.gzip}/bin/zcat ${probeImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
       machine1.wait_until_succeeds(
           "kubectl create -f ${probePod}"
@@ -101,7 +108,7 @@ let
       machine1.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 
@@ -118,7 +125,7 @@ let
       # prepare machines for test
       machine1.wait_until_succeeds("kubectl get node machine2.${domain} | grep -w Ready")
       machine2.wait_until_succeeds(
-          "docker load < ${redisImage}"
+          "${pkgs.gzip}/bin/zcat ${redisImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
       machine1.wait_until_succeeds(
           "kubectl create -f ${redisPod}"
@@ -127,7 +134,7 @@ let
           "kubectl create -f ${redisService}"
       )
       machine2.wait_until_succeeds(
-          "docker load < ${probeImage}"
+          "${pkgs.gzip}/bin/zcat ${probeImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
       machine1.wait_until_succeeds(
           "kubectl create -f ${probePod}"
@@ -143,7 +150,7 @@ let
       machine2.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 in {

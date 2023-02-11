@@ -1,9 +1,10 @@
-{ stdenv
+{ lib
 , fetchurl
+, nix-update-script
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome3
+, gnome
 , gobject-introspection
 , gtk3
 , wrapGAppsHook
@@ -13,32 +14,31 @@
 , libappindicator
 , intltool
 , wmctrl
-, xvfb_run
+, xvfb-run
 , librsvg
+, libX11
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.7.3";
-
-  disabled = python3Packages.isPy27;
+  version = "5.15.0";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "0wq2zsq3496fjfg89q01dsm7sb7kv92sycvqm6ad8z1z2kpisrbh";
+    sha256 = "sha256-1Qo6ffMtVRtZDPCHvHEl7T0dPdDUxP4TP2hkSVSdQpo";
   };
 
   nativeBuildInputs = with python3Packages; [
     distutils_extra
+    gobject-introspection
     intltool
     wrapGAppsHook
+    gdk-pixbuf
   ];
 
   buildInputs = [
-    gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
-    gobject-introspection
+    gnome.adwaita-icon-theme
     gtk3
     keybinder3
     libappindicator
@@ -55,28 +55,30 @@ python3Packages.buildPythonApplication rec {
     dbus-python
     pygobject3
     pyinotify
-    python-Levenshtein
+    levenshtein
     pyxdg
+    pycairo
     requests
-    websocket_client
+    websocket-client
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest
     pytest-mock
-    pytestpep8
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [
     ./fix-path.patch
-    ./0001-Adjust-get_data_path-for-NixOS.patch
     ./fix-extensions.patch
   ];
 
   postPatch = ''
     substituteInPlace setup.py --subst-var out
+    patchShebangs bin/ulauncher-toggle
+    substituteInPlace bin/ulauncher-toggle \
+      --replace wmctrl ${wmctrl}/bin/wmctrl
   '';
 
   # https://github.com/Ulauncher/Ulauncher/issues/390
@@ -94,20 +96,32 @@ python3Packages.buildPythonApplication rec {
     # skip tests in invocation that handle paths that
     # aren't nix friendly (i think)
     xvfb-run -s '-screen 0 1024x768x16' \
-      pytest -k 'not TestPath and not test_handle_key_press_event' --pep8 tests
+      pytest -k 'not TestPath and not test_handle_key_press_event' tests
 
     runHook postCheck
   '';
 
+  # do not double wrap
+  dontWrapGApps = true;
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    makeWrapperArgs+=(
+     "''${gappsWrapperArgs[@]}"
+     --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
+     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libX11 ]}"
+     --prefix WEBKIT_DISABLE_COMPOSITING_MODE : "1"
+    )
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse worldofpeace ];
+    maintainers = with maintainers; [ aaronjanse ];
   };
 }

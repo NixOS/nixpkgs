@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
+{ lib, stdenv, fetchurl, motif, libXpm, libXt }:
 
 stdenv.mkDerivation rec {
   pname = "nedit";
@@ -11,11 +11,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ xlibsWrapper ];
-  buildInputs = [ motif libXpm ];
+  buildInputs = [ motif libXpm libXt ];
 
   # the linux config works fine on darwin too!
-  buildFlags = stdenv.lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
+  buildFlags = lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
 
   NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/nedit";
     description = "A fast, compact Motif/X11 plain text editor";
     platforms = with platforms; linux ++ darwin;

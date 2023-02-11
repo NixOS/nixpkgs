@@ -9,7 +9,7 @@ let
 in {
   name = "gerrit";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli zimbatm ];
   };
 
@@ -18,7 +18,6 @@ in {
       { config, pkgs, ... }: {
         networking.firewall.allowedTCPPorts = [ 80 2222 ];
 
-        virtualisation.memorySize = 1024;
 
         services.gerrit = {
           enable = true;

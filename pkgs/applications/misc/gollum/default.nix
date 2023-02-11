@@ -1,37 +1,23 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git }:
+{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, git, docutils, nixosTests }:
 
-stdenv.mkDerivation rec {
+bundlerApp rec {
   pname = "gollum";
-  # nix-shell -p bundix icu zlib cmake pkg-config openssl
-  version = (import ./gemset.nix).gollum.version;
+  exes = [ "gollum" ];
+
+  inherit ruby;
+  gemdir = ./.;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "installPhase" ];
-
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
-      inherit pname ruby;
-      gemdir = ./.;
-    };
-  in ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
-    makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
-  '';
-
   passthru.updateScript = bundlerUpdateScript "gollum";
+  passthru.tests.gollum = nixosTests.gollum;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, Git-powered wiki with a sweet API and local frontend";
     homepage = "https://github.com/gollum/gollum";
-    changelog = "https://github.com/gollum/gollum/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/gollum/gollum/blob/HEAD/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich primeos nicknovitski ];
+    maintainers = with maintainers; [ erictapen jgillich nicknovitski bbenno ];
     platforms = platforms.unix;
   };
 }

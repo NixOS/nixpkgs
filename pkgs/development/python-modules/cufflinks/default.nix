@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi
 , chart-studio
 , colorlover
 , ipython
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  checkInputs = [ pytest nose ];
+  nativeCheckInputs = [ pytest nose ];
 
   # ignore tests which are incompatible with pandas>=1.0
   # https://github.com/santosjorge/cufflinks/issues/236

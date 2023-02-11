@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''iolib_dot_grovel'';
-  version = ''iolib-v0.8.3'';
+  baseName = "iolib_dot_grovel";
+  version = "iolib-v0.8.3";
 
-  description = ''The CFFI Groveller'';
+  description = "The CFFI Groveller";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_common-lisp" args."iolib_dot_conf" args."split-sequence" args."trivial-features" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz'';
-    sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
+    url = "http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz";
+    sha256 = "12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c";
   };
 
   packageName = "iolib.grovel";

@@ -11,20 +11,21 @@ in
 
   options = {
     programs.npm = {
-      enable = mkEnableOption "<command>npm</command> global config";
+      enable = mkEnableOption (lib.mdDoc "{command}`npm` global config");
 
       package = mkOption {
-        type = types.path;
-        description = "The npm package version / flavor to use";
+        type = types.package;
+        description = lib.mdDoc "The npm package version / flavor to use";
         default = pkgs.nodePackages.npm;
-        example = literalExample "pkgs.nodePackages_13_x.npm";
+        defaultText = literalExpression "pkgs.nodePackages.npm";
+        example = literalExpression "pkgs.nodePackages_13_x.npm";
       };
 
       npmrc = mkOption {
         type = lib.types.lines;
-        description = ''
+        description = lib.mdDoc ''
           The system-wide npm configuration.
-          See <link xlink:href="https://docs.npmjs.com/misc/config"/>.
+          See <https://docs.npmjs.com/misc/config>.
         '';
         default = ''
           prefix = ''${HOME}/.npm

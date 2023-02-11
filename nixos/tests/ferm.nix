@@ -1,7 +1,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "ferm";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ mic92 ];
   };
 
@@ -56,6 +56,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       start_all()
 
       client.wait_for_unit("network-online.target")
+      server.wait_for_unit("network-online.target")
       server.wait_for_unit("ferm.service")
       server.wait_for_unit("nginx.service")
       server.wait_until_succeeds("ss -ntl | grep -q 80")

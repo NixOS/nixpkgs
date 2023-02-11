@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -34,13 +34,13 @@ buildPythonPackage rec {
     dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  nativeCheckInputs = [ dcm2niix pytest mock ];
 
   # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
   # and these aren't in Nixpkgs
   checkPhase = "pytest -k 'not test_dlad and not test_monitor' heudiconv/tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
     license = licenses.asl20;

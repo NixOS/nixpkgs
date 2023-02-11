@@ -1,37 +1,60 @@
 { podman-unwrapped
 , runCommand
 , makeWrapper
+, symlinkJoin
 , lib
+, stdenv
 , extraPackages ? []
-, podman # Docker compat
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
-, utillinux # nsenter
-, cni-plugins # not added to path
+, util-linux # nsenter
 , iptables
+, iproute2
+, catatonit
+, gvproxy
+, aardvark-dns
+, netavark
 }:
 
-let
-  podman = podman-unwrapped;
+# do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
+let
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
     slirp4netns
     fuse-overlayfs
-    utillinux
+    util-linux
     iptables
+    iproute2
   ] ++ extraPackages);
 
-in runCommand podman.name {
-  name = "${podman.pname}-wrapper-${podman.version}";
-  inherit (podman) pname version passthru;
+  helpersBin = symlinkJoin {
+    name = "${podman-unwrapped.pname}-helper-binary-wrapper-${podman-unwrapped.version}";
 
-  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    paths = [
+      gvproxy
+    ] ++ lib.optionals stdenv.isLinux [
+      aardvark-dns
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
+      podman-unwrapped.rootlessport
+    ];
+  };
+
+in runCommand podman-unwrapped.name {
+  name = "${podman-unwrapped.pname}-wrapper-${podman-unwrapped.version}";
+  inherit (podman-unwrapped) pname version passthru;
+
+  preferLocalBuild = true;
+
+  meta = builtins.removeAttrs podman-unwrapped.meta [ "outputsToInstall" ];
 
   outputs = [
     "out"
@@ -43,10 +66,13 @@ in runCommand podman.name {
   ];
 
 } ''
-  ln -s ${podman.man} $man
+  ln -s ${podman-unwrapped.man} $man
 
   mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/etc $out/etc
+  ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
-    --prefix PATH : ${binPath}
+    --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
+    --prefix PATH : ${lib.escapeShellArg binPath}
 ''

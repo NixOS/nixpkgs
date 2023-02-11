@@ -1,8 +1,7 @@
 { stdenv
+, lib
 , fetchurl
 , rpmextract
-, patchelf
-, patchelfUnstable
 , libnotify
 , libuuid
 , cairo
@@ -33,24 +32,29 @@
 , libXft
 , libXcomposite
 , libXScrnSaver
-, alsaLib
+, alsa-lib
 , pulseaudio
 , makeWrapper
+, xdg-utils
 }:
+
+let
+  getFirst = n: v: builtins.concatStringsSep "." (lib.take n (lib.splitString "." v));
+in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.3.0";
+  version = "2.31.0.83";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
-    sha256 = "06lcpkga8h0zpl2wlysj6n979f0yg361frp3zr0vwzln3fiil2a7";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
+    sha256 = "sha256-dzT6S6124l70uYqkB6fGgCpqZBXS2irgwOfkmupN8HU=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
         expat
         gdk-pixbuf
         dbus
-        udev.lib
+        (lib.getLib udev)
         freetype
         nspr
         glib
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
         libXft
         libXcomposite
         libXScrnSaver
-        alsaLib
+        alsa-lib
         pulseaudio
       ];
 
@@ -96,19 +100,22 @@ stdenv.mkDerivation rec {
     mv usr/share share
     rmdir usr
 
-    ${patchelf}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
-    ${patchelfUnstable}/bin/patchelf \
+
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
-    cc $localtime64_stub -shared -o "$out"/opt/BlueJeans/liblocaltime64_stub.so
+    cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
-      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
@@ -116,11 +123,15 @@ stdenv.mkDerivation rec {
     patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
+

@@ -2,25 +2,39 @@
 , buildPythonPackage
 , fetchPypi
 , configobj
-, six
+, patiencediff
+, fastbencode
 , fastimport
 , dulwich
 , launchpadlib
 , testtools
+, pythonOlder
+, installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.0.2";
+  version = "3.2.2";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50f16bc7faf299f98fe58573da55b0664078f94b1a0e7f0ce9e1e6a0d47e68e0";
+    sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
   };
 
-  propagatedBuildInputs = [ configobj six fastimport dulwich launchpadlib ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ testtools ];
+  propagatedBuildInputs = [
+    configobj
+    fastbencode
+    patiencediff
+    fastimport
+    dulwich
+    launchpadlib
+  ];
+
+  nativeCheckInputs = [ testtools ];
 
   # There is a conflict with their `lazy_import` and plugin tests
   doCheck = false;
@@ -28,6 +42,8 @@ buildPythonPackage rec {
   # symlink for bazaar compatibility
   postInstall = ''
     ln -s "$out/bin/brz" "$out/bin/bzr"
+
+    installShellCompletion --cmd brz --bash contrib/bash/brz
   '';
 
   pythonImportsCheck = [ "breezy" ];
@@ -35,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
   };
 }

@@ -1,26 +1,31 @@
-{ fetchurl, stdenv, perl, makeWrapper, procps }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20200522";
+  pname = "parallel";
+  version = "20221222";
 
   src = fetchurl {
-    url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "10is46v5dpccxibby0zikg1q68mdwpmgdpxk796zka93idd6id29";
+    url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-TakMe+wYqUQxtOPbSd1WP2XPIM6v0kX3zHtC74v4WX8=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];
 
+  preInstall = ''
+    patchShebangs ./src/parallel
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ procps perl ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shell tool for executing jobs in parallel";
     longDescription =
       '' GNU Parallel is a shell tool for executing jobs in parallel.  A job

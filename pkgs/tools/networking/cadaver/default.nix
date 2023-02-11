@@ -1,30 +1,41 @@
-{ stdenv, fetchurl, fetchpatch, openssl, readline }:
+{ lib
+, stdenv
+, fetchurl
+, neon
+, pkg-config
+, zlib
+, openssl
+}:
 
 stdenv.mkDerivation rec {
-  name = "cadaver-0.23.3";
+  pname = "cadaver";
+  version = "0.24";
 
   src = fetchurl {
-    url = "http://www.webdav.org/cadaver/${name}.tar.gz";
-    sha256 = "1jizq69ifrjbjvz5y79wh1ny94gsdby4gdxwjad4bfih6a5fck7x";
+    url = "https://notroj.github.io/cadaver/cadaver-${version}.tar.gz";
+    hash = "sha256-Rs/y8+vTLNMoNoEspHvMdTU/wr51fwk9qIwN2PEP1fY=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/disable-sslv2.patch?h=packages/cadaver";
-      name = "disable-sslv2.patch";
-      sha256 = "1qx65hv584wdarks51yhd3y38g54affkphm5wz27xiz4nhmbssrr";
-    })
+  configureFlags = [
+    "--with-ssl"
   ];
 
-  configureFlags = [ "--with-ssl" "--with-readline" ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl readline ];
+  buildInputs = [
+    neon
+    openssl
+    zlib
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line WebDAV client";
-    homepage    = "http://www.webdav.org/cadaver";
+    homepage = "https://notroj.github.io/cadaver/";
+    changelog = "https://github.com/notroj/cadaver/blob/${version}/NEWS";
     maintainers = with maintainers; [ ianwookim ];
-    license     = licenses.gpl2;
-    platforms   = with platforms; linux ++ freebsd ++ openbsd;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

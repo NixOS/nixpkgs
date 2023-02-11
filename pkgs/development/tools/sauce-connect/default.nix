@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl, zlib, unzip }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "sauce-connect";
   version = "4.5.4";
@@ -19,12 +17,12 @@ stdenv.mkDerivation rec {
     }
   );
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/lib:${makeLibraryPath [zlib]}" \
+      --set-rpath "$out/lib:${lib.makeLibraryPath [zlib]}" \
       bin/sc
   '';
 
@@ -35,8 +33,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "A secure tunneling app for executing tests securely when testing behind firewalls";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
     maintainers = with maintainers; [offline];

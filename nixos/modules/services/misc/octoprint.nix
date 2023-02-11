@@ -17,7 +17,7 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+  pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
   package = pkgs.octoprint;
 
@@ -29,53 +29,60 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption "OctoPrint, web interface for 3D printers";
+      enable = mkEnableOption (lib.mdDoc "OctoPrint, web interface for 3D printers");
 
       host = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           Host to bind OctoPrint to.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
-        description = ''
+        description = lib.mdDoc ''
           Port to bind OctoPrint to.
         '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Open ports in the firewall for OctoPrint.";
       };
 
       user = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "User for the daemon.";
+        description = lib.mdDoc "User for the daemon.";
       };
 
       group = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "Group for the daemon.";
+        description = lib.mdDoc "Group for the daemon.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/octoprint";
-        description = "State directory of the daemon.";
+        description = lib.mdDoc "State directory of the daemon.";
       };
 
       plugins = mkOption {
-        default = plugins: [];
-        defaultText = "plugins: []";
-        example = literalExample "plugins: [ m3d-fio ]";
-        description = "Additional plugins.";
+        type = types.functionTo (types.listOf types.package);
+        default = plugins: [ ];
+        defaultText = literalExpression "plugins: []";
+        example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
+        description = lib.mdDoc "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
-        description = "Extra options which are added to OctoPrint's YAML configuration file.";
+        default = { };
+        description = lib.mdDoc "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };
@@ -99,6 +106,9 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+      # this will allow octoprint access to raspberry specific hardware to check for throttling
+      # read-only will not work: "VCHI initialization failed" error
+      "a /dev/vchiq - - - - u:octoprint:rw"
     ];
 
     systemd.services.octoprint = {
@@ -121,9 +131,12 @@ in
         ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
+        SupplementaryGroups = [
+          "dialout"
+        ];
       };
     };
 
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
   };
-
 }

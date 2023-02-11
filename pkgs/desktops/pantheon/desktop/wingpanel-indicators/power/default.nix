@@ -1,7 +1,10 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, substituteAll
+, nix-update-script
+, gnome-power-manager
+, pkg-config
 , meson
 , python3
 , ninja
@@ -10,6 +13,7 @@
 , granite
 , bamf
 , libgtop
+, libnotify
 , udev
 , wingpanel
 , libgee
@@ -17,25 +21,26 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "2.1.5";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "19zhgzyivf3y416r5xaajx81h87zdhvrrcsagli00gp1f2169q5m";
+    sha256 = "sha256-TxrskbwitsilTidWifSWg9IP6BzH1y/OOrFohlENJmM=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gnome_power_manager = gnome-power-manager;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -46,6 +51,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libgtop
+    libnotify
     udev
     wingpanel
   ];
@@ -55,11 +61,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
     description = "Power Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-power";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

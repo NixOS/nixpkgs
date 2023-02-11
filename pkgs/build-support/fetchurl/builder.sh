@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 source $mirrorsFile
@@ -15,8 +16,16 @@ curl=(
     --retry 3
     --disable-epsv
     --cookie-jar cookies
-    --insecure
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
+)
+
+if ! [ -f "$SSL_CERT_FILE" ]; then
+    curl+=(--insecure)
+fi
+
+eval "curl+=($curlOptsList)"
+
+curl+=(
     $curlOpts
     $NIX_CURL_FLAGS
 )
@@ -28,7 +37,7 @@ if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 tryDownload() {
     local url="$1"
     echo
-    header "trying $url"
+    echo "trying $url"
     local curlexit=18;
 
     success=

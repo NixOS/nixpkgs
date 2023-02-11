@@ -1,30 +1,37 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtbase
+, qttools
+, qtimageformats
+, qtsvg
+}:
 
 mkDerivation rec {
   pname = "qview";
-  version = "3.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
     rev = version;
-    sha256 = "15a91bs3wcqhgf76wzigbn10hayg628j84pq4j2vaxar94ak0vk7";
+    hash = "sha256-VQ0H9iPrrxO9e/kMo7yZ/zN5I2qDWBCAFacS9uGuZLI=";
   };
 
   nativeBuildInputs = [ qmake ];
 
   buildInputs = [
     qtbase
+    qttools
+    qtimageformats
+    qtsvg
   ];
-
-  patchPhase = ''
-    sed "s|/usr/|$out/|g" -i qView.pro
-  '';
 
   meta = with lib; {
     description = "Practical and minimal image viewer";
     homepage = "https://interversehq.com/qview/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ acowley ];
     platforms = platforms.all;
   };

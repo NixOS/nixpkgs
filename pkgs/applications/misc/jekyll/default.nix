@@ -30,11 +30,13 @@ in bundlerApp {
     then ./full
     else ./basic;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/jekyll --prefix PATH : ${rubyWrapper}/bin
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A blog-aware, static site generator, written in Ruby";
@@ -49,7 +51,7 @@ in bundlerApp {
     homepage    = "https://jekyllrb.com/";
     #changelog   = "https://raw.githubusercontent.com/jekyll/jekyll/v${version}/History.markdown";
     license     = licenses.mit;
-    maintainers = with maintainers; [ primeos pesterhazy ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.unix;
   };
 }

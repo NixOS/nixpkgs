@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
+, python3
 , ninja
 , gusb
 , pixman
@@ -9,14 +10,16 @@
 , nss
 , gobject-introspection
 , coreutils
+, cairo
+, libgudev
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.90.2";
+  version = "1.94.5";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -24,15 +27,24 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g890y49anqd7yfz86iyvywxgbfmfmj6813fy58m5n8jain7iy1b";
+    hash = "sha256-+eSvzbXxjemVKMeD8tp/0/tGBjw2EOlmyxb8KfyZKtA=";
   };
 
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
+  '';
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
   ];
@@ -42,16 +54,39 @@ stdenv.mkDerivation rec {
     pixman
     glib
     nss
+    cairo
+    libgudev
   ];
 
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=all"
+    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-  meta = with stdenv.lib; {
+  nativeInstallCheckInputs = [
+    (python3.withPackages (p: with p; [ pygobject3 ]))
+  ];
+
+  # We need to run tests _after_ install so all the paths that get loaded are in
+  # the right place.
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ninjaCheckPhase
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

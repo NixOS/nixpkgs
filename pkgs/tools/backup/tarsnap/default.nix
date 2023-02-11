@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, e2fsprogs }:
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bash, bzip2 }:
 
 let
   zshCompletion = fetchurl {
@@ -8,20 +8,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tarsnap";
-  version = "1.0.39";
+  version = "1.0.40";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
-    sha256 = "10i0whbmb345l2ggnf4vs66qjcyf6hmlr8f4nqqcfq0h5a5j24sn";
+    sha256 = "1mbzq81l4my5wdhyxyma04sblr43m8p7ryycbpi6n78w1hwfbjmw";
   };
 
   preConfigure = ''
-    configureFlags="--with-bash-completion-dir=$out/etc/bash_completion.d"
+    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
   '';
 
   patchPhase = ''
     substituteInPlace Makefile.in \
       --replace "command -p mv" "mv"
+    substituteInPlace configure \
+      --replace "command -p getconf PATH" "echo $PATH"
   '';
 
   postInstall = ''
@@ -29,13 +31,14 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib ] ++ stdenv.lib.optional stdenv.isLinux e2fsprogs ;
+  buildInputs = [ openssl zlib ] ++ lib.optional stdenv.isLinux e2fsprogs
+                ++ lib.optional stdenv.isDarwin bzip2;
 
   meta = {
     description = "Online backups for the truly paranoid";
     homepage    = "http://www.tarsnap.com/";
-    license     = stdenv.lib.licenses.unfree;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice roconnor ];
+    license     = lib.licenses.unfree;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
   };
 }

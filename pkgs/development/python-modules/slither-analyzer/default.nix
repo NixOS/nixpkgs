@@ -1,30 +1,49 @@
-{ lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+{ lib
+, stdenv
+, buildPythonPackage
+, crytic-compile
+, fetchFromGitHub
+, makeWrapper
+, packaging
 , prettytable
+, pythonOlder
 , setuptools
 , solc
+, withSolc ? false
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.6.12";
+  version = "0.9.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  # No Python tests
-  doCheck = false;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9773cf48754341d03bb2e65c07897fc9c00a8727487ab2820ed89eb85f546506";
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "slither";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Co3BFdLmSIMqlZVEPJHYH/Cf7oKYSZ+Ktbnd5RZGmfE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable setuptools ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  postFixup = ''
+  propagatedBuildInputs = [
+    crytic-compile
+    packaging
+    prettytable
+    setuptools
+  ];
+
+  postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
+
+  # No Python tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";
@@ -34,7 +53,8 @@ buildPythonPackage rec {
       contract details, and provides an API to easily write custom analyses.
     '';
     homepage = "https://github.com/trailofbits/slither";
-    license = licenses.agpl3;
-    maintainers = [ maintainers.asymmetric ];
+    changelog = "https://github.com/crytic/slither/releases/tag/${version}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ arturcygan fab ];
   };
 }

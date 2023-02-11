@@ -1,52 +1,55 @@
-# TODO: Resolve the issues with the Mono bindings.
+{ stdenv, fetchgit, lib
+, pkg-config, autoreconfHook
+, glib, dbus-glib
+, gtkVersion ? "3"
+, gtk2, libindicator-gtk2, libdbusmenu-gtk2
+, gtk3, libindicator-gtk3, libdbusmenu-gtk3
+, gtk-doc, vala, gobject-introspection
+, monoSupport ? false, mono, gtk-sharp-2_0, gtk-sharp-3_0
+, testers
+}:
 
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, autoreconfHook
-, glib, dbus-glib, gtkVersion ? "3"
-, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
-, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, vala, gobject-introspection
-, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
- }:
+let
+  throwBadGtkVersion = throw "unknown GTK version ${gtkVersion}";
+in
 
-with lib;
-
-
-stdenv.mkDerivation rec {
-  name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
-          in "libappindicator-${postfix}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = let postfix = if monoSupport then "sharp" else "gtk${gtkVersion}";
+          in "libappindicator-${postfix}";
+  version = "12.10.1+20.10.20200706.1";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
-    sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/libappindicator";
+    rev = "fe25e53bc7e39cd59ad6b3270cd7a6a9c78c4f44";
+    sha256 = "0xjvbl4gn7ra2fs6gn2g9s787kzb5cg9hv79iqsz949rxh4iw32d";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
+  nativeBuildInputs = [ pkg-config autoreconfHook vala gobject-introspection gtk-doc ];
 
-  propagatedBuildInputs =
-    if gtkVersion == "2"
-    then [ gtk2 libdbusmenu-gtk2 ]
-    else [ gtk3 libdbusmenu-gtk3 ];
+  propagatedBuildInputs = {
+    "2" = [ gtk2 libdbusmenu-gtk2 ];
+    "3" = [ gtk3 libdbusmenu-gtk3 ];
+  }.${gtkVersion} or throwBadGtkVersion;
 
   buildInputs = [
     glib dbus-glib
-  ] ++ (if gtkVersion == "2"
-    then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
-    else [ libindicator-gtk3 ]);
-
-  patches = [
-    # Remove python2 from libappindicator.
-    (fetchpatch {
-      name = "no-python.patch";
-      url = "https://src.fedoraproject.org/rpms/libappindicator/raw/8508f7a52437679fd95a79b4630373f08315f189/f/nopython.patch";
-      sha256 = "18b1xzvwsbhhfpbzf5zragij4g79pa04y1dk6v5ci1wsjvii725s";
-    })
+    {
+      "2" = libindicator-gtk2;
+      "3" = libindicator-gtk3;
+    }.${gtkVersion} or throwBadGtkVersion
+  ] ++ lib.optionals monoSupport [
+    mono
+    {
+      "2" = gtk-sharp-2_0;
+      "3" = gtk-sharp-3_0;
+    }.${gtkVersion} or throwBadGtkVersion
   ];
+
+  preAutoreconf = ''
+    gtkdocize
+  '';
 
   configureFlags = [
     "CFLAGS=-Wno-error"
@@ -62,11 +65,19 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];
+    pkgConfigModules = {
+      "2" = [ "appindicator-0.1" ];
+      "3" = [ "appindicator3-0.1" ];
+    }.${gtkVersion} or throwBadGtkVersion;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
+    # TODO: Resolve the issues with the Mono bindings.
+    broken = monoSupport;
   };
-}
+})

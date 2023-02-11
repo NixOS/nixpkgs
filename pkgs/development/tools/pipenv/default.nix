@@ -1,31 +1,38 @@
 { lib
+, stdenv
 , python3
+, installShellFiles
 }:
 
 with python3.pkgs;
 
 let
 
-  runtimeDeps = [
+  runtimeDeps = ps: with ps; [
     certifi
     setuptools
     pip
     virtualenv
     virtualenv-clone
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAndroid [
+    pyjnius
   ];
 
-  pythonEnv = python3.withPackages(ps: with ps; runtimeDeps);
+  pythonEnv = python3.withPackages runtimeDeps;
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2020.6.2";
+  version = "2023.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12s7c3f3k5v1szdhklsxwisf9v3dk4mb9fh7762afpgs8mrrmm3x";
+    sha256 = "sha256-GKPrpRnjbVnw1af5xCvSaFIeS5t7PRvWrc8TFWkyMnU=";
   };
 
   LC_ALL = "en_US.UTF-8";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postPatch = ''
     # pipenv invokes python in a subprocess to create a virtualenv
@@ -36,7 +43,14 @@ in buildPythonApplication rec {
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
-  propagatedBuildInputs = runtimeDeps;
+  propagatedBuildInputs = runtimeDeps python3.pkgs;
+
+  postInstall = ''
+    installShellCompletion --cmd pipenv \
+      --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
+      --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
+      --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
+  '';
 
   doCheck = true;
   checkPhase = ''

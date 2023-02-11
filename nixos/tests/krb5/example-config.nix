@@ -3,22 +3,25 @@
 
 import ../make-test-python.nix ({ pkgs, ...} : {
   name = "krb5-with-example-config";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }: {
       krb5 = {
         enable = true;
-        kerberos = pkgs.krb5Full;
+        kerberos = pkgs.krb5;
         libdefaults = {
           default_realm = "ATHENA.MIT.EDU";
         };
         realms = {
           "ATHENA.MIT.EDU" = {
             admin_server = "athena.mit.edu";
-            kdc = "athena.mit.edu";
+            kdc = [
+              "athena01.mit.edu"
+              "athena02.mit.edu"
+            ];
           };
         };
         domain_realm = {
@@ -65,7 +68,8 @@ import ../make-test-python.nix ({ pkgs, ...} : {
       [realms]
         ATHENA.MIT.EDU = {
           admin_server = athena.mit.edu
-          kdc = athena.mit.edu
+          kdc = athena01.mit.edu
+          kdc = athena02.mit.edu
         }
 
       [domain_realm]

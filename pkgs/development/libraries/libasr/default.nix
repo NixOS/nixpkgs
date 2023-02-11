@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl }:
+{ lib, stdenv, fetchurl, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "libasr";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/OpenSMTPD/libasr";
     description = "Free, simple and portable asynchronous resolver library";
     license = licenses.isc;

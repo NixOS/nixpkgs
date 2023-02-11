@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage }:
+{ lib, stdenv, fetchurl, callPackage }:
 
 let
  # Probably a bug in some FreeDict release files, but easier to trivially
@@ -12,7 +12,7 @@ let
      inherit src;
      locale = _locale;
      dbName = _name;
-     buildPhase = ":";
+     dontBuild = true;
      unpackPhase = ''
        tar xf  ${src}
      '';
@@ -24,7 +24,7 @@ let
 
      meta = {
        description = "dictd-db dictionary for dictd";
-       platforms = stdenv.lib.platforms.linux;
+       platforms = lib.platforms.linux;
      };
    };
 in rec {
@@ -56,6 +56,16 @@ in rec {
     url = "mirror://sourceforge/freedict/eng-fra.tar.gz";
     sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
   }) "eng-fra" "en_UK";
+  jpn2eng = makeDictdDB (fetchurl {
+    url = let version = "0.1";
+          in "mirror://sourceforge/freedict/jpn-eng/${version}/freedict-jpn-eng-${version}.dictd.tar.xz";
+    sha256 = "sha256-juJBoEq7EztLZzOomc7uoZhXVaQPKoUvIxxPLB0xByc=";
+  }) "jpn-eng" "jpn-eng" "ja_JP";
+  eng2jpn = makeDictdDB (fetchurl {
+    url = let version = "2022.04.06";
+          in "https://download.freedict.org/dictionaries/eng-jpn/${version}/freedict-eng-jpn-${version}.dictd.tar.xz";
+    sha256 = "sha256-kfRT2kgbV3XKarCr4mqDRT5A1jR8M8APky5M5MFYatE=";
+  }) "eng-jpn" "eng-jpn" "en_UK";
   mueller_eng2rus_pkg = makeDictdDB (fetchurl {
     url = "mirror://sourceforge/mueller-dict/mueller-dict-3.1.tar.gz";
     sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
@@ -91,5 +101,5 @@ in rec {
     locale = "en_UK";
   };
   wordnet = callPackage ./dictd-wordnet.nix {};
-  wiktionary = callPackage ./dictd-wiktionary.nix {};
+  wiktionary = callPackage ./wiktionary {};
 }

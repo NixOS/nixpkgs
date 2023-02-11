@@ -8,9 +8,9 @@ in {
   ### docs
 
   meta = {
-    doc = ./trezord.xml;
+    doc = ./trezord.md;
   };
-  
+
   ### interface
 
   options = {
@@ -18,7 +18,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Trezor bridge daemon, for use with Trezor hardware bitcoin wallets.
         '';
       };
@@ -26,7 +26,7 @@ in {
       emulator.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Trezor emulator support.
           '';
        };
@@ -34,21 +34,21 @@ in {
       emulator.port = mkOption {
         type = types.port;
         default = 21324;
-        description = ''
+        description = lib.mdDoc ''
           Listening port for the Trezor emulator.
           '';
       };
     };
   };
-  
+
   ### implementation
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.trezor-udev-rules ];
 
     systemd.services.trezord = {
-      description = "TREZOR Bridge";
-      after = [ "systemd-udev-settle.service" "network.target" ];
+      description = "Trezor Bridge";
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [];
       serviceConfig = {

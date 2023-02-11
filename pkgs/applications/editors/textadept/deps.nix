@@ -1,42 +1,45 @@
 {
-    "542782a4df7d.zip" = {
-      url = "http://foicica.com/hg/scintilla/archive/542782a4df7d.zip";
-      sha256 = "1qwxxcj86z9y7ij05j60lcp1awy2c9ck0vnn9z6c732sqjza0zx5";
-    };
-    "lua-5.3.5.tar.gz" = {
-      url = "http://www.lua.org/ftp/lua-5.3.5.tar.gz";
-      sha256 = "1b2qn2rv96nmbm6zab4l877bd4zq7wpwm8drwjiy2ih4jqzysbhc";
-    };
-    "lpeg-1.0.0.tar.gz" = {
-      url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.0.tar.gz";
-      sha256 = "13mz18s359wlkwm9d9iqlyyrrwjc6iqfpa99ai0icam2b3khl68h";
-    };
-    "v_1_6_3.zip" = {
-      url = "https://github.com/keplerproject/luafilesystem/archive/v_1_6_3.zip";
-      sha256 = "044s125im2irb4i42nnc5shvjj25fp4vsdbzd6b0va5igj0f6h4y";
-    };
-    "6435a42450c7.zip" = {
-      url = "http://foicica.com/hg/gtdialog/archive/6435a42450c7.zip";
-      sha256 = "1vxn89sif3qccksb6x5iprysqhjg69g7nyxlgrg31q397dmsg1ym";
-    };
-    "cdk-5.0-20150928.tgz" = {
-      url = "http://invisible-mirror.net/archives/cdk/cdk-5.0-20150928.tgz";
-      sha256 = "0j74l874y33i26y5kjg3pf1vswyjif8k93pqhi0iqykpbxfsg382";
-    };
-    "libtermkey-0.20.tar.gz" = {
-      url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.20.tar.gz";
-      sha256 = "1xfj6lchhfljmbcl6dz8dpakppyy13nbl4ykxiv5x4dr9b4qf3bc";
-    };
-    "pdcurs36.zip" = {
-      url = "http://prdownloads.sourceforge.net/pdcurses/pdcurs36.zip";
-      sha256 = "0y91zpygrxms7d1l5ksrz42bkvq8jd2xqlj5j7wgyxcl58chcw9b";
-    };
-    "bombay.zip" = {
-      url = "http://foicica.com/hg/bombay/archive/b25520cc76bb.zip";
-      sha256 = "07spq7jmkfyq20gv67yffara3ln3ns2xi0k02m2mxdms3xm1q36h";
-    };
-    "cloc-1.60.pl" = {
-      url = "http://prdownloads.sourceforge.net/cloc/cloc-1.60.pl";
-      sha256 = "0p504bi19va3dh274v7lb7giqrydwa5yyry60f7jpz84y6z71a2a";
-    };
+  "scintilla524.tgz" = {
+    url = "https://www.scintilla.org/scintilla524.tgz";
+    sha256 = "sha256-Su8UiMmkOxcuBat2JWYEnhNdG5HKnV1fn1ClnJhazGY=";
+  };
+  "lexilla510.tgz" = {
+    url = "https://www.scintilla.org/lexilla510.tgz";
+    sha256 = "sha256-azWVJ0AFSYZxuFTPV73uwiVJZvNxcS/POnFtl6p/P9g=";
+  };
+  "9088723504b19f8611b66c119933a4dc7939d7b8.zip" = {
+    url =
+      "https://github.com/orbitalquark/scintillua/archive/9088723504b19f8611b66c119933a4dc7939d7b8.zip";
+    sha256 = "sha256-V2t1kt6+SpZQvQSzLhh8n+WiAnA32SRVFnrbTaJrHRo=";
+  };
+  "475d8d43f3418590c28bd2fb07ee9229d1fa2d07.zip" = {
+    url =
+      "https://github.com/orbitalquark/scinterm/archive/475d8d43f3418590c28bd2fb07ee9229d1fa2d07.zip";
+    sha256 = "sha256-lNMK0RFcOLg9RRE5a6VelhSzUYVl5TiAiXcje2JOedE=";
+  };
+  "lua-5.4.4.tar.gz" = {
+    url = "http://www.lua.org/ftp/lua-5.4.4.tar.gz";
+    sha256 = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
+  };
+  "lpeg-1.0.2.tar.gz" = {
+    url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.2.tar.gz";
+    sha256 = "sha256-SNZldgUbbHg4j6rQm3BJMJMmRYj80PJY3aqxzdShX/4=";
+  };
+  "v1_8_0.zip" = {
+    url = "https://github.com/keplerproject/luafilesystem/archive/v1_8_0.zip";
+    sha256 = "sha256-46a+ynqKkFIu7THbbM3F7WWkM4JlAMaGJ4TidnG54Yo=";
+  };
+  "444af9ca8a73151dbf759e6676d1035af469f01a.zip" = {
+    url =
+      "https://github.com/orbitalquark/gtdialog/archive/444af9ca8a73151dbf759e6676d1035af469f01a.zip";
+    sha256 = "sha256-7AkX7OWXJtzKq3h4uJeLzHpf6mrsz67SXtPvmyA5xxg=";
+  };
+  "cdk-5.0-20200923.tgz" = {
+    url = "http://invisible-mirror.net/archives/cdk/cdk-5.0-20200923.tgz";
+    sha256 = "sha256-AH9d6IDLLuvYVW335M2Gc9XmTJlwFH7uaSOoFMKfqu0=";
+  };
+  "libtermkey-0.22.tar.gz" = {
+    url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz";
+    sha256 = "sha256-aUW9PEqqg9qD2AoEXFVj2k7dfQN0xiwNNa7AnrMBRgA=";
+  };
 }

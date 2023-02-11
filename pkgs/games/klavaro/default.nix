@@ -1,24 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , curl
+, espeak
 , file
 , gtk3
+, gtkdatabox
 , intltool
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
-  version = "3.10";
+  version = "3.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
-    sha256 = "0jnzdrndiq6m0bwgid977z5ghp4q61clwdlzfpx4fd2ml5x3iq95";
+    sha256 = "0z6c3lqikk50mkz3ipm93l48qj7b98lxyip8y6ndg9y9k0z0n878";
   };
 
-  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
-  buildInputs = [ curl gtk3 ];
+  nativeBuildInputs = [ intltool makeWrapper pkg-config ];
+  buildInputs = [ curl gtk3 gtkdatabox ];
+
+  postPatch = ''
+    substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
+  '';
+
+  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
@@ -34,9 +42,10 @@ stdenv.mkDerivation rec {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free touch typing tutor program";
     homepage = "http://klavaro.sourceforge.net/";
+    changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mimame davidak ];

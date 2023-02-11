@@ -1,41 +1,59 @@
-{ buildPythonPackage
+{ lib
+, stdenv
 , asn1crypto
-, fetchPypi
-, lib
+, buildPythonPackage
+, fetchFromGitHub
 , openssl
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "oscrypto";
-  version = "1.1.1";
+  version = "1.3.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1vlryamwr442w2av8f54ldhls8fqs6678fg60pqbrf5pjy74kg23";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "wbond";
+    repo = pname;
+    rev = version;
+    hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
 
-  testSources = fetchPypi {
-    inherit version;
-    pname = "oscrypto_tests";
-    sha256 = "1crndz647pqdd8148yn3n5l63xwr6qkwa1qarsz59nk3ip0dsyq5";
-  };
-
-  preCheck = ''
-    tar -xf ${testSources}
-    mv oscrypto_tests-${version} tests
-
-    # remove tests that require network
-    sed -e '/TLSTests/d' -e '/TrustListTests/d' -i tests/__init__.py
+  postPatch = ''
+    for file in oscrypto/_openssl/_lib{crypto,ssl}_c{ffi,types}.py; do
+      substituteInPlace $file \
+        --replace "get_library('crypto', 'libcrypto.dylib', '42')" "'${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}'" \
+        --replace "get_library('ssl', 'libssl', '44')" "'${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    done
   '';
 
   propagatedBuildInputs = [
     asn1crypto
-    openssl
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "oscrypto"
+  ];
+
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # Tests require network access
+    "TLSTests"
+    "TrustListTests"
   ];
 
   meta = with lib; {
-    description = "A compilation-free, always up-to-date encryption library for Python that works on Windows, OS X, Linux and BSD.";
-    homepage = "https://www.snowflake.com/";
+    description = "Encryption library for Python";
+    homepage = "https://github.com/wbond/oscrypto";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

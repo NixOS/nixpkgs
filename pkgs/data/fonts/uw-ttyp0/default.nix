@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, perl
-, bdftopcf, bdf2psf, mkfontdir
-, fonttosfnt
+{ lib, stdenv, fetchurl, perl
+, bdftopcf, bdf2psf, xorg
 , targetsDat  ? null
 , variantsDat ? null
 }:
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   # remove for version >1.3
   patches = [ ./determinism.patch ];
 
-  nativeBuildInputs = [ perl bdftopcf bdf2psf fonttosfnt mkfontdir ];
+  nativeBuildInputs = [ perl bdftopcf bdf2psf xorg.fonttosfnt xorg.mkfontdir ];
 
   # configure sizes, encodings and variants
   preConfigure =
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
     install -m 644 -D psf/*.psf -t "$fontDir"
 
     # install otb fonts
-    fontDir="$otb/share/fonts/X11/misc"
+    fontDir="$out/share/fonts/X11/misc"
     install -m 644 -D otb/*.otb -t "$fontDir"
     mkfontdir "$fontDir"
   '';
@@ -80,9 +79,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
     license = with licenses; [ free mit ];

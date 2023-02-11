@@ -1,30 +1,29 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, perl, bison, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
 , CoreFoundation, Security, SystemConfiguration
 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "heimdal";
-  version = "7.7.0";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
     rev = "heimdal-${version}";
-    sha256 = "099qn9b8q20invvi5r8d8q9rnwpcm3nr89hx5rj7gj2ah2x5vgxs";
+    sha256 = "sha256-iXOaar1S3y0xHdL0S+vS0uxoFQjy43kABxqE+KEhxjU=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 perl bison flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
-  buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
+  buildInputs = lib.optionals (stdenv.isLinux) [ libcap_ng ]
     ++ [ db sqlite openssl libedit openldap pam]
-    ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
+    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
 
   ## ugly, X should be made an option
   configureFlags = [
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     "--with-berkeley-db"
     "--with-berkeley-db-include=${db.dev}/include"
     "--with-openldap=${openldap.dev}"
-  ] ++ optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.isLinux) [
     "--with-capng"
   ];
 
@@ -81,6 +80,9 @@ stdenv.mkDerivation rec {
     # asn1 compilers, move them to $dev
     mv $out/libexec/heimdal/heimdal/* $dev/bin
     rmdir $out/libexec/heimdal/heimdal
+
+    # compile_et is needed for cross-compiling this package and samba
+    mv lib/com_err/.libs/compile_et $dev/bin
   '';
 
   # Issues with hydra
@@ -88,7 +90,7 @@ stdenv.mkDerivation rec {
   #  hx_locl.h:67:25: fatal error: pkcs10_asn1.h: No such file or directory
   #enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;

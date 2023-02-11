@@ -1,34 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, sphinx
-, pytest
-, pytestcov
-, pytest-flake8
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest-mypy
+, pythonOlder
+, redis
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
   pname = "portalocker";
+  version = "2.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p32v16va780mjjdbyp3v702aqg5s618khlila7bdyynis1n84q9";
+    hash = "sha256-lk9oMPtCp0tdMrzpntN9gwjB19RN3xjz3Yn0aA3pezk=";
   };
 
-  patches = [
-    # remove pytest-flakes from test dependencies
-    # merged into master, remove > 1.7.0 release
-    (fetchpatch {
-      url = "https://github.com/WoLpH/portalocker/commit/42e4c0a16bbc987c7e33b5cbc7676a63a164ceb5.patch";
-      sha256 = "01mlr41nhh7mh3qhqy5fhp3br4nps745iy4ns9fjcnm5xhabg5rr";
-      excludes = [ "pytest.ini" ];
-    })
+  propagatedBuildInputs = [
+    redis
   ];
 
-  checkInputs = [
-    sphinx
-    pytest
-    pytestcov
-    pytest-flake8
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mypy
+  ];
+
+  disabledTests = [
+    "test_combined" # no longer compatible with setuptools>=58
+  ];
+
+  pythonImportsCheck = [
+    "portalocker"
   ];
 
   meta = with lib; {

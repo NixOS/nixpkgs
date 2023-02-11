@@ -9,7 +9,7 @@ in {
     enable = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the Profile Sync daemon.
       '';
     };
@@ -17,7 +17,7 @@ in {
       type = str;
       default = "1h";
       example = "1h 30min";
-      description = ''
+      description = lib.mdDoc ''
         The amount of time to wait before syncing browser profiles back to the
         disk.
 
@@ -36,7 +36,7 @@ in {
             description = "Profile Sync daemon";
             wants = [ "psd-resync.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools utillinux profile-sync-daemon ];
+            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
             unitConfig = {
               RequiresMountsFor = [ "/home/" ];
             };
@@ -55,7 +55,7 @@ in {
             wants = [ "psd-resync.timer" ];
             partOf = [ "psd.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools utillinux profile-sync-daemon ];
+            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
             serviceConfig = {
               Type = "oneshot";
               ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";

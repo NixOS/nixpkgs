@@ -9,7 +9,7 @@
 , xgboost
 , mpi4py
 , lightgbm
-, Keras
+, keras
 , mxnet
 , scikit-optimize
 , tensorflow
@@ -30,17 +30,17 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "0.19.0";
+  version = "3.0.5";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "179x2lsckpmkrkkdnvvbzky86g1ba882z677qwbayhsc835wbp0y";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-TfAWL81a7GIePkPm+2uXinBP5jwnhWCZPp5GJjXOC6g=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     mock
     bokeh
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     xgboost
     mpi4py
     lightgbm
-    Keras
+    keras
     mxnet
     scikit-optimize
     tensorflow
@@ -84,6 +84,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;  # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
     homepage = "https://optuna.org/";
     license = licenses.mit;

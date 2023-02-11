@@ -1,22 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, sfml }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml }:
 
-let
-  version = "2.5";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "csfml";
-  inherit version;
+  version = "2.5.1";
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
     rev   = version;
-    sha256 = "071magxif5nrdddzk2z34czqmz1dfws4d7dqynb2zpn7cwhwxcpm";
+    sha256 = "sha256-a46V5CakKVygNfr3/nZwlsCyqNsbti4a3cr7itK5QfI=";
   };
-  buildInputs = [ cmake sfml ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''

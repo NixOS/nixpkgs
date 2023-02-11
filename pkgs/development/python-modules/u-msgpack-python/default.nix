@@ -2,25 +2,23 @@
 , lib
 , fetchPypi
 , glibcLocales
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "u-msgpack-python";
-  version = "2.6.0";
+  version = "2.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "754edb07eaee39a9686a99823892e3a1be4e0948d9cc5c717946750c27643c9c";
+    sha256 = "sha256-6G96xqoO9MbEnwBLT9Q1vOmcI+LdXXMAPz+YFgJMK9g=";
   };
 
   LC_ALL="en_US.UTF-8";
 
   buildInputs = [ glibcLocales ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";

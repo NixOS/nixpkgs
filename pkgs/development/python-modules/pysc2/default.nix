@@ -12,7 +12,7 @@
 , pygame
 , s2clientprotocol
 , six
-, websocket_client
+, websocket-client
 , sc2-headless
 }:
 
@@ -49,7 +49,7 @@ buildPythonPackage {
     pygame
     s2clientprotocol
     six
-    websocket_client
+    websocket-client
     sc2-headless
   ];
 
@@ -58,6 +58,6 @@ buildPythonPackage {
     homepage = "https://github.com/deepmind/pysc2";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ danharaj ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

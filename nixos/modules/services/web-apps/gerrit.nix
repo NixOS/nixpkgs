@@ -17,6 +17,10 @@ let
     lib.generators.toGitINI cfg.settings
   );
 
+  replicationConfig = pkgs.writeText "replication.conf" (
+    lib.generators.toGitINI cfg.replicationSettings
+  );
+
   # Wrap the gerrit java with all the java options so it can be called
   # like a normal CLI app
   gerrit-cli = pkgs.writeShellScriptBin "gerrit" ''
@@ -55,19 +59,20 @@ in
 {
   options = {
     services.gerrit = {
-      enable = mkEnableOption "Gerrit service";
+      enable = mkEnableOption (lib.mdDoc "Gerrit service");
 
       package = mkOption {
         type = types.package;
         default = pkgs.gerrit;
-        description = "Gerrit package to use";
+        defaultText = literalExpression "pkgs.gerrit";
+        description = lib.mdDoc "Gerrit package to use";
       };
 
       jvmPackage = mkOption {
         type = types.package;
         default = pkgs.jre_headless;
-        defaultText = "pkgs.jre_headless";
-        description = "Java Runtime Environment package to use";
+        defaultText = literalExpression "pkgs.jre_headless";
+        description = lib.mdDoc "Java Runtime Environment package to use";
       };
 
       jvmOpts = mkOption {
@@ -76,13 +81,13 @@ in
           "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance"
           "-Dflogger.logging_context=com.google.gerrit.server.logging.LoggingContext#getInstance"
         ];
-        description = "A list of JVM options to start gerrit with.";
+        description = lib.mdDoc "A list of JVM options to start gerrit with.";
       };
 
       jvmHeapLimit = mkOption {
         type = types.str;
         default = "1024m";
-        description = ''
+        description = lib.mdDoc ''
           How much memory to allocate to the JVM heap
         '';
       };
@@ -90,8 +95,8 @@ in
       listenAddress = mkOption {
         type = types.str;
         default = "[::]:8080";
-        description = ''
-          <literal>hostname:port</literal> to listen for HTTP traffic.
+        description = lib.mdDoc ''
+          `hostname:port` to listen for HTTP traffic.
 
           This is bound using the systemd socket activation.
         '';
@@ -100,16 +105,25 @@ in
       settings = mkOption {
         type = gitIniType;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Gerrit configuration. This will be generated to the
-          <literal>etc/gerrit.config</literal> file.
+          `etc/gerrit.config` file.
+        '';
+      };
+
+      replicationSettings = mkOption {
+        type = gitIniType;
+        default = {};
+        description = lib.mdDoc ''
+          Replication configuration. This will be generated to the
+          `etc/replication.config` file.
         '';
       };
 
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of plugins to add to Gerrit. Each derivation is a jar file
           itself where the name of the derivation is the name of plugin.
         '';
@@ -118,25 +132,32 @@ in
       builtinPlugins = mkOption {
         type = types.listOf (types.enum cfg.package.passthru.plugins);
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of builtins plugins to install. Those are shipped in the
-          <literal>gerrit.war</literal> file.
+          `gerrit.war` file.
         '';
       };
 
       serverId = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Set a UUID that uniquely identifies the server.
 
           This can be generated with
-          <literal>nix-shell -p utillinux --run uuidgen</literal>.
+          `nix-shell -p util-linux --run uuidgen`.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
+        message = "Gerrit replicationSettings require enabling the replication plugin";
+      }
+    ];
 
     services.gerrit.settings = {
       cache.directory = "/var/cache/gerrit";
@@ -194,6 +215,7 @@ in
 
         # copy the config, keep it mutable because Gerrit
         ln -sfv ${gerritConfig} etc/gerrit.config
+        ln -sfv ${replicationConfig} etc/replication.config
 
         # install the plugins
         rm -rf plugins
@@ -215,4 +237,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [ edef zimbatm ];
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

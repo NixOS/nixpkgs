@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dissect'';
-  version = ''20190710-git'';
+  baseName = "dissect";
+  version = "20210531-git";
 
-  description = ''A lib for introspecting the call stack and active restarts.'';
+  description = "A lib for introspecting the call stack and active restarts.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/dissect/2019-07-10/dissect-20190710-git.tgz'';
-    sha256 = ''15h653gbi9iybns0ll8rhjr7diwwnq4g9wf51f6d9846nl1v424b'';
+    url = "http://beta.quicklisp.org/archive/dissect/2021-05-31/dissect-20210531-git.tgz";
+    sha256 = "07f5sk2nvhj5jjrw5k561dfnwbjcaniqi2z7wgdrw8qb9h8kkkzk";
   };
 
   packageName = "dissect";
@@ -19,7 +20,7 @@ rec {
 }
 /* (SYSTEM dissect DESCRIPTION
     A lib for introspecting the call stack and active restarts. SHA256
-    15h653gbi9iybns0ll8rhjr7diwwnq4g9wf51f6d9846nl1v424b URL
-    http://beta.quicklisp.org/archive/dissect/2019-07-10/dissect-20190710-git.tgz
-    MD5 fb0e90e86fe4c184c08d19c1ef61d4e4 NAME dissect FILENAME dissect DEPS NIL
-    DEPENDENCIES NIL VERSION 20190710-git SIBLINGS NIL PARASITES NIL) */
+    07f5sk2nvhj5jjrw5k561dfnwbjcaniqi2z7wgdrw8qb9h8kkkzk URL
+    http://beta.quicklisp.org/archive/dissect/2021-05-31/dissect-20210531-git.tgz
+    MD5 41dfb42dc93aa41d825c167fe173fa89 NAME dissect FILENAME dissect DEPS NIL
+    DEPENDENCIES NIL VERSION 20210531-git SIBLINGS NIL PARASITES NIL) */

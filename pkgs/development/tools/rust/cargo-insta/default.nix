@@ -1,22 +1,19 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, libiconv, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "0.16.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     rev = version;
-    sha256 = "1lcbdzh139lhmpz3pyik8nbgrbfc42z9ydz2hkg2lzjdpfdsz3ag";
+    sha256 = "sha256-h0jRuY3GSqK85NCeFqdqjyVdNTMbdtD70zU5G3w1STc=";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0qjzbcaznnmb0p0r23s82jjbfs5mhhkacg26lf8fq4vvlkr1hsqf";
-
-  patches = [ ./ignore-rustfmt-test.patch ];
-
-  cargoBuildFlags = [ "-p cargo-insta" ];
+  sourceRoot = "source/cargo-insta";
+  cargoHash = "sha256-GC2ggTJJV3Aww3qPfsnuND0eII1l3OBoZfi5RtvhO8I=";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";

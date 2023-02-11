@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , boost, eigen2, lua, luabind, libGLU, libGL, SDL }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A physics-based puzzle game";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

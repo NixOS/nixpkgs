@@ -1,26 +1,62 @@
-{ lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson, pillow
-, nose, mock, pytest, freezegun }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, decorator
+, requests
+, typing ? null
+, configparser
+, click
+, freezegun
+, mock
+, pytestCheckHook
+, pytest-vcr
+, python-dateutil
+, vcrpy
+}:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.36.0";
+  version = "0.44.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kkbsrzxc2a6k319lh98qkinn99dzcqz8h4fm25q17dlgmc9gq9z";
+    sha256 = "sha256-BxFw8MfvIlEdv3+b12xL5QDuLT1SBykApch7VJXSxzM=";
   };
 
   postPatch = ''
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson pillow ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  checkInputs = [ nose mock pytest freezegun ];
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  propagatedBuildInputs = [ decorator requests ]
+    ++ lib.optional (pythonOlder "3.5") typing
+    ++ lib.optional (pythonOlder "3.0") configparser;
+
+  nativeCheckInputs = [
+    click
+    freezegun
+    mock
+    pytestCheckHook
+    pytest-vcr
+    python-dateutil
+    vcrpy
+  ];
+
+  disabledTestPaths = [
+    "tests/performance"
+  ];
+
+  disabledTests = [
+    "test_default_settings_set"
+  ];
+
+  pythonImportsCheck = [ "datadog" ];
 
   meta = with lib; {
     description = "The Datadog Python library";

@@ -1,57 +1,74 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , which
 , libtool
 , liblo
 , libxml2
 , libjack2
 , libsndfile
-, wxGTK30
+, wxGTK32
 , libsigcxx
 , libsamplerate
 , rubberband
 , gettext
 , ncurses
-, alsaLib
+, alsa-lib
 , fftw
 }:
 
 stdenv.mkDerivation rec {
   pname = "sooperlooper";
-  version = "unstable-2019-09-30";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "4d1da14176e16b0f56b727bb1e6c2e8957515625";
-    sha256 = "1gsgqa7hdymzw2al1ymzv0f33y161dyhh3fmy88lpjwv3bfchamg";
+    rev = "v${version}";
+    sha256 = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "10-build_with_wx_32.patch";
+      url = "https://sources.debian.org/data/main/s/sooperlooper/1.7.8~dfsg0-2/debian/patches/10-build_with_wx_32.patch";
+      sha256 = "sha256-NF/w+zgRBNkSTqUJhfH9kQogXSYEF70pCN+loR0hjpg=";
+    })
+  ];
 
   autoreconfPhase = ''
     patchShebangs ./autogen.sh
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which libtool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+    libtool
+  ];
 
   buildInputs = [
     liblo
     libxml2
     libjack2
     libsndfile
-    wxGTK30
+    wxGTK32
     libsigcxx
     libsamplerate
     rubberband
     gettext
     ncurses
-    alsaLib
+    alsa-lib
     fftw
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.
@@ -60,7 +77,7 @@ stdenv.mkDerivation rec {
       However, this kind of live performance looping tool is most effectively used via hardware (midi footpedals, etc)
       and the engine can be run standalone on a computer without a monitor.
     '';
-    homepage = "http://essej.net/sooperlooper/"; # https is broken
+    homepage = "https://sonosaurus.com/sooperlooper/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

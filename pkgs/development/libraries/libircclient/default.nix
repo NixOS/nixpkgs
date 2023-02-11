@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "1.10";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace "cp "              "install "
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small but extremely powerful library which implements the client IRC protocol";
     homepage    = "http://www.ulduzsoft.com/libircclient/";
     license     = licenses.lgpl3;

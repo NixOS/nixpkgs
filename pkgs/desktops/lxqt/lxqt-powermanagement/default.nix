@@ -12,18 +12,19 @@
 , kidletime
 , liblxqt
 , libqtxdg
-, lxqtUpdateScript
+, lxqt-globalkeys
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "0.15.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0gqxy4d05gibsvq27qdfwp5v19310l0ln4bvwaan6ailbyyya90f";
+    sha256 = "yUQYvAWAsbaa2acwzIqnlFt5bsFLT63/RQdvWUsopqc=";
   };
 
   nativeBuildInputs = [
@@ -41,15 +42,16 @@ mkDerivation rec {
     kidletime
     liblxqt
     libqtxdg
+    lxqt-globalkeys
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "Power management module for LXQt";
     homepage = "https://github.com/lxqt/lxqt-powermanagement";
-    license = licenses.lgpl21;
+    description = "Power management module for LXQt";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

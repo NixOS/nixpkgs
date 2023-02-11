@@ -26,7 +26,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Disks daemon, a program designed to
           be a UDisks2 graphical front-end.
         '';
@@ -41,9 +41,9 @@ with lib;
 
   config = mkIf config.programs.gnome-disks.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-disk-utility ];
+    environment.systemPackages = [ pkgs.gnome.gnome-disk-utility ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-disk-utility ];
+    services.dbus.packages = [ pkgs.gnome.gnome-disk-utility ];
 
   };
 

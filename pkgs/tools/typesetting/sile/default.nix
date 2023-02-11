@@ -1,37 +1,99 @@
-{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig, autoconf, automake
-, harfbuzz, icu
-, fontconfig, lua, libiconv
-, makeFontsConf, gentium
+{ lib, stdenv
+, darwin
+, fetchurl
+, makeWrapper
+, pkg-config
+, poppler_utils
+, gitMinimal
+, harfbuzz
+, icu
+, fontconfig
+, lua
+, libiconv
+, makeFontsConf
+, gentium
+, runCommand
+, sile
 }:
 
-with stdenv.lib;
-
 let
-  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo compat53 linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
-
+  luaEnv = lua.withPackages(ps: with ps; [
+    cassowary
+    cldr
+    cosmo
+    fluent
+    linenoise
+    loadkit
+    lpeg
+    lua-zlib
+    lua_cliargs
+    luaepnf
+    luaexpat
+    luafilesystem
+    luarepl
+    luasec
+    luasocket
+    luautf8
+    penlight
+    vstruct
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+    bit32
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+    compat53
+  ]);
 in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.4";
+  version = "0.14.8";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "08j2vv6spnzz8bsh62wbdv1pjiziiba71cadscsy5hw6pklzndni";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0r00s7c8ycc9haqf7p141gj5jn3k0kxpjdzb538f1jpwkgi6mjh9";
   };
 
-  configureFlags = [ "--with-system-luarocks" ];
+  configureFlags = [
+    "--with-system-luarocks"
+    "--with-manual"
+  ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
-  buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
-  ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  nativeBuildInputs = [
+    gitMinimal
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    luaEnv
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
+  ]
+  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+    # Copied from Makefile.am
+    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
+      runCommand "${pname}-test"
+        {
+          nativeBuildInputs = [ poppler_utils sile ];
+          inherit FONTCONFIG_FILE;
+        } ''
+        output=$(mktemp -t selfcheck-XXXXXX.pdf)
+        echo "<sile>foo</sile>" | sile -o $output -
+        pdfinfo $output | grep "SILE v${version}" > $out
+      '');
+  };
 
-  preConfigure = optionalString stdenv.isDarwin ''
+  postPatch = ''
+    patchShebangs build-aux/*.sh
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
@@ -39,31 +101,19 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  # TODO: needs to tweak Makefile-fonts to avoid download fonts
-  doCheck = false; /*stdenv.targetPlatform == stdenv.hostPlatform
-  && ! stdenv.isAarch64 # random seg. faults
-  && ! stdenv.isDarwin; # dy lib not found
- */
-
   enableParallelBuilding = true;
 
-  preBuild = stdenv.lib.optionalString stdenv.cc.isClang ''
+  preBuild = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace libtexpdf/dpxutil.c \
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
-  '';
-
-  checkTarget = "examples";
-
-  postInstall = ''
-    install -D -t $out/share/doc/sile documentation/sile.pdf
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" "dev" ];
 
-  meta = {
+  meta = with lib; {
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -75,8 +125,10 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = "https://sile-typesetter.org/";
+    homepage = "https://sile-typesetter.org";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
 }

@@ -1,20 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, python, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, zlib, catch2 }:
 
 stdenv.mkDerivation rec {
   pname = "seasocks";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "mattgodbolt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c2gc0k9wgbgn7y7wmq2ylp0gvdbmagc1x8c4jwbsncl1gy6x4g2";
+    sha256 = "sha256-b1KNHuS5ndkBWItKVTiJ//Y+uKi1PcUk9624IILOusQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python ];
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp src/test/c/catch/catch2/catch.hpp
+  '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib python3 ];
+
+  doCheck = true;
+
+  meta = with lib; {
     homepage = "https://github.com/mattgodbolt/seasocks";
     description = "Tiny embeddable C++ HTTP and WebSocket server";
     license = licenses.bsd2;

@@ -2,34 +2,35 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , lxqt-build-tools
 , qtbase
 , qttools
 , qtx11extras
 , qtsvg
+, polkit
 , polkit-qt
 , kwindowsystem
 , liblxqt
 , libqtxdg
 , pcre
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "0.15.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "001zgjxgvzp7clfqr46sx8m3a7v38xxgxjqrpz01lxx18zik3d9h";
+    sha256 = "SvJ4XN0JZs2VAt5H9CJXrJhThxnQnlbsLP44CW7zpGM=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -38,6 +39,7 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtsvg
+    polkit
     polkit-qt
     kwindowsystem
     liblxqt
@@ -45,13 +47,14 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "The LXQt PolicyKit agent";
     homepage = "https://github.com/lxqt/lxqt-policykit";
-    license = licenses.lgpl21;
+    description = "The LXQt PolicyKit agent";
+    mainProgram = "lxqt-policykit-agent";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

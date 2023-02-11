@@ -1,7 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, perl, gcc
-, ncurses5, gmp, glibc, libiconv
+, ncurses5, ncurses6, gmp, glibc, libiconv
 , llvmPackages
+, coreutils
+, targetPackages
 }:
 
 # Prebuilt only does native
@@ -10,11 +12,16 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   useLLVM = !stdenv.targetPlatform.isx86;
 
-  libPath = stdenv.lib.makeLibraryPath ([
-    ncurses5 gmp
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+  useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux"
+                || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
 
-  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
+  ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
+
+  libPath = lib.makeLibraryPath ([
+    ourNcurses gmp
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+
+  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
@@ -22,38 +29,59 @@ let
        # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
        ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
-      "${stdenv.lib.getLib glibc}/lib/ld-linux*";
+      "${lib.getLib glibc}/lib/ld-linux*";
+
+  downloadsUrl = "https://downloads.haskell.org/ghc";
+
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
 stdenv.mkDerivation rec {
   version = "8.6.5";
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
     i686-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+      # Don't use the Fedora27 build (as below) because there isn't one!
+      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
       sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
     };
     x86_64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb9-linux.tar.xz";
-      sha256 = "1pqlx6rdjs2110g0y1i9f8x18lmdizibjqd15f5xahcz39hgaxdw";
+      # This is the Fedora build because it links against ncurses6 where the
+      # deb9 one links against ncurses5, see here
+      # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+      sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
     };
     aarch64-linux = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
       sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
     };
     x86_64-darwin = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
+    };
+    powerpc64le-linux = {
+      url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-powerpc64le-fedora29-linux.tar.xz";
+      sha256 = "sha256-tWSsJdPVrCiqDyIKzpBt5DaXb3b6j951tCya584kWs4=";
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -62,7 +90,7 @@ stdenv.mkDerivation rec {
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -78,31 +106,22 @@ stdenv.mkDerivation rec {
       patchShebangs ghc-${version}/configure
     '' +
 
-    # Strip is harmful, see also below. It's important that this happens
-    # first. The GHC Cabal build system makes use of strip by default and
-    # has hardcoded paths to /usr/bin/strip in many places. We replace
-    # those below, making them point to our dummy script.
-    ''
-      mkdir "$TMP/bin"
-      for i in strip; do
-        echo '#! ${stdenv.shell}' > "$TMP/bin/$i"
-        chmod +x "$TMP/bin/$i"
-      done
-      PATH="$TMP/bin:$PATH"
-    '' +
     # We have to patch the GMP paths for the integer-gmp package.
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm -0100 -exec patchelf \
-          --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
-          --replace-needed libtinfo.so libtinfo.so.5 \
+    lib.optionalString stdenv.isLinux ''
+      find . -type f -perm -0100 \
+          -exec patchelf \
+          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          ${ # This isn't required for x86_64-linux where we use ncurses6
+             lib.optionalString (!useNcurses6) "--replace-needed libtinfo.so libtinfo.so.5"
+           } \
           --interpreter ${glibcDynLinker} {} \;
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
@@ -114,35 +133,41 @@ stdenv.mkDerivation rec {
     # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
     # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
     # Use objcopy magic to make the change:
-    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    lib.optionalString stdenv.hostPlatform.isMusl ''
       find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
-    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
-
-  # Stripping combined with patchelf breaks the executables (they die
-  # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
-  dontStrip = true;
+    "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
+  ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
 
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
+
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     for p in $(find "$out" -type f -executable); do
       if isELF "$p"; then
         echo "Patchelfing $p"
         patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
       fi
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -155,9 +180,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # In nixpkgs, musl based builds currently enable `pie` hardening by default
+  # (see `defaultHardeningFlags` in `make-derivation.nix`).
+  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -166,7 +199,7 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    env -i $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
@@ -174,8 +207,20 @@ stdenv.mkDerivation rec {
   passthru = {
     targetPrefix = "";
     enableShared = true;
+
+    inherit llvmPackages;
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
   };
 
-  meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+  meta = rec {
+    license = lib.licenses.bsd3;
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "powerpc64le-linux" ];
+    # build segfaults, use ghc8102Binary which has proper musl support instead
+    broken = stdenv.hostPlatform.isMusl;
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
+  };
 }

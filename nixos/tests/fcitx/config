@@ -1,0 +1,12 @@
+[Hotkey]
+SwitchKey=Disabled
+IMSwitchHotkey=ALT_SHIFT
+TimeInterval=240
+
+[Program]
+DelayStart=5
+
+[Output]
+
+[Appearance]
+

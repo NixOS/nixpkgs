@@ -1,9 +1,14 @@
-{ newScope }:
+{ pkgs, lib }:
 
 let
-  callPackage = newScope self;
+  packages = self: with self; {
 
-  self = rec {
+    # Update script tailored to mate packages from git repository
+    mateUpdateScript = { pname, odd-unstable ? true, rev-prefix ? "v", url ? null }:
+      pkgs.gitUpdater {
+        inherit odd-unstable rev-prefix;
+        url = if url == null then "https://git.mate-desktop.org/${pname}" else url;
+      };
 
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
@@ -35,15 +40,17 @@ let
     mate-sensors-applet = callPackage ./mate-sensors-applet { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
+    mate-settings-daemon-wrapped = callPackage ./mate-settings-daemon/wrapped.nix { };
     mate-screensaver = callPackage ./mate-screensaver { };
     mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
+    mate-tweak = callPackage ./mate-tweak { };
     mate-user-guide = callPackage ./mate-user-guide { };
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
     mozo = callPackage ./mozo { };
-    pluma = callPackage ./pluma { };
+    pluma = callPackage ./pluma { inherit (pkgs.gnome) adwaita-icon-theme; };
     python-caja = callPackage ./python-caja { };
 
     basePackages = [
@@ -62,6 +69,7 @@ let
       mate-polkit
       mate-session-manager
       mate-settings-daemon
+      mate-settings-daemon-wrapped
       mate-themes
     ];
 
@@ -90,4 +98,4 @@ let
 
   };
 
-in self
+in lib.makeScope pkgs.newScope packages

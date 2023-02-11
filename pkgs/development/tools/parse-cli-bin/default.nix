@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "parse-cli-bin";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1iyfizbbxmr87wjgqiwqds51irgw6l3vm9wn89pc3zpj2zkyvf5h";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse Command Line Interface";
     homepage    = "https://parse.com";
     platforms   = platforms.linux;
     license     = licenses.bsd3;
   };
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

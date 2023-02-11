@@ -1,21 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , glib
-, gobject-introspection
 , icu
 , libxml2
 , ninja
 , perl
-, pkgconfig
+, pkg-config
+, libical
 , python3
 , tzdata
+, fixDarwinDylibNames
+, gobject-introspection
 , vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.8";
+  version = "3.0.16";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -23,24 +27,30 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "0pkh74bfrgp1slv8wsv7lbmal2m7qkixwm5llpmfwaiv14njlp68";
+    sha256 = "sha256-3D/0leI3LLKDFOXkKSrmMamLoaXdi/2Z4iPUXqgwtg8=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
-    gobject-introspection
     ninja
     perl
-    pkgconfig
+    pkg-config
+    gobject-introspection
     vala
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # provides ical-glib-src-generator that runs during build
+    libical
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
+    (python3.pythonForBuild.withPackages (pkgs: with pkgs; [
       pygobject3
     ]))
   ];
@@ -49,12 +59,15 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
+    gobject-introspection
   ];
 
   cmakeFlags = [
-    "-DGOBJECT_INTROSPECTION=True"
     "-DENABLE_GTK_DOC=False"
+    "-DGOBJECT_INTROSPECTION=True"
     "-DICAL_GLIB_VAPI=True"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
 
   patches = [
@@ -65,8 +78,16 @@ stdenv.mkDerivation rec {
 
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
-  doInstallCheck = true;
+  # Musl does not support TZDIR.
+  doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
+  preInstallCheck = if stdenv.isDarwin then ''
+    for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
+      for lib in $(cd lib && ls *.3.dylib); do
+        install_name_tool -change $lib $out/lib/$lib $testexe
+      done
+    done
+  '' else null;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -76,7 +97,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

@@ -1,0 +1,130 @@
+From 913e74b8682f77da94ed7b7d459482b9b23a5d88 Mon Sep 17 00:00:00 2001
+From: roblabla <unfiltered@roblab.la>
+Date: Tue, 28 Dec 2021 14:20:30 +0100
+Subject: [PATCH] Use protobuf gradle plugin
+
+---
+ Ghidra/Debug/Debugger-gadp/build.gradle | 76 +++----------------------
+ build.gradle                            |  6 ++
+ 2 files changed, 15 insertions(+), 67 deletions(-)
+
+diff --git a/Ghidra/Debug/Debugger-gadp/build.gradle b/Ghidra/Debug/Debugger-gadp/build.gradle
+index 1b4922f66..3d2ef8856 100644
+--- a/Ghidra/Debug/Debugger-gadp/build.gradle
++++ b/Ghidra/Debug/Debugger-gadp/build.gradle
+@@ -23,42 +23,19 @@ apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
+ 
+ apply plugin: 'eclipse'
+-eclipse.project.name = 'Debug Debugger-gadp'
++apply plugin: 'com.google.protobuf'
+ 
+-configurations {
+-	allProtocArtifacts
+-	protocArtifact
+-}
++eclipse.project.name = 'Debug Debugger-gadp'
+ 
+ def platform = getCurrentPlatformName()
+ 
+-dependencies {
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.17.3:windows-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.17.3:linux-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.17.3:linux-aarch_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.17.3:osx-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.17.3:osx-aarch_64@exe'
+-
+-	if (isCurrentWindows()) {
+-		protocArtifact 'com.google.protobuf:protoc:3.17.3:windows-x86_64@exe'
+-	}
+-	if (isCurrentLinux()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.17.3:linux-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.17.3:linux-aarch_64@exe'
+-		}
+-	}
+-	if (isCurrentMac()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.17.3:osx-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.17.3:osx-aarch_64@exe'
+-		}
+-	}
++buildscript {
++  dependencies {
++    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++  }
++}
+ 
++dependencies {
+ 	api 'com.google.protobuf:protobuf-java:3.17.3'
+ 	api project(':Framework-AsyncComm')
+ 	api project(':Framework-Debugging')
+@@ -68,43 +45,8 @@ dependencies {
+ 	testImplementation project(path: ':Framework-Debugging', configuration: 'testArtifacts')
+ }
+ 
+-/*protobuf {
++protobuf {
+ 	protoc {
+ 		artifact = 'com.google.protobuf:protoc:3.17.3'
+ 	}
+-}*/
+-
+-task generateProto {
+-	ext.srcdir = file("src/main/proto")
+-	ext.src = fileTree(srcdir) {
+-		include "**/*.proto"
+-	}
+-	ext.outdir = file("build/generated/source/proto/main/java")
+-	outputs.dir(outdir)
+-	inputs.files(src)
+-	dependsOn(configurations.protocArtifact)
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
+-		exec {
+-			commandLine exe, "--java_out=$outdir", "-I$srcdir"
+-			args src
+-		}
+-	}
+ }
+-
+-tasks.compileJava.dependsOn(tasks.generateProto)
+-tasks.eclipse.dependsOn(tasks.generateProto)
+-rootProject.tasks.prepDev.dependsOn(tasks.generateProto)
+-
+-sourceSets {
+-	main {
+-		java {
+-			srcDir tasks.generateProto.outdir
+-		}
+-	}
+-}
+-zipSourceSubproject.dependsOn generateProto
+-
+diff --git a/build.gradle b/build.gradle
+index dce3a5149..7a2e637ce 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -76,6 +76,12 @@ if (flatRepo.isDirectory()) {
+ 			jcenter()
+ 			flatDir name: "flat", dirs:["$flatRepo"]
+ 		}
++		buildscript {
++			repositories {
++				mavenLocal()
++				mavenCentral()
++			}
++		}
+ 	}
+ }
+ else {	
+-- 
+2.33.1
+

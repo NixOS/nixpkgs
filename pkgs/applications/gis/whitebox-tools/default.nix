@@ -1,24 +1,35 @@
-{ stdenv, rustPlatform , fetchFromGitHub, Security }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, Security
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
-    rev = "v${version}";
-    sha256 = "0c9jmfjz6ys65y65zlllv9xvaaavr9jpqc1dc217iywhj07j8k2v";
+    rev = "7551aa70e8d9cbd8b3744fde48e82aa40393ebf8";
+    hash = "sha256-MJQJcU91rAF7sz16Dlvg64cfWK8x3uEFcAsYqVLiz1Y=";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  cargoSha256 = "sha256-+IFLv/mIgqyDKNC5aZgQeW6Ymu6+desOD8dDvEdwsSM=";
 
-  cargoSha256 = "05w2jimmygg7dc93i8bpjpjc5yj5xfpfkjnbbgw2sq4kh06r5ii4";
+  cargoPatches = [
+    ./update-cargo-lock.patch
+  ];
 
-  meta = with stdenv.lib; {
-    description = "An advanced geospatial data analysis platform";
+  buildInputs = lib.optional stdenv.isDarwin Security;
+
+  doCheck = false;
+
+  meta = with lib; {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
+    description = "An advanced geospatial data analysis platform";
     license = licenses.mit;
     maintainers = [ maintainers.mpickering ];
-    platforms = platforms.all;
   };
 }

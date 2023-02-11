@@ -6,17 +6,17 @@
 , makeWrapper
 , udev
 , stdenv
+, lib
 , wrapGAppsHook
 }:
 let
   desktopItem = makeDesktopItem {
     desktopName = "HakuNeko Desktop";
     genericName = "Manga & Anime Downloader";
-    categories = "Network;FileTransfer;";
+    categories = [ "Network" "FileTransfer" ];
     exec = "hakuneko";
     icon = "hakuneko-desktop";
     name = "hakuneko-desktop";
-    type = "Application";
   };
 in
 stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   runtimeDependencies = [
-    udev.lib
+    (lib.getLib udev)
   ];
 
   postFixup = ''
@@ -69,9 +69,10 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manga & Anime Downloader";
     homepage = "https://sourceforge.net/projects/hakuneko/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unlicense;
     maintainers = with maintainers; [
       nloomans

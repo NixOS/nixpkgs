@@ -1,21 +1,43 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+
+# native
+, flake8
+
+# tests
+, pytestCheckHook
+, pexpect
+}:
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "2.0.0";
+  version = "4.0.3";
+  format = "setuptools";
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
-    rev = version;
-    sha256 = "0j1vj4f2j8x5f40rs6h8qplklcxcdbvkkvjpkpmr1xagw05i12bm";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-QMaTZRS9iOSuax706Es9WhkwU3vdcNb14dbiSt48aN0=";
   };
 
-  nativeBuildInputs = [ flake8 ];
-  checkInputs = [ pytest pytestcov pexpect ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=readchar" ""
+  '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    flake8
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pexpect
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/magmax/python-readchar";
     description = "Python library to read characters and key strokes";
     license = licenses.mit;

@@ -1,28 +1,38 @@
-{ lib, fetchurl, buildDunePackage, ounit, cstruct, dune-configurator, pkg-config }:
+{ lib, fetchurl, buildDunePackage, ounit2, cstruct, dune-configurator, eqaf, pkg-config
+, withFreestanding ? false
+, ocaml-freestanding
+}:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   pname = "mirage-crypto";
-  version = "0.8.0";
+  version = "0.10.7";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-v${version}.tbz";
-    sha256 = "1wb2923v17z179v866ragil0r601w5b3kvpnbkmkwlijp4i5grih";
+    url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
+    sha256 = "sha256-PoGKdgwjXFtoTHtrQ7HN0qfdBOAQW2gNUk+DbrmIppw=";
   };
 
-  useDune2 = true;
-
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ ounit2 ];
 
-  nativeBuildInputs = [ dune-configurator pkg-config ];
-  propagatedBuildInputs = [ cstruct ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator  ];
+  propagatedBuildInputs = [
+    cstruct eqaf
+  ] ++ lib.optionals withFreestanding [
+    ocaml-freestanding
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";
     description = "Simple symmetric cryptography for the modern age";
-    license = licenses.isc;
+    license = [
+      licenses.isc  # default license
+      licenses.bsd2 # mirage-crypto-rng-mirage
+      licenses.mit  # mirage-crypto-ec
+    ];
     maintainers = with maintainers; [ sternenseemann ];
   };
 }

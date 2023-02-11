@@ -36,14 +36,14 @@ in with python.pkgs; buildPythonPackage rec {
     xstatic-pygments
   ];
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1y3smw9620w2ia4zfsl2svb9j7mkfgc8z1bzjffyk1w5vryhwikh";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     selenium
   ];

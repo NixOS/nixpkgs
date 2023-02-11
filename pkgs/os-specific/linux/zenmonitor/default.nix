@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "ocerman";
-    repo = "zenmonitor";
+    owner = "Ta180m";
+    repo = "zenmonitor3";
     rev = "v${version}";
-    sha256 = "1mn496iqfmhqsac7a5r0bdfddzrfiz6l34qiga0pip925g7hsm52";
+    sha256 = "sha256-2EsuSMXnnMg0e0JD1TXJplsi7sOg9em0qqge2WlC6ro=";
   };
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitoring software for AMD Zen-based CPUs";
-    homepage = "https://github.com/ocerman/zenmonitor";
+    homepage = "https://github.com/Ta180m/zenmonitor3";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ alexbakker ];
+    maintainers = with maintainers; [ alexbakker artturin ];
   };
 }
