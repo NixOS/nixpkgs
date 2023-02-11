@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-71UFVXfww3wgSO2qoRCuV80+33B91Bjl2+nuuCbQRLg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-71UFVXfww3wgSO2qoRCuV80+33B91Bjl2+nuuCbQRLg=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interact with the Renault API";
     homepage = "https://github.com/hacf-fr/renault-api";
+    changelog = "https://github.com/hacf-fr/renault-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
