@@ -480,6 +480,7 @@ in {
     };
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    systemd.services.ModemManager.path = [ pkgs.libqmi ] // optionalAttrs cfg.enableFccUnlock;
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
