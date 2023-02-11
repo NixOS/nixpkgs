@@ -31,12 +31,12 @@ in
   inherit mkFlutter flutterDrv flutter2Patches flutter3Patches;
   stable = flutterDrv {
     pname = "flutter";
-    version = "3.3.8";
-    dartVersion = "2.18.4";
-    hash = "sha256-QH+10F6a0XYEvBetiAi45Sfy7WTdVZ1i8VOO4JuSI24=";
+    version = "3.7.3";
+    dartVersion = "2.19.2";
+    hash = "sha256-ez0pAM4ONn1z2FWR1dQ6EflKIjJ43TIgd2sDqD4jSGU=";
     dartHash = {
-      x86_64-linux = "sha256-lFw+KaxzhuAMnu6ypczINqywzpiD+8Kd+C/UHJDrO9Y=";
-      aarch64-linux = "sha256-snlFTY4oJ4ALGLc210USbI2Z///cx1IVYUWm7Vo5z2I=";
+      x86_64-linux = "sha256-Mm9gharzpnM/PPLvrOGFE6+9B8cOQGjE2pxogBYd2ys=";
+      aarch64-linux = "sha256-TG9ROb3nn1V6+SeQ0hnmTxouBDpleEjlYY77y4L5t34=";
     };
     patches = flutter3Patches;
   };
