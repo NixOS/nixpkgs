@@ -9,8 +9,8 @@ let
   # supply 2GB of dynamic space to avoid exhausting the heap while building the
   # ACL2 system itself; see
   # https://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
-  sbcl' = args.sbcl.override { disableImmobileSpace = true; };
-  sbcl = runCommandLocal args.sbcl.name { nativeBuildInputs = [ makeWrapper ]; } ''
+  sbcl' = args.sbcl.pkg.override { disableImmobileSpace = true; };
+  sbcl = runCommandLocal args.sbcl.pkg.name { nativeBuildInputs = [ makeWrapper ]; } ''
     makeWrapper ${sbcl'}/bin/sbcl $out/bin/sbcl \
       --add-flags "--dynamic-space-size 2000"
   '';

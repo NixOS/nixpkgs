@@ -129,7 +129,7 @@ let
   singular = pkgs.singular.override { inherit flint; };
 
   maxima = pkgs.maxima.override {
-    lisp-compiler = pkgs.ecl.override {
+    lisp-compiler = pkgs.ecl.pkg.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it
       # only works if threads are disabled.  sage 9.2 tests this

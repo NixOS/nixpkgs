@@ -25,6 +25,7 @@
  <xi:include href="ios.section.xml" />
  <xi:include href="java.section.xml" />
  <xi:include href="javascript.section.xml" />
+ <xi:include href="lisp.section.xml" />
  <xi:include href="lua.section.xml" />
  <xi:include href="maven.section.xml" />
  <xi:include href="nim.section.xml" />
