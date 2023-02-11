@@ -29,7 +29,7 @@ class BaseConverter(Converter):
 
     _options: dict[str, RenderedOption]
 
-    def __init__(self, manpage_urls: dict[str, str],
+    def __init__(self, manpage_urls: Mapping[str, str],
                  revision: str,
                  markdown_by_default: bool):
         super().__init__(manpage_urls)
