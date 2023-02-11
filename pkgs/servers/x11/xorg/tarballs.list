@@ -207,7 +207,7 @@ mirror://xorg/individual/lib/libXv-1.0.11.tar.bz2
 mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2
 mirror://xorg/individual/lib/libXxf86dga-1.1.5.tar.bz2
 mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
-mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2
+mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz
 mirror://xorg/individual/lib/xtrans-1.4.0.tar.bz2
 mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz
 mirror://xorg/individual/proto/xorgproto-2021.5.tar.bz2
