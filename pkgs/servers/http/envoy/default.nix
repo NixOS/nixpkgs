@@ -149,6 +149,7 @@ buildBazelPackage rec {
     "--spawn_strategy=standalone"
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"

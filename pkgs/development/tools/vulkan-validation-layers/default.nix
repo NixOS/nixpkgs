@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, jq
 , glslang
 , libffi
 , libX11
@@ -37,15 +38,10 @@ stdenv.mkDerivation rec {
       hash = "sha256-+VbiXtxzYaF5o+wIrJ+09LmgBdaLv/0VJGFDnBkrXms=";
     });
 
-  # Include absolute paths to layer libraries in their associated
-  # layer definition json files.
-  postPatch = ''
-    sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
+    jq
   ];
 
   buildInputs = [
@@ -73,6 +69,15 @@ stdenv.mkDerivation rec {
   # Tests require access to vulkan-compatible GPU, which isn't
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
+
+  # Include absolute paths to layer libraries in their associated
+  # layer definition json files.
+  preFixup = ''
+    for f in "$out"/share/vulkan/explicit_layer.d/*.json "$out"/share/vulkan/implicit_layer.d/*.json; do
+      jq <"$f" >tmp.json ".layer.library_path = \"$out/lib/\" + .layer.library_path"
+      mv tmp.json "$f"
+    done
+  '';
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
