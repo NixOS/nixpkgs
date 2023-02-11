@@ -13,6 +13,7 @@
 , pango
 , pkg-config
 , scdoc
+, wayland-scanner
 , wayland
 , wayland-protocols
 , wlroots_0_16
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [
