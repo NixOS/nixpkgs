@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ole";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-0bIlnRFKBvSXnBIU4+1V7WzyXCvulUpNSXG1Rj2k4jY=";
   };
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Object Linking & Embedding (OLE) format";
     homepage = "https://github.com/fox-it/dissect.ole";
+    changelog = "https://github.com/fox-it/dissect.ole/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
