@@ -20,10 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-jNfU5jT2xLgwVeVp8jXrQ6QQuUDwMOxf+hZ7VFsMFpM=";
   };
 
-  propagatedBuildInputs = [
-    aioredis
-    msgpack
-  ];
+  passthru.optional-dependencies = {
+    redis = [
+      redis
+    ];
+    msgpack = [
+      msgpack
+    ];
+  };
 
   # aiomcache would be required but last release was in 2017
   doCheck = false;
