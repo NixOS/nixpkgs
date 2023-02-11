@@ -14006,6 +14006,10 @@ with pkgs;
 
   asciigraph = callPackage ../tools/text/asciigraph { };
 
+  autocorrect = callPackage ../tools/text/autocorrect {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   as31 = callPackage ../development/compilers/as31 { };
 
   asl = callPackage ../development/compilers/asl {
