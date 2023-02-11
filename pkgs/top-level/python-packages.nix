@@ -9259,6 +9259,8 @@ self: super: with self; {
 
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
+  pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
+
   pillow-simd = callPackage ../development/python-modules/pillow-simd {
       inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
       inherit (pkgs.xorg) libX11;
