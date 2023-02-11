@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, wayland-scanner
 , glslang
 , libffi
 , libX11
@@ -30,9 +31,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-8XJON+iBEPRtuQWf1bPXyOJHRkuRLnLXgTIjk7gYQwE=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
