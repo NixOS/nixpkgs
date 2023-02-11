@@ -11,10 +11,25 @@ in
     services.prowlarr = {
       enable = mkEnableOption (lib.mdDoc "Prowlarr");
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/prowlarr/.config/Prowlarr";
+        description = lib.mdDoc "The directory where Prowlarr stores its data files.";
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc "Open ports in the firewall for the Prowlarr web interface.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prowlarr;
+        defaultText = literalExpression "pkgs.prowlarr";
+        description = lib.mdDoc ''
+          Prowlarr package to use.
+        '';
       };
     };
   };
@@ -29,7 +44,7 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${pkgs.prowlarr}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
+        ExecStart = "${cfg.package}/bin/Prowlarr -nobrowser -data=${cfg.dataDir}";
         Restart = "on-failure";
       };
     };
