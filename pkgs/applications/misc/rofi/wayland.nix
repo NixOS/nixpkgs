@@ -2,7 +2,9 @@
 , lib
 , fetchFromGitHub
 , rofi-unwrapped
+, pkg-config
 , wayland-protocols
+, wayland-scanner
 , wayland
 }:
 
@@ -18,7 +20,8 @@ rofi-unwrapped.overrideAttrs (oldAttrs: rec {
     sha256 = "sha256-ddKLV7NvqgTQl5YlAEyBK0oalcJsLASK4z3qArQPUDQ=";
   };
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ wayland-protocols ];
+  depsBuildBuild = oldAttrs.depsBuildBuild ++ [ pkg-config ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ wayland-protocols wayland-scanner ];
   buildInputs = oldAttrs.buildInputs ++ [ wayland ];
 
   meta = with lib; {
