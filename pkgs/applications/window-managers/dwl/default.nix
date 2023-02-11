@@ -8,6 +8,7 @@
 , libxkbcommon
 , pixman
 , pkg-config
+, wayland-scanner
 , substituteAll
 , wayland
 , wayland-protocols
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
