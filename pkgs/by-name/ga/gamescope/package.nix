@@ -12,6 +12,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , glm
 , gbenchmark
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
+    wayland-scanner
   ];
 
   buildInputs = [
