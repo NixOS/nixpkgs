@@ -9517,6 +9517,8 @@ with pkgs;
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
+  lipl = callPackage ../tools/misc/lipl { };
+
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   lmp = callPackage ../tools/security/lmp { };
@@ -9896,6 +9898,8 @@ with pkgs;
   mt-st = callPackage ../tools/backup/mt-st {};
 
   mubeng = callPackage ../tools/networking/mubeng { };
+
+  muffet = callPackage ../tools/networking/muffet { };
 
   multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
 
@@ -13742,6 +13746,8 @@ with pkgs;
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
   zplug = callPackage ../shells/zsh/zplug { };
+
+  zps = callPackage ../tools/system/zps { };
 
   zi = callPackage ../shells/zsh/zi {};
 
@@ -22624,6 +22630,8 @@ with pkgs;
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
   pkgdiff = callPackage ../tools/misc/pkgdiff { };
+
+  pkgtop = callPackage ../tools/misc/pkgtop { };
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
