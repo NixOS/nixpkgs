@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.2";
+  version = "3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.shellitem";
     rev = "refs/tags/${version}";
-    hash = "sha256-z0/KSOgo5Gnl4MLOY5eUPHlI/8dCyYaEEiKMmkP7cgg=";
+    hash = "sha256-flTv2Y+UwMTQnvqRS/pZRPkTsIjvCAp7B4rKAQPOJL4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Shellitem structures";
     homepage = "https://github.com/fox-it/dissect.shellitem";
-    changelog = "";
+    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
