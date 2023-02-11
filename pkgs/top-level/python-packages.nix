@@ -7267,6 +7267,8 @@ self: super: with self; {
 
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
+  pyoutbreaksnearme = callPackage ../development/python-modules/pyoutbreaksnearme { };
+
   pyoverkiz = callPackage ../development/python-modules/pyoverkiz { };
 
   pyownet = callPackage ../development/python-modules/pyownet { };
