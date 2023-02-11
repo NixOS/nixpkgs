@@ -98,5 +98,6 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (harec.meta) platforms badPlatforms;
+    broken = stdenv.isAarch64; # still figuring how to set cross-compiling stuff
   };
 })
