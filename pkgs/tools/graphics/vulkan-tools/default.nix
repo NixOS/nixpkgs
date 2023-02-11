@@ -5,6 +5,7 @@
 , cmake
 , pkg-config
 , python3
+, wayland-scanner
 , glslang
 , libffi
 , libX11
@@ -33,10 +34,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-IAlqFCenv5e70XyLSYh2fE84JZQFJwg+YKTGaK7ShKA=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
+    wayland-scanner
   ];
 
   buildInputs = [
