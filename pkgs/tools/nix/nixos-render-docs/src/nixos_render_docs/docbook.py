@@ -28,6 +28,9 @@ class Deflist:
 class Heading(NamedTuple):
     container_tag: str
     level: int
+    # special handling for <part> titles: whether partinfo was already closed from elsewhere
+    # or still needs closing.
+    partintro_closed: bool = False
 
 class DocBookRenderer(Renderer):
     __output__ = "docbook"
@@ -251,7 +254,17 @@ class DocBookRenderer(Renderer):
         return result + f'<{tag}{attrs_str}>\n<title>'
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
-        return '</title>'
+        heading = self._headings[-1]
+        result = '</title>'
+        if heading.container_tag == 'part':
+            # generate the same ids as were previously assigned manually. if this collides we
+            # rely on outside schema validation to catch it!
+            maybe_id = ""
+            assert tokens[i - 2].type == 'heading_open'
+            if id := cast(str, tokens[i - 2].attrs.get('id', "")):
+                maybe_id = " xml:id=" + quoteattr(id + "-intro")
+            result += f"<partintro{maybe_id}>"
+        return result
     def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         if id := token.attrs.get('id'):
@@ -266,8 +279,10 @@ class DocBookRenderer(Renderer):
         result = []
         while len(self._headings):
             if level is None or self._headings[-1].level >= level:
-                result.append(f"</{self._headings[-1].container_tag}>")
-                self._headings.pop()
+                heading = self._headings.pop()
+                if heading.container_tag == 'part' and not heading.partintro_closed:
+                    result.append("</partintro>")
+                result.append(f"</{heading.container_tag}>")
             else:
                 break
         return "\n".join(result)
