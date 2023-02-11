@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.4.2";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
-    rev = version;
-    sha256 = "00fi04991skq61gjrmig8ry6936pc8zs7p8py8spfipbxf1irkjg";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-7ZMkA5WzWJKSwvpOoZYQO9JgedCdxNGrkFuPmYm4aRE=";
   };
 
   propagatedBuildInputs = [ redis ];
