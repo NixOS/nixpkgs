@@ -43,7 +43,7 @@
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
 , enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-, enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
+, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
 }:
 
 assert lib.asserts.assertMsg
@@ -214,8 +214,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
-  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ]
-  ++ lib.optionals enableGcs [ "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}" ];
+  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
