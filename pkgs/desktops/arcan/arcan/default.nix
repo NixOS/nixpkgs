@@ -41,6 +41,7 @@
 , valgrind
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xcbutil
 , xcbutilwm
 , xz
@@ -71,6 +72,7 @@ stdenv.mkDerivation (self: {
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
   ] ++ lib.optionals buildManPages [
     ruby
   ];
