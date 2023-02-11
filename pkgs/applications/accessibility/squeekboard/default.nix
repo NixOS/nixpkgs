@@ -7,6 +7,7 @@
 , gnome
 , gnome-desktop
 , glib
+, wayland-scanner
 , gtk3
 , wayland
 , wayland-protocols
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
-    wayland
+    wayland-scanner
     wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
