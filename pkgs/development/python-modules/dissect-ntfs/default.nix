@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-4QEsWTdqlHIP1a9g45+zv1SdHY0Ofsr7Rf1z+ctssSw=";
   };
 
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
+    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
