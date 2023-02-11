@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     redis = [
-      redis
+      aioredis
     ];
     msgpack = [
       msgpack
