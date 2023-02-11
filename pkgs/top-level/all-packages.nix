@@ -13936,7 +13936,11 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
-  abcl = callPackage ../development/compilers/abcl { };
+  abcl = let
+    pkg = callPackage ../development/compilers/abcl { };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "abcl"; };
+  };
 
   temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
   temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
@@ -14074,8 +14078,12 @@ with pkgs;
 
   cc65 = callPackage ../development/compilers/cc65 { };
 
-  ccl = callPackage ../development/compilers/ccl {
-    inherit (buildPackages.darwin) bootstrap_cmds;
+  ccl = let
+    pkg = callPackage ../development/compilers/ccl {
+      inherit (buildPackages.darwin) bootstrap_cmds;
+    };    
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "lx64fsl"; };
   };
 
   cdb = callPackage ../development/tools/database/cdb {
@@ -14248,8 +14256,17 @@ with pkgs;
 
   dictu = callPackage ../development/compilers/dictu { };
 
-  ecl = callPackage ../development/compilers/ecl { };
-  ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
+  ecl = let
+    pkg = callPackage ../development/compilers/ecl { };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fas"; };
+  };
+  
+  ecl_16_1_2 = let
+    pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fsl"; };
+  };
 
   eli = callPackage ../development/compilers/eli { };
 
@@ -15918,19 +15935,79 @@ with pkgs;
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl_2_0_8 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.8"; };
-  sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.9"; };
-  sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.1"; };
-  sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.2"; };
-  sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.9"; };
-  sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.10"; };
-  sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.11"; };
-  sbcl_2_2_4 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.4"; };
-  sbcl_2_2_6 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.6"; };
-  sbcl_2_2_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
-  sbcl_2_2_10 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.10"; };
-  sbcl_2_2_11 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
-  sbcl_2_3_0 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
+  
+  sbcl_2_0_9 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.9"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_1_1 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.1"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_1_2 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.2"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_1_9 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.9"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_1_10 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.10"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_1_11 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.11"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_2_4 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.4"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_2_6 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.6"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_2_9 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_2_10 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.10"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_2_11 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
+  sbcl_2_3_0 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
+  };
+  
   sbcl = sbcl_2_3_0;
 
   roswell = callPackage ../development/tools/roswell { };
@@ -16252,11 +16329,18 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  clisp = callPackage ../development/interpreters/clisp {
-    # On newer readline8 fails as:
-    #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
-    #   does not have the required size or alignment
-    readline = readline63;
+  clisp = let
+    pkg = callPackage ../development/interpreters/clisp {
+      # On newer readline8 fails as:
+      #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
+      #   does not have the required size or alignment
+      readline = readline63;
+    };
+  in callPackage ../development/lisp-modules {
+    spec = {
+      inherit asdf pkg;
+      flags = "-E UTF-8";
+      faslExt = "fas"; };
   };
 
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
@@ -24075,6 +24159,12 @@ with pkgs;
   # Currently most popular
   asdf_3_1 = callPackage ../development/lisp-modules/asdf/3.1.nix {
     texLive = null;
+  };
+
+  sbcl_2_0_8 = let
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.8"; };
+  in callPackage ../development/lisp-modules {
+    spec = { inherit asdf pkg; faslExt = "fasl"; };
   };
 
   clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;

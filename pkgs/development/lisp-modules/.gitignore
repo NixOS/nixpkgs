@@ -1,0 +1,6 @@
+result
+.direnv
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.fasl
