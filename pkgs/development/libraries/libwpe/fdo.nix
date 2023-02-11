@@ -4,6 +4,7 @@
 , meson
 , pkg-config
 , ninja
+, wayland-scanner
 , wayland
 , libepoxy
 , glib
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
