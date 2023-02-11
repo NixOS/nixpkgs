@@ -2475,6 +2475,8 @@ self: super: with self; {
 
   dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
 
+  dissect-squashfs = callPackage ../development/python-modules/dissect-squashfs { };
+
   dissect-sql = callPackage ../development/python-modules/dissect-sql { };
 
   dissect-target = callPackage ../development/python-modules/dissect-target { };
