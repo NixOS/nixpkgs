@@ -144,6 +144,7 @@ let
     };
     classimp = pkg: {
       nativeLibs = [ assimp ];
+      meta.broken = true; # Requires assimp ≤ 5.0.x.
     };
     clsql-postgresql = pkg: {
       nativeLibs = [ postgresql.lib ];
