@@ -57,6 +57,16 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
+  # Currently rustup requires 1GB per compile thread, which exceed's some
+  # contributors memory. Therefore we limit parallism to 2/3 of the available
+  # cores. This is a bit adhoc based on current common hardware configuration
+  # and might need to be adjusted in future.
+  preBuild = ''
+    if [[ "$NIX_BUILD_CORES" -ge "$(nproc)" ]]; then
+      (( NIX_BUILD_CORES = $(nproc) * 66 / 100 ))
+    if
+  '';
+
   postInstall = ''
     pushd $out/bin
     mv rustup-init rustup
