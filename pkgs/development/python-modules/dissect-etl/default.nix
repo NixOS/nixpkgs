@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.2";
+  version = "3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.etl";
     rev = "refs/tags/${version}";
-    hash = "sha256-s3Ls8tuqp/COBF+WV9RRyfo7FAqPcXmBZ08gHZMPzOU=";
+    hash = "sha256-rEYWTMBzMyaADqT1Pp5z1J2Uf/t/GeX/FAnZVnaycYs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
