@@ -20455,6 +20455,8 @@ with pkgs;
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
+  irr1 = callPackage ../development/libraries/irr1 { };
+
   irrlicht = if !stdenv.isDarwin then
     callPackage ../development/libraries/irrlicht { }
   else callPackage ../development/libraries/irrlicht/mac.nix {
@@ -26211,8 +26213,8 @@ with pkgs;
 
   nsh = callPackage ../shells/nsh { };
 
-  nushell = callPackage ../shells/nushell {
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation Security;
+  nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
     inherit (darwin.apple_sdk) sdk;
   };
 
