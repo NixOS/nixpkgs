@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.3";
+  version = "3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "acquire";
     rev = version;
-    hash = "sha256-S7EZZxNcoLcZyyRNGlZj6nGoCAlqCxNdh3azIVKvOTM=";
+    hash = "sha256-VkO+XLIC/UQzvfLsgbKcx9i8OxTC6J32nkxPHWWn7m8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
