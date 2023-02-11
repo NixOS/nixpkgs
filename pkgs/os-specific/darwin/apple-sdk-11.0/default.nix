@@ -56,6 +56,22 @@ let
     '';
   };
 
+  mkStdenv = stdenv:
+    let
+      cc = stdenv.cc.override {
+        bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
+        libc = packages.Libsystem;
+      };
+    in
+    if stdenv.isAarch64 then stdenv
+    else
+      (overrideCC stdenv cc).override {
+        targetPlatform = stdenv.targetPlatform // {
+          darwinMinVersion = "10.12";
+          darwinSdkVersion = "11.0";
+        };
+      };
+
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
 
   packages = {
@@ -90,7 +106,7 @@ let
     };
 
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin rec {
-      inherit (pkgs.darwin.apple_sdk_11_0) stdenv xcodebuild rustPlatform;
+      inherit (pkgs.darwin.apple_sdk_11_0) gcc12Stdenv stdenv xcodebuild rustPlatform;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
         apple_sdk = prev.darwin.apple_sdk_11_0;
@@ -99,20 +115,8 @@ let
       xcbuild = xcodebuild;
     });
 
-    stdenv =
-      let
-        clang = stdenv.cc.override {
-          bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
-          libc = packages.Libsystem;
-        };
-      in
-      if stdenv.isAarch64 then stdenv
-      else
-        (overrideCC stdenv clang).override {
-          targetPlatform = stdenv.targetPlatform // {
-            darwinMinVersion = "10.12";
-            darwinSdkVersion = "11.0";
-          };
-        };
+    gcc12Stdenv = mkStdenv pkgs.gcc12Stdenv;
+
+    stdenv = mkStdenv stdenv;
   };
 in packages
