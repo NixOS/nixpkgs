@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-fat";
-  version = "3.2";
+  version = "3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.fat";
     rev = "refs/tags/${version}";
-    hash = "sha256-kqdVgUkvW9I5CI4T9b7VeX6hPm3Ufwrdnhmo1jR5Fdg=";
+    hash = "sha256-v4GjI6DdDfxO3kGZ7Z5C6mkdRj9axsT9mvlSOQyiMBw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
