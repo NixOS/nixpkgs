@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.eventlog";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-emNGZs/5LWD29xE5BmXQKQfkZApLZlGs6KNIqobaKvM=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing parsers for the Windows EVT, EVTX and WEVT log file formats";
     homepage = "https://github.com/fox-it/dissect.eventlog";
+    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
