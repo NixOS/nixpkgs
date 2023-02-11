@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-HGlWyRjvXu1d0n1PPkMyl8NNRRhsjMzXZJMS1MjdTWQ=";
   };
 
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.util";
+    changelog = "https://github.com/fox-it/dissect.util/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
