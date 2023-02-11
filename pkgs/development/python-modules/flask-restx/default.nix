@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "python-restx";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-9CIAPsV0SJaBlNZZtWkqhhCJ/a1QEgbTkrCEBnuDVDo=";
+    sha256 = "sha256-Rp+TQjAZqgIS6jmj0PAqshD+5a3JPOr2Qw5l4INxK/Y=";
   };
 
   propagatedBuildInputs = [
