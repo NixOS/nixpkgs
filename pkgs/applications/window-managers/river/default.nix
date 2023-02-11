@@ -2,10 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , zig
-, wayland
+, wayland-scanner
 , pkg-config
 , scdoc
 , xwayland
+, wayland
 , wayland-protocols
 , wlroots_0_16
 , libxkbcommon
@@ -30,9 +31,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
+  nativeBuildInputs = [ pkg-config scdoc wayland-scanner xwayland zig ];
 
   buildInputs = [
+    wayland
     wayland-protocols
     wlroots_0_16
     libxkbcommon
