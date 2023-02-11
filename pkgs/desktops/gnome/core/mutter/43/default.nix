@@ -37,6 +37,7 @@
 , gnome-settings-daemon
 , xorgserver
 , python3
+, wayland-scanner
 , wrapGAppsHook
 , gi-docgen
 , sysprof
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook
     gi-docgen
     xorgserver
