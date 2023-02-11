@@ -479,8 +479,10 @@ in {
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
-    systemd.services.ModemManager.path = [ pkgs.libqmi ] // optionalAttrs cfg.enableFccUnlock;
+    systemd.services.ModemManager = {
+      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+      path = if cfg.enableFccUnlock then [ pkgs.libqmi ] else [];
+    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
