@@ -70,7 +70,7 @@
 , jackSupport ? false
 , onlyLibVLC ? false
 , skins2Support ? !onlyLibVLC, freetype
-, waylandSupport ? true, wayland, wayland-protocols
+, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
 , withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook, wrapGAppsHook
 }:
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ]
   ++ optionals withQt5 [ wrapQtAppsHook ]
-  ++ optionals waylandSupport [ wayland wayland-protocols ];
+  ++ optionals waylandSupport [ wayland-scanner ];
 
   enableParallelBuilding = true;
 
