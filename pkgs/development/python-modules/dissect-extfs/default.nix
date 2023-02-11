@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.extfs";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-KGqmguKwCSQw2USKuWFMQCz+D8XMv5W12eJfUxgz324=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the ExtFS file system";
     homepage = "https://github.com/fox-it/dissect.extfs";
+    changelog = "https://github.com/fox-it/dissect.extfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
