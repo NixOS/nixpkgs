@@ -24,13 +24,14 @@
 , debug ? false
 , developerBuild ? false
 , decryptSslTraffic ? false
+, testers
 }:
 
 let
   debugSymbols = debug || developerBuild;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtbase";
   inherit qtCompatVersion src version;
   debug = debugSymbols;
@@ -338,12 +339,33 @@ stdenv.mkDerivation {
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
+    pkgConfigModules = [
+      "Qt5Concurrent"
+      "Qt5Core"
+      "Qt5DBus"
+      "Qt5Gui"
+      "Qt5Network"
+      "Qt5OpenGL"
+      "Qt5OpenGLExtensions"
+      "Qt5PrintSupport"
+      #"Qt5Qml"
+      #"Qt5QmlModels"
+      #"Qt5Quick"
+      #"Qt5QuickTest"
+      #"Qt5QuickWidgets"
+      "Qt5Sql"
+      "Qt5Test"
+      "Qt5Widgets"
+      "Qt5Xml"
+    ];
     platforms = platforms.unix;
   };
 
-}
+})
