@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.vmfs";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-6ZNybNRL97Zz6O32r4X0K3/+vZF3Qid98rj2pgGWgvI=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the VMFS file system";
     homepage = "https://github.com/fox-it/dissect.vmfs";
+    changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
