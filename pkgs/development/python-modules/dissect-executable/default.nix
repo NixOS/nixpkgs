@@ -5,22 +5,21 @@
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
-, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "dissect-eventlog";
-  version = "3.3";
+  pname = "dissect-executable";
+  version = "1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
-    repo = "dissect.eventlog";
+    repo = "dissect.executable";
     rev = "refs/tags/${version}";
-    hash = "sha256-PbU9Rd0D+xdleTIMAV+esw1WynWU4++8KeXlHS9yiJs=";
+    hash = "sha256-c58g2L3B/3/pC+iyXphYsjhpBs0I0Q64B8+rv5k1dtg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -35,18 +34,14 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
   pythonImportsCheck = [
-    "dissect.eventlog"
+    "dissect.executable"
   ];
 
   meta = with lib; {
-    description = "Dissect module implementing parsers for the Windows EVT, EVTX and WEVT log file formats";
-    homepage = "https://github.com/fox-it/dissect.eventlog";
-    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${version}";
+    description = "Dissect module implementing a parser for various executable formats such as PE, ELF and Macho-O";
+    homepage = "https://github.com/fox-it/dissect.executable";
+    changelog = "https://github.com/fox-it/dissect.executable/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

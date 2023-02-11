@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "22.0.2";
+  version = "22.1";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${version}";
-    sha256 = "sha256-20Tem6CD7XAt1EDfkl46Nxhb+Vq3sCk/UqnLCAm85FU=";
+    sha256 = "sha256-HDV06O9k+TpYR0ZwLas2hvDwxvnfoa8VUzgvkXv/WV8=";
   };
 
   nativeBuildInputs =
