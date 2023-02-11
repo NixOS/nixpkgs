@@ -167,5 +167,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    broken = lib.versionAtLeast stdenv.cc.version "12";
   };
 }
