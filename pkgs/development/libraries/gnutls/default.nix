@@ -5,7 +5,7 @@
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
-, withSecurity ? true, Security  # darwin Security.framework
+, Security  # darwin Security.framework
 # certificate compression - only zlib now, more possible: zstd, brotli
 
 # for passthru.tests
@@ -47,11 +47,7 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ]
-    # Disable native add_system_trust.
-    # FIXME: apparently it's not enough to drop the framework anymore; maybe related to
-    # https://gitlab.com/gnutls/gnutls/-/commit/c19cb93d492e45141bfef9b926dfeba36003261c
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+  patches = [ ./nix-ssl-cert-file.patch ];
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -93,12 +89,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkg-config ]
-    ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
     # Builds dynamically linking against gnutls seem to need the framework now.
-    ++ lib.optional (isDarwin && withSecurity) Security;
+    ++ lib.optional isDarwin Security;
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
