@@ -19,6 +19,7 @@
 , pixman
 , pkg-config
 , unzip
+, wayland-scanner
 , wayland
 , wayland-protocols
 , xcbutilerrors
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     pandoc
     pkg-config
     unzip
+    wayland-scanner
   ];
   buildInputs = [
     ffmpeg
