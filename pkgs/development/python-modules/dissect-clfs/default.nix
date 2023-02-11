@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.clfs";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-1nh81ppJpYre3y7hJ9xS+TNU1NfTH+9NMHdV55kPEXI=";
   };
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
     homepage = "https://github.com/fox-it/dissect.clfs";
+    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
