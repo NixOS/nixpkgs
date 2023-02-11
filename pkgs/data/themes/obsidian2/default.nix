@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , gtk-engine-murrine
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,11 @@ stdenv.mkDerivation rec {
     cp -a Obsidian-2* $out/share/themes
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/madmaxms/theme-obsidian-2";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Gnome theme based upon Adwaita-Maia dark skin";
