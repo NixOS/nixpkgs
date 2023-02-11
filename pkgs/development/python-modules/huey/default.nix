@@ -1,15 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, redis }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, redis
+}:
 
 buildPythonPackage rec {
   pname = "huey";
   version = "2.4.5";
 
+  format = "pyproject";
+
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7ZMkA5WzWJKSwvpOoZYQO9JgedCdxNGrkFuPmYm4aRE=";
+    hash = "sha256-7ZMkA5WzWJKSwvpOoZYQO9JgedCdxNGrkFuPmYm4aRE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [ redis ];
 
