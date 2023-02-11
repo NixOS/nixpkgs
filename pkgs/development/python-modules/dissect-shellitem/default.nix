@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-z0/KSOgo5Gnl4MLOY5eUPHlI/8dCyYaEEiKMmkP7cgg=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Shellitem structures";
     homepage = "https://github.com/fox-it/dissect.shellitem";
+    changelog = "";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
