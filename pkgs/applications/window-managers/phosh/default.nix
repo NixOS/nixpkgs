@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook4
 , libadwaita
 , libhandy
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook4
   ];
 
