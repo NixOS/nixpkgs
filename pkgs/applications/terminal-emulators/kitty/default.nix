@@ -14,6 +14,7 @@
 , UserNotifications
 , libcanberra
 , libicns
+, wayland-scanner
 , libpng
 , python3
 , zlib
@@ -75,7 +76,11 @@ buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 
