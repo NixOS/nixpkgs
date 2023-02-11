@@ -12,6 +12,7 @@
 , docbook_xml_dtd_42
 , cmocka
 , wafHook
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    tdb
+    tevent
   ];
 
   buildInputs = [
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
     tevent
     popt
     cmocka
+    libxcrypt
   ];
 
   # otherwise the configure script fails with

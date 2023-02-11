@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-camel-case";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-31kTYv+kSMjwo1TFauilP7eruxXiIpUdDG9feBYzkH4=";
+    sha256 = "sha256-SNkv1llh/2uzIKAMkmqnpab3sCeNCP0cXpYFSycIF58=";
   };
 
   propagatedBuildInputs = [

@@ -1,15 +1,19 @@
 {lib, stdenv, fetchpatch, fetchurl, autoreconfHook, pkg-config, atk, cairo, glib
 , gnome-common, gtk2, pango
-, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2 }:
+, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2
+, testers
+}:
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "2.10.5";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceview/2.10/${pname}-${version}.tar.bz2";
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e";
   };
 
@@ -40,4 +44,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # requires X11 daemon
-}
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
+    pkgConfigModules = [ "gtksourceview-2.0" ];
+  };
+})

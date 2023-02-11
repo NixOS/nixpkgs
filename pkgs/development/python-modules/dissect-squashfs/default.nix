@@ -3,24 +3,26 @@
 , dissect-cstruct
 , dissect-util
 , fetchFromGitHub
+, lz4
+, python-lzo
+, pythonOlder
 , setuptools
 , setuptools-scm
-, pytestCheckHook
-, pythonOlder
+, zstandard
 }:
 
 buildPythonPackage rec {
-  pname = "dissect-eventlog";
-  version = "3.3";
+  pname = "dissect-squashfs";
+  version = "1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
-    repo = "dissect.eventlog";
+    repo = "dissect.squashfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-PbU9Rd0D+xdleTIMAV+esw1WynWU4++8KeXlHS9yiJs=";
+    hash = "sha256-bDR6GAgl1dOhZ3fWA7E27KS6pj9AXInNxwmwNXXV3lc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -35,18 +37,22 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  passthru.optional-dependencies = {
+    full = [
+      lz4
+      python-lzo
+      zstandard
+    ];
+  };
 
   pythonImportsCheck = [
-    "dissect.eventlog"
+    "dissect.squashfs"
   ];
 
   meta = with lib; {
-    description = "Dissect module implementing parsers for the Windows EVT, EVTX and WEVT log file formats";
-    homepage = "https://github.com/fox-it/dissect.eventlog";
-    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${version}";
+    description = "Dissect module implementing a parser for the SquashFS file system";
+    homepage = "https://github.com/fox-it/dissect.squashfs";
+    changelog = "https://github.com/fox-it/dissect.squashfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
