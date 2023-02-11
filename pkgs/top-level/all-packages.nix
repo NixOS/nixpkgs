@@ -11200,6 +11200,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  rnm = callPackage ../tools/filesystems/rnm { };
+
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix {
@@ -13738,6 +13740,8 @@ with pkgs;
 
   zplug = callPackage ../shells/zsh/zplug { };
 
+  zps = callPackage ../tools/system/zps { };
+
   zi = callPackage ../shells/zsh/zi {};
 
   zinit = callPackage ../shells/zsh/zinit {} ;
@@ -15696,6 +15700,7 @@ with pkgs;
   cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-binstall = callPackage ../development/tools/rust/cargo-binstall { };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -20519,6 +20524,8 @@ with pkgs;
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
   jose = callPackage ../development/libraries/jose { };
+
+  jpcre2 = callPackage ../development/libraries/jpcre2 { };
 
   jshon = callPackage ../development/tools/parsing/jshon { };
 
@@ -38812,6 +38819,8 @@ with pkgs;
   hss = callPackage ../tools/networking/hss {};
 
   undaemonize = callPackage ../tools/system/undaemonize {};
+
+  wtfis = callPackage ../tools/networking/wtfis { };
 
   houdini = callPackage ../applications/misc/houdini {};
 

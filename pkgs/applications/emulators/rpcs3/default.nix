@@ -82,6 +82,6 @@ gcc11Stdenv.mkDerivation {
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [ abbradar neonfuz ilian zane ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
