@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-4yUVJwIQniE9AAtAgzHczOZfyWZly86JKc0Qh3byYf4=";
   };
 
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Windows thumbcache";
     homepage = "https://github.com/fox-it/dissect.thumbcache";
+    changelog = "https://github.com/fox-it/dissect.thumbcache/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
