@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, gst_all_1, wrapQtAppsHook, qtbase, qtmultimedia }:
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, meson, ninja, wayland-scanner, wrapQtAppsHook
+, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon
+, gst_all_1, qtbase, qtmultimedia
+}:
+
 let
  gstreamerPath = with gst_all_1; lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
      gstreamer
@@ -18,7 +23,7 @@ in stdenv.mkDerivation rec {
     sha256 = "135kfyg1b61xvfpk8vpk4qyw6s9q1mn3a6lfkrqrhl0dz9kka9lx";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner wrapQtAppsHook ];
   buildInputs = [
       wayland
       pixman
