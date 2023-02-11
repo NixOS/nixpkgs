@@ -132,6 +132,7 @@ let
     passthru = {
       inherit products;
       home = graalvmXXX-ce;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; ({
