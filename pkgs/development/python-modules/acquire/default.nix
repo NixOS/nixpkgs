@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-VkO+XLIC/UQzvfLsgbKcx9i8OxTC6J32nkxPHWWn7m8=";
   };
 
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
+    changelog = "https://github.com/fox-it/acquire/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
