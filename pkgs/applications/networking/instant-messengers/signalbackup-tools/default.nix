@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.malo ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
   };
 }

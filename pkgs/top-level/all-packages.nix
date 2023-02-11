@@ -11875,7 +11875,9 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  signalbackup-tools = darwin.apple_sdk_11_0.callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
+  signalbackup-tools = darwin.apple_sdk_11_0.callPackage ../applications/networking/instant-messengers/signalbackup-tools {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.gcc12Stdenv else stdenv;
+  };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
