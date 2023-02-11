@@ -12,7 +12,6 @@
 , xorg
 , libiconv
 , AppKit
-, Foundation
 , Security
 # darwin.apple_sdk.sdk
 , sdk
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    Foundation
     (
       # Pull a header that contains a definition of proc_pid_rusage().
       # (We pick just that one because using the other headers from `sdk` is not

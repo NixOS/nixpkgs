@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       runHook preBuild
 
       ln -s ${nodeDependencies}/lib/node_modules .
+      export HOME=$(mktemp -d)
       export PATH="${nodeDependencies}/bin:$PATH"
       npm run build
 
