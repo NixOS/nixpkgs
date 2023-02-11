@@ -17,6 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/coleifer/huey/blob/${src.rev}/CHANGELOG.md";
     description = "A little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
