@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
 , OpenGL
 , enableEGL ? false
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glew";
   version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
@@ -44,14 +45,17 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "An OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
     license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then
         subtractLists darwin mesaPlatforms
       else
         mesaPlatforms;
   };
-}
+})

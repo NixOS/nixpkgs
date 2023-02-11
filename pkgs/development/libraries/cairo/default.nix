@@ -156,7 +156,7 @@ in {
       "cairo-ps"
       "cairo-svg"
     ] ++ lib.optional gobjectSupport "cairo-gobject"
-      ++ lib.optional pdfSupport "cairo-gobject";
+      ++ lib.optional pdfSupport "cairo-pdf";
     platforms = platforms.all;
   };
 })
