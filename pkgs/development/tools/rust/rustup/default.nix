@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   preBuild = ''
     if [[ "$NIX_BUILD_CORES" -ge "$(nproc)" ]]; then
       (( NIX_BUILD_CORES = $(nproc) * 66 / 100 ))
-    if
+    fi
   '';
 
   postInstall = ''
