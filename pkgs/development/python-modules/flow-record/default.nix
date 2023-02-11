@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-bXI7q+unlrXvagKisAO4INfzeXlC4g918xmPmwMDCK8=";
   };
 
@@ -69,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
