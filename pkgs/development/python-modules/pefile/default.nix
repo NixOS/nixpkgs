@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erocarrera";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Cv20hJsErHFSuS5Q1kqLNp4DAsPXv/eFhaU9oYECSeI=";
   };
 
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
+    changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ pamplemousse ];
   };
