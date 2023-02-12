@@ -43,7 +43,8 @@ let
       # Use virtualenv from a Nix env.
       nixenv-virtualenv = rec {
         env = runCommand "${python.name}-virtualenv" {} ''
-          ${pythonVirtualEnv.interpreter} -m virtualenv $out
+          ${pythonVirtualEnv.interpreter} -m virtualenv venv
+          mv venv $out
         '';
         interpreter = "${env}/bin/${python.executable}";
         is_venv = "False";
