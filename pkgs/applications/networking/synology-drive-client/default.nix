@@ -2,7 +2,7 @@
 let
   pname = "synology-drive-client";
   baseUrl = "https://global.download.synology.com/download/Utility/SynologyDriveClient";
-  version = "3.2.0-13258";
+  version = "3.2.1-13272";
   buildNumber = with lib; last (splitString "-" version);
   meta = with lib; {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
@@ -29,7 +29,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Ubuntu/Installer/x86_64/synology-drive-client-${buildNumber}.x86_64.deb";
-      sha256 = "sha256-jnMwhirZphguW+hluhzD9aXDTQ9RuJgAtjh+Iy23c3w=";
+      sha256 = "sha256-olORBipyAv3jYQ7Gv8i4dHoCAdMcTcJR72/UYCPAVt0=";
     };
 
     nativeBuildInputs = [ autoPatchelfHook dpkg ];
@@ -59,7 +59,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
-      sha256 = "0hv0vgbvgqhzayc4przqhnkyvsykhw40hrwk6imvla00nix853wy";
+      sha256 = "sha256-oNo/2Fim63xiWiVuY99Q18dHOPHydQJr7C9tib8LLOE=";
     };
 
     nativeBuildInputs = [ cpio xar undmg ];
