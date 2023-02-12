@@ -21,6 +21,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ipython matplotlib numpy pillow ];
 
+  format = "flit";
+
   pythonImportsCheck = [ "mediapy" ];
 
   meta = with lib; {
