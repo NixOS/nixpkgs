@@ -79,7 +79,7 @@ in
   ++ [
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ]
-  ++ optionals (cloog != null) [ cloog ]
+  ++ optionals (lib.versionOlder version "5" && cloog != null) [ cloog ]
   ++ optionals (isl != null) [ isl ]
   ++ optionals (zlib != null) [ zlib ]
   ++ optionals langJava [ boehmgc zip unzip ]

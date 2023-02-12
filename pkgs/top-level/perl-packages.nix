@@ -26521,10 +26521,10 @@ let
 
   URIdb = buildPerlModule {
     pname = "URI-db";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.19.tar.gz";
-      hash = "sha256-xJmd6vRRZSIWAyyOMn/25tZVU56sN5CVu2mww2nvplg=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.20.tar.gz";
+      hash = "sha256-FMjaFawgljG445/BJFHJsTEa0LXKX5Aye9+peLfRPxQ=";
     };
     propagatedBuildInputs = [ URINested ];
     meta = {

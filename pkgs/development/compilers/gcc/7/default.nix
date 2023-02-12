@@ -21,7 +21,7 @@
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , gnused ? null
-, cloog # unused; just for compat with gcc4, as we override the parameter on some places
+, cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 }:
 
@@ -90,6 +90,63 @@ let majorVersion = "7";
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
+
+    callFile = lib.callPackageWith {
+      # lets
+      inherit
+        majorVersion
+        version
+        buildPlatform
+        hostPlatform
+        targetPlatform
+        patches
+        crossMingw
+        stageNameAddon
+        crossNameAddon
+      ;
+      # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc7.cc.override)" | jq '.[]' --raw-output'
+      inherit
+        binutils
+        buildPackages
+        cloog
+        crossStageStatic
+        enableLTO
+        enableMultilib
+        enablePlugin
+        enableShared
+        fetchpatch
+        fetchurl
+        gettext
+        gmp
+        gnused
+        isl
+        langC
+        langCC
+        langFortran
+        langGo
+        langJit
+        langObjC
+        langObjCpp
+        lib
+        libcCross
+        libmpc
+        mpfr
+        name
+        noSysDirs
+        patchelf
+        perl
+        profiledCompiler
+        reproducibleBuild
+        staticCompiler
+        stdenv
+        targetPackages
+        texinfo
+        threadsCross
+        which
+        zip
+        zlib
+      ;
+    };
 
 in
 
@@ -165,66 +222,20 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
 
-  inherit (import ../common/dependencies.nix {
-    inherit
-      lib
-      stdenv
-      buildPackages
-      targetPackages
-      crossStageStatic
-      threadsCross
-      version
-      texinfo
-      which
-      gettext
-      gnused
-      patchelf
-      gmp
-      mpfr
-      libmpc
-      isl
-      zlib
-      zip
-      perl
-    ;
-  }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
+  inherit (callFile ../common/dependencies.nix { })
+    depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
-  preConfigure = import ../common/pre-configure.nix {
-    inherit lib;
-    inherit version targetPlatform hostPlatform buildPlatform langGo crossStageStatic enableMultilib;
-  };
+  preConfigure = callFile ../common/pre-configure.nix { };
 
   dontDisableStatic = true;
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = import ../common/configure-flags.nix {
-    inherit
-      lib
-      stdenv
-      targetPackages
-      crossStageStatic libcCross threadsCross
-      version
-
-      binutils gmp mpfr libmpc isl
-
-      enableLTO
-      enableMultilib
-      enablePlugin
-      enableShared
-
-      langC
-      langCC
-      langFortran
-      langGo
-      langObjC
-      langObjCpp
-      langJit
-      ;
-  } ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
+  configureFlags = (callFile ../common/configure-flags.nix { })
+    ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
     ++ optional targetPlatform.isNetBSD "--disable-libcilkrts"
   ;
 
@@ -234,8 +245,7 @@ stdenv.mkDerivation ({
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
-  inherit
-    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
+  inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -260,10 +270,7 @@ stdenv.mkDerivation ({
 
   LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
 
-  inherit
-    (import ../common/extra-target-flags.nix {
-      inherit lib stdenv crossStageStatic libcCross threadsCross;
-    })
+  inherit (callFile ../common/extra-target-flags.nix { })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
     ;
@@ -277,22 +284,14 @@ stdenv.mkDerivation ({
   inherit enableShared enableMultilib;
 
   meta = {
-    homepage = "https://gcc.gnu.org/";
-    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}";
-
-    longDescription = ''
-      The GNU Compiler Collection includes compiler front ends for C, C++,
-      Objective-C, Fortran, OpenMP for C/C++/Fortran, and Ada, as well as
-      libraries for these languages (libstdc++, libgomp,...).
-
-      GCC development is a part of the GNU Project, aiming to improve the
-      compiler used in the GNU system including the GNU/Linux variant.
-    '';
-
-    maintainers = lib.teams.gcc.members;
-
-    platforms = lib.platforms.unix;
+    inherit (callFile ../common/meta.nix { })
+      homepage
+      license
+      description
+      longDescription
+      platforms
+      maintainers
+    ;
     badPlatforms = [ "aarch64-darwin" ];
   };
 }
