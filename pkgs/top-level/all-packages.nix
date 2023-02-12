@@ -5049,6 +5049,8 @@ with pkgs;
 
   jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
 
+  jellyseerr = callPackage ../servers/jellyseerr { };
+
   jiten = callPackage ../applications/misc/jiten { };
 
   kanjidraw = callPackage ../applications/misc/kanjidraw { };
