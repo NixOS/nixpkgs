@@ -1,24 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, SDL2
-, SDL2_ttf
+, gettext
 , installShellFiles
 , ncurses
-, pkg-config
 , ui ? "terminal"
 }:
 
-assert lib.elem ui [ "terminal" "curses" "sdl" ];
+assert lib.elem ui [ "terminal" "curses" ];
 stdenv.mkDerivation (self: {
   pname = "2048-cli";
-  version = "0.9.1";
+  version = "unstable-2019-12-10";
 
   src = fetchFromGitHub {
     owner = "tiehuis";
     repo = "2048-cli";
-    rev = "v${self.version}";
-    hash = "sha256-pLOrUilIrA+wo3iePhSXSK1UhbcjKyAx4SpKcC0I2yY=";
+    rev = "67439255df7d4f70209ca628d65128cd41d33e8d";
+    hash = "sha256-U7g2wCZgR7Lp/69ktQIZZ1cScll2baCequemTl3Mc3I=";
   };
 
   postPatch = ''
@@ -28,16 +26,16 @@ stdenv.mkDerivation (self: {
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
   ];
 
-  buildInputs =
-    (lib.optional (ui == "curses") ncurses)
-    ++ (lib.optionals (ui == "sdl") [ SDL2 SDL2_ttf ]);
+  buildInputs = [
+    gettext
+  ]
+  ++ (lib.optional (ui == "curses") ncurses);
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (ui == "sdl") "-I${SDL2_ttf}/include/SDL2";
+  NIX_CFLAGS_COMPILE="-I${lib.getDev gettext}/share/gettext/";
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -48,7 +46,7 @@ stdenv.mkDerivation (self: {
     runHook preInstall
 
     install -Dm755 -t $out/bin 2048
-    installManPage man/2048.1
+    installManPage man/2048.6
 
     runHook postInstall
   '';
@@ -59,6 +57,5 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = (ui == "sdl"); # segmentation fault
   };
 })
