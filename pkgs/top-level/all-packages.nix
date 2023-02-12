@@ -34791,6 +34791,8 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
+  rbdoom-3-bfg = callPackage ../games/rbdoom-3-bfg { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
