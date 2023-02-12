@@ -1,23 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux }:
+{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ReimuNotMoe";
     repo = "ydotool";
     rev = "v${version}";
-    sha256 = "sha256-RcPHQFXD3YgfF11OFpcnSowPlEjxy2c2RWhGYr30GhI=";
+    hash = "sha256-MtanR+cxz6FsbNBngqLE+ITKPZFHmWGsD1mBDk0OVng=";
   };
+
+  postPatch = ''
+    substituteInPlace Daemon/ydotoold.c \
+      --replace "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
+    substituteInPlace Daemon/ydotool.service.in \
+      --replace "/usr/bin/kill" "${util-linux}/bin/kill"
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [ cmake scdoc ];
-
-  postInstall = ''
-    substituteInPlace ${placeholder "out"}/lib/systemd/user/ydotool.service \
-      --replace /usr/bin/kill "${util-linux}/bin/kill"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/ReimuNotMoe/ydotool";
