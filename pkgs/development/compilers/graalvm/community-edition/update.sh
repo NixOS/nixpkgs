@@ -16,7 +16,7 @@ verlte() {
 
 readonly nixpkgs=../../../../..
 
-readonly current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A graalvm11-ce.version | tr -d \")"
+readonly current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A graalvm-ce.version | tr -d \")"
 
 if [[ -z "${1:-}" ]]; then
   readonly gh_version="$(curl \

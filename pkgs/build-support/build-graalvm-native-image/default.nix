@@ -1,4 +1,4 @@
-{ lib, stdenv, graalvm, glibcLocales }:
+{ lib, stdenv, graalvm-ce, glibcLocales }:
 
 { name ? "${args.pname}-${args.version}"
   # Final executable name
@@ -19,7 +19,7 @@
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
   # The GraalVM derivation to use
-, graalvmDrv ? graalvm
+, graalvmDrv ? graalvm-ce
   # Locale to be used by GraalVM compiler
 , LC_ALL ? "en_US.UTF-8"
 , meta ? { }
