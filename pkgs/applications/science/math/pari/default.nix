@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gmp
 , libX11
 , libpthreadstubs
@@ -24,6 +25,15 @@ stdenv.mkDerivation rec {
     ];
     hash = "sha256-sEYoER7iKHZRmksc2vsy/rqjTq+iT56B9Y+NBX++4N0=";
   };
+
+  patches = [
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2441
+    (fetchpatch {
+      name = "fix-find_isogenous_from_Atkin.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/bug2441.patch?id=9.8.rc0";
+      hash = "sha256-DvOUFlFDnopN+MJY6GYRPNabuoHPFch/nNn+49ygznc=";
+    })
+  ];
 
   buildInputs = [
     gmp
