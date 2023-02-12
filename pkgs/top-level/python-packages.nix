@@ -9842,6 +9842,8 @@ self: super: with self; {
 
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
+  rapt-ble = callPackage ../development/python-modules/rapt-ble { };
+
   rarfile = callPackage ../development/python-modules/rarfile {
     inherit (pkgs) libarchive;
   };
