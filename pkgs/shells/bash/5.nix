@@ -12,6 +12,8 @@
 , withDocs ? false
 , texinfo
 , forFHSEnv ? false
+
+, pkgsStatic
 }:
 
 let
@@ -113,6 +115,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/bash";
+    tests.static = pkgsStatic.bash;
   };
 
   meta = with lib; {
