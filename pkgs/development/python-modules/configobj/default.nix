@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "configobj";
-  version = "5.0.6";
+  version = "5.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "DiffSK";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HMLYzVMnxvMpb3ORsbKy18oU/NkuRT0isK6NaUk6J3U=";
+    hash = "sha256-t3Q0FEBibkAM5PAG4fjXwNH/71RqSSDj/Mn27ri0iDU=";
   };
 
   propagatedBuildInputs = [
@@ -26,8 +26,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    mock
   ];
 
   pythonImportsCheck = [
