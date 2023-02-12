@@ -2859,6 +2859,8 @@ with pkgs;
 
   boxes = callPackage ../tools/text/boxes { };
 
+  boxxy = callPackage ../tools/misc/boxxy { };
+
   boundary = callPackage ../tools/networking/boundary { };
 
   chamber = callPackage ../tools/admin/chamber {  };
