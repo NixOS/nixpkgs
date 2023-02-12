@@ -5344,6 +5344,8 @@ with pkgs;
 
   osv-scanner = callPackage ../tools/security/osv-scanner {};
 
+  ouroboros = callPackage ../applications/networking/ouroboros { };
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
