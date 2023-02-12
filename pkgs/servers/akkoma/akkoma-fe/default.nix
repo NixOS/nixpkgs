@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "pleroma-fe";
+  pname = "akkoma-fe";
   version = "unstable-2023-02-11";
 
   src = fetchFromGitea {
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Frontend for Akkoma and Pleroma";
-    homepage = "https://akkoma.dev/AkkomaGang/pleroma-fe/";
+    description = "Frontend for Akkoma";
+    homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mvs ];
   };
