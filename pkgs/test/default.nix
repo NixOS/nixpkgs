@@ -23,6 +23,14 @@ with pkgs;
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
+  hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {});
+  hardeningFlags-gcc = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {
+    stdenv = gccStdenv;
+  });
+  hardeningFlags-clang = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {
+    stdenv = llvmPackages.stdenv;
+  });
+
   config = callPackage ./config.nix { };
 
   haskell = callPackage ./haskell { };
