@@ -7940,6 +7940,8 @@ with pkgs;
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
+  grpc_cli = callPackage ../tools/networking/grpc_cli { };
+
   grpc-gateway = callPackage ../development/tools/grpc-gateway { };
 
   grpcui = callPackage ../tools/networking/grpcui { };
