@@ -860,6 +860,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
+  ./services/networking/imaginary.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
