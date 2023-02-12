@@ -101,12 +101,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "2.4.1";
+    version = "2.4.2";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-epgsearch";
       owner = "vdr-projects";
-      sha256 = "sha256-UlbPCkUFN0Gyxjw9xq2STFTDZRVcPPNjadSQd4o2o9U=";
+      sha256 = "sha256-C+WSdGTnDBTWLvpjG5GBaK8pYbht431nL5iaL/a0H4Y=";
       rev = "v${version}";
     };
 
