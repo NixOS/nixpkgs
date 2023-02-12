@@ -29,6 +29,8 @@ buildPythonPackage {
     "test_fqdn"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [
     "ephemeral_port_reserve"
   ];
