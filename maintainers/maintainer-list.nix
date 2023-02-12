@@ -16352,6 +16352,12 @@
     githubId = 908716;
     name = "Zach Coyle";
   };
+  Zaechus = {
+    email = "zaechus@proton.me";
+    github = "Zaechus";
+    githubId = 19353212;
+    name = "Maxwell Anderson";
+  };
   zagy = {
     email = "cz@flyingcircus.io";
     github = "zagy";
