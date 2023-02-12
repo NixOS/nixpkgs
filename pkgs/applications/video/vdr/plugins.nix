@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, fetchFromGitHub
+{ lib, stdenv, vdr, fetchFromGitHub
 , graphicsmagick, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
@@ -173,14 +173,15 @@ in {
 
   };
 
-  text2skin = stdenv.mkDerivation {
+  text2skin = stdenv.mkDerivation rec {
     pname = "vdr-text2skin";
     version = "1.3.4-20170702";
 
-    src = fetchgit {
-      url = "git://projects.vdr-developer.org/vdr-plugin-text2skin.git";
-      sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-text2skin";
+      owner = "vdr-projects";
       rev = "8f7954da2488ced734c30e7c2704b92a44e6e1ad";
+      sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
     };
 
     buildInputs = [ vdr graphicsmagick ];
@@ -200,7 +201,7 @@ in {
     dontInstall = true;
 
     meta = with lib; {
-      homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";
+      inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
