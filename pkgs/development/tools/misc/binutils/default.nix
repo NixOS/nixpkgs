@@ -234,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   $out/$host/$target/include/* to $dev/include/*
   # TODO(trofi): fix installation paths upstream so we could remove this
   # code and have "lib" output unconditionally.
-  postInstall = lib.optionalString (hostPlatform != targetPlatform) ''
+  postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
     ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
   '';
