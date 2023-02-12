@@ -21,5 +21,6 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 })
