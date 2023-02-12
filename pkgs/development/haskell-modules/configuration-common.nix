@@ -1144,6 +1144,10 @@ self: super: {
       })
       super.persistent-postgresql;
 
+  # Test suite requires a later version of persistent-test which depends on persistent 2.14
+  # https://github.com/commercialhaskell/stackage/issues/6884
+  persistent-sqlite = dontCheck super.persistent-sqlite;
+
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
 
