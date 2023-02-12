@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.4.2";
+  version = "2.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bz5VXAWFOw9pZfPQMym6vfnjil8s6gKOYaZM1+63StU=";
+    hash = "sha256-cYc8Efcr0Z4rHbV4IUcW8NT3yPolAJPGASZamnF97lI=";
   };
 
   LC_ALL = "en_US.UTF-8";
