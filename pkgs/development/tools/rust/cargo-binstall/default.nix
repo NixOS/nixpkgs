@@ -11,22 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "0.19.3";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-MxbZlUlan58TVgcr2n5ZA+L01u90bYYqf88GU+sLmKk=";
+    hash = "sha256-wM8DawrniyJxj8Omgj+hiePa521p4hIAngfzEHFNO58=";
   };
 
-  cargoHash = "sha256-HG43UCjPCB5bEH0GYPoHsOlaJQNPRrD175SuUJ6QbEI=";
-
-  patches = [
-    # make it possible to disable the static feature
-    # https://github.com/cargo-bins/cargo-binstall/pull/782
-    ./fix-features.patch
-  ];
+  cargoHash = "sha256-ZanPmdFMDGZhRHVVGt03OJWz8HnSYFdm42W6rpytu5Y=";
 
   nativeBuildInputs = [
     pkg-config

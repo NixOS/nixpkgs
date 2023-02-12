@@ -715,13 +715,13 @@ let
         sha512 = "3vLKLPThO4td43lYRBygmMY18JN3CPh9w+XS2j8WC30vR4yZeFG4z1iFe4jXE43NtGqe//zHW5q8ENLlHvz9gw==";
       };
     };
-    "@lezer/html-1.3.0" = {
+    "@lezer/html-1.3.1" = {
       name = "_at_lezer_slash_html";
       packageName = "@lezer/html";
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@lezer/html/-/html-1.3.0.tgz";
-        sha512 = "jU/ah8DEoiECLTMouU/X/ujIg6k9WQMIOFMaCLebzaXfrguyGaR3DpTgmk0tbljiuIJ7hlmVJPcJcxGzmCd0Mg==";
+        url = "https://registry.npmjs.org/@lezer/html/-/html-1.3.1.tgz";
+        sha512 = "mxmArW0psdJ3Vd3bZvCbrFpd7gNJgTjqTLhFZfTPo3jsw0STaQ68EWVWBQInv9W8j94XKaL2sbO3qixicFMnYw==";
       };
     };
     "@lezer/javascript-1.4.1" = {
@@ -1966,13 +1966,13 @@ let
         sha512 = "9cYNccliXZDByFsFliVwk5GvTq058Fj513CiR4E60ndDwmuXzTJEp/Bp8FyuRmGyYupLjHLs+JA9/CBoVS4/NQ==";
       };
     };
-    "aws-sdk-2.1312.0" = {
+    "aws-sdk-2.1313.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.1312.0";
+      version = "2.1313.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1312.0.tgz";
-        sha512 = "NG6ERxxxU6p+CDWrq7wLinp0siKRcCNN98iY0qr/2WKZbz5JCtDyiQV/l+6jLmNKP5qIT5z++jnDy9cgNP6ICQ==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1313.0.tgz";
+        sha512 = "8GMdtV2Uch3HL2c6+P3lNZFTcg/fqq9L3EWYRLb6ljCZvWKTssjdkjSJFDyTReNgeiKV224YRPYQbKpOEz4flQ==";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -5251,13 +5251,13 @@ let
         sha512 = "3GYo0GJtLqgNXj4YhrisLaNNvWSNwSS2wS4OELGfGxH8I69+XfNdnmV1AyN+ZqMh0i7eX+SWjrwFKDBDgfBC1A==";
       };
     };
-    "ioredis-5.3.0" = {
+    "ioredis-5.3.1" = {
       name = "ioredis";
       packageName = "ioredis";
-      version = "5.3.0";
+      version = "5.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ioredis/-/ioredis-5.3.0.tgz";
-        sha512 = "Id9jKHhsILuIZpHc61QkagfVdUj2Rag5GzG1TGEvRNeM7dtTOjICgjC+tvqYxi//PuX2wjQ+Xjva2ONBuf92Pw==";
+        url = "https://registry.npmjs.org/ioredis/-/ioredis-5.3.1.tgz";
+        sha512 = "C+IBcMysM6v52pTLItYMeV4Hz7uriGtoJdz7SSBDX6u+zwSYGirLdQh3L7t/OItWITcw3gTFMjJReYUwS4zihg==";
       };
     };
     "ip-1.1.8" = {
@@ -7159,13 +7159,13 @@ let
         sha512 = "z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==";
       };
     };
-    "n8n-core-0.154.0" = {
+    "n8n-core-0.154.1" = {
       name = "n8n-core";
       packageName = "n8n-core";
-      version = "0.154.0";
+      version = "0.154.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.154.0.tgz";
-        sha512 = "jBnLFpDCa93aK7bGFMAHZleNSU2q6h8zwRPQyDStjlc1J2gSOUAMHBqzz/3of9UbjTx7N/2JfkyC22rgFf5tSA==";
+        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.154.1.tgz";
+        sha512 = "LpwNxGxGpHrA3fJNeAL7qVAKrXj88MDWuK40JVnLXGgnWjdy9M8Gpz0ucHXBRuN0HxeCpCA+59edNsDUUaBAsQ==";
       };
     };
     "n8n-design-system-0.53.0" = {
@@ -7177,31 +7177,31 @@ let
         sha512 = "QTPcnNOv9sp9RzT0I4cuB2lqEmHJrv+TBV1D8mZ3upas7ZMdNVLhGiRM8EgbeQoY5jsKlTA3nagTflNQy8H/tw==";
       };
     };
-    "n8n-editor-ui-0.181.0" = {
+    "n8n-editor-ui-0.181.1" = {
       name = "n8n-editor-ui";
       packageName = "n8n-editor-ui";
-      version = "0.181.0";
+      version = "0.181.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.181.0.tgz";
-        sha512 = "TmaCveuWjz5qZ9WOwczGF/XRnGkHqCrMx02r3GcgxoLVvOro2AklGYaY+CL2AsbEsiwoCfD8fF8yAqd5+cc95w==";
+        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.181.1.tgz";
+        sha512 = "NmkTic2XLgAgx/sKsKd8kPDuEuj7roBXT1uLcFdlz+mnn4LN12GFFyHO6GrOJC3lYA6SY6QQZ475/EpNsMzqLw==";
       };
     };
-    "n8n-nodes-base-0.213.0" = {
+    "n8n-nodes-base-0.213.1" = {
       name = "n8n-nodes-base";
       packageName = "n8n-nodes-base";
-      version = "0.213.0";
+      version = "0.213.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-nodes-base/-/n8n-nodes-base-0.213.0.tgz";
-        sha512 = "8Re6eUkZRR5Wy6UNsYFtB+rGXG+Ll30dr/PV/WWf71JMlH3mqCrfVEz1G1YeiUcfDNyL8F9re7sVzVZ1SDwr2w==";
+        url = "https://registry.npmjs.org/n8n-nodes-base/-/n8n-nodes-base-0.213.1.tgz";
+        sha512 = "diU4FVseBaJ3wC/57o/snFHv19KMrWv3bxadFfpMDHYN1u6YB4L3GacpNgBE1CLPgGIptlVNhVJ4USInIIVDrw==";
       };
     };
-    "n8n-workflow-0.136.0" = {
+    "n8n-workflow-0.136.1" = {
       name = "n8n-workflow";
       packageName = "n8n-workflow";
-      version = "0.136.0";
+      version = "0.136.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-workflow/-/n8n-workflow-0.136.0.tgz";
-        sha512 = "nNsDxwSrdAruVF7sTgok8W24Kzy8eXCADPpocvnBofMrhcAhHCYV32dyqEyKLcnOfmyOhvkFsyCDF9R6vlKUzA==";
+        url = "https://registry.npmjs.org/n8n-workflow/-/n8n-workflow-0.136.1.tgz";
+        sha512 = "Y7v72erInEIlXGjdUzJD/Cj4qagmNx6w5jqLCb/Z/t2VHBEXrBasHAA96leiVwx9VILlaMXMK/p6PJz3NNnpNA==";
       };
     };
     "named-placeholders-1.1.3" = {
@@ -11386,10 +11386,10 @@ in
   n8n = nodeEnv.buildNodePackage {
     name = "n8n";
     packageName = "n8n";
-    version = "0.215.0";
+    version = "0.215.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/n8n/-/n8n-0.215.0.tgz";
-      sha512 = "r9Z4BGkVFSy0zKmZvA6HP9RMxd6MvTN11q5Txv+04xjmdg+LxJo3ES8znnOeMXPZrpQ2yB44kyRNzJMJdZt0Yg==";
+      url = "https://registry.npmjs.org/n8n/-/n8n-0.215.1.tgz";
+      sha512 = "iJcgw8F8zop+Agyrq5x3xczr/uZSR/ghXltcfZ0D/mLe7RxeWvZk1kg0fxaX+sTBeAu0yhsPvib3EBeTqNTcJg==";
     };
     dependencies = [
       (sources."@acuminous/bitsyntax-0.1.2" // {
@@ -11534,7 +11534,7 @@ in
       sources."@lezer/common-1.0.2"
       sources."@lezer/css-1.1.1"
       sources."@lezer/highlight-1.1.3"
-      sources."@lezer/html-1.3.0"
+      sources."@lezer/html-1.3.1"
       sources."@lezer/javascript-1.4.1"
       sources."@lezer/lr-1.3.3"
       sources."@mapbox/node-pre-gyp-1.0.10"
@@ -11754,7 +11754,7 @@ in
       })
       sources."available-typed-arrays-1.0.5"
       sources."avsc-5.7.7"
-      (sources."aws-sdk-2.1312.0" // {
+      (sources."aws-sdk-2.1313.0" // {
         dependencies = [
           sources."buffer-4.9.2"
           sources."events-1.1.1"
@@ -12238,7 +12238,7 @@ in
       sources."inquirer-7.3.3"
       sources."internal-slot-1.0.5"
       sources."interpret-1.4.0"
-      (sources."ioredis-5.3.0" // {
+      (sources."ioredis-5.3.1" // {
         dependencies = [
           sources."denque-2.1.0"
         ];
@@ -12528,7 +12528,7 @@ in
         ];
       })
       sources."mz-2.7.0"
-      (sources."n8n-core-0.154.0" // {
+      (sources."n8n-core-0.154.1" // {
         dependencies = [
           sources."concat-stream-2.0.0"
           sources."readable-stream-3.6.0"
@@ -12541,13 +12541,13 @@ in
           sources."vue2-boring-avatars-0.3.8"
         ];
       })
-      sources."n8n-editor-ui-0.181.0"
-      (sources."n8n-nodes-base-0.213.0" // {
+      sources."n8n-editor-ui-0.181.1"
+      (sources."n8n-nodes-base-0.213.1" // {
         dependencies = [
           sources."chokidar-3.5.2"
         ];
       })
-      (sources."n8n-workflow-0.136.0" // {
+      (sources."n8n-workflow-0.136.1" // {
         dependencies = [
           sources."ast-types-0.15.2"
         ];
