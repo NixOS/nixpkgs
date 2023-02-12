@@ -86,8 +86,9 @@ stdenvNoCC.mkDerivation rec {
       yarn2nix;
   };
 
-  meta = {
+  meta = with lib; {
     inherit (mirakurun.meta) description platforms;
-    maintainers = with lib.maintainers; [ midchildan ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ midchildan ];
   };
 }

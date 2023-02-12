@@ -582,6 +582,7 @@ mapAliases ({
   go-mk = throw "go-mk has been dropped due to the lack of maintanence from upstream since 2015"; # Added 2022-06-02
   go-pup = throw "'go-pup' has been renamed to/replaced by 'pup'"; # Converted to throw 2022-02-22
   go-repo-root = throw "go-repo-root has been dropped due to the lack of maintanence from upstream since 2014"; # Added 2022-06-02
+  gometer = throw "gometer has been removed from nixpkgs because goLance stopped offering Linux support"; # Added 2023-02-10
   gpgstats = throw "gpgstats has been removed: upstream is gone"; # Added 2022-02-06
   gpshell = throw "gpshell has been removed, because it was unmaintained in nixpkgs"; # added 2021-12-17
 
