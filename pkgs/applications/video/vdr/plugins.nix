@@ -55,13 +55,13 @@ in {
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    version = "3.0.26";
+    version = "3.1.1";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-markad";
       owner = "kfb77";
-      sha256 = "sha256-0J6XeLgr9IZSWsheQZWVNRLIxp8iyCvR9Y0z/yrbTnI=";
-      rev = "v${version}";
+      sha256 = "sha256-h2a400T6mHzZRWAVFXF5Wzhu4Zp1D3btEKlxnCtB13M=";
+      rev = "V${version}";
     };
 
     buildInputs = [ vdr ffmpeg ];
