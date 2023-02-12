@@ -10,6 +10,7 @@
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,12 +20,12 @@
 
 let
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
-   stdenv.mkDerivation rec {
+   stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -204,13 +205,20 @@ let
       fi
     '';
 
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
     meta = with lib; {
       homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
+      pkgConfigModules = [
+        "libcrypto"
+        "libssl"
+        "openssl"
+      ];
       platforms = platforms.all;
     } // extraMeta;
-  };
+  });
 
 in {
 
