@@ -80,7 +80,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "052ld021yvjbnx1sbj1ryflsyn0v1y1ygx1zv0ql6fk3cysw5lxf";
+      sha256 = "0f2nnszfiqwdgfky3190prkhcndp0mva3jk7a6cl461w8kp1jspa";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -138,6 +138,8 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
+  pandoc-cli = throwIfNot (versionOlder super.pandoc.version "3.0.0") "pandoc-cli contains the pandoc executable starting with 3.0, this needs to be considered now." (markBroken (dontDistribute super.pandoc-cli));
+
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
   # Jailbreak is necessary for QuickCheck dependency.
   vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag "--ghc-options=-msse2" super.vector else super.vector);
@@ -171,6 +173,9 @@ self: super: {
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
 
+  # 2023-01-29: Restrictive base bound already loosened on master but not released: https://github.com/sebastiaanvisser/clay/commit/4483bdf7a452903f177220958f1610030ab7f28a
+  clay = throwIfNot (super.clay.version == "0.14.0") "Remove clay jailbreak in configuration-common.nix when you see this eval error." (doJailbreak super.clay);
+
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
@@ -197,8 +202,14 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
+  streamly-bytestring = dontCheck super.streamly-bytestring;
+
   # base bound
   digit = doJailbreak super.digit;
+
+  # 2022-01-29: Tests require package to be in ghc-db.
+  aeson-schemas = dontCheck super.aeson-schemas;
 
   # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
@@ -747,9 +758,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_8;
+    hspec = self.hspec_2_10_9;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_8;
+      hspec = self.hspec_2_10_9;
     };
   });
 
@@ -920,12 +931,9 @@ self: super: {
     '';
   }) super.hpack;
 
-  # hslua has tests that appear to break when using musl.
+  # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
-  # Note that hslua is currently version 1.3.  However, in the latest version
-  # (>= 2.0), hslua has been split into multiple packages and this override
-  # will likely need to be moved to the hslua-core package.
-  hslua = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua else super.hslua;
+  hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
 
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
@@ -1436,14 +1444,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_8 = doDistribute (super.hspec_2_10_8.override {
-    hspec-discover = self.hspec-discover_2_10_8;
-    hspec-core = self.hspec-core_2_10_8;
+  hspec_2_10_9 = doDistribute (super.hspec_2_10_9.override {
+    hspec-discover = self.hspec-discover_2_10_9;
+    hspec-core = self.hspec-core_2_10_9;
   });
-  hspec-discover_2_10_8 = super.hspec-discover_2_10_8.override {
+  hspec-discover_2_10_9 = super.hspec-discover_2_10_9.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
-  hspec-core_2_10_8 = super.hspec-core_2_10_8.override {
+  hspec-core_2_10_9 = super.hspec-core_2_10_9.override {
     hspec-meta = self.hspec-meta_2_10_5;
   };
 
@@ -2025,9 +2033,6 @@ self: super: {
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
-
-  # https://github.com/peti/hopenssl/issues/5
-  hopenssl = super.hopenssl.override { openssl = pkgs.openssl_1_1; };
 
   # Fixes compilation with GHC 9.0 and above
   # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3

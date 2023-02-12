@@ -311,6 +311,8 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
 
+  heystone = addBuildTool pkgs.fixDarwinDylibNames super.heystone;
+
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
