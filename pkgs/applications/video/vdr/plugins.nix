@@ -4,7 +4,7 @@
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
-    name = "vdr-${vdr.version}-${name}";
+    name = "vdr-${name}-${vdr.version}";
     inherit (vdr) src;
     buildInputs = [ vdr ];
     preConfigure = "cd PLUGINS/src/${name}";
