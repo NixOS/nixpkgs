@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cnping";
-  version = "unstable-2021-04-04";
+  version = "unstable-2023-01-26";
 
   src = fetchFromGitHub {
     owner = "cntools";
     repo = "cnping";
-    rev = "6b89363e6b79ecbf612306d42a8ef94a5a2f756a";
-    sha256 = "sha256-E3Wm5or6C4bHq7YoyaEbtDwyd+tDVYUOMeQrprlmL4A=";
+    rev = "16ee54ac8a6630a778aa1d1354c4303a70ca56eb";
+    sha256 = "sha256-AR96vww1LP1hJ1L3U8+Wtkc4GYYA88SIKcWhu+CWv+A=";
     fetchSubmodules = true;
   };
 
