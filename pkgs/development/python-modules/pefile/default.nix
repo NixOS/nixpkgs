@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2022.5.30";
+  version = "2023.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "erocarrera";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Cv20hJsErHFSuS5Q1kqLNp4DAsPXv/eFhaU9oYECSeI=";
+    hash = "sha256-lD8GpNl+cVNYTZUKFRF1/2kDwEbn/ekRBNBTYuFmFW0=";
   };
 
   nativeBuildInputs = [
