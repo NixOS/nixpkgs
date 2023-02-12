@@ -31,7 +31,7 @@
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
 , gnused ? null
-, cloog # unused; just for compat with gcc4, as we override the parameter on some places
+, cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 }:
 
@@ -115,6 +115,86 @@ let majorVersion = "6";
     stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
+    callFile = lib.callPackageWith {
+      # lets
+      inherit
+        majorVersion
+        version
+        buildPlatform
+        hostPlatform
+        targetPlatform
+        patches
+        javaEcj
+        javaAntlr
+        xlibs
+        javaAwtGtk
+        crossMingw
+        stageNameAddon
+        crossNameAddon
+      ;
+      # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc6.cc.override)" | jq '.[]' --raw-output'
+      inherit
+        binutils
+        boehmgc
+        buildPackages
+        cloog
+        crossStageStatic
+        enableLTO
+        enableMultilib
+        enablePlugin
+        enableShared
+        fetchFromGitHub
+        fetchpatch
+        fetchurl
+        flex
+        gettext
+        gmp
+        gnatboot
+        gnused
+        gtk2
+        isl
+        langAda
+        langC
+        langCC
+        langFortran
+        langGo
+        langJava
+        langJit
+        langObjC
+        langObjCpp
+        lib
+        libICE
+        libSM
+        libX11
+        libXi
+        libXrandr
+        libXrender
+        libXt
+        libXtst
+        libart_lgpl
+        libcCross
+        libmpc
+        mpfr
+        name
+        noSysDirs
+        patchelf
+        perl
+        pkg-config
+        profiledCompiler
+        reproducibleBuild
+        staticCompiler
+        stdenv
+        targetPackages
+        texinfo
+        threadsCross
+        unzip
+        which
+        x11Support
+        xorgproto
+        zip
+        zlib
+      ;
+    };
 in
 
 # We need all these X libraries when building AWT with GTK.
@@ -193,78 +273,18 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  inherit (import ../common/dependencies.nix {
-    inherit
-      lib
-      stdenv
-      buildPackages
-      targetPackages
-      crossStageStatic
-      threadsCross
-      version
-      langAda
-      gnatboot
-      flex
-      langJava
-      javaAwtGtk
-      texinfo
-      which
-      gettext
-      pkg-config
-      gnused
-      patchelf
-      gmp
-      mpfr
-      libmpc
-      isl
-      zlib
-      boehmgc
-      zip
-      unzip
-      gtk2
-      libart_lgpl
-      perl
-      xlibs
-    ;
-  }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
+  inherit (callFile ../common/dependencies.nix { })
+    depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
-  preConfigure = import ../common/pre-configure.nix {
-    inherit lib;
-    inherit version targetPlatform hostPlatform buildPlatform gnatboot langJava langAda langGo crossStageStatic enableMultilib;
-  };
+  preConfigure = callFile ../common/pre-configure.nix { };
 
   dontDisableStatic = true;
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = import ../common/configure-flags.nix {
-    inherit
-      lib
-      stdenv
-      targetPackages
-      crossStageStatic libcCross threadsCross
-      version
-
-      binutils gmp mpfr libmpc isl
-
-      enableLTO
-      enableMultilib
-      enablePlugin
-      enableShared
-
-      langC
-      langCC
-      langFortran
-      langJava javaAwtGtk javaAntlr javaEcj
-      langAda
-      langGo
-      langObjC
-      langObjCpp
-      langJit
-      ;
-  };
+  configureFlags = callFile ../common/configure-flags.nix { };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -272,8 +292,7 @@ stdenv.mkDerivation ({
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
-  inherit
-    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
+  inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -311,10 +330,7 @@ stdenv.mkDerivation ({
     ++ optionals javaAwtGtk [ gmp mpfr ]
   ));
 
-  inherit
-    (import ../common/extra-target-flags.nix {
-      inherit lib stdenv crossStageStatic libcCross threadsCross;
-    })
+  inherit (callFile ../common/extra-target-flags.nix { })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
     ;
@@ -328,20 +344,14 @@ stdenv.mkDerivation ({
   inherit enableShared enableMultilib;
 
   meta = {
-    homepage = "https://gcc.gnu.org/";
-    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}";
-
-    longDescription = ''
-      The GNU Compiler Collection includes compiler front ends for C, C++,
-      Objective-C, Fortran, OpenMP for C/C++/Fortran, Java, and Ada, as well
-      as libraries for these languages (libstdc++, libgcj, libgomp,...).
-
-      GCC development is a part of the GNU Project, aiming to improve the
-      compiler used in the GNU system including the GNU/Linux variant.
-    '';
-
-    platforms = lib.platforms.unix;
+    inherit (callFile ../common/meta.nix { })
+      homepage
+      license
+      description
+      longDescription
+      platforms
+      maintainers
+    ;
     badPlatforms = [ "aarch64-darwin" ];
   };
 }
