@@ -30777,6 +30777,10 @@ with pkgs;
 
   icesl = callPackage ../applications/misc/icesl { };
 
+  input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
+    avahi = avahi.override { withLibdnssdCompat = true; };
+  };
+
   karlender = callPackage ../applications/office/karlender { };
 
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
