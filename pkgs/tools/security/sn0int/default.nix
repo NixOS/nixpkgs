@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kpcyrd/sn0int";
     changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ fab xrelkd ];
     platforms = platforms.linux;
   };
 }
