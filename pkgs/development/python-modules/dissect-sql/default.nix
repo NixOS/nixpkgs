@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-sql";
-  version = "3.2";
+  version = "3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.sql";
-    rev = version;
-    hash = "sha256-yw0EUxlgm7/3FpecGGvxkukudyFMv0fmPbOLJqc2tC0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sIXFEckHFr9H4oGFw8uuC+c54PR8ZbQxJKb5x5EixxQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parsers for the SQLite database file format";
     homepage = "https://github.com/fox-it/dissect.sql";
+    changelog = "https://github.com/fox-it/dissect.sql/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

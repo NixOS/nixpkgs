@@ -22,14 +22,15 @@
 , qt5
 , texmacs
 , ttfautohint
+, testers
 }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
   version = "2.12.1";
 
-  src = fetchurl {
+  src = let inherit (finalAttrs) pname version; in fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-R2byAVfMTPDNKS+Av5F/ktHEObJDrDAY3r9rkUDEGn8=";
   };
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
       ttfautohint;
     inherit (python3.pkgs) freetype-py;
     inherit (qt5) qtbase;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -96,6 +98,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
+    pkgConfigModules = [ "freetype2" ];
     maintainers = with maintainers; [ ttuegel ];
   };
-}
+})

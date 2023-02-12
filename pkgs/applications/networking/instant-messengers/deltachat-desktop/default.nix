@@ -21,17 +21,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.107.0";
+    version = "1.107.1";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-fjiS7GZy1BLgmxu4LFOWgucORcVx+9KleQcga+hRkSY=";
+      hash = "sha256-ISAUZyFrp86ILtRrlowceBQNJ7+tbJReIAe6+u4wwQI=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-7XhSI/C0GEmsaL0UupvufB1bfPGbzSQJH720Y4/Do3o=";
+      hash = "sha256-B4BMxiI3GhsjeD3gYrq5ZpbZ7l77ycrIMWu2sUzZiz4=";
     };
   });
   esbuild' = esbuild.override {
@@ -48,16 +48,16 @@ let
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.3";
+  version = "1.34.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-6WZJD8lMsk1WNguMkXygBCTVpOzNkNuVZJ3Ygv6VBkM=";
+    hash = "sha256-LV8/r6psUZuCEGbaH1nWlrkeNbEYG8R5O1aCxECPH1E=";
   };
 
-  npmDepsHash = "sha256-B91yQ/xi8+uyOllqYR7lZTfLBpJvZat1cIIJk9TkM/c=";
+  npmDepsHash = "sha256-rdZVvsyCo/6C4+gjytCCn9Qcl+chc6U+6orkcM59I8U=";
 
   nativeBuildInputs = [
     makeWrapper

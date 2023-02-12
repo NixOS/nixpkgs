@@ -1477,7 +1477,7 @@ self: super: with self; {
 
   buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
 
-  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
+  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards badges ]);
 
   buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
 
@@ -2461,6 +2461,8 @@ self: super: with self; {
 
   dissect-evidence = callPackage ../development/python-modules/dissect-evidence { };
 
+  dissect-executable = callPackage ../development/python-modules/dissect-executable { };
+
   dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
 
   dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
@@ -2472,6 +2474,8 @@ self: super: with self; {
   dissect-regf = callPackage ../development/python-modules/dissect-regf { };
 
   dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
+
+  dissect-squashfs = callPackage ../development/python-modules/dissect-squashfs { };
 
   dissect-sql = callPackage ../development/python-modules/dissect-sql { };
 
@@ -7182,6 +7186,11 @@ self: super: with self; {
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
+  pjsua2 = (toPythonModule (pkgs.pjsip.override {
+    pythonSupport = true;
+    python3 = self.python;
+  })).py;
+
   pkce = callPackage ../development/python-modules/pkce { };
 
   pkgconfig = callPackage ../development/python-modules/pkgconfig { };
@@ -8957,6 +8966,8 @@ self: super: with self; {
   pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
 
   pytap2 = callPackage ../development/python-modules/pytap2 { };
+
+  pytapo = callPackage ../development/python-modules/pytapo { };
 
   pytautulli = callPackage ../development/python-modules/pytautulli { };
 
