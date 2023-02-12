@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.prowlarr;
-
 in
 {
   options = {
@@ -13,7 +12,7 @@ in
 
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/prowlarr/.config/Prowlarr";
+        default = "/var/lib/private/prowlarr";
         description = lib.mdDoc "The directory where Prowlarr stores its data files.";
       };
 
@@ -44,7 +43,8 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${cfg.package}/bin/Prowlarr -nobrowser -data=${cfg.dataDir}";
+        BindPaths = [ cfg.dataDir ];
+        ExecStart = "${cfg.package}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
     };
