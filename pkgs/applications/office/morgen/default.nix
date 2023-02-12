@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "2.5.16";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
-    sha256 = "sha256-U77yOgQNSj1p3WZbwkyq0Ui2UrXeuAv5sD7L+ZI2x24=";
+    sha256 = "sha256-2Cze8R22Wrvp+FJq/7Kp36i7Areo5e9fdBo3DQ+rvZY=";
   };
 
   nativeBuildInputs = [
@@ -18,9 +18,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
-
-  dontBuild = true;
-  dontConfigure = true;
 
   unpackCmd = ''
     dpkg-deb -x ${src} ./morgen-${pname}
@@ -37,7 +34,7 @@ stdenv.mkDerivation rec {
     # 2. Fixes startup script
     substituteInPlace $TMP/work/dist/main.js \
       --replace "process.resourcesPath,\"todesktop-runtime-config.json" "\"$out/opt/Morgen/resources/todesktop-runtime-config.json" \
-      --replace "Exec=\"+process.execPath+\"" "Exec=$out/bin/morgen"
+      --replace "Exec=\".concat(process.execPath," "Exec=\".concat(\"$out/bin/morgen\","
     asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" $out/opt/Morgen/resources/app.asar
 
     substituteInPlace $out/share/applications/morgen.desktop \

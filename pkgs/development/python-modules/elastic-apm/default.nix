@@ -15,6 +15,7 @@
 , pytest-bdd
 , pytest-localserver
 , pytest-mock
+, pytest-random-order
 , pytestCheckHook
 , pythonOlder
 , sanic
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.13.2";
+  version = "6.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HbIra8Cxgn/2xOVEvtcc7rMtSLBmWMxxHlIM44Oy+8U=";
+    hash = "sha256-T1TWILlJZffTISVt8YSi8ZYSXOHieh6SV55j8W333LQ=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +54,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
     asynctest
     ecs-logging
     jinja2
@@ -64,8 +69,8 @@ buildPythonPackage rec {
     pytest-bdd
     pytest-mock
     pytest-localserver
+    pytest-random-order
     sanic-testing
-    pytestCheckHook
     structlog
     webob
   ];

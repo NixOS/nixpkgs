@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "maeparser";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "maeparser";
     rev = "v${version}";
-    sha256 = "sha256-9KxCR/spIZzePjmZe8qihIi1hEhPvxg/9dAlYmHxZPs=";
+    sha256 = "sha256-+eCTOU0rqFQC87wcxgINGLsULfbIr/wKxQTkRR59JVc=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -4,7 +4,10 @@ let
   efiSystemsBuild = {
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
+    armv7l-linux.target = "arm";
     aarch64-linux.target = "aarch64";
+    riscv32-linux.target = "riscv32";
+    riscv64-linux.target = "riscv64";
   };
 
 in (

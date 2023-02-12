@@ -1,6 +1,12 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
 , fmt
-, alcotest, hxd, crowbar, bigstringaf
+, alcotest
+, hxd
+, crowbar
+, bigstringaf
 }:
 
 buildDunePackage rec {
@@ -15,7 +21,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     crowbar
     hxd

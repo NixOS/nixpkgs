@@ -1,28 +1,33 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
 , attrs
+, buildPythonPackage
 , colorlog
 , csvw
-, python-dateutil
-, tabulate
+, fetchFromGitHub
+, git
+, isPy27
+, lxml
+, markdown
+, markupsafe
 , mock
 , postgresql
-, pytestCheckHook
+, pylatexenc
 , pytest-mock
+, pytestCheckHook
+, python-dateutil
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.9.0";
+  version = "3.19.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07ljq7v1zvaxyl6xn4a2p4097lgd5j9bz71lf05y5bz8k024mxbr";
+    sha256 = "sha256-dva0lbbTxvETDPkACxpI3PPzWh5gz87Fv6W3lTjNv3Q=";
   };
 
   patchPhase = ''
@@ -30,18 +35,23 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    attrs
+    colorlog
+    csvw
+    lxml
+    markdown
+    markupsafe
+    pylatexenc
     python-dateutil
     tabulate
-    colorlog
-    attrs
-    csvw
   ];
 
   nativeCheckInputs = [
     mock
     postgresql
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
+    git
   ];
 
   disabledTests = [
@@ -54,6 +64,6 @@ buildPythonPackage rec {
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ melling ];
   };
 }

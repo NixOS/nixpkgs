@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y4LSWo6sbHn239qSdQjwfZO4cyNyoGFQVVGvZbRgYfQ=";
+    sha256 = "sha256-kHiYknmteenBgce63EpzhGBEUYcQHrDLreZ1k01eRkQ=";
   };
 
   postPatch = ''

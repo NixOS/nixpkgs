@@ -66,7 +66,7 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
   };
 
 }

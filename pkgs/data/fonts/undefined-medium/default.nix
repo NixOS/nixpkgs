@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "undefined-medium";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchzip {
-    url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";
-    hash = "sha256-HG+V7jR7dDI6LeoiCg/8F38lW8Zdo6CyLj2DXy/ff64=";
+    url = "https://github.com/andirueckel/undefined-medium/archive/v1.1.zip";
+    hash = "sha256-iquxt7lo92y4AQZf23Ij5Qzg2U7buL3kGLksQSR6vac=";
   };
 
   installPhase = ''

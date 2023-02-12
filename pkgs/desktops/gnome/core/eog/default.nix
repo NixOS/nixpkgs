@@ -23,6 +23,7 @@
 , wrapGAppsHook
 , librsvg
 , webp-pixbuf-loader
+, libheif
 , libexif
 , gobject-introspection
 , gi-docgen
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
       extraLoaders = [
         librsvg
         webp-pixbuf-loader
+        libheif.out
       ];
     }}"
   '';

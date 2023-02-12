@@ -18,8 +18,11 @@ buildDunePackage {
   duneVersion = "3";
 
   buildInputs = [
-    awa awa-mirage cmdliner
-    mirage-clock tcpip
+    awa
+    awa-mirage
+    cmdliner
+    mirage-clock
+    tcpip
   ];
   propagatedBuildInputs = [
     rresult result bigstringaf
@@ -30,12 +33,13 @@ buildDunePackage {
     tls tls-mirage git happy-eyeballs-lwt
     git-mirage mirage-clock-unix
   ];
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest alcotest-lwt base64 ke
-    mirage-crypto-rng git-binary
+    mirage-crypto-rng
     uri mtime
     cacert # sets up NIX_SSL_CERT_FILE
   ];
+  nativeCheckInputs = [ git-binary ];
   doCheck = true;
 
   meta = {

@@ -134,7 +134,9 @@
 /pkgs/development/ruby-modules      @marsam
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
+/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq @winterqt @figsoda
+/pkgs/build-support/rust @zowoq @winterqt @figsoda
+/doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer

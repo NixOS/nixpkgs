@@ -915,11 +915,11 @@ let
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.1.0";
+    version = "1.3.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.1.0.tar.gz";
-      hash = "sha256-7hRs111jAIN+bKVZuwveJH1CEjyWssXUsoAPONPj0as=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.3.1.tar.gz";
+      hash = "sha256-9edo0pjNQEfuKuQjGXgujCzaMSc3vL2/r1gL1H7+i5Q=";
     };
     buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl ];
@@ -5200,14 +5200,14 @@ let
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.31";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.31.tar.gz";
-      hash = "sha256-QXNAOtTPdnMhkgmfgz+/vzzYEE4CRrOEQYeuOE0sVDY=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.33.tar.gz";
+      hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "RSA encoding and decoding, using the openSSL libraries";
@@ -12911,12 +12911,12 @@ let
     };
   };
 
-  libapreq2 = buildPerlPackage {
+  libapreq2 = buildPerlPackage rec {
     pname = "libapreq2";
-    version = "2.16";
+    version = "2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libapreq2-2.16.tar.gz";
-      hash = "sha256-4EyFWj6gcLiGNWn7rgL+go9TSsiHVbI+JNOGPMlZg0k=";
+      url = "mirror://apache/httpd/libapreq/${pname}-${version}.tar.gz";
+      hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
@@ -17825,6 +17825,21 @@ let
     };
   };
 
+  NetIPXS = buildPerlPackage {
+    pname = "Net-IP-XS";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
+      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+    };
+    propagatedBuildInputs = [ IOCapture TieSimple ];
+    meta = {
+      homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
+      description = "IPv4/IPv6 address library";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   NetLDAPServer = buildPerlPackage {
     pname = "Net-LDAP-Server";
     version = "0.43";
@@ -19469,10 +19484,10 @@ let
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.0.11-1";
+    version = "7.1.0-0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      hash = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
+      hash = "sha256-+QyXXL4hRFd3xA0ZwXt/eQI9MGTvj6vPNIz4JlS8Fus=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
@@ -22907,10 +22922,10 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "3.009";
+    version = "3.101";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.009.tar.gz";
-      hash = "sha256-1q0ju/Y3pZtd/RrABkYN/LGFmC5IUs3ncVD70IXx9bY=";
+      url = "mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-3.101.tar.gz";
+      hash = "sha256-0qMt1sIeSzfGqT34CHyp6IDPrmE6Pl766jB7C9yu21g=";
     };
     doCheck = !stdenv.isDarwin;
     propagatedBuildInputs = [ AppConfig ];
@@ -26506,10 +26521,10 @@ let
 
   URIdb = buildPerlModule {
     pname = "URI-db";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.19.tar.gz";
-      hash = "sha256-xJmd6vRRZSIWAyyOMn/25tZVU56sN5CVu2mww2nvplg=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.20.tar.gz";
+      hash = "sha256-FMjaFawgljG445/BJFHJsTEa0LXKX5Aye9+peLfRPxQ=";
     };
     propagatedBuildInputs = [ URINested ];
     meta = {
@@ -27791,10 +27806,10 @@ let
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "4.0.1";
+    version = "5.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
-      hash = "sha256-7dNPe4E35JLmzoR0xFpVBXLcpQVqve/EXAdt+daWXKA=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v5.0.1.tar.gz";
+      hash = "sha256-a/PPgavkaw9gCW44rj7+6AjOOSHKglg4H3kr6jXuRE4=";
     };
     propagatedBuildInputs = [
       JSONXS
@@ -27818,18 +27833,13 @@ let
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.5.1";
+    version = "4.6.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
-      hash = "sha256-RdIExtrXzZAXYIS/JCe6qM5QNoSlaZ6+sjbk0zvAuoY=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
+      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
-    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
-
-    preCheck = ''
-      # disable dnssec test as it fails
-      rm -f t/Test-dnssec.t t/manifest.t
-    '';
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP NetIPXS Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
     meta = {
       description = "A tool to check the quality of a DNS zone";
@@ -27839,18 +27849,18 @@ let
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "2.2.2";
+    version = "3.1.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
-      hash = "sha256-4KccPjWqdhkJvjI9QQGCPX/B8vRUGw91eUUgxhHk788=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.1.0.tar.gz";
+      hash = "sha256-Rr4uoQg5g9/ZLVnFQiLAz5MB+Uj39U24YWEa+o2+9HE=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include -I${pkgs.libidn2}.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
-    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl_1_1.dev}" ];
+    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];
 
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];

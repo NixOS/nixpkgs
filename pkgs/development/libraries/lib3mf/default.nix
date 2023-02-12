@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "out"}/include/lib3mf"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
     "-DUSE_INCLUDED_ZLIB=OFF"
     "-DUSE_INCLUDED_LIBZIP=OFF"
     "-DUSE_INCLUDED_GTEST=OFF"
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
-    sed -i 's,=''${\(exec_\)\?prefix}/,=,' lib3mf.pc.in
+    sed -i 's,libdir=''${\(exec_\)\?prefix}/,libdir=,' lib3mf.pc.in
+
 
     # replace bundled binaries
     for i in AutomaticComponentToolkit/bin/act.*; do

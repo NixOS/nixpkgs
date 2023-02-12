@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-cli";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-y9EHksRDVbw58XiV7/dKzy4p6OWWAkQ3X9LP/WDWD2c=";
+    sha256 = "sha256-YNOD0hDDQ6M496m9lps28UX41pMO1r/CE30rcS53h48=";
   };
 
-  cargoSha256 = "sha256-vv8XSAsGs1M97Y6cIGYevCdaxmPy3aDmHFF00exumq8=";
+  cargoSha256 = "sha256-/1bnDtfNxnOI4Inmnd+r2epT236ghQsiNuoAuROEfPM=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
 

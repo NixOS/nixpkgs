@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
     src = ./fix-build-bash.patch;
   });
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml ];
+  buildInputs = [ mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
 
   dontStrip = true;
 

@@ -1,5 +1,17 @@
-{ lib, buildDunePackage, fetchurl, alcotest
-, cstruct, domain-name, duration, gmap, ipaddr, logs, lru, metrics, ptime, fmt
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, cstruct
+, domain-name
+, duration
+, gmap
+, ipaddr
+, logs
+, lru
+, metrics
+, ptime
+, fmt
 , base64
 }:
 
@@ -18,7 +30,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt logs ptime domain-name gmap cstruct ipaddr lru duration metrics base64 ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "An Domain Name System (DNS) library";

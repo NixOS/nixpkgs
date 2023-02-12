@@ -23,7 +23,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
+  checkInputs = [
     lwt_log
     ssl
   ];

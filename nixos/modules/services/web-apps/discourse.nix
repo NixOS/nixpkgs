@@ -1080,6 +1080,6 @@ in
     ];
   };
 
-  meta.doc = ./discourse.xml;
+  meta.doc = ./discourse.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "spacy-legacy";
-  version = "3.0.9";
+  version = "3.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-T33LxObI6MtOrbsAn5wKGipnRC4AMsjWd2yUcMN1mQM=";
+    sha256 = "sha256-s31uDJtuHXyhz1vHFSq2SkxGcfWcha2vej/LhwNXp3Q=";
   };
 
   # nativeCheckInputs = [ pytestCheckHook spacy ];

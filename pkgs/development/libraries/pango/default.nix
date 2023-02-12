@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fribidi
     libthai
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon

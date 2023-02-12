@@ -5,6 +5,7 @@
 , jinja2
 , markupsafe
 , poetry-core
+, poetry
 , pytestCheckHook
 , pythonOlder
 , tomlkit
@@ -37,7 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    poetry
   ];
+
+  # virtualenv: error: argument dest: the destination . is not write-able at /
+  doCheck = false;
 
   disabledTests = [
     # these require .git, but leaveDotGit = true doesn't help

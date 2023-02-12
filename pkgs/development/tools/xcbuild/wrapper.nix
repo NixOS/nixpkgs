@@ -77,7 +77,7 @@ while [ $# -gt 0 ]; do
          --toolchain | -toolchain) shift ;;
          --find | -find | -f)
            shift
-           command -v $1 ;;
+           command -v $1 || exit 1 ;;
          --log | -log) ;; # noop
          --verbose | -verbose) ;; # noop
          --no-cache | -no-cache) ;; # noop

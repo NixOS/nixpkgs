@@ -1,31 +1,23 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder, cython
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytestCheckHook, boto3, mock, giflib, pytz
 , gdal, certifi
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.8.22";
+  version = "1.9.0";
 
   src = fetchPypi {
     pname = "Fiona";
     inherit version;
-    sha256 = "sha256-qCqZzps+eCV0AVfEXJ+yJZ1OkvCohqqsJfDbQP/h7qM=";
+    hash = "sha256-bkh8v7pahJ+98G5FFp/X4fFmL0Tz1xerS5RgRrJFfq4=";
   };
-
-  patches = [
-    # https://github.com/Toblerity/Fiona/pull/1122
-    (fetchpatch {
-      url = "https://github.com/Toblerity/Fiona/commit/fa632130dcd9dfbb982ecaa4911b3fab3459168f.patch";
-      hash = "sha256-IuNHr3yBqS1jY9Swvcq8XPv6BpVlInDx0FVuzEMaYTY=";
-    })
-  ];
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   nativeBuildInputs = [
+    cython
     gdal # for gdal-config
   ];
 
@@ -61,6 +53,8 @@ buildPythonPackage rec {
     # https://github.com/Toblerity/Fiona/issues/1164
     "test_no_append_driver_cannot_append"
   ];
+
+  pythonImportsCheck = [ "fiona" ];
 
   meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";

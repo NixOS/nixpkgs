@@ -16,9 +16,11 @@ buildDunePackage rec {
   # dune 3 is required for tests to pass
   duneVersion = if doCheck then "3" else "2";
 
-  buildInputs = [ astring cmdliner cppo fpath result tyxml odoc-parser fmt ];
+  nativeBuildInputs = [ cppo ];
+  buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];
 
-  nativeCheckInputs = [ markup yojson sexplib0 jq ppx_expect bash ];
+  nativeCheckInputs = [ bash jq ];
+  checkInputs = [ markup yojson sexplib0 jq ppx_expect ];
   doCheck = lib.versionAtLeast ocaml.version "4.08"
     && lib.versionOlder yojson.version "2.0";
 

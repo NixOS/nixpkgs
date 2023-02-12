@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0z1z4wqbqwgppkh2bm89fgy07a0y2m6g4lvcyzs09sm1ysklk2dh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [
-    ocaml findlib camlp5 lablgtk ]);
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config ] ++ (with ocamlPackages; [ ocaml findlib camlp5 ]);
+  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ lablgtk ]);
 
   dontAddPrefix = true;
   configureFlags = [ "--prefix" "$(out)" ];

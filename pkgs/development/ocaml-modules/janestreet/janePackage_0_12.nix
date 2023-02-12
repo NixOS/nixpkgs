@@ -16,8 +16,6 @@ buildDunePackage (args // {
     sha256 = hash;
   };
 
-  strictDeps = true;
-
   meta = {
     license = lib.licenses.mit;
     homepage = "https://github.com/janestreet/${pname}";

@@ -1,5 +1,5 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, libyamlcpp, libpwquality, parted, polkit-qt, python
+, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
@@ -43,7 +43,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb libyamlcpp libpwquality parted polkit-qt python
+    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
     qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
 

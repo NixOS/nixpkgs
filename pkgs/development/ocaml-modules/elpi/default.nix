@@ -36,8 +36,11 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.04";
 
-  buildInputs = [ perl ncurses ]
+  # atdgen is both a library and executable
+  nativeBuildInputs = [ perl camlp5 ]
   ++ lib.optional (lib.versionAtLeast version "1.15" || version == "dev") menhir
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  buildInputs = [ ncurses ]
   ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
 
   propagatedBuildInputs = [ re stdlib-shims ]

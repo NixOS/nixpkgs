@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , testers
 , vsmtp
@@ -9,30 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-uyu2NpHFDqJDcfQukG6TdRH7KuZnrYTULvLiABdvAog=";
+    hash = "sha256-FI4BvU+83nTzRLJQZ1l1eOn41ZeA62Db+p3d//5o0Wk=";
   };
 
-  patches = [
-    # https://github.com/viridIT/vSMTP/pull/952
-    # treewide: set GIT_HASH to unknown if git rev-parse HEAD fails
-    (fetchpatch {
-      url = "https://github.com/viridIT/vSMTP/commit/0ac4820c079e459f515825dfb451980119eaae9e.patch";
-      includes = [ "src/vsmtp/vsmtp-core/build.rs" "src/vqueue/build.rs" ];
-      hash = "sha256-kGjXsVokP6039rksaxw1EM/0zOlKIus1EaIEsFJvLE8=";
-    })
-  ];
-
-  cargoHash = "sha256-A0Q6ciZJL13VzJgZIWZalrRElSNGHUN/9b8Csj4Tdak=";
+  cargoHash = "sha256-Qhhh0riM1qeD3/JZINvY0t5fEOj+prI0fyXagdR43sc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # too many upstream failures
+  # tests do not run well in the nix sandbox
   doCheck = false;
 
   postInstall = ''

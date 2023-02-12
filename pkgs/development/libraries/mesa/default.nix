@@ -6,11 +6,58 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , vulkan-loader, glslang
-, galliumDrivers ? ["auto"]
-# upstream Mesa defaults to only enabling swrast (aka lavapipe) on aarch64 for some reason, so force building the others
-, vulkanDrivers ? if (stdenv.isLinux && stdenv.isAarch64) then [ "swrast" "broadcom" "freedreno" "panfrost" ] else [ "auto" ]
+, galliumDrivers ?
+  if stdenv.isLinux then
+    [
+      "d3d12" # WSL emulated GPU (aka Dozen)
+      "kmsro" # helper driver for display-only devices
+      "nouveau" # Nvidia
+      "radeonsi" # new AMD (GCN+)
+      "r300" # very old AMD
+      "r600" # less old AMD
+      "swrast" # software renderer (aka LLVMPipe)
+      "svga" # VMWare virtualized GPU
+      "virgl" # QEMU virtualized GPU (aka VirGL)
+      "zink" # generic OpenGL over Vulkan, experimental
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "lima" # ARM Mali 4xx
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+      "tegra" # Nvidia Tegra SoCs
+      "v3d" # Broadcom VC5 (Raspberry Pi 4)
+      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    ] ++ lib.optionals stdenv.isx86_64 [
+      "iris" # new Intel, could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
+      "crocus" # Intel legacy, x86_64 only
+    ]
+  else [ "auto" ]
+, vulkanDrivers ?
+  if stdenv.isLinux then
+    [
+      "amd" # AMD (aka RADV)
+      "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+      "swrast" # software renderer (aka Lavapipe)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
+      # QEMU virtualized GPU (aka VirGL)
+      # Requires ATOMIC_INT_LOCK_FREE == 2.
+      "virtio-experimental"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "imagination-experimental" # PowerVR Rogue (currently N/A)
+      "panfrost" # ARM Mali Midgard and up (T/G series)
+    ]
+    ++ lib.optionals stdenv.isx86_64 [
+      "intel" # Intel (aka ANV), could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
+      "intel_hasvk" # Intel Haswell/Broadwell, experimental, x86_64 only
+    ]
+  else [ "auto" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
-, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" ] # No Vulkan support on Darwin
+, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -19,10 +66,12 @@
 , enablePatentEncumberedCodecs ? true
 , libclc
 , jdupes
-, cmake
 , rustc
 , rust-bindgen
-, spirv-llvm-translator_14
+, spirv-llvm-translator
+, zstd
+, directx-headers
+, udev
 }:
 
 /** Packaging design:
@@ -39,17 +88,26 @@
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.3.3";
+  version = "22.3.4";
   branch  = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
+  # Align all the Mesa versions used. Required to prevent explosions when
+  # two different LLVMs are loaded in the same process.
+  # FIXME: these should really go into some sort of versioned LLVM package set
   rust-bindgen' = rust-bindgen.override {
     rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
       clang = llvmPackages.clang;
     };
   };
+  spirv-llvm-translator' = spirv-llvm-translator.override {
+    inherit (llvmPackages) llvm;
+  };
 
+  haveWayland = lib.elem "wayland" eglPlatforms;
+  haveZink = lib.elem "zink" galliumDrivers;
+  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
 self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
@@ -62,7 +120,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "sha256-vteZeIvyvZ7wedl82OCTSL9TywhoGFeOQHc7KxeBKSI=";
+    sha256 = "37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593";
   };
 
   # TODO:
@@ -91,7 +149,11 @@ self = stdenv.mkDerivation {
   outputs = [ "out" "dev" "drivers" ]
     ++ lib.optional enableOSMesa "osmesa"
     ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl";
+    ++ lib.optional enableOpenCL "opencl"
+    # the Dozen drivers depend on libspirv2dxil, but link it statically, and
+    # libspirv2dxil itself is pretty chonky, so relocate it to its own output
+    # in case anything wants to use it at some point
+    ++ lib.optional haveDozen "spirv2dxil";
 
   # FIXME: this fixes rusticl/iris segfaulting on startup, _somehow_.
   # Needs more investigating.
@@ -122,6 +184,7 @@ self = stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+
     "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
@@ -130,8 +193,15 @@ self = stdenv.mkDerivation {
     "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
+
+    # Enable RT for Intel hardware
+    "-Dintel-clc=enabled"
   ] ++ lib.optionals enableOpenCL [
-    "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
+    # Clover, old OpenCL frontend
+    "-Dgallium-opencl=icd"
+    "-Dopencl-spirv=true"
+
+    # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ] ++ lib.optional enablePatentEncumberedCodecs
@@ -143,24 +213,23 @@ self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
+    zstd
+  ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator_14 ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
-    # Mesa will not build zink when gallium-drivers=auto
-    ++ lib.optional (lib.elem "zink" galliumDrivers) vulkan-loader;
+    ++ lib.optional haveZink vulkan-loader
+    ++ lib.optional haveDozen directx-headers;
 
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako
+    python3Packages.python python3Packages.Mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
-    wayland-scanner
-  ];
+  ] ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
@@ -217,6 +286,10 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
       substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
     done
+  '' + lib.optionalString haveDozen ''
+    mkdir -p $spirv2dxil/{bin,lib}
+    mv -t $spirv2dxil/lib $out/lib/libspirv_to_dxil*
+    mv -t $spirv2dxil/bin $out/bin/spirv2dxil
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -253,6 +326,10 @@ self = stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+
+    # Work around regression from https://github.com/NixOS/nixpkgs/pull/210004
+    # TODO(trofi): remove
+    "--sysroot=/"
   ];
 
   passthru = {

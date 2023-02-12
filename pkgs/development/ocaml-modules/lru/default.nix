@@ -12,7 +12,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ psq ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ qcheck-alcotest ];
+  checkInputs = [ qcheck-alcotest ];
 
   meta = {
     homepage = "https://github.com/pqwy/lru";

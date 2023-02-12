@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   meta = builtins.removeAttrs ocaml_gettext.meta  [ "mainProgram" ];
 }

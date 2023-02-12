@@ -539,6 +539,6 @@ in
     };
   };
 
-  meta.doc = ./parsedmarc.xml;
+  meta.doc = ./parsedmarc.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

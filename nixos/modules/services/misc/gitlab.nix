@@ -1504,6 +1504,6 @@ in {
 
   };
 
-  meta.doc = ./gitlab.xml;
+  meta.doc = ./gitlab.md;
 
 }

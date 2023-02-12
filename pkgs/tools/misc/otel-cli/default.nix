@@ -1,17 +1,17 @@
-{ lib, bash, buildGoModule, fetchFromGitHub, getent, stdenv }:
+{ lib, bash, buildGoModule, fetchFromGitHub, getent, nix-update-script, stdenv }:
 
 buildGoModule rec {
   pname = "otel-cli";
-  version = "0.0.20";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bWdkuw0uEE75l9YCo2Dq1NpWXuMH61RQ6p7m65P1QCE=";
+    hash = "sha256-iYlyokBAS5KQUYq83zhKWH/Vulq7prQdceFpeBJN2PI=";
   };
 
-  vendorHash = "sha256-IJ2Gq5z1oNvcpWPh+BMs46VZMN1lHyE+M7kUinTSRr8=";
+  vendorHash = "sha256-5c5uDp5KVo/DYAM5F76ivtT52+lNBheVmjAjmq6EJFk=";
 
   preCheck = ''
     ln -s $GOPATH/bin/otel-cli .
@@ -19,6 +19,8 @@ buildGoModule rec {
     substituteInPlace main_test.go \
       --replace 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${lib.makeBinPath [ getent ]}`'
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://github.com/equinix-labs/otel-cli";

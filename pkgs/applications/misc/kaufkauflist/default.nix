@@ -15,14 +15,14 @@ let
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-feqk2FUs3lcnIgyPzhsow+xO9u7l9+9eZEk9jxRlpG4=";
+    hash = "sha256-oXrb6n1oD27bHt/zPWP0REQyCyZXI8BB57pdR/q42gY=";
   };
 
   npmDepsHash = "sha256-lSnGLK7+ac/wEpAxlpkZS/kgr9F+8WK+nRjCzkrPJt0=";

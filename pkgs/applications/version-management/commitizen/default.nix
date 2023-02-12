@@ -26,14 +26,13 @@
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.39.1";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QQIYyg2zwV7cfFxGHVsLiTRBgTGs3O7OJcmURvfY3LQ=";
-    deepClone = true;
+    hash = "sha256-dzAIRfUdyHSefDRDuPMsr8l2Dsiall2ZUDB6GufTbXE=";
   };
 
   format = "pyproject";

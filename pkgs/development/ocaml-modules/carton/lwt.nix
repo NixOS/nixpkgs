@@ -11,6 +11,7 @@ buildDunePackage {
   pname = "carton-lwt";
 
   inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton
@@ -23,6 +24,8 @@ buildDunePackage {
   doCheck = true;
   nativeCheckInputs = [
     git-binary
+  ];
+  checkInputs = [
     alcotest
     alcotest-lwt
     cstruct

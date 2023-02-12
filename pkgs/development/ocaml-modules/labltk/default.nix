@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 
+  strictDeps = true;
+
   nativeBuildInputs = [ ocaml findlib makeWrapper ];
   buildInputs = [ tcl tk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 

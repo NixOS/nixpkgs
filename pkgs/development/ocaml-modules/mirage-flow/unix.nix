@@ -1,5 +1,6 @@
 { buildDunePackage, fmt, logs, mirage-flow, ocaml_lwt, cstruct
-, alcotest, mirage-flow-combinators }:
+, alcotest, mirage-flow-combinators
+}:
 
 buildDunePackage {
   pname = "mirage-flow-unix";
@@ -14,7 +15,7 @@ buildDunePackage {
   propagatedBuildInputs = [ fmt logs mirage-flow ocaml_lwt cstruct ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest mirage-flow-combinators ];
+  checkInputs = [ alcotest mirage-flow-combinators ];
 
   meta = mirage-flow.meta // {
     description = "Flow implementations and combinators for MirageOS on Unix";

@@ -18,7 +18,7 @@ buildDunePackage rec {
   postPatch = "rm -rf examples/xmldiff";
 
   propagatedBuildInputs = [ ocplib-endian cmdliner afl-persistent ];
-  nativeCheckInputs = [ calendar fpath pprint uutf uunf uucp ];
+  checkInputs = [ calendar fpath pprint uutf uunf uucp ];
   # uunf is broken on aarch64
   doCheck = !stdenv.isAarch64;
 

@@ -93,6 +93,7 @@
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
@@ -174,6 +175,7 @@ stdenv.mkDerivation {
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
     ./0018-core-don-t-taint-on-unmerged-usr.patch
+    ./0019-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -714,7 +716,7 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [ (plat: plat.isStatic) ];
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;

@@ -168,7 +168,7 @@ rec {
        ] { a.b.c = 0; }
        => { a = { b = { d = 1; }; }; x = { y = "xy"; }; }
 
-    Type: updateManyAttrsByPath :: [{ path :: [String], update :: (Any -> Any) }] -> AttrSet -> AttrSet
+    Type: updateManyAttrsByPath :: [{ path :: [String]; update :: (Any -> Any); }] -> AttrSet -> AttrSet
   */
   updateManyAttrsByPath = let
     # When recursing into attributes, instead of updating the `path` of each
@@ -414,7 +414,7 @@ rec {
        => { name = "some"; value = 6; }
 
      Type:
-       nameValuePair :: String -> Any -> { name :: String, value :: Any }
+       nameValuePair :: String -> Any -> { name :: String; value :: Any; }
   */
   nameValuePair =
     # Attribute name
@@ -449,7 +449,7 @@ rec {
        => { foo_x = "bar-a"; foo_y = "bar-b"; }
 
      Type:
-       mapAttrs' :: (String -> Any -> { name = String; value = Any }) -> AttrSet -> AttrSet
+       mapAttrs' :: (String -> Any -> { name :: String; value :: Any; }) -> AttrSet -> AttrSet
   */
   mapAttrs' =
     # A function, given an attribute's name and value, returns a new `nameValuePair`.
@@ -649,7 +649,7 @@ rec {
 
      Example:
        zipAttrsWith (name: values: values) [{a = "x";} {a = "y"; b = "z";}]
-       => { a = ["x" "y"]; b = ["z"] }
+       => { a = ["x" "y"]; b = ["z"]; }
 
      Type:
        zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
@@ -664,7 +664,7 @@ rec {
 
      Example:
        zipAttrs [{a = "x";} {a = "y"; b = "z";}]
-       => { a = ["x" "y"]; b = ["z"] }
+       => { a = ["x" "y"]; b = ["z"]; }
 
      Type:
        zipAttrs :: [ AttrSet ] -> AttrSet

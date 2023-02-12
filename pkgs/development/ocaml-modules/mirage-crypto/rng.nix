@@ -7,12 +7,12 @@ buildDunePackage rec {
   inherit (mirage-crypto) version src;
 
   doCheck = true;
-  nativeCheckInputs = [ ounit2 randomconv ];
+  checkInputs = [ ounit2 randomconv ];
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ocaml_lwt ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "A cryptographically secure PRNG";

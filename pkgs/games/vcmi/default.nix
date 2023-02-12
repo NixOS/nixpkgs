@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-Ah+aAuU2ioUfvtxfcSb4GNqriqY71ee5RhW2L9UMYFY=";
+    hash = "sha256-/BHpAXOCLi6d0+/uE79g8p6YO1swizItAwVlPVf/nkQ=";
   };
 
   postPatch = ''
@@ -69,7 +69,9 @@ stdenv.mkDerivation rec {
     # Upstream assumes relative value while Nixpkgs passes absolute.
     # Both should be allowed: https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html
     # Meanwhile work it around by passing a relative value.
+    "-DCMAKE_INSTALL_BINDIR:STRING=bin"
     "-DCMAKE_INSTALL_LIBDIR:STRING=lib"
+    "-DCMAKE_INSTALL_DATAROOTDIR:STRING=share"
   ];
 
   postFixup = ''

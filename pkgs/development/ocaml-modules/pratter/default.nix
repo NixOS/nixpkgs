@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp-streams ];
 
-  nativeCheckInputs = [ alcotest qcheck qcheck-alcotest ];
+  checkInputs = [ alcotest qcheck qcheck-alcotest ];
   doCheck = true;
 
   meta = with lib; {

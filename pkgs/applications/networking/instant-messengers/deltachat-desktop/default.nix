@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_18
+, electron_22
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -21,17 +21,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.106.0";
+    version = "1.107.1";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-S53ghVFb1qDI7MVNbc2ZlHqDN4VRBFQJCJg2J+w0erc=";
+      hash = "sha256-ISAUZyFrp86ILtRrlowceBQNJ7+tbJReIAe6+u4wwQI=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-k4j814Ao7FAyd0w1nH2fuX1cJKjBkhPw0CVZqNU7Hqs=";
+      hash = "sha256-B4BMxiI3GhsjeD3gYrq5ZpbZ7l77ycrIMWu2sUzZiz4=";
     };
   });
   esbuild' = esbuild.override {
@@ -48,16 +48,16 @@ let
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.2";
+  version = "1.34.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-XOGfKa0eGVZKKKC0Pm2kw48XWWcrxCyDdYzCSKp+wco=";
+    hash = "sha256-LV8/r6psUZuCEGbaH1nWlrkeNbEYG8R5O1aCxECPH1E=";
   };
 
-  npmDepsHash = "sha256-ZMXXBDVT5rHTzHOrKAUAezL/1UTMdzbBllG69kxg55M=";
+  npmDepsHash = "sha256-rdZVvsyCo/6C4+gjytCCn9Qcl+chc6U+6orkcM59I8U=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -105,7 +105,7 @@ in buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
@@ -128,8 +128,6 @@ in buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

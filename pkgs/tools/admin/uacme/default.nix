@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "ACMEv2 client written in plain C with minimal dependencies";
     homepage = "https://github.com/ndilieto/uacme";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

@@ -195,7 +195,7 @@ maintenance work for `haskellPackages` is required. Besides that, it is not
 possible to get the dependencies of a legacy project from nixpkgs or to use a
 specific stack solver for compiling a project.
 
-Even though we couldn‘t use them directly in nixpkgs, it would be desirable
+Even though we couldn’t use them directly in nixpkgs, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
 Sadly we currently don’t have tooling for this. For this you might be
@@ -538,7 +538,7 @@ via [`shellFor`](#haskell-shellFor).
 When using `cabal-install` for dependency resolution you need to be a bit
 careful to achieve build purity. `cabal-install` will find and use all
 dependencies installed from the packages `env` via Nix, but it will also
-consult Hackage to potentially download and compile dependencies if it can‘t
+consult Hackage to potentially download and compile dependencies if it can’t
 find a valid build plan locally. To prevent this you can either never run
 `cabal update`, remove the cabal database from your `~/.cabal` folder or run
 `cabal` with `--offline`. Note though, that for some usecases `cabal2nix` needs

@@ -2,30 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, contextlib2
 , pytest
 , pytestCheckHook
 , vcrpy
 , citeproc-py
 , requests
-, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.9.1";
+  version = "0.9.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6192ce9315b35f6a67174761291e61d0831e496e8ff4acbc061731e7604faf8";
+    sha256 = "sha256-Dg/Yfp5GzmyUMI6feAwgP+g22JYoQE+L9a+Wp0V77Rw=";
   };
 
-  # bin/duecredit requires setuptools at runtime
-  propagatedBuildInputs = [ citeproc-py requests setuptools six ];
+  propagatedBuildInputs = [ citeproc-py requests six ];
 
-  nativeCheckInputs = [ contextlib2 pytest pytestCheckHook vcrpy ];
+  nativeCheckInputs = [ pytest pytestCheckHook vcrpy ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

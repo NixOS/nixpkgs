@@ -25,8 +25,6 @@ buildDunePackage rec {
   pname = "ppx_import";
   inherit version;
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {
@@ -38,7 +36,7 @@ buildDunePackage rec {
     ppxlib
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     ounit
     ppx_deriving
     ppx_sexp_conv

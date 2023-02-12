@@ -61,6 +61,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_tiff_rgb"
+    "test_png_gray1"  # https://gitlab.mister-muffin.de/josch/img2pdf/issues/154
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

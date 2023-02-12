@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "6.4.0";
+  version = "7.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-9+U9kRMkcQY0tjao6Pmi0STqh0xw0pFU0/xZXlawkKM=";
+    hash = "sha256-xIlg3W/A3FBvVOEin/ku0QdmzGXlmOm5yLeYvoGkzNU=";
   };
 
   postPatch = ''

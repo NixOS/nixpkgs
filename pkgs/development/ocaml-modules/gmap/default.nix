@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, ocaml, fetchurl, alcotest }:
+{ lib, buildDunePackage, ocaml, fetchurl, alcotest, fmt }:
 
 buildDunePackage rec {
   pname = "gmap";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest fmt ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

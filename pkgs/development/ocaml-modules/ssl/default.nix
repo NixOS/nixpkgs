@@ -24,7 +24,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ openssl ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
   preCheck = ''
     mkdir -p _build/default/tests/
     cp tests/digicert_certificate.pem _build/default/tests/

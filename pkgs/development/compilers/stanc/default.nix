@@ -22,9 +22,11 @@ ocamlPackages.buildDunePackage rec {
       --replace "if Sys.file_exists (to_windows path) then to_windows cmd else cmd" "cmd"
   '';
 
+  nativeBuildInputs = with ocamlPackages; [
+    menhir
+  ];
   buildInputs = with ocamlPackages; [
     core_unix
-    menhir
     menhirLib
     ppx_deriving
     fmt

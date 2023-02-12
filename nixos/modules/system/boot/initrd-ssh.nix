@@ -128,13 +128,13 @@ in
         HostKey ${initrdKeyPath path}
       '')}
 
-      KexAlgorithms ${concatStringsSep "," sshdCfg.kexAlgorithms}
-      Ciphers ${concatStringsSep "," sshdCfg.ciphers}
-      MACs ${concatStringsSep "," sshdCfg.macs}
+      KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      MACs ${concatStringsSep "," sshdCfg.settings.Macs}
 
-      LogLevel ${sshdCfg.logLevel}
+      LogLevel ${sshdCfg.settings.LogLevel}
 
-      ${if sshdCfg.useDns then ''
+      ${if sshdCfg.settings.UseDns then ''
         UseDNS yes
       '' else ''
         UseDNS no

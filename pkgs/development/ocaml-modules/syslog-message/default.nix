@@ -23,7 +23,7 @@ buildDunePackage rec {
   ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [
+  checkInputs = [
     qcheck
   ];
 

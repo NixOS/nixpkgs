@@ -12,6 +12,7 @@
 , kcontacts
 , ki18n
 , kio
+, kirigami-addons
 , kirigami2
 , knotifications
 , kpeople
@@ -40,6 +41,7 @@ gcc11Stdenv.mkDerivation rec {
     kcontacts
     ki18n
     kio
+    kirigami-addons
     kirigami2
     knotifications
     kpeople

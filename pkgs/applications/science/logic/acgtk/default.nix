@@ -13,11 +13,19 @@ stdenv.mkDerivation {
     sha256 = "sha256-W/BDhbng5iYuiB7desMKvRtDFdhoaxiJNvNvtbLlA6E=";
   };
 
-  buildInputs = [ dune_2 ] ++ (with ocamlPackages; [
-    ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir menhirLib mtime sedlex yojson
-  ]);
+  strictDeps = true;
 
-  buildPhase = "dune build --profile=release";
+  nativeBuildInputs = with ocamlPackages; [ menhir ocaml findlib dune_2 ];
+
+  buildInputs = with ocamlPackages; [
+    ansiterminal cairo2 cmdliner fmt logs menhirLib mtime sedlex yojson
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    dune build --profile=release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    runHook postBuild
+  '';
 
   installPhase = ''
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR

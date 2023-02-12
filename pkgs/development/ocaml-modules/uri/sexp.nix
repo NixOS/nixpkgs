@@ -8,7 +8,7 @@ buildDunePackage {
   pname = "uri-sexp";
   inherit (uri) version useDune2 src meta;
 
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
   propagatedBuildInputs = [ ppx_sexp_conv sexplib0 uri ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 }

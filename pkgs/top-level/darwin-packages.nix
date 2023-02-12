@@ -120,6 +120,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
   checkReexportsHook = pkgs.makeSetupHook {
+    name = "darwin-check-reexports-hook";
     deps = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
@@ -140,6 +141,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
+    name = "auto-sign-darwin-binaries-hook";
     deps = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
@@ -167,6 +169,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
+
+  openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
+    inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
+  };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 

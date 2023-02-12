@@ -10,7 +10,7 @@ buildDunePackage {
   propagatedBuildInputs = [ alcotest logs lwt fmt ];
 
   doCheck = true;
-  nativeCheckInputs = [ re cmdliner ];
+  checkInputs = [ re cmdliner ];
 
   meta = alcotest.meta // {
     description = "Lwt-based helpers for Alcotest";

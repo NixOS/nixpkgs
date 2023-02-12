@@ -13,11 +13,11 @@ buildDunePackage rec {
     hash = "sha256-1Mnqtt5zHeRdYJHvhdQNjN8d4yxUEKD2cpwtoc7DGC0=";
   };
 
-  nativeBuildInputs = [ ppx_cstruct ];
+  buildInputs = [ ppx_cstruct ];
   propagatedBuildInputs = [ cstruct lwt ];
 
   doCheck = true;
-  nativeCheckInputs = [ ounit2 ];
+  checkInputs = [ ounit2 ];
 
   meta = with lib; {
     description = "Xenstore protocol in pure OCaml";

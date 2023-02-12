@@ -1,6 +1,7 @@
 { lib, fetchurl, buildDunePackage, ocaml
 , cppo, logs, ptime, uri, bigstringaf
-, re, cmdliner, alcotest }:
+, re, cmdliner, alcotest
+}:
 
 buildDunePackage rec {
   pname = "caqti";
@@ -15,7 +16,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ logs ptime uri bigstringaf ];
-  nativeCheckInputs = [ re cmdliner alcotest ];
+  checkInputs = [ re cmdliner alcotest ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

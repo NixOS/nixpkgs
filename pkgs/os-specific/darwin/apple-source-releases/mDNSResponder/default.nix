@@ -1,8 +1,7 @@
 { appleDerivation', stdenvNoCC }:
 
 appleDerivation' stdenvNoCC {
-  phases = [ "unpackPhase" "installPhase" ];
-
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/include
     cp mDNSShared/dns_sd.h $out/include

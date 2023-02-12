@@ -5,7 +5,7 @@
 , fparser
 , tinyxml
 , hdf5
-, vtk_8
+, vtk
 , boost
 , zlib
 , cmake
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     fparser
     tinyxml
     hdf5
-    vtk_8
+    vtk
     boost
     zlib
     csxcad

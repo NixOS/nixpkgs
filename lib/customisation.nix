@@ -252,7 +252,8 @@ rec {
       outputsList = map makeOutput outputs;
 
       drv' = (lib.head outputsList).value;
-    in lib.deepSeq drv' drv';
+    in if drv == null then null else
+      lib.deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage` will be evaluated with the same

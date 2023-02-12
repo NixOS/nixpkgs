@@ -23,12 +23,12 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [
-    bisect_ppx
-    ppx_cstruct
     pkg-config
   ];
 
   propagatedBuildInputs = [
+    bisect_ppx
+    ppx_cstruct
     rresult
     cstruct
     cstruct-lwt
@@ -58,7 +58,7 @@ buildDunePackage rec {
   ];
 
   doCheck = false;
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     mirage-flow
     mirage-vnetif

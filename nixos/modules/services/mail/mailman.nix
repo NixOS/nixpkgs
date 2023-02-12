@@ -642,7 +642,7 @@ in {
 
   meta = {
     maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
-    doc = ./mailman.xml;
+    doc = ./mailman.md;
   };
 
 }

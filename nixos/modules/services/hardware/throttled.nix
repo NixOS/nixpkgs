@@ -20,7 +20,7 @@ in {
   config = mkIf cfg.enable {
     systemd.packages = [ pkgs.throttled ];
     # The upstream package has this in Install, but that's not enough, see the NixOS manual
-    systemd.services.lenovo_fix.wantedBy = [ "multi-user.target" ];
+    systemd.services.throttled.wantedBy = [ "multi-user.target" ];
 
     environment.etc."throttled.conf".source =
       if cfg.extraConfig != ""

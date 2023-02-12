@@ -39,20 +39,15 @@ buildGoModule rec {
 
   buildInputs = lib.optional pamSupport pam;
 
-  preBuild =
-    let
-      tags = lib.optional pamSupport "pam"
-        ++ lib.optional sqliteSupport "sqlite sqlite_unlock_notify";
-      tagsString = lib.concatStringsSep " " tags;
-    in
-    ''
-      export buildFlagsArray=(
-        -tags="${tagsString}"
-        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-      )
-    '';
+  tags = lib.optional pamSupport "pam"
+    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+  ];
 
   outputs = [ "out" "data" ];
 

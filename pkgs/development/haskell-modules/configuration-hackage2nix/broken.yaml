@@ -86,7 +86,6 @@ broken-packages:
   - aeson-parsec-picky
   - aeson-prefix
   - aeson-schema
-  - aeson-schemas
   - aeson-smart
   - aeson-streams
   - aeson-t
@@ -511,7 +510,6 @@ broken-packages:
   - byline
   - by-other-names
   - bytearray-parsing
-  - bytepatch
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
@@ -705,7 +703,6 @@ broken-packages:
   - classy-parallel
   - classyplate
   - ClassyPrelude
-  - clay
   - clckwrks-plugin-bugs
   - clckwrks-plugin-mailinglist
   - clckwrks-theme-clckwrks
@@ -927,6 +924,7 @@ broken-packages:
   - credential-store
   - critbit
   - criterion-cmp
+  - criterion-compare
   - criterion-plus
   - criterion-to-html
   - criu-rpc-types
@@ -1106,6 +1104,7 @@ broken-packages:
   - derive-monoid
   - derive-trie
   - deriving-openapi3
+  - deriving-trans
   - derp-lib
   - describe
   - descriptive
@@ -1437,6 +1436,7 @@ broken-packages:
   - extensible-effects-concurrent
   - extensible-skeleton
   - external-sort
+  - extism
   - extractelf
   - ez3
   - ez-couch
@@ -1446,7 +1446,6 @@ broken-packages:
   - fadno-braids
   - fadno-xml
   - failable-list
-  - FailT
   - failure-detector
   - fake
   - fake-type
@@ -1822,7 +1821,6 @@ broken-packages:
   - gloss-banana
   - gloss-export
   - gloss-game
-  - glpk-headers
   - gltf-codec
   - glue
   - g-npm
@@ -2485,7 +2483,6 @@ broken-packages:
   - hslogger-template
   - hs-logo
   - hslua-examples
-  - hslua-list
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
@@ -2921,6 +2918,7 @@ broken-packages:
   - khph
   - kickass-torrents-dump-parser
   - kickchan
+  - kind-generics-deriving
   - kleene-list
   - kmn-programming
   - kmonad
@@ -3068,6 +3066,7 @@ broken-packages:
   - libpafe
   - libpq
   - librandomorg
+  - libsecp256k1
   - libsystemd-daemon
   - libtagc
   - libxls
@@ -3248,7 +3247,6 @@ broken-packages:
   - math-grads
   - math-interpolate
   - math-metric
-  - math-programming
   - matrix-as-xyz
   - matrix-lens
   - matrix-market
@@ -3359,6 +3357,8 @@ broken-packages:
   - ml-w
   - mm2
   - mmsyn2
+  - mmsyn7l
+  - mmsyn7ukr-array
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
@@ -3807,10 +3807,12 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
+  - pandoc-lua-engine
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
+  - pandoc-server
   - pandoc-unlit
   - pandoc-utils
   - pandora
@@ -3956,7 +3958,13 @@ broken-packages:
   - phone-numbers
   - phone-push
   - phonetic-languages-constaints
+  - phonetic-languages-constraints-array
+  - phonetic-languages-filters-array
+  - phonetic-languages-permutations-array
+  - phonetic-languages-phonetics-basics
+  - phonetic-languages-plus
   - phonetic-languages-simplified-properties-array-old
+  - phonetic-languages-ukrainian-array
   - phonetic-languages-vector
   - phraskell
   - Phsu
@@ -4694,10 +4702,12 @@ broken-packages:
   - servant-router
   - servant-scotty
   - servant-seo
+  - servant-serf
   - servant-smsc-ru
   - servant-stache
   - servant-static-th
   - servant-streaming
+  - servant-streamly
   - servant-tracing
   - servant-typed-error
   - servant-wasm
@@ -4870,6 +4880,7 @@ broken-packages:
   - snake-game
   - snap-accept
   - snap-auth-cli
+  - snap-blaze-clay
   - snap-configuration-utilities
   - snap-error-collector
   - snap-language
@@ -5052,7 +5063,6 @@ broken-packages:
   - streaming-sort
   - streamly-archive
   - streamly-binary
-  - streamly-bytestring
   - streamly-cassava
   - streamly-examples
   - streamly-lmdb
@@ -5311,6 +5321,7 @@ broken-packages:
   - threadscope
   - threepenny-editors
   - threepenny-gui-contextmenu
+  - threepenny-gui-flexbox
   - thrift
   - Thrift
   - throttled-io-loop
@@ -5490,6 +5501,7 @@ broken-packages:
   - type-indexed-queues
   - type-int
   - type-interpreter
+  - typelet
   - type-level-bst
   - type-level-natural-number-induction
   - type-level-natural-number-operations
@@ -5522,6 +5534,8 @@ broken-packages:
   - uhexdump
   - uhttpc
   - ui-command
+  - ukrainian-phonetics-basic-array
+  - ukrainian-phonetics-basic-array-bytestring
   - unamb-custom
   - unbeliever
   - unbounded-delays-units
@@ -5756,6 +5770,7 @@ broken-packages:
   - webkit-javascriptcore
   - webmention
   - web-output
+  - web-page
   - web-push
   - Webrexp
   - web-routes-quasi
@@ -5795,6 +5810,7 @@ broken-packages:
   - wol
   - word24
   - word2vec-model
+  - wordchoice
   - wordify
   - Wordlint
   - wordn
@@ -5975,6 +5991,7 @@ broken-packages:
   - yoda
   - Yogurt
   - youtube
+  - yu-auth
   - yu-core
   - yuiGrid
   - yu-tool

@@ -23,6 +23,15 @@ buildPythonPackage rec {
     sha256 = "sha256-BNKcXtsBB90KQe4HXmfJ7H3yepk1dEkozSEy5v8KSAA=";
   };
 
+  patches = [
+    # https://github.com/aequitas/python-rflink/pull/70
+    (fetchpatch {
+      name = "python311-compat.patch";
+      url = "https://github.com/aequitas/python-rflink/commit/ba807ddd2fde823b8d50bc50bb500a691d9e331f.patch";
+      hash = "sha256-4Wh7b7j8qsvzYKdFwaY+B5Jd8EkyjAe1awlY0BDu2YA=";
+    })
+  ];
+
   propagatedBuildInputs = [
     async-timeout
     docopt

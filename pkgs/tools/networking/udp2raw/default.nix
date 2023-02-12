@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "udp2raw";
-  version = "20200818.0";
+  version = "20230206.0";
 
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = "udp2raw";
     rev = version;
-    hash = "sha256-TkTOfF1RfHJzt80q0mN4Fek3XSFY/8jdeAVtyluZBt8=";
+    hash = "sha256-mchSaqw6sOJ7+dydCM8juP7QMOVUrPL4MFA79Rvyjdo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

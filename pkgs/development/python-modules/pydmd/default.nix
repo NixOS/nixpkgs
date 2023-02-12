@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4.0.post2301";
+  version = "0.4.0.post2302";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "PyDMD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0ss7yyT6u0if+YjBYNbKtx5beJU43JC1LD9rqHPKBS8=";
+    hash = "sha256-EYVmaxwOxje3KVrNbvsjwRqQBD7Rje/JK+qB1F7EqA0=";
   };
 
   propagatedBuildInputs = [

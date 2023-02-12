@@ -7,7 +7,7 @@
 , cinnamon-session
 , cinnamon-translations
 , cjs
-, clutter
+, evolution-data-server
 , fetchFromGitHub
 , gdk-pixbuf
 , gettext
@@ -23,6 +23,7 @@
 , libstartup_notification
 , libXtst
 , libXdamage
+, mesa
 , muffin
 , networkmanager
 , pkg-config
@@ -52,6 +53,23 @@
 , perl
 }:
 
+let
+  pythonEnv = python3.withPackages (pp: with pp; [
+    dbus-python
+    setproctitle
+    pygobject3
+    pycairo
+    pp.xapp # don't omit `pp.`, see #213561
+    pillow
+    pyinotify # for looking-glass
+    pytz
+    tinycss2
+    python-pam
+    pexpect
+    distro
+    requests
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
   version = "5.6.7";
@@ -69,28 +87,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (pp: with pp; [
-      dbus-python
-      setproctitle
-      pygobject3
-      pycairo
-      python3.pkgs.xapp # The scope prefix is required
-      pillow
-      pytz
-      tinycss2
-      python-pam
-      pexpect
-      distro
-      requests
-    ]))
     atk
     cacert
     cinnamon-control-center
     cinnamon-desktop
     cinnamon-menus
     cjs
-    clutter
     dbus
+    evolution-data-server # for calendar-server
     gdk-pixbuf
     glib
     gsound
@@ -100,9 +104,11 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
+    mesa
     muffin
     networkmanager
     polkit
+    pythonEnv
     libxml2
     libgnomekbd
     gst_all_1.gstreamer
@@ -151,9 +157,9 @@ stdenv.mkDerivation rec {
 
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
-    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
+    sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
 
-    sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
 
     sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
       -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js

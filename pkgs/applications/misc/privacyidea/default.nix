@@ -1,9 +1,13 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python39, fetchpatch
+, python310, fetchpatch
 }:
 
 let
-  python3' = python39.override {
+  dropDevOutput = { outputs, ... }: {
+    outputs = lib.filter (x: x != "doc") outputs;
+  };
+
+  python3' = python310.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
@@ -25,6 +29,15 @@ let
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };
       });
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
+        version = "2.5.1";
+        format = "setuptools";
+        src = self.fetchPypi {
+          pname = "Flask-SQLAlchemy";
+          inherit version;
+          hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912";
+        };
+      });
       # Taken from by https://github.com/NixOS/nixpkgs/pull/173090/commits/d2c0c7eb4cc91beb0a1adbaf13abc0a526a21708
       werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
         version = "1.0.1";
@@ -44,6 +57,19 @@ let
           inherit version;
           sha256 = "sha256-ptWEM94K6AA0fKsfowQ867q+i6qdKeZo8cdoy4ejM8Y=";
         };
+        patches = [
+          # python 3.10 compat fixes. In later upstream releases, but these
+          # are not compatible with flask 1 which we need here :(
+          (fetchpatch {
+            url = "https://github.com/thmo/jinja/commit/1efb4cc918b4f3d097c376596da101de9f76585a.patch";
+            sha256 = "sha256-GFaSvYxgzOEFmnnDIfcf0ImScNTh1lR4lxt2Uz1DYdU=";
+          })
+          (fetchpatch {
+            url = "https://github.com/mkrizek/jinja/commit/bd8bad37d1c0e2d8995a44fd88e234f5340afec5.patch";
+            sha256 = "sha256-Uow+gaO+/dH6zavC0X/SsuMAfhTLRWpamVlL87DXDRA=";
+            excludes = [ "CHANGES.rst" ];
+          })
+        ];
       });
       # Required by jinja2-2.11.3
       markupsafe = super.markupsafe.overridePythonAttrs (old: rec {
@@ -84,18 +110,62 @@ let
         nativeCheckInputs = [];
         doCheck = false;
       });
+      # Requires pytest-httpserver as checkInput now which requires Werkzeug>=2 which is not
+      # supported by current privacyIDEA.
+      responses = super.responses.overridePythonAttrs (lib.const {
+        doCheck = false;
+      });
+      flask-babel = (super.flask-babel.override {
+        sphinxHook = null;
+        furo = null;
+      }).overridePythonAttrs (old: (dropDevOutput old) // rec {
+        pname = "Flask-Babel";
+        version = "2.0.0";
+        format = "setuptools";
+        src = self.fetchPypi {
+          inherit pname;
+          inherit version;
+          hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+        };
+      });
+      psycopg2 = (super.psycopg2.override {
+        sphinxHook = null;
+        sphinx-better-theme = null;
+      }).overridePythonAttrs dropDevOutput;
+      hypothesis = super.hypothesis.override {
+        enableDocumentation = false;
+      };
+      pyjwt = (super.pyjwt.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs (old: (dropDevOutput old) // { format = "setuptools"; });
+      beautifulsoup4 = (super.beautifulsoup4.override {
+        sphinxHook = null;
+      }).overridePythonAttrs dropDevOutput;
+      pydash = (super.pydash.override {
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs (old: rec {
+        version = "5.1.0";
+        src = self.fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-GysFCsG64EnNB/WSCxT6u+UmOPSF2a2h6xFanuv/aDU=";
+        };
+        format = "setuptools";
+        doCheck = false;
+      });
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.7.4";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QoVL6WJjX6+sN5S/iqV3kcfQ5fWTXkTnf6NpZcw3bGo=";
+    sha256 = "sha256-SYXw8PBCb514v3rcy15W/vZS5JyMsu81D2sJmviLRtw=";
     fetchSubmodules = true;
   };
 
@@ -104,17 +174,7 @@ python3'.pkgs.buildPythonPackage rec {
     defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
-    pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt
-  ];
-
-  patches = [
-    # Apply https://github.com/privacyidea/privacyidea/pull/3304, fixes
-    # `Exceeds the limit (4300) for integer string conversion` in the tests,
-    # see https://hydra.nixos.org/build/192932057
-    (fetchpatch {
-      url = "https://github.com/privacyidea/privacyidea/commit/0e28f36c0b3291a361669f4a3a77c294f4564475.patch";
-      sha256 = "sha256-QqcO8bkt+I2JKce/xk2ZhzEaLZ3E4uZ4x5W9Kk0pMQQ=";
-    })
+    pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt segno
   ];
 
   passthru.tests = { inherit (nixosTests) privacyidea; };
@@ -128,6 +188,7 @@ python3'.pkgs.buildPythonPackage rec {
 
     # Tries to connect to `fcm.googleapis.com`.
     "test_02_api_push_poll"
+    "test_04_decline_auth_request"
 
     # Timezone info not available in build sandbox
     "test_14_convert_timestamp_to_utc"

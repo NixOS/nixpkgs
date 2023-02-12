@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-slang=${slang.dev}"
     "--with-ssl=${openssl.dev}"
+    "--with-slrnpull"
   ];
 
   buildInputs = [ slang ncurses openssl ];

@@ -100,8 +100,6 @@ patchShebangs() {
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
-
-    stopNest
 }
 
 patchShebangsAuto () {

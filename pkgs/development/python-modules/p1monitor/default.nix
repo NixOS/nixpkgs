@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HaTwqTKqTuXZVt2fhKXyXEEYZCSau/YY6DRg6YHIhOI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jmSSejflez3AmIp7PY6m0+vW8YZuNgUj8lwyu0roLYc=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with the P1 Monitor";
     homepage = "https://github.com/klaasnicolaas/python-p1monitor";
-    changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/${version}";
+    changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

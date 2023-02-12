@@ -1,4 +1,5 @@
-{ lib, buildDunePackage
+{ lib
+, buildDunePackage
 , git
 , mimic
 , mimic-happy-eyeballs
@@ -82,7 +83,7 @@ buildDunePackage {
     result
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     alcotest-lwt
     bigstringaf

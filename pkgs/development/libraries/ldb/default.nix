@@ -12,15 +12,16 @@
 , docbook_xml_dtd_42
 , cmocka
 , wafHook
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "ldb";
-  version = "2.3.0";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
-    sha256 = "0bcjj4gv48ddg44wyxpsvrs26xry6yy9x9k16qgz0bljs2rhilx4";
+    sha256 = "sha256-RnQD9334Z4LDlluxdUQLqi7XUan+uVYBlL2MBr8XNsk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    tdb
+    tevent
   ];
 
   buildInputs = [
@@ -42,7 +45,15 @@ stdenv.mkDerivation rec {
     tevent
     popt
     cmocka
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 

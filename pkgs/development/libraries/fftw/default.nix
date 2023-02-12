@@ -12,18 +12,19 @@
 , enableMpi ? false
 , mpi
 , withDoc ? stdenv.cc.isGNU
+, testers
 }:
 
 assert lib.elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fftw-${precision}";
   version = "3.3.10";
 
   src = fetchurl {
     urls = [
-      "https://fftw.org/fftw-${version}.tar.gz"
-      "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
+      "https://fftw.org/fftw-${finalAttrs.version}.tar.gz"
+      "ftp://ftp.fftw.org/pub/fftw/fftw-${finalAttrs.version}.tar.gz"
     ];
     sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
@@ -60,11 +61,21 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ perl ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Fastest Fourier Transform in the West library";
     homepage = "http://www.fftw.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.spwhitt ];
+    pkgConfigModules = [
+      {
+        "single" = "fftw3f";
+        "double" = "fftw3";
+        "long-double" = "fftw3l";
+        "quad-precision" = "fftw3q";
+      }.${precision}
+    ];
     platforms = platforms.unix;
   };
-}
+})

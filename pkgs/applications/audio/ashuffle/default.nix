@@ -6,7 +6,7 @@
 , meson
 , ninja
 , libmpdclient
-, libyamlcpp
+, yaml-cpp
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
   nativeBuildInputs = [ cmake pkg-config meson ninja ];
-  buildInputs = [ libmpdclient libyamlcpp ];
+  buildInputs = [ libmpdclient yaml-cpp ];
 
   mesonFlags = [ "-Dunsupported_use_system_yamlcpp=true" ];
 

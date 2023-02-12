@@ -10,7 +10,14 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-Uw8UIJa+Dtsy+o31I1ynLyhZrFNX42NFRXu1O2ISbzU=";
   };
 
-  pythonRelaxDeps = [ "cheroot" ];
+  patches = [
+    ./flask-babel.patch
+  ];
+
+  pythonRelaxDeps = [
+    "cheroot"
+    "Flask-Babel"
+  ];
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm pythonRelaxDepsHook ];
 
@@ -20,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     cheroot
     click
     flask
-    flaskbabel
+    flask-babel
     jaraco_functools
     jinja2
     markdown2

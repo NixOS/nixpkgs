@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ stdlib-shims uutf uucp ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ alcotest fmt ];
+  checkInputs = [ alcotest fmt ];
 
   meta = with lib; {
     description = "Basic utilities for interacting with terminals";

@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ fmt ];
 
-  nativeCheckInputs = [ alcotest bigstringaf ];
+  checkInputs = [ alcotest bigstringaf ];
   doCheck = true;
 
   minimalOCamlVersion = "4.08";

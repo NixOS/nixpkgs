@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fRurEkatWbtGiTRNe6tA2NyYk1IRCBW8SKBSUm4FrO4=";
+    sha256 = "sha256-XWDhQ5Nu+gGj0/TQ/fALxQJ+QXzMiHm0Qh9FlGiskEA=";
   };
 
   patches = [

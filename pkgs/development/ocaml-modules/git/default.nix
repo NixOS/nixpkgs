@@ -32,7 +32,10 @@ buildDunePackage rec {
     domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
   ];
   nativeCheckInputs = [
-    alcotest alcotest-lwt mirage-crypto-rng git-binary crowbar cmdliner
+    git-binary
+  ];
+  checkInputs = [
+    alcotest alcotest-lwt mirage-crypto-rng crowbar cmdliner
   ];
   doCheck = !stdenv.isAarch64;
 

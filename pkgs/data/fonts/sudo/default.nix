@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sudo-font";
-  version = "0.64";
+  version = "0.69";
 
   src = fetchzip {
     url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-    hash = "sha256-Y99YPoNpe55Wrj5epiqqQ6ddUBTj9uI4oj4M5ARTzJo=";
+    hash = "sha256-GXlQh9JRAzbwWKTJw/y003ywjaWtiQayHxiWPTPvIO0=";
   };
 
   installPhase = ''

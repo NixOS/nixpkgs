@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchurl, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, openssl
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, nixosTests
+}:
+
 
 stdenv.mkDerivation rec {
   pname = "stunnel";
   version = "5.67";
+
+  outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url    = "https://www.stunnel.org/archive/${lib.versions.major version}.x/${pname}-${version}.tar.gz";
@@ -11,11 +17,19 @@ stdenv.mkDerivation rec {
     # not the output of `nix-prefetch-url`
   };
 
-  buildInputs = [ openssl ];
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ];
+
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.enableFeature systemdSupport "systemd")
   ];
 
   postInstall = ''

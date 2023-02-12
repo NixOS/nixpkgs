@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -10,7 +11,7 @@ buildPythonPackage rec {
   version = "0.7.16";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "ponyorm";

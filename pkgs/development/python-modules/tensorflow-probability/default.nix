@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
-, bazel_3
+, bazel_6
 , buildBazelPackage
 , buildPythonPackage
+, cctools
 , python
 , setuptools
 , wheel
@@ -25,7 +27,7 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.19.0";
   pname = "tensorflow_probability";
 
   # first build all binaries and generate setup.py using bazel
@@ -35,7 +37,7 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "v" + version;
-      sha256 = "155fgmra90s08vjnp61qxdrpzq74xa3kdzhgdkavwgc25pvxn3mi";
+      hash = "sha256-ZkQ20Qt/RF/leVP6Kc38tGgPz+C6lEuHvoL+s97oksE=";
     };
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
@@ -46,12 +48,13 @@ let
       tensorflow
     ];
 
-    bazel = bazel_3;
+    bazel = bazel_6;
 
     bazelTarget = ":pip_pkg";
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "0sgxdlw5x3dydy53l10vbrj8smh78b7r1wff8jxcgp4w69mk8zfm";
+      sha256 = "sha256-pST4R45mWC5j0ngkkRe+hmostaMploW0+BN3WKPt0t0=";
     };
 
     buildAttrs = {

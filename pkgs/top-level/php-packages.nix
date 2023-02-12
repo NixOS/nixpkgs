@@ -57,15 +57,22 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
-  mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
-    pname = "php-${pname}";
-    passthru = {
-      updateScript = nix-update-script {};
-    };
-    meta = args.meta // {
-      mainProgram = args.meta.mainProgram or pname;
-    };
-  });
+  mkDerivation = origArgs:
+    let
+      args = lib.fix (lib.extends
+        (_: previousAttrs: {
+          pname = "php-${previousAttrs.pname}";
+          passthru = (previousAttrs.passthru or { }) // {
+            updateScript = nix-update-script { };
+          };
+          meta = (previousAttrs.meta or { }) // {
+            mainProgram = previousAttrs.meta.mainProgram or previousAttrs.pname;
+          };
+        })
+        (if lib.isFunction origArgs then origArgs else (_: origArgs))
+      );
+    in
+    pkgs.stdenv.mkDerivation args;
 
   # Function to build an extension which is shipped as part of the php
   # source, based on the php version.
@@ -411,14 +418,15 @@ lib.makeScope pkgs.newScope (self: with self; {
             valgrind.dev
           ];
           zendExtension = true;
-          patches = [ ] ++ lib.optionals (lib.versionAtLeast php.version "8.1") [
-            (fetchpatch {
-              # See https://github.com/php/php-src/pull/10266
-              name = "avoid-opcache-test-failures.patch";
-              url = "https://github.com/PHP/php-src/commit/9216d14b3abfc727b0668592b48699440137aa74.patch";
-              sha256 = "sha256-/U6LMn/QGM8BXlh+Etl1z97v3qZFiWL2G3ZopNYShGU=";
-            })
-          ];
+          postPatch = lib.optionalString stdenv.isDarwin ''
+            # Tests are flaky on darwin
+            rm ext/opcache/tests/blacklist.phpt
+            rm ext/opcache/tests/bug66338.phpt
+            rm ext/opcache/tests/bug78106.phpt
+            rm ext/opcache/tests/issue0115.phpt
+            rm ext/opcache/tests/issue0149.phpt
+            rm ext/opcache/tests/revalidate_path_01.phpt
+          '';
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }

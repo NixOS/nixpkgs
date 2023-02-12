@@ -6,13 +6,13 @@
 , importlib-metadata
 , pytestCheckHook
 , pythonOlder
-, setuptools
-, setuptools-scm
+, hatch-vcs
+, hatchling
 }:
 
 buildPythonPackage rec {
-  version = "4.4.0";
   pname = "humanize";
+  version = "4.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,20 +20,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = pname;
-    rev = version;
-    hash = "sha256-XxlmOs3sfHOLTkrKGsHRiBWpuCIPJua2VkKxDmjOeWE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sI773uzh+yMiyu1ebsk6zutfyt+tfx/zT/X2AdH5Fyg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
     gettext
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
@@ -57,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
+    changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo Luflosi ];
   };

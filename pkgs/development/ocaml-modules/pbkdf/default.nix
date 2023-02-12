@@ -10,14 +10,16 @@ buildDunePackage rec {
   pname = "pbkdf";
   version = "1.2.0";
 
+  duneVersion = "3";
+
   src = fetchzip {
     url = "https://github.com/abeaumont/ocaml-pbkdf/archive/${version}.tar.gz";
     sha256 = "sha256-dGi4Vw+7VBpK/NpJ6zdpogm+E6G/oJovXCksJBSmqjI=";
   };
 
-  minimalOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
   propagatedBuildInputs = [ cstruct mirage-crypto ];
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = {

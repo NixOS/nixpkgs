@@ -7,20 +7,11 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, callPackage
 }:
 
 let
-  version = "4.3.3";
+  version = "4.3.4";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,7 +28,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-40GfOKBTAi8RAsAVrG9rv1Jr5IqM+1yro6YYRsSULxw=";
+    sha256 = "sha256-0xYGTCk+Sk7LP+E9r2Y7UJZsfbobLe6Yb+x5ZRCN40Y=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-NPXGfbEjT9l88ZnGbDcE3+oGxThTzW7YfesBzssGsbc=";
+    sha256 = "sha256-+Z4NZK/unFN6mxCuMleHBxAoD+U1PzVk3/ZnZRmOOxo=";
   };
 
   postUnpack = ''
@@ -125,20 +116,7 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
     description = "Lightweight Bitcoin wallet";

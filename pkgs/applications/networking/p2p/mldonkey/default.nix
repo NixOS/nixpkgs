@@ -27,13 +27,9 @@ stdenv.mkDerivation rec {
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 
-  buildInputs = (with ocamlPackages; [
-    ocaml
-    camlp4
-    num
-  ]) ++ [
-    zlib
-  ];
+  strictDeps = true;
+  nativeBuildInputs = with ocamlPackages; [ ocaml camlp4];
+  buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
 
   meta = {
     broken = stdenv.isDarwin;

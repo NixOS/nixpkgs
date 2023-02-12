@@ -253,6 +253,11 @@ stdenv.mkDerivation rec {
     "bin/qdbusxml2cpp"
     "bin/qlalr"
     "bin/qmake"
+    "bin/qmake6"
+    "bin/qt-cmake"
+    "bin/qt-cmake-private"
+    "bin/qt-cmake-private-install.cmake"
+    "bin/qt-cmake-standalone-test"
     "bin/rcc"
     "bin/syncqt.pl"
     "bin/uic"
@@ -271,7 +276,8 @@ stdenv.mkDerivation rec {
     # fixup .pc file (where to find 'moc' etc.)
     if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
       sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-        -e "/^bindir=/ c bindir=$dev/bin"
+        -e "/^bindir=/ c bindir=$dev/bin" \
+        -e "/^libexecdir=/ c libexecdir=$dev/libexec"
     fi
 
     patchShebangs $out $dev

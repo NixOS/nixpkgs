@@ -14,12 +14,10 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   useDune2 = true;
 
-  strictDeps = !doCheck;
-
   propagatedBuildInputs = [ bigarray-compat ];
 
   nativeBuildInputs = [ findlib pkg-config ];
-  nativeCheckInputs = [ alcotest astring fpath bos ];
+  checkInputs = [ alcotest astring fpath bos ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

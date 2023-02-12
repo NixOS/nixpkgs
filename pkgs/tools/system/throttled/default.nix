@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, pciutils }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   ];
 
   # The upstream unit both assumes the install location, and tries to run in a virtualenv
-  postPatch = ''sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service'';
+  postPatch = ''
+    sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service
+
+    substituteInPlace throttled.py --replace "'setpci'" "'${pciutils}/bin/setpci'"
+  '';
 
   installPhase = ''
     runHook preInstall

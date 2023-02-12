@@ -28,7 +28,7 @@ buildDunePackage rec {
     uutf
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     bigstringaf
     crowbar

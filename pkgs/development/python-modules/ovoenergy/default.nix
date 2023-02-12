@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZbLs8w0qeaV2qWP08FKnlZ3fefj15Bw2A2bGpL6/d0I=";
+    hash = "sha256-oeNwBmzlkE8JewSwuFG8OYigyispP4xdwO3s2CAcfW4=";
   };
 
   nativeBuildInputs = [

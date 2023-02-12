@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, libyamlcpp, nlohmann_json, re2
+, yaml-cpp, nlohmann_json, re2
 }:
 
-with lib;
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
   libsRev = "0.9.1";
@@ -51,10 +50,10 @@ stdenv.mkDerivation rec {
     re2
     protobuf
     grpc
-    libyamlcpp
+    yaml-cpp
     jsoncpp
     nlohmann_json
-  ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
+  ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     "-DUSE_BUNDLED_TBB=OFF"
     "-DUSE_BUNDLED_RE2=OFF"
     "-DCREATE_TEST_TARGETS=OFF"
-  ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
+  ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   # needed since luajit-2.1.0-beta3
   NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
@@ -93,7 +92,7 @@ stdenv.mkDerivation rec {
       exit 1
     fi
     cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -labsl_synchronization")
-  '' + optionalString (kernel != null) ''
+  '' + lib.optionalString (kernel != null) ''
     export INSTALL_MOD_PATH="$out"
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
@@ -106,7 +105,7 @@ stdenv.mkDerivation rec {
       rmdir $out/etc/bash_completion.d
       rmdir $out/etc
     ''
-    + optionalString (kernel != null) ''
+    + lib.optionalString (kernel != null) ''
       make install_driver
       kernel_dev=${kernel.dev}
       kernel_dev=''${kernel_dev#/nix/store/}
@@ -121,7 +120,7 @@ stdenv.mkDerivation rec {
     '';
 
 
-  meta = {
+  meta = with lib; {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [maintainers.raskin];

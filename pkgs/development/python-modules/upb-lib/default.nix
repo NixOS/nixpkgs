@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "upb-lib";
-  version = "0.5.2";
+  version = "0.5.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "upb_lib";
     inherit version;
-    hash = "sha256-/TNKsno0JJtxBY9HCPQfp7OhlfkOP6sJI51rgp2ujDg=";
+    hash = "sha256-I1lnIr8ptDCyK8r0bvFWFPUGRwoMsQcNnSCSwzdt1Bc=";
   };
 
   propagatedBuildInputs = [

@@ -10,8 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages;  [
+    ocaml findlib menhir
+    # Coq Support
+    coqPackages.coq
+  ];
+
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
+    ocamlgraph zarith
     # Emacs compilation of why3.el
     emacs
     # Documentation

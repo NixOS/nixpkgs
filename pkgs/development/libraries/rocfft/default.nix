@@ -19,7 +19,8 @@
 }:
 
 let
-  rocfft = stdenv.mkDerivation (finalAttrs: {
+  # This is over 3GB, to allow hydra caching we separate it
+  rf = stdenv.mkDerivation (finalAttrs: {
     pname = "rocfft";
     version = "5.4.2";
 
@@ -112,29 +113,26 @@ let
     };
   });
 
-  rocfft-zero = runCommand "rocfft-zero" { preferLocalBuild = true; } ''
-    mkdir -p $out
-    cp -a ${rocfft}/lib/librocfft-device-0* $out
+  rf-zero = runCommand "librocfft-device-0.so.0.1" { preferLocalBuild = true; } ''
+    cp -a ${rf}/lib/$name $out
   '';
 
-  rocfft-one = runCommand "rocfft-one" { preferLocalBuild = true; } ''
-    mkdir -p $out
-    cp -a ${rocfft}/lib/librocfft-device-1* $out
+  rf-one = runCommand "librocfft-device-1.so.0.1" { preferLocalBuild = true; } ''
+    cp -a ${rf}/lib/$name $out
   '';
 
-  rocfft-two = runCommand "rocfft-two" { preferLocalBuild = true; } ''
-    mkdir -p $out
-    cp -a ${rocfft}/lib/librocfft-device-2* $out
+  rf-two = runCommand "librocfft-device-2.so.0.1" { preferLocalBuild = true; } ''
+    cp -a ${rf}/lib/$name $out
   '';
 
-  rocfft-three = runCommand "rocfft-three" { preferLocalBuild = true; } ''
-    mkdir -p $out
-    cp -a ${rocfft}/lib/librocfft-device-3* $out
+  rf-three = runCommand "librocfft-device-3.so.0.1" { preferLocalBuild = true; } ''
+    cp -a ${rf}/lib/$name $out
   '';
 in stdenv.mkDerivation {
-  inherit (rocfft) pname version outputs src passthru meta;
+  inherit (rf) pname version outputs src passthru meta;
 
   dontUnpack = true;
+  dontPatch = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -142,17 +140,34 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/lib
-
-    for path in ${rocfft-zero} ${rocfft-one} ${rocfft-two} ${rocfft-three}; do
-      cp -as $path/* $out/lib
-    done
-
-    cp -an ${rocfft}/* $out
+    cp -as ${rf-zero} $out/lib/${rf-zero.name}
+    cp -as ${rf-one} $out/lib/${rf-one.name}
+    cp -as ${rf-two} $out/lib/${rf-two.name}
+    cp -as ${rf-three} $out/lib/${rf-three.name}
+    cp -an ${rf}/* $out
   '' + lib.optionalString buildTests ''
-    cp -a ${rocfft.test} $test
+    cp -a ${rf.test} $test
   '' + lib.optionalString buildBenchmarks ''
-    cp -a ${rocfft.benchmark} $benchmark
+    cp -a ${rf.benchmark} $benchmark
   '' + ''
     runHook postInstall
+  '';
+
+  # Fix paths
+  preFixup = ''
+    substituteInPlace $out/include/*.h $out/rocfft/include/*.h \
+      --replace "${rf}" "$out"
+
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $out/lib/librocfft.so | sed 's,${rf}/lib,'"$out/lib"',') \
+      $out/lib/librocfft.so
+  '' + lib.optionalString buildTests ''
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $test/bin/rocfft-test | sed 's,${rf}/lib,'"$out/lib"',') \
+      $test/bin/rocfft-test
+  '' + lib.optionalString buildBenchmarks ''
+    patchelf --set-rpath \
+      $(patchelf --print-rpath $benchmark/bin/rocfft-rider | sed 's,${rf}/lib,'"$out/lib"',') \
+      $benchmark/bin/rocfft-rider
   '';
 }

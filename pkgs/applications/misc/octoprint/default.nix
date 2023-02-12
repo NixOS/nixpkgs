@@ -5,6 +5,7 @@
 , python3
 , substituteAll
 , nix-update-script
+, nixosTests
   # To include additional plugins, pass them here as an overlay.
 , packageOverrides ? self: super: { }
 }:
@@ -14,6 +15,32 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
+        (
+          # with version 3 of flask-limiter octoprint 1.8.6 fails to start with
+          #  TypeError: Limiter.__init__() got multiple values for argument 'key_func'
+          self: super: {
+            flask-limiter = super.flask-limiter.overridePythonAttrs (oldAttrs: rec {
+              version = "2.6.2";
+              src = fetchFromGitHub {
+                owner = "alisaifee";
+                repo = "flask-limiter";
+                rev = version;
+                sha256 = "sha256-eWOdJ7m3cY08ASN/X+7ILJK99iLJJwCY8294fwJiDew=";
+              };
+            });
+            flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.0";
+              src = super.fetchPypi {
+                pname = "Flask-Babel";
+                inherit version;
+                sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
+              };
+              nativeBuildInputs = [ ];
+              format = "setuptools";
+              outputs = [ "out" ];
+            });
+          }
+        )
         # Built-in dependency
         (
           self: super: {
@@ -66,6 +93,10 @@ let
 
               # requires octoprint itself during tests
               doCheck = false;
+              postPatch = ''
+                substituteInPlace octoprint_pi_support/__init__.py \
+                  --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              '';
             };
           }
         )
@@ -202,6 +233,9 @@ let
               passthru = {
                 python = self.python;
                 updateScript = nix-update-script { };
+                tests = {
+                  inherit (nixosTests) octoprint;
+                };
               };
 
               meta = with lib; {

@@ -31,7 +31,7 @@ buildDunePackage rec {
     lru
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     crowbar
     re

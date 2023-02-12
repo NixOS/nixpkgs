@@ -194,6 +194,13 @@ let
           stripDebugList = [ "share" ];
         });
 
+        epkg = super.epkg.overrideAttrs (old: {
+          postPatch = ''
+            substituteInPlace lisp/epkg.el \
+              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+          '';
+        });
+
         erlang = super.erlang.overrideAttrs (attrs: {
           buildInputs = attrs.buildInputs ++ [
             pkgs.perl

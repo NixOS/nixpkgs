@@ -58,7 +58,10 @@ stdenv.mkDerivation rec {
     "--disable-examples"
     (lib.enableFeature enableApp "app")
   ] ++ lib.optionals (enableAsioLib) [ "--enable-asio-lib" "--with-boost-libdir=${boost}/lib" ]
-    ++ lib.optionals (enablePython) [ "--with-cython=${python3Packages.cython}/bin/cython" ];
+    ++ lib.optionals (enablePython) [
+      "--enable-python-bindings"
+      "--with-cython=${python3Packages.cython}/bin/cython"
+    ];
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
@@ -82,6 +85,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit curl libsoup;
+    python-nghttp2 = python3Packages.nghttp2;
   };
 
   meta = with lib; {

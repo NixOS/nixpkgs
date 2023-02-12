@@ -14,7 +14,7 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.15.1";
+  version = "2.15.2";
 
   src = fetchurl {
     urls = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-RUGdt3xmhb7mfkLg7LeOGe9WK+eq/GN8ikGXDy6Qnj0=";
+    hash = "sha256-sEYoER7iKHZRmksc2vsy/rqjTq+iT56B9Y+NBX++4N0=";
   };
 
   buildInputs = [

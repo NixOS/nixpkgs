@@ -14,11 +14,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agi";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchzip {
     url = "https://github.com/google/agi/releases/download/v${version}/agi-${version}-linux.zip";
-    sha256 = "sha256-wguQERJ5Zvcodk7QMtloCwI4qYmatmHCFhgArbS07EA=";
+    sha256 = "sha256-vKq1pe4Z0blSvNgez+/MP2rA0+QfCyr3RsCGX4GMR08=";
   };
 
   nativeBuildInputs = [

@@ -68,6 +68,9 @@
   # nvim-treesitter dependencies
 , callPackage
 
+  # sg.nvim dependencies
+, darwin
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -113,7 +116,7 @@
 
 self: super: {
 
-  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+  barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
       description = "A VS Code like winbar for Neovim";
@@ -484,10 +487,6 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace plugin/himalaya.vim \
@@ -748,6 +747,34 @@ self: super: {
     ];
   });
 
+  sg-nvim = super.sg-nvim.overrideAttrs (old:
+    let
+      sg-nvim-rust = rustPlatform.buildRustPackage {
+        pname = "sg-nvim-rust";
+        inherit (old) version src;
+
+        cargoHash = "sha256-nm9muH4RC92HdUiytmcW0WNyMQJcIH6dgwjUrwcqq4I=";
+
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
+
+        cargoBuildFlags = [ "--workspace" ];
+
+        # tests are broken
+        doCheck = false;
+      };
+    in
+    {
+      dependencies = with self; [ plenary-nvim ];
+      postInstall = ''
+        mkdir -p $out/target/debug
+        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
+      '';
+    });
+
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
     inherit (skim) version;
@@ -964,6 +991,11 @@ self: super: {
       '';
     });
 
+  unison = super.unison.overrideAttrs (old: {
+    # Editor stuff isn't at top level
+    postPatch = "cd editor-support/vim";
+  });
+
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
     propagatedBuildInputs = [ gnome.zenity ];
@@ -1056,7 +1088,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-v9RXW5RSPMotRVR/9ljBJ9VNbrLnSkU3zlEU79Xem28=";
+          cargoSha256 = "sha256-jpO26OXaYcWirQ5tTKIwlva7dHIfdmnruF4WdwSq0nI=";
         };
       in
       ''
@@ -1166,7 +1198,7 @@ self: super: {
         hexokinase = buildGoModule {
           name = "hexokinase";
           src = old.src + "/hexokinase";
-          vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+          vendorSha256 = null;
         };
       in
       ''

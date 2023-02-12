@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ fmt ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

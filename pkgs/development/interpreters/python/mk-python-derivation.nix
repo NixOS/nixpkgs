@@ -101,12 +101,6 @@
 
 , ... } @ attrs:
 
-
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
-else
-
 let
   inherit (python) stdenv;
 
@@ -114,6 +108,7 @@ let
 
   name_ = name;
 
+  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
     "disabledTestPaths" "outputs"
@@ -204,4 +199,7 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation true passthru self
+in lib.extendDerivation
+  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
+  passthru
+  self

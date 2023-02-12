@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.2.0";
+  version = "3.3.0";
 
   format = "setuptools";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cB7nRDmO2NNaHjNkHCuXH0+15WZfxseS8DBdIqefSzk=";
+    sha256 = "sha256-PLf+PMIXlaoL974e7coQCQKH6cVBYODPhkDxa2vhTB0=";
   };
 
   propagatedBuildInputs = [

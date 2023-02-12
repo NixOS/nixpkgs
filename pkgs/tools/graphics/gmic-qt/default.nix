@@ -14,7 +14,6 @@
 , libtiff
 , libpng
 , curl
-, krita ? null
 , gimp ? null
 , gmic
 , cimg
@@ -36,13 +35,6 @@ let
         gimp.gtk
       ];
       description = "GIMP plugin for the G'MIC image processing framework";
-    };
-
-    krita = {
-      extraDeps = [
-        krita
-      ];
-      description = "Krita plugin for the G'MIC image processing framework";
     };
 
     standalone = {

@@ -12,7 +12,9 @@ with lib;
 let
   path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
-  mkdirp = makeSetupHook { } ./mkdirp.sh;
+  mkdirp = makeSetupHook {
+    name = "openra-mkdirp-hook";
+  } ./mkdirp.sh;
 
 in {
   patchEngine = dir: version: ''

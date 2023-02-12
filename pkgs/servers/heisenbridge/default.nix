@@ -4,17 +4,18 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
-        version = "0.16.3";
-        src = oldAttrs.src.override {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+        version = "0.16.10";
+        src = fetchFromGitHub {
+          owner = "mautrix";
+          repo = "python";
+          rev = "v${version}";
+          hash = "sha256-YQsQ7M+mHcRdGUZp+mo46AlBmKSdmlgRdGieEG0Hu9k=";
         };
       });
     };
   };
-
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.13.1";
 
@@ -30,11 +31,10 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp
     irc
+    ruamel-yaml
     mautrix
     python-socks
-    pyyaml
   ];
 
   nativeCheckInputs = with python.pkgs; [
