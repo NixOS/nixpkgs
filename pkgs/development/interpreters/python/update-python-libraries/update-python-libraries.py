@@ -12,6 +12,7 @@ to update all non-pinned libraries in that folder.
 """
 
 import argparse
+import json
 import os
 import pathlib
 import re
@@ -20,6 +21,7 @@ from concurrent.futures import ThreadPoolExecutor as Pool
 from packaging.version import Version as _Version
 from packaging.version import InvalidVersion
 from packaging.specifiers import SpecifierSet
+from typing import Optional, Any
 import collections
 import subprocess
 
@@ -33,7 +35,7 @@ PRERELEASES = False
 
 GIT = "git"
 
-NIXPGKS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
+NIXPKGS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -66,6 +68,22 @@ def _get_values(attribute, text):
     regex = re.compile(regex)
     values = regex.findall(text)
     return values
+
+
+def _get_attr_value(attr_path: str) -> Optional[Any]:
+    try:
+        response = subprocess.check_output([
+            "nix",
+            "--extra-experimental-features", "nix-command",
+            "eval",
+            "-f", f"{NIXPKGS_ROOT}/default.nix",
+            "--json",
+            f"{attr_path}"
+        ])
+        return json.loads(response.decode())
+    except (subprocess.CalledProcessError, ValueError):
+        return None
+
 
 def _get_unique_value(attribute, text):
     """Match attribute in text and return unique match.
@@ -123,6 +141,16 @@ def _fetch_github(url):
     else:
         raise ValueError("request for {} failed".format(url))
 
+
+def _hash_to_sri(algorithm, value):
+    """Convert a hash to its SRI representation"""
+    return subprocess.check_output([
+        "nix",
+        "hash",
+        "to-sri",
+        "--type", algorithm,
+        value
+    ]).decode().strip()
 
 SEMVER = {
     'major' : 0,
@@ -198,7 +226,7 @@ def _get_latest_version_github(package, extension, current_version, target):
     attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
     try:
         homepage = subprocess.check_output(
-            ["nix", "eval", "-f", f"{NIXPGKS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
+            ["nix", "eval", "-f", f"{NIXPKGS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
             .decode('utf-8')
     except Exception as e:
         raise ValueError(f"Unable to determine homepage: {e}")
@@ -217,17 +245,39 @@ def _get_latest_version_github(package, extension, current_version, target):
 
     release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
     prefix = get_prefix(release['tag_name'])
-    try:
-        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
-            .decode('utf-8').strip()
-    except:
-        # this may fail if they have both a branch and a tag of the same name, attempt tag name
-        tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
-        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url], stderr=subprocess.DEVNULL)\
-            .decode('utf-8').strip()
 
+    # some attributes require using the fetchgit
+    git_fetcher_args = []
+    if (_get_attr_value(f"{attr_path}.src.fetchSubmodules")):
+        git_fetcher_args.append("--fetch-submodules")
+    if (_get_attr_value(f"{attr_path}.src.fetchLFS")):
+        git_fetcher_args.append("--fetch-lfs")
+    if (_get_attr_value(f"{attr_path}.src.leaveDotGit")):
+        git_fetcher_args.append("--leave-dotGit")
 
-    return version, sha256, prefix
+    if git_fetcher_args:
+        algorithm = "sha256"
+        cmd = [
+            "nix-prefetch-git",
+            f"https://github.com/{owner}/{repo}.git",
+            "--hash", algorithm,
+            "--rev", f"refs/tags/{release['tag_name']}"
+        ]
+        cmd.extend(git_fetcher_args)
+        response = subprocess.check_output(cmd)
+        document = json.loads(response.decode())
+        hash = _hash_to_sri(algorithm, document[algorithm])
+    else:
+        try:
+            hash = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
+                .decode('utf-8').strip()
+        except:
+            # this may fail if they have both a branch and a tag of the same name, attempt tag name
+            tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
+            hash = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url], stderr=subprocess.DEVNULL)\
+                .decode('utf-8').strip()
+
+    return version, hash, prefix
 
 
 FETCHERS = {
@@ -294,8 +344,6 @@ def _determine_extension(text, fetcher):
             raise ValueError('url does not point to PyPI.')
 
     elif fetcher == 'fetchFromGitHub':
-        if "fetchSubmodules" in text:
-            raise ValueError("fetchFromGitHub fetcher doesn't support submodules")
         extension = "tar.gz"
 
     return extension
@@ -340,10 +388,10 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
+
     # hashes from pypi are 16-bit encoded sha256's, normalize it to sri to avoid merge conflicts
     # sri hashes have been the default format since nix 2.4+
-    sri_hash = subprocess.check_output(["nix", "--extra-experimental-features", "nix-command", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
-
+    sri_hash = _hash_to_sri("sha256", new_sha256)
 
     # fetchers can specify a sha256, or a sri hash
     try:
