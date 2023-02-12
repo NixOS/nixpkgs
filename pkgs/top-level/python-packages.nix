@@ -10211,6 +10211,8 @@ self: super: with self; {
 
   schiene = callPackage ../development/python-modules/schiene { };
 
+  scholarly = callPackage ../development/python-modules/scholarly { };
+
   schwifty = callPackage ../development/python-modules/schwifty { };
 
   scim2-filter-parser = callPackage ../development/python-modules/scim2-filter-parser { };
