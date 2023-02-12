@@ -150,7 +150,7 @@ in {
 
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
-    version = "1.8.1";
+    version = "1.8.3";
 
     buildInputs = [ vdr ];
 
@@ -160,7 +160,7 @@ in {
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
       rev = version;
-      sha256 = "sha256-1C0Z7NoU+FNch4BhrAcbJdzVvGuH1YDaxJ+9PflR78E=";
+      sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
     meta = with lib; {
