@@ -148,6 +148,43 @@ let
     "--stringparam chunk.toc ${toc}"
   ];
 
+  linterFunctions = ''
+    # outputs the context of an xmllint error output
+    # LEN lines around the failing line are printed
+    function context {
+      # length of context
+      local LEN=6
+      # lines to print before error line
+      local BEFORE=4
+
+      # xmllint output lines are:
+      # file.xml:1234: there was an error on line 1234
+      while IFS=':' read -r file line rest; do
+        echo
+        if [[ -n "$rest" ]]; then
+          echo "$file:$line:$rest"
+          local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
+          # number lines & filter context
+          nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
+        else
+          if [[ -n "$line" ]]; then
+            echo "$file:$line"
+          else
+            echo "$file"
+          fi
+        fi
+      done
+    }
+
+    function lintrng {
+      xmllint --debug --noout --nonet \
+        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
+        "$1" \
+        2>&1 | context 1>&2
+        # ^ redirect assumes xmllint doesn’t print to stdout
+    }
+  '';
+
   manual-combined = runCommand "nixos-manual-combined"
     { inherit sources;
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
@@ -157,50 +194,29 @@ let
       ${copySources}
 
       xmllint --xinclude --output ./manual-combined.xml ./manual.xml
-      xmllint --xinclude --noxincludenode \
-         --output ./man-pages-combined.xml ./man-pages.xml
 
-      # outputs the context of an xmllint error output
-      # LEN lines around the failing line are printed
-      function context {
-        # length of context
-        local LEN=6
-        # lines to print before error line
-        local BEFORE=4
-
-        # xmllint output lines are:
-        # file.xml:1234: there was an error on line 1234
-        while IFS=':' read -r file line rest; do
-          echo
-          if [[ -n "$rest" ]]; then
-            echo "$file:$line:$rest"
-            local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
-            # number lines & filter context
-            nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
-          else
-            if [[ -n "$line" ]]; then
-              echo "$file:$line"
-            else
-              echo "$file"
-            fi
-          fi
-        done
-      }
-
-      function lintrng {
-        xmllint --debug --noout --nonet \
-          --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-          "$1" \
-          2>&1 | context 1>&2
-          # ^ redirect assumes xmllint doesn’t print to stdout
-      }
+      ${linterFunctions}
 
       mkdir $out
       cp manual-combined.xml $out/
-      cp man-pages-combined.xml $out/
 
       lintrng $out/manual-combined.xml
-      lintrng $out/man-pages-combined.xml
+    '';
+
+  manpages-combined = runCommand "nixos-manpages-combined.xml"
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+      meta.description = "The NixOS manpages as plain docbook XML";
+    }
+    ''
+      mkdir generated
+      cp -prd ${./man-pages.xml} man-pages.xml
+      ln -s ${optionsDoc.optionsDocBook} generated/options-db.xml
+
+      xmllint --xinclude --noxincludenode --output $out ./man-pages.xml
+
+      ${linterFunctions}
+
+      lintrng $out
     '';
 
 in rec {
@@ -300,7 +316,7 @@ in rec {
             --param man.endnotes.are.numbered 0 \
             --param man.break.after.slash 1 \
             ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
-            ${manual-combined}/man-pages-combined.xml
+            ${manpages-combined}
         ''
         else ''
           mkdir -p $out/share/man/man5
