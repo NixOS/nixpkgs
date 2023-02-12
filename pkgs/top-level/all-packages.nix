@@ -34745,6 +34745,11 @@ with pkgs;
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
+  _2048-cli = _2048-cli-terminal;
+  _2048-cli-curses = callPackage ../games/2048-cli { ui = "curses"; };
+  _2048-cli-sdl = callPackage ../games/2048-cli { ui = "sdl"; };
+  _2048-cli-terminal = callPackage ../games/2048-cli { ui = "terminal"; };
+
   _20kly = callPackage ../games/20kly { };
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
