@@ -1537,6 +1537,8 @@ with pkgs;
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout {};
 
+  pycdc = callPackage ../tools/misc/pycdc { };
+
   q = callPackage ../tools/networking/q {};
 
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
