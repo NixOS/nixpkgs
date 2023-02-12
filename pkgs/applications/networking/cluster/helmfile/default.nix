@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.145.2";
+  version = "0.150.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-ipGMGby7qUoFJNc+7+Gq+JaBUdxm19NwhklWsTpslVI=";
+    sha256 = "sha256-7wCt+JAuozsd+LifLArfPNwiKK/tDvgwpIwVCW4nU3Y=";
   };
 
-  vendorSha256 = "sha256-031Xdr3u35uirDBZhExdh8PMAZa1gfMTC2II8VMbr6Q=";
+  vendorSha256 = "sha256-vLLS+/Xfnlt6cvkNvXKX3DVLku1Q4bRCiv2vMTfOnfw=";
 
   doCheck = false;
 
@@ -23,8 +23,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd helmfile \
-      --bash ./autocomplete/helmfile_bash_autocomplete  \
-      --zsh ./autocomplete/helmfile_zsh_autocomplete
+      --bash <($out/bin/helmfile completion bash) \
+      --fish <($out/bin/helmfile completion fish) \
+      --zsh <($out/bin/helmfile completion zsh)
   '';
 
   meta = {
