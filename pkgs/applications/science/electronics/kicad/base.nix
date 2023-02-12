@@ -34,6 +34,7 @@
 , at-spi2-core
 , libXtst
 , pcre2
+, libdeflate
 
 , swig4
 , python
@@ -50,7 +51,6 @@
 , withNgspice
 , withScripting
 , withI18n
-, withPCM
 , debug
 , sanitizeAddress
 , sanitizeThreads
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DKICAD_USE_EGL=ON"
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"  # upstream issue 12491
   ]
   ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
@@ -116,12 +117,6 @@ stdenv.mkDerivation rec {
   ]
   ++ optionals (withI18n) [
     "-DKICAD_BUILD_I18N=ON"
-  ]
-  ++ optionals (!withPCM && stable) [
-    "-DKICAD_PCM=OFF"
-  ]
-  ++ optionals (!stable) [ # upstream issue 12491
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ];
 
   nativeBuildInputs = [
@@ -166,8 +161,9 @@ stdenv.mkDerivation rec {
     boost
     swig4
     python
+    unixODBC
+    libdeflate
   ]
-  ++ optional (!stable) unixODBC
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
   ++ optional (withOCC) opencascade-occt
