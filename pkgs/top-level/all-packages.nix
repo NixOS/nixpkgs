@@ -16945,9 +16945,7 @@ with pkgs;
 
   adtool = callPackage ../tools/admin/adtool { };
 
-  inherit (callPackage ../development/tools/alloy {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  })
+  inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
     alloy;
