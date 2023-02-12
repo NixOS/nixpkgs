@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyipma";
-  version = "3.0.5";
+  version = "3.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KyXHNkP/XJlTdVFdP91x3udMquQju8G2VUHLPvZymtk=";
+    hash = "sha256-BwW8gUFeinZ9Z/v1orJKRTqt2WxVMD+hQj+A3gU1LDI=";
   };
 
   propagatedBuildInputs = [
