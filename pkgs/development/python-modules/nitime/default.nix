@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, pythonAtLeast
 , pytestCheckHook
 , cython
 , numpy
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.9";
-  disabled = isPy27;
+  disabled = isPy27 || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
