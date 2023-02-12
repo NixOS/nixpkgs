@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i6V2Owb8GcTcWowgb/BmdupOSFsYiCF2SbC9hXa26uY=";
   };
 
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-std=c++11" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract ];
