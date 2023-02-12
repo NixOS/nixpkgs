@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpenning";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-OKPw7P2hhk8yzqjOcf2NYEueJR1ecC/D93ULfkM88Xg=";
   };
 
@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Parse, Audit, Query, Build, and Modify Cisco IOS-style configurations";
     homepage = "https://github.com/mpenning/ciscoconfparse";
+    changelog = "https://github.com/mpenning/ciscoconfparse/blob/${version}/CHANGES.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ astro ];
   };
