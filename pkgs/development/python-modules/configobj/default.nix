@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DiffSK";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-HMLYzVMnxvMpb3ORsbKy18oU/NkuRT0isK6NaUk6J3U=";
   };
 
@@ -36,7 +36,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Config file reading, writing and validation";
-    homepage = "https://pypi.python.org/pypi/configobj";
+    homepage = "https://github.com/DiffSK/configobj";
+    changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
