@@ -109,7 +109,9 @@ in
     /* menu:
        Video
     */
-    name = "gap-2.6.0";
+    pname = "gap";
+    version = "2.6.0";
+
     src = fetchurl {
       url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
@@ -228,7 +230,9 @@ in
     /* menu:
       Filters/Enhance/Wavelet sharpen
     */
-    name = "wavelet-sharpen-0.1.2";
+    pname = "wavelet-sharpen";
+    version = "0.1.2";
+
     # Workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: interface.o:(.bss+0xe0): multiple definition of `fimg'; plugin.o:(.bss+0x40): first defined here
@@ -271,7 +275,7 @@ in
 
   gimplensfun = pluginDerivation rec {
     version = "unstable-2018-10-21";
-    name = "gimplensfun-${version}";
+    pname = "gimplensfun";
 
     src = fetchFromGitHub {
       owner = "seebk";
