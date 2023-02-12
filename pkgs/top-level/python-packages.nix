@@ -3573,6 +3573,8 @@ self: super: with self; {
 
   fqdn = callPackage ../development/python-modules/fqdn { };
 
+  free-proxy = callPackage ../development/python-modules/free-proxy { };
+
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
