@@ -13840,6 +13840,8 @@ with pkgs;
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
+  nix-your-shell = callPackage ../shells/nix-your-shell { };
+
   bash = lowPrio (callPackage ../shells/bash/5.nix {
     binutils = stdenv.cc.bintools;
   });
