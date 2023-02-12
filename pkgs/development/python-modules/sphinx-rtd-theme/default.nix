@@ -4,24 +4,21 @@
 , docutils
 , sphinx
 , readthedocs-sphinx-ext
+, sphinx-jquery
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-rtd-theme";
-  version = "1.1.1";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    sha256 = "sha256-YUbIRfHhlHs8PdRDLCiZihaTzMdCtPmtfGMSnwdXwQM=";
+    sha256 = "sha256-oNi9Gi7VLgszjL4ZxLLu88XnoEh2l1PaxqnwWce2Qbg=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "docutils <0.18" "docutils" \
-      --replace "sphinx >=1.6,<6" "sphinx"
-  '';
 
   preBuild = ''
     # Don't use NPM to fetch assets. Assets are included in sdist.
@@ -31,18 +28,28 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     sphinx
+    sphinx-jquery
   ];
 
   nativeCheckInputs = [
-    readthedocs-sphinx-ext
     pytestCheckHook
+    pythonRelaxDepsHook
+    readthedocs-sphinx-ext
+  ];
+
+  pythonRelaxDeps = [
+    "docutils"
+    "sphinxcontrib-jquery"
+  ];
+
+  pythonImportsCheck = [
+    "sphinx_rtd_theme"
   ];
 
   meta = with lib; {
-    description = "ReadTheDocs.org theme for Sphinx";
+    description = "Sphinx theme for readthedocs.org";
     homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
+    changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    platforms = platforms.unix;
   };
-
 }
