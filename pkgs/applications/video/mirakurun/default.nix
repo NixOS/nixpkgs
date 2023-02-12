@@ -39,6 +39,9 @@ stdenvNoCC.mkDerivation rec {
     yarnLock = ./yarn.lock;
     packageJSON = ./package.json;
 
+    # workaround for https://github.com/webpack/webpack/issues/14532
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
     patches = [
       # NOTE: fixes for hardcoded paths and assumptions about filesystem
       # permissions
