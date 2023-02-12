@@ -68,56 +68,6 @@ let
       optionIdPrefix = "test-opt-";
     };
 
-  sources = runCommand "manual-sources" {
-    inputs = lib.sourceFilesBySuffices ./. [ ".xml" ".md" ];
-    nativeBuildInputs = [ pkgs.nixos-render-docs ];
-  } ''
-    mkdir $out
-    cd $out
-    cp -r --no-preserve=all $inputs/* .
-
-    declare -a convert_args
-    while read -r mf; do
-      if [[ "$mf" = *.chapter.md ]]; then
-        convert_args+=("--chapter")
-      else
-        convert_args+=("--section")
-      fi
-
-      convert_args+=("from_md/''${mf%.md}.xml" "$mf")
-    done < <(find . -type f -name '*.md')
-
-    nixos-render-docs manual docbook-fragment \
-      --manpage-urls ${manpageUrls} \
-      "''${convert_args[@]}"
-  '';
-
-  modulesDoc = runCommand "modules.xml" {
-    nativeBuildInputs = [ pkgs.nixos-render-docs ];
-  } ''
-    nixos-render-docs manual docbook-section \
-      --manpage-urls ${manpageUrls} \
-      "$out" \
-      --section \
-        --section-id modules \
-        --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
-  '';
-
-  generatedSources = runCommand "generated-docbook" {} ''
-    mkdir $out
-    ln -s ${modulesDoc} $out/modules.xml
-    ln -s ${optionsDoc.optionsDocBook} $out/options-db.xml
-    ln -s ${testOptionsDoc.optionsDocBook} $out/test-options-db.xml
-    printf "%s" "${version}" > $out/version
-  '';
-
-  copySources =
-    ''
-      cp -prd $sources/* . # */
-      ln -s ${generatedSources} ./generated
-      chmod -R u+w .
-    '';
-
   toc = builtins.toFile "toc.xml"
     ''
       <toc role="chunk-toc">
@@ -186,12 +136,40 @@ let
   '';
 
   manual-combined = runCommand "nixos-manual-combined"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    { inputs = lib.sourceFilesBySuffices ./. [ ".xml" ".md" ];
+      nativeBuildInputs = [ pkgs.nixos-render-docs pkgs.libxml2.bin pkgs.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
-      ${copySources}
+      cp -r --no-preserve=all $inputs/* .
+
+      declare -a convert_args
+      while read -r mf; do
+        if [[ "$mf" = *.chapter.md ]]; then
+          convert_args+=("--chapter")
+        else
+          convert_args+=("--section")
+        fi
+
+        convert_args+=("from_md/''${mf%.md}.xml" "$mf")
+      done < <(find . -type f -name '*.md')
+
+      nixos-render-docs manual docbook-fragment \
+        --manpage-urls ${manpageUrls} \
+        "''${convert_args[@]}"
+
+      mkdir ./generated
+      ln -s ${optionsDoc.optionsDocBook} ./generated/options-db.xml
+      ln -s ${testOptionsDoc.optionsDocBook} ./generated/test-options-db.xml
+      printf "%s" "${version}" > ./generated/version
+      chmod -R u+w .
+
+      nixos-render-docs manual docbook-section \
+        --manpage-urls ${manpageUrls} \
+        ./generated/modules.xml \
+        --section \
+          --section-id modules \
+          --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
 
       xmllint --xinclude --output ./manual-combined.xml ./manual.xml
 
@@ -220,14 +198,11 @@ let
     '';
 
 in rec {
-  inherit generatedSources;
-
   inherit (optionsDoc) optionsJSON optionsNix optionsDocBook optionsUsedDocbook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -264,8 +239,7 @@ in rec {
   manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
     }
     ''
       # Generate the epub manual.
