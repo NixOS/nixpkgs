@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-        --replace "libusb-package>=1.0,<2.0" ""
+        --replace "libusb-package>=1.0,<2.0" "" \
+        --replace "pylink-square>=0.11.1,<1.0" "pylink-square>=0.11.1,<2.0"
   '';
 
   meta = with lib; {
