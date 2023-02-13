@@ -17940,6 +17940,8 @@ with pkgs;
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
+  ida-free = callPackage ../development/tools/analysis/ida-free { };
+
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_9) stdenv clang llvm;
   };
