@@ -10,6 +10,7 @@
 , openssl
 , libusb1
 , AppKit
+, git
 , openssh
 }:
 
@@ -50,7 +51,10 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  nativeCheckInputs = [ openssh ];
+  nativeCheckInputs = [
+    git
+    openssh
+  ];
   preCheck = ''
     eval $(ssh-agent)
   '';
