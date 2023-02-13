@@ -15,7 +15,7 @@
 , zlib
 , vpnc-scripts
 , PCSC
-, useDefaultExternalBrowser ? true
+, useDefaultExternalBrowser ? stdenv.isLinux && stdenv.buildPlatform == stdenv.hostPlatform # xdg-utils doesn't cross-compile
 , xdg-utils
 , autoreconfHook
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp libxml2 stoken zlib (if useOpenSSL then openssl else gnutls) ]
     ++ lib.optional stdenv.isDarwin PCSC
     ++ lib.optional stdenv.isLinux p11-kit
-    ++ lib.optional (stdenv.isLinux && useDefaultExternalBrowser) xdg-utils;
+    ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   meta = with lib; {
