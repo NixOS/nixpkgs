@@ -3,13 +3,11 @@
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
   coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "juicipp";
   version = "1.2.3";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cppit/jucipp";
     description = "A lightweight, platform independent C++-IDE with support for C++11, C++14, and experimental C++17 features depending on libclang version";
     license = licenses.mit;
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xp6ijnrggskjrvscp204bmdpz48l5a8nxr9abp17wni6akb5wiq";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook cmake ];
   buildInputs = [
     dbus
     openssl
@@ -38,7 +36,6 @@ stdenv.mkDerivation rec {
     libepoxy
     boost
     libXdmcp
-    cmake
     aspell
     libgit2
     libxkbcommon

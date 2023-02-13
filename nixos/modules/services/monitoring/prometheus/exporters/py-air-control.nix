@@ -14,14 +14,14 @@ in
     deviceHostname = mkOption {
       type = types.str;
       example = "192.168.1.123";
-      description = ''
+      description = lib.mdDoc ''
         The hostname of the air purification device from which to scrape the metrics.
       '';
     };
     protocol = mkOption {
       type = types.str;
       default = "http";
-      description = ''
+      description = lib.mdDoc ''
         The protocol to use when communicating with the air purification device.
         Available: [http, coap, plain_coap]
       '';
@@ -29,8 +29,8 @@ in
     stateDir = mkOption {
       type = types.str;
       default = "prometheus-py-air-control-exporter";
-      description = ''
-        Directory below <literal>/var/lib</literal> to store runtime data.
+      description = lib.mdDoc ''
+        Directory below `/var/lib` to store runtime data.
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };

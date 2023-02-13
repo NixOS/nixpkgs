@@ -7,24 +7,27 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "5.2.0";
+  version = "6.0.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dd1c93edb444b33ba2274b66f63def8a327d607c6c790772f448a53b6ea59ce";
+    hash = "sha256-NmaQZJLvt2RTwOe5fyz0WbBoLnQCwEialUhJZdvB2kk=";
   };
 
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multidict" ];
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/multidict/blob/v${version}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;

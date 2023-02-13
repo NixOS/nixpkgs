@@ -31,10 +31,9 @@ stdenv.mkDerivation rec {
     exec = "runelite";
     icon = icon;
     comment = "Open source Old School RuneScape client";
-    terminal = "false";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
     # RuneLite looks for `.so` files in $PWD/natives, so ensure that we set the PWD to the right place
     makeWrapper ${jre}/bin/java $out/bin/runelite \
-      --run "cd $out" \
+      --chdir "$out" \
       --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
       --add-flags "-jar $out/share/runelite/RuneLite.jar"
   '';
@@ -59,6 +58,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source Old School RuneScape client";
     homepage = "https://runelite.net/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.bsd2;
     maintainers = with maintainers; [ kmeakin ];
     platforms = [ "x86_64-linux" ];

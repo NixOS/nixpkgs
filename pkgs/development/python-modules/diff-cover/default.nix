@@ -2,55 +2,66 @@
 , buildPythonPackage
 , chardet
 , fetchPypi
-, inflect
 , jinja2
 , jinja2_pluralize
+, pluggy
 , pycodestyle
 , pyflakes
 , pygments
 , pylint
+, pytest-datadir
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "5.4.0";
-  disabled = pythonOlder "3.6";
+  version = "7.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    sha256 = "sha256-4iQ9/QcXh/lW8HE6wFZWc6Y57xhAEWu2TQnIUZJNAMs=";
+    hash = "sha256-qbHyu9FJYs1Sedc1ijuo1ya5pswD2/QJ+JzCB2pCQjQ=";
   };
 
   propagatedBuildInputs = [
     chardet
-    inflect
     jinja2
     jinja2_pluralize
+    pluggy
     pygments
+    tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pycodestyle
     pyflakes
     pylint
+    pytest-datadir
     pytest-mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    "added_file_pylint_console"
+    # Tests check for flake8
     "file_does_not_exist"
+    # Comparing console output doesn't work reliable
+    "console"
   ];
 
-  pythonImportsCheck = [ "diff_cover" ];
+  pythonImportsCheck = [
+    "diff_cover"
+  ];
 
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

@@ -7,7 +7,7 @@ callPackage ./common.nix {} {
 
   configureFlags = [ "--enable-add-ons" ];
 
-  buildInputs = [ texinfo perl ];
+  extraNativeBuildInputs = [ texinfo perl ];
 
   buildPhase = "make info";
 

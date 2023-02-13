@@ -1,20 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja
-, pixman, gnutls, libdrm, libjpeg_turbo, zlib, aml
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, aml
+, ffmpeg
+, gnutls
+, libjpeg_turbo
+, mesa
+, pixman
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wpq1vyjqra877vwc3n4i0c1dyhmabyn993cslf1k142ikyc0a8w";
+    sha256 = "sha256-3hNdgfAJGJkMXdB86+u3bKwrvXoMei1YCFXDG4ObkU4=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ pixman gnutls libdrm libjpeg_turbo zlib aml ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    aml
+    ffmpeg
+    gnutls
+    libjpeg_turbo
+    mesa
+    pixman
+    zlib
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "tests" true)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A VNC server library";
@@ -29,6 +61,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

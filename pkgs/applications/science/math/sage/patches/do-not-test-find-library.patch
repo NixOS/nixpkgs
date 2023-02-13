@@ -1,8 +1,8 @@
 diff --git a/src/sage/env.py b/src/sage/env.py
-index 95980cc2df..37107a30e1 100644
+index c4953cfa65..47b880f9ad 100644
 --- a/src/sage/env.py
 +++ b/src/sage/env.py
-@@ -227,93 +227,12 @@ OPENMP_CXXFLAGS = var("OPENMP_CXXFLAGS", "")
+@@ -244,81 +244,8 @@ os.environ['MPMATH_SAGE'] = '1'
  SAGE_BANNER = var("SAGE_BANNER", "")
  SAGE_IMPORTALL = var("SAGE_IMPORTALL", "yes")
  
@@ -29,20 +29,12 @@ index 95980cc2df..37107a30e1 100644
 -
 -    EXAMPLES::
 -
--        sage: import sys
--        sage: from fnmatch import fnmatch
 -        sage: from sage.env import _get_shared_lib_path
--        sage: lib_filename = _get_shared_lib_path("Singular", "singular-Singular")
--        sage: if sys.platform == 'cygwin':
--        ....:     pattern = "*/cygSingular-*.dll"
--        ....: elif sys.platform == 'darwin':
--        ....:     pattern = "*/libSingular-*.dylib"
--        ....: else:
--        ....:     pattern = "*/lib*Singular-*.so"
--        sage: fnmatch(str(lib_filename), pattern)
+-        sage: "gap" in _get_shared_lib_path("gap")
 -        True
 -        sage: _get_shared_lib_path("an_absurd_lib") is None
 -        True
+-
 -    """
 -
 -    for libname in libnames:
@@ -87,11 +79,6 @@ index 95980cc2df..37107a30e1 100644
 -    # Just return None if no files were found
 -    return None
 -
- # locate singular shared object
- # On Debian it's libsingular-Singular so try that as well
--SINGULAR_SO = var("SINGULAR_SO", _get_shared_lib_path("Singular", "singular-Singular"))
-+SINGULAR_SO = var("SINGULAR_SO", '/default')
- 
  # locate libgap shared object
 -GAP_SO = var("GAP_SO", _get_shared_lib_path("gap", ""))
 +GAP_SO = var("GAP_SO", '/default')

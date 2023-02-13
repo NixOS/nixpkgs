@@ -1,25 +1,44 @@
-{ lib, stdenv, fetchurl, libxml2, libxslt }:
+{ lib
+, stdenv
+, libxml2
+, libxslt
+, pkg-config
+, cmake
+, fetchFromGitHub
+, perl
+, bison
+, flex
+, fetchpatch
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "raptor2";
-  version = "2.0.15";
+  version = "unstable-2022-06-06";
 
-  src = fetchurl {
-    url = "http://download.librdf.org/source/${pname}-${version}.tar.gz";
-    sha256 = "ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed";
+  src = fetchFromGitHub {
+    owner = "dajobe";
+    repo = "raptor";
+    rev = "3cca62a33da68143b687c9e486eefc7c7cbb4586";
+    sha256 = "sha256-h03IyFH1GHPqajfHBBTb19lCEu+VXzQLGC1wiEGVvgY=";
   };
 
+  cmakeFlags = [
+    # Build defaults to static libraries.
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ];
+
   patches = [
-    (fetchurl {
-      name = "CVE-2017-18926.patch";
-      url = "https://github.com/dajobe/raptor/commit/590681e546cd9aa18d57dc2ea1858cb734a3863f.patch";
-      sha256 = "1qlpb5rm3j2yi0x6zgdi5apymg5zlvwq3g1zl417gkjrlvxmndgp";
+    # https://github.com/dajobe/raptor/pull/52
+    (fetchpatch {
+      name = "fix-cmake-generated-pc-file";
+      url = "https://github.com/dajobe/raptor/commit/fa1ef9a27d8762f5588ac2e92554a188e73dee9f.diff";
+      sha256 = "sha256-zXIbrYGgC9oTpiD0WUikT4vRdc9b6bsyfnDkwUSlqao=";
     })
   ];
 
+  nativeBuildInputs = [ pkg-config cmake perl bison flex ];
   buildInputs = [ libxml2 libxslt ];
-
-  postInstall = "rm -rvf $out/share/gtk-doc";
 
   meta = {
     description = "The RDF Parser Toolkit";

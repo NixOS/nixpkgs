@@ -1,27 +1,30 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
 , nix-update-script
 , cmake
 , pkg-config
 , adwaita-qt
+, adwaita-qt6
 , glib
 , gtk3
 , qtbase
+, qtwayland
 , pantheon
 , substituteAll
 , gsettings-desktop-schemas
+, useQt6 ? false
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "sha256-950VEcxhJeBPSQToC8KpBx/KSneARN6Y8X7CAuFyRjo=";
+    sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
   };
 
   patches = [
@@ -38,21 +41,28 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    adwaita-qt
     glib
     gtk3
     qtbase
+    qtwayland
+  ] ++ lib.optionals (!useQt6) [
+    adwaita-qt
+  ] ++ lib.optionals useQt6 [
+    adwaita-qt6
   ];
+
+  # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
     "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ] ++ lib.optionals useQt6 [
+    "-DUSE_QT6=true"
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -5,11 +5,17 @@
 buildDunePackage {
   pname = "awa-lwt";
 
-  inherit (awa) version src useDune2;
+  inherit (awa) version src;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
-    awa cstruct mtime lwt cstruct-unix mirage-crypto-rng
+    awa cstruct mtime lwt mirage-crypto-rng
   ];
 
-  inherit (awa) meta;
+  doCheck = true;
+  nativeCheckInputs = [ awa ];
+  checkInputs = [ cstruct-unix ];
+
+  meta = awa.meta // { mainProgram = "awa_lwt_server"; };
 }

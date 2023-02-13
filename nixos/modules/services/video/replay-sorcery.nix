@@ -9,23 +9,23 @@ in
 {
   options = with types; {
     services.replay-sorcery = {
-      enable = mkEnableOption "the ReplaySorcery service for instant-replays";
+      enable = mkEnableOption (lib.mdDoc "the ReplaySorcery service for instant-replays");
 
-      enableSysAdminCapability = mkEnableOption ''
+      enableSysAdminCapability = mkEnableOption (lib.mdDoc ''
         the system admin capability to support hardware accelerated
         video capture. This is equivalent to running ReplaySorcery as
-        root, so use with caution'';
+        root, so use with caution'');
 
       autoStart = mkOption {
         type = bool;
         default = false;
-        description = "Automatically start ReplaySorcery when graphical-session.target starts.";
+        description = lib.mdDoc "Automatically start ReplaySorcery when graphical-session.target starts.";
       };
 
       settings = mkOption {
         type = attrsOf (oneOf [ str int ]);
         default = {};
-        description = "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
+        description = lib.mdDoc "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
         example = literalExpression ''
           {
             videoInput = "hwaccel"; # requires `services.replay-sorcery.enableSysAdminCapability = true`

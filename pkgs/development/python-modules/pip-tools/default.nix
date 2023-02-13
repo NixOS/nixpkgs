@@ -1,50 +1,72 @@
 { lib
-, fetchPypi
-, pythonOlder
+, stdenv
 , buildPythonPackage
-, pip
-, pytestCheckHook
-, pytest-xdist
+, build
 , click
-, setuptools-scm
+, fetchPypi
 , pep517
+, pip
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.4.0";
+  version = "6.12.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65553a15b1ba34be5e43889345062e38fb9b219ffa23b084ca0d4c4039b6f53b";
+    hash = "sha256-i5A2lt9FmLENRpAm75mVxfmodLQW6I56IUiE6+SnAkU=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ];
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    build
     click
     pep517
     pip
+    setuptools
+    wheel
   ];
 
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '';
+
   disabledTests = [
-    # these want internet access
+    # Tests require network access
     "network"
     "test_direct_reference_with_extras"
+    "test_local_duplicate_subdependency_combined"
+    "test_bad_setup_file"
+  ];
+
+  pythonImportsCheck = [
+    "piptools"
   ];
 
   meta = with lib; {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
+    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zimbatm ];
   };

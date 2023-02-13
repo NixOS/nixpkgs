@@ -4,26 +4,39 @@
 , requests
 , google-auth
 , google-auth-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "5.1.1";
   pname = "gspread";
+  version = "5.7.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9db8c43d552f541ea072d4727d1e955bc2368b095dd86c5429a845c9d8aed8f";
+    hash = "sha256-znb5wWuIzLeSNQFCIkpZr6jmn3Rj89NBcUjL6JLvx8s=";
   };
 
-  propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];
-
-  meta = with lib; {
-    description = "Google Spreadsheets client library";
-    homepage = "https://github.com/burnash/gspread";
-    license = licenses.mit;
-  };
+  propagatedBuildInputs = [
+    requests
+    google-auth
+    google-auth-oauthlib
+  ];
 
   # No tests included
   doCheck = false;
 
+  pythonImportsCheck = [
+    "gspread"
+  ];
+
+  meta = with lib; {
+    description = "Google Spreadsheets client library";
+    homepage = "https://github.com/burnash/gspread";
+    changelog = "https://github.com/burnash/gspread/blob/v${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

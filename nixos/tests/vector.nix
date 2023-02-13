@@ -9,7 +9,7 @@ with pkgs.lib;
     name = "vector-test1";
     meta.maintainers = [ pkgs.lib.maintainers.happysalada ];
 
-    machine = { config, pkgs, ... }: {
+    nodes.machine = { config, pkgs, ... }: {
       services.vector = {
         enable = true;
         journaldAccess = true;
@@ -21,7 +21,7 @@ with pkgs.lib;
               type = "file";
               inputs = [ "journald" ];
               path = "/var/lib/vector/logs.log";
-              encoding = { codec = "ndjson"; };
+              encoding = { codec = "json"; };
             };
           };
         };

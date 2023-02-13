@@ -40,20 +40,20 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption "PostgreSQL Server";
+      enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
 
       package = mkOption {
         type = types.package;
         example = literalExpression "pkgs.postgresql_11";
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL package to use.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5432;
-        description = ''
+        description = lib.mdDoc ''
           The port on which PostgreSQL listens.
         '';
       };
@@ -61,14 +61,14 @@ in
       checkConfig = mkOption {
         type = types.bool;
         default = true;
-        description = "Check the syntax of the configuration file at compile time";
+        description = lib.mdDoc "Check the syntax of the configuration file at compile time";
       };
 
       dataDir = mkOption {
         type = types.path;
         defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/11";
-        description = ''
+        description = lib.mdDoc ''
           The data directory for PostgreSQL. If left as the default value
           this directory will automatically be created before the PostgreSQL server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -79,16 +79,15 @@ in
       authentication = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines how users authenticate themselves to the server. See the
-          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">
-          PostgreSQL documentation for pg_hba.conf</link>
+          [PostgreSQL documentation for pg_hba.conf](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
           for details on the expected format of this option. By default,
           peer based authentication will be used for users connecting
           via the Unix socket, and md5 password authentication will be
           used for users connecting via TCP. Any added rules will be
           inserted above the default rules. If you'd like to replace the
-          default rules entirely, you can use <function>lib.mkForce</function> in your
+          default rules entirely, you can use `lib.mkForce` in your
           module.
         '';
       };
@@ -96,7 +95,7 @@ in
       identMap = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines the mapping from system users to database users.
 
           The general form is:
@@ -109,8 +108,8 @@ in
         type = with types; listOf str;
         default = [];
         example = [ "--data-checksums" "--allow-group-access" ];
-        description = ''
-          Additional arguments passed to <literal>initdb</literal> during data dir
+        description = lib.mdDoc ''
+          Additional arguments passed to `initdb` during data dir
           initialisation.
         '';
       };
@@ -118,7 +117,7 @@ in
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A file containing SQL statements to execute on first startup.
         '';
       };
@@ -126,7 +125,7 @@ in
       ensureDatabases = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Ensures that the specified databases exist.
           This option will never delete existing databases, especially not when the value of this
           option is changed. This means that databases created once through this option or
@@ -143,14 +142,15 @@ in
           options = {
             name = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of the user to ensure.
               '';
             };
+
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Permissions to ensure for the user, specified as an attribute set.
                 The attribute names specify the database and tables to grant the permissions for.
                 The attribute values specify the permissions to grant. You may specify one or
@@ -158,8 +158,8 @@ in
 
                 For more information on how to specify the target
                 and on which privileges exist, see the
-                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
+                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
+                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
               '';
               example = literalExpression ''
                 {
@@ -168,10 +168,158 @@ in
                 }
               '';
             };
+
+            ensureClauses = mkOption {
+              description = lib.mdDoc ''
+                An attrset of clauses to grant to the user. Under the hood this uses the
+                [ALTER USER syntax](https://www.postgresql.org/docs/current/sql-alteruser.html) for each attrName where
+                the attrValue is true in the attrSet:
+                `ALTER USER user.name WITH attrName`
+              '';
+              example = literalExpression ''
+                {
+                  superuser = true;
+                  createrole = true;
+                  createdb = true;
+                }
+              '';
+              default = {};
+              defaultText = lib.literalMD ''
+                The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
+              '';
+              type = types.submodule {
+                options = let
+                  defaultText = lib.literalMD ''
+                    `null`: do not set. For newly created roles, use PostgreSQL's default. For existing roles, do not touch this clause.
+                  '';
+                in {
+                  superuser = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, superuser permissions. From the postgres docs:
+
+                      A database superuser bypasses all permission checks,
+                      except the right to log in. This is a dangerous privilege
+                      and should not be used carelessly; it is best to do most
+                      of your work as a role that is not a superuser. To create
+                      a new database superuser, use CREATE ROLE name SUPERUSER.
+                      You must do this as a role that is already a superuser.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  createrole = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, createrole permissions. From the postgres docs:
+
+                      A role must be explicitly given permission to create more
+                      roles (except for superusers, since those bypass all
+                      permission checks). To create such a role, use CREATE
+                      ROLE name CREATEROLE. A role with CREATEROLE privilege
+                      can alter and drop other roles, too, as well as grant or
+                      revoke membership in them. However, to create, alter,
+                      drop, or change membership of a superuser role, superuser
+                      status is required; CREATEROLE is insufficient for that.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  createdb = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, createdb permissions. From the postgres docs:
+
+                      A role must be explicitly given permission to create
+                      databases (except for superusers, since those bypass all
+                      permission checks). To create such a role, use CREATE
+                      ROLE name CREATEDB.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  "inherit" = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user created inherit permissions. From the postgres docs:
+
+                      A role is given permission to inherit the privileges of
+                      roles it is a member of, by default. However, to create a
+                      role without the permission, use CREATE ROLE name
+                      NOINHERIT.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  login = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, login permissions. From the postgres docs:
+
+                      Only roles that have the LOGIN attribute can be used as
+                      the initial role name for a database connection. A role
+                      with the LOGIN attribute can be considered the same as a
+                      “database user”. To create a role with login privilege,
+                      use either:
+
+                      CREATE ROLE name LOGIN; CREATE USER name;
+
+                      (CREATE USER is equivalent to CREATE ROLE except that
+                      CREATE USER includes LOGIN by default, while CREATE ROLE
+                      does not.)
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  replication = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
+
+                      A role must explicitly be given permission to initiate
+                      streaming replication (except for superusers, since those
+                      bypass all permission checks). A role used for streaming
+                      replication must have LOGIN permission as well. To create
+                      such a role, use CREATE ROLE name REPLICATION LOGIN.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                  bypassrls = mkOption {
+                    type = types.nullOr types.bool;
+                    description = lib.mdDoc ''
+                      Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
+
+                      A role must be explicitly given permission to bypass
+                      every row-level security (RLS) policy (except for
+                      superusers, since those bypass all permission checks). To
+                      create such a role, use CREATE ROLE name BYPASSRLS as a
+                      superuser.
+
+                      More information on postgres roles can be found [here](https://www.postgresql.org/docs/current/role-attributes.html)
+                    '';
+                    default = null;
+                    inherit defaultText;
+                  };
+                };
+              };
+            };
           };
         });
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Ensures that the specified users exist and have at least the ensured permissions.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
           same name only, and that without the need for a password.
@@ -200,7 +348,7 @@ in
       enableTCPIP = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether PostgreSQL should listen on all network interfaces.
           If disabled, the database can only be accessed via its Unix
           domain socket or via TCP connections to localhost.
@@ -211,9 +359,9 @@ in
         type = types.str;
         default = "[%p] ";
         example = "%m [%p] ";
-        description = ''
+        description = lib.mdDoc ''
           A printf-style string that is output at the beginning of each log line.
-          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
+          Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
           not include the timestamp, because journal has it anyway.
         '';
       };
@@ -222,24 +370,24 @@ in
         type = types.listOf types.path;
         default = [];
         example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
-        description = ''
+        description = lib.mdDoc ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
-          match version for <literal>services.postgresql.package</literal> value.
+          match version for `services.postgresql.package` value.
         '';
       };
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool float int str ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE"/>
-          for an overview of <literal>postgresql.conf</literal>.
+          <https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          for an overview of `postgresql.conf`.
 
-          <note><para>
-            String values will automatically be enclosed in single quotes. Single quotes will be
-            escaped with two single quotes as described by the upstream documentation linked above.
-          </para></note>
+          ::: {.note}
+          String values will automatically be enclosed in single quotes. Single quotes will be
+          escaped with two single quotes as described by the upstream documentation linked above.
+          :::
         '';
         example = literalExpression ''
           {
@@ -255,8 +403,8 @@ in
       recoveryConfig = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
-          Contents of the <filename>recovery.conf</filename> file.
+        description = lib.mdDoc ''
+          Contents of the {file}`recovery.conf` file.
         '';
       };
 
@@ -265,7 +413,7 @@ in
         default = "postgres";
         internal = true;
         readOnly = true;
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';
@@ -295,7 +443,8 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+      mkDefault (if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
+            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
             else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
             else mkThrow "9_5");
@@ -380,12 +529,29 @@ in
               $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
             '') cfg.ensureDatabases}
           '' + ''
-            ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-              '') user.ensurePermissions)}
-            '') cfg.ensureUsers}
+            ${
+              concatMapStrings
+              (user:
+                let
+                  userPermissions = concatStringsSep "\n"
+                    (mapAttrsToList
+                      (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
+                      user.ensurePermissions
+                    );
+
+                  filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+
+                  clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+
+                  userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+                in ''
+                  $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
+                  ${userPermissions}
+                  ${userClauses}
+                ''
+              )
+              cfg.ensureUsers
+            }
           '';
 
         serviceConfig = mkMerge [
@@ -419,6 +585,6 @@ in
 
   };
 
-  meta.doc = ./postgresql.xml;
+  meta.doc = ./postgresql.md;
   meta.maintainers = with lib.maintainers; [ thoughtpolice danbst ];
 }

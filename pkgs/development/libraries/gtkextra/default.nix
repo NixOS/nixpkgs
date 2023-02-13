@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 glib cairo atk pango libtiff libpng libjpeg ];
 
   meta = with lib; {
-    homepage = "http://gtkextra.sourceforge.net/";
+    homepage = "https://gtkextra.sourceforge.net/";
     description = "GtkExtra is a useful set of widgets for creating GUI's for GTK+.";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

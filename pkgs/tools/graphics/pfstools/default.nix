@@ -36,10 +36,10 @@ mkDerivation rec {
     libGLU libGL freeglut
   ]) ++ lib.optional enableUnfree (opencv2.override { enableUnfree = true; });
 
-  patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
+  patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
   meta = with lib; {
-    homepage = "http://pfstools.sourceforge.net/";
+    homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;
     license = licenses.lgpl2;

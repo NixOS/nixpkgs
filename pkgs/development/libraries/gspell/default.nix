@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , fetchurl
 , pkg-config
 , libxml2
@@ -16,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.9.1";
+  version = "1.12.0";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pdb4gbjrs8mk6r0ipw5vxyvzav1wvkjq46kiq53r3nyznfpdfyw";
+    sha256 = "QNKFDxu26HdSRvoeOUOLNsqvvbraHSihn6HKB+H/gq0=";
   };
 
   patches = [
@@ -38,10 +39,10 @@ stdenv.mkDerivation rec {
     libxml2
     autoreconfHook
     gtk-doc
+    glib
   ];
 
   buildInputs = [
-    glib
     gtk3
     icu
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -51,6 +52,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkg-config
     enchant2
+  ];
+
+  configureFlags = [
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "GLIB_MKENUMS=${lib.getDev buildPackages.glib}/bin/glib-mkenums"
   ];
 
   passthru = {

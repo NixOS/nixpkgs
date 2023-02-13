@@ -74,7 +74,7 @@ there are 3 steps, frontend dependencies (javascript), backend dependencies (eli
 
 ##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
 
-for phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+For phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
 
 ##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
 
@@ -82,18 +82,18 @@ There are 2 ways to package backend dependencies. With mix2nix and with a fixed-
 
 ###### mix2nix {#mix2nix}
 
-mix2nix is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
+`mix2nix` is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
 
 Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/pleroma/default.nix#L20)) or use the FOD method.
 
 The advantage of using mix2nix is that nix will know your whole dependency graph. On a dependency update, this won't trigger a full rebuild and download of all the dependencies, where FOD will do so.
 
-practical steps:
+Practical steps:
 
 - run `mix2nix > mix_deps.nix` in the upstream repo.
 - pass `mixNixDeps = with pkgs; import ./mix_deps.nix { inherit lib beamPackages; };` as an argument to mixRelease.
 
-If there are git depencencies.
+If there are git dependencies.
 
 - You'll need to fix the version artificially in mix.exs and regenerate the mix.lock with fixed version (on upstream). This will enable you to run `mix2nix > mix_deps.nix`.
 - From the mix_deps.nix file, remove the dependencies that had git versions and pass them as an override to the import function.
@@ -115,7 +115,7 @@ If there are git depencencies.
           owner = "elixir-libraries";
           repo = "prometheus.ex";
           rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
-          sha256 = "1v0q4bi7sb253i8q016l7gwlv5562wk5zy3l2sa446csvsacnpjk";
+          hash = "sha256-U17LlN6aGUKUFnT4XyYXppRN+TvUBIBRHEUsfeIiGOw=";
         };
         # you can re-use the same beamDeps argument as generated
         beamDeps = with final; [ prometheus ];
@@ -124,11 +124,11 @@ If there are git depencencies.
 };
 ```
 
-You will need to run the build process once to fix the sha256 to correspond to your new git src.
+You will need to run the build process once to fix the hash to correspond to your new git src.
 
 ###### FOD {#fixed-output-derivation}
 
-A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir_ls.nix) for a usage example of FOD.
+A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir-ls/default.nix) for a usage example of FOD.
 
 Practical steps
 
@@ -138,13 +138,13 @@ Practical steps
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    sha256 = lib.fakeSha256;
+    hash = lib.fakeHash;
   };
 ```
 
-The first build will complain about the sha256 value, you can replace with the suggested value after that.
+The first build will complain about the hash value, you can replace with the suggested value after that.
 
-Note that if after you've replaced the value, nix suggests another sha256, then mix is not fetching the dependencies reproducibly. An FOD will not work in that case and you will have to use mix2nix.
+Note that if after you've replaced the value, nix suggests another hash, then mix is not fetching the dependencies reproducibly. An FOD will not work in that case and you will have to use mix2nix.
 
 ##### mixRelease - example {#mix-release-example}
 
@@ -170,7 +170,7 @@ let
     pname = "mix-deps-${pname}";
     inherit src version;
     # nix will complain and tell you the right value to replace this with
-    sha256 = lib.fakeSha256;
+    hash = lib.fakeHash;
     # if you have build time environment variables add them here
     MY_ENV_VAR="my_value";
   };
@@ -277,6 +277,30 @@ let
 in
 mkShell {
   buildInputs = [ elixir ];
+}
+```
+
+### Using an overlay
+
+If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `hash`) and then use this overlay in your development environment:
+
+#### `shell.nix`
+
+```nix
+let
+  elixir_1_13_1_overlay = (self: super: {
+      elixir_1_13 = super.elixir_1_13.override {
+        version = "1.13.1";
+        sha256 = "sha256-t0ic1LcC7EV3avWGdR7VbyX7pGDpnJSW1ZvwvQUPC3w=";
+      };
+    });
+  pkgs = import <nixpkgs> { overlays = [ elixir_1_13_1_overlay ]; };
+in
+with pkgs;
+mkShell {
+  buildInputs = [
+    elixir_1_13
+  ];
 }
 ```
 

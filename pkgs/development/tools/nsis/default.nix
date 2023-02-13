@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   CPPPATH = symlinkJoin {
@@ -70,5 +70,7 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pombeirp ];
+    mainProgram = "makensis";
+    broken = stdenv.isDarwin;
   };
 }

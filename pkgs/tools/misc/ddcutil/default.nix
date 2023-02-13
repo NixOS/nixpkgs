@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.2.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "rockowitz";
-    repo = "ddcutil";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mIYxGoITaFlHgqAfB6ZZFR3spGD0BElJZJJqFGM4r/I=";
+    sha256 = "sha256-y3mubdInYa4gpxhdw2JcRhnhd12O7jNq/oF3qoP82LU=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
+    changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
   };
 }
 

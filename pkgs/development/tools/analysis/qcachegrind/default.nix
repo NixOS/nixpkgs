@@ -1,14 +1,12 @@
-{ lib, stdenv, qmake, qtbase, perl, python, php, kcachegrind, wrapQtAppsHook }:
+{ lib, stdenv, qmake, qtbase, perl, php, kcachegrind, wrapQtAppsHook }:
 
-let
-  name = lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
-
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation {
+  pname = "qcachegrind";
+  version = kcachegrind.version;
 
   src = kcachegrind.src;
 
-  buildInputs = [ qtbase perl python php ];
+  buildInputs = [ qtbase perl php ];
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
@@ -17,7 +15,6 @@ in stdenv.mkDerivation {
   postInstall = ''
      mkdir -p $out/bin
      cp -p converters/dprof2calltree $out/bin/dprof2calltree
-     cp -p converters/hotshot2calltree.in $out/bin/hotshot2calltree
      cp -p converters/memprof2calltree $out/bin/memprof2calltree
      cp -p converters/op2calltree $out/bin/op2calltree
      cp -p converters/pprof2calltree $out/bin/pprof2calltree
@@ -38,6 +35,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Qt GUI to visualize profiling data";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -1,15 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, gfortran, lhapdf, python3, zlib }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gfortran, lhapdf, python3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "apfel";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
     rev = version;
-    sha256 = "sha256-szEtSC/NouYlHSjVoX9Hoh7yQ0W82rVccYEF1L2tXoU=";
+    sha256 = "sha256-fRdJ+C92tEC75iUwP9Tmm/EswrlA52eUo5fBjfieH9o=";
   };
+
+  # needed for aarch64-darwin
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ gfortran lhapdf python3 zlib ];
 
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A PDF Evolution Library";
-    license     = licenses.gpl3;
+    license     = licenses.gpl3Plus;
     homepage    = "https://apfel.mi.infn.it/";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];

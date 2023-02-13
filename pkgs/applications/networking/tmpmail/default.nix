@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, stdenvNoCC, w3m, curl, jq, makeWrapper, installShellFiles }:
+{ lib, fetchFromGitHub, stdenvNoCC, w3m, curl, jq, makeWrapper, installShellFiles, xclip }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tmpmail";
-  version = "1.1.9";
+  version = "1.2.3";
 
    src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "tmpmail";
     rev = "v${version}";
-    sha256 = "sha256-sWcsmBUHSfo7sICXyhNhbfRFSHumObnWc7stWxcwVTg=";
+    sha256 = "sha256-s4c1M4YHK/CNpH7nPt7rRqlkLUZrpBXvAVS/qxCai9c=";
   };
 
   dontConfigure = true;
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/bin
     install -Dm755 -t $out/bin tmpmail
     installManPage tmpmail.1
-    wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq ]}
+    wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq xclip ]}
   '';
 
    meta = with lib; {

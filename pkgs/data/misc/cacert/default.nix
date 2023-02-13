@@ -17,16 +17,26 @@
 }:
 
 let
-  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
+  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" (blacklist ++ [
+    # Mozilla does not trust new certificates issued by these CAs after 2022/11/30¹
+    # in their products, but unfortunately we don't have such a fine-grained
+    # solution for most system packages², so we decided to eject these.
+    #
+    # [1] https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ
+    # [2] https://utcc.utoronto.ca/~cks/space/blog/linux/CARootStoreTrustProblem
+    "TrustCor ECA-1"
+    "TrustCor RootCert CA-1"
+    "TrustCor RootCert CA-2"
+  ]));
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.71";
+  srcVersion = "3.86";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ andir fpletz lukegb ];
+    maintainers = with maintainers; [ fpletz lukegb ];
     license = licenses.mpl20;
   };
   certdata = stdenv.mkDerivation {
@@ -35,7 +45,7 @@ let
 
     src = if nssOverride != null then nssOverride.src else fetchurl {
       url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
+      sha256 = "sha256-PzhfxoZHa7uoEQNfpoIbVCR11VdHsYwgwiHU1mVzuXU=";
     };
 
     dontBuild = true;

@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Tracker miners, indexing services for Tracker
           search engine and metadata storage system.
         '';
@@ -46,6 +46,8 @@ with lib;
     services.dbus.packages = [ pkgs.tracker-miners ];
 
     systemd.packages = [ pkgs.tracker-miners ];
+
+    services.gnome.tracker.subcommandPackages = [ pkgs.tracker-miners ];
 
   };
 

@@ -1,16 +1,13 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libnfnetlink-1.0.1";
+  pname = "libnfnetlink";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/libnfnetlink/files/${name}.tar.bz2";
-    sha256 = "06mm2x4b01k3m7wnrxblk9j0mybyr4pfz28ml7944xhjx6fy2w7j";
+    url = "https://www.netfilter.org/projects/libnfnetlink/files/libnfnetlink-${version}.tar.bz2";
+    sha256 = "0xn3rcrzxr6g82kfxzs9bqn2zvl2kf2yda30drwb9vr6sk1wfr5h";
   };
-
-  patches = [
-    ./Use-stdlib-uint-instead-of-u_int.patch
-  ];
 
   meta = {
     description = "Low-level library for netfilter related kernel/userspace communication";

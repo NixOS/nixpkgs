@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.24.0";
+  version = "1.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ufS8pdA1Jxjge3OF+xlam7yP1oa3lZt0E3hU1SqrnFg=";
+    sha256 = "sha256-lRa4Tp2fEA24mgxny/5XztsFYjENRcqvtjMuJ7vrXNM=";
   };
 
   mesonFlags = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     libnma
     gtk3
     networkmanager
-    libnotify
     libsecret
     gsettings-desktop-schemas
     polkit

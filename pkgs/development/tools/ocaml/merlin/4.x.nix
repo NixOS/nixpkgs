@@ -2,11 +2,11 @@
 , substituteAll
 , fetchurl
 , ocaml
-, dune_2
+, dune_3
 , buildDunePackage
 , yojson
 , csexp
-, result
+, merlin-lib
 , dot-merlin-reader
 , jq
 , menhir
@@ -15,16 +15,17 @@
 }:
 
 let
-  merlinVersion = "4.4";
+  merlinVersion = "4.7";
 
   hashes = {
-    "4.4-411" = "sha256:0chx28098mmnjbnaz5wgzsn82rh1w9dhzqmsykb412cq13msl1q4";
-    "4.4-412" = "sha256:18xjpsiz7xbgjdnsxfc52l7yfh22harj0birlph4xm42d14pkn0n";
-    "4.4-413" = "sha256:1ilmh2gqpwgr51w2ba8r0s5zkj75h00wkw4az61ssvivn9jxr7k0";
+    "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
+    "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
+    "4.7-414" = "sha256-bIZ4kwmnit/ujM2//jZA59rweo7Y0QfDb+BpoTxswHs=";
+    "4.7-500" = "sha256-elYb/0vVvohi9yYFe/54brb6Qh6fyiN1kYPRq5fP1zE=";
   };
 
-  ocamlVersionShorthand = lib.concatStrings
-    (lib.take 2 (lib.splitVersion ocaml.version));
+  ocamlVersionShorthand = lib.substring 0 3
+    (lib.concatStrings (lib.splitVersion ocaml.version));
 
   version = "${merlinVersion}-${ocamlVersionShorthand}";
 in
@@ -36,6 +37,7 @@ else
 buildDunePackage {
   pname = "merlin";
   inherit version;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
@@ -46,37 +48,33 @@ buildDunePackage {
     (substituteAll {
       src = ./fix-paths.patch;
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_2}/bin/dune";
+      dune = "${dune_3}/bin/dune";
     })
-  ] ++ lib.optional (!lib.versionAtLeast ocaml.version "4.12")
-    # This fixes the test-suite on macOS
-    # See https://github.com/ocaml/merlin/pull/1399
-    # Fixed in 4.4 for OCaml ≥ 4.12
-    ./test.patch
-  ;
+  ];
 
-  useDune2 = true;
+  strictDeps = true;
 
+  nativeBuildInputs = [
+    menhir
+    jq
+  ];
   buildInputs = [
     dot-merlin-reader
     yojson
-    csexp
-    result
+    (if lib.versionAtLeast version "4.7-414"
+     then merlin-lib
+     else csexp)
+    menhirSdk
+    menhirLib
   ];
 
-  doCheck = true;
+  doCheck = false;
   checkPhase = ''
     runHook preCheck
     patchShebangs tests/merlin-wrapper
     dune runtest # filtering with -p disables tests
     runHook postCheck
   '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

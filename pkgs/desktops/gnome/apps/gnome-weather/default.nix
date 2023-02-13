@@ -3,43 +3,42 @@
 , fetchurl
 , pkg-config
 , gnome
-, gtk3
-, libhandy
-, wrapGAppsHook
+, gtk4
+, libadwaita
+, wrapGAppsHook4
 , gjs
 , gobject-introspection
 , libgweather
 , meson
 , ninja
 , geoclue2
-, gnome-desktop
 , python3
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "41.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1vidwq768xnrnr24jcfbpwjczz7vm5zmaiv41nb75q4p8avlwqg5";
+    sha256 = "LxERf3VVK/G7ngHwHPs8L82mo/aQcP/gUZoHYVMrjyY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
+    gobject-introspection
+    gjs
   ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     gjs
-    gobject-introspection
-    gnome-desktop
     libgweather
     gnome.adwaita-icon-theme
     geoclue2
@@ -57,6 +56,8 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Weather";
     description = "Access current weather conditions and forecasts";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

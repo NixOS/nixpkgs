@@ -2,6 +2,7 @@
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
+, fetchpatch
 # Auth modules
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
@@ -11,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.17.1";
+  version = "2.3.20";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "1f525bvpjvi4rnwqjsqaqrbdii08sqmc1v8xq03m19w1vk6cqrqw";
+    hash = "sha256-yqgy65aBSKvfNe6dD1NLd5+nMsDOSpE9mrjDRpshhVI=";
   };
 
   enableParallelBuilding = true;
@@ -57,6 +58,11 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    # fix openssl 3.0 compatibility
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
+      hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
+    })
   ];
 
   configureFlags = [

@@ -2,6 +2,7 @@
 , asttokens
 , buildPythonPackage
 , executing
+, hatchling
 , fetchFromGitHub
 , pygments
 , pytest-mock
@@ -11,17 +12,21 @@
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.10.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "0yavcbxzxi1nfa1k326gsl03y8sadi5z5acamwd8b1bsiv15p757";
+    sha256 = "sha256-x9dL/FE94OixMAmjnmfzZUcYJBqE5P2AAIFsNJF0Fxo=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     asttokens
@@ -29,14 +34,23 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
     # Test for Windows32
     "test_print_subprocess"
+    # sensitive to timing
+    "test_multiple_not_verbose"
+    # sensitive to interpreter output
+    "test_simple_vars"
   ];
 
   pythonImportsCheck = [
@@ -46,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
+    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jdahm ];
   };

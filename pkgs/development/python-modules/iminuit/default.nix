@@ -1,21 +1,37 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, cmake, numpy, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, numpy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.8.4";
-  disabled = !isPy3k;
+  version = "2.18.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b09189f3094896cfc68596adc95b7f1d92772e1de1424e5dc4dd81def56e8b0";
+    hash = "sha256-fuLGoLzaxYGzj66NDzQ/3uVfkfH2psyWQ/z7zGwtw+Y=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/iminuit";

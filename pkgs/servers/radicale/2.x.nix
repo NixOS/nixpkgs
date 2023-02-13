@@ -25,13 +25,13 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-runner
     pytest
   ];
 
   meta = with lib; {
-    homepage = "https://www.radicale.org/2.x.nix";
+    homepage = "https://radicale.org/v2.html";
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV
@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication rec {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
+    maintainers = with maintainers; [ edwtjo pSub infinisil ];
   };
 }

@@ -6,6 +6,7 @@
 , jinja2
 , lib
 , mock
+, packaging
 , pexpect
 , psutil
 , pyserial
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     attrs
     autobahn
     jinja2
+    packaging
     pexpect
     pyserial
     pyudev
@@ -57,7 +59,7 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     psutil
     pytestCheckHook

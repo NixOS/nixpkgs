@@ -9,11 +9,12 @@
 , num
 , ppxlib
 , re
+, findlib
 }:
 
 buildDunePackage rec {
   pname = "ppx_cstubs";
-  version = "0.6.1.2";
+  version = "0.7.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -23,18 +24,22 @@ buildDunePackage rec {
     owner = "fdopen";
     repo = "ppx_cstubs";
     rev = version;
-    sha256 = "15cjb9ygnvp2kv85rrb7ncz7yalifyl7wd2hp2cl8r1qrpgi1d0w";
+    sha256 = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
   };
+
+  nativeBuildInputs = [ cppo findlib ];
 
   buildInputs = [
     bigarray-compat
     containers
-    cppo
-    ctypes
     integers
     num
     ppxlib
     re
+  ];
+
+  propagatedBuildInputs = [
+    ctypes
   ];
 
   meta = with lib; {

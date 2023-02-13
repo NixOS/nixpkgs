@@ -1,21 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.8.3";
-in
-fetchzip rec {
-  name = "Cozette-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "cozette";
+  version = "1.19.0";
 
-  url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
+  src = fetchzip {
+    url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
+    hash = "sha256-nlEnQjQJAFRvZgdGMiloMs4afugmSFnITTIHD+Qkggg=";
+  };
 
-  sha256 = "1nc4zk6n7cbv9vwlhpm3ady5lc4d4ic1klyywwfg27w8j0jv57hx";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.bdf -d $out/share/fonts/misc
-    unzip -j $downloadedFile \*.otb -d $out/share/fonts/misc
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 *.otf -t $out/share/fonts/opentype
+    install -Dm644 *.bdf -t $out/share/fonts/misc
+    install -Dm644 *.otb -t $out/share/fonts/misc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

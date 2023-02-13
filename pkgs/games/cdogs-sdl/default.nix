@@ -13,20 +13,23 @@
 
 stdenv.mkDerivation rec {
   pname = "cdogs";
-  version = "0.13.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-7wNiDA/gOpqzSFWw8Bn6suC/f5RXdDTxPV49nCvOxas=";
+    sha256 = "sha256-jEK84iFodd0skRnHG3R0+MvBUXLd3o+YOLnBjZdsDms=";
   };
 
   postPatch = ''
     patchShebangs src/proto/nanopb/generator/*
   '';
 
-  cmakeFlags = [ "-DCDOGS_DATA_DIR=${placeholder "out"}/" ];
+  cmakeFlags = [
+    "-DCDOGS_DATA_DIR=${placeholder "out"}/"
+    "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -9,22 +9,23 @@
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.7.0";
+  version = "5.2.8.0";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-JdnzEW+qAhAljR+WfmgE3P9xeR2HvjS64tFgCC0tNA0=";
+    sha256 = "sha256-uNcaeTelFNfg+YjPYc7nK4TrFDxJsEuPhsF8x1cvIYQ=";
   };
 
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsa-lib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
     libXxf86vm openal libGLU libGL
     libjpeg flac
     libXi libXfixes
-    enet libtheora freetype physfs libopus pkg-config gtk3 pcre libXdmcp
+    enet libtheora freetype physfs libopus gtk3 pcre libXdmcp
     libpulseaudio libpthreadstubs
   ];
 

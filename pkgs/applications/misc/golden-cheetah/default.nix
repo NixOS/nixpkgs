@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
-, bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
+, bison, flex, zlib, qmake, makeDesktopItem, wrapQtAppsHook
 }:
 
 let
@@ -12,32 +12,40 @@ let
     desktopName = "GoldenCheetah";
     genericName = "GoldenCheetah";
     comment = "Performance software for cyclists, runners and triathletes";
-    categories = "Utility;";
+    categories = [ "Utility" ];
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.6-DEV2111";
+  version = "3.6-RC3";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "v${version}";
-    sha256 = "17sk89szvaq31bcv6rgfn1bbw132k7w8zlalfb3ayflavdxbk6sa";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/LGVDeWJZZXy5r5WxElDuxUagpA/RIwHGRbkcdO8IrE=";
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1 gsl blas
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
+    gsl
+    blas
   ];
-  nativeBuildInputs = [ flex makeWrapper qmake bison ];
+  nativeBuildInputs = [ flex wrapQtAppsHook qmake bison ];
 
   patches = [
     # allow building with bison 3.7
-    # PR at https://github.com/GoldenCheetah/GoldenCheetah/pull/3590
-    (fetchpatch {
-      url = "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
-      sha256 = "1h0y9vfji5jngqcpzxna5nnawxs77i1lrj44w8a72j0ah0sznivb";
-    })
+    # Included in https://github.com/GoldenCheetah/GoldenCheetah/pull/3590,
+    # which is periodically rebased but pre 3.6 release, as it'll break other CI systems
+    ./0001-Fix-building-with-bison-3.7.patch
   ];
 
   NIX_LDFLAGS = "-lz -lgsl -lblas";
@@ -47,11 +55,10 @@ in mkDerivation rec {
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
-    echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
-    echo 'LIBUSB_INSTALL = ${libusb-compat-0_1}' >> src/gcconfig.pri
-    echo 'LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include' >> src/gcconfig.pri
-    echo 'LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb' >> src/gcconfig.pri
-    sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
+    sed -i 's,^#QMAKE_LRELEASE.*,QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease,' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_INSTALL.*,LIBUSB_INSTALL = ${libusb-compat-0_1},' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include,' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
   '';
 
   installPhase = ''
@@ -68,7 +75,7 @@ in mkDerivation rec {
   meta = with lib; {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ adamcstephens ];
     license = licenses.gpl2Plus;
   };
 }

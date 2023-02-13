@@ -1,8 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
 , common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
-with lib;
-
 let
   repo = "git@github.com:scala/scala.git";
 
@@ -26,8 +24,8 @@ let
     };
 
     "2.13" = {
-      version = "2.13.7";
-      sha256 = "FO8WAIeGvHs3E1soS+YkUHcB9lE5bRb9ikijWkvOqU4=";
+      version = "2.13.10";
+      sha256 = "sha256-sBRhWZzQeGBCxktTN5D0XlG6u5HFLcRl2EaDjpcBnMQ=";
       pname = "scala_2_13";
     };
   };
@@ -102,7 +100,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "A general purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express

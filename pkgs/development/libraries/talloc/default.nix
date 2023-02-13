@@ -4,6 +4,7 @@
 , pkg-config
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
@@ -12,27 +13,36 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-a+lbI2i9CvHEzXqIFG62zuoY5Gw//JMwv2JitA0diqo=";
+    sha256 = "sha256-F5+eviZeZ+SrLCbK0rfeS2p3xsIS+WaQM4KGnwa+ZQU=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    fixDarwinDylibNames
     python3
     wafHook
     docbook-xsl-nons
     docbook_xml_dtd_42
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
     python3
     readline
     libxslt
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 

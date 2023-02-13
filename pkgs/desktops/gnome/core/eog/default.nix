@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -8,12 +9,12 @@
 , libxml2
 , libjpeg
 , libpeas
-, libportal
+, libportal-gtk3
 , gnome
 , gtk3
+, libhandy
 , glib
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
 , lcms2
 , gdk-pixbuf
@@ -21,19 +22,30 @@
 , shared-mime-info
 , wrapGAppsHook
 , librsvg
+, webp-pixbuf-loader
+, libheif
 , libexif
 , gobject-introspection
-, python3
+, gi-docgen
 }:
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "41.1";
+  version = "43.2";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-huG5ujnaz3QiavpFermDtBJTuJ9he/VBOcrQiS0C2Kk=";
+    sha256 = "sha256-nc/c5VhakOK7HPV+N3yx6xLUG9m8ubus31BrwbE1Tvk=";
   };
+
+  patches = [
+    # Fix path to libeog.so in the gir file.
+    # We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -42,15 +54,16 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    libxml2
+    libxml2 # for xmllint for xml-stripblanks
     gobject-introspection
-    python3
+    gi-docgen
   ];
 
   buildInputs = [
     libjpeg
-    libportal
+    libportal-gtk3
     gtk3
+    libhandy
     gdk-pixbuf
     glib
     libpeas
@@ -61,12 +74,22 @@ stdenv.mkDerivation rec {
     exempi
     gsettings-desktop-schemas
     shared-mime-info
-    adwaita-icon-theme
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+        libheif.out
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -76,6 +99,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -91,5 +119,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    # requires <gio/gdesktopappinfo.h>
+    broken = stdenv.isDarwin;
   };
 }

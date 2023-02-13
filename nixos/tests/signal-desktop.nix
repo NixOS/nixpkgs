@@ -16,7 +16,7 @@ in {
     maintainers = [ flokli primeos ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [
@@ -60,7 +60,7 @@ in {
     )
     # Only SQLCipher should be able to read the encrypted DB:
     machine.fail(
-        "su - alice -c 'sqlite3 ~/.config/Signal/sql/db.sqlite .databases'"
+        "su - alice -c 'sqlite3 ~/.config/Signal/sql/db.sqlite .tables'"
     )
     print(machine.succeed(
         "su - alice -c 'sqlcipher ~/.config/Signal/sql/db.sqlite'"

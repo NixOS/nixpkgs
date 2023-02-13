@@ -1,39 +1,66 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, asn1crypto
+, cffi
+, cryptography
+, ibm-sw-tpm2
+, pkgconfig # see nativeBuildInputs
+, pkg-config # see nativeBuildInputs
+, pycparser
+, pytestCheckHook
+, python
+, pyyaml
+, setuptools-scm
 , tpm2-tss
-, cryptography, ibm-sw-tpm2
 }:
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
+  version = "2.1.0";
+  format = "setuptools";
 
-  # Last version on github is 0.2.4, but it looks
-  # like a mistake (it's missing commits from 0.1.9)
-  version = "0.1.9";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v5Xth0A3tFnLFg54nvWYL2TD201e/GWv+2y5Qc60CmU=";
+    hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
   };
-  postPatch = ''
-    substituteInPlace tpm2_pytss/config.py --replace \
-      'SYSCONFDIR = CONFIG.get("sysconfdir", "/etc")' \
-      'SYSCONFDIR = "${tpm2-tss}/etc"'
-  '';
 
-  nativeBuildInputs = [ pkg-config swig ];
-  # The TCTI is dynamically loaded from tpm2-tss, we have to provide the library to the end-user
-  propagatedBuildInputs = [ tpm2-tss ];
+  nativeBuildInputs = [
+    cffi
+    pkgconfig # this is the Python module
+    pkg-config # this is the actual pkg-config tool
+    setuptools-scm
+  ];
 
-  checkInputs = [
+  buildInputs = [
+    tpm2-tss
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+    asn1crypto
     cryptography
-    # provide tpm_server used as simulator for the tests
+    pyyaml
+  ];
+
+  # https://github.com/tpm2-software/tpm2-pytss/issues/341
+  doCheck = false;
+
+  nativeCheckInputs = [
     ibm-sw-tpm2
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tpm2_pytss"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
+    changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = licenses.bsd2;
     maintainers = with maintainers; [ baloo ];

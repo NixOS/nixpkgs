@@ -1,53 +1,42 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pkg-config
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, libxml2
-, gtk3
+, pkg-config
 , python3
-, granite
+, vala
+, wrapGAppsHook4
+, granite7
+, gtk4
 , libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.7.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calculator";
     rev = version;
-    sha256 = "sha256-U0wXrw9ZJwkqZAtTTHmTzqYhwF9V2JZEZZdDak3kPIc=";
+    sha256 = "sha256-7aKJDlpODIysrHtqtD5wfd+dULFpD+LfWsjzg3OAxkY=";
   };
 
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
-    libxml2
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
-    libhandy
   ];
 
   postPatch = ''
@@ -56,9 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

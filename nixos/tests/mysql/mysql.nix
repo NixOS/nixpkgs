@@ -1,221 +1,149 @@
-import ./../make-test-python.nix ({ pkgs, ...}:
-
+{
+  system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../../.. { inherit system config; },
+  lib ? pkgs.lib
+}:
 
 let
+  inherit (import ./common.nix { inherit pkgs lib; }) mkTestName mariadbPackages mysqlPackages;
+
+  makeTest = import ./../make-test-python.nix;
   # Setup common users
-  users = { ... }:
-  {
-    users.groups.testusers = { };
-
-    users.users.testuser = {
-      isSystemUser = true;
-      group = "testusers";
+  makeMySQLTest = {
+    package,
+    name ? mkTestName package,
+    useSocketAuth ? true,
+    hasMroonga ? true,
+    hasRocksDB ? true
+  }: makeTest {
+    inherit name;
+    meta = with lib.maintainers; {
+      maintainers = [ ajs124 das_j ];
     };
 
-    users.users.testuser2 = {
-      isSystemUser = true;
-      group = "testusers";
-    };
-  };
+    nodes = {
+      ${name} =
+        { pkgs, ... }: {
 
-in
+          users = {
+            groups.testusers = { };
 
-{
-  name = "mysql";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
-  };
+            users.testuser = {
+              isSystemUser = true;
+              group = "testusers";
+            };
 
-  nodes = {
-    mysql57 =
-      { pkgs, ... }:
-
-      {
-        imports = [ users ];
-
-        services.mysql.enable = true;
-        services.mysql.initialDatabases = [
-          { name = "testdb3"; schema = ./testdb.sql; }
-        ];
-        # note that using pkgs.writeText here is generally not a good idea,
-        # as it will store the password in world-readable /nix/store ;)
-        services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
-          CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
-          GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
-        '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
+            users.testuser2 = {
+              isSystemUser = true;
+              group = "testusers";
+            };
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
-        services.mysql.package = pkgs.mysql57;
-      };
 
-    mysql80 =
-      { pkgs, ... }:
+          services.mysql = {
+            enable = true;
+            initialDatabases = [
+              { name = "testdb3"; schema = ./testdb.sql; }
+            ];
+            # note that using pkgs.writeText here is generally not a good idea,
+            # as it will store the password in world-readable /nix/store ;)
+            initialScript = pkgs.writeText "mysql-init.sql" (if (!useSocketAuth) then ''
+              CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
+              GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
+            '' else ''
+              ALTER USER root@localhost IDENTIFIED WITH unix_socket;
+              DELETE FROM mysql.user WHERE password = ''' AND plugin = ''';
+              DELETE FROM mysql.user WHERE user = ''';
+              FLUSH PRIVILEGES;
+            '');
 
-      {
-        imports = [ users ];
-
-        services.mysql.enable = true;
-        services.mysql.initialDatabases = [
-          { name = "testdb3"; schema = ./testdb.sql; }
-        ];
-        # note that using pkgs.writeText here is generally not a good idea,
-        # as it will store the password in world-readable /nix/store ;)
-        services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
-          CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
-          GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
-        '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
-        services.mysql.package = pkgs.mysql80;
-      };
-
-    mariadb =
-      { pkgs, ... }:
-
-      {
-        imports = [ users ];
-
-        services.mysql.enable = true;
-        services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
-          ALTER USER root@localhost IDENTIFIED WITH unix_socket;
-          DELETE FROM mysql.user WHERE password = ''' AND plugin = ''';
-          DELETE FROM mysql.user WHERE user = ''';
-          FLUSH PRIVILEGES;
-        '';
-        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
-        services.mysql.settings = {
-          mysqld = {
-            plugin-load-add = [ "ha_mroonga.so" "ha_rocksdb.so" ];
+            ensureDatabases = [ "testdb" "testdb2" ];
+            ensureUsers = [{
+              name = "testuser";
+              ensurePermissions = {
+                "testdb.*" = "ALL PRIVILEGES";
+              };
+            } {
+              name = "testuser2";
+              ensurePermissions = {
+                "testdb2.*" = "ALL PRIVILEGES";
+              };
+            }];
+            package = package;
+            settings = {
+              mysqld = {
+                plugin-load-add = lib.optional hasMroonga "ha_mroonga.so"
+                  ++ lib.optional hasRocksDB "ha_rocksdb.so";
+              };
+            };
           };
         };
-        services.mysql.package = pkgs.mariadb;
-      };
 
+      mariadb =        {
+        };
+    };
+
+    testScript = ''
+      start_all()
+
+      machine = ${name}
+      machine.wait_for_unit("mysql")
+      machine.succeed(
+          "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
+      )
+      machine.succeed(
+          "echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser"
+      )
+      # Ensure testuser2 is not able to insert into testdb as mysql testuser2
+      machine.fail(
+          "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser2"
+      )
+      # Ensure testuser2 is not able to authenticate as mysql testuser
+      machine.fail(
+          "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser"
+      )
+      machine.succeed(
+          "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
+      )
+
+      ${lib.optionalString hasMroonga ''
+        # Check if Mroonga plugin works
+        machine.succeed(
+            "echo 'use testdb; create table mroongadb (test_id INT, PRIMARY KEY (test_id)) ENGINE = Mroonga;' | sudo -u testuser mysql -u testuser"
+        )
+        machine.succeed(
+            "echo 'use testdb; insert into mroongadb values (25);' | sudo -u testuser mysql -u testuser"
+        )
+        machine.succeed(
+            "echo 'use testdb; select test_id from mroongadb;' | sudo -u testuser mysql -u testuser -N | grep 25"
+        )
+        machine.succeed(
+            "echo 'use testdb; drop table mroongadb;' | sudo -u testuser mysql -u testuser"
+        )
+      ''}
+
+      ${lib.optionalString hasRocksDB ''
+        # Check if RocksDB plugin works
+        machine.succeed(
+            "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser mysql -u testuser"
+        )
+        machine.succeed(
+            "echo 'use testdb; insert into rocksdb values (28);' | sudo -u testuser mysql -u testuser"
+        )
+        machine.succeed(
+            "echo 'use testdb; select test_id from rocksdb;' | sudo -u testuser mysql -u testuser -N | grep 28"
+        )
+        machine.succeed(
+            "echo 'use testdb; drop table rocksdb;' | sudo -u testuser mysql -u testuser"
+        )
+      ''}
+    '';
   };
-
-  testScript = ''
-    start_all()
-
-    mysql57.wait_for_unit("mysql")
-    mysql57.succeed(
-        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
-    )
-    mysql57.succeed(
-        "echo 'use testdb; insert into tests values (41);' | sudo -u testuser mysql -u testuser"
-    )
-    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
-    mysql57.fail(
-        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser2"
-    )
-    # Ensure testuser2 is not able to authenticate as mysql testuser
-    mysql57.fail(
-        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser"
-    )
-    mysql57.succeed(
-        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 41"
-    )
-    mysql57.succeed(
-        "echo 'use testdb3; select * from tests;' | mysql -u testuser3 --password=secure -N | grep 4"
-    )
-
-    mysql80.wait_for_unit("mysql")
-    mysql80.succeed(
-        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
-    )
-    mysql80.succeed(
-        "echo 'use testdb; insert into tests values (41);' | sudo -u testuser mysql -u testuser"
-    )
-    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
-    mysql80.fail(
-        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser2"
-    )
-    # Ensure testuser2 is not able to authenticate as mysql testuser
-    mysql80.fail(
-        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser"
-    )
-    mysql80.succeed(
-        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 41"
-    )
-    mysql80.succeed(
-        "echo 'use testdb3; select * from tests;' | mysql -u testuser3 --password=secure -N | grep 4"
-    )
-
-    mariadb.wait_for_unit("mysql")
-    mariadb.succeed(
-        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser"
-    )
-    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
-    mariadb.fail(
-        "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser2"
-    )
-    # Ensure testuser2 is not able to authenticate as mysql testuser
-    mariadb.fail(
-        "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
-    )
-
-    # Check if Mroonga plugin works
-    mariadb.succeed(
-        "echo 'use testdb; create table mroongadb (test_id INT, PRIMARY KEY (test_id)) ENGINE = Mroonga;' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; insert into mroongadb values (25);' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; select test_id from mroongadb;' | sudo -u testuser mysql -u testuser -N | grep 25"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; drop table mroongadb;' | sudo -u testuser mysql -u testuser"
-    )
-
-    # Check if RocksDB plugin works
-    mariadb.succeed(
-        "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; insert into rocksdb values (28);' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; select test_id from rocksdb;' | sudo -u testuser mysql -u testuser -N | grep 28"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; drop table rocksdb;' | sudo -u testuser mysql -u testuser"
-    )
-  '';
-})
+in
+  lib.mapAttrs (_: package: makeMySQLTest {
+    inherit package;
+    hasRocksDB = false; hasMroonga = false; useSocketAuth = false;
+  }) mysqlPackages
+  // (lib.mapAttrs (_: package: makeMySQLTest {
+    inherit package;
+  }) mariadbPackages)

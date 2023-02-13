@@ -63,32 +63,32 @@ mount --rbind /sys "$mountPoint/sys"
 
 # modified from https://github.com/archlinux/arch-install-scripts/blob/bb04ab435a5a89cd5e5ee821783477bc80db797f/arch-chroot.in#L26-L52
 chroot_add_resolv_conf() {
-    local chrootdir=$1 resolv_conf=$1/etc/resolv.conf
+    local chrootDir="$1" resolvConf="$1/etc/resolv.conf"
 
     [[ -e /etc/resolv.conf ]] || return 0
 
     # Handle resolv.conf as a symlink to somewhere else.
-    if [[ -L $chrootdir/etc/resolv.conf ]]; then
+    if [[ -L "$resolvConf" ]]; then
       # readlink(1) should always give us *something* since we know at this point
       # it's a symlink. For simplicity, ignore the case of nested symlinks.
-      # We also ignore the possibility if `../`s escaping the root.
-      resolv_conf=$(readlink "$chrootdir/etc/resolv.conf")
-      if [[ $resolv_conf = /* ]]; then
-        resolv_conf=$chrootdir$resolv_conf
+      # We also ignore the possibility of `../`s escaping the root.
+      resolvConf="$(readlink "$resolvConf")"
+      if [[ "$resolvConf" = /* ]]; then
+        resolvConf="$chrootDir$resolvConf"
       else
-        resolv_conf=$chrootdir/etc/$resolv_conf
+        resolvConf="$chrootDir/etc/$resolvConf"
       fi
     fi
 
     # ensure file exists to bind mount over
-    if [[ ! -f $resolv_conf ]]; then
-      install -Dm644 /dev/null "$resolv_conf" || return 1
+    if [[ ! -f "$resolvConf" ]]; then
+      install -Dm644 /dev/null "$resolvConf" || return 1
     fi
 
-    mount --bind /etc/resolv.conf "$resolv_conf"
+    mount --bind /etc/resolv.conf "$resolvConf"
 }
 
-chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.conf"
+chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" >&2
 
 (
     # If silent, write both stdout and stderr of activation script to /dev/null
@@ -100,8 +100,11 @@ chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.co
     # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
     LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" IN_NIXOS_ENTER=1 chroot "$mountPoint" "$system/activate" 1>&2 || true
 
-    # Create /tmp
-    chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
+    # Create /tmp. This is needed for nix-build and the NixOS activation script to work.
+    # Hide the unhelpful "failed to replace specifiers" errors caused by missing /etc/machine-id.
+    chroot "$mountPoint" "$system/sw/bin/systemd-tmpfiles" --create --remove -E 2> /dev/null || true
 )
+
+unset TMPDIR
 
 exec chroot "$mountPoint" "${command[@]}"

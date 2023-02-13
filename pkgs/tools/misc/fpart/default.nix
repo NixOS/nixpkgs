@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fpart";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
     rev = "${pname}-${version}";
-    sha256 = "sha256-O+OV/uhehKMWhND3L7wtIL9lMUSN5bX2YRRD7ftcIGY=";
+    sha256 = "sha256-SULtbfUUzYgD/Q6wmgYSIldiGgk9MY4dr0hveTTMwvw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
       Fpart also includes a live mode, which allows it to crawl very large
       filesystems and produce partitions in live. Hooks are available to act on
-      those partitions (e.g. immediatly start a transfer using rsync(1))
+      those partitions (e.g. immediately start a transfer using rsync(1))
       without having to wait for the filesystem traversal job to be finished.
       Used this way, fpart can be seen as a powerful data migration tool.
     '';

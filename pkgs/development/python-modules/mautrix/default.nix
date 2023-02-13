@@ -1,38 +1,77 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel-yaml, CommonMark, lxml, aiosqlite
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+  # deps
+, aiohttp
+, attrs
+, yarl
+  # optional deps
+, python-magic
+, python-olm
+, unpaddedbase64
+, pycryptodome
+  # check deps
+, pytestCheckHook
+, pytest-asyncio
+, aiosqlite
+, sqlalchemy
+, asyncpg
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.12.4";
+  version = "0.19.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c8d226a96e57d52bb532d7e572ba5670d2e2143f720063a4bbd04a77049030d4";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "python";
+    rev = "v${version}";
+    hash = "sha256-7nvy2/DUS2BkcyQUUG8+aT/JHcPu141e5YWOiccS6cU=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-
-    # defined in optional-requirements.txt
-    sqlalchemy
-    aiosqlite
-    ruamel-yaml
-    CommonMark
-    lxml
+    attrs
+    yarl
   ];
 
-  disabled = pythonOlder "3.7";
+  passthru.optional-dependencies = {
+    detect_mimetype = [
+      python-magic
+    ];
+    encryption = [
+      python-olm
+      unpaddedbase64
+      pycryptodome
+    ];
+  };
 
-  # no tests available
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "mautrix" ];
+  checkInputs = [
+    pytest-asyncio
+    aiosqlite
+    sqlalchemy
+    asyncpg
+  ] ++ passthru.optional-dependencies.encryption;
+
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  pythonImportsCheck = [
+    "mautrix"
+  ];
 
   meta = with lib; {
+    description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    description = "A Python 3 asyncio Matrix framework.";
+    changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
+    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans nickcao ];
   };
 }

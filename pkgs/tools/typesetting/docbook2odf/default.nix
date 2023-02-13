@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Convert DocBook to OpenDocument Format (ODF)";
     longDescription = ''
-      Docbook2odf is a toolkit that automaticaly converts DocBook to OASIS
+      Docbook2odf is a toolkit that automatically converts DocBook to OASIS
       OpenDocument (ODF, the ISO standardized format used for texts,
       spreadsheets and presentations). Conversion is based on a XSLT which
       makes it easy to convert DocBook->ODF, ODT, ODS and ODP as all these

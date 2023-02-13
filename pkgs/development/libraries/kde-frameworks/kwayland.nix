@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kwayland";
+  pname = "kwayland";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ plasma-wayland-protocols wayland wayland-protocols ];
   propagatedBuildInputs = [ qtbase ];

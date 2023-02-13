@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot-pkg, mock }:
+{ lib, buildPythonPackage, fetchPypi, buildbot-pkg, mock, cairosvg, klein, jinja2 }:
 
 {
   www = buildPythonPackage rec {
@@ -7,10 +7,10 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-65ZbCiNtxH3YjAcdhv5cwSUNrLT65jlQh/2oL8342Tw=";
+      sha256 = "sha256-t4xHfox6h5PY4+phdCQbClHd77+WfpUWErMZCEcMxu0=";
     };
 
-    # Remove unneccessary circular dependency on buildbot
+    # Remove unnecessary circular dependency on buildbot
     postPatch = ''
       sed -i "s/'buildbot'//" setup.py
     '';
@@ -34,7 +34,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-2wu6rE5tgjPXxlcIND8s+DAmX9CF29M3ElonV0L8WOs=";
+      sha256 = "sha256-JySn7QO+SgoXjVeV4wYwc9twr0Q2c/wsEspqeq038+k=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -56,7 +56,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-Vu4CouTuVyxpmx5C4fthQJPdFBAtN1jliQjy4pLYAzc=";
+      sha256 = "sha256-935eeF2kpT68lK/UMg8MZQOYEj7D8FaT9iSs/lNahYA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -78,7 +78,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-BDzI4VBbNGCKRxv6294IIVkDXZV0KHauvUYDjIVovvE=";
+      sha256 = "sha256-3pHSiVoOZj2iCGfiz+tMWWMPHSBH5Ggp6e3+a8topsg=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -100,7 +100,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-hkcxwZWFJOLHMIRJfzzMTEoH6oc2UblJEKFjYthFfDc=";
+      sha256 = "sha256-5Qr1FeYIJG/qaFaTB7ScFN9uca+joHKE6FlfKwhubfo=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -115,4 +115,28 @@
       license = licenses.gpl2;
     };
   };
+
+  badges = buildPythonPackage rec {
+    pname = "buildbot-badges";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-H0Dn+uTtFyZgyqbk3QQEc5t7CJovyzU+XuCoTe4Ajug=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = [ cairosvg klein jinja2 ];
+
+    # No tests
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Badges Plugin";
+      maintainers = with maintainers; [ julienmalka ];
+      license = licenses.gpl2;
+    };
+  };
+
 }

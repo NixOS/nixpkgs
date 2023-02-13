@@ -3,16 +3,16 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz
-, makeWrapper, python3, ruby, perl
+, callPackage, ghostscript_headless, harfbuzz
+, makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
+, libfaketime
 , useFixedHashes ? true
 , recurseIntoAttrs
-, fetchpatch
 }:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    ghostscript = ghostscriptX;
+    ghostscript = ghostscript_headless;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
@@ -24,8 +24,8 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
+      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
+    ghostscript = ghostscript_headless;
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
@@ -57,22 +57,15 @@ let
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
 
+      # override cyclic dependency until #167226 is fixed
+      xecjk = orig.xecjk // {
+        deps = removeAttrs orig.xecjk.deps [ "ctex" ];
+      };
+
       texdoc = orig.texdoc // {
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
-        postUnpack = let
-          # commit that ensures reproducibility of Data.tlpdb.lua
-          # remove on the next texdoc update
-          reproPatch = fetchpatch {
-            name = "make-data-tlpdb-lua-reproducible.patch";
-            url = "https://github.com/TeX-Live/texdoc/commit/82aff83d5453a887c1117b9e771a98bddd8a605a.patch";
-            sha256 = "0y04y468i7db4p5bsyyhgzip8q4fi1756x9a15ndha9xfnasbf44";
-            stripLen = 2;
-            extraPrefix = "scripts/texdoc/";
-          };
-        in ''
+        postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            patch -p1 -d "$out" < "${reproPatch}"
-
             unxz --stdout "${tlpdb}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
@@ -123,20 +116,21 @@ let
         ++ combinePkgs (attrs.deps or {});
     };
 
+  # for daily snapshots
   snapshot = {
-    year = "2021";
-    month = "04";
-    day = "08";
+    year = "2022";
+    month = "12";
+    day = "27";
   };
 
   tlpdb = fetchurl {
     # use the same mirror(s) as urlPrefixes below
     urls = [
-      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
       "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
     ];
-    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
+    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
   };
 
   # create a derivation that contains an unpacked upstream TL package
@@ -157,8 +151,8 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
         "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
@@ -209,6 +203,7 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            #extraVersion = "-final";
             extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )

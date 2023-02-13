@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.0.2";
+  version = "1.1.1";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4OGcnuajGdBRlXCYwbTK/zLNQRrir60qCYajHRRCpkU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nLeJAAsJUKFAetZSAQmOtXP+3ZRHvCTFAzycSkK+kiI=";
   };
 
   propagatedBuildInputs = [
@@ -31,16 +31,19 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pook" ];
+  pythonImportsCheck = [
+    "pook"
+  ];
 
   meta = with lib; {
     description = "HTTP traffic mocking and testing made simple in Python";
     homepage = "https://github.com/h2non/pook";
+    changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

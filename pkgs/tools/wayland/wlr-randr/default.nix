@@ -1,29 +1,31 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
 , wayland
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  src = fetchFromGitHub {
-    owner = "emersion";
+  src = fetchFromSourcehut {
+    owner = "~emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JeSxFXSFxcTwJz9EaLb18wtD4ZIT+ATeYM5OyDTJhDQ=";
+    sha256 = "sha256-iJSHCQbom+V0TrtEYrjMrMkdc6PoZrjhtcgebZYjQjI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ wayland ];
 
   meta = with lib; {
     description = "An xrandr clone for wlroots compositors";
-    homepage = "https://github.com/emersion/wlr-randr";
+    homepage = "https://git.sr.ht/~emersion/wlr-randr";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.unix;

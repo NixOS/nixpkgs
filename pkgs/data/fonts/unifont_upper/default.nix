@@ -1,15 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
-  version = "14.0.01";
-in fetchzip rec {
-  name = "unifont_upper-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "unifont_upper";
+  version = "15.0.01";
 
-  url = "mirror://gnu/unifont/unifont-${version}/${name}.ttf";
+  src = fetchurl {
+    url = "mirror://gnu/unifont/unifont-${version}/${pname}-${version}.ttf";
+    hash = "sha256-o6ItW9fME+f4t2cvhj96r3ZG9nKLAUznn/pdukFYnxw=";
+  };
 
-  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/unifont_upper.ttf";
+  dontUnpack = true;
 
-  sha256 = "0sb3m2qg0ri7zmxhjvrq8n0jmxxjx8rrx9rpibh5f5fbfkibq4gm";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 $src $out/share/fonts/truetype/unifont_upper.ttf
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";

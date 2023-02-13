@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "prometheus-json-exporter";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "json_exporter";
     rev = "v${version}";
-    sha256 = "0nhww7pbyqpiikcli1ysqa15d4y76h3jaij1j0sj8i3mhv1nsjz9";
+    sha256 = "sha256-33cu2DG6kgzCVQPaN9L8f/Iq76RqDPa+kE7qMt8czhI=";
   };
 
-  vendorSha256 = "1fiy6x06mqxbv9c4rxfl4q7hvblbzhknkpcp0alz61f3fk5wxsgp";
+  vendorSha256 = "sha256-aMpJaxyBBfpsRJTxAO05926tQSt8qQoDDzLFbX4qwWc=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) json; };
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus-community/json_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz ];
+    mainProgram = "json_exporter";
   };
 }

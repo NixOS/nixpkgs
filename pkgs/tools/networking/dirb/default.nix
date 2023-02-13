@@ -25,6 +25,12 @@ in stdenv.mkDerivation rec {
     sed -i "s#/usr#$out#" src/dirb.c
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: resume.o:/build/dirb222/src/variables.h:15: multiple definition of `curl';
+  #     crea_wordlist.o:/build/dirb222/src/variables.h:15: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   postInstall = ''
     mkdir -p $out/share/dirb/
     cp -r wordlists/ $out/share/dirb/
@@ -32,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A web content scanner";
-    homepage = "http://dirb.sourceforge.net/";
+    homepage = "https://dirb.sourceforge.net/";
     maintainers = with lib.maintainers; [ bennofs ];
     license = with lib.licenses; [ gpl2 ];
     platforms = lib.platforms.unix;

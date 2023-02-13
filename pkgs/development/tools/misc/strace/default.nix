@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
+{ lib, stdenv, fetchurl, perl, libunwind, buildPackages, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.15";
+  version = "6.1";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-68rCLylzNSlNxlRCXLw84BM0O+zm2iaZ467Iau6Nctw=";
+    sha256 = "sha256-JXnpzsN9u3hvbqC+vRX0DdVh7yveKiouzc5ZY7AYWf0=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libunwind ]; # support -k
 
   configureFlags = [ "--enable-mpers=check" ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/strace/strace.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://strace.io/";

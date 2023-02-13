@@ -11,6 +11,7 @@
 , graphicsmagick
 , gsettings-desktop-schemas
 , gtk3
+, hicolor-icon-theme
 , libnotify
 , librsvg
 , libxslt
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
     # Relative paths.
     "BINDIR=/bin"
     "PERLDIR=/share/perl5"
-    "MODSDIR=/lib/"
+    "MODSDIR=/nonexistent" # AMC will test for that dir before
+    # defaulting to the "portable" strategy, so this test *must* fail.
     "TEXDIR=/tex/latex/" # what texlive.combine expects
     "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
     "MAN1DIR=/share/man/man1"
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     "LANG_GTKSOURCEVIEW_DIR=/share/gtksourceview-4/language-specs"
     # Pretend to be redhat so `install` doesn't try to chown/chgrp.
     "SYSTEM_TYPE=rpm"
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "GCC_PP=${stdenv.cc.targetPrefix}c++"
   ];
 
   preFixup = ''
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makePerlPath [
+    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
       ArchiveZip
       DBDSQLite
       Cairo
@@ -75,14 +79,15 @@ stdenv.mkDerivation rec {
       GlibObjectIntrospection
       Gtk3
       LocaleGettext
+      OpenOfficeOODoc
       PerlMagick
       TextCSV
       XMLParser
       XMLSimple
       XMLWriter
     ]}:"$out/share/perl5 \
-    --prefix XDG_DATA_DIRS : "$out/share" \
-    --set TEXINPUTS ":.:$out/share/texmf/tex/latex/AMC"
+    --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+    --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
   nativeBuildInputs = [
@@ -100,6 +105,7 @@ stdenv.mkDerivation rec {
     graphicsmagick
     gsettings-desktop-schemas
     gtk3
+    hicolor-icon-theme
     libnotify
     librsvg
     libxslt

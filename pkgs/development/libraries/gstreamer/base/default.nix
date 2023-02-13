@@ -5,7 +5,6 @@
 , meson
 , ninja
 , gettext
-, gobject-introspection
 , python3
 , gstreamer
 , orc
@@ -19,6 +18,7 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
+, gobject-introspection
 , enableX11 ? stdenv.isLinux
 , libXv
 , libXext
@@ -37,23 +37,26 @@
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.18.4";
+  version = "1.20.3";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "08w3ivbc6n4vdds2ap6q7l8zdk9if8417nznyqidf0adm0lk5r99";
+    sha256 = "sha256-fjCz3YGnA4D/dVT5mEcdaZb/drvm/FRHCW+FHiRHPJ8=";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
   ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -62,13 +65,14 @@ stdenv.mkDerivation rec {
     gettext
     orc
     glib
-    gobject-introspection
-
+    gstreamer
     # docs
     # TODO add hotdoc here
+    gobject-introspection
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
+    gobject-introspection
     orc
     libtheora
     libintl
@@ -78,17 +82,16 @@ stdenv.mkDerivation rec {
     libjpeg
     tremor
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
+    pango
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
-    pango
     OpenGL
   ] ++ lib.optionals enableAlsa [
     alsa-lib
   ] ++ lib.optionals enableX11 [
     libXext
     libXv
-    pango
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
@@ -106,7 +109,6 @@ stdenv.mkDerivation rec {
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
     "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
@@ -120,7 +122,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      common/scangobj-merge.py \
+      scripts/meson-pkg-config-file-fixup.py \
       scripts/extract-release-date-from-doap-file.py
   '';
 
@@ -147,11 +149,19 @@ stdenv.mkDerivation rec {
     waylandEnabled = enableWayland;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-audio-1.0"
+      "gstreamer-base-1.0"
+      "gstreamer-net-1.0"
+      "gstreamer-video-1.0"
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

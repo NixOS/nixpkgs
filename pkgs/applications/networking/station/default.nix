@@ -1,4 +1,4 @@
-{ appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, lib }:
+{ appimageTools, fetchurl, lib }:
 
 let
   pname = "station";
@@ -18,7 +18,6 @@ in appimageTools.wrapType2 rec {
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   multiPkgs = null;
@@ -37,6 +36,6 @@ in appimageTools.wrapType2 rec {
     homepage = "https://getstation.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ lattfein ];
+    maintainers = with maintainers; [ ];
   };
 }

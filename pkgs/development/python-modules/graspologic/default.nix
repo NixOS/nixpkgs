@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "0.3.1";
+  version = "2.0.1";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graspologic";
-    rev = "v${version}";
-    sha256 = "07dmfb1aplha01d22b41js7634dac4v28pv1l3bzssqhi4yyds7h";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-EmbCA4JpY2OIwXrRWjBxA4iNm0ddQODjoGmHIYgvAWs=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
   pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 
@@ -45,5 +45,7 @@ buildPythonPackage rec {
     description = "A package for graph statistical algorithms";
     license = licenses.asl20;  # changing to `licenses.mit` in next release
     maintainers = with maintainers; [ bcdarwin ];
+    # graspologic-native is not available
+    broken = true;
   };
 }

@@ -18,7 +18,11 @@ let
   enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
     #  VEX: Mismatch detected between RDMA and atomics features.
-    && !stdenv.isAarch64;
+    && !stdenv.isAarch64
+    # Valgrind on musl does not hook malloc calls properly, resulting in errors `Invalid free() / delete / delete[] / realloc()`
+    # https://bugs.kde.org/show_bug.cgi?id=435441
+    && !stdenv.hostPlatform.isMusl
+  ;
 in stdenv.mkDerivation rec {
   pname = "libpsl";
   version = "0.21.1";
@@ -85,7 +89,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = [ maintainers.c0bw3b ];
+    mainProgram = "psl";
+    platforms = platforms.unix;
   };
 }

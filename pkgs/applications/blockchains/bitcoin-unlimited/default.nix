@@ -1,35 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, util-linux, protobuf, qrencode, libevent, python3
 , withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  name = "bitcoin" + (toString (optional (!withGui) "d")) + "-unlimited-" + version;
-  version = "1.9.2.0";
+  pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-unlimited";
+  version = "1.10.0.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "bitcoinunlimited";
-    repo = "bitcoinunlimited";
+    repo = "BCHUnlimited";
     rev = "BCHunlimited${version}";
-    sha256 = "sha256-qUf/GWZHpI57ATTlvRhjDtAjRa8a4uvUb0G9Xcf0j7w=";
+    sha256 = "sha256-d+giTXq/6HpysRAPT7yOl/B1x4zie9irs4O7cJsBqHg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]
-    ++ optionals withGui [ wrapQtAppsHook qttools ];
+    ++ lib.optionals withGui [ wrapQtAppsHook qttools ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc util-linux protobuf libevent ]
-                  ++ optionals withGui [ qtbase qttools qrencode ]
-                  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
+                  ++ lib.optionals withGui [ qtbase qttools qrencode ]
+                  ++ lib.optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5"
+                     ++ lib.optionals withGui [ "--with-gui=qt5"
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Peer-to-peer electronic cash system (Unlimited client)";
     longDescription= ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is

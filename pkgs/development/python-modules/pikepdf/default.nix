@@ -1,13 +1,15 @@
 { lib
 , attrs
 , buildPythonPackage
-, defusedxml
 , fetchFromGitHub
 , hypothesis
-, isPy3k
+, pythonOlder
+, importlib-metadata
 , jbig2dec
+, deprecation
 , lxml
 , mupdf
+, packaging
 , pillow
 , psutil
 , pybind11
@@ -18,14 +20,16 @@
 , qpdf
 , setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
 , substituteAll
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "4.2.0";
-  disabled = ! isPy3k;
+  version = "7.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -34,10 +38,10 @@ buildPythonPackage rec {
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
-    extraPostFetch = ''
+    postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "sha256-8ForstZzRpr2TnOgK/+y4aF3R7XMEYfcSQhntA765Co=";
+    hash = "sha256-sJVAiAQtJ8tU8ZHRU5jzIICnHc6RJwMsvxexnt7b4Yw=";
   };
 
   patches = [
@@ -48,19 +52,25 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
-    pybind11
     qpdf
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
+    pybind11
+    setuptools
     setuptools-scm
+    wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
     pytest-xdist
@@ -71,10 +81,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    defusedxml
+    deprecation
     lxml
+    packaging
     pillow
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [ "pikepdf" ];
@@ -84,6 +96,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

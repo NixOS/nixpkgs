@@ -14,18 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "unison";
-  version = "2.51.5";
+  version = "2.52.1";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-pi5uYwPpIy0lERmgATWQCO3EA3Pg5pnn7gxv49FaPug=";
+    sha256 = "sha256-taA8eZ/wOe9uMccXVYfe34/XzWgqYKA3tLZnIOahOrQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ]
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocamlPackages.ocaml ]
     ++ lib.optional enableX11 copyDesktopItems;
-  buildInputs = [ ocamlPackages.ocaml ncurses ];
+  buildInputs = [ ncurses ];
 
   preBuild = lib.optionalString enableX11 ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
@@ -60,12 +62,9 @@ stdenv.mkDerivation rec {
     genericName = "File synchronization tool";
     exec = "unison";
     icon = "unison";
-    categories = "Utility;FileTools;GTK;";
-    extraDesktopEntries = {
-      StartupWMClass = "Unison";
-      StartupNotify = "true";
-      X-MultipleArgs = "false";
-    };
+    categories = [ "Utility" "FileTools" "GTK" ];
+    startupNotify = true;
+    startupWMClass = "Unison";
   });
 
   meta = with lib; {

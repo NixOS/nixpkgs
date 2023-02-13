@@ -1,38 +1,22 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
+buildDunePackage rec {
+  pname = "pprint";
+  version = "20220103";
 
-let param =
-  if lib.versionAtLeast ocaml.version "4.02"
-  then {
-    version = "20171003";
-    sha256 = "06zwsskri8kaqjdszj9360nf36zvwh886xwf033aija8c9k4w6cx";
-  } else {
-    version = "20140424";
-    sha256 = "0sc9q89dnyarcg24czyhr6ams0ylqvia3745s6rfwd2nldpygsdk";
-}; in
+  useDune2 = true;
 
-stdenv.mkDerivation {
-
-  name = "ocaml${ocaml.version}-pprint-${param.version}";
-
-  src = fetchurl {
-    url = "http://gallium.inria.fr/~fpottier/pprint/pprint-${param.version}.tar.gz";
-    inherit (param) sha256;
+  src = fetchFromGitHub {
+    owner = "fpottier";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256:09y6nwnjldifm47406q1r9987njlk77g4ifqg6qs54dckhr64vax";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-
-  createFindlibDestdir = true;
-
-  dontBuild = true;
-  installFlags = [ "-C" "src" ];
-
   meta = with lib; {
-    homepage = "http://gallium.inria.fr/~fpottier/pprint/";
-    description = "An OCaml adaptation of Wadler’s and Leijen’s prettier printer";
-    license = licenses.cecill-c;
+    inherit (src.meta) homepage;
+    description = "An OCaml library for pretty-printing textual documents";
+    license = licenses.lgpl2Only;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
   };
 }

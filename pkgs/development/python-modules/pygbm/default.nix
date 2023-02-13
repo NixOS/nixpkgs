@@ -28,7 +28,7 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

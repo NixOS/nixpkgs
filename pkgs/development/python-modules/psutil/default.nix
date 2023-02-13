@@ -1,30 +1,42 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
-, darwin
+{ lib
+, stdenv
+, buildPythonPackage
+, CoreFoundation
+, fetchPypi
+, IOKit
 , pytestCheckHook
-, mock
-, ipaddress
-, unittest2
+, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.8.0";
+  version = "5.9.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1immnj532bnnrh1qmk5q3lsw3san8qfk9kxy1cpmy0knmfcwp70c";
+    hash = "sha256-PX+XOetDXUsTOJRKviP0lYS95TlfJ0h9LuJa2ah3SmI=";
   };
 
-  # We have many test failures on various parts of the package:
-  #  - segfaults on darwin:
-  #    https://github.com/giampaolo/psutil/issues/1715
-  #  - swap (on linux) might cause test failures if it is fully used:
-  #    https://github.com/giampaolo/psutil/issues/1911
-  #  - some mount paths are required in the build sanbox to make the tests succeed:
-  #    https://github.com/giampaolo/psutil/issues/1912
-  doCheck = false;
-  checkInputs = [ pytestCheckHook ]
-  ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
+  buildInputs =
+    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
+    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      CoreFoundation
+    ] ++ lib.optionals stdenv.isDarwin [
+      IOKit
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Segfaults on darwin:
+  # https://github.com/giampaolo/psutil/issues/1715
+  doCheck = !stdenv.isDarwin;
+
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
@@ -35,19 +47,20 @@ buildPythonPackage rec {
 
   # Note: $out must be referenced as test import paths are relative
   disabledTests = [
-    "user"
+    "cpu_freq"
+    "cpu_times"
     "disk_io_counters"
     "sensors_battery"
-    "cpu_times"
-    "cpu_freq"
+    "user"
+    "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.IOKit ];
-
-  pythonImportsCheck = [ "psutil" ];
+  pythonImportsCheck = [
+    "psutil"
+  ];
 
   meta = with lib; {
-    description = "Process and system utilization information interface for python";
+    description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer ];

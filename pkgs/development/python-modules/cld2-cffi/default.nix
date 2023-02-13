@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six cffi ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # gcc doesn't approve of this code, so disable -Werror
   NIX_CFLAGS_COMPILE = "-w" + lib.optionalString stdenv.cc.isClang " -Wno-error=c++11-narrowing";

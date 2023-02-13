@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
     python-dateutil
@@ -37,6 +37,14 @@ buildPythonPackage rec {
 
   # pelican requires > 2.7
   doCheck = !pythonOlder "3.6";
+
+  disabledTests = [
+    # incompatible with pytest7
+    # https://github.com/bobfang1992/pytomlpp/issues/66
+    "test_loads_valid_toml_files"
+    "test_round_trip_for_valid_toml_files"
+    "test_decode_encode_binary"
+  ];
 
   preCheck = ''
     cd tests

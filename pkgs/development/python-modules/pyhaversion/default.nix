@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "21.11.1";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-wh6NJRDgOrEHYEN3QlC4lOZHPnPeiPCJFF1xLoixQ14=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-HMJqZn0yzN2dP5WTRCbem1Xw8nyH2Hy7oVP4kEKHHAo=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     awesomeversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

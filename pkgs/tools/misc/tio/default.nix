@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, bash-completion }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "1.32";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-m8GgS7bv1S7KXoP7tYaTaXnjF1lBz4s0ThHqOU5tmFM=";
+    hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ meson ninja pkg-config inih bash-completion ];
 
   meta = with lib; {
     description = "Serial console TTY";
     homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
   };
 }

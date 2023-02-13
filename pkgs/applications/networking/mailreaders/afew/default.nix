@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun notmuch
   ];
 
@@ -40,6 +40,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/afewmail/afew";
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;
-    maintainers = with maintainers; [ andir flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

@@ -1,17 +1,28 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, netlify-cli
+}:
 
 buildGoModule rec {
   pname = "esbuild";
-  version = "0.13.6";
+  version = "0.14.39";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "esbuild";
-    rev = "v${version}";
-    sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
+    rev = "5faa7ad54c99a953d05c06819298d2b6f8c82d80";
+    sha256 = "pYiwGjgFMclPYTW0Qml7Pr/knT1gywUAGANra5aojYM=";
   };
 
-  vendorSha256 = "sha256-2ABWPqhK2Cf4ipQH7XvRrd+ZscJhYPc3SV2cGT0apdg=";
+  vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+
+  passthru = {
+    tests = {
+      inherit netlify-cli;
+    };
+  };
 
   meta = with lib; {
     description = "A fork of esbuild maintained by netlify";

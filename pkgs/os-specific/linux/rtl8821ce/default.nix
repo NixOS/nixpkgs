@@ -1,20 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, bc
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2021-11-19";
+  version = "${kernel.version}-unstable-2023-01-01";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
-    sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
+    rev = "a3e2f7c1f91e92f2dc788e8fcd7f2986af3d19b6";
+    sha256 = "sha256-eR4iTkRMnhNEBrUEC+fKlwq3hezNC9mSAQ7D0Wwss/0=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ hhm ivar ];
+    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

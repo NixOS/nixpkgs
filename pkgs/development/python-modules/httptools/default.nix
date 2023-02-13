@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "httptools";
-  version = "0.3.0";
+  version = "0.5.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f9b4856d46ba1f0c850f4e84b264a9a8b4460acb20e865ec00978ad9fbaa4cf";
+    sha256 = "sha256-KVh0hhwXP5EBlgu6MyQpu3ftTc2M31zumSLrAOT2vAk=";
   };
 
   # tests are not included in pypi tarball

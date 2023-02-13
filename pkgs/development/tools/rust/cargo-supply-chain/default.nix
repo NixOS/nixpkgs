@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-supply-chain";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-zjDZJOUjnEQ03rmo5CdSY1emE6YohOPlf7SKuvNLuV0=";
+    sha256 = "sha256-0WyaenLyD1MNkV+mzCIodhtkU6FqbGnuTdw6PvzIrVU=";
   };
 
-  cargoSha256 = "sha256-xSJ5rx8k+my0NeGYHZyvDzbM7uMdbViT7Ou9a9JACfs=";
+  cargoSha256 = "sha256-K3qBhd090BUZyJIAbhPBCQpCwgudCSGL7i7EezOp66Y=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

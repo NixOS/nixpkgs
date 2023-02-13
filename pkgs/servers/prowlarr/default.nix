@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
   os =
@@ -16,17 +16,17 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-aUmeZ/numcAkejfMm4kuXem5u9bwkn5jRz5PzTNq1tQ=";
-    arm64-linux_hash = "sha256-8EwB52bNTxmoPcCC8Q5y77gM8M9pDqMXypwz7ukLDuE=";
-    x64-osx_hash = "sha256-NnunLw9sZCBDMqrDMX+u/xt0owJT/NdsUv2rF6knnx4=";
+    x64-linux_hash = "sha256-hKvme3saa3/GT0l6OlFjYI0RPClo5rWtVYFN/YuJSaw=";
+    arm64-linux_hash = "sha256-f7YIJRk1AhlfepmsQqlDFMA97QnbAAzrUtPFfbuV+QY=";
+    x64-osx_hash = "sha256-7nU12Y7f+fwjziUm6O+xO78IZf8EOfgmz+JibAP/xk8=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "prowlarr";
-  version = "0.1.6.1184";
+  version = "1.1.3.2521";
 
   src = fetchurl {
-    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.develop.${version}.${os}-core-${arch}.tar.gz";
+    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";
     sha256 = hash;
   };
 
@@ -38,10 +38,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Prowlarr \
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Prowlarr \
       --add-flags "$out/share/${pname}-${version}/Prowlarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo mono openssl icu ]}
+        curl sqlite libmediainfo mono openssl icu zlib ]}
 
     runHook postInstall
   '';

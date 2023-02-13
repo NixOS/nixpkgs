@@ -43,9 +43,8 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       [ ! -f /etc/lsb-release ] || (source /etc/lsb-release; echo "OS release: $DISTRIB_DESCRIPTION")
       echo "System/kernel: $(uname -a)"
       if test -e /etc/debian_version; then echo "Debian release: $(cat /etc/debian_version)"; fi
-      header "installed Debian packages"
+      echo "installed Debian packages"
       dpkg-query --list
-      stopNest
     '';
 
     installPhase = ''
@@ -73,11 +72,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       [ "$(echo $out/debs/*.deb)" != "" ]
 
       for i in $out/debs/*.deb; do
-        header "Generated DEB package: $i"
+        echo "Generated DEB package: $i"
         dpkg-deb --info "$i"
         pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
         echo "file deb $i" >> $out/nix-support/hydra-build-products
-        stopNest
       done
       dpkg -i $out/debs/*.deb
 

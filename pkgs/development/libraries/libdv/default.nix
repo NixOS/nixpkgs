@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, popt }:
 
 stdenv.mkDerivation rec {
-  name = "libdv-1.0.0";
+  pname = "libdv";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdv/${name}.tar.gz";
+    url = "mirror://sourceforge/libdv/libdv-${version}.tar.gz";
     sha256 = "1fl96f2xh2slkv1i1ix7kqk576a0ak1d33cylm0mbhm96d0761d3";
   };
 

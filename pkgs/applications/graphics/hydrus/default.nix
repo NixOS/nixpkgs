@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , wrapQtAppsHook
-, miniupnpc_2
+, miniupnpc
 , ffmpeg
 , enableSwftools ? false
 , swftools
@@ -10,37 +10,38 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "467";
+  version = "503";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "v${version}";
-    sha256 = "sha256-ijIOCabpnaK9ww1cR+HNpCOn8uSwSEuyLWwnT2ypdD4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nJn5EphbmVYAAOisV3fym/nHlJl/aPZ2Iyp+Z2/N3Jc=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    python3Packages.mkdocs-material
   ];
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
+    cbor2
     chardet
     cloudscraper
     html5lib
     lxml
     lz4
-    nose
     numpy
     opencv4
     pillow
     psutil
-    pylzma
     pyopenssl
     pyside2
     pysocks
-    pythonPackages.mpv
+    python-dateutil
+    python3Packages.mpv
     pyyaml
     qtpy
     requests
@@ -50,7 +51,11 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = with python3Packages; [ nose mock httmock ];
+  nativeCheckInputs = with python3Packages; [
+    nose
+    mock
+    httmock
+  ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
@@ -85,6 +90,7 @@ python3Packages.buildPythonPackage rec {
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mkdocs build -d help
     mv help $out/doc/
 
     # install the hydrus binaries
@@ -102,7 +108,7 @@ python3Packages.buildPythonPackage rec {
   dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc_2 ]})
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc ]})
   '';
 
   meta = with lib; {

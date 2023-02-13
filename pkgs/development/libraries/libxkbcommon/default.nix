@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0d4jzq0zv1xmng0z0q5lb4rz03ikgxdwi68k3r70ac16gb911ixk";
+    sha256 = "sha256-Vg8RxLu8oQ9JXz7306aqTKYrT4+wtS59RZ0Yom5G4Bc=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ttuegel ];
+    mainProgram = "xkbcli";
     platforms = with platforms; unix;
   };
 }

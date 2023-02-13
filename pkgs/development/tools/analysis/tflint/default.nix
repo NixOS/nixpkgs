@@ -1,21 +1,47 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runCommand
+, makeWrapper
+, tflint
+, tflint-plugins
+, symlinkJoin
+}:
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.34.1";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ltxFduUr+poi4tEjViQXCbe+j3fUdvBG8CTaM7VdpK0=";
+    sha256 = "sha256-tsnW6KoLHEWd/uDZrK2cnVZ2IWftoxZ5zGdYhRdUp9Q=";
   };
 
-  vendorSha256 = "sha256-iZdWCSkdKG0SXcUtZ0DgDGk25vESlv2dSbcK1gUVTV8=";
+  vendorSha256 = "sha256-crGs7j9hAnGCCFjhigIJVpTM0rr9WgvBq3/ZGt6hwqQ=";
 
   doCheck = false;
 
   subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
+
+  passthru.withPlugins = plugins:
+    let
+      actualPlugins = plugins tflint-plugins;
+      pluginDir = symlinkJoin {
+        name = "tflint-plugin-dir";
+        paths = [ actualPlugins ];
+      };
+    in
+    runCommand "tflint-with-plugins"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      } ''
+      makeWrapper ${tflint}/bin/tflint $out/bin/tflint \
+        --set TFLINT_PLUGIN_DIR "${pluginDir}"
+    '';
 
   meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";

@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Online Miners, a service that
           crawls through your online content.
         '';

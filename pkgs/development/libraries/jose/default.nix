@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, asciidoc
 , zlib, jansson, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "jose";
-  version = "10";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15ac8a656m66rd9qg4dj53smykwaagqv606h18w7fiqn0ykxl4vi";
+    hash = "sha256-TKcXswF50B8MS+XHSEvqHaFSAct7VdsnZ0RtZCF04Lc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ meson pkg-config ninja asciidoc ];
   buildInputs = [ zlib jansson openssl ];
 
   outputs = [ "out" "dev" "man" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C-language implementation of Javascript Object Signing and Encryption";
     homepage = "https://github.com/latchset/jose";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.asl20;
   };
 }

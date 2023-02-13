@@ -13,12 +13,9 @@ services.lemmy = {
     hostname = "lemmy.union.rocks";
     database.createLocally = true;
   };
-  jwtSecretPath = "/run/secrets/lemmyJwt";
   caddy.enable = true;
 }
 ```
-
-(note that you can use something like agenix to get your secret jwt to the specified path)
 
 this will start the backend on port 8536 and the frontend on port 1234.
 It will expose your instance with a caddy reverse proxy to the hostname you've provided.

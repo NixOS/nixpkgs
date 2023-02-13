@@ -5,22 +5,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
-  version = "unstable-2021-11-08";
+  version = "4.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
-    rev = "c2f5581505c54f3bf9fe4e6f07c17fa9ef501cab";
-    sha256 = "0m2n30prqd9d02kmryk8vry4cabcad1892qr8a02qfg6r98x8q3q";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vwlWAbA4ExYAPRInhEsjRCNuL2wqMhAmYKO78Vi4OGo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     asn1crypto
-    pycryptodome
+    dnspython
+    dsinternals
     impacket
     ldap3
     pyasn1
-    dnspython
+    pycryptodome
+    requests_ntlm
   ];
 
   # Project has no tests
@@ -33,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
     homepage = "https://github.com/ly4k/Certipy";
+    changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -3,11 +3,11 @@
 let
   elasticmq-server = stdenv.mkDerivation rec {
     pname = "elasticmq-server";
-    version = "1.2.0";
+    version = "1.3.14";
 
     src = fetchurl {
       url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${pname}-${version}.jar";
-      sha256 = "06bn5ixz0pvvhfvavr6njv8c2i9pgd6gj32wnp2f0fn0z1kypn1f";
+      sha256 = "sha256-diTfRYV51d9QYx1E6ZbSSaM6qDIaqVPum9qsBagIcec=";
     };
 
     # don't do anything?
@@ -28,6 +28,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/softwaremill/elasticmq";
       description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ peterromfeldhk ];

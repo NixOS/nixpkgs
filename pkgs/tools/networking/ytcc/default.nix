@@ -2,13 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.5.4";
+  version = "2.6.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "sha256-nYHfmksZnIZGMSSFDhW7ajvv1F5h3aJo8IXw6yYOEw0=";
+    sha256 = "sha256-pC2uoog+nev/Xa6UbXX4vX00VQQLHtZzbVkxrxO/Pg8=";
   };
 
   nativeBuildInputs = [ gettext installShellFiles ];
@@ -19,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     wcwidth
   ];
 
-  checkInputs = with python3Packages; [ nose pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ nose pytestCheckHook ];
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [
@@ -37,6 +38,10 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/ytcc.1
+    installShellCompletion --cmd ytcc \
+      --bash scripts/completions/bash/ytcc.completion.sh \
+      --fish scripts/completions/fish/ytcc.fish \
+      --zsh scripts/completions/zsh/_ytcc
   '';
 
   meta = {

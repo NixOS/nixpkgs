@@ -3,23 +3,31 @@
 , fetchFromGitHub
 , mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "python_http_client";
-  version = "3.3.4";
+  pname = "python-http-client";
+  version = "3.3.7";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sendgrid";
     repo = "python-http-client";
     rev = version;
-    sha256 = "sha256-wTXHq+tC+rfvmDZIWvcGhQZqm6DxOmx50BsX0c6asec=";
+    sha256 = "sha256-8Qs5Jw0LMV2UucLnlFKJQ2PUhYaQx6uJdIV/4gaPH3w=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # checks date in license file and subsequently fails after new years
+    "test_daterange"
   ];
 
   pythonImportsCheck = [

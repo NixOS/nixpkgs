@@ -97,7 +97,7 @@ proc configurePhase*() =
   for def in getEnv("nimDefines").split:
     if def != "":
       switch("define", def)
-  for input in getEnv("buildInputs").split:
+  for input in getEnv("NIX_NIM_BUILD_INPUTS").split:
     if input != "":
       for nimbleFile in walkFiles(input / "*.nimble"):
         let inputSrc = normalizedPath(
@@ -119,8 +119,8 @@ proc buildPhase*() =
     binDir = getOutputDir("bin") / "bin"
   if bins != @[]:
     for bin in bins:
-      cmds.add("nim compile $# --outdir:$# $#" %
-          [getenv"nimFlags", binDir, normalizedPath(srcDir / bin)])
+      cmds.add("nim compile $# --parallelBuild:$# --outdir:$# $#" %
+          [getenv("nimFlags"), getenv("NIX_BUILD_CORES","1"), binDir, normalizedPath(srcDir / bin)])
   if getEnvBool"nimDoc":
     echo "generating documentation"
     let docDir = getOutputDir("doc") / "doc"

@@ -13,14 +13,14 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
         virtualHosts.lockedroot = {
           inherit root;
-          basicAuth.alice = "jane";
+          basicAuth.alice = "pwofa";
         };
 
         virtualHosts.lockedsubdir = {
           inherit root;
           locations."/sublocation/" = {
             alias = "${root}/";
-            basicAuth.bob = "john";
+            basicAuth.bob = "pwofb";
           };
         };
       };
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     webserver.fail("curl --fail --resolve lockedroot:80:127.0.0.1 http://lockedroot")
     webserver.succeed(
-        "curl --fail --resolve lockedroot:80:127.0.0.1 http://alice:jane@lockedroot"
+        "curl --fail --resolve lockedroot:80:127.0.0.1 http://alice:pwofa@lockedroot"
     )
 
     webserver.succeed("curl --fail --resolve lockedsubdir:80:127.0.0.1 http://lockedsubdir")
@@ -41,7 +41,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "curl --fail --resolve lockedsubdir:80:127.0.0.1 http://lockedsubdir/sublocation/index.html"
     )
     webserver.succeed(
-        "curl --fail --resolve lockedsubdir:80:127.0.0.1 http://bob:john@lockedsubdir/sublocation/index.html"
+        "curl --fail --resolve lockedsubdir:80:127.0.0.1 http://bob:pwofb@lockedsubdir/sublocation/index.html"
     )
   '';
 })

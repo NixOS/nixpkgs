@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libatomic_ops";
-  version = "7.6.12";
+  version = "7.6.14";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 = "sha256-8KtWbiX84ItWDh/qtqPbAdtKOOW8aHgEM07zkgxUnz4=";
+    sha256 = "sha256-OQ8kTUJHFHNbcFDQVlZ2FbO48pAIpmPCYvtUjxgC0pI=";
   };
 
   outputs = [ "out" "dev" "doc" ];

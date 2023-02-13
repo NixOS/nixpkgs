@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "berkeley_upc";
-  version = "2.22.0";
+  version = "2020.12.0";
 
   src = fetchurl {
     url = "http://upc.lbl.gov/download/release/berkeley_upc-${version}.tar.gz";
-    sha256 = "041l215x8z1cvjcx7kwjdgiaf9rl2d778k6kiv8q09bc68nwd44m";
+    sha256 = "sha256-JdpFORlXHpCQE+TivoQQnjQlxQN7C8BNfHvTOSwXbYQ=";
   };
 
   postPatch = ''
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   # Used during the configure phase
   ENVCMD = "${coreutils}/bin/env";
 
-  nativeBuildInputs = [ coreutils ];
   buildInputs = [ perl ];
 
   meta = with lib; {
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://upc.lbl.gov/";
     license = licenses.mit;
-    platforms = with platforms; [ linux ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ zimbatm ];
   };
 }

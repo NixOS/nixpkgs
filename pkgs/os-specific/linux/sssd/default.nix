@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson,
+  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
   nixosTests,
   withSudo ? false }:
@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.6.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AcfNm/0VpjD+Aa1ZUwI2EI/i0s06rxQCfabv3a/AM38=";
+    sha256 = "sha256-nEMfwOvWd3FRk+1RS1NPT+LcfWi4lDLCGYqH7KuPw7o=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=$(find ${python3.pkgs.ldap} -type d -name site-packages)
+    export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -54,13 +54,13 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson ];
+                  libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
+                  nss_wrapper ncurses Po4a http-parser jansson jose ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
@@ -87,6 +87,11 @@ stdenv.mkDerivation rec {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+  postFixup = ''
+    for f in $out/bin/sss{ctl,_cache,_debuglevel,_override,_seed}; do
+      wrapProgram $f --prefix LDB_MODULES_PATH : $out/modules/ldb
+    done
+  '';
 
   passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
 
@@ -96,6 +101,6 @@ stdenv.mkDerivation rec {
     changelog = "https://sssd.io/release-notes/sssd-${version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ e-user illustris ];
+    maintainers = with maintainers; [ illustris ];
   };
 }

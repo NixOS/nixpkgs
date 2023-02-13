@@ -1,24 +1,26 @@
-{ lib, stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.0";
+  version = "2.13.8";
 
-  src = fetchurl {
-    url = "https://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
-    sha256 = "0mikc3fdjd0w6rrcyksjzmv0czvgba6yk8dfmz4a3cr8s4y2pgsy";
+  src = fetchFromGitHub {
+    owner = "lttng";
+    repo = "lttng-modules";
+    rev = "v${version}";
+    hash = "sha256-6ohWsGUGFz7QlHkKWyW5edpSsBTE9DFS3v6EsH9wNZo=";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
-  preConfigure = ''
-    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    export INSTALL_MOD_PATH="$out"
-  '';
+  makeFlags = kernel.makeFlags ++ [
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   installTargets = [ "modules_install" ];
 
@@ -30,5 +32,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21Only gpl2Only mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = (lib.versions.majorMinor kernel.modDirVersion) == "5.10" || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
 }

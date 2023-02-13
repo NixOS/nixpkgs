@@ -79,18 +79,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
               f"seaf-cli download -l {libid} -s http://server -u admin\@example.com -p seafile_password -d . >&2"
           )
 
-          client1.sleep(3)
-
-          client1.succeed("seaf-cli status |grep synchronized >&2")
+          client1.wait_until_succeeds("seaf-cli status |grep synchronized >&2")
 
           client1.succeed("ls -la >&2")
           client1.succeed("ls -la test01 >&2")
 
           client1.execute("echo bla > test01/first_file")
 
-          client1.sleep(2)
-
-          client1.succeed("seaf-cli status |grep synchronized >&2")
+          client1.wait_until_succeeds("seaf-cli status |grep synchronized >&2")
 
       with subtest("client2 sync"):
           client2.wait_for_unit("default.target")
@@ -110,9 +106,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
               f"seaf-cli download -l {libid} -s http://server -u admin\@example.com -p seafile_password -d . >&2"
           )
 
-          client2.sleep(3)
-
-          client2.succeed("seaf-cli status |grep synchronized >&2")
+          client2.wait_until_succeeds("seaf-cli status |grep synchronized >&2")
 
           client2.succeed("ls -la test01 >&2")
 

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ijljhs0v99dj6y27hc10z6qchyp8gdp4199y6jzngy6dzxlzsvw";
   };
 
+  # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
+  propagatedBuildInputs = [ SDL ];
   buildInputs = [ SDL ] ;
 
   configureFlags = [ "--disable-mmx" ]
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/sdlgfx/";
     license = licenses.zlib;
 
-    maintainers = with maintainers; [ bjg ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

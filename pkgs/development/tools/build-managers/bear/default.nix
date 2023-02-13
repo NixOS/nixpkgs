@@ -9,7 +9,6 @@
 , gtest
 , spdlog
 , c-ares
-, abseil-cpp
 , zlib
 , sqlite
 , re2
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.14";
+  version = "3.0.21";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "0qy96dyd29bjvfhi46y30hli5cvshw8am0spvcv9v43660wbczd7";
+    sha256 = "sha256-wT3s8CjgFPKrJiMWHWsvmUQwpuuS4figJZUXJn3RclU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     gtest
     spdlog
     c-ares
-    abseil-cpp
     zlib
     sqlite
     re2

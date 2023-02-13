@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.7.2";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,15 +16,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kbr";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-TT0mc3ID+R5Dhm0xSMpyg68wZR70xJfRfgPkHkvLstA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BHlOX5STnKaIOM5tiBZ9JHNQIYVZfIPDMuSw6DAJliA=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

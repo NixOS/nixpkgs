@@ -1,18 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "influxdb_exporter";
-  version = "0.8.0";
+  version = "0.11.2";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "influxdb_exporter";
-    sha256 = "sha256-aNj4ru3yDet+jdcEpckFVaymmjWmKzTMPcTxPMNFbgo=";
+    hash = "sha256-UIB6/0rYOrS/B7CFffg0lPaAhSbmk0KSEogjCundXAU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = "sha256-ueE1eE0cxr7+APvIEzR26Uprx0CXN1jfNLzGVgDmJQk=";
 
   ldflags = [
     "-s"
@@ -29,6 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Prometheus exporter that accepts InfluxDB metrics";
     homepage = "https://github.com/prometheus/influxdb_exporter";
+    changelog = "https://github.com/prometheus/influxdb_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

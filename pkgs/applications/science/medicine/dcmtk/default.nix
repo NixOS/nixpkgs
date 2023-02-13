@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, zlib, libtiff, libxml2, openssl, libiconv, libpng, cmake }:
+{ lib, stdenv, fetchFromGitHub, zlib, libtiff, libxml2, openssl, libiconv
+, libpng, cmake, fetchpatch }:
 
 with lib;
 stdenv.mkDerivation rec {
   pname = "dcmtk";
-  version = "3.6.6";
+  version = "3.6.7";
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = pname;
     rev = "DCMTK-${version}";
-    sha256 = "sha256-bpvf2JJXikV/CqmXZb3w4Ua3VBEQcQk7PXw9ie0t8xo=";
+    sha256 = "sha256-Pw99R6oGcLX6Z7s8ZnpbBBqcIvY9Rl/nw2PVGjpD3gY=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libpng zlib libtiff libxml2 openssl libiconv ];
 
+  # This is only needed until https://github.com/DCMTK/dcmtk/pull/75/files is merged
+  patches = [ ./0001-Fix-cmake.patch ];
+
+  doCheck = true;
+
   meta = {
-    description = "Collection of libraries and applications implementing large parts of the DICOM standard";
+    description =
+      "Collection of libraries and applications implementing large parts of the DICOM standard";
     longDescription = ''
       DCMTK is a collection of libraries and applications implementing large parts of the DICOM standard.
       It includes software for examining, constructing and converting DICOM image files, handling offline media,

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "librsb";
-  version = "1.2.0.9";
+  version = "1.2.0.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ynrsgnvv1jfm8dv3jwjrip9x9icxv7w3qrk149025j6fbaza8gl";
+    sha256 = "sha256-7Enz94p8Q/yeEJdlk9EAqkmxhjMJ7Y+jzLt6rVLS97g=";
   };
 
   # The default configure flags are still present when building
@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     make cleanall
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     octave
   ];
   checkTarget = "tests";
 
   meta = with lib; {
-    homepage = "http://librsb.sourceforge.net/";
+    homepage = "https://librsb.sourceforge.net/";
     description = "Shared memory parallel sparse matrix and sparse BLAS library";
     longDescription = ''
       Library for sparse matrix computations featuring the Recursive Sparse

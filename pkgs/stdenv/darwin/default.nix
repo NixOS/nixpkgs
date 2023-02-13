@@ -75,7 +75,7 @@ rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+  } // lib.optionalAttrs config.contentAddressedByDefault {
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -223,23 +223,15 @@ rec {
         '';
       };
 
-      pbzx = stdenv.mkDerivation {
-        name = "bootstrap-stage0-pbzx";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapTools}/bin/pbzx $out/bin
-        '';
-      };
+      pbzx = self.runCommandLocal "bootstrap-stage0-pbzx" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapTools}/bin/pbzx $out/bin
+      '';
 
-      cpio = stdenv.mkDerivation {
-        name = "bootstrap-stage0-cpio";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapFiles.cpio} $out/bin/cpio
-        '';
-      };
+      cpio = self.runCommandLocal "bootstrap-stage0-cpio" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapFiles.cpio} $out/bin/cpio
+      '';
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenvNoCC fetchurl; };
@@ -253,49 +245,28 @@ rec {
           '';
         };
 
-        sigtool = stdenv.mkDerivation {
-          name = "bootstrap-stage0-sigtool";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/sigtool $out/bin
+        sigtool = self.runCommandLocal "bootstrap-stage0-sigtool" { } ''
+           mkdir -p $out/bin
+           ln -s ${bootstrapTools}/bin/sigtool  $out/bin
+           ln -s ${bootstrapTools}/bin/codesign $out/bin
+        '';
 
-            # Rewrite nuked references
-            sed -e "s|[^( ]*\bsigtool\b|$out/bin/sigtool|g" \
-              ${bootstrapTools}/bin/codesign > $out/bin/codesign
-            chmod a+x $out/bin/codesign
-          '';
-          # on next bootstrap tools update, use the following:
-          # installPhase = ''
-          #   mkdir -p $out/bin
-          #   ln -s ${bootstrapTools}/bin/sigtool  $out/bin
-          #   ln -s ${bootstrapTools}/bin/codesign $out/bin
-          # '';
+        print-reexports = self.runCommandLocal "bootstrap-stage0-print-reexports" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/print-reexports $out/bin
+        '';
+
+        rewrite-tbd = self.runCommandLocal "bootstrap-stage0-rewrite-tbd" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
+        '';
+
+        binutils-unwrapped = bootstrapTools // {
+          name = "bootstrap-stage0-binutils";
         };
 
-        print-reexports = stdenv.mkDerivation {
-          name = "bootstrap-stage0-print-reexports";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/print-reexports $out/bin
-          '';
-        };
-
-        rewrite-tbd = stdenv.mkDerivation {
-          name = "bootstrap-stage0-rewrite-tbd";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
-          '';
-        };
-
-        binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
-
-        cctools = {
+        cctools = bootstrapTools // {
           name = "bootstrap-stage0-cctools";
-          outPath = bootstrapTools;
           targetPrefix = "";
         };
 
@@ -359,7 +330,7 @@ rec {
 
         libcxx = stdenv.mkDerivation {
           name = "bootstrap-stage0-libcxx";
-          phases = [ "installPhase" "fixupPhase" ];
+          dontUnpack = true;
           installPhase = ''
             mkdir -p $out/lib $out/include
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
@@ -367,6 +338,7 @@ rec {
           '';
           passthru = {
             isLLVM = true;
+            cxxabi = self."${finalLlvmPackages}".libcxxabi;
           };
         };
 
@@ -376,6 +348,9 @@ rec {
             mkdir -p $out/lib
             ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
           '';
+          passthru = {
+            libName = "c++abi";
+          };
         };
 
         compiler-rt = stdenv.mkDerivation {
@@ -398,6 +373,8 @@ rec {
     let
       persistent = self: super: with prevStage; {
         cmake = super.cmakeMinimal;
+
+        curl = super.curlMinimal;
 
         inherit pbzx cpio;
 
@@ -513,6 +490,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -588,6 +566,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -606,7 +585,7 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
+          gnumake gzip gnused bzip2 ed xz patch bash python3
           ncurses libffi zlib gmp pcre gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
 
@@ -708,7 +687,7 @@ rec {
       __stdenvImpureHostDeps = commonImpureHostDeps;
       __extraImpureHostDeps = commonImpureHostDeps;
 
-      initialPath = import ../common-path.nix { inherit pkgs; };
+      initialPath = import ../generic/common-path.nix { inherit pkgs; };
       shell = "${pkgs.bash}/bin/bash";
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;
@@ -723,6 +702,11 @@ rec {
         libc = pkgs.darwin.Libsystem;
         shellPackage = pkgs.bash;
         inherit bootstrapTools;
+      } // lib.optionalAttrs useAppleSDKLibs {
+        # This objc4 will be propagated to all builds using the final stdenv,
+        # and we shouldn't mix different builds, because they would be
+        # conflicting LLVM modules. Export it here so we can grab it later.
+        inherit (pkgs.darwin) objc4;
       };
 
       allowedRequisites = (with pkgs; [
@@ -755,12 +739,16 @@ rec {
         darwin.binutils
         darwin.binutils.bintools
         curl.out
+        zstd.out
+        libidn2.out
+        libunistring.out
         openssl.out
         libssh2.out
         nghttp2.lib
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        file
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

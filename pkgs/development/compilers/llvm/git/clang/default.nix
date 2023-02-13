@@ -1,16 +1,24 @@
-{ lib, stdenv, llvm_meta, src, substituteAll, cmake, libxml2, libllvm, version, python3
+{ lib, stdenv, llvm_meta
+, monorepoSrc, runCommand
+, substituteAll, cmake, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
 
 let
-  self = stdenv.mkDerivation ({
+  self = stdenv.mkDerivation (rec {
     pname = "clang";
     inherit version;
 
-    inherit src;
-    sourceRoot = "source/clang";
+    src = runCommand "${pname}-src-${version}" {} ''
+      mkdir -p "$out"
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/clang-tools-extra "$out"
+    '';
+
+    sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
@@ -19,9 +27,10 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
+      "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -37,6 +46,7 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
+      ./add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
@@ -45,10 +55,6 @@ let
 
     postPatch = ''
       (cd tools && ln -s ../../clang-tools-extra extra)
-
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
 
       # Patch for standalone doc building
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
@@ -64,7 +70,7 @@ let
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"
-      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
+      substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
@@ -75,6 +81,7 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
+      patchShebangs $python/bin
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
@@ -99,6 +106,7 @@ let
         of tools that can be built using the Clang frontend as a library to
         parse C/C++ code.
       '';
+      mainProgram = "clang";
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";

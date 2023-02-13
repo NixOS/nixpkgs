@@ -2,20 +2,28 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
+
+  # popular downstream dependencies
+, aiohttp
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "2.0.8";
+  version = "3.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
-    rev = version;
-    sha256 = "sha256-+acnzdDcujnMa0FYlWaAX7Ga9APMRlvBLKoogIyY8YM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2kXs6ZdemA6taV4aa9xBKLmhbSgpybjg3Z61EUFabrk=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -24,7 +32,11 @@ buildPythonPackage rec {
       --replace " --cov=charset_normalizer --cov-report=term-missing" ""
   '';
 
-  pythonImportsCheck = [ "charset_normalizer" ];
+  pythonImportsCheck = [
+    "charset_normalizer"
+  ];
+
+  passthru.tests = { inherit aiohttp requests; };
 
   meta = with lib; {
     description = "Python module for encoding and language detection";

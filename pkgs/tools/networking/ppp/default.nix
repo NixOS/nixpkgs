@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , substituteAll
 , libpcap
+, libxcrypt
 , openssl
 , bash
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
       src = ./nix-purity.patch;
       glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
       openssl_dev = openssl.dev;
-      openssl_out = openssl.out;
+      openssl_lib = lib.getLib openssl;
     })
     # Without nonpriv.patch, pppd --version doesn't work when not run as root.
     ./nonpriv.patch
@@ -31,6 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpcap
+    libxcrypt
     openssl
     bash
   ];
@@ -48,6 +51,8 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  NIX_LDFLAGS = "-lcrypt";
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -59,6 +64,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     substituteInPlace "$out/bin/pon" --replace "/usr/sbin" "$out/bin"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) pppd;
+  };
 
   meta = with lib; {
     homepage = "https://ppp.samba.org";

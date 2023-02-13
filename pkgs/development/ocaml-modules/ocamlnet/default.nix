@@ -2,12 +2,11 @@
 , gnutls, nettle
 }:
 
-if lib.versionOlder ocaml.version "4.02"
-then throw "ocamlnet is not available for OCaml ${ocaml.version}"
-else
+lib.throwIf (lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0")
+  "ocamlnet is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ocamlnet-${version}";
+  pname = "ocaml${ocaml.version}-ocamlnet";
   version = "4.1.9";
 
   src = fetchurl {
@@ -15,8 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vlwxjxr946gdl61a1d7yk859cijq45f60dhn54ik3w4g6cx33pr";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
-  buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];
+  nativeBuildInputs = [ pkg-config which ocaml findlib ];
+  buildInputs = [ ncurses ocaml_pcre camlzip gnutls nettle ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "http://projects.camlcity.org/projects/ocamlnet.html";
     description = "A library implementing Internet protocols (http, cgi, email, etc.) for OCaml";
     license = "Most Ocamlnet modules are released under the zlib/png license. The HTTP server module Nethttpd is, however, under the GPL.";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

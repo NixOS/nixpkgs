@@ -59,13 +59,13 @@ mkDerivation rec {
     "pokerth.pro"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL";
 
   meta = with lib; {
     homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz yegortimoshenko ];
+    maintainers = with maintainers; [ obadz yana ];
     platforms = platforms.all;
   };
 }

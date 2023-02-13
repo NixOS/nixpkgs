@@ -22,6 +22,12 @@ let
      test '~' = '~' && echo 'success'
     '';
 
+    fish = writeFishBin "test-writers-fish-bin" ''
+      if test "test" = "test"
+        echo "success"
+      end
+    '';
+
     rust = writeRustBin "test-writers-rust-bin" {} ''
       fn main(){
         println!("success")
@@ -94,6 +100,12 @@ let
      test '~' = '~' && echo 'success'
     '';
 
+    fish = writeFish "test-writers-fish" ''
+      if test "test" = "test"
+        echo "success"
+      end
+    '';
+
     haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
       import Data.Default
 
@@ -150,6 +162,29 @@ let
       print(y[0]['test'])
     '';
 
+    fsharp = makeFSharpWriter {
+      libraries = { fetchNuGet }: [
+        (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
+      ];
+    } "test-writers-fsharp" ''
+      #r "nuget: FSharp.SystemTextJson, 0.17.4"
+
+      module Json =
+          open System.Text.Json
+          open System.Text.Json.Serialization
+          let options = JsonSerializerOptions()
+          options.Converters.Add(JsonFSharpConverter())
+          let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
+          let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
+
+      type Letter = A | B
+      let a = {| Hello = Some "World"; Letter = A |}
+      if a |> Json.serialize |> Json.deserialize |> (=) a
+      then "success"
+      else "failed"
+      |> printfn "%s"
+    '';
+
     pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
       print("success")
     '';
@@ -160,6 +195,10 @@ let
 
     pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
       print("success")
+    '';
+
+    fsharpNoNugetDeps = writeFSharp "test-writers-fsharp-no-nuget-deps" ''
+      printfn "success"
     '';
   };
 

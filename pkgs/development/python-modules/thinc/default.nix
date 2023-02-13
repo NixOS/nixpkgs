@@ -1,26 +1,26 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, blis
-, catalogue
-, cymem
-, cython
-, contextvars
-, dataclasses
 , Accelerate
+, blis
+, buildPythonPackage
+, catalogue
+, confection
 , CoreFoundation
 , CoreGraphics
 , CoreVideo
+, cymem
+, cython
+, fetchPypi
 , hypothesis
 , mock
 , murmurhash
 , numpy
 , plac
-, pythonOlder
 , preshed
 , pydantic
+, pytestCheckHook
+, python
+, pythonOlder
 , srsly
 , tqdm
 , typing-extensions
@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.13";
+  version = "8.1.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R2YqOuM9RFp3tup7dyREgFx7uomR8SLjUNr3Le3IFxo=";
+    hash = "sha256-Dwj20fxQ4ovxiBTKKxyAfNTVmpMNcTRZpnXghsR3mvk=";
   };
 
   buildInputs = [
@@ -51,41 +51,41 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     blis
     catalogue
+    confection
     cymem
     murmurhash
     numpy
     plac
     preshed
+    pydantic
     srsly
     tqdm
-    pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    contextvars
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  pytestFlagsArray = [
-    "thinc/tests"
-  ];
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
+  '';
 
   pythonImportsCheck = [
     "thinc"
   ];
 
   meta = with lib; {
-    description = "Practical Machine Learning for NLP in Python";
+    description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];

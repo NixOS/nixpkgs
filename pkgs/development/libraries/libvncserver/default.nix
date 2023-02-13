@@ -14,20 +14,35 @@
 
 stdenv.mkDerivation rec {
   pname = "libvncserver";
-  version = "0.9.13";
+  version = "0.9.14";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "libvncserver";
     rev = "LibVNCServer-${version}";
-    sha256 = "sha256-gQT/M2u4nWQ0MfO2gWAqY0ZJc7V9eGczGzcsxKmG4H8=";
+    sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libjpeg openssl libgcrypt libpng ]
-    ++ lib.optional stdenv.isLinux systemd
-    ++ lib.optional stdenv.isDarwin Carbon;
-  propagatedBuildInputs = [ zlib ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libjpeg
+    openssl
+    libgcrypt
+    libpng
+  ] ++ lib.optionals stdenv.isLinux [
+    systemd
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+  ];
+
+  propagatedBuildInputs = [
+    zlib
+  ];
 
   meta = with lib; {
     description = "VNC server library";

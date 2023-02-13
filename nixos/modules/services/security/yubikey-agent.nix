@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to start yubikey-agent when you log in.  Also sets
           SSH_AUTH_SOCK to point at yubikey-agent.
 
@@ -34,7 +34,7 @@ in
         type = types.package;
         default = pkgs.yubikey-agent;
         defaultText = literalExpression "pkgs.yubikey-agent";
-        description = ''
+        description = lib.mdDoc ''
           The package used for the yubikey-agent daemon.
         '';
       };
@@ -56,6 +56,9 @@ in
           "graphical-session.target")
       ];
     };
+
+    # Yubikey-agent expects pcsd to be running in order to function.
+    services.pcscd.enable = true;
 
     environment.extraInit = ''
       if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then

@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ lib.optional disableDocs [ "--disable-docs" ]
-                   ++ lib.optional stdenv.isDarwin [ "--enable-xonx" ];
+                   ++ lib.optionals disableDocs [ "--disable-docs" ]
+                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://racket-lang.org/";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ kkallio henrytill vrthra ];
+    maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
     broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };

@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
     configureFlags="--with-ocaml-lib-prefix=$out/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ libxslt ];
+  propagatedBuildInputs = [ gdome2 ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ocaml findlib gdome2 libxslt];
-  propagatedBuildInputs = [gdome2];
+  strictDeps = true;
 
   meta = {
-    homepage = "http://gmetadom.sourceforge.net/";
+    homepage = "https://gmetadom.sourceforge.net/";
     description = "A collection of librares, each library providing a DOM implementation";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.roconnor ];

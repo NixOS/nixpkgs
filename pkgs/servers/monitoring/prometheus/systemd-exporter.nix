@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "systemd_exporter";
-  version = "0.4.0";
+  version = "0.5.0";
 
-  vendorSha256 = "sha256-bYoB0r+d0j3esi/kK2a7/Duup9cf4M3WJjiBNs2+bj8=";
+  vendorSha256 = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
 
   src = fetchFromGitHub {
     owner = "povilasv";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JDfRHczFnTP9sxA7polUE9qzJhSPIiAU58GBNDYkX4c=";
+    sha256 = "sha256-q6rnD8JCtB1zTkUfZt6f2Uyo91uFi3HYI7WFlZdzpBM=";
   };
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };

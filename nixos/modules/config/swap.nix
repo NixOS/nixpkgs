@@ -14,7 +14,7 @@ let
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
           WARNING: Don't try to hibernate when you have at least one swap partition with
@@ -31,7 +31,7 @@ let
         default = "aes-xts-plain64";
         example = "serpent-xts-plain64";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Use specified cipher for randomEncryption.
 
           Hint: Run "cryptsetup benchmark" to see which one is fastest on your machine.
@@ -42,7 +42,7 @@ let
         default = "/dev/urandom";
         example = "/dev/random";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Define the source of randomness to obtain a random key for encryption.
         '';
       };
@@ -50,7 +50,7 @@ let
       allowDiscards = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow TRIM requests to the underlying device. This option
           has security implications; please read the LUKS documentation before
           activating it.
@@ -66,15 +66,15 @@ let
 
       device = mkOption {
         example = "/dev/sda3";
-        type = types.str;
-        description = "Path of the device or swap file.";
+        type = types.nonEmptyStr;
+        description = lib.mdDoc "Path of the device or swap file.";
       };
 
       label = mkOption {
         example = "swap";
         type = types.str;
-        description = ''
-          Label of the device.  Can be used instead of <varname>device</varname>.
+        description = lib.mdDoc ''
+          Label of the device.  Can be used instead of {var}`device`.
         '';
       };
 
@@ -82,7 +82,7 @@ let
         default = null;
         example = 2048;
         type = types.nullOr types.int;
-        description = ''
+        description = lib.mdDoc ''
           If this option is set, ‘device’ is interpreted as the
           path of a swapfile that will be created automatically
           with the indicated size (in megabytes).
@@ -93,7 +93,7 @@ let
         default = null;
         example = 2048;
         type = types.nullOr types.int;
-        description = ''
+        description = lib.mdDoc ''
           Specify the priority of the swap device. Priority is a value between 0 and 32767.
           Higher numbers indicate higher priority.
           null lets the kernel choose a priority, which will show up as a negative value.
@@ -108,7 +108,7 @@ let
           source = "/dev/random";
         };
         type = types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
-        description = ''
+        description = lib.mdDoc ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
           HINT: run "cryptsetup benchmark" to test cipher performance on your machine.
@@ -127,7 +127,7 @@ let
         default = null;
         example = "once";
         type = types.nullOr (types.enum ["once" "pages" "both" ]);
-        description = ''
+        description = lib.mdDoc ''
           Specify the discard policy for the swap device. If "once", then the
           whole swap space is discarded at swapon invocation. If "pages",
           asynchronous discard on freed pages is performed, before returning to
@@ -140,7 +140,7 @@ let
         default = [ "defaults" ];
         example = [ "nofail" ];
         type = types.listOf types.nonEmptyStr;
-        description = ''
+        description = lib.mdDoc ''
           Options used to mount the swap.
         '';
       };
@@ -160,7 +160,7 @@ let
     config = rec {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
-      deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
+      deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
     };
 
@@ -181,13 +181,13 @@ in
         { device = "/var/swapfile"; }
         { label = "bigswap"; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         The swap devices and swap files.  These must have been
-        initialised using <command>mkswap</command>.  Each element
+        initialised using {command}`mkswap`.  Each element
         should be an attribute set specifying either the path of the
-        swap device or file (<literal>device</literal>) or the label
-        of the swap device (<literal>label</literal>, see
-        <command>mkswap -L</command>).  Using a label is
+        swap device or file (`device`) or the label
+        of the swap device (`label`, see
+        {command}`mkswap -L`).  Using a label is
         recommended.
       '';
 
@@ -197,6 +197,21 @@ in
   };
 
   config = mkIf ((length config.swapDevices) != 0) {
+    assertions = map (sw: {
+      assertion = sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
+      message = ''
+        You cannot use swap device "${sw.device}" with randomEncryption enabled.
+        The UUIDs and labels will get erased on every boot when the partition is encrypted.
+        Use /dev/disk/by-partuuid/… instead.
+      '';
+    }) config.swapDevices;
+
+    warnings =
+      concatMap (sw:
+        if sw.size != null && hasPrefix "/dev/" sw.device
+        then [ "Setting the swap size of block device ${sw.device} has no effect" ]
+        else [ ])
+      config.swapDevices;
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SWAP")
@@ -205,24 +220,27 @@ in
     # Create missing swapfiles.
     systemd.services =
       let
-
         createSwapDevice = sw:
-          assert sw.device != "";
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-label" sw.device);
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+            path = [ pkgs.util-linux pkgs.e2fsprogs ]
+              ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+
+            environment.DEVICE = sw.device;
 
             script =
               ''
                 ${optionalString (sw.size != null) ''
-                  currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
-                  if [ "${toString sw.size}" != "$currentSize" ]; then
-                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                  currentSize=$(( $(stat -c "%s" "$DEVICE" 2>/dev/null || echo 0) / 1024 / 1024 ))
+                  if [[ ! -b "$DEVICE" && "${toString sw.size}" != "$currentSize" ]]; then
+                    # Disable CoW for CoW based filesystems like BTRFS.
+                    truncate --size 0 "$DEVICE"
+                    chattr +C "$DEVICE" 2>/dev/null || true
+
+                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size}
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi

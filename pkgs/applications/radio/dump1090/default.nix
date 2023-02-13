@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "6.1";
+  version = "8.2";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OLXnT5TD6ZBNJUk4qXOMbr+NWdw3j1rv1xkFPZi4Wo8=";
+    sha256 = "sha256-SUvK9XTXIDimEMEnORnp/Af/F030TZTxLI43Jzz31Js=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple Mode S decoder for RTLSDR devices";
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;

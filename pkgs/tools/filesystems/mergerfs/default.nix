@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.33.1";
+  version = "2.34.1";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-60jGW3aMBf1Ue+AbV/kHb8WoKBqCRMa0fgt6Id1Xt9w=";
+    sha256 = "sha256-67LkMbs3JGpkwMHGWJf03yy8aGfSVb64TF4DPLlLMgY=";
   };
 
   nativeBuildInputs = [

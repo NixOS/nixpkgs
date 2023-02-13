@@ -14,24 +14,28 @@
 , pyshp
 , fonttools
 , pyyaml
-, pdfminer
+, pdfminer-six
 , vobject
 , tabulate
 , wcwidth
 , zstandard
 , setuptools
+, importlib-metadata
 , git
 , withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
+, testers
+, visidata
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.8";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
+    hash = "sha256-OKCrlUWHgbaLZJPVvs9lnw4cD27pRoO7F9oel1NzT6A=";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +59,7 @@ buildPythonApplication rec {
     pyyaml
     #namestand
     #datapackage
-    pdfminer
+    pdfminer-six
     #tabula
     vobject
     tabulate
@@ -63,9 +67,11 @@ buildPythonApplication rec {
     zstandard
     odfpy
     setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+    importlib-metadata
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 
@@ -73,6 +79,7 @@ buildPythonApplication rec {
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   checkPhase = ''
+    runHook preCheck
     # disable some tests which require access to the network
     rm tests/load-http.vd            # http
     rm tests/graph-cursor-nosave.vd  # http
@@ -85,13 +92,21 @@ buildPythonApplication rec {
 
     substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
     bash dev/test.sh
+    runHook postCheck
   '';
+
+  pythonImportsCheck = ["visidata"];
+
+  passthru.tests.version = testers.testVersion {
+    package = visidata;
+    version = "v${version}";
+  };
 
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raskin markus1189 ];
-    homepage = "http://visidata.org/";
+    homepage = "https://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

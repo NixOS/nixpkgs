@@ -5,7 +5,6 @@
 , cmake
 , extra-cmake-modules
 , cairo
-, cldr-emoji-annotation
 , pango
 , fribidi
 , fmt
@@ -41,17 +40,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.11";
+  version = "5.0.21";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-81FuV6wBDQcOG5TLEJBqSG09BRgLekAo3tqZA40AQYo=";
+    sha256 = "sha256-O2ozMSNo07TWw7Se4CCo95OM/paG7TSVVG6SqHoYiBE=";
   };
 
   prePatch = ''
-    ln -s ${enDict} src/modules/spell/dict/$(stripHash ${enDict})
+    ln -s ${enDict} src/modules/spell/$(stripHash ${enDict})
   '';
 
   nativeBuildInputs = [
@@ -73,7 +72,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     wayland
     wayland-protocols
-    cldr-emoji-annotation
     json_c
     libGL
     libevent

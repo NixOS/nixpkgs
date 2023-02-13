@@ -1,41 +1,49 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, attrs
 , click
 , colorama
-, dataclasses
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
 , mypy-extensions
 , pathspec
 , parameterized
 , platformdirs
-, regex
 , tomli
 , typed-ast
 , typing-extensions
 , uvloop
 }:
 
-
 buildPythonPackage rec {
   pname = "black";
-  version = "21.10b0";
+  version = "22.12.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qZUiKQkuMl/l89rlbYH2ObI/cTHrhAeBlH5LKIYDDzM=";
+    hash = "sha256-IpNR5aGMow9Ee/ck0Af4kPl+E68HC7atTApEHNdZai8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized ];
+  nativeCheckInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -58,22 +66,23 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ];
+  # multiple tests exceed max open files on hydra builders
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-cors
-    attrs
     click
-    colorama
     mypy-extensions
     pathspec
     platformdirs
-    regex
     tomli
-    typed-ast # required for tests and python2 extra
-    uvloop
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses
-    ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") typed-ast
+  ++ lib.optional (pythonOlder "3.10") typing-extensions;
+
+  passthru.optional-dependencies = {
+    d = [ aiohttp aiohttp-cors ];
+    colorama = [ colorama ];
+    uvloop = [ uvloop ];
+  };
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

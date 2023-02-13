@@ -11,7 +11,7 @@ in
     gatewayAddress = mkOption {
       type = types.str;
       default = "fritz.box";
-      description = ''
+      description = lib.mdDoc ''
         The hostname or IP of the FRITZ!Box.
       '';
     };
@@ -19,7 +19,7 @@ in
     gatewayPort = mkOption {
       type = types.int;
       default = 49000;
-      description = ''
+      description = lib.mdDoc ''
         The port of the FRITZ!Box UPnP service.
       '';
     };

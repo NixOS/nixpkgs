@@ -80,15 +80,15 @@ in
   ###### interface
   options.services.sympa = with types; {
 
-    enable = mkEnableOption "Sympa mailing list manager";
+    enable = mkEnableOption (lib.mdDoc "Sympa mailing list manager");
 
     lang = mkOption {
       type = str;
       default = "en_US";
       example = "cs";
-      description = ''
+      description = lib.mdDoc ''
         Default Sympa language.
-        See <link xlink:href='https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa' />
+        See <https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa>
         for available options.
       '';
     };
@@ -96,7 +96,7 @@ in
     listMasters = mkOption {
       type = listOf str;
       example = [ "postmaster@sympa.example.org" ];
-      description = ''
+      description = lib.mdDoc ''
         The list of the email addresses of the listmasters
         (users authorized to perform global server commands).
       '';
@@ -106,9 +106,9 @@ in
       type = nullOr str;
       default = null;
       example = "lists.example.org";
-      description = ''
-        Main domain to be used in <filename>sympa.conf</filename>.
-        If <literal>null</literal>, one of the <option>services.sympa.domains</option> is chosen for you.
+      description = lib.mdDoc ''
+        Main domain to be used in {file}`sympa.conf`.
+        If `null`, one of the {option}`services.sympa.domains` is chosen for you.
       '';
     };
 
@@ -119,8 +119,8 @@ in
             type = nullOr str;
             default = null;
             example = "archive.example.org";
-            description = ''
-              Domain part of the web interface URL (no web interface for this domain if <literal>null</literal>).
+            description = lib.mdDoc ''
+              Domain part of the web interface URL (no web interface for this domain if `null`).
               DNS record of type A (or AAAA or CNAME) has to exist with this value.
             '';
           };
@@ -128,7 +128,7 @@ in
             type = str;
             default = "/";
             example = "/sympa";
-            description = "URL path part of the web interface.";
+            description = lib.mdDoc "URL path part of the web interface.";
           };
           settings = mkOption {
             type = attrsOf (oneOf [ str int bool ]);
@@ -136,9 +136,9 @@ in
             example = {
               default_max_list_members = 3;
             };
-            description = ''
-              The <filename>robot.conf</filename> configuration file as key value set.
-              See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+            description = lib.mdDoc ''
+              The {file}`robot.conf` configuration file as key value set.
+              See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
               for list of configuration parameters.
             '';
           };
@@ -149,7 +149,7 @@ in
         };
       }));
 
-      description = ''
+      description = lib.mdDoc ''
         Email domains handled by this instance. There have
         to be MX records for keys of this attribute set.
       '';
@@ -172,36 +172,36 @@ in
         type = enum [ "SQLite" "PostgreSQL" "MySQL" ];
         default = "SQLite";
         example = "MySQL";
-        description = "Database engine to use.";
+        description = lib.mdDoc "Database engine to use.";
       };
 
       host = mkOption {
         type = nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Database host address.
 
-          For MySQL, use <literal>localhost</literal> to connect using Unix domain socket.
+          For MySQL, use `localhost` to connect using Unix domain socket.
 
-          For PostgreSQL, use path to directory (e.g. <filename>/run/postgresql</filename>)
+          For PostgreSQL, use path to directory (e.g. {file}`/run/postgresql`)
           to connect using Unix domain socket located in this directory.
 
-          Use <literal>null</literal> to fall back on Sympa default, or when using
-          <option>services.sympa.database.createLocally</option>.
+          Use `null` to fall back on Sympa default, or when using
+          {option}`services.sympa.database.createLocally`.
         '';
       };
 
       port = mkOption {
         type = nullOr port;
         default = null;
-        description = "Database port. Use <literal>null</literal> for default port.";
+        description = lib.mdDoc "Database port. Use `null` for default port.";
       };
 
       name = mkOption {
         type = str;
         default = if cfg.database.type == "SQLite" then "${dataDir}/sympa.sqlite" else "sympa";
         defaultText = literalExpression ''if database.type == "SQLite" then "${dataDir}/sympa.sqlite" else "sympa"'';
-        description = ''
+        description = lib.mdDoc ''
           Database name. When using SQLite this must be an absolute
           path to the database file.
         '';
@@ -210,22 +210,22 @@ in
       user = mkOption {
         type = nullOr str;
         default = user;
-        description = "Database user. The system user name is used as a default.";
+        description = lib.mdDoc "Database user. The system user name is used as a default.";
       };
 
       passwordFile = mkOption {
         type = nullOr path;
         default = null;
         example = "/run/keys/sympa-dbpassword";
-        description = ''
-          A file containing the password for <option>services.sympa.database.user</option>.
+        description = lib.mdDoc ''
+          A file containing the password for {option}`services.sympa.database.user`.
         '';
       };
 
       createLocally = mkOption {
         type = bool;
         default = true;
-        description = "Whether to create a local database automatically.";
+        description = lib.mdDoc "Whether to create a local database automatically.";
       };
     };
 
@@ -233,23 +233,23 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = "Whether to enable Sympa web interface.";
+        description = lib.mdDoc "Whether to enable Sympa web interface.";
       };
 
       server = mkOption {
         type = enum [ "nginx" "none" ];
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
           Further nginx configuration can be done by adapting
-          <option>services.nginx.virtualHosts.<replaceable>name</replaceable></option>.
+          {option}`services.nginx.virtualHosts.«name»`.
         '';
       };
 
       https = mkOption {
         type = bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use HTTPS. When nginx integration is enabled, this option forces SSL and enables ACME.
           Please note that Sympa web interface always uses https links even when this option is disabled.
         '';
@@ -258,7 +258,7 @@ in
       fcgiProcs = mkOption {
         type = ints.positive;
         default = 2;
-        description = "Number of FastCGI processes to fork.";
+        description = lib.mdDoc "Number of FastCGI processes to fork.";
       };
     };
 
@@ -266,12 +266,12 @@ in
       type = mkOption {
         type = enum [ "postfix" "none" ];
         default = "postfix";
-        description = ''
-          Mail transfer agent (MTA) integration. Use <literal>none</literal> if you want to configure it yourself.
+        description = lib.mdDoc ''
+          Mail transfer agent (MTA) integration. Use `none` if you want to configure it yourself.
 
-          The <literal>postfix</literal> integration sets up local Postfix instance that will pass incoming
+          The `postfix` integration sets up local Postfix instance that will pass incoming
           messages from configured domains to Sympa. You still need to configure at least outgoing message
-          handling using e.g. <option>services.postfix.relayHost</option>.
+          handling using e.g. {option}`services.postfix.relayHost`.
         '';
       };
     };
@@ -285,9 +285,9 @@ in
           viewlogs_page_size = 50;
         }
       '';
-      description = ''
-        The <filename>sympa.conf</filename> configuration file as key value set.
-        See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+      description = lib.mdDoc ''
+        The {file}`sympa.conf` configuration file as key value set.
+        See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
         for list of configuration parameters.
       '';
     };
@@ -298,16 +298,16 @@ in
           enable = mkOption {
             type = bool;
             default = true;
-            description = "Whether this file should be generated. This option allows specific files to be disabled.";
+            description = lib.mdDoc "Whether this file should be generated. This option allows specific files to be disabled.";
           };
           text = mkOption {
             default = null;
             type = nullOr lines;
-            description = "Text of the file.";
+            description = lib.mdDoc "Text of the file.";
           };
           source = mkOption {
             type = path;
-            description = "Path of the source file.";
+            description = lib.mdDoc "Path of the source file.";
           };
         };
 
@@ -321,7 +321,7 @@ in
           };
         }
       '';
-      description = "Set of files to be linked in <filename>${dataDir}</filename>.";
+      description = lib.mdDoc "Set of files to be linked in {file}`${dataDir}`.";
     };
   };
 

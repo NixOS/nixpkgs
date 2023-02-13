@@ -6,32 +6,28 @@ let
   cfg = config.services.heapster;
 in {
   options.services.heapster = {
-    enable = mkOption {
-      description = "Whether to enable heapster monitoring";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption (lib.mdDoc "Heapster monitoring");
 
     source = mkOption {
-      description = "Heapster metric source";
+      description = lib.mdDoc "Heapster metric source";
       example = "kubernetes:https://kubernetes.default";
       type = types.str;
     };
 
     sink = mkOption {
-      description = "Heapster metic sink";
+      description = lib.mdDoc "Heapster metic sink";
       example = "influxdb:http://localhost:8086";
       type = types.str;
     };
 
     extraOpts = mkOption {
-      description = "Heapster extra options";
+      description = lib.mdDoc "Heapster extra options";
       default = "";
       type = types.separatedString " ";
     };
 
     package = mkOption {
-      description = "Package to use by heapster";
+      description = lib.mdDoc "Package to use by heapster";
       default = pkgs.heapster;
       defaultText = literalExpression "pkgs.heapster";
       type = types.package;

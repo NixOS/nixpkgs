@@ -9,6 +9,7 @@
 , wrapGAppsHook
 , libinput
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
@@ -20,36 +21,38 @@
 let
   phocWlroots = wlroots.overrideAttrs (old: {
     patches = (old.patches or []) ++ [
-      # Temporary fix. Upstream report: https://source.puri.sm/Librem5/phosh/-/issues/422
+      # Revert "layer-shell: error on 0 dimension without anchors"
+      # https://source.puri.sm/Librem5/phosh/-/issues/422
       (fetchpatch {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/78fde4aaf1a74eb13a3f083cb6dfb29f578c3265/community/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        sha256 = "1zjn7mwdj21z0jsc2mz90cnrzk97yqkiq58qqgpjav4h4dgpfb38";
-      })
-      # To fix missing header `EGL/eglmesaext.h` dropped upstream
-      (fetchpatch {
-        name = "0002-stop-including-eglmesaext-h.patch";
-        url = "https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab.patch";
-        sha256 = "17ax4dyk0584yhs3lq8ija5bkainjf7psx9c9r50cr4jm9c0i37l";
+        url = "https://source.puri.sm/Librem5/wlroots/-/commit/4f66b0931aaaee65367102e9c4ccb736097412c7.patch";
+        hash = "sha256-2Vy5a4lWh8FP2PN6xRIZv6IlUuLZibT0MYW+EyvVULs=";
       })
 
-      # xwayland: Allow to retrieve _NET_STARTUP_ID
+      # xdg-activation: Deduplicate token creation code
       (fetchpatch {
-        name = "allow-to-retrieve-net-startup-id.patch";
-        url = "https://github.com/swaywm/wlroots/commit/66593071bc90a1cccaeedc636eb6f33c973f5362.patch";
-        sha256 = "sha256-yKf/twdUzrII5IakH7AH6LGyPDo9Nl/gIB0pTThSTfY=";
+        name = "xdg-activation-deduplicate-token-creation-code.patch";
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/dd03d839ab56c3e5d7c607a8d76e58e0b75edb85.patch";
+        sha256 = "sha256-mxt68MISC24xpaBtVSc1F2W4cyNs5wQowtbUQH9Eqr8=";
       })
-      # xwayland: Allow to retrieve startup-id via _NET_STARTUP_INFO
+
+      # seat: Allow to cancel touches
       (fetchpatch {
-        name = "allow-to-retrieve-startup-id-via-net-startup-info.patch";
-        url = "https://github.com/swaywm/wlroots/commit/235bb6f2fcb8ee4174215ba74b5bc2f191c5960a.patch";
-        sha256 = "sha256-7AWBq12tF/781CmgvTaOvTIiiJMywxRn6eWp+jacdak=";
+        name = "seat-Allow-to-cancel-touches.patch";
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/17b2b06633729f1826715c1d0b84614aa3cedb3a.patch";
+        sha256 = "sha256-BAeXa3ZB5TXnlq0ZP2+rZlVXEPWpLP4Wi4TLwoXjkz4=";
       })
+
+      # From
+      # https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/13fcdba75cf5f21cfd49c1a05f4fa62f77619b40
+      # which has been merged upstream, but doesn't cleanly apply on to the
+      # latest released version.
+      ./0001-handle-outputs-that-arent-in-the-layout.patch
     ];
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.9.0";
+  version = "0.21.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -57,7 +60,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qd1ZETM2/AjU5nKQIqh0Q+SboLNr+NncvSHgLv2S3KI=";
+    sha256 = "sha256-HPqhro6TE/Ukh4txBPrDoIuDaxSxd/ZkDVZU3+m3GFg=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +77,7 @@ in stdenv.mkDerivation rec {
     libinput
     glib
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
     wayland
@@ -92,7 +95,7 @@ in stdenv.mkDerivation rec {
     description = "Wayland compositor for mobile phones like the Librem 5";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

@@ -1,47 +1,41 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
-, python
-, nose
-, pytest
-, mock
-, ipython
 , ipykernel
+, ipython
 , jupyterlab-widgets
+, lib
+, nbformat
+, pytestCheckHook
+, pytz
 , traitlets
-, notebook
 , widgetsnbextension
 }:
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "7.6.5";
+  version = "8.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00974f7cb4d5f8d494c19810fedb9fa9b64bffd3cda7c2be23c133a1ad3c99c5";
+    hash = "sha256-wABad6R9d4icr+2JK1jjO0oqlnEhVEBMZUjsIicoEeo=";
   };
 
-  # Tests are not distributed
-  # doCheck = false;
-
-  buildInputs = [ nose pytest mock ];
   propagatedBuildInputs = [
     ipython
     ipykernel
     jupyterlab-widgets
     traitlets
-    notebook
+    nbformat
+    pytz
     widgetsnbextension
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

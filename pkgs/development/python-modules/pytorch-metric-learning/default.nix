@@ -1,31 +1,33 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
 , numpy
 , scikit-learn
 , pytestCheckHook
-, pytorch
+, torch
 , torchvision
 , tqdm
+, faiss
 }:
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "0.9.99";
+  version = "2.0.0";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ahs2b7q3hxi6yv4g2fjy7mvl899h56dvlpc2r9301440qsgkdzr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-xarZvCRT/PhhB+ySv94XGz7uF/WiKbil6ohg7XbzOUs=";
   };
 
   propagatedBuildInputs = [
     numpy
-    pytorch
+    torch
     scikit-learn
     torchvision
     tqdm
@@ -36,14 +38,18 @@ buildPythonPackage rec {
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
+
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    faiss
+    pytestCheckHook
+  ];
+
   disabledTests = [
-    # requires FAISS (not in Nixpkgs)
-    "test_accuracy_calculator_and_faiss"
-    "test_global_embedding_space_tester"
-    "test_with_same_parent_label_tester"
+    # TypeError: setup() missing 1 required positional argument: 'world_size'
+    "TestDistributedLossWrapper"
     # require network access:
+    "TestInference"
     "test_get_nearest_neighbors"
     "test_tuplestoweights_sampler"
     "test_untrained_indexer"
@@ -51,6 +57,10 @@ buildPythonPackage rec {
     "test_pca"
     # flaky
     "test_distributed_classifier_loss_and_miner"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_global_embedding_space_tester"
+    "test_with_same_parent_label_tester"
   ];
 
   meta = {

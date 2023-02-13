@@ -27,7 +27,7 @@ rec {
   setName = name: drv: drv // {inherit name;};
 
 
-  /* Like `setName', but takes the previous name as an argument.
+  /* Like `setName`, but takes the previous name as an argument.
 
      Example:
        updateName (oldName: oldName + "-experimental") somePkg
@@ -76,15 +76,19 @@ rec {
 
        1. (legacy) a system string.
 
-       2. (modern) a pattern for the platform `parsed` field.
+       2. (modern) a pattern for the entire platform structure (see `lib.systems.inspect.platformPatterns`).
 
-     We can inject these into a patten for the whole of a structured platform,
+       3. (modern) a pattern for the platform `parsed` field (see `lib.systems.inspect.patterns`).
+
+     We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
   platformMatch = platform: elem: let
       pattern =
         if builtins.isString elem
         then { system = elem; }
+        else if elem?parsed
+        then elem
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
 
@@ -92,12 +96,13 @@ rec {
 
      A package is available on a platform if both
 
-       1. One of `meta.platforms` pattern matches the given platform.
+       1. One of `meta.platforms` pattern matches the given
+          platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
   */
   availableOn = platform: pkg:
-    lib.any (platformMatch platform) pkg.meta.platforms &&
+    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
     lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
@@ -126,4 +131,18 @@ rec {
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
         { shortName = licstr; }
       );
+
+  /* Get the path to the main program of a derivation with either
+     meta.mainProgram or pname or name
+
+     Type: getExe :: derivation -> string
+
+     Example:
+       getExe pkgs.hello
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe pkgs.mustache-go
+       => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+  */
+  getExe = x:
+    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
 }

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "f6842b7242b1039c0c28f6feef29016e7e7dd3caaeb476a193acf737db31ee38";
   };
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
 
   checkPhase = ''
     pytest

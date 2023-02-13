@@ -1,21 +1,35 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, py
+, pytest-benchmark
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "sqlitedict";
-  version = "1.6.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "sqlitedict";
-    rev = version;
-    sha256 = "1yq94lgpny9qcfbsl39npjvrsjfggi3lj2kpzcsxcfdfgxag6m2m";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
   };
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    pytest tests
+  preCheck = ''
+    mkdir tests/db
   '';
+
+  nativeCheckInputs = [
+    py
+    pytest-benchmark
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--benchmark-disable"
+  ];
 
   meta = with lib; {
     description = "Persistent, thread-safe dict";

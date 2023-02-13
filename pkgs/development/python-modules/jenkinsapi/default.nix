@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, pythonAtLeast
 , fetchPypi
 , mock
 , pytest
@@ -13,6 +14,9 @@
 buildPythonPackage rec {
   pname = "jenkinsapi";
   version = "0.3.11";
+  format = "setuptools";
+
+  disabled = pythonAtLeast "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pytz requests ];
-  checkInputs = [ mock pytest pytest-mock requests-kerberos toml ];
+  nativeCheckInputs = [ mock pytest pytest-mock requests-kerberos toml ];
   # TODO requests-kerberos is broken on darwin, weeding out the broken tests without
   # access to macOS is not an adventure I am ready to embark on - @rski
   doCheck = !stdenv.isDarwin;

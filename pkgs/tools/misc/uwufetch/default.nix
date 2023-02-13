@@ -2,31 +2,29 @@
 
 stdenv.mkDerivation rec {
   pname = "uwufetch";
-  version = "1.7";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
     repo = pname;
     rev = version;
-    hash = "sha256-6yfRWFKdg7wM18hD2Bn095HzpnURhZJtx+SYx8SVBLA=";
+    hash = "sha256-2kktKdQ1xjQRIQR2auwveHgNWGaX1jdJsdlgWrH6l2g=";
   };
 
   patches = [
     # cannot find images in /usr
     ./fix-paths.patch
-    # https://github.com/TheDarkBug/uwufetch/pull/150
-    (fetchpatch {
-      url = "https://github.com/lourkeur/uwufetch/commit/de561649145b57d8750843555e4ffbc1cbcb01f0.patch";
-      sha256 = "sha256-KR81zxGlmthcadYBdsiVwxa5+lZUtqP7w0O4uFuputE=";
-    })
   ];
 
   nativeBuildInputs = [ makeWrapper ];
 
+  makeFlags = [
+    "UWUFETCH_VERSION=${version}"
+  ];
+
   installFlags = [
-    "PREFIX=${placeholder "out"}/bin"
-    "LIBDIR=${placeholder "out"}/lib"
-    "MANDIR=${placeholder "out"}/share/man/man1"
+    "DESTDIR=${placeholder "out"}"
+    "ETC_DIR=${placeholder "out"}"
   ];
 
   postPatch = ''

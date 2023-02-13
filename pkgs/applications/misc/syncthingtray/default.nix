@@ -1,12 +1,15 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, substituteAll
 , qtbase
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
 , cpp-utilities
 , qtutilities
+, qtforkawesome
+, boost
 , cmake
 , kio
 , plasma-framework
@@ -19,17 +22,34 @@
 }:
 
 mkDerivation rec {
-  version = "1.1.3";
+  version = "1.3.1";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-ovit2XSkxSjcbpqQUv8IzMqfsfItbtXLbx0/Vy0+J0Y=";
+    sha256 = "sha256-0rmfDkPvgubVqfbIOZ+mnv/x1p2sb88zGeg/Q2JCy3I=";
   };
 
-  buildInputs = [ qtbase cpp-utilities qtutilities ]
+  patches = [
+    # Fix Exec= path in runtime-generated
+    # ~/.config/autostart/syncthingtray.desktop file - this is required because
+    # we are wrapping the executable. We can't use `substituteAll` because we
+    # can't use `${placeholder "out"}` because that will produce the $out of
+    # the patch derivation itself, and not of syncthing's "out" placeholder.
+    # Hence we use a C definition with NIX_CFLAGS_COMPILE
+    ./use-nix-path-in-autostart.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
+
+  buildInputs = [
+    qtbase
+    cpp-utilities
+    qtutilities
+    boost
+    qtforkawesome
+  ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]

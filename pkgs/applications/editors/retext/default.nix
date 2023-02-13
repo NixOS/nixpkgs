@@ -1,29 +1,64 @@
-{ lib, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
-# Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
-# available.
+{ lib
+, python3
+, fetchzip
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qttools
+, qtsvg
+, buildEnv
+, aspellDicts
+  # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
+  # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
 }:
 
-let
-  version = "7.0.4";
-  pythonEnv = python3.withPackages (ps: with ps; [
-    pyqt5 docutils pyenchant Markups markdown pygments chardet
-  ]);
-in python3.pkgs.buildPythonApplication {
-  inherit version;
+python3.pkgs.buildPythonApplication rec {
   pname = "retext";
+  version = "8.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
-    repo = "retext";
+    repo = pname;
     rev = version;
-    sha256 = "1zcapywspc9v5zf5cxqkcy019np9n41gmryqixj66zsvd544c6si";
+    hash = "sha256-22yqNwIehgTfeElqhN5Jzye7LbcAiseTeoMgenpmsL0=";
   };
 
-  doCheck = false;
+  toolbarIcons = fetchzip {
+    url = "https://github.com/retext-project/retext/archive/icons.zip";
+    hash = "sha256-LQtSFCGWcKvXis9pFDmPqAMd1m6QieHQiz2yykeTdnI=";
+  };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
-  propagatedBuildInputs = [ pythonEnv ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    qttools.dev
+  ];
+
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    chardet
+    docutils
+    markdown
+    markups
+    pyenchant
+    pygments
+    pyqt6
+    pyqt6-webengine
+  ];
+
+  patches = [ ./remove-wheel-check.patch ];
+
+  preConfigure = ''
+    lrelease ReText/locale/*.ts
+  '';
+
+  # prevent double wrapping
+  dontWrapQtApps = true;
 
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -34,15 +69,23 @@ in python3.pkgs.buildPythonApplication {
       }}"
     )
 
+    cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
+
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
       --replace "Exec=ReText-${version}.data/scripts/retext %F" "Exec=$out/bin/retext %F" \
-      --replace "Icon=ReText-${version}.data/data/share/retext/icons/retext.svg" "Icon=$out/share/retext/icons/retext.svg"
+      --replace "Icon=ReText/icons/retext.svg" "Icon=retext"
   '';
 
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "ReText"
+  ];
+
   meta = with lib; {
+    description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
-    description = "Simple but powerful editor for Markdown and reStructuredText";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
   };

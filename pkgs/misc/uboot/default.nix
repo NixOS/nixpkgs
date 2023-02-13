@@ -1,15 +1,19 @@
 { stdenv
 , lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
 , bc
 , bison
 , dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
 , flex
+, gnutls
+, libuuid
+, meson-tools
+, ncurses
 , openssl
 , swig
-, meson-tools
+, which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
@@ -19,12 +23,12 @@
 }:
 
 let
-  defaultVersion = "2021.10";
+  defaultVersion = "2022.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
+    hash = "sha256-ULRIKlBbwoG6hHDDmaPCbhReKbI1ALw1xQ3r1/pGvfg=";
   };
-  buildUBoot = {
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
@@ -56,6 +60,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc
@@ -66,10 +71,19 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
+      which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+    ];
+
     hardeningDisable = [ "all" ];
+
+    enableParallelBuilding = true;
 
     makeFlags = [
       "DTC=dtc"
@@ -77,6 +91,16 @@ let
     ] ++ extraMakeFlags;
 
     passAsFile = [ "extraConfig" ];
+
+    # Workaround '-idirafter' ordering bug in staging-next:
+    #   https://github.com/NixOS/nixpkgs/pull/210004
+    # where libc '-idirafter' gets added after user's idirafter and
+    # breaks.
+    # TODO(trofi): remove it in staging once fixed in cc-wrapper.
+    preConfigure = ''
+      export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"] buildPackages.stdenv.hostPlatform.config}=$(< ${buildPackages.stdenv.cc}/nix-support/libc-cflags)
+      export NIX_CFLAGS_COMPILE_BEFORE_${lib.replaceStrings ["-" "."] ["_" "_"]               stdenv.hostPlatform.config}=$(<               ${stdenv.cc}/nix-support/libc-cflags)
+    '';
 
     configurePhase = ''
       runHook preConfigure
@@ -102,18 +126,15 @@ let
       runHook postInstall
     '';
 
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
-
     dontStrip = true;
 
     meta = with lib; {
-      homepage = "http://www.denx.de/wiki/U-Boot/";
+      homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 
@@ -135,6 +156,12 @@ in {
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
@@ -191,6 +218,47 @@ in {
     postInstall = ''
       mkdir -p $out/spl
       cp spl/u-boot-spl $out/spl/
+    '';
+  };
+
+  # Flashing instructions:
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
+  ubootLibreTechCC = let
+    firmwareImagePkg = fetchFromGitHub {
+      owner = "LibreELEC";
+      repo = "amlogic-boot-fip";
+      rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
+      sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
+      meta.license = lib.licenses.unfreeRedistributableFirmware;
+    };
+  in
+  assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+  buildUBoot {
+    defconfig = "libretech-cc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    postBuild = ''
+      # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
+      mkdir $out tmp
+      cp ${firmwareImagePkg}/lepotato/{acs.bin,bl2.bin,bl21.bin,bl30.bin,bl301.bin,bl31.img} \
+         ${firmwareImagePkg}/lepotato/{acs_tool.py,aml_encrypt_gxl,blx_fix.sh} \
+         u-boot.bin tmp/
+      cd tmp
+      python3 acs_tool.py bl2.bin bl2_acs.bin acs.bin 0
+
+      bash -e blx_fix.sh bl2_acs.bin zero bl2_zero.bin bl21.bin bl21_zero.bin bl2_new.bin bl2
+      [ -f zero ] && rm zero
+
+      bash -e blx_fix.sh bl30.bin zero bl30_zero.bin bl301.bin bl301_zero.bin bl30_new.bin bl30
+      [ -f zero ] && rm zero
+
+      ./aml_encrypt_gxl --bl2sig --input bl2_new.bin --output bl2.n.bin.sig
+      ./aml_encrypt_gxl --bl3enc --input bl30_new.bin --output bl30_new.bin.enc
+      ./aml_encrypt_gxl --bl3enc --input bl31.img --output bl31.img.enc
+      ./aml_encrypt_gxl --bl3enc --input u-boot.bin --output bl33.bin.enc
+      ./aml_encrypt_gxl --bootmk --output $out/u-boot.gxl \
+        --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc
     '';
   };
 
@@ -274,6 +342,13 @@ in {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOlimexA64Olinuxino = buildUBoot {
+    defconfig = "a64-olinuxino-emmc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -348,8 +423,27 @@ in {
 
   ubootQemuRiscv64Smode = buildUBoot {
     defconfig = "qemu-riscv64_smode_defconfig";
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
+        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
+      })
+    ];
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
   };
 
   ubootRaspberryPi = buildUBoot {

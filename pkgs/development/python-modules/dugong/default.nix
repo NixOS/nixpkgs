@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonAtLeast
 , pytestCheckHook
 }:
 
@@ -17,9 +18,13 @@ buildPythonPackage rec {
     sha256 = "1063c1779idc5nrjzfv5w1xqvyy3crapb2a2xll9y6xphxclnkjc";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  # Lots of tests hang during teardown with:
+  #   ssl.SSLEOFError: EOF occurred in violation of protocol (_ssl.c:2396)
+  doCheck = pythonOlder "3.10";
 
   pythonImportsCheck = [ "dugong" ];
 

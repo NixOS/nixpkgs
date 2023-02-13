@@ -1,21 +1,23 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd }:
+{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.5.18";
+  version = "1.7.6";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dX1U1zza8zMhDiTLE+DgtN6RLRciLks4NDOukpKH/po=";
+    sha256 = "sha256-TNh0laNAyHkIZLC51hzchSIDvsHst2aPxoRdI6Mdr84=";
   };
 
-  checkInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
     borgbackup
@@ -27,6 +29,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    installShellCompletion --cmd borgmatic \
+      --bash <($out/bin/borgmatic --bash-completion)
+
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     substitute sample/systemd/borgmatic.service \
@@ -35,6 +40,8 @@ python3Packages.buildPythonApplication rec {
                --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
                --replace sleep ${coreutils}/bin/sleep
   '';
+
+  passthru.tests.version = testers.testVersion { package = borgmatic; };
 
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";

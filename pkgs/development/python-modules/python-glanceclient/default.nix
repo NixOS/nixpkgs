@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , coreutils
 , pbr
@@ -11,19 +11,23 @@
 , oslo-i18n
 , wrapt
 , pyopenssl
+, pythonOlder
 , stestr
 , testscenarios
 , ddt
 , requests-mock
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-glanceclient";
-  version = "3.5.0";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "417b9d814b43e62df4351f26a0d5569b801e9f99f7758bd8c82ef994c3629356";
+    hash = "sha256-+CmOh9Dr6Gx8MLkR1u/YNpScOxIO7OUIbJAio+omOpg=";
   };
 
   postPatch = ''
@@ -43,7 +47,7 @@ buildPythonApplication rec {
     pyopenssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     ddt
@@ -54,7 +58,9 @@ buildPythonApplication rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "glanceclient" ];
+  pythonImportsCheck = [
+    "glanceclient"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the OpenStack Images API";

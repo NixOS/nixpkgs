@@ -1,21 +1,22 @@
 { lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
 , aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyatag";
-  version = "0.3.5.3";
+  version = "0.3.6.2";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatsNl";
     repo = "pyatag";
-    rev = version;
-    sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-yJEPDNjEv2lGrBQ78sl7nseVRemsG7hTdBGH5trciYU=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";
+    changelog = "https://github.com/MatsNl/pyatag/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

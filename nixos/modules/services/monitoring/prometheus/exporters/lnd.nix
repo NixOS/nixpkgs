@@ -11,21 +11,21 @@ in
     lndHost = mkOption {
       type = types.str;
       default = "localhost:10009";
-      description = ''
+      description = lib.mdDoc ''
         lnd instance gRPC address:port.
       '';
     };
 
     lndTlsPath = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to lnd TLS certificate.
       '';
     };
 
     lndMacaroonDir = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to lnd macaroons.
       '';
     };

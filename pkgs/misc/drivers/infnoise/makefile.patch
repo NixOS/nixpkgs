@@ -1,7 +1,7 @@
 diff --git a/software/Makefile.linux b/software/Makefile.linux
 index db48aa5..df8b3d2 100644
---- a/Makefile.linux
-+++ b/Makefile.linux
+--- a/software/Makefile.linux
++++ b/software/Makefile.linux
 @@ -1,6 +1,6 @@
 -GIT_VERSION := $(shell git --no-pager describe --tags --always)
 -GIT_COMMIT  := $(shell git rev-parse --verify HEAD)

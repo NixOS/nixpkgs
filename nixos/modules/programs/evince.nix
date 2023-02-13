@@ -22,13 +22,13 @@ in {
     programs.evince = {
 
       enable = mkEnableOption
-        "Evince, the GNOME document viewer";
+        (lib.mdDoc "Evince, the GNOME document viewer");
 
       package = mkOption {
         type = types.package;
         default = pkgs.evince;
         defaultText = literalExpression "pkgs.evince";
-        description = "Evince derivation to use.";
+        description = lib.mdDoc "Evince derivation to use.";
       };
 
     };

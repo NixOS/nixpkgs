@@ -2,16 +2,16 @@
 
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "7.4";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "sha256-dngAKzyD+lmqmxsCSOMViyCgA/+Ve35gLtPS+Lgs8Pc=";
+    sha256 = "sha256-XmRGe39O3xXmTvfawwT2mCwLIyXOlQm7f40mH5tzz+s=";
   };
 
-  checkInputs = [ fzf fd util-linux ];
+  nativeCheckInputs = [ fzf fd util-linux ];
   checkPlugins = [ clownfish fishtape_3 ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''

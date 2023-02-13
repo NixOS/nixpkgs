@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.0.8";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
     rev = "v${version}";
-    sha256 = "1rv3ns4n61v18cpnp36zi47jpnqhj410yzi8b307ghiyriapbijv";
+    sha256 = "+59/5vfwx9fys7Q63SahVPS/ckvwkr4w6T37UqAnwZ4=";
   };
 
   buildInputs = [ linuxHeaders ];
@@ -18,13 +18,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
 
-    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko; do
+    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko uniwill_wmi.ko; do
         mv src/$module $out/lib/modules/${kernel.modDirVersion}
     done
   '';
 
   meta = with lib; {
-    description = "Full color keyboard driver for tuxedo computers laptops";
+    description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
+    longDescription = ''
+      This driver provides support for Fn keys, brightness/color/mode for most TUXEDO
+      keyboards (except white backlight-only models).
+
+      Can be used with the "hardware.tuxedo-keyboard" NixOS module.
+    '';
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

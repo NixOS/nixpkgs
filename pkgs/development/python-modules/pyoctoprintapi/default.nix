@@ -12,7 +12,7 @@
 
 let
   pname = "pyoctoprintapi";
-  version = "0.1.7";
+  version = "0.1.11";
 in
 buildPythonPackage {
   inherit pname version;
@@ -21,8 +21,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "rfleming71";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XAMHQ7n03e10hFcPIUqyCDlRk2uO8dX8Iq0mdY7wRGE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MlFL8yUCkiMnxPbMGr4jwCs0kYwRM+VGBRQUcQ5Hd6A=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage {
     "pyoctoprintapi"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -41,6 +41,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Simple async wrapper around the Octoprint API";
     homepage = "https://github.com/rfleming71/pyoctoprintapi";
+    changelog = "https://github.com/rfleming71/pyoctoprintapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers= with maintainers; [ hexa ];
   };

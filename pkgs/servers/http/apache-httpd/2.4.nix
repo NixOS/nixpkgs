@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -11,18 +11,20 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.51";
+  version = "2.4.55";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4";
+    sha256 = "sha256-Eda6GeNsC5PKYuR+b/wtLyiElCaUvODyPznHG9xfaaw=";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [ perl ] ++
+  nativeBuildInputs = [ which ];
+
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     "--with-apr=${apr.dev}"
     "--with-apr-util=${aprutil.dev}"
     "--with-z=${zlib.dev}"
-    "--with-pcre=${pcre.dev}"
+    "--with-pcre=${pcre2.dev}/bin/pcre2-config"
     "--disable-maintainer-mode"
     "--disable-debugger-mode"
     "--enable-mods-shared=all"

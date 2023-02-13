@@ -7,7 +7,7 @@
 , alsa-lib
 , libsndfile
 , qt4
-, qscintilla
+, qscintilla-qt4
 , libpulseaudio
 , libjack2
 , audioBackend ? "pulse" # "pulse", "alsa", or "jack"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libsndfile
     qt4
-    qscintilla
+    qscintilla-qt4
   ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
     ++ lib.optional (audioBackend == "jack")  libjack2;
 

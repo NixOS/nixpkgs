@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, argon2_cffi
+, argon2-cffi
 , keyring
 , pycryptodome
 , pytestCheckHook
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    argon2_cffi
+    argon2-cffi
     keyring
     pycryptodome
   ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "keyrings.cryptfile"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

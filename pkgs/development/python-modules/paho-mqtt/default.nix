@@ -5,6 +5,7 @@
 , isPy3k
 , pytestCheckHook
 , mock
+, six
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,10 @@ buildPythonPackage rec {
     sha256 = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pylama" "" \
-      --replace "'pytest-runner'" ""
-    substituteInPlace setup.cfg \
-      --replace "--pylama" ""
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optional (!isPy3k) [
+    six
+  ] ++ lib.optionals (!isPy3k) [
     mock
   ];
 

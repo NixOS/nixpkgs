@@ -1,6 +1,6 @@
-{ callPackage, lib, pkgs }:
+{ config, lib, pkgs }:
 
-rec {
+lib.makeScope pkgs.newScope (self: with self; {
   # Dependencies
 
   espeak = pkgs.espeak-ng;
@@ -14,6 +14,12 @@ rec {
   xarcan = callPackage ./xarcan { };
 
   # Appls
+
+  cat9 = callPackage ./cat9 { };
+  cat9-wrapped = callPackage ./wrapper.nix {
+    name = "cat9-wrapped";
+    appls = [ cat9 ];
+  };
 
   durden = callPackage ./durden { };
   durden-wrapped = callPackage ./wrapper.nix {
@@ -38,6 +44,6 @@ rec {
 
   all-wrapped = callPackage ./wrapper.nix {
     name = "all-wrapped";
-    appls = [ durden pipeworld ];
+    appls = [ durden cat9 pipeworld ];
   };
-}
+})

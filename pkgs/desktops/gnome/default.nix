@@ -3,20 +3,9 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  /* Remove packages of packagesToRemove from packages, based on their names
-
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
-
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
-  */
-  removePackagesByName = packages: packagesToRemove:
-    let
-      namesToRemove = map lib.getName packagesToRemove;
-    in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
+  # Temporary helper until gdk-pixbuf supports multiple cache files.
+  # This will go away, do not use outside Nixpkgs.
+  _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -34,8 +23,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   dconf-editor = callPackage ./core/dconf-editor { };
 
-  empathy = callPackage ./core/empathy { };
-
   epiphany = callPackage ./core/epiphany { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
@@ -48,6 +35,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
+
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
@@ -57,8 +46,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-calculator = callPackage ./core/gnome-calculator { };
 
   gnome-common = callPackage ./core/gnome-common { };
-
-  gnome-desktop = callPackage ./core/gnome-desktop { };
 
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
@@ -138,6 +125,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     withGnome = true;
   };
 
+  nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
+
   rygel = callPackage ./core/rygel { };
 
   simple-scan = callPackage ./core/simple-scan { };
@@ -165,8 +154,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   ghex = callPackage ./apps/ghex { };
 
-  gnome-books = callPackage ./apps/gnome-books { };
-
   gnome-boxes = callPackage ./apps/gnome-boxes { };
 
   gnome-calendar = callPackage ./apps/gnome-calendar { };
@@ -174,8 +161,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-characters = callPackage ./apps/gnome-characters { };
 
   gnome-clocks = callPackage ./apps/gnome-clocks { };
-
-  gnome-documents = callPackage ./apps/gnome-documents { };
 
   gnome-logs = callPackage ./apps/gnome-logs { };
 
@@ -191,8 +176,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
 
-  gnome-todo = callPackage ./apps/gnome-todo {};
-
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   polari = callPackage ./apps/polari { };
@@ -206,8 +189,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   anjuta = callPackage ./devtools/anjuta { };
 
   devhelp = callPackage ./devtools/devhelp { };
-
-  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
 #### Games
 
@@ -255,8 +236,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
-
   gnome-applets = callPackage ./misc/gnome-applets { };
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
@@ -273,96 +252,23 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   nautilus-python = callPackage ./misc/nautilus-python { };
 
-  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
+  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
 
   pomodoro = callPackage ./misc/pomodoro { };
 
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-} // lib.optionalAttrs (config.allowAliases or true) {
-#### Legacy aliases
+}) // lib.optionalAttrs config.allowAliases {
+#### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  bijiben = gnome-notes; # added 2018-09-26
-  evolution_data_server = evolution-data-server; # added 2018-02-25
-  geocode_glib = pkgs.geocode-glib; # added 2018-02-25
-  glib_networking = pkgs.glib-networking; # added 2018-02-25
-  gnome_common = gnome-common; # added 2018-02-25
-  gnome_control_center = gnome-control-center; # added 2018-02-25
-  gnome_desktop = gnome-desktop; # added 2018-02-25
-  gnome_keyring = gnome-keyring; # added 2018-02-25
-  gnome_online_accounts = gnome-online-accounts; # added 2018-02-25
-  gnome_session = gnome-session; # added 2018-02-25
-  gnome_settings_daemon = gnome-settings-daemon; # added 2018-02-25
-  gnome_shell = gnome-shell; # added 2018-02-25
-  gnome_terminal = gnome-terminal; # added 2018-02-25
-  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
-  gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
-  gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
-  gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  libgames-support = libgnome-games-support; # added 2018-03-14
-  libgnome_keyring = libgnome-keyring; # added 2018-02-25
-  inherit (pkgs) rarian; # added 2018-04-25
-  networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
-  networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
-  networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
-  networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
-  networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  yelp_xsl = yelp-xsl; # added 2018-02-25
-  yelp_tools = yelp-tools; # added 2018-02-25
+  empathy = throw "The ‘gnome.empathy’ package was removed as it is unmaintained and no longer launches due to libsoup3 migration."; # added 2023-01-20
+  gnome-desktop = throw "The ‘gnome.gnome-desktop’ alias was removed. Please use ‘pkgs.gnome-desktop’ directly."; # converted to throw on 2022-10-26
+  gnome-todo = pkgs.endeavour; # added 2022-07-30
+  libgnome-games-support = throw "The ‘gnome.libgnome-games-support’ alias was removed. Please use ‘pkgs.libgnome-games-support’ directly."; # converted to throw on 2022-10-26
 
-  # added 2019-02-08
-  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-      libgtop libgudev libhttpseverywhere librsvg libsecret gdk-pixbuf gtksourceview gtksourceviewmm gtksourceview4
-      easytag meld orca rhythmbox shotwell gnome-usage
-      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
-  inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
-  inherit (pkgs) gnome-video-effects; # added 2019-08-19
-  inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
-  inherit (pkgs) glib-networking; # added 2019-09-02
-  inherit (pkgs) nemiver; # added 2019-09-09
+  gnome-books = throw "The ‘gnome.gnome-books’ package was removed as it is broken and abandoned."; # added 2022-10-26
+  gnome-documents = throw "The ‘gnome.gnome-documents’ package was removed as it is broken and abandoned."; # added 2022-10-26
+  gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
 
-  defaultIconTheme = adwaita-icon-theme;
-  gtk = gtk3;
-  gtkmm = gtkmm3;
-  rest = librest;
-
-  pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
-
-  # added 2019-08-25
-  corePackages = throw "gnome.corePackages is removed since 2019-08-25: please use `services.gnome.core-shell.enable`";
-  optionalPackages = throw "gnome.optionalPackages is removed since 2019-08-25: please use `services.gnome.core-utilities.enable`";
-  gamesPackages = throw "gnome.gamesPackages is removed since 2019-08-25: please use `services.gnome.games.enable`";
-
-  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
-
-  inherit (pkgs) vala; # added 2019-10-10
-
-  inherit (pkgs) gnome-user-docs; # added 2019-11-20
-
-  inherit (pkgs) gjs; # added 2019-01-05
-
-  inherit (pkgs) yelp-tools; # added 2019-11-20
-
-  inherit (pkgs) dconf; # added 2019-11-30
-
-  inherit (pkgs) networkmanagerapplet; # added 2019-12-12
-
-  inherit (pkgs) glade; # added 2020-05-15
-
-  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
-
-  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
-
-  maintainers = lib.teams.gnome.members;
-
-  mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
-
-  # Added 2021-05-07
-  gnome3 = self // { recurseForDerivations = false; };
-})
+}

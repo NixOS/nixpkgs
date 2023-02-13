@@ -1,13 +1,13 @@
 { lib, python3Packages, fetchFromGitHub }:
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "janten";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kmhsx6n3wjzqcvfnpvdxiiwzxr51khgrl0kgaaas8hwq246l65d";
+    sha256 = "0zvf09b9rzpx5b0w81ziqd7v321hfhgsgvshdx23karj2hf75bvj";
   };
 
   doCheck = false;

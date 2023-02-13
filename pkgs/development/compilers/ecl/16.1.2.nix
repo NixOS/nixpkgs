@@ -25,12 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LUgrGgpPvV2IFDRRcDInnYCMtkBeIt2R721zNTRGS5k=";
   };
 
-  buildInputs = [
-    libtool
-    autoconf
-    automake
-    makeWrapper
-  ];
+  nativeBuildInputs = [ autoconf automake makeWrapper libtool ];
   propagatedBuildInputs = [
     libffi
     gmp
@@ -98,5 +93,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "reproc";
-  version = "14.2.3";
+  version = "14.2.4";
 
   src = fetchFromGitHub {
     owner = "DaanDeMeyer";
     repo = "reproc";
     rev = "v${version}";
-    sha256 = "sha256-bdZ7czkeoSl5znGit0AYQ9D4K8qE2Co+F2Z4jLJuQok=";
+    sha256 = "sha256-LWzBeKhE7cSiZsK8xWzoTdrOcPiU/zEkmi40WiFytic=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +21,16 @@ stdenv.mkDerivation rec {
     "-DREPROC++=ON"
     "-DREPROC_TEST=ON"
   ];
+
+  # https://github.com/DaanDeMeyer/reproc/issues/81
+  postPatch = ''
+    substituteInPlace reproc++/reproc++.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace reproc/reproc.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/DaanDeMeyer/reproc";

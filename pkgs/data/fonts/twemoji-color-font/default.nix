@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "twemoji-color-font";
-  version = "13.1.0";
+  version = "14.0.2";
 
   # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
   src = fetchurl {
     url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${version}/TwitterColorEmoji-SVGinOT-Linux-${version}.tar.gz";
-    sha256 = "sha256-V8DWUUAK+HLDPcq3izPs174PfUnaSeLByDpZwhUIX5Q=";
+    sha256 = "sha256-aCbiHqCNxd8myIeuTlYEaYfg9JCd+MAsc94FcUoDU8E=";
   };
 
   dontBuild = true;

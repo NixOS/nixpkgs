@@ -16,6 +16,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.enlightenment.members;
+  };
+
   imports = [
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
   ];
@@ -25,7 +29,7 @@ in
     services.xserver.desktopManager.enlightenment.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the Enlightenment desktop environment.";
+      description = lib.mdDoc "Enable the Enlightenment desktop environment.";
     };
 
   };
@@ -36,6 +40,7 @@ in
       enlightenment.econnman
       enlightenment.efl
       enlightenment.enlightenment
+      enlightenment.ecrire
       enlightenment.ephoto
       enlightenment.rage
       enlightenment.terminology
@@ -91,6 +96,7 @@ in
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.xserver.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.7";
+  version = "0.4.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0IMNOPTmY22JCHccIVuZxDhVr41cDcKNkx8bp+5h2CU=";
+    hash = "sha256-vz7Sjd8KT7UgOBI5AN5q6CS7jl+WL87w91cgm0bXRGw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
     ${python.interpreter} pywayland/ffi_build.py

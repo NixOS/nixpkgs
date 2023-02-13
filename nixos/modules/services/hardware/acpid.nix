@@ -48,12 +48,12 @@ in
 
     services.acpid = {
 
-      enable = mkEnableOption "the ACPI daemon";
+      enable = mkEnableOption (lib.mdDoc "the ACPI daemon");
 
       logEvents = mkOption {
         type = types.bool;
         default = false;
-        description = "Log all event activity.";
+        description = lib.mdDoc "Log all event activity.";
       };
 
       handlers = mkOption {
@@ -62,22 +62,22 @@ in
             event = mkOption {
               type = types.str;
               example = literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
-              description = "Event type.";
+              description = lib.mdDoc "Event type.";
             };
 
             action = mkOption {
               type = types.lines;
-              description = "Shell commands to execute when the event is triggered.";
+              description = lib.mdDoc "Shell commands to execute when the event is triggered.";
             };
           };
         });
 
-        description = ''
+        description = lib.mdDoc ''
           Event handlers.
 
-          <note><para>
-            Handler can be a single command.
-          </para></note>
+          ::: {.note}
+          Handler can be a single command.
+          :::
         '';
         default = {};
         example = {
@@ -104,19 +104,19 @@ in
       powerEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on a button/power.* event.";
+        description = lib.mdDoc "Shell commands to execute on a button/power.* event.";
       };
 
       lidEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on a button/lid.* event.";
+        description = lib.mdDoc "Shell commands to execute on a button/lid.* event.";
       };
 
       acEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on an ac_adapter.* event.";
+        description = lib.mdDoc "Shell commands to execute on an ac_adapter.* event.";
       };
 
     };

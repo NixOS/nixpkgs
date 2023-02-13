@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unzip ];
+  nativeCheckInputs = [ unzip ];
 
   # We cannot run the pkgtests, as Nix does not allow network
   # connections.
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     description = "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
     license = licenses.mit;
+    platforms = mlton.meta.platforms;
     maintainers = with maintainers; [ athas ];
   };
 }

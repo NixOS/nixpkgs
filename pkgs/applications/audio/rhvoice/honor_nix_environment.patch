@@ -1,14 +1,31 @@
-diff --git a/SConstruct b/SConstruct
-index 2421399..ba39254 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -147,6 +147,9 @@ def create_base_env(vars):
+@@ -94,11 +94,8 @@ def CheckWiX(context):
+     return result
+ 
+ def get_spd_module_dir():
+-    env = Environment()
+-    try:
+-        return env.ParseConfig("pkg-config speech-dispatcher --variable=modulebindir", passthru)
+-    except:
+-        return False
++    # cannot write to ${speechd}/libexec/speech-dispatcher-modules
++    return os.path.join(os.environ["out"], "libexec/speech-dispatcher-modules")
+ 
+ def validate_spd_version(key,val,env):
+     m=re.match(r"^\d+\.\d+",val)
+@@ -207,10 +204,10 @@ def create_base_env(user_vars):
+     env_args["LIBS"]=[]
      env_args["package_name"]="RHVoice"
      env_args["CPPDEFINES"]=[("RHVOICE","1")]
-     env=Environment(**env_args)
+-    env=Environment(**env_args)
+-    if env["dev"]:
+-        env["prefix"]=os.path.abspath("local")
+-        env["RPATH"]=env.Dir("$libdir").abspath
++    env=Environment(ENV = os.environ, **env_args)
 +    env.PrependENVPath("PATH", os.environ["PATH"])
 +    env["ENV"]["PKG_CONFIG_PATH"]=os.environ["PKG_CONFIG_PATH"]
-+    env["RPATH"]=env["libdir"]
++    env["RPATH"]=env.Dir("$libdir").abspath
      env["package_version"]=get_version(env["release"])
      env.Append(CPPDEFINES=("PACKAGE",env.subst(r'\"$package_name\"')))
-     env.Append(CPPDEFINES=("VERSION",env.subst(r'\"$package_version\"')))
+     if env["PLATFORM"]=="win32":

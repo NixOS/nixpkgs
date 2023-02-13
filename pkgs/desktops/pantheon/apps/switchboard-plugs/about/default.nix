@@ -2,37 +2,31 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
 , libgtop
+, libgudev
 , libhandy
 , granite
 , gtk3
 , switchboard
+, udisks2
 , fwupd
 , appstream
-, nixos-artwork
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.0.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0c075ac7iqz4hqbp2ph0cwyhiq0jn6c1g1jjfhygjbssv3vvd268";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
   };
 
   nativeBuildInputs = [
@@ -49,17 +43,20 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libgtop
+    libgudev
     libhandy
     switchboard
+    udisks2
   ];
 
-  patches = [
-    # Use NixOS's default wallpaper
-    (substituteAll {
-      src = ./fix-background-path.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
+  mesonFlags = [
+    # Does not play nice with the nix-snowflake logo
+    "-Dwallpaper=false"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard About Plug";

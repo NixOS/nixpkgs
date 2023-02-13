@@ -70,7 +70,7 @@ nixev() {
 }
 
 desc_system() {
-    nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system'
+    nixev 'builtins.currentSystem'
 }
 
 desc_host_os() {
@@ -84,7 +84,7 @@ desc_host_os() {
         (
             # shellcheck disable=SC1091
             . /etc/os-release
-            printf ", %s, %s" "${NAME:-$(uname -v)}" "${VERSION:-noversion}"
+            printf ", %s, %s, %s" "${NAME:-$(uname -v)}" "${VERSION:-noversion}" "${BUILD_ID:-nobuild}"
         )
     fi
 }
@@ -98,7 +98,7 @@ desc_multi_user() {
 }
 
 desc_nixpkgs_path() {
-    nixev '<nixpkgs>'
+    nixev '<nixpkgs>' 2>/dev/null || echo "not found"
 }
 
 channel_facts() {

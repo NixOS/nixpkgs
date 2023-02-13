@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
@@ -20,13 +20,10 @@ let
     inherit ruby;
     gemdir = ./rubyEnv;
     gemset =
-      let x = import (gemdir + "/gemset.nix");
+      let x = import (gemdir + "/gemset.nix") src;
       in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ./fix-grpc-ar.patch ];
-          dontBuild = false;
+        gpgme = x.gpgme // {
+          nativeBuildInputs = [ pkg-config ];
         };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
@@ -43,7 +40,7 @@ let
         railties = x.railties // {
           dontBuild = false;
           patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = "-p2";
+          patchFlags = [ "-p2" ];
         };
       };
     groups = [
@@ -52,22 +49,32 @@ let
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
-  };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
+    extraConfigPaths = [ "${src}/vendor" ];
   };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
 
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
+
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer complains about valid keywords only being "main" and "ci".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-geo-from-database.yml.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
@@ -80,14 +87,14 @@ let
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      mv config/database.yml.env config/database.yml
+      mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
@@ -95,6 +102,7 @@ let
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
+      patchShebangs scripts/frontend/
 
       runHook postConfigure
     '';
@@ -104,7 +112,7 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
@@ -125,6 +133,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
@@ -180,6 +189,9 @@ stdenv.mkDerivation {
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
     cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
+
+    # manually patch the shebang line in generate-loose-foreign-key
+    wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
   '';
 
   passthru = {
@@ -198,7 +210,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
+    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

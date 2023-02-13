@@ -1,12 +1,12 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "notion-app-enhanced";
-  version = "2.0.16-5";
+  version = "2.0.18-1";
   name = "${pname}-v${version}";
 
   src = fetchurl {
     url = "https://github.com/notion-enhancer/notion-repackaged/releases/download/v${version}/Notion-Enhanced-${version}.AppImage";
-    sha256 = "1v733b4clc9sjgb72fasmbqiyz26d09f3kmvd1nqshwp5d14dajz";
+    sha256 = "sha256-SqeMnoMzxxaViJ3NPccj3kyMc1xvXWULM6hQIDZySWY=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyruckus";
-  version = "0.14";
+  version = "0.16";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "gabe565";
     repo = pname;
-    rev = version;
-    sha256 = "069asvx7g2gywpmid0cbf84mlzhgha4yqd47y09syz09zgv34a36";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-SVE5BrCCQgCrhOC0CSGgbZ9TEY3iZ9Rp/xMUShPAxxM=";
   };
 
   propagatedBuildInputs = [

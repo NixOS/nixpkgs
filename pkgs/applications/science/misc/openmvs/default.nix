@@ -1,77 +1,82 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, eigen
-, opencv
+, boost
+, breakpad
 , ceres-solver
 , cgal
-, boost
-, vcg
+, cmake
+, eigen
+, fetchFromGitHub
+, glfw
 , gmp
+, libjpeg
+, libpng
+, libtiff
 , mpfr
-, glog
-, gflags
-, libjpeg_turbo
+, opencv
+, openmp
+, pkg-config
+, stdenv
+, vcg
+, zstd
 }:
 
-stdenv.mkDerivation {
+let
+  boostWithZstd = boost.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ zstd ];
+  });
+in
+stdenv.mkDerivation rec {
+  version = "2.1.0";
   pname = "openmvs";
-  version = "unstable-2018-05-26";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
-    rev = "939033c55b50478339084431aac2c2318041afad";
-    sha256 = "12dgkwwfdp24581y3i41gsd1k9hq0aw917q0ja5s0if4qbmc8pni";
+    rev = "v${version}";
+    sha256 = "sha256-eqNprBgR0hZnbLKLZLJqjemKxHhDtGblmaSxYlmegsc=";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
+  # SSE is enabled by default
+  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+
+  buildInputs = [
+    boostWithZstd
+    breakpad
+    ceres-solver
+    cgal
+    eigen
+    glfw
+    gmp
+    libjpeg
+    libpng
+    libtiff
+    mpfr
+    opencv
+    openmp
+    vcg
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  preConfigure = ''
-    cmakeFlagsArray=(
-      $cmakeFlagsArray
-      "-DCMAKE_CXX_FLAGS=-std=c++11"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_STATIC_RUNTIME=ON"
-      "-DINSTALL_BIN_DIR=$out/bin"
-      "-DVCG_DIR=${vcg}"
-      "-DCGAL_ROOT=${cgal}/lib/cmake/CGAL"
-      "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
-    )
+  postInstall = ''
+    mv $out/bin/OpenMVS/* $out/bin
+    rmdir $out/bin/OpenMVS
+    rm $out/bin/Tests
   '';
 
-  postFixup = ''
-    rp=$(patchelf --print-rpath $out/bin/DensifyPointCloud)
-    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/DensifyPointCloud
-
-    rp=$(patchelf --print-rpath $out/bin/InterfaceVisualSFM)
-    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/InterfaceVisualSFM
-
-    rp=$(patchelf --print-rpath $out/bin/ReconstructMesh)
-    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/ReconstructMesh
-
-    rp=$(patchelf --print-rpath $out/bin/RefineMesh)
-    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/RefineMesh
-
-    rp=$(patchelf --print-rpath $out/bin/TextureMesh)
-    patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/TextureMesh
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest
+    runHook postCheck
   '';
 
-  cmakeDir = "./";
-
-  dontUseCmakeBuildDir = true;
-
-  meta = with lib; {
-    description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
-    homepage = "http://cdcseacave.github.io/openMVS/";
-    license = licenses.agpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mdaiter ];
-    # 20190414-174115: CMake cannot find CGAL which is passed as build input
-    broken = true;
+  meta = {
+    description = "Open Multi-View Stereo reconstruction library";
+    homepage = "https://github.com/cdcseacave/openMVS";
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bouk ];
   };
 }

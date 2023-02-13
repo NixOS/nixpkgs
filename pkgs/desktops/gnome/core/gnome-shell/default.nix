@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -29,7 +30,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -43,9 +44,10 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
+, libadwaita
 , sassc
 , systemd
 , pipewire
@@ -55,7 +57,7 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
-, asciidoc-full
+, asciidoc
 , bash-completion
 , mesa
 }:
@@ -66,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "41.2";
+  version = "43.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "OEZR6wUTk9ur4AbRrQV78p1c1z67h7x3n/Xhwx6AqCc=";
+    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
   };
 
   patches = [
@@ -118,8 +120,7 @@ stdenv.mkDerivation rec {
     sassc
     desktop-file-utils
     libxslt.bin
-    python3
-    asciidoc-full
+    asciidoc
   ];
 
   buildInputs = [
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
@@ -138,10 +139,11 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
+    libadwaita
     gdm
     geoclue2
     adwaita-icon-theme
@@ -169,6 +171,9 @@ stdenv.mkDerivation rec {
     bash-completion
     gnome-autoar
     json-glib
+
+    # for tools
+    pythonEnv
   ];
 
   mesonFlags = [
@@ -177,11 +182,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs src/data-to-c.pl
-    chmod +x meson/postinstall.py
-    patchShebangs meson/postinstall.py
 
-    substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
+    # We can generate it ourselves.
+    rm -f man/gnome-shell.1
+    rm data/theme/gnome-shell.css
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -198,6 +213,8 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

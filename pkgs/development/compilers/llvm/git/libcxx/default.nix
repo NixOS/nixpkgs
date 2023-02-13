@@ -1,5 +1,8 @@
-{ lib, stdenv, llvm_meta, src, cmake, python3, fixDarwinDylibNames, version
-, libcxxabi
+{ lib, stdenv, llvm_meta
+, monorepoSrc, runCommand
+, cmake, python3, fixDarwinDylibNames, version
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -10,14 +13,37 @@
 , headersOnly ? false
 }:
 
+let
+  basename = "libcxx";
+in
+
+assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
+
 stdenv.mkDerivation rec {
-  pname = if headersOnly then "cxx-headers" else "libcxx";
+  pname = basename + lib.optionalString headersOnly "-headers";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/libcxx";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${basename} "$out"
+    mkdir -p "$out/libcxxabi"
+    cp -r ${monorepoSrc}/libcxxabi/include "$out/libcxxabi"
+    mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    cp -r ${monorepoSrc}/third-party "$out"
+    cp -r ${monorepoSrc}/runtimes "$out"
+  '';
+
+  sourceRoot = "${src.name}/runtimes";
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
+
+  prePatch = ''
+    cd ../${basename}
+    chmod -R u+w .
+  '';
 
   patches = [
     ./gnu-install-dirs.patch
@@ -25,10 +51,8 @@ stdenv.mkDerivation rec {
     ../../libcxx-0001-musl-hacks.patch
   ];
 
-  # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"
   postPatch = ''
-    substituteInPlace include/__config \
-      --replace "#    define _LIBCPP_USE_AVAILABILITY_APPLE" ""
+    cd ../runtimes
   '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -38,9 +62,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
+  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
-  cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
+  cmakeFlags = [
+    "-DLLVM_ENABLE_RUNTIMES=libcxx"
+    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}${cxxabi.pname}"
+  ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -52,17 +79,23 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
-  # At this point, cxxabi headers would be installed in the dev output, which
-  # prevents moveToOutput from doing its job later in the build process.
-  postInstall = lib.optionalString (!headersOnly) ''
-    mv "$dev/include/c++/v1/"* "$out/include/c++/v1/"
-    pushd "$dev"
-    rmdir -p include/c++/v1
-    popd
+  preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''
+    for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
+      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
+      installName="$out/lib/$baseName"
+      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
+
+      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
+      done
+    done
   '';
 
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {

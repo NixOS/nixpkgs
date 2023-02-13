@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
 
+  patches = [ ./patch-limits.diff ];
+
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
   '';
@@ -79,10 +81,10 @@ in stdenv.mkDerivation rec {
     tk
   ];
 
-  meta = {
+  meta = with lib; {
     description = "An open source implementation of Oz 3";
-    maintainers = [ lib.maintainers.layus ];
-    license = lib.licenses.bsd2;
+    maintainers = with maintainers; [ layus h7x4 ];
+    license = licenses.bsd2;
     homepage = "https://mozart.github.io";
   };
 

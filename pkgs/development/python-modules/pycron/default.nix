@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "12hkqrdfg3jbqkmck8i00ssyaw1c4hhvdhjxkmh2gm9pd99z5bpv";
   };
 
-  checkInputs = [ arrow coveralls delorean nose pendulum pytz udatetime ];
+  nativeCheckInputs = [ arrow coveralls delorean nose pendulum pytz udatetime ];
 
   checkPhase = ''
     nosetests

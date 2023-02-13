@@ -18,7 +18,7 @@ else
   # this allows us to include the bits of rails we use without pieces we do not.
   #
   # To issue a rails update bump the version number here
-  rails_version = '6.1.4.1'
+  rails_version = '7.0.3.1'
   gem 'actionmailer', rails_version
   gem 'actionpack', rails_version
   gem 'actionview', rails_version
@@ -39,9 +39,9 @@ gem 'sprockets', '3.7.2'
 # allows us to precompile all our templates in the unicorn master
 gem 'actionview_precompiler', require: false
 
-gem 'seed-fu'
+gem 'discourse-seed-fu'
 
-gem 'mail', git: 'https://github.com/discourse/mail.git', require: false
+gem 'mail', git: 'https://github.com/discourse/mail.git'
 gem 'mini_mime'
 gem 'mini_suffix'
 
@@ -63,14 +63,7 @@ gem 'active_model_serializers', '~> 0.8.3'
 
 gem 'http_accept_language', require: false
 
-# Ember related gems need to be pinned cause they control client side
-# behavior, we will push these versions up when upgrading ember
-gem 'discourse-ember-rails', '0.18.6', require: 'ember-rails'
-gem 'discourse-ember-source', '~> 3.12.2'
-gem 'ember-handlebars-template', '0.8.0'
-gem 'discourse-fonts'
-
-gem 'barber'
+gem 'discourse-fonts', require: 'discourse_fonts'
 
 gem 'message_bus'
 
@@ -105,9 +98,8 @@ gem 'omniauth-oauth2', require: false
 
 gem 'omniauth-google-oauth2'
 
-# Pinning oj until https://github.com/ohler55/oj/issues/699 is resolved.
-# Segfaults and stuck processes after upgrading.
-gem 'oj', '3.13.2'
+# pending: https://github.com/ohler55/oj/issues/789
+gem 'oj', '3.13.14'
 
 gem 'pg'
 gem 'mini_sql'
@@ -135,24 +127,30 @@ gem 'cose', require: false
 gem 'addressable'
 gem 'json_schemer'
 
+gem "net-smtp", require: false
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "digest", require: false
+
 # Gems used only for assets and not required in production environments by default.
 # Allow everywhere for now cause we are allowing asset debugging in production
 group :assets do
   gem 'uglifier'
-  gem 'rtlit', require: false # for css rtling
 end
 
 group :test do
+  gem 'capybara', require: false
   gem 'webmock', require: false
   gem 'fakeweb', require: false
   gem 'minitest', require: false
   gem 'simplecov', require: false
+  gem 'selenium-webdriver', require: false
   gem "test-prof"
+  gem 'webdrivers', require: false
 end
 
 group :test, :development do
   gem 'rspec'
-  gem 'mock_redis'
   gem 'listen', require: false
   gem 'certified', require: false
   gem 'fabrication', require: false
@@ -165,7 +163,7 @@ group :test, :development do
   gem 'shoulda-matchers', require: false
   gem 'rspec-html-matchers'
   gem 'byebug', require: ENV['RM_INFO'].nil?, platform: :mri
-  gem "rubocop-discourse", require: false
+  gem 'rubocop-discourse', require: false
   gem 'parallel_tests'
 
   gem 'rswag-specs'
@@ -185,7 +183,7 @@ if ENV["ALLOW_DEV_POPULATE"] == "1"
   gem 'discourse_dev_assets'
   gem 'faker', "~> 2.16"
 else
-  group :development do
+  group :development, :test do
     gem 'discourse_dev_assets'
     gem 'faker', "~> 2.16"
   end
@@ -256,6 +254,8 @@ if ENV["IMPORT"] == "1"
   gem 'reverse_markdown'
   gem 'tiny_tds'
   gem 'csv'
+
+  gem 'parallel', require: false
 end
 
 gem 'webpush', require: false
@@ -263,3 +263,10 @@ gem 'colored2', require: false
 gem 'maxminddb'
 
 gem 'rails_failover', require: false
+
+gem 'faraday'
+gem 'faraday-retry'
+
+# workaround for faraday-net_http, see
+# https://github.com/ruby/net-imap/issues/16#issuecomment-803086765
+gem 'net-http'

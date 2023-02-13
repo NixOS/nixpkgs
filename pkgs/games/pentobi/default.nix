@@ -3,14 +3,14 @@
 }:
 
 mkDerivation rec {
-  version = "19.0";
+  version = "20.0";
   pname = "pentobi";
 
   src = fetchFromGitHub {
     owner = "enz";
     repo = "pentobi";
     rev = "v${version}";
-    sha256 = "sha256-2UeGMAYtVsmKUR7Yw5rogGOd/BTY6twAHuVBU5APp20=";
+    sha256 = "sha256-DQM3IJ0pRkX4OsrjZGROg50LfKb621UnpvtqSjxchz8=";
   };
 
   nativeBuildInputs = [ cmake docbook_xsl qttools ];
@@ -31,7 +31,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.linux;
   };

@@ -3,21 +3,21 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
-, gtk-doc
+, gi-docgen
 , pkg-config
 , gobject-introspection
 , gettext
 , libgudev
 , polkit
 , libxmlb
+, glib
 , gusb
 , sqlite
 , libarchive
+, libredirect
 , curl
 , libjcat
-, libxslt
 , elfutils
 , libsmbios
 , efivar
@@ -25,14 +25,13 @@
 , meson
 , libuuid
 , colord
-, docbook_xml_dtd_43
-, docbook-xsl-nons
 , ninja
 , gcab
 , gnutls
 , protobufc
 , python3
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
+, ensureNewerSourcesForZipFilesHook
 , json-glib
 , bash-completion
 , shared-mime-info
@@ -50,6 +49,12 @@
 , nixosTests
 , runCommand
 , unstableGitUpdater
+, modemmanager
+, libqmi
+, libmbim
+, libcbor
+, xz
+, enableFlashrom ? false
 }:
 
 let
@@ -72,7 +77,7 @@ let
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
   # Experimental
-  haveFlashrom = false;
+  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand = name: buildCommandPython: runCommand name {
     nativeBuildInputs = [ python3 ];
@@ -83,13 +88,13 @@ let
 
   test-firmware =
     let
-      version = "unstable-2021-11-02";
+      version = "unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
         repo = "fwupd-test-firmware";
-        rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
-        sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
+        rev = "39954e434d63e20e85870dd1074818f48a0c08b7";
+        hash = "sha256-d4qG3fKyxkfN91AplRYqARFz+aRr+R37BpE450bPxi0=";
         passthru = {
           inherit src version; # For update script
           updateScript = unstableGitUpdater {
@@ -112,7 +117,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.2";
+    version = "1.8.10";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -121,7 +126,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-hjLfacO6/Fk4fNy1F8POMaWXoJAm5E9ZB9g4RnG5+DQ=";
+      hash = "sha256-vvNUidNdhW9xeksjEVnkIR7CZ4oBQizZJRMFtZUq6Ow=";
     };
 
     patches = [
@@ -140,17 +145,16 @@ let
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
       ./installed-tests-path.patch
 
-      # Tests detect fwupd is installed when prefix is /usr.
-      ./fix-install-detection.patch
-
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
     ];
 
     nativeBuildInputs = [
+      # required for firmware zipping
+      ensureNewerSourcesForZipFilesHook
       meson
       ninja
-      gtk-doc
+      gi-docgen
       pkg-config
       gobject-introspection
       gettext
@@ -158,12 +162,9 @@ let
       valgrind
       gcab
       gnutls
-      docbook_xml_dtd_43
-      docbook-xsl-nons
-      libxslt
       protobufc # for protoc
       python
-      wrapGAppsHook
+      wrapGAppsNoGuiHook
       vala
     ];
 
@@ -187,15 +188,22 @@ let
       efivar
       fwupd-efi
       protobufc
+      modemmanager
+      libmbim
+      libcbor
+      libqmi
+      xz # for liblzma
     ] ++ lib.optionals haveDell [
       libsmbios
+    ] ++ lib.optionals haveFlashrom [
+      flashrom
     ];
 
     mesonFlags = [
-      "-Ddocs=gtkdoc"
+      "-Ddocs=enabled"
       "-Dplugin_dummy=true"
       # We are building the official releases.
-      "-Dsupported_build=true"
+      "-Dsupported_build=enabled"
       # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
       # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
       "-Dsoup_session_compat=false"
@@ -206,28 +214,25 @@ let
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
+      "-Dplugin_modem_manager=enabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
-      # Our builder only adds $lib/lib to rpath but some things link
-      # against libfwupdplugin which is in $out/lib.
-      "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
-      "-Dplugin_dell=false"
-      "-Dplugin_synaptics=false"
+      "-Dplugin_dell=disabled"
+      "-Dplugin_synaptics_mst=disabled"
     ] ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=false"
-    ] ++ lib.optionals haveFlashrom [
-      "-Dplugin_flashrom=true"
+      "-Dplugin_redfish=disabled"
+    ] ++ lib.optionals (!haveFlashrom) [
+      "-Dplugin_flashrom=disabled"
     ] ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=false"
+      "-Dplugin_msr=disabled"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
     dontWrapGApps = true;
 
-    # /etc/os-release not available in sandbox
-    # doCheck = true;
+    doCheck = true;
 
     # Environment variables
 
@@ -248,12 +253,31 @@ let
     postPatch = ''
       patchShebangs \
         contrib/generate-version-script.py \
-        meson_post_install.sh \
         po/test-deps
+
+      substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
+        --replace "gdbus" ${glib.bin}/bin/gdbus
+
+      # tests fail with: Failed to load SMBIOS: neither SMBIOS or DT found
+      sed -i 's/test(.*)//' plugins/lenovo-thinklmi/meson.build
+      sed -i 's/test(.*)//' plugins/mtd/meson.build
+      # fails on amd cpu
+      sed -i 's/test(.*)//' libfwupdplugin/meson.build
+      # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+      sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
+    '';
+
+    preBuild = ''
+      # jcat-tool at buildtime requires a home directory
+      export HOME="$(mktemp -d)"
     '';
 
     preCheck = ''
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
+
+      echo "12345678901234567890123456789012" > machine-id
+      export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
     '';
 
     preInstall = ''
@@ -276,7 +300,7 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ lib.optional haveFlashrom flashrom;
+      ];
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -285,8 +309,8 @@ let
       )
     '';
 
-    # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
     postFixup = ''
+      # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
       find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
         | while IFS= read -r -d ''' file; do
         if [[ "$file" != *.efi ]]; then
@@ -294,18 +318,21 @@ let
           wrapGApp "$file"
         fi
       done
+
+      # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+      moveToOutput "share/doc" "$devdoc"
     '';
 
     separateDebugInfo = true;
 
     passthru = {
       filesInstalledToEtc = [
+        "fwupd/bios-settings.d/README.md"
         "fwupd/daemon.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
         "fwupd/remotes.d/vendor-directory.conf"
-        "fwupd/thunderbolt.conf"
         "fwupd/uefi_capsule.conf"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -318,13 +345,16 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ] ++ lib.optionals haveRedfish [
         "fwupd/redfish.conf"
+      ] ++ lib.optionals haveMSR [
+        "fwupd/msr.conf"
+      ] ++ lib.optionals isx86 [
+        "fwupd/thunderbolt.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
       defaultDisabledPlugins = [
         "test"
         "test_ble"
-        "invalid"
       ];
 
       # For updating.

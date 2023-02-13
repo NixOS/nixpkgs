@@ -1,17 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, datree
+}:
 
 buildGoModule rec {
   pname = "datree";
-  version = "0.14.62";
+  version = "1.8.21";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = version;
-    sha256 = "sha256-yNq3GRovFm0OlYNJJGjTe5AqKG9J4I+igJ/WVNLWdKI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OURnQo38ofiDRu01GeEFTNiTYUeiDLMr1j28HzHVxds=";
   };
 
-  vendorSha256 = "sha256-SlU1lJcKCDkoihU19c8iky3Bj5ZZD9E9W0QQX9fBT1c=";
+  vendorHash = "sha256-mkVguYzjNGgFUdATjGfenCx3h97LS3SEOkYo3CuP9fA=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -19,12 +27,32 @@ buildGoModule rec {
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
   ];
 
-  doCheck = true;
+  tags = [ "main" ];
+
+  postInstall = ''
+    installShellCompletion \
+      --cmd datree \
+      --bash <($out/bin/datree completion bash) \
+      --fish <($out/bin/datree completion fish) \
+      --zsh <($out/bin/datree completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = datree;
+    command = "datree version";
+  };
 
   meta = with lib; {
-    description = "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
+    description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
+    longDescription = ''
+      Datree provides an E2E policy enforcement solution to run automatic checks
+      for rule violations. Datree can be used on the command line, admission
+      webhook, or even as a kubectl plugin to run policies against Kubernetes
+      objects.
+    '';
     homepage = "https://datree.io/";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.jceb ];
+    changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ azahi jceb ];
   };
 }

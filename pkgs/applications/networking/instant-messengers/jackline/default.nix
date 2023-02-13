@@ -4,17 +4,17 @@ with ocamlPackages;
 
 buildDunePackage rec {
   pname = "jackline";
-  version = "unstable-2021-08-10";
+  version = "unstable-2022-05-27";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev    = "73d87e9a62d534566bb0fbe64990d32d75487f11";
-    sha256 = "0wk574rqfg2vqz27nasxzwf67x51pj5fgl4vkc27r741dg4q6c5a";
+    rev    = "d8f7c504027a0dd51966b2b7304d6daad155a05b";
+    hash = "sha256-6SWYl2mB0g8JNVHBeTnZEbzOaTmVbsRMMEs+3j/ewwk=";
   };
 
   nativeBuildInpts = [
@@ -28,20 +28,21 @@ buildDunePackage rec {
     mirage-crypto-pk
     x509
     domain-name
-    ocaml_lwt
+    lwt
     otr
     astring
     ptime
     notty
     sexplib
     hex
-    uutf
     uchar
-    uuseg
     uucp
+    uuseg
+    uutf
     dns-client
     cstruct
     base64
+    happy-eyeballs-lwt
   ];
 
   meta = with lib; {

@@ -1,7 +1,5 @@
 {lib, stdenv, fetchFromGitHub, cmake}:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "unittest-cpp";
   version = "2.0.0";
@@ -20,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/unittest-cpp/unittest-cpp";
     description = "Lightweight unit testing framework for C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [];
     platforms = lib.platforms.unix;
   };

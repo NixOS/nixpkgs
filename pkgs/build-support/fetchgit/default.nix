@@ -15,6 +15,8 @@ in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
+, sparseCheckout ? []
+, nonConeMode ? false
 , name ? urlToName url rev
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
@@ -26,11 +28,13 @@ in
 , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
   netrcImpureEnvVars ? []
+, meta ? {}
+, allowedRequisites ? null
 }:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
-   This is because fetching arbitrary (maybe dangling) commits may be a security risk
+   This is because fetching arbitrary (maybe dangling) commits creates garbage collection risks
    and checking whether a commit belongs to a ref is expensive. This may
    change in the future when some caching is added to git (?)
    Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)
@@ -51,12 +55,16 @@ in
 */
 
 assert deepClone -> leaveDotGit;
+assert nonConeMode -> !(sparseCheckout == "" || sparseCheckout == []);
 
 if md5 != "" then
   throw "fetchgit does not support md5 anymore, please use sha256"
 else if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
+# Added 2022-11-12
+lib.warnIf (builtins.isString sparseCheckout)
+  "Please provide directories/patterns for sparse checkout as a list of strings. Support for passing a (multi-line) string is deprecated and will be removed in the next release."
 stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
@@ -74,7 +82,12 @@ stdenvNoCC.mkDerivation {
   else
     lib.fakeSha256;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
+  # git-sparse-checkout(1) says:
+  # > When the --stdin option is provided, the directories or patterns are read
+  # > from standard in as a newline-delimited list instead of from the arguments.
+  sparseCheckout = if builtins.isString sparseCheckout then sparseCheckout else builtins.concatStringsSep "\n" sparseCheckout;
+
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -89,5 +102,10 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
-  inherit preferLocalBuild;
+
+  inherit preferLocalBuild meta allowedRequisites;
+
+  passthru = {
+    gitRepoUrl = url;
+  };
 }

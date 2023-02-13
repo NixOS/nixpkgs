@@ -13,7 +13,7 @@ let
 in {
   options = {
     services.tedicross = {
-      enable = mkEnableOption "the TediCross Telegram-Discord bridge service";
+      enable = mkEnableOption (lib.mdDoc "the TediCross Telegram-Discord bridge service");
 
       config = mkOption {
         type = types.attrs;
@@ -57,9 +57,9 @@ in {
             debug = false;
           }
         '';
-        description = ''
-          <filename>settings.yaml</filename> configuration as a Nix attribute set.
-          Secret tokens should be specified using <option>environmentFile</option>
+        description = lib.mdDoc ''
+          {file}`settings.yaml` configuration as a Nix attribute set.
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable file.
         '';
       };
@@ -67,10 +67,10 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           File containing environment variables to be passed to the TediCross service,
           in which secret tokens can be specified securely using the
-          <literal>TELEGRAM_BOT_TOKEN</literal> and <literal>DISCORD_BOT_TOKEN</literal>
+          `TELEGRAM_BOT_TOKEN` and `DISCORD_BOT_TOKEN`
           keys.
         '';
       };

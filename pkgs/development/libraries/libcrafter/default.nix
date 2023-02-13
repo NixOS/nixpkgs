@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchzip, autoconf, automake, libtool, libpcap }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "libcrafter";
   version = "1.0";
 
-  src = fetchzip {
-    url = "https://github.com/pellegre/libcrafter/archive/version-${version}.zip";
-    sha256 = "1d2vgxawdwk2zg3scxclxdby1rhghmivly8azdjja89kw7gls9xl";
+  src = fetchFromGitHub {
+    owner = "pellegre";
+    repo = "libcrafter";
+    rev = "version-${version}";
+    sha256 = "sha256-tCdN3+EzISVl+wp5umOFD+bgV+uUdabH+2LyxlV/W7Q=";
   };
 
   preConfigure = "cd libcrafter";
@@ -15,7 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-libpcap=yes" ];
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool ];
 
   propagatedBuildInputs = [ libpcap ];
 

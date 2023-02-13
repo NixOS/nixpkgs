@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnonograms";
-  version = "2.0.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "jeremypw";
     repo = "gnonograms";
     rev = "v${version}";
-    sha256 = "sha256-2uXaybpCAm9cr0o7bqfhgD7mMNPwtv1X/PgnFnSDOl0=";
+    sha256 = "sha256-TkEVjrwlr4Q5FsfcdY+9fxwaMq+DFs0RwGI2E+GT5Mk=";
   };
 
   postPatch = ''

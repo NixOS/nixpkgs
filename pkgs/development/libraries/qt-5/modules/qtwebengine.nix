@@ -1,7 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
+, bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
@@ -12,24 +12,27 @@
 , libcap
 , pciutils
 , systemd
-, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
-, cctools, libobjc, libunwind, sandbox, xnu
+, cctools, libobjc, libpm, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
+, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg ? null
+, ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
+, pipewireSupport ? stdenv.isLinux
+, pipewire_0_2
+, postPatch ? ""
 }:
 
 qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
+    bison flex git gperf ninja pkg-config python which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -78,30 +81,26 @@ qtModule {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  '' + lib.optionalString stdenv.isDarwin (
-  (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+  '' + lib.optionalString stdenv.isDarwin (''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '' else ''
-    substituteInPlace src/core/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '')
-   # Following is required to prevent a build error:
-   # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-  + ''
+
+    # Following is required to prevent a build error:
+    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
       --replace '$sysroot/usr' "${xnu}"
-  ''
-  # Apple has some secret stuff they don't share with OpenBSM
-  + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-    --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
-  substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-    --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-  '' else ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-    --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-  ''));
+
+    # Apple has some secret stuff they don't share with OpenBSM
+    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
+      --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+      --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+
+    # ld: warning: directory not found for option '-L/nix/store/...-xcodebuild-0.1.2-pre/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/usr/lib'
+    # ld: fatal warning(s) induced error (-fatal_warnings)
+    substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
+      --replace "-Wl,-fatal_warnings" ""
+  '') + postPatch;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
@@ -112,19 +111,6 @@ qtModule {
     "-march=westmere"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-elaborated-enum-base"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
-    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
-
-    #
-    # Prevent errors like
-    # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
-    # error: pointer to non-const type 'id' with no explicit ownership
-    #     id** _kvcPropertyAccessors;
-    #
-    # TODO remove when new Apple SDK is in
-    #
-    "-fno-objc-arc"
   ];
 
   preConfigure = ''
@@ -136,7 +122,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ lib.optional pipewireSupport "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -153,7 +139,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-    ffmpeg
+    ffmpeg_4
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -170,7 +156,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
-  ] ++ lib.optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+  ] ++ lib.optionals pipewireSupport [
     # Pipewire
     pipewire_0_2
   ]
@@ -195,6 +181,11 @@ qtModule {
     Quartz
     Cocoa
     LocalAuthentication
+    MediaPlayer
+    MediaAccessibility
+    SecurityInterface
+    Vision
+    CoreML
 
     openbsm
     libunwind
@@ -202,6 +193,7 @@ qtModule {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     cups
+    libpm
     sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
@@ -228,7 +220,7 @@ qtModule {
     [Paths]
     Prefix = ..
     EOF
-  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
+
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
@@ -238,13 +230,24 @@ qtModule {
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.unix;
+
+    # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
+    # x86-64, ARM, Aarch64, and MIPSel architectures."
+    platforms =
+      lib.trivial.pipe lib.systems.doubles.all [
+        (map (double: lib.systems.elaborate { system = double; }))
+        (lib.lists.filter (parsedPlatform: with parsedPlatform;
+          isUnix &&
+          (isx86_32  ||
+           isx86_64  ||
+           isAarch32 ||
+           isAarch64 ||
+           (isMips && isLittleEndian))))
+        (map (plat: plat.system))
+      ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
+
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
-    # we are still stuck with MacOS SDK 10.12 on x86_64-darwin
-    # and qtwebengine 5.14+ requires at least SDK 10.14
-    # (qtwebengine 5.12 is fine with SDK 10.12)
-    # on aarch64-darwin we are already at MacOS SDK 11.0
-    broken = stdenv.isDarwin && stdenv.isx86_64 && (lib.versionAtLeast qtCompatVersion "5.14");
   };
 }

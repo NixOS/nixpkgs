@@ -1,5 +1,5 @@
 { lib
-, pkgs
+, fetchFromGitHub
 , python3
 }:
 
@@ -7,33 +7,34 @@ let
   setoptconf-tmp = python3.pkgs.callPackage ./setoptconf.nix { };
 in
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "prospector";
-  version = "1.5.1";
+  version = "1.8.4";
   format = "pyproject";
-  disabled = pythonOlder "3.6.1";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = version;
-    sha256 = "17f822cxrvcvnrzdx1a9fyi9afljq80b6g6z1k2bqa1vs21gwv7l";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g7tyn6pj5I/+b28wIitqDapR5ffk1xDEAtcYs2TpIUk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "pyflakes"
+    "pep8-naming"
+    "flake8"
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     bandit
     dodgy
+    flake8
+    gitpython
     mccabe
     mypy
     pep8-naming
@@ -54,16 +55,25 @@ buildPythonApplication rec {
     vulture
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [
+    "prospector"
+  ];
+
+  disabledTestPaths = [
+    # distutils.errors.DistutilsArgError: no commands supplied
+    "tests/tools/pyroma/test_pyroma_tool.py"
+  ];
+
 
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

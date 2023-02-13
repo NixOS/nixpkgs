@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "1.9";
+  version = "2.1";
   pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${version}";
-    sha256 = "0qbdq7k0mmvkjp6qzz88n7vf29liqn6y5w4y39ldqdc8hzw5sld7";
+    sha256 = "sha256-D5FUhv1moQKzcLj/3VWJNs24jTXJir1dMpv59orPTtc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

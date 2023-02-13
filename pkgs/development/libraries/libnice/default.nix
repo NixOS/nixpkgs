@@ -13,6 +13,7 @@
 , gupnp-igd
 , gst_all_1
 , gnutls
+, graphviz
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
+    graphviz
   ];
 
   buildInputs = [
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = with licenses; [ lgpl21 mpl11 ];
   };
 }

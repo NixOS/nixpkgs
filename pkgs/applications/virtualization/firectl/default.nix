@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "firectl";
-  version = "0.1.0";
-
-  patches = [ ./gomod.patch ];
+  # The latest upstream 0.1.0 is incompatible with firecracker
+  # v0.1.0. See issue: https://github.com/firecracker-microvm/firectl/issues/82
+  version = "unstable-2022-07-12";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ni3yx4rjhrkqk2038c6hkb2jwsdj2llx233wd5wgpvb6c57652p";
+    rev = "ec72798240c0561dea8341d828e8c72bb0cc36c5";
+    sha256 = "sha256-RAl1DaeMR7eYYwqVAvm6nib5gEGaM/t7TR8u1IpqOIM=";
   };
 
-  vendorSha256 = "1xbpck1gvzl75xgrajf5yzl199l4f2f6j3mac5586i7b00b9jxqj";
+  vendorSha256 = "sha256-dXAJOifRtzcTyGzUTFu9+daGAlL/5dQSwcjerkZDuKA=";
 
   doCheck = false;
 

@@ -16,8 +16,6 @@
 , which
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "crip";
   version = "3.9";
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.perl perlPackages.CDDB_get ];
   nativeBuildInputs = [ makeWrapper ];
 
-  toolDeps = makeBinPath [
+  toolDeps = lib.makeBinPath [
     cdparanoia
     coreutils
     eject
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin/
 
-    for script in ${escapeShellArgs scripts}; do
+    for script in ${lib.escapeShellArgs scripts}; do
       cp $script $out/bin/
 
       substituteInPlace $out/bin/$script \
@@ -61,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://bach.dynet.com/crip/";
     description = "Terminal-based ripper/encoder/tagger tool for creating Ogg Vorbis/FLAC files";
-    license = lib.licenses.gpl1;
+    license = lib.licenses.gpl1Only;
     platforms = lib.platforms.linux;
-    maintainers = [ maintainers.endgame ];
+    maintainers = [ lib.maintainers.endgame ];
   };
 }

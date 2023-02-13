@@ -5,12 +5,12 @@ with lib;
 let
   cfg = config.services.cage;
 in {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage.enable = mkEnableOption (lib.mdDoc "cage kiosk service");
 
   options.services.cage.user = mkOption {
     type = types.str;
     default = "demo";
-    description = ''
+    description = lib.mdDoc ''
       User to log-in as.
     '';
   };
@@ -19,7 +19,7 @@ in {
     type = types.listOf types.str;
     default = [];
     defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
+    description = lib.mdDoc "Additional command line arguments to pass to Cage.";
     example = ["-d"];
   };
 
@@ -27,7 +27,7 @@ in {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
     defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
+    description = lib.mdDoc ''
       Program to run in cage.
     '';
   };
@@ -81,12 +81,14 @@ in {
       };
     };
 
+    security.polkit.enable = true;
+
     security.pam.services.cage.text = ''
       auth    required pam_unix.so nullok
       account required pam_unix.so
       session required pam_unix.so
       session required pam_env.so conffile=/etc/pam/environment readenv=0
-      session required ${pkgs.systemd}/lib/security/pam_systemd.so
+      session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
     hardware.opengl.enable = mkDefault true;

@@ -143,6 +143,23 @@ export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
 
+# Copy the NixOS/Nixpkgs sources to the target as the initial contents
+# of the NixOS channel.
+if [[ -z $noChannelCopy ]]; then
+    if [[ -z $channelPath ]]; then
+        channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
+    fi
+    if [[ -n $channelPath ]]; then
+        echo "copying channel..."
+        mkdir -p "$mountPoint"/nix/var/nix/profiles/per-user/root
+        nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
+                -p "$mountPoint"/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                "${verbosity[@]}"
+        install -m 0700 -d "$mountPoint"/root/.nix-defexpr
+        ln -sfn /nix/var/nix/profiles/per-user/root/channels "$mountPoint"/root/.nix-defexpr/channels
+    fi
+fi
+
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
     outLink="$tmpdir/system"
@@ -167,23 +184,6 @@ nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
         -p "$mountPoint"/nix/var/nix/profiles/system --set "$system" "${verbosity[@]}"
 
-# Copy the NixOS/Nixpkgs sources to the target as the initial contents
-# of the NixOS channel.
-if [[ -z $noChannelCopy ]]; then
-    if [[ -z $channelPath ]]; then
-        channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
-    fi
-    if [[ -n $channelPath ]]; then
-        echo "copying channel..."
-        mkdir -p "$mountPoint"/nix/var/nix/profiles/per-user/root
-        nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p "$mountPoint"/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
-                "${verbosity[@]}"
-        install -m 0700 -d "$mountPoint"/root/.nix-defexpr
-        ln -sfn /nix/var/nix/profiles/per-user/root/channels "$mountPoint"/root/.nix-defexpr/channels
-    fi
-fi
-
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
 mkdir -m 0755 -p "$mountPoint/etc"
 touch "$mountPoint/etc/NIXOS"
@@ -195,7 +195,20 @@ if [[ -z $noBootLoader ]]; then
     echo "installing the boot loader..."
     # Grub needs an mtab.
     ln -sfn /proc/mounts "$mountPoint"/etc/mtab
-    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
+    export mountPoint
+    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
+      # Create a bind mount for each of the mount points inside the target file
+      # system. This preserves the validity of their absolute paths after changing
+      # the root with `nixos-enter`.
+      # Without this the bootloader installation may fail due to options that
+      # contain paths referenced during evaluation, like initrd.secrets.
+      # when not root, re-execute the script in an unshared namespace
+      mount --rbind --mkdir / "$mountPoint"
+      mount --make-rslave "$mountPoint"
+      /run/current-system/bin/switch-to-configuration boot
+      umount -R "$mountPoint" && rmdir "$mountPoint"
+EOF
+)"
 fi
 
 # Ask the user to set a root password, but only if the passwd command

@@ -5,7 +5,7 @@ let
 in {
   options = {
     services.auto-cpufreq = {
-      enable = mkEnableOption "auto-cpufreq daemon";
+      enable = mkEnableOption (lib.mdDoc "auto-cpufreq daemon");
     };
   };
 

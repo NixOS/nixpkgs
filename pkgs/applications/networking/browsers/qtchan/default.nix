@@ -24,7 +24,7 @@ mkDerivation rec {
     description = "4chan browser in qt5";
     homepage    = "https://github.com/siavash119/qtchan";
     license     = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms   = platforms.unix;
   };
 }

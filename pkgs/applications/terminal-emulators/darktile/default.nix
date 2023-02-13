@@ -1,5 +1,4 @@
 { stdenv
-, buildGoModule
 , fetchFromGitHub
 , lib
 , go
@@ -12,6 +11,7 @@
 , libXext
 , libXxf86vm
 , libGL
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.darktile;
 
   meta = with lib; {
     description = "A GPU rendered terminal emulator designed for tiling window managers";

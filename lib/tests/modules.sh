@@ -58,9 +58,22 @@ checkConfigError() {
     fi
 }
 
+# Shorthand meta attribute does not duplicate the config
+checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
+checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
+checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
+checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
+checkConfigOutput '^42$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^420$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix ./define-shorthandOnlyDefinesConfig-true.nix
+checkConfigError 'The option .bare-submodule.deep. in .*/declare-bare-submodule-deep-option.nix. is already declared in .*/declare-bare-submodule-deep-option-duplicate.nix' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix  ./declare-bare-submodule-deep-option-duplicate.nix
 
 # Check integer types.
 # unsigned
@@ -123,6 +136,7 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enab
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
 checkConfigOutput '^false$' "$@" ./disable-define-enable.nix
+checkConfigOutput '^false$' "$@" ./disable-define-enable-string-path.nix
 checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*- In .*: true" "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
@@ -151,7 +165,7 @@ checkConfigError 'A definition for option .* is not.*string or signed integer co
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
-checkConfigError 'json.exception.parse_error' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix
@@ -187,6 +201,17 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
+## deferredModule
+# default module is merged into nodes.foo
+checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
+# errors from the default module are reported with accurate location
+checkConfigError 'In `the-file-that-contains-the-bad-config.nix, via option default'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
+checkConfigError '.*lib/tests/modules/deferred-module-error.nix, via option deferred [(]:anon-1:anon-1:anon-1[)] does not look like a module.' config.result ./deferred-module-error.nix
+
+# Check the file location information is propagated into submodules
+checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
+
+
 # Check that disabledModules works recursively and correctly
 checkConfigOutput '^true$' config.enable ./disable-recursive/main.nix
 checkConfigOutput '^true$' config.enable ./disable-recursive/{main.nix,disable-foo.nix}
@@ -221,7 +246,7 @@ checkConfigError 'A definition for option .* is not of type .*' \
 ## Freeform modules
 # Assigning without a declared option should work
 checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-string.nix
-# No freeform assigments shouldn't make it error
+# No freeform assignments shouldn't make it error
 checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
 # but only if the type matches
 checkConfigError 'A definition for option .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
@@ -240,6 +265,11 @@ checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
+# submodules in freeformTypes should have their locations annotated
+checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
+# freeformTypes can get merged using `types.type`, including submodules
+checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
+checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
 
 ## types.anything
 # Check that attribute sets are merged recursively
@@ -275,14 +305,58 @@ checkConfigOutput '^"baz"$' config.value.nested.bar.baz ./types-anything/mk-mods
 ## types.functionTo
 checkConfigOutput '^"input is input"$' config.result ./functionTo/trivial.nix
 checkConfigOutput '^"a b"$' config.result ./functionTo/merging-list.nix
-checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
+checkConfigError 'A definition for option .fun.<function body>. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
 checkConfigOutput '^"b a"$' config.result ./functionTo/list-order.nix
 checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
+checkConfigOutput '^"a bee"$' config.result ./functionTo/submodule-options.nix
+checkConfigOutput '^"fun.<function body>.a fun.<function body>.b"$' config.optionsResult ./functionTo/submodule-options.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
-checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
+checkConfigOutput '^"a b y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
+
+## emptyValue's
+checkConfigOutput "[ ]" config.list.a ./emptyValues.nix
+checkConfigOutput "{ }" config.attrs.a ./emptyValues.nix
+checkConfigOutput "null" config.null.a ./emptyValues.nix
+checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
+# These types don't have empty values
+checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+
+## types.raw
+checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput "10" config.processedToplevel ./raw.nix
+checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
+checkConfigOutput "bar" config.priorities ./raw.nix
+
+## Option collision
+checkConfigError \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integer. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  config.set \
+  ./declare-set.nix ./declare-enable-nested.nix
+
+# Test that types.optionType merges types correctly
+checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
+checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
+
+# Test that types.optionType correctly annotates option locations
+checkConfigError 'The option .theOption.nested. in .other.nix. is already declared in .optionTypeFile.nix.' config.theOption.nested ./optionTypeFile.nix
+
+# Test that types.optionType leaves types untouched as long as they don't need to be merged
+checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
+
+# Anonymous submodules don't get nixed by import resolution/deduplication
+# because of an `extendModules` bug, issue 168767.
+checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
+
+# doRename works when `warnings` does not exist.
+checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
+# doRename adds a warning.
+checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. has been renamed to `c\.d\.e.\."$' \
+  config.result \
+  ./doRename-warnings.nix
 
 cat <<EOF
 ====== module tests ======

@@ -18,15 +18,16 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2021.10.1";
+  version = "2022.10.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "dask";
+    owner = "fsspec";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BME40kyxZHx9+XrMCqWYp8+q6tjeYwAw/zISMNpQxDU=";
+    hash = "sha256-+S4AziibYWos/hZ1v3883b1Vv3y4xjIDUrQ8c2XJ1MQ=";
   };
 
   propagatedBuildInputs = [
@@ -41,15 +42,21 @@ buildPythonPackage rec {
     ujson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-vcr
     pytestCheckHook
     vcrpy
   ];
 
-  disabledTests = [
-    # Tests wants to communicate with the Link-local address
-    "test_GoogleCredentials_None"
+  disabledTestPaths = [
+    # Tests require a running Docker instance
+    "gcsfs/tests/test_core.py"
+    "gcsfs/tests/test_mapping.py"
+    "gcsfs/tests/test_retry.py"
+  ];
+
+  pytestFlagsArray = [
+    "-x"
   ];
 
   pythonImportsCheck = [
@@ -58,7 +65,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
-    homepage = "https://github.com/dask/gcsfs";
+    homepage = "https://github.com/fsspec/gcsfs";
+    changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nbren12 ];
   };

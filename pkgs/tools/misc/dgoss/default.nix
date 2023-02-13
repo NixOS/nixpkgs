@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, resholvePackage
+, resholve
 , substituteAll
 , bash
 , coreutils
@@ -8,15 +8,15 @@
 , which
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.16";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "aelsabbahy";
     repo = "goss";
     rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
   };
 
   dontConfigure = true;
@@ -32,8 +32,8 @@ resholvePackage rec {
       scripts = [ "bin/dgoss" ];
       interpreter = "${bash}/bin/bash";
       inputs = [ coreutils which ];
-      fake = {
-        external = [ "docker" ];
+      keep = {
+        "$CONTAINER_RUNTIME" = true;
       };
     };
   };

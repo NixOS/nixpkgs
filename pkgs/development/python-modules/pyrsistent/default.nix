@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.18.0";
+  version = "0.19.3";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "773c781216f8c2900b42a7b638d5b517bb134ae1acbebe4d1e8f1f41ea60eb4b";
+    sha256 = "sha256-GimUdzcGu7SZXDGpe8lPFBgxSSO9EEjG2WSDcEA3ZEA=";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [ pytestCheckHook hypothesis ];
 
   postPatch = ''
     substituteInPlace setup.py \

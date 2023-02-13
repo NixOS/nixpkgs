@@ -6,41 +6,41 @@
 , libiconv
 , Security
 , SystemConfiguration
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "0.8.0";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "ellie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I/ZDaOAiHdWOkmf+jIWWxZ3C25UHsl6MB7mCRLADFNs=";
+    sha256 = "sha256-kt0Xu95E3MayUybSh1mU5frJoU7BF41Hnjqqrz/cVHE=";
   };
 
-  cargoSha256 = "sha256-KMss6Mpn4LHnkhtJyRea+D7mKItBK4lqq9syFEmCiFo=";
+  cargoSha256 = "sha256-WAAelEFtHlFGDk0AI381OS5bxN58Z46kyMAuL+XX/Ac=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   postInstall = ''
-    HOME=$(mktemp -d)
-    for shell in bash fish zsh; do
-      $out/bin/atuin gen-completions -s $shell -o .
-    done
-
     installShellCompletion --cmd atuin \
-      --bash atuin.bash \
-      --fish atuin.fish \
-      --zsh _atuin
+      --bash <($out/bin/atuin gen-completions -s bash) \
+      --fish <($out/bin/atuin gen-completions -s fish) \
+      --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) atuin;
+  };
 
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 ];
+    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy ];
   };
 }

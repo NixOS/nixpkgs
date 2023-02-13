@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f827da4a1bf69d4f4f881f7d7ebc8b378967b60924aa4baea2c9d1debedf5fc";
+    sha256 = "sha256-4SAXjx5pRDhv4YVUgrUttyUa5izpYqpDKiiGJc2y8V0=";
   };
 
   # win_inet_pton is required for windows support
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     substituteInPlace python_hosts/utils.py --replace "import win_inet_pton" ""
   '';
 
-  checkInputs = [ pyyaml pytest pytest-cov ];
+  nativeCheckInputs = [ pyyaml pytest pytest-cov ];
 
   # Removing 1 test file (it requires internet connection) and keeping the other two
   checkPhase = ''

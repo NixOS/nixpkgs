@@ -2,72 +2,79 @@
 , alsa-utils
 , autoPatchelfHook
 , fetchurl
+, ffmpeg
 , lib
 , makeWrapper
+, openssl
 , stdenv
 , zlib
 }:
 let
-  inherit (stdenv.targetPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  version = "1.8-1125";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  host = stdenv.hostPlatform.system;
+  system = if host == "x86_64-linux" then "linuxx64"
+           else if host == "aarch64-linux" then "linuxarmv8"
+           else throw "Unsupported platform ${host}";
+  src = fetchurl {
+    url = "https://download.roonlabs.com/updates/stable/RoonBridge_${system}_${urlVersion}.tar.bz2";
+    hash = if system == "linuxx64" then "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
+           else if system == "linuxarmv8" then "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
+           else throw "Unsupported platform ${host}";
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "roon-bridge";
-  version = "1.8-814";
+  inherit src version;
 
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-    in
-      {
-        x86_64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxx64_${urlVersion}.tar.bz2";
-          sha256 = "sha256-dersaP/8qkl9k81FrgMieB0P4nKmDwjLW5poqKhEn7A=";
-        };
-        aarch64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxarmv8_${urlVersion}.tar.bz2";
-          sha256 = "sha256-zZj7PkLUYYHo3dngqErv1RqynSXi6/D5VPZWfrppX5U=";
-        };
-      }.${system} or throwSystem;
+  dontConfigure = true;
+  dontBuild = true;
 
   buildInputs = [
     alsa-lib
-    alsa-utils
     zlib
+    stdenv.cc.cc.lib
   ];
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    mv * $out
-    runHook postInstall
-  '';
-
-  postFixup =
+  installPhase =
     let
-      linkFix = bin: ''
-        sed -i '/ulimit/d' ${bin}
-        sed -i '/ln -sf/d' ${bin}
-        ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
-      '';
-      wrapFix = bin: ''
-        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
+      fixBin = binPath: ''
+        (
+          sed -i '/ulimit/d' ${binPath}
+          sed -i 's@^SCRIPT=.*@SCRIPT="$(basename "${binPath}")"@' ${binPath}
+          wrapProgram ${binPath} \
+            --argv0 "$(basename ${binPath})" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib ffmpeg openssl ]}" \
+            --prefix PATH : "${lib.makeBinPath [ alsa-utils ffmpeg ]}"
+        )
       '';
     in
     ''
-      ${linkFix "$out/Bridge/RAATServer"}
-      ${linkFix "$out/Bridge/RoonBridge"}
-      ${linkFix "$out/Bridge/RoonBridgeHelper"}
+      runHook preInstall
+      mkdir -p $out
+      mv * $out
 
-      ${wrapFix "$out/check.sh"}
-      ${wrapFix "$out/start.sh"}
+      rm $out/check.sh
+      rm $out/start.sh
+      rm $out/VERSION
+
+      ${fixBin "${placeholder "out"}/Bridge/RAATServer"}
+      ${fixBin "${placeholder "out"}/Bridge/RoonBridge"}
+      ${fixBin "${placeholder "out"}/Bridge/RoonBridgeHelper"}
+
+      mkdir -p $out/bin
+      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --chdir "$out"
+
+      runHook postInstall
     '';
 
   meta = with lib; {
     description = "The music player for music lovers";
+    changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];

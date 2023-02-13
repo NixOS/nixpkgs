@@ -42,12 +42,12 @@ in
 {
   options = {
     services.gvpe = {
-      enable = lib.mkEnableOption "gvpe";
+      enable = lib.mkEnableOption (lib.mdDoc "gvpe");
 
       nodename = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description =''
+        description =lib.mdDoc ''
           GVPE node name
         '';
       };
@@ -68,7 +68,7 @@ in
           on alpha if-up = if-up-0
           on alpha pid-file = /var/gvpe/gvpe.pid
         '';
-        description = ''
+        description = lib.mdDoc ''
           GVPE config contents
         '';
       };
@@ -76,14 +76,14 @@ in
         default = null;
         type = types.nullOr types.path;
         example = "/root/my-gvpe-conf";
-        description = ''
+        description = lib.mdDoc ''
           GVPE config file, if already present
         '';
       };
       ipAddress = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           IP address to assign to GVPE interface
         '';
       };
@@ -91,14 +91,14 @@ in
         default = null;
         type = types.nullOr types.str;
         example = "10.0.0.0/8";
-        description = ''
+        description = lib.mdDoc ''
           IP subnet assigned to GVPE network
         '';
       };
       customIFSetup = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Additional commands to apply in ifup script
         '';
       };

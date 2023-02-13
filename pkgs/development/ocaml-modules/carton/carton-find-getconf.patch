@@ -1,0 +1,13 @@
+diff --git a/bin/fiber/fiber.ml b/bin/fiber/fiber.ml
+index 188a92cc9..6087a8687 100644
+--- a/bin/fiber/fiber.ml
++++ b/bin/fiber/fiber.ml
+@@ -129,7 +129,7 @@ let worker pool =
+ 
+ let get_concurrency () =
+   try
+-    let ic = Unix.open_process_in "getconf _NPROCESSORS_ONLN" in
++    let ic = Unix.open_process_in "@getconf@/bin/getconf _NPROCESSORS_ONLN" in
+     let close () = ignore (Unix.close_process_in ic) in
+     let sc = Scanf.Scanning.from_channel ic in
+     try

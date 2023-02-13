@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python3
-, bdftopcf, mkfontscale
+, bdftopcf, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
 
   nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale ];
+    [ python3 bdftopcf xorg.mkfontscale ];
 
   enableParallelBuilding = true;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = "http://terminus-font.sourceforge.net/";
+    homepage = "https://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
   };

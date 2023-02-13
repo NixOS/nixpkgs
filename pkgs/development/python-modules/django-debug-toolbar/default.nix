@@ -3,6 +3,7 @@
 , pythonOlder
 , buildPythonPackage
 , python
+, hatchling
 , django
 , jinja2
 , sqlparse
@@ -11,15 +12,21 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "3.2.2";
-  disabled = pythonOlder "3.6";
+  version = "3.8.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
-    rev = version;
-    sha256 = "1dgb3s449nasbnqd5xfikxrfhwwilwlgrw9nv4bfkapvkzpdszjk";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GlEw25wem8iwwm3rYLk6TFEAIzC1pYjpSHdAkHwtFcE=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     django
@@ -32,7 +39,7 @@ buildPythonPackage rec {
   TEST_ARGS = "tests";
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     html5lib
   ];
 
@@ -42,11 +49,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "debug_toolbar"
+  ];
+
+  meta = with lib; {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
-    maintainers =  with lib.maintainers; [ yuu ];
-    license = lib.licenses.bsd3;
-  };
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ yuu ];
+};
 }

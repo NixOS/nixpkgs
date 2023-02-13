@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   GSEXE="${ghostscript}/bin/gs";
 
+  configureFlags = [ "--enable-transfig" ];
+
   postInstall = ''
     wrapProgram $out/bin/fig2ps2tex \
         --set PATH ${lib.makeBinPath [ coreutils bc gnugrep gawk ]}
@@ -34,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to convert Xfig files to other formats";
-    homepage = "http://mcj.sourceforge.net/";
+    homepage = "https://mcj.sourceforge.net/";
     license = licenses.xfig;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lesuisse ];
   };
 }

@@ -2,8 +2,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.10.52";
-  tag = "1.20210805";
+  modDirVersion = "5.15.84";
+  tag = "1.20230106";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -13,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = tag;
-    sha256 = "1j71xblflslfi4c3zx2srw6fahnhp3bjx4yjfqrp39kzaa41ij0b";
+    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
   };
 
   defconfig = {
@@ -41,10 +41,10 @@ lib.overrideDerivation (buildLinux (args // {
   '';
 
   extraMeta = if (rpiVersion < 3) then {
-    platforms = with lib.platforms; [ arm ];
+    platforms = with lib.platforms; arm;
     hydraPlatforms = [];
   } else {
-    platforms = with lib.platforms; [ arm aarch64 ];
+    platforms = with lib.platforms; arm ++ aarch64;
     hydraPlatforms = [ "aarch64-linux" ];
   };
 } // (args.argsOverride or {}))) (oldAttrs: {
@@ -75,6 +75,7 @@ lib.overrideDerivation (buildLinux (args // {
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux"]) ''
     copyDTB bcm2709-rpi-2-b.dtb bcm2836-rpi-2-b.dtb
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux" "aarch64-linux"]) ''
+    copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
     copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb

@@ -1,0 +1,13 @@
+diff --git a/gptcl.cc b/gptcl.cc
+index 34c9421..0d578eb 100644
+--- a/gptcl.cc
++++ b/gptcl.cc
+@@ -155,7 +155,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+    } // while
+ 
+    // Assume first non-option argument is the device filename....
+-   device = (char*) poptGetArg(poptCon);
++   device = strdup((char*) poptGetArg(poptCon));
+    poptResetContext(poptCon);
+ 
+    if (device != NULL) {

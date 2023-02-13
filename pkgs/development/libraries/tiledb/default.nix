@@ -13,7 +13,7 @@
 , libpqxx
 , clang-tools
 , catch2
-, python
+, python3
 , gtest
 , doxygen
 , fixDarwinDylibNames
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     clang-tools
     cmake
-    python
+    python3
     doxygen
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

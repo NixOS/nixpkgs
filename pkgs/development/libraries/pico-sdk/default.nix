@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pico-sdk";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = version;
-    sha256 = "00z160f7ypws5pzp1ql7xrs3gmjcbw6gywnnq2fiwl47940balns";
+    sha256 = "sha256-p69go8KXQR21szPb+R1xuonyFj+ZJDunNeoU7M3zIsE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/picotool";
     description = "SDK provides the headers, libraries and build system necessary to write programs for the RP2040-based devices";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ musfay ];
+    maintainers = with maintainers; [ muscaln ];
     platforms = platforms.unix;
   };
 }

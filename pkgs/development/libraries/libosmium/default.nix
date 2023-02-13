@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmium";
-  version = "2.17.2";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     rev = "v${version}";
-    sha256 = "sha256-+WeEK7rWoUPAiAsgd5qT2bwDf+5IlP4uuyh7+i2L/HU=";
+    sha256 = "sha256-R7kOhQFfGYuHNkIZV4BTE+WKjHnCJwKeIWjCJNrvyTQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     description = "Fast and flexible C++ library for working with OpenStreetMap data";
     homepage = "https://osmcode.org/libosmium/";
     license = licenses.boost;
+    changelog = [
+      "https://github.com/osmcode/libosmium/releases/tag/v${version}"
+      "https://github.com/osmcode/libosmium/blob/v${version}/CHANGELOG.md"
+    ];
     maintainers = with maintainers; [ das-g ];
   };
 }

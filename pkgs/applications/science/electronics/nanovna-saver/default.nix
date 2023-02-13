@@ -1,36 +1,34 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  wrapQtAppsHook,
 }:
-
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.3.8";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z83rwpnbbs1n74mx8dgh1d1crp90mannj9vfy161dmy4wzc5kpv";
+    sha256 = "sha256-CLfgDQt2rOXtWwvEhlXEstPp28nFhuhiAPYL6EjZVu4=";
   };
+
+  # Fix for https://github.com/NanoVNA-Saver/nanovna-saver/issues/579
+  # Try dropping the patch in the next release after v0.5.4
+  patches = [
+    (fetchpatch {
+      name = "remote-changelog-from-setup-py.patch";
+      url = "https://github.com/NanoVNA-Saver/${pname}/commit/d654ea0441939e4e1c599d1333b587a185394fbe.diff";
+      sha256 = "sha256-ifOhiWD0EYyQZRKp2W3G6crmWslca+/21APmhpfP/xE=";
+    })
+  ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     cython
     scipy
     pyqt5
@@ -60,6 +58,6 @@ in python.pkgs.buildPythonApplication rec {
       generally display and analyze the resulting data.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaninime ];
+    maintainers = with maintainers; [ zaninime tmarkus ];
   };
 }

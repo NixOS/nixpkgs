@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to automatically sign git commits, replacing gpg for that purpose";
     homepage = "https://github.com/withoutboats/bpb";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,50 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce }:
+{ lib
+, mkXfceDerivation
+, imagemagick
+, libwnck
+, libxfce4ui
+, python3
+, xfce4-panel
+, xfconf
+}:
 
-stdenv.mkDerivation rec {
-  pname  = "xfce4-windowck-plugin";
-  version = "0.4.10";
-
-  src = fetchFromGitHub {
-    owner = "invidian";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-luCQzqWX3Jl2MlBa3vi1q7z1XOhpFxE8PUxscoIyBlA=";
-  };
-
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+mkXfceDerivation {
+  category = "panel-plugins";
+  pname = "xfce4-windowck-plugin";
+  version = "0.5.0";
+  rev-prefix = "v";
+  odd-unstable = false;
+  sha256 = "sha256-MhNSgI74VLdoS5yL6nfRrVrPvv7+0P5meO4zQheYFzo=";
 
   buildInputs = [
-    python3
     imagemagick
     libwnck
     libxfce4ui
+    python3
     xfce4-panel
     xfconf
-    xfce4-dev-tools
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-    patchShebangs .
+  postPatch = ''
+    patchShebangs themes/windowck{,-dark}/{xfwm4,unity}/generator.py
   '';
 
-  enableParallelBuilding = true;
-
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.gitLister src.meta.homepage;
-    rev-prefix = "v";
-  };
-
   meta = with lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-windowck-plugin";
-    description = "Xfce plugins which allows to put the maximized window title and buttons on the panel";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
+    description = "Xfce panel plugin for displaying window title and buttons";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

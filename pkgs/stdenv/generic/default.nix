@@ -11,6 +11,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
+, disallowedRequisites ? []
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -56,28 +57,21 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
-    [ ../../build-support/setup-hooks/move-docs.sh
-      ../../build-support/setup-hooks/make-symlinks-relative.sh
+    [
+      ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
-      ../../build-support/setup-hooks/strip.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
+      ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/move-sbin.sh
+      ../../build-support/setup-hooks/move-systemd-user-units.sh
+      ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
       ../../build-support/setup-hooks/prune-libtool-files.sh
-    ]
-      # FIXME this on Darwin; see
-      # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optionals hostPlatform.isLinux [
-      ../../build-support/setup-hooks/audit-tmpdir.sh
-      ../../build-support/setup-hooks/move-systemd-user-units.sh
-    ]
-    ++ [
-      ../../build-support/setup-hooks/multiple-outputs.sh
-      ../../build-support/setup-hooks/move-sbin.sh
-      ../../build-support/setup-hooks/move-lib64.sh
-      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       ../../build-support/setup-hooks/reproducible-builds.sh
-      # TODO use lib.optional instead
-      (if hasCC then cc else null)
-    ];
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/strip.sh
+    ] ++ lib.optionals hasCC [ cc ];
 
   defaultBuildInputs = extraBuildInputs;
 
@@ -90,13 +84,14 @@ let
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
     }
-    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+    // lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     }
     // {
       inherit name;
+      inherit disallowedRequisites;
 
       # Nix itself uses the `system` field of a derivation to decide where to
       # build it. This is a bit confusing for cross compilation.
@@ -112,7 +107,7 @@ let
       # are absolute unless we go out of our way to make them relative (like with CF)
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
-      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+      preHook = preHook + lib.optionalString buildPlatform.isDarwin ''
         export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
@@ -168,6 +163,16 @@ let
       inherit overrides;
 
       inherit cc hasCC;
+
+      # Convenience for doing some very basic shell syntax checking by parsing a script
+      # without running any commands. Because this will also skip `shopt -s extglob`
+      # commands and extglob affects the Bash parser, we enable extglob always.
+      shellDryRun = "${stdenv.shell} -n -O extglob";
+
+      tests = {
+        succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
+      };
+      passthru.tests = lib.warn "Use `stdenv.tests` instead. `passthru` is a `mkDerivation` detail." stdenv.tests;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

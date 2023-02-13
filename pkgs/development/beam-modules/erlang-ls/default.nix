@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib }:
+, stdenv, writeScript, lib, erlang }:
 let
-  version = "0.20.0";
+  version = "0.46.1";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -11,6 +11,11 @@ let
       proper = super.proper.overrideAttrs (_: {
         configurePhase = "true";
       });
+      redbug = super.redbug.overrideAttrs (_: {
+        patchPhase = ''
+          substituteInPlace rebar.config --replace ", warnings_as_errors" ""
+          '';
+      });
     });
   };
 in
@@ -19,11 +24,18 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-XBCauvPalIPjVOYlMfWC+5mKku28b/qqKhp9NgSkoyA=";
+    sha256 = "sha256-UiXnamLl6Brp+XOsoldeahNxJ9OKEUgSs1WLRmB9yL8=";
     rev = version;
   };
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
+
+  # Skip "els_hover_SUITE" test for Erlang/OTP 25+ while upstream hasn't fixed it
+  # https://github.com/erlang-ls/erlang_ls/pull/1402
+  postPatch = lib.optionalString (lib.versionOlder "25" erlang.version) ''
+    rm apps/els_lsp/test/els_hover_SUITE.erl
+  '';
+
   buildPlugins = [ rebar3-proper ];
   buildPhase = "HOME=. make";
   # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml
@@ -51,7 +63,7 @@ rebar3Relx {
     #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
-    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+    latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
     if [[ "$latest" != "${version}" ]]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       nix_path="$nixpkgs/pkgs/development/beam-modules/erlang-ls"

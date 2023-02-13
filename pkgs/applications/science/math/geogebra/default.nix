@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
-  version = "5-0-680-0";
+  version = "5-0-745-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
-    sha256 = "01sy7ggfvck350hwv0cla9ynrvghvssqm3c59x4q5lwsxjsxdpjm";
+    hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
   };
 
   desktopItem = makeDesktopItem {
@@ -15,8 +15,8 @@ let
     desktopName = "Geogebra";
     genericName = "Geogebra";
     comment = meta.description;
-    categories = "Education;Science;Math;";
-    mimeType = "application/vnd.geogebra.file;application/vnd.geogebra.tool;";
+    categories = [ "Education" "Science" "Math" ];
+    mimeTypes = [ "application/vnd.geogebra.file" "application/vnd.geogebra.tool" ];
   };
 
   meta = with lib; {
@@ -27,8 +27,12 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [ sikmir imsofi ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode  # some jars include native binaries
+    ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
   };
@@ -41,9 +45,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "https://web.archive.org/web/20210910014320/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20221126102702/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      sha256 = "0gdvajf220pm1w3nxi2fymxjx2vl978pz7ffn5gr72cx8f2956lm";
+      hash = "sha256-DhZ9inK/6Cc/vunYNHhyP4tI/9/toUOgV4lZWmFIj3c=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -72,9 +76,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
-        "https://web.archive.org/web/20210101213641/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://web.archive.org/web/20221126102602/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
       ];
-      sha256 = "02sbxrns9zvhcfrr68ygv766and6f6b2a3dfarljxszwsviv6ljf";
+      hash = "sha256-La7NzEoao4ExUw3mBGstvSHm94/JM5LHlhOE9ewJePY=";
     };
 
     dontUnpack = true;

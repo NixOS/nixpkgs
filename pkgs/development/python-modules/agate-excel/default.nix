@@ -13,12 +13,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ agate openpyxl xlrd olefile ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # See https://github.com/wireservice/agate-excel/issues/45
-    "test_ambiguous_date"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";

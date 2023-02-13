@@ -10,7 +10,7 @@ let
 
   toYesNo = b: if b then "yes" else "no";
 
-  gititShared = with cfg.haskellPackages; gitit + "/share/" + pkgs.stdenv.hostPlatform.system + "-" + ghc.name + "/" + gitit.pname + "-" + gitit.version;
+  gititShared = with cfg.haskellPackages; gitit + "/share/" + ghc.targetPrefix + ghc.haskellCompilerName + "/" + gitit.pname + "-" + gitit.version;
 
   gititWithPkgs = hsPkgs: extras: hsPkgs.ghcWithPackages (self: with self; [ gitit ] ++ (extras self));
 
@@ -31,14 +31,14 @@ let
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the gitit service.";
+        description = lib.mdDoc "Enable the gitit service.";
       };
 
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
         example = literalExpression "pkgs.haskell.packages.ghc784";
-        description = "haskellPackages used to build gitit and plugins.";
+        description = lib.mdDoc "haskellPackages used to build gitit and plugins.";
       };
 
       extraPackages = mkOption {
@@ -49,41 +49,41 @@ let
             haskellPackages.wreq
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to ghc when running gitit. The
           value must be a function which receives the attrset defined
-          in <varname>haskellPackages</varname> as the sole argument.
+          in {var}`haskellPackages` as the sole argument.
         '';
       };
 
       address = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = "IP address on which the web server will listen.";
+        description = lib.mdDoc "IP address on which the web server will listen.";
       };
 
       port = mkOption {
         type = types.int;
         default = 5001;
-        description = "Port on which the web server will run.";
+        description = lib.mdDoc "Port on which the web server will run.";
       };
 
       wikiTitle = mkOption {
         type = types.str;
         default = "Gitit!";
-        description = "The wiki title.";
+        description = lib.mdDoc "The wiki title.";
       };
 
       repositoryType = mkOption {
         type = types.enum ["git" "darcs" "mercurial"];
         default = "git";
-        description = "Specifies the type of repository used for wiki content.";
+        description = lib.mdDoc "Specifies the type of repository used for wiki content.";
       };
 
       repositoryPath = mkOption {
         type = types.path;
         default = homeDir + "/wiki";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of the repository directory. If it does not
           exist, gitit will create it on startup.
         '';
@@ -92,7 +92,7 @@ let
       requireAuthentication = mkOption {
         type = types.enum [ "none" "modify" "read" ];
         default = "modify";
-        description = ''
+        description = lib.mdDoc ''
           If 'none', login is never required, and pages can be edited
           anonymously.  If 'modify', login is required to modify the wiki
           (edit, add, delete pages, upload files).  If 'read', login is
@@ -103,7 +103,7 @@ let
       authenticationMethod = mkOption {
         type = types.enum [ "form" "http" "generic" "github" ];
         default = "form";
-        description = ''
+        description = lib.mdDoc ''
           'form' means that users will be logged in and registered using forms
           in the gitit web interface.  'http' means that gitit will assume that
           HTTP authentication is in place and take the logged in username from
@@ -121,7 +121,7 @@ let
       userFile = mkOption {
         type = types.path;
         default = homeDir + "/gitit-users";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of the file containing user login information.  If
           it does not exist, gitit will create it (with an empty user list).
           This file is not used if 'http' is selected for
@@ -132,7 +132,7 @@ let
       sessionTimeout = mkOption {
         type = types.int;
         default = 60;
-        description = ''
+        description = lib.mdDoc ''
           Number of minutes of inactivity before a session expires.
         '';
       };
@@ -140,7 +140,7 @@ let
       staticDir = mkOption {
         type = types.path;
         default = gititShared + "/data/static";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of the static directory (containing javascript,
           css, and images).  If it does not exist, gitit will create it and
           populate it with required scripts, stylesheets, and images.
@@ -150,7 +150,7 @@ let
       defaultPageType = mkOption {
         type = types.enum [ "markdown" "rst" "latex" "html" "markdown+lhs" "rst+lhs" "latex+lhs" ];
         default = "markdown";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the type of markup used to interpret pages in the wiki.
           Possible values are markdown, rst, latex, html, markdown+lhs,
           rst+lhs, and latex+lhs. (the +lhs variants treat the input as
@@ -166,7 +166,7 @@ let
       math = mkOption {
         type = types.enum [ "mathml" "raw" "mathjax" "jsmath" "google" ];
         default = "mathml";
-        description = ''
+        description = lib.mdDoc ''
           Specifies how LaTeX math is to be displayed.  Possible values are
           mathml, raw, mathjax, jsmath, and google.  If mathml is selected,
           gitit will convert LaTeX math to MathML and link in a script,
@@ -186,7 +186,7 @@ let
       mathJaxScript = mkOption {
         type = types.str;
         default = "https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path to MathJax rendering script.  You might want to
           use your own MathJax script to render formulas without Internet
           connection or if you want to use some special LaTeX packages.  Note:
@@ -202,7 +202,7 @@ let
       showLhsBirdTracks = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether to show Haskell code blocks in "bird style", with
           "> " at the beginning of each line.
         '';
@@ -211,7 +211,7 @@ let
       templatesDir = mkOption {
         type = types.path;
         default = gititShared + "/data/templates";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of the directory containing page templates.  If it
           does not exist, gitit will create it with default templates.  Users
           may wish to edit the templates to customize the appearance of their
@@ -224,7 +224,7 @@ let
       logFile = mkOption {
         type = types.path;
         default = homeDir + "/gitit.log";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of gitit's log file.  If it does not exist, gitit
           will create it. The log is in Apache combined log format.
         '';
@@ -233,7 +233,7 @@ let
       logLevel = mkOption {
         type = types.enum [ "DEBUG" "INFO" "NOTICE" "WARNING" "ERROR" "CRITICAL" "ALERT" "EMERGENCY" ];
         default = "ERROR";
-        description = ''
+        description = lib.mdDoc ''
           Determines how much information is logged.  Possible values (from
           most to least verbose) are DEBUG, INFO, NOTICE, WARNING, ERROR,
           CRITICAL, ALERT, EMERGENCY.
@@ -243,7 +243,7 @@ let
       frontPage = mkOption {
         type = types.str;
         default = "Front Page";
-        description = ''
+        description = lib.mdDoc ''
           Specifies which wiki page is to be used as the wiki's front page.
           Gitit creates a default front page on startup, if one does not exist
           already.
@@ -253,7 +253,7 @@ let
       noDelete = mkOption {
         type = types.str;
         default = "Front Page, Help";
-        description = ''
+        description = lib.mdDoc ''
           Specifies pages that cannot be deleted through the web interface.
           (They can still be deleted directly using git or darcs.) A
           comma-separated list of page names.  Leave blank to allow every page
@@ -264,7 +264,7 @@ let
       noEdit = mkOption {
         type = types.str;
         default = "Help";
-        description = ''
+        description = lib.mdDoc ''
           Specifies pages that cannot be edited through the web interface.
           Leave blank to allow every page to be edited.
         '';
@@ -273,7 +273,7 @@ let
       defaultSummary = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Specifies text to be used in the change description if the author
           leaves the "description" field blank.  If default-summary is blank
           (the default), the author will be required to fill in the description
@@ -284,7 +284,7 @@ let
       tableOfContents = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether to print a tables of contents (with links to
           sections) on each wiki page.
         '';
@@ -293,7 +293,7 @@ let
       plugins = mkOption {
         type = with types; listOf str;
         default = [ (gititShared + "/plugins/Dot.hs") ];
-        description = ''
+        description = lib.mdDoc ''
           Specifies a list of plugins to load. Plugins may be specified either
           by their path or by their module name. If the plugin name starts
           with Gitit.Plugin., gitit will assume that the plugin is an installed
@@ -304,7 +304,7 @@ let
       useCache = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether to cache rendered pages.  Note that if use-feed is
           selected, feeds will be cached regardless of the value of use-cache.
         '';
@@ -313,13 +313,13 @@ let
       cacheDir = mkOption {
         type = types.path;
         default = homeDir + "/cache";
-        description = "Path where rendered pages will be cached.";
+        description = lib.mdDoc "Path where rendered pages will be cached.";
       };
 
       maxUploadSize = mkOption {
         type = types.str;
         default = "1000K";
-        description = ''
+        description = lib.mdDoc ''
           Specifies an upper limit on the size (in bytes) of files uploaded
           through the wiki's web interface.  To disable uploads, set this to
           0K.  This will result in the uploads link disappearing and the
@@ -330,32 +330,32 @@ let
       maxPageSize = mkOption {
         type = types.str;
         default = "1000K";
-        description = "Specifies an upper limit on the size (in bytes) of pages.";
+        description = lib.mdDoc "Specifies an upper limit on the size (in bytes) of pages.";
       };
 
       debugMode = mkOption {
         type = types.bool;
         default = false;
-        description = "Causes debug information to be logged while gitit is running.";
+        description = lib.mdDoc "Causes debug information to be logged while gitit is running.";
       };
 
       compressResponses = mkOption {
         type = types.bool;
         default = true;
-        description = "Specifies whether HTTP responses should be compressed.";
+        description = lib.mdDoc "Specifies whether HTTP responses should be compressed.";
       };
 
       mimeTypesFile = mkOption {
         type = types.path;
         default = "/etc/mime/types.info";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of a file containing mime type mappings.  Each
           line of the file should contain two fields, separated by whitespace.
           The first field is the mime type, the second is a file extension.
           For example:
-<programlisting>
-video/x-ms-wmx  wmx
-</programlisting>
+          ```
+          video/x-ms-wmx  wmx
+          ```
           If the file is not found, some simple defaults will be used.
         '';
       };
@@ -363,7 +363,7 @@ video/x-ms-wmx  wmx
       useReCaptcha = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true, causes gitit to use the reCAPTCHA service
           (http://recaptcha.net) to prevent bots from creating accounts.
         '';
@@ -372,7 +372,7 @@ video/x-ms-wmx  wmx
       reCaptchaPrivateKey = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the private key for the reCAPTCHA service.  To get
           these, you need to create an account at http://recaptcha.net.
         '';
@@ -381,7 +381,7 @@ video/x-ms-wmx  wmx
       reCaptchaPublicKey = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the public key for the reCAPTCHA service.  To get
           these, you need to create an account at http://recaptcha.net.
         '';
@@ -390,7 +390,7 @@ video/x-ms-wmx  wmx
       accessQuestion = mkOption {
         type = types.str;
         default = "What is the code given to you by Ms. X?";
-        description = ''
+        description = lib.mdDoc ''
           Specifies a question that users must answer when they attempt to
           create an account
         '';
@@ -399,7 +399,7 @@ video/x-ms-wmx  wmx
       accessQuestionAnswers = mkOption {
         type = types.str;
         default = "RED DOG, red dog";
-        description = ''
+        description = lib.mdDoc ''
           Specifies a question that users must answer when they attempt to
           create an account, along with a comma-separated list of acceptable
           answers.  This can be used to institute a rudimentary password for
@@ -413,7 +413,7 @@ video/x-ms-wmx  wmx
       rpxDomain = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the domain and key of your RPX account.  The domain is just
           the prefix of the complete RPX domain, so if your full domain is
           'https://foo.rpxnow.com/', use 'foo' as the value of rpx-domain.
@@ -423,13 +423,13 @@ video/x-ms-wmx  wmx
       rpxKey = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "RPX account access key.";
+        description = lib.mdDoc "RPX account access key.";
       };
 
       mailCommand = mkOption {
         type = types.str;
         default = "sendmail %s";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the command to use to send notification emails.  '%s' will
           be replaced by the destination email address.  The body of the
           message will be read from stdin.  If this field is left blank,
@@ -451,7 +451,7 @@ video/x-ms-wmx  wmx
           >
           > Regards
         '';
-        description = ''
+        description = lib.mdDoc ''
           Gives the text of the message that will be sent to the user should
           she want to reset her password, or change other registration info.
           The lines must be indented, and must begin with '>'.  The initial
@@ -471,7 +471,7 @@ video/x-ms-wmx  wmx
       useFeed = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether an ATOM feed should be enabled (for the site and
           for individual pages).
         '';
@@ -480,7 +480,7 @@ video/x-ms-wmx  wmx
       baseUrl = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The base URL of the wiki, to be used in constructing feed IDs and RPX
           token_urls.  Set this if useFeed is false or authentication-method
           is 'rpx'.
@@ -490,10 +490,10 @@ video/x-ms-wmx  wmx
       absoluteUrls = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Make wikilinks absolute with respect to the base-url.  So, for
           example, in a wiki served at the base URL '/wiki', on a page
-          Sub/Page, the wikilink '[Cactus]()' will produce a link to
+          Sub/Page, the wikilink `[Cactus]()` will produce a link to
           '/wiki/Cactus' if absoluteUrls is true, and a relative link to
           'Cactus' (referring to '/wiki/Sub/Cactus') if absolute-urls is 'no'.
         '';
@@ -502,19 +502,19 @@ video/x-ms-wmx  wmx
       feedDays = mkOption {
         type = types.int;
         default = 14;
-        description = "Number of days to be included in feeds.";
+        description = lib.mdDoc "Number of days to be included in feeds.";
       };
 
       feedRefreshTime = mkOption {
         type = types.int;
         default = 60;
-        description = "Number of minutes to cache feeds before refreshing.";
+        description = lib.mdDoc "Number of minutes to cache feeds before refreshing.";
       };
 
       pdfExport = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true, PDF will appear in export options. PDF will be created using
           pdflatex, which must be installed and in the path. Note that PDF
           exports create significant additional server load.
@@ -524,7 +524,7 @@ video/x-ms-wmx  wmx
       pandocUserData = mkOption {
         type = with types; nullOr path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           If a directory is specified, this will be searched for pandoc
           customizations. These can include a templates/ directory for custom
           templates for various export formats, an S5 directory for custom S5
@@ -537,7 +537,7 @@ video/x-ms-wmx  wmx
       xssSanitize = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           If true, all HTML (including that produced by pandoc) is filtered
           through xss-sanitize.  Set to no only if you trust all of your users.
         '';
@@ -546,37 +546,37 @@ video/x-ms-wmx  wmx
       oauthClientId = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "OAuth client ID";
+        description = lib.mdDoc "OAuth client ID";
       };
 
       oauthClientSecret = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "OAuth client secret";
+        description = lib.mdDoc "OAuth client secret";
       };
 
       oauthCallback = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "OAuth callback URL";
+        description = lib.mdDoc "OAuth callback URL";
       };
 
       oauthAuthorizeEndpoint = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "OAuth authorize endpoint";
+        description = lib.mdDoc "OAuth authorize endpoint";
       };
 
       oauthAccessTokenEndpoint = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "OAuth access token endpoint";
+        description = lib.mdDoc "OAuth access token endpoint";
       };
 
       githubOrg = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "Github organization";
+        description = lib.mdDoc "Github organization";
       };
   };
 
@@ -689,14 +689,14 @@ in
           ''
           if [ ! -d _darcs ]
           then
-            ${pkgs.darcs}/bin/darcs initialize
+            darcs initialize
             echo "${gm}" > _darcs/prefs/email
           ''
           else if repositoryType == "mercurial" then
           ''
           if [ ! -d .hg ]
           then
-            ${pkgs.mercurial}/bin/hg init
+            hg init
             cat >> .hg/hgrc <<NAMED
 [ui]
 username = gitit ${gm}
@@ -706,9 +706,9 @@ NAMED
           ''
           if [ ! -d  .git ]
           then
-            ${pkgs.git}/bin/git init
-            ${pkgs.git}/bin/git config user.email "${gm}"
-            ${pkgs.git}/bin/git config user.name "gitit"
+            git init
+            git config user.email "${gm}"
+            git config user.name "gitit"
           ''}
           chown ${uid}:${gid} -R ${repositoryPath}
           fi

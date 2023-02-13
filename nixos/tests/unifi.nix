@@ -12,7 +12,7 @@ let
   makeAppTest = unifi: makeTest {
     name = "unifi-controller-${unifi.version}";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ zhaofengli ];
+      maintainers = [ patryk27 zhaofengli ];
     };
 
     nodes.server = {
@@ -32,4 +32,5 @@ in with pkgs; {
   unifiLTS = makeAppTest unifiLTS;
   unifi5 = makeAppTest unifi5;
   unifi6 = makeAppTest unifi6;
+  unifi7 = makeAppTest unifi7;
 }

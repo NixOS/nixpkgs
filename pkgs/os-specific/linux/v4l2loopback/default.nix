@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "unstable-2021-07-13-${kernel.version}";
+  version = "unstable-2022-08-05-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "baf9de279afc7a7c7513e9c40a0c9ff88f456af4";
-    sha256 = "sha256-uglYTeqz81fgkKYYU9Cw8x9+S088jGxDEGkb3rmkhrw==";
+    rev = "76434ab6f71d5ecbff8a218ff6bed91ea2bf73b8";
+    sha256 = "sha256-TdZacRkFAO2HAEbljzXeJ241VcDqSwBECq3bnn7yvBY=";
   };
 
   hardeningDisable = [ "format" "pic" ];
@@ -16,12 +16,9 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
-    export PATH=${kmod}/sbin:$PATH
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  buildInputs = [ kmod ];
+  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     make install-utils PREFIX=$bin
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" ];
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

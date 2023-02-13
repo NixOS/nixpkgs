@@ -1,15 +1,13 @@
 { lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
 , nix, coreutils, gnused, disableRemoteLogging ? true }:
 
-with lib;
-
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
 
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.5.0";
+      version = "2.5.3";
 
       src = fetchurl {
         url =
@@ -22,7 +20,7 @@ let
       installPhase = ''
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-      '' + optionalString (disableRemoteLogging) ''
+      '' + lib.optionalString (disableRemoteLogging) ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
@@ -66,7 +64,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = {
+      meta = with lib; {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -74,19 +72,20 @@ let
           with a lot of ergonomic improvements and configurability
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
-        homepage = "https://www.lihaoyi.com/Ammonite/";
+        homepage = "https://github.com/com-lihaoyi/Ammonite";
         license = licenses.mit;
-        platforms = platforms.all;
         maintainers = [ maintainers.nequissimus ];
+        mainProgram = "amm";
+        platforms = platforms.all;
       };
     };
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-JTW1xb+eCb0yhzrA1ntmalP88JoUo+KrjOBvs+cuE/A=";
+    sha256 = "sha256-Iov55ohFjcGhur5UEng7aAZJPVua1H/JaKKW6OKS6Zg=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-l5kGPP8tuYi16t6u8ZeAY54yqAWJZR5UuopSGQ69v9Y=";
+    sha256 = "sha256-dzUhKUQDHrYZ4WyCk4z4CTxb6vK05qfApR/WPOwhA5s=";
   };
 }

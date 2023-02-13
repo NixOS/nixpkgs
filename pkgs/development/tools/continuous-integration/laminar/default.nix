@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchFromGitHub
 , cmake
 , capnproto
 , sqlite
@@ -24,14 +25,21 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "laminar";
-  version = "1.1";
-  src = fetchurl {
-    url = "https://github.com/ohwgiles/laminar/archive/${version}.tar.gz";
-    sha256 = "1lzfmfjygmbdr2n1q49kwwffw8frz5y6iczhdz5skwmzwg0chbsf";
+  version = "1.2";
+  outputs = [ "out" "doc" ];
+  src = fetchFromGitHub {
+    owner = "ohwgiles";
+    repo = "laminar";
+    rev = version;
+    sha256 = "sha256-PLnfiWpelgKhs4FNry60sm6/QdhYs76FnZ/ZcRmb4Ok=";
   };
   patches = [ ./patches/no-network.patch ];
-  nativeBuildInputs = [ cmake pandoc ];
+
+  # We need both binary from "capnproto" and library files.
+  nativeBuildInputs = [ cmake pandoc capnproto ];
   buildInputs = [ capnproto sqlite boost zlib rapidjson ];
+  cmakeFlags = [ "-DLAMINAR_VERSION=${version}" ];
+
   preBuild = ''
     mkdir -p js css
     cp  ${js.vue}         js/vue.min.js

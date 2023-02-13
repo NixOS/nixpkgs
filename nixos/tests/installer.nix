@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  systemdStage1 ? false
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -20,8 +21,12 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        documentation.enable = false;
+
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
+
+        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.version = ${toString grubVersion};
@@ -46,6 +51,8 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
+        boot.initrd.secrets."/etc/secret" = ./secret;
+
         users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
@@ -54,7 +61,7 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
-        ${replaceChars ["\n"] ["\n  "] extraConfig}
+        ${replaceStrings ["\n"] ["\n  "] extraConfig}
       }
     '';
 
@@ -121,6 +128,7 @@ let
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
+          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
@@ -128,9 +136,21 @@ let
       with subtest("Do it again to make sure it's idempotent"):
           machine.succeed("nixos-install < /dev/null >&2")
 
+      with subtest("Check that we can build things in nixos-enter"):
+          machine.succeed(
+              """
+              nixos-enter -- nix-build --option substitute false -E 'derivation {
+                  name = "t";
+                  builder = "/bin/sh";
+                  args = ["-c" "echo nixos-enter build > $out"];
+                  system = builtins.currentSystem;
+                  preferLocalBuild = true;
+              }'
+              """
+          )
+
       with subtest("Shutdown system after installation"):
-          machine.succeed("umount /mnt/boot || true")
-          machine.succeed("umount /mnt")
+          machine.succeed("umount -R /mnt")
           machine.succeed("sync")
           machine.shutdown()
 
@@ -290,6 +310,8 @@ let
           virtualisation.cores = 8;
           virtualisation.memorySize = 1536;
 
+          boot.initrd.systemd.enable = systemdStage1;
+
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is
           # the same during and after installation.
@@ -299,6 +321,13 @@ let
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
 
+          # We don't want to have any networking in the guest whatsoever.
+          # Also, if any vlans are enabled, the guest will reboot
+          # (with a different configuration for legacy reasons),
+          # and spend 5 minutes waiting for the vlan interface to show up
+          # (which will never happen).
+          virtualisation.vlans = [];
+
           boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
           hardware.enableAllFirmware = mkForce false;
@@ -306,15 +335,31 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+            brotli
+            brotli.dev
+            brotli.lib
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
+            kmod.dev
+            libarchive.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
             perlPackages.ListCompare
             perlPackages.XMLLibXML
+            python3Minimal
+            # make-options-doc/default.nix
+            (let
+                self = (pkgs.python3Minimal.override {
+                  inherit self;
+                  includeSiteCustomize = true;
+                });
+              in self.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo
@@ -334,11 +379,11 @@ let
             (pkgs.grub2_efi.override { inherit zfsSupport; })
           ]);
 
-          nix.binaryCaches = mkForce [ ];
-          nix.extraOptions = ''
-            hashed-mirrors =
-            connect-timeout = 1
-          '';
+          nix.settings = {
+            substituters = mkForce [];
+            hashed-mirrors = null;
+            connect-timeout = 1;
+          };
         };
 
       };
@@ -437,8 +482,12 @@ let
     '';
     testSpecialisationConfig = true;
   };
-
-
+  # disable zfs so we can support latest kernel if needed
+  no-zfs-module = {
+    nixpkgs.overlays = [(final: super: {
+      zfs = super.zfs.overrideAttrs(_: {meta.platforms = [];});}
+    )];
+  };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -561,24 +610,14 @@ in {
           + " mkpart primary 2048M -1s"  # PV2
           + " set 2 lvm on",
           "udevadm settle",
-          "sleep 1",
           "pvcreate /dev/vda1 /dev/vda2",
-          "sleep 1",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
-          "sleep 1",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "sleep 1",
-          "lvcreate --size 3G --name nixos MyVolGroup",
-          "sleep 1",
+          "lvcreate --size 6G --name nixos MyVolGroup",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
-      )
-    '';
-    postBootCommands = ''
-      assert "loaded active" in machine.succeed(
-          "systemctl list-units 'lvm2-pvscan@*' -ql --no-legend | tee /dev/stderr"
       )
     '';
   };
@@ -632,6 +671,55 @@ in {
     '';
   };
 
+  # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
+  # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+          + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
+          + " set 1 boot on"
+          + " mkpart primary ext2 1024MiB -1MiB",  # LUKS
+          "udevadm settle",
+          "modprobe dm_mod dm_crypt",
+          "dd if=/dev/random of=luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda2 -",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda2 luks.key",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda2 crypt",
+          "pvcreate /dev/mapper/crypt",
+          "vgcreate crypt /dev/mapper/crypt",
+          "lvcreate -L 100M -n swap crypt",
+          "lvcreate -l '100%FREE' -n nixos crypt",
+          "mkfs.vfat -n efi /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/crypt/nixos",
+          "mkswap -L swap /dev/crypt/swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/{etc/nixos,boot/efi}",
+          "mount LABEL=efi /mnt/boot/efi",
+          "swapon -L swap",
+          "mv luks.key /mnt/etc/nixos/"
+      )
+    '';
+    bootLoader = "grub";
+    grubUseEfi = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+      boot.initrd.secrets."/luks.key" = ./luks.key;
+      boot.initrd.luks.devices.crypt =
+        { device  = "/dev/vda2";
+          keyFile = "/luks.key";
+        };
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Enter passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
+
   swraid = makeInstallerTest "swraid" {
     createPartitions = ''
       machine.succeed(
@@ -681,8 +769,6 @@ in {
           "modprobe bcache",
           "udevadm settle",
           "make-bcache -B /dev/vda4 -C /dev/vda3",
-          "echo /dev/vda3 > /sys/fs/bcache/register",
-          "echo /dev/vda4 > /sys/fs/bcache/register",
           "udevadm settle",
           "mkfs.ext3 -L nixos /dev/bcache0",
           "mount LABEL=nixos /mnt",
@@ -691,6 +777,98 @@ in {
           "mount LABEL=boot /mnt/boot",
           "mkswap -f /dev/vda2 -L swap",
           "swapon -L swap",
+      )
+    '';
+  };
+
+  bcachefsSimple = makeInstallerTest "bcachefs-simple" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+      imports = [ no-zfs-module ];
+    };
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+
+      environment.systemPackages = with pkgs; [ keyutils ];
+    };
+
+    extraConfig = ''
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("password\n")
+    '';
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "keyctl link @u @s",
+        "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
+        "echo password | bcachefs unlock /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsMulti = makeInstallerTest "bcachefs-multi" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+    };
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M 4096M"            # /
+        + " mkpart primary 4096M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
+        "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
       )
     '';
   };
@@ -813,6 +991,27 @@ in {
           # is actually looking up subvolumes
           "mkdir /mnt/boot",
           "mount -o defaults,subvol=badpath/boot LABEL=root /mnt/boot",
+      )
+    '';
+  };
+
+  # Test to see if we can deal with subvols that need to be escaped in fstab
+  btrfsSubvolEscape = makeInstallerTest "btrfsSubvolEscape" {
+    createPartitions = ''
+      machine.succeed(
+          "sgdisk -Z /dev/vda",
+          "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "mkfs.btrfs -L root /dev/vda3",
+          "btrfs device scan",
+          "mount LABEL=root /mnt",
+          "btrfs subvol create '/mnt/nixos in space'",
+          "btrfs subvol create /mnt/boot",
+          "umount /mnt",
+          "mount -o 'defaults,subvol=nixos in space' LABEL=root /mnt",
+          "mkdir /mnt/boot",
+          "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
     '';
   };

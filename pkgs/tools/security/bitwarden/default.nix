@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwarden";
-  version = "1.30.0";
+  version = "2023.1.1";
 
   src = fetchurl {
-    url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}-amd64.deb";
-    sha256 = "sha256-x0i7MUVr0nhPy8M/dTVtRjaLfJQlzqhzLQ/JHLRmL6E=";
+    url = "https://github.com/bitwarden/clients/releases/download/desktop-v${version}/Bitwarden-${version}-amd64.deb";
+    sha256 = "sha256-bL3ybErpY5jeCixF8qtU/DQ35xU+43K9aXreHsoCF7Q=";
   };
 
   desktopItem = makeDesktopItem {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     icon = "bitwarden";
     comment = "A secure and free password manager for all of your devices";
     desktopName = "Bitwarden";
-    categories = "Utility";
+    categories = [ "Utility" ];
   };
 
   dontBuild = true;
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ kiwi ];
     platforms = [ "x86_64-linux" ];

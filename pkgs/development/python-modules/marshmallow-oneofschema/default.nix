@@ -1,22 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, marshmallow, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, marshmallow
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "marshmallow-oneofschema";
-  version = "3.0.1";
+  version = "3.0.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "62cd2099b29188c92493c2940ee79d1bf2f2619a71721664e5a98ec2faa58237";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "marshmallow-code";
+    repo = pname;
+    rev = version;
+    hash = "sha256-Em2jQmvI5IiWREeOX/JAcdOQlpwP7k+cbCirkh82sf0=";
   };
 
-  propagatedBuildInputs = [ marshmallow setuptools ];
+  propagatedBuildInputs = [
+    marshmallow
+    setuptools
+  ];
 
-  pythonImportsCheck = [ "marshmallow_oneofschema" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "marshmallow_oneofschema"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/marshmallow-code/marshmallow-oneofschema";
+    changelog = "https://github.com/marshmallow-code/marshmallow-oneofschema/blob/${src.rev}/CHANGELOG.rst";
     description = "Marshmallow library extension that allows schema (de)multiplexing";
+    homepage = "https://github.com/marshmallow-code/marshmallow-oneofschema";
     license = licenses.mit;
-    maintainers = [ maintainers.ivan-tkatchev ];
+    maintainers = with maintainers; [ ivan-tkatchev ];
   };
 }

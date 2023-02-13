@@ -1,5 +1,5 @@
 { stdenv, lib
-, fetchgit
+, fetchFromGitHub
 , fetchYarnDeps
 , nodejs
 , yarn
@@ -18,16 +18,25 @@ in stdenv.mkDerivation rec {
   pname = "schildichat-web";
   inherit (pinData) version;
 
-  src = fetchgit {
-    url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "SchildiChat";
+    repo = "schildichat-desktop";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };
 
-  offlineCache = fetchYarnDeps {
+  webOfflineCache = fetchYarnDeps {
     yarnLock = src + "/element-web/yarn.lock";
     sha256 = pinData.webYarnHash;
+  };
+  jsSdkOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/matrix-js-sdk/yarn.lock";
+    sha256 = pinData.jsSdkYarnHash;
+  };
+  reactSdkOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/matrix-react-sdk/yarn.lock";
+    sha256 = pinData.reactSdkYarnHash;
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
@@ -36,15 +45,36 @@ in stdenv.mkDerivation rec {
     runHook preConfigure
 
     export HOME=$PWD/tmp
+    # with the update of openssl3, some key ciphers are not supported anymore
+    # this flag will allow those codecs again as a workaround
+    # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
+    # and https://github.com/vector-im/element-web/issues/21043
+    export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
+
     pushd element-web
-    yarn config --offline set yarn-offline-mirror $offlineCache
     fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $webOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
     rm -rf node_modules/matrix-react-sdk
-    patchShebangs node_modules/ ../matrix-react-sdk/scripts/
     ln -s $PWD/../matrix-react-sdk node_modules/
-    ln -s $PWD/node_modules ../matrix-react-sdk/
+    rm -rf node_modules/matrix-js-sdk
+    ln -s $PWD/../matrix-js-sdk node_modules/
+    popd
+
+    pushd matrix-js-sdk
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $jsSdkOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+    popd
+
+    pushd matrix-react-sdk
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $reactSdkOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules scripts
     popd
 
     runHook postConfigure
@@ -53,14 +83,11 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    pushd matrix-react-sdk
-    node_modules/.bin/reskindex -h ../element-web/src/header
-    popd
-
     pushd element-web
-    node scripts/copy-res.js
-    node_modules/.bin/reskindex -h ../element-web/src/header
-    node_modules/.bin/webpack --progress --mode production
+    export VERSION=${version}
+    yarn build:res --offline
+    yarn build:module_system --offline
+    yarn build:bundle --offline
     popd
 
     runHook postBuild
@@ -75,12 +102,12 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client / Element Web fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members;
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

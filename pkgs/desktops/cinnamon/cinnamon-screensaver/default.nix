@@ -21,20 +21,21 @@
 , pam
 , accountsservice
 , cairo
-, xapps
+, xapp
+, xdotool
 , xorg
 , iso-flags-png-320x420
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.2.0";
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-weQ5sw5SY89JFIxamCeLiSLy8xCXGg0Yxj/5Ca5r+6o=";
+    hash = "sha256-S4+9ZTpDwwvYTc3gz0YQBYjgygp8KP94azkiJcH6xCk=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +61,14 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXrandr
 
-    (python3.withPackages (pp: with pp; [ pygobject3 setproctitle xapp pycairo ]))
-    xapps
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+      setproctitle
+      python3.pkgs.xapp # The scope prefix is required
+      pycairo
+    ]))
+    xapp
+    xdotool
     pam
     accountsservice
     cairo
@@ -74,11 +81,6 @@ stdenv.mkDerivation rec {
     iso-flags-png-320x420
   ];
 
-  mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-  ];
-
   postPatch = ''
     # cscreensaver hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -89,6 +91,13 @@ stdenv.mkDerivation rec {
       {} +
 
     sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
+  '';
+
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
   '';
 
   meta = with lib; {

@@ -25,9 +25,11 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
+, isGNU ? bintools.isGNU or false, isLLVM ? bintools.isLLVM or false
 , buildPackages ? {}
 , targetPackages ? {}
 , useMacosReexportHack ? false
+, wrapGas ? false
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
@@ -55,9 +57,9 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then null else getBin libc;
-  libc_dev = if libc == null then null else getDev libc;
-  libc_lib = if libc == null then null else getLib libc;
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
   bintools_bin = if nativeTools then "" else getBin bintools;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
@@ -68,8 +70,9 @@ let
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
   dynamicLinker =
-    /**/ if sharedLibraryLoader == null then null
+    /**/ if sharedLibraryLoader == null then ""
     else if targetPlatform.libc == "musl"             then "${sharedLibraryLoader}/lib/ld-musl-*"
+    else if targetPlatform.libc == "uclibc"           then "${sharedLibraryLoader}/lib/ld*-uClibc.so.1"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is64bit) then "/system/bin/linker64"
     else if targetPlatform.libc == "nblibc"           then "${sharedLibraryLoader}/libexec/ld.elf_so"
@@ -86,7 +89,7 @@ let
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
-    else null;
+    else "";
 
   expand-response-params =
     if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
@@ -102,16 +105,11 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit bintools_bin libc_bin libc_dev libc_lib coreutils_bin;
-  shell = getBin shell + shell.shellPath or "";
-  gnugrep_bin = if nativeTools then "" else gnugrep;
-
-  inherit targetPrefix suffixSalt;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {
-    inherit bintools libc nativeTools nativeLibc nativePrefix;
+    inherit targetPrefix suffixSalt;
+    inherit bintools libc nativeTools nativeLibc nativePrefix isGNU isLLVM;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -127,6 +125,8 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   dontConfigure = true;
+
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -162,11 +162,26 @@ stdenv.mkDerivation {
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
-    # Create a symlink to as (the assembler).
-    + ''
-      if [ -e $ldPath/${targetPrefix}as ]; then
-        ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
+    # If we are asked to wrap `gas` and this bintools has it,
+    # then symlink it (`as` will be symlinked next).
+    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # as it must have both the GNU assembler from cctools (installed as `gas`)
+    # and the Clang integrated assembler (installed as `as`).
+    # See pkgs/os-specific/darwin/binutils/default.nix for details.
+    + lib.optionalString wrapGas ''
+      if [ -e $ldPath/${targetPrefix}gas ]; then
+        ln -s $ldPath/${targetPrefix}gas $out/bin/${targetPrefix}gas
       fi
+    ''
+
+    # Create symlinks for rest of the binaries.
+    + ''
+      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \
+          ranlib readelf elfedit dlltool dllwrap windmc windres; do
+        if [ -e $ldPath/${targetPrefix}''${binary} ]; then
+          ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
+        fi
+      done
 
     '' + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
@@ -184,43 +199,8 @@ stdenv.mkDerivation {
       done
     '';
 
-  emulation = let
-    fmt =
-      /**/ if targetPlatform.isDarwin  then "mach-o"
-      else if targetPlatform.isWindows then "pe"
-      else "elf" + toString targetPlatform.parsed.cpu.bits;
-    endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower && !targetPlatform.isRiscV) "-";
-    arch =
-      /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
-      else if targetPlatform.isAarch32     then endianPrefix + "arm"
-      else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isx86_32  then "i386"
-      else if targetPlatform.isMips    then {
-          mips     = "btsmipn32"; # n32 variant
-          mipsel   = "ltsmipn32"; # n32 variant
-          mips64   = "btsmip";
-          mips64el = "ltsmip";
-        }.${targetPlatform.parsed.cpu.name}
-      else if targetPlatform.isMmix then "mmix"
-      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
-      else if targetPlatform.isSparc then "sparc"
-      else if targetPlatform.isMsp430 then "msp430"
-      else if targetPlatform.isAvr then "avr"
-      else if targetPlatform.isAlpha then "alpha"
-      else if targetPlatform.isVc4 then "vc4"
-      else if targetPlatform.isOr1k then "or1k"
-      else if targetPlatform.isM68k then "m68k"
-      else if targetPlatform.isS390 then "s390"
-      else if targetPlatform.isRiscV then "lriscv"
-      else throw "unknown emulation for platform: ${targetPlatform.config}";
-    in if targetPlatform.useLLVM or false then ""
-       else targetPlatform.bfdEmulation or (fmt + sep + arch);
-
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
-
-  wrapperName = "BINTOOLS_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -393,10 +373,15 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  inherit dynamicLinker expand-response-params;
-
-  # for substitution in utils.bash
-  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+  env = {
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    wrapperName = "BINTOOLS_WRAPPER";
+    inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
+    inherit bintools_bin libc_bin libc_dev libc_lib;
+  };
 
   meta =
     let bintools_ = if bintools != null then bintools else {}; in

@@ -3,30 +3,48 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
+, incremental
+, pydantic
 , pythonOlder
+, typer
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.1.12";
+  version = "1.3.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1430k699gblxwspsbgxnha8afk6npqharhz2jyjw5gir9pi6g9cz";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oeNwBmzlkE8JewSwuFG8OYigyispP4xdwO3s2CAcfW4=";
   };
+
+  nativeBuildInputs = [
+    incremental
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "typer==0.6.1" "typer"
+  '';
 
   propagatedBuildInputs = [
     aiohttp
     click
+    pydantic
+    typer
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "ovoenergy" ];
+  pythonImportsCheck = [
+    "ovoenergy"
+  ];
 
   meta = with lib; {
     description = "Python client for getting data from OVO's API";

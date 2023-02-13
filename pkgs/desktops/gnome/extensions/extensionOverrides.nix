@@ -3,10 +3,23 @@
 , gjs
 , gnome
 , gobject-introspection
-, xprop
+, gsound
+, hddtemp
+, libgda
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
+, pulseaudio
+, libgtop
+, python3
+, smartmontools
+, substituteAll
 , touchegg
 , vte
 , wrapGAppsHook
+, xprop
 }:
 let
   # Helper method to reduce redundancy
@@ -23,10 +36,6 @@ in
 super: lib.trivial.pipe super [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
-  }))
-
-  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
@@ -52,6 +61,17 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
+        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        netcat = netcat-gnu;
+        nvmecli = nvme-cli;
+      })
+    ];
+  }))
+
   (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
     # Requires gjs
     # https://github.com/NixOS/nixpkgs/issues/136112
@@ -60,6 +80,46 @@ super: lib.trivial.pipe super [
         substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
       done
     '';
+  }))
+
+  (patchExtension "pano@elhan.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
+        inherit gsound libgda;
+      })
+    ];
+  }))
+
+  (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
+    # Requires gjs
+    # https://github.com/NixOS/nixpkgs/issues/164865
+    postPatch = ''
+      for file in *.js; do
+        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      done
+    '';
+  }))
+
+  (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/shell-volume-mixer_at_derhofbauer.at.patch;
+        inherit pulseaudio;
+        inherit python3;
+      })
+    ];
+
+    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+  }))
+
+  (patchExtension "tophat@fflewddur.github.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
   }))
 
   (patchExtension "unite@hardpixel.eu" (old: {

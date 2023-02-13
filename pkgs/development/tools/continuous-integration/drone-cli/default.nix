@@ -1,28 +1,35 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+}:
 
 buildGoModule rec {
-  version = "1.4.0";
+  version = "1.7.0";
   pname = "drone-cli";
   revision = "v${version}";
 
-  vendorSha256 = "sha256-v2ijRZ5xvYkL3YO7Xfgalzxzd9C5BKdaQF7VT5UoqOk=";
+  src = fetchFromGitHub {
+    owner = "harness";
+    repo = "drone-cli";
+    rev = revision;
+    hash = "sha256-PZ0M79duSctPepD5O+NdJZKhkyR21g/4P6loJtoWZiU=";
+  };
 
-  doCheck = false;
+  vendorSha256 = "sha256-JC7OR4ySDsVWmrBBTjpwZrkJlM8RJehbsvXW/VtA4VA=";
+
+  # patch taken from https://patch-diff.githubusercontent.com/raw/harness/drone-cli/pull/179.patch
+  # but with go.mod changes removed due to conflict
+  patches = [ ./0001-use-builtin-go-syscerts.patch ];
 
   ldflags = [
     "-X main.version=${version}"
   ];
 
-  src = fetchFromGitHub {
-    owner = "drone";
-    repo = "drone-cli";
-    rev = revision;
-    sha256 = "sha256-+70PWHGd8AQP6ih0b/+VOIbJcF8tSOAO9wsGqQWX+bU=";
-  };
+  doCheck = false;
 
   meta = with lib; {
     mainProgram = "drone";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ techknowlogick ];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";
   };

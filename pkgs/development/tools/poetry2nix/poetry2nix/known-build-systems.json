@@ -1,0 +1,13 @@
+[
+    "poetry",
+    "poetry-core",
+    "flit",
+    "flit-core",
+    "pbr",
+    "flitBuildHook",
+    "cython",
+    "hatchling",
+    "hatch-vcs",
+    "setuptools",
+    "setuptools-scm"
+]

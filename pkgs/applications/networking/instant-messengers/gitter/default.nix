@@ -1,5 +1,5 @@
 { lib, stdenv, alsa-lib, atk, at-spi2-core, cairo, cups, dbus, dpkg, expat, fetchurl
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3,  libdrm, libX11
+, fontconfig, freetype, gdk-pixbuf, glib, gtk3,  libdrm, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
 , libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, mesa, nspr, nss
@@ -18,7 +18,6 @@ let gitterDirectorySuffix = "opt/gitter";
      freetype
      gdk-pixbuf
      glib
-     gnome2.GConf
      gtk3
      libX11
      libXScrnSaver
@@ -89,12 +88,13 @@ in stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "Gitter";
     genericName = meta.description;
-    categories = "Network;InstantMessaging;";
+    categories = [ "Network" "InstantMessaging" ];
   };
 
   meta = with lib; {
     description = "Where developers come to talk";
     downloadPage = "https://gitter.im/apps";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = [ maintainers.imalison ];
     platforms = [ "x86_64-linux" ];

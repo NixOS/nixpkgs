@@ -7,6 +7,9 @@
   # Cargo lock file contents as string
 , lockFileContents ? null
 
+  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+, allowBuiltinFetchGit ? false
+
   # Hashes for git dependencies.
 , outputHashes ? {}
 } @ args:
@@ -38,14 +41,14 @@ let
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
   # safely skip it.
-  depPackages = (builtins.filter (p: p ? "source") packages);
+  depPackages = builtins.filter (p: p ? "source") packages;
 
   # Create dependent crates from packages.
   #
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq (gitShaOutputHash) (builtins.map mkCrate depPackages);
+  depCrates = builtins.deepSeq gitShaOutputHash (builtins.map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
@@ -117,19 +120,33 @@ let
           If you use `buildRustPackage`, you can add this attribute to the `cargoLock`
           attribute set.
         '';
-        sha256 = gitShaOutputHash.${gitParts.sha} or missingHash;
-        tree = fetchgit {
-          inherit sha256;
-          inherit (gitParts) url;
-          rev = gitParts.sha; # The commit SHA is always available.
-        };
+        tree =
+          if gitShaOutputHash ? ${gitParts.sha} then
+            fetchgit {
+              inherit (gitParts) url;
+              rev = gitParts.sha; # The commit SHA is always available.
+              sha256 = gitShaOutputHash.${gitParts.sha};
+            }
+          else if allowBuiltinFetchGit then
+            builtins.fetchGit {
+              inherit (gitParts) url;
+              rev = gitParts.sha;
+              allRefs = true;
+            }
+          else
+            missingHash;
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
 
         # If the target package is in a workspace, or if it's the top-level
         # crate, we should find the crate path using `cargo metadata`.
-        crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+        # Some packages do not have a Cargo.toml at the top-level,
+        # but only in nested directories.
+        # Only check the top-level Cargo.toml, if it actually exists
+        if [[ -f $tree/Cargo.toml ]]; then
+          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
           ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
+        fi
 
         # If the repository is not a workspace the package might be in a subdirectory.
         if [[ -z $crateCargoTOML ]]; then

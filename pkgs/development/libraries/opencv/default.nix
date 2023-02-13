@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
-, enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib ]
-    ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
@@ -55,8 +53,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
     ;
-
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
@@ -77,8 +73,6 @@ stdenv.mkDerivation rec {
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
   '';
-
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "fpyutils";
-  version = "2.1.0";
+  version = "3.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-QO7g0wjlaboZwvA+JYL1ax7M8zzCc0hizBdaN2b1TCs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cmCD8uKPX/7Ak6jAqzCvDqR1FgH09GaLfLTZdBQB+bs=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of useful non-standard Python functions";
     homepage = "https://github.com/frnmst/fpyutils";
+    changelog = "https://blog.franco.net.eu.org/software/fpyutils-${version}/release.html";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

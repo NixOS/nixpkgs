@@ -5,6 +5,7 @@
 , lockfile
 , cachecontrol
 , decorator
+, h5py
 , ipython
 , matplotlib
 , natsort
@@ -19,18 +20,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.6";
+  version = "0.5.8";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48b73ec53ce0ff2c2e3e05f3cfcf93527c1525a8d3e9dd4ae317b4219c37f0ea";
+    sha256 = "sha256-1VqDw+XyyhEydE4UCSM/th2a8MWpXet7KR5uNAcSuGs=";
   };
 
-  buildInputs = [ cython ];
-  checkInputs = [ coverage ];
-  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy hdmedians scikit-learn ];
+  nativeBuildInputs = [ cython ];
+  nativeCheckInputs = [ coverage ];
+  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
 
   # cython package not included for tests
   doCheck = false;

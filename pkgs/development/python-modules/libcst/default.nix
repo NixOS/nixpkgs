@@ -1,14 +1,15 @@
 { lib
-, black
+, stdenv
 , buildPythonPackage
-, dataclasses
 , fetchFromGitHub
 , hypothesis
-, isort
-, pytest
+, libiconv
+, pytestCheckHook
 , python
 , pythonOlder
 , pyyaml
+, rustPlatform
+, setuptools-rust
 , setuptools-scm
 , typing-extensions
 , typing-inspect
@@ -16,17 +17,26 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.23";
-  format = "setuptools";
+  version = "0.4.9";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "instagram";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1r4aiqpndqa75119faknsghi7zxyjrx5r6i7cb3d0liwiqrkzrvx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ikddvKsvXMNHMfA9jUhvyiDXII0tTs/rE97IGI/azgA=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "source/${cargoRoot}";
+    name = "${pname}-${version}";
+    hash = "sha256-FWQGv3E5X+VEnTYD0uKN6W4USth8EQlEGbYgUAWZ5EQ=";
+  };
+
+  cargoRoot = "native";
 
   postPatch = ''
     # test try to format files, which isn't necessary when consuming releases
@@ -37,22 +47,22 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools-rust
     setuptools-scm
-  ];
+    rustPlatform.cargoSetupHook
+  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   propagatedBuildInputs = [
-    hypothesis
     typing-extensions
     typing-inspect
     pyyaml
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
-    black
-    isort
-    pytest
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -75,6 +85,6 @@ buildPythonPackage rec {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

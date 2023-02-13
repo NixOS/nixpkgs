@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ipmicfg";
-  version = "1.32.0";
-  buildVersion = "200910";
+  version = "1.34.0";
+  buildVersion = "220906";
 
   src = fetchzip {
     url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "1mncinwgx5d8jkvnvhccqlj2xp0xa5xjsab4r5mblmcnvm609rr3";
+    sha256 = "ZumCXuR7M2Ep7maBOBFk0UsxyRo4fBkf+9AVmkz4AF0=";
   };
 
   installPhase = ''
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
    meta = with lib; {
      description = "Supermicro IPMI configuration tool";
      homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
+     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
      license = licenses.unfree;
      platforms = [ "x86_64-linux" ];
      maintainers = with maintainers; [ sorki ];

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.6.6";
+  version = "0.19.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
-    rev = version;
-    sha256 = "0b2kn1xyf7d994kz29dpqiaf8yzvx0axw4yqi854c54pl22ddgzl";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-eha0I/SJmBGFdvJrNUBg/sx54UXdbjhEbyvI40Vngm4=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     wheel # No idea why but it is listed
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     # optional
     pandas

@@ -5,9 +5,11 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
-, libepoxy
+, wrapGAppsHook4
+, feedbackd
 , gtk4
+, libepoxy
+, xorg
 , zbar
 , tiffSupport ? true
 , libraw
@@ -27,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "1.4.3";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "megapixels";
     rev = version;
-    hash = "sha256-UHJ3Fayf+lS3nRuuhHHLN6mbHfHIPssWkghPMPF5ECg=";
+    hash = "sha256-xrO9Xr9DPjlDs4yaKy32yb4X8wFqLKfy8rsjtBuN+Rg=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +43,14 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    libepoxy
+    feedbackd
     gtk4
+    libepoxy
+    xorg.libXrandr
     zbar
   ];
 
@@ -56,7 +60,7 @@ stdenv.mkDerivation rec {
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${runtimePath}
+      --prefix PATH : ${lib.escapeShellArg runtimePath}
     )
   '';
 

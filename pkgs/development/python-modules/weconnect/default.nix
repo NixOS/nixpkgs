@@ -7,11 +7,12 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.28.0";
+  version = "0.50.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,17 +20,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    rev = "v${version}";
-    sha256 = "sha256-J7T62L6wT9rkl/Ukf2y5kBbJEdzh2XnGgCgedkxVEmA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KYGNtUJXpY1UrRbUxr71EHxLCR6WixTAk+ybkfqB3Ps=";
   };
 
   propagatedBuildInputs = [
-    ascii-magic
-    pillow
+    oauthlib
     requests
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    Images = [
+      ascii-magic
+      pillow
+    ];
+  };
+
+  nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
   ];
@@ -40,6 +47,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
+    substituteInPlace image_extra_requirements.txt \
+      --replace "pillow~=9.3.0" "pillow"
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""
@@ -52,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the Volkswagen WeConnect Services";
     homepage = "https://github.com/tillsteinbach/WeConnect-python";
+    changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "mmixware";
-  version = "unstable-2019-02-19";
+  version = "unstable-2021-06-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";
     owner = "mmix";
     repo = "mmixware";
-    rev = "a330d68aafcfe739ecaaece888a669b8e7d9bcb8";
-    sha256 = "0bq0d19vqhfbpk4mcqzmd0hygbkhapl1mzlfkcr6afx0fhlhi087";
+    rev = "7c790176d50d13ae2422fa7457ccc4c2d29eba9b";
+    sha256 = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
   };
 
   hardeningDisable = [ "format" ];
@@ -17,6 +17,10 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile --replace 'rm abstime.h' ""
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: mmix-config.o:(.bss+0x600): multiple definition of `buffer'; /build/ccDuGrwH.o:(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [ tetex ];
   enableParallelBuilding = true;

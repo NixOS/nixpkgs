@@ -4,22 +4,22 @@ Date: Mon, 27 Jan 2020 05:31:23 -0600
 Subject: [PATCH 2/3] xwayland
 
 ---
- src/xwl/xwayland.cpp | 2 +-
+ src/xwayland/xwaylandlauncher.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/xwl/xwayland.cpp b/src/xwl/xwayland.cpp
+diff --git a/src/xwayland/xwaylandlauncher.cpp b/src/xwayland/xwaylandlauncher.cpp
 index 57efdde..a211a58 100644
---- a/src/xwl/xwayland.cpp
-+++ b/src/xwl/xwayland.cpp
-@@ -124,7 +124,7 @@ void Xwayland::start()
+--- a/src/xwayland/xwaylandlauncher.cpp
++++ b/src/xwayland/xwaylandlauncher.cpp
+@@ -163,7 +163,7 @@ void Xwayland::start()
  
-     m_xwaylandProcess = new Process(this);
+     m_xwaylandProcess = new QProcess(this);
      m_xwaylandProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
 -    m_xwaylandProcess->setProgram(QStringLiteral("Xwayland"));
 +    m_xwaylandProcess->setProgram(QLatin1String(NIXPKGS_XWAYLAND));
-     QProcessEnvironment env = m_app->processStartupEnvironment();
+     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
      env.insert("WAYLAND_SOCKET", QByteArray::number(wlfd));
-     env.insert("EGL_PLATFORM", QByteArrayLiteral("DRM"));
+     if (qEnvironmentVariableIsSet("KWIN_XWAYLAND_DEBUG")) {
 -- 
 2.29.2
 

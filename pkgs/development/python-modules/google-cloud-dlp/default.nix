@@ -3,29 +3,41 @@
 , fetchPypi
 , google-api-core
 , google-cloud-testutils
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pytz
 , mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.4.0";
+  version = "3.11.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b249fa87deb57f5c7107a7d5d303673590a6524a7f113fc95f87493f3328606";
+    hash = "sha256-TwVY6/4TSY8cPj3y/A7+cxpyVJ9+lPg+vAKNhfBNfqI=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus pytz ];
+  propagatedBuildInputs = [
+    google-api-core
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_inspect_content"
   ];
 
@@ -37,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Data Loss Prevention (DLP) API API client library";
     homepage = "https://github.com/googleapis/python-dlp";
+    changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

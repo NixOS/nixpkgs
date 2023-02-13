@@ -17,7 +17,7 @@ buildPythonApplication rec {
     description = "An implementation of docker-compose with podman backend";
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
   };
 }

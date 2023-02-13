@@ -1,20 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "vazir-code-font";
   version = "1.1.2";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "rastikerdar";
-  repo = "vazir-code-font";
-  rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "vazir-code-font";
+    rev = "v${version}";
+    hash = "sha256-iBojse3eHr4ucZtPfpkN+mmO6sEExY8WcAallyPgMsI=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+
+    runHook postInstall
   '';
-  sha256 = "0ivwpn9xm2zwhwgg9mghyiy5v66cn4786w9j6rkff5cmzshv279r";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/vazir-code-font";

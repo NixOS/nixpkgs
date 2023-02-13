@@ -5,21 +5,27 @@
 , pkg-config
 , igraph
 , texttable
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.9.8";
+  version = "0.10.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    sha256 = "sha256-RtvT5/LZ/xP68yBB7DDKJGeNCiX4HyPTCuk+Ijd2nFs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DR4D12J/BKFpF4hMHfitNmwDZ7UEo+pI0tvEa1T5GTY=";
   };
+
+  postPatch = ''
+    rm -r vendor
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +33,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     igraph
-    igraph.dev
   ];
 
   propagatedBuildInputs = [
@@ -39,15 +44,16 @@ buildPythonPackage rec {
   # told to do it. ~ C.
   setupPyGlobalFlags = [ "--use-pkg-config" ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "igraph" ];
 
   meta = with lib; {
     description = "High performance graph data structures and algorithms";
     homepage = "https://igraph.org/python/";
+    changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   #
   # See also https://discourse.nixos.org/t/qt-plugin-path-unset-in-test-phase/
 
-  #checkInputs = [ mock nose ];
+  #nativeCheckInputs = [ mock nose ];
   nativeBuildInputs = [ qt5.qttools ];
   propagatedBuildInputs = [
     alembic

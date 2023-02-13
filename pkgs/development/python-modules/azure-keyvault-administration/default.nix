@@ -1,32 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , azure-common
 , azure-core
 , msrest
+, six
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-administration";
-  version = "4.0.0";
-  disabled = isPy27;
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b05a0372f35921cedb7a231426077745eee9a65881088de6d4d8b73d9709a6cb";
+    hash = "sha256-2Xuyx1dAJRgiDEetQu1qnzTua7l/G5eSWOTI/UI/z00=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-core
     msrest
+    six
   ];
 
   # no tests in pypi tarball
   doCheck = false;
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  pythonNamespaces = [
+    "azure.keyvault"
+  ];
 
-  pythonImportsCheck = [ "azure.keyvault.administration" ];
+  pythonImportsCheck = [
+    "azure.keyvault.administration"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Key Vault Administration Client Library for Python";

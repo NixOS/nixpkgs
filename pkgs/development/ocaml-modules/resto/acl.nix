@@ -2,9 +2,10 @@
 
 buildDunePackage {
   pname = "resto-acl";
-  inherit (resto) src version meta useDune2 doCheck;
+  inherit (resto) src version meta doCheck;
 
-    minimalOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.10";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     resto

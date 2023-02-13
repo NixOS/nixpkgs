@@ -7,7 +7,7 @@
 # Native build inputs:
 , ninja, pkg-config
 , python3, perl
-, gnutar, which
+, which
 , llvmPackages
 # postPatch:
 , pkgsBuildHost
@@ -23,7 +23,7 @@
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
-, nspr, nss, systemd
+, nspr, nss
 , util-linux, alsa-lib
 , bison, gperf, libkrb5
 , glib, gtk3, dbus-glib
@@ -34,24 +34,23 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, libffi
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
 
 # Package customization:
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , cupsSupport ? true, cups ? null
 , proprietaryCodecs ? true
 , pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
-, libgcrypt ? null # gnomeSupport || cupsSupport
+, libgcrypt ? null # cupsSupport
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
 }:
 
 buildFun:
-
-with lib;
 
 let
   python3WithPackages = python3.withPackages(ps: with ps; [
@@ -75,16 +74,16 @@ let
     let
       # Serialize Nix types into GN types according to this document:
       # https://source.chromium.org/gn/gn/+/master:docs/language.md
-      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
+      mkGnString = value: "\"${lib.escape ["\"" "$" "\\"] value}\"";
       sanitize = value:
         if value == true then "true"
         else if value == false then "false"
-        else if isList value then "[${concatMapStringsSep ", " sanitize value}]"
-        else if isInt value then toString value
-        else if isString value then mkGnString value
+        else if lib.isList value then "[${lib.concatMapStringsSep ", " sanitize value}]"
+        else if lib.isInt value then toString value
+        else if lib.isString value then mkGnString value
         else throw "Unsupported type for GN value `${value}'.";
       toFlag = key: value: "${key}=${sanitize value}";
-    in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
+    in attrs: lib.concatStringsSep " " (lib.attrValues (lib.mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
@@ -96,7 +95,7 @@ let
     "libpng"
     "libwebp"
     "libxslt"
-    "opus"
+    # "opus"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -114,7 +113,7 @@ let
   };
 
   base = rec {
-    name = "${packageName}-unwrapped-${version}";
+    pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -126,7 +125,7 @@ let
     nativeBuildInputs = [
       ninja pkg-config
       python3WithPackages perl
-      gnutar which
+      which
       llvmPackages.bintools
     ];
 
@@ -139,7 +138,7 @@ let
       libusb1 re2
       ffmpeg libxslt libxml2
       nasm
-      nspr nss systemd
+      nspr nss
       util-linux alsa-lib
       bison gperf libkrb5
       glib gtk3 dbus-glib
@@ -151,19 +150,30 @@ let
       libdrm wayland mesa.drivers libxkbcommon
       curl
       libepoxy
-    ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
-      ++ optional gnomeKeyringSupport libgnome-keyring3
-      ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      libffi
+    ] ++ lib.optional systemdSupport systemd
+      ++ lib.optionals cupsSupport [ libgcrypt cups ]
+      ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # Required to fix the build with a more recent wayland-protocols version
+      # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
+      # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
+      ./patches/angle-wayland-include-protocol.patch
     ];
 
     postPatch = ''
+      # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
+      substituteInPlace BUILD.gn \
+        --replace '"//infra/orchestrator:orchestrator_all",' ""
+      # Disable build flags that require LLVM 15:
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace '"-Xclang",' "" \
+        --replace '"-no-opaque-pointers",' ""
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -183,6 +193,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
+      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -204,9 +215,10 @@ let
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
+    '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
-
+    '' + ''
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
 
@@ -220,15 +232,15 @@ let
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
-      ln -s "${pkgsBuildHost.jre8}/bin/java" third_party/jdk/current/bin/
+      ln -s "${pkgsBuildHost.jre8_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
-    '' + optionalString stdenv.isAarch64 ''
+    '' + lib.optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
-    '' + optionalString ungoogled ''
+    '' + lib.optionalString ungoogled ''
       ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ${ungoogler}/utils/patches.py . ${ungoogler}/patches
       ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
@@ -248,8 +260,6 @@ let
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
-      # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -266,8 +276,8 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
       # Optional features:
-      use_gio = gnomeSupport;
-      use_gnome_keyring = gnomeKeyringSupport;
+      use_gio = true;
+      use_gnome_keyring = false; # Superseded by libsecret
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -279,33 +289,23 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
-    } // optionalAttrs proprietaryCodecs {
+      # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
+      chrome_pgo_phase = 0;
+      clang_base_path = "${llvmPackages.clang}";
+      use_qt = false;
+      # To fix the build as we don't provide libffi_pic.a
+      # (ld.lld: error: unable to find library -l:libffi_pic.a):
+      use_system_libffi = true;
+    } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs pulseSupport {
+    } // lib.optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs ungoogled {
-      chrome_pgo_phase = 0;
-      enable_hangout_services_extension = false;
-      enable_js_type_check = false;
-      enable_mdns = false;
-      enable_nacl_nonsfi = false;
-      enable_one_click_signin = false;
-      enable_reading_list = false;
-      enable_remoting = false;
-      enable_reporting = false;
-      enable_service_discovery = false;
-      exclude_unwind_tables = true;
-      google_api_key = "";
-      google_default_client_id = "";
-      google_default_client_secret = "";
-      safe_browsing_mode = 0;
-      use_official_google_api_keys = false;
-      use_unofficial_version_number = false;
-    } // (extraAttrs.gnFlags or {}));
+    } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+    // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
       runHook preConfigure
@@ -313,7 +313,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -328,7 +328,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
@@ -338,7 +338,7 @@ let
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
-    in concatStringsSep "\n" commands;
+    in lib.concatStringsSep "\n" commands;
 
     postFixup = ''
       # Make sure that libGLESv2 is found by dlopen (if using EGL).

@@ -1,23 +1,24 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, libxslt, libtraceevent, libtracefs }:
+{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "2.9.5";
+  version = "3.1.6";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "0kc5cldk5i7q2zr2nyz3mvs5v7w0km6lpx7g39sy3pmhshp0wqlq";
+    sha256 = "sha256-qjfeomeExjsx/6XrUaGm5szbL7XVlekGd4Hsuncv8NY=";
   };
 
   # Don't build and install html documentation
   postPatch = ''
     sed -i -e '/^all:/ s/html//' -e '/^install:/ s/install-html//' \
        Documentation{,/trace-cmd,/libtracecmd}/Makefile
+    patchShebangs check-manpages.sh
   '';
 
-  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto ];
+  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
 
-  buildInputs = [ libtraceevent libtracefs ];
+  buildInputs = [ libtraceevent libtracefs zstd ];
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -27,19 +28,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   makeFlags = [
-    "all" "libs" "doc"
     # The following values appear in the generated .pc file
     "prefix=${placeholder "lib"}"
-    "libdir=${placeholder "lib"}/lib"
-    "includedir=${placeholder "dev"}/include"
   ];
 
-  installTargets = [ "install_cmd" "install_libs" "install_doc" ];
+  # We do not mention targets (like "doc") explicitly in makeFlags
+  # because the Makefile would not print warnings about too old
+  # libraries (see "warning:" in the Makefile)
+  postBuild = ''
+    make libs doc -j$NIX_BUILD_CORES
+  '';
+
+  installTargets = [
+    "install_cmd"
+    "install_libs"
+    "install_doc"
+  ];
   installFlags = [
+    "LDCONFIG=false"
     "bindir=${placeholder "out"}/bin"
-    "man_dir=${placeholder "man"}/share/man"
+    "mandir=${placeholder "man"}/share/man"
     "libdir=${placeholder "lib"}/lib"
-    "pkgconfig_dir=${placeholder "lib"}/lib/pkgconfig"
+    "pkgconfig_dir=${placeholder "dev"}/lib/pkgconfig"
     "includedir=${placeholder "dev"}/include"
     "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];
@@ -47,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     homepage    = "https://www.trace-cmd.org/";
-    license     = licenses.gpl2;
+    license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };

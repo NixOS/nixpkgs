@@ -32,14 +32,18 @@ Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes 
 
 Here is a simple package example.
 
-- It defines an (optional) attribute `minimalOCamlVersion` that will be used to
-  throw a descriptive evaluation error if building with an older OCaml is
-  attempted.
+- It defines an (optional) attribute `minimalOCamlVersion` (see note below)
+  that will be used to throw a descriptive evaluation error if building with
+  an older OCaml is attempted.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- `useDune2 = true` ensures that the latest version of Dune is used for the
-  build (this may become the default value in a future release).
+- `duneVersion = "2"` ensures that Dune version 2 is used for the
+  build (this is the default; valid values are `"1"`, `"2"`, and `"3"`);
+  note that there is also a legacy `useDune2` boolean attribute:
+  set to `false` it corresponds to `duneVersion = "1"`; set to `true` it
+  corresponds to `duneVersion = "2"`. If both arguments (`duneVersion` and
+  `useDune2`) are given, the second one (`useDune2`) is silently ignored.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
@@ -67,7 +71,7 @@ Here is a simple package example.
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
+  duneVersion = "2";
 
   minimalOCamlVersion = "4.04";
 
@@ -75,7 +79,7 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
+    hash   = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
   checkInputs = [ alcotest ppx_let ];
@@ -106,7 +110,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
+    hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
   meta = with lib; {
@@ -117,3 +121,16 @@ buildDunePackage rec {
   };
 }
 ```
+
+Note about `minimalOCamlVersion`.  A deprecated version of this argument was
+spelled `minimumOCamlVersion`; setting the old attribute wrongly modifies the
+derivation hash and is therefore inappropriate. As a technical dept, currently
+packaged libraries may still use the old spelling: maintainers are invited to
+fix this when updating packages. Massive renaming is strongly discouraged as it
+would be challenging to review, difficult to test, and will cause unnecessary
+rebuild.
+
+The build will automatically fail if two distinct versions of the same library
+are added to `buildInputs` (which usually happens transitively because of
+`propagatedBuildInputs`). Set `dontDetectOcamlConflicts` to true to disable this
+behavior.

@@ -1,26 +1,41 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gnome
-, iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, gnome
+, gtk3
+, gdk-pixbuf
+, librsvg
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";
-  version = "41.0";
+  version = "43";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "71M52MNfytXRBIG3BICAPw+iCz08vDOSOPys7q7gHro=";
+    sha256 = "LjrHfTKmqlVUFV3zfo8KDdVPxaZf1yHojVBflw2jLsY=";
   };
 
-  # For convenience, we can specify adwaita-icon-theme only in packages
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    gtk3
+  ];
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  buildInputs = [
+    gdk-pixbuf
+    librsvg
+  ];
 
-  nativeBuildInputs = [ pkg-config intltool iconnamingutils gtk3 ];
+  propagatedBuildInputs = [
+    # For convenience, we can specify adwaita-icon-theme only in packages
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
-
-  # remove a tree of dirs with no files within
-  postInstall = '' rm -rf "$out/locale" '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -32,5 +47,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = with platforms; linux ++ darwin;
     maintainers = teams.gnome.members;
+    license = licenses.cc-by-sa-30;
   };
 }

@@ -12,20 +12,20 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.19.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xiAt42kc1+rro99KMwzYKi3XC+wxYVqOY11tM+M/uV8=";
+    sha256 = "sha256-Qs3+NWMKiAFlKTTosdyHOxWRPKFlYQD20+MKiKR371U=";
   };
 
   propagatedBuildInputs = [
     httpx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpcore
     httpx
     flask
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
+    changelog = "https://github.com/lundberg/respx/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

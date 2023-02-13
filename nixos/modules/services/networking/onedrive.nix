@@ -26,17 +26,13 @@ in {
   ### Interface
 
   options.services.onedrive = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable OneDrive service";
-    };
+     enable = lib.mkEnableOption (lib.mdDoc "OneDrive service");
 
      package = lib.mkOption {
        type = lib.types.package;
        default = pkgs.onedrive;
        defaultText = lib.literalExpression "pkgs.onedrive";
-       description = ''
+       description = lib.mdDoc ''
          OneDrive package to use.
        '';
      };

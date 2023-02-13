@@ -1,32 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
-, py-cpuinfo
-, pythonOlder
 , pathlib
+, py-cpuinfo
+, pytest
+, pythonOlder
 , statistics
 }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "3.2.2";
+  version = "4.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hslzzinpwc1zqhbpllqh3sllmiyk69pcycl7ahr0rz3micgwczj";
+    hash = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  propagatedBuildInputs = [ py-cpuinfo ] ++ lib.optionals (pythonOlder "3.4") [ pathlib statistics ];
+  propagatedBuildInputs = [
+    py-cpuinfo
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    pathlib
+    statistics
+  ];
 
-  meta = {
-    description = "Py.test fixture for benchmarking code";
+  # Circular dependency
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pytest_benchmark"
+  ];
+
+  meta = with lib; {
+    description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ costrouc ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

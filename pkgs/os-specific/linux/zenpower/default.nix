@@ -1,14 +1,15 @@
-{ lib, stdenv, kernel, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, kernel, fetchFromGitea }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "0.1.13";
+  version = "unstable-2022-11-04";
 
-  src = fetchFromGitHub {
-    owner = "Ta180m";
+  src = fetchFromGitea {
+    domain = "git.exozy.me";
+    owner = "a";
     repo = "zenpower3";
-    rev = "v${version}";
-    sha256 = "sha256-2QScHDwOKN3Psui0M2s2p6D97jjbfe3Us5Nkn2srKC0=";
+    rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
+    sha256 = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs.";
     homepage = "https://github.com/Ta180m/zenpower3";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ alexbakker artturin ];
     platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";

@@ -7,24 +7,24 @@ let
   bgrabitmap = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgrabitmap";
-    rev = "v11.2.5";
-    sha256 = "0w5pdihsxn039kalkf4cx23j69hz5r09qmhd358h2n74irv1r3x1";
+    rev = "v11.5.3";
+    sha256 = "sha256-qjBD9TVZQy1tKWHFWkuu6vdLjASzQb3+HRy0FLdd9a8=";
   };
   bgracontrols = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgracontrols";
-    rev = "v7.0";
-    sha256 = "0qz3cscrc9jvhrix1hbmzhdxv6mxk0mz9azr46canflsydda8fjy";
+    rev = "v7.6";
+    sha256 = "sha256-btg9DMdYg+C8h0H7MU+uoo2Kb4OeLHoxFYHAv7LbLBA=";
   };
 in stdenv.mkDerivation rec {
   pname = "lazpaint";
-  version = "7.1.5";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "lazpaint";
     rev = "v${version}";
-    sha256 = "0bpk3rlqzbxvgrxmrzs0hcrgwhsqnpjqv1kdd9cp09knimmksvy5";
+    sha256 = "sha256-J6s0GnGJ7twEYW5+B72bB3EX4AYvLnhSPLbdhZWzlkw=";
   };
 
   nativeBuildInputs = [ lazarus fpc makeWrapper ];
@@ -32,6 +32,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pango cairo glib atk gtk2 libX11 gdk-pixbuf ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
   buildPhase = ''
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap
@@ -47,6 +51,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     # Reuse existing install script
+    substituteInPlace Makefile --replace "/bin/bash" $BASH
     cd lazpaint/release/debian
     substituteInPlace makedeb.sh --replace "rm -rf" "ls"
     patchShebangs ./makedeb.sh

@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "electron";
+  pname = "electron";
   version = "2016-03-07";
 
   idrisDeps = [ contrib jheiling-extras jheiling-js ];

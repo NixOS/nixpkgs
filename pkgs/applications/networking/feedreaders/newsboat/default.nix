@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.25";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "sha256-TAnGDxTKYl4niouS6nYdJDaIngAPsPHr9Bw9L3cR2Xk=";
+    hash = "sha256-hiZN3wWknshP8MG4ThhbMLyhQkuFozzoETs3mYaMVro=";
   };
 
-  cargoSha256 = "sha256-MxoyYBLbrCuLVa0p8JrYKSKu2oFPnXMwab42lhhAu48=";
+  cargoHash = "sha256-Ap8i8hLqrUi6aSn4wKAdG3Z/5or+bF+epDaWUdWYt78";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -31,11 +31,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
 
   postBuild = ''
-    make prefix="$out"
+    make -j $NIX_BUILD_CORES prefix="$out"
   '';
-
-  # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
@@ -47,12 +44,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   preCheck = ''
-    make test
+    make -j $NIX_BUILD_CORES test
   '';
 
   postInstall = ''
-    make prefix="$out" install
-    cp -r contrib $out
+    make -j $NIX_BUILD_CORES prefix="$out" install
   '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"

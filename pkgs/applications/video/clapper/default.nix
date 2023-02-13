@@ -12,7 +12,7 @@
 , desktop-file-utils
 , makeWrapper
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook4
 , meson
 , gjs
 , gtk4
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clapper";
-  version = "0.4.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
     repo   = pname;
     rev    = version;
-    sha256 = "sha256-ccvg8yxPCN7OYmJvq0SPY6iyiuFuWJyiu+mRoykEzqI=";
+    sha256 = "sha256-s+qdTq3/pHHstwr1W3Hs2Zje++iJFHM6hQTFoZD43bY=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info # for update-mime-database
-    wrapGAppsHook # for gsettings
+    wrapGAppsHook4 # for gsettings
   ];
 
   buildInputs = [
@@ -64,11 +64,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
   '';
-
-  mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-  ];
 
   postInstall = ''
     cp ${src}/data/icons/*.svg $out/share/icons/hicolor/scalable/apps/

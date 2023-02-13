@@ -2,18 +2,21 @@
 , stdenv
 , buildPackages
 , autoreconfHook
+, pkg-config
 , fetchurl
 , fetchpatch
 , libedit
+, runCommand
+, dash
 }:
 
 stdenv.mkDerivation rec {
   pname = "dash";
-  version = "0.5.11.4";
+  version = "0.5.11.5";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/${pname}-${version}.tar.gz";
-    sha256 = "13g06zqfy4n7jkrbb5l1vw0xcnjvq76i16al8fjc5g33afxbf5af";
+    sha256 = "sha256-23eBEIkfeTeYXym/I0EP4cXWaVAnYPWE5U4OeynhI70=";
   };
 
   hardeningDisable = [ "format" ];
@@ -33,13 +36,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
   # configure.ac patched; remove on next release
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ pkg-config ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ libedit ];
 
   configureFlags = [ "--with-libedit" ];
+  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+    export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
+  '';
 
   enableParallelBuilding = true;
 
@@ -52,5 +60,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/dash";
+    tests = {
+      "execute-simple-command" = runCommand "${pname}-execute-simple-command" { } ''
+        mkdir $out
+        ${dash}/bin/dash -c 'echo "Hello World!" > $out/success'
+        [ -s $out/success ]
+        grep -q "Hello World" $out/success
+      '';
+    };
   };
 }

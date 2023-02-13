@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-zq1jpkMcq7WHc6weht2iEFMlxIJSoDreWqJCi8F+Lxs=";
+    sha256 = "sha256-4rFtbCfx6QFdp62FPjOYAhSWM03g3rXsF4pD22+EhcA=";
   };
 
-  cargoSha256 = "sha256-NcznWWMcgK4RixqvumPEQUlvIFRyYkbeTTGvjQ91ggE=";
+  cargoSha256 = "sha256-av/F1FHMd0o9NvwA2Q9mqSd89ZEqmUaVxC+JmSwEHhI=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage rec {
       --bash completions/xh.bash \
       --fish completions/xh.fish \
       --zsh completions/_xh
+
+    installManPage doc/xh.1
+    ln -s $out/share/man/man1/xh.1 $out/share/man/man1/xhs.1
+
+    install -m444 -Dt $out/share/doc/xh README.md CHANGELOG.md
 
     # https://github.com/ducaale/xh#xh-and-xhs
     ln -s $out/bin/xh $out/bin/xhs
@@ -56,6 +61,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas SuperSandro2000 ];
+    maintainers = with maintainers; [ payas ];
   };
 }

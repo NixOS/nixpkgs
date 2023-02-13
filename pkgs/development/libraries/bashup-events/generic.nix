@@ -1,7 +1,7 @@
 {
   # general
   lib
-, resholvePackage
+, resholve
 , bash
 , doCheck ? true
 , doInstallCheck ? true
@@ -32,7 +32,7 @@ let
     '';
 
 in
-resholvePackage rec {
+resholve.mkDerivation rec {
   # bashup.events doesn't version yet but it has two variants with
   # differing features/performance characteristics:
   # - branch master: a variant for bash 3.2+
@@ -49,7 +49,7 @@ resholvePackage rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ bash ];
+  nativeCheckInputs = [ bash ];
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +68,7 @@ resholvePackage rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ bash ];
+  nativeInstallCheckInputs = [ bash ];
   installCheckPhase = ''
     runHook preInstallCheck
     ${installCheck "${bash}/bin/bash"}

@@ -8,8 +8,10 @@
 , gdal
 , hdf5-cpp
 , LASzip
+, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
 , libe57format
 , libgeotiff
+, libtiff
 , libxml2
 , postgresql
 , tiledb
@@ -20,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdal";
-  version = "2.3.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = version;
-    sha256 = "sha256-DKIraCyp8fcgnVp5dFrtQ4Wq96cQGC9SiAPLS6htUZc=";
+    sha256 = "sha256-9TQlhuGSTnHsTlJos9Hwnyl1CxI0tXLZdqsaGdp6WIE=";
   };
 
   nativeBuildInputs = [
@@ -40,18 +42,20 @@ stdenv.mkDerivation rec {
     gdal
     hdf5-cpp
     LASzip
-    libe57format
     libgeotiff
+    libtiff
     libxml2
     postgresql
     tiledb
     xercesc
     zlib
     zstd
+  ] ++ lib.optionals enableE57 [
+    libe57format
   ];
 
   cmakeFlags = [
-    "-DBUILD_PLUGIN_E57=ON"
+    "-DBUILD_PLUGIN_E57=${if enableE57 then "ON" else "OFF"}"
     "-DBUILD_PLUGIN_HDF=ON"
     "-DBUILD_PLUGIN_PGPOINTCLOUD=ON"
     "-DBUILD_PLUGIN_TILEDB=ON"

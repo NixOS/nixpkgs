@@ -1,12 +1,12 @@
-{ lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail }:
+{ lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail, udev }:
 
 stdenv.mkDerivation rec {
   pname = "mdadm";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/mdadm-${version}.tar.xz";
-    sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
+    sha256 = "sha256-RhwhVnCGS7dKTRo2IGhKorL4KW3/oGdD8m3aVVes8B0=";
   };
 
   patches = [ ./no-self-references.patch ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "install-systemd" ];
 
   enableParallelBuilding = true;
+
+  buildInputs = [ udev ];
 
   nativeBuildInputs = [ groff ];
 

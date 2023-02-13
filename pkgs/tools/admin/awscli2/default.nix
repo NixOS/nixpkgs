@@ -1,37 +1,22 @@
-{ lib, python3, groff, less, fetchFromGitHub }:
+{ lib
+, python3
+, groff
+, less
+, fetchFromGitHub
+, nix-update-script
+, testers
+, awscli2
+}:
+
 let
   py = python3.override {
     packageOverrides = self: super: {
-      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.4";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
-        };
-      });
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev155";
-        src = fetchFromGitHub {
-          owner = "boto";
-          repo = "botocore";
-          rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
-          sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
-        };
-        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
-      });
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.10";
-        src = oldAttrs.src.override {
+        version = "3.0.28";
+        src = self.fetchPypi {
+          pname = "prompt_toolkit";
           inherit version;
-          sha256 = "1nr990i4b04rnlw1ghd0xmgvvvhih698mb6lb6jylr76cs7zcnpi";
-        };
-      });
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "sha256-ywIvSxZVHt67sxo3fT8JYA262nNj2MXbeXbn9Hcy4bI=";
+          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
         };
       });
     };
@@ -40,32 +25,23 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.3.4"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.9.21"; # N.B: if you change this, check if overrides are still up-to-date
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-C/NrU+1AixuN4T1N5Zs8xduUQiwuQWvXkitQRnPJdNw=";
+    hash = "sha256-/CMV6eCNm2gF9HhdoTo2TUUy7I4NF9Fb+6l2biGIbkE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
-      --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "s3transfer>=0.4.2,<0.5.0" "s3transfer" \
-      --replace "wcwidth<0.2.0" "wcwidth" \
-      --replace "distro>=1.5.0,<1.6.0" "distro"
-  '';
-
-  checkInputs = [ jsonschema mock pytestCheckHook pytest-xdist ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     awscrt
     bcdoc
-    botocore
     colorama
     cryptography
     distro
@@ -76,16 +52,22 @@ with py.pkgs; buildPythonApplication rec {
     pyyaml
     rsa
     ruamel-yaml
-    s3transfer
-    six
-    wcwidth
+    python-dateutil
+    jmespath
+    urllib3
   ];
 
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
+  nativeCheckInputs = [
+    jsonschema
+    mock
+    pytestCheckHook
+  ];
 
-    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
-    export HOME=$TMP
+  postPatch = ''
+    sed -i pyproject.toml \
+      -e 's/colorama.*/colorama",/' \
+      -e 's/cryptography.*/cryptography",/' \
+      -e 's/distro.*/distro",/'
   '';
 
   postInstall = ''
@@ -101,13 +83,49 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  doCheck = true;
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
+
+    # Disable slow tests (only run unit tests)
+    "tests/backends"
+    "tests/functional"
+  ];
+
+  pythonImportsCheck = [
+    "awscli"
+  ];
+
+  passthru = {
+    python = py; # for aws_shell
+    updateScript = nix-update-script {
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(2\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      version = version;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    mainProgram = "aws";
   };
 }

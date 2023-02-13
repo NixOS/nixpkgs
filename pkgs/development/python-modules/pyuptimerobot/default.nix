@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "21.11.0";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,25 +18,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "1nmmwp9m38b75lz51ypcj0qxnxm9wq4id5cggl0pn2rx6gwnbw9n";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hy/hmXxxEb44X8JUszoA1YF/41y7GkQqC4uS+Pax6WA=";
   };
-
-  propagatedBuildInputs = [
-    aiohttp
-  ];
-
-  checkInputs = [
-    aresponses
-    pytestCheckHook
-    pytest-asyncio
-  ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo
     substituteInPlace setup.py \
       --replace 'version="main",' 'version="${version}",'
   '';
+
+  propagatedBuildInputs = [
+    aiohttp
+  ];
+
+  nativeCheckInputs = [
+    aresponses
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   pythonImportsCheck = [
     "pyuptimerobot"
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper for Uptime Robot";
     homepage = "https://github.com/ludeeus/pyuptimerobot";
+    changelog = "https://github.com/ludeeus/pyuptimerobot/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

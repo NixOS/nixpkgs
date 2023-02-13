@@ -1,4 +1,11 @@
 /* This file defines some basic smoke tests for cross compilation.
+   Individual jobs can be tested by running:
+
+   $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
 */
 
 { # The platforms *from* which we cross compile.
@@ -27,6 +34,8 @@ let
     nix = nativePlatforms;
     nixUnstable = nativePlatforms;
     mesa = nativePlatforms;
+    rustc = nativePlatforms;
+    cargo = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
@@ -77,6 +86,17 @@ let
     buildPackages.binutils = nativePlatforms;
     mpg123 = nativePlatforms;
   };
+
+  # Enabled-but-unsupported platforms for which nix is known to build.
+  # We provide Hydra-built `nixStatic` for these platforms.  This
+  # allows users to bootstrap their own system without either (a)
+  # trusting binaries from a non-Hydra source or (b) having to fight
+  # with their host distribution's versions of nix's numerous
+  # build dependencies.
+  nixCrossStatic = {
+    nixStatic = linux;  # no need for buildPlatform=*-darwin
+  };
+
 in
 
 {
@@ -141,6 +161,8 @@ in
   /* Javacript */
   ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
+    haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
   };
 
   /* Linux on Raspberrypi */
@@ -153,7 +175,6 @@ in
 
   /* Linux on armv7l-hf */
   armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
-  scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
 
   pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
 
@@ -195,8 +216,9 @@ in
   powerpcle-embedded = mapTestOnCross lib.systems.examples.ppcle-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
-  riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64 embedded;
-  riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32 embedded;
+  riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64-embedded embedded;
+  riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32-embedded embedded;
+  rx-embedded = mapTestOnCross lib.systems.examples.rx-embedded embedded;
 
   x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 
@@ -211,5 +233,16 @@ in
     mkBootstrapToolsJob = drv:
       assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob)
+    # The `bootstrapTools.${platform}.bootstrapTools` derivation
+    # *unpacks* the bootstrap-files using their own `busybox` binary,
+    # so it will fail unless buildPlatform.canExecute hostPlatform.
+    # Unfortunately `bootstrapTools` also clobbers its own `system`
+    # attribute, so there is no way to detect this -- we must add it
+    # as a special case.
+    (builtins.removeAttrs tools ["bootstrapTools"]);
+
+  # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
+  mips64el-nixCrossStatic = mapTestOnCross lib.systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;
+  powerpc64le-nixCrossStatic = mapTestOnCross lib.systems.examples.powernv nixCrossStatic;
 }

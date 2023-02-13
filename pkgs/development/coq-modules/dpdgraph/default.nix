@@ -1,14 +1,15 @@
 { lib, mkCoqDerivation, autoreconfHook, coq, version ? null }:
 
-with lib;
-let hasWarning = versionAtLeast coq.ocamlPackages.ocaml.version "4.08"; in
+let hasWarning = lib.versionAtLeast coq.ocamlPackages.ocaml.version "4.08"; in
 
 mkCoqDerivation {
   pname = "dpdgraph";
   owner = "Karmaki";
   repo = "coq-dpdgraph";
   inherit version;
-  defaultVersion = switch coq.coq-version [
+  defaultVersion = lib.switch coq.coq-version [
+    { case = "8.16"; out = "1.0+8.16"; }
+    { case = "8.15"; out = "1.0+8.15"; }
     { case = "8.14"; out = "1.0+8.14"; }
     { case = "8.13"; out = "1.0+8.13"; }
     { case = "8.12"; out = "0.6.8"; }
@@ -21,6 +22,8 @@ mkCoqDerivation {
     { case = "8.5";  out = "0.6"; }
   ] null;
 
+  release."1.0+8.16".sha256 = "sha256-xy4xcVHaD1OHBdGUzUy3SeZnHtOf1+UIh6YjUYFINm0=";
+  release."1.0+8.15".sha256 = "sha256:1pxr0gakcz297y8hhrnssv5j07ccd58pv7rh7qv5g7855pfqrkg7";
   release."1.0+8.14".sha256 = "sha256:01pmi7jcc77431jii6x6nd4m8jg4vycachiyi1h6dx9rp3a2508s";
   release."1.0+8.13".sha256 = "sha256:0f8lj8b99n8nsq2jf5m0snblfs8yz50hmlqqq9nlw4qklq7j4z5z";
   release."0.6.9".sha256 = "11mbydpcgk7y8pqzickbzx0ig7g9k9al71i9yfrcscd2xj8fwj8z";
@@ -39,15 +42,15 @@ mkCoqDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   mlPlugin = true;
-  extraBuildInputs = [ coq.ocamlPackages.ocamlgraph ];
+  buildInputs = [ coq.ocamlPackages.ocamlgraph ];
 
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag
-  preConfigure = optionalString hasWarning ''
+  preConfigure = lib.optionalString hasWarning ''
     substituteInPlace Makefile.in --replace "-warn-error +a " ""
   '';
 
-  buildFlags = optional hasWarning "WARN_ERR=";
+  buildFlags = lib.optional hasWarning "WARN_ERR=";
 
   preInstall = ''
     mkdir -p $out/bin
@@ -55,7 +58,7 @@ mkCoqDerivation {
 
   extraInstallFlags = [ "BINDIR=$(out)/bin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Build dependency graphs between Coq objects";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ vbgl ];

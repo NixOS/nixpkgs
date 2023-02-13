@@ -1,26 +1,25 @@
-{ stdenv, lib, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config
 , python3
 , curl
 , icu
+, libzim
 , pugixml
-, zimlib
 , zlib
 , libmicrohttpd
 , mustache-hpp
 , gtest
 }:
 
-
 stdenv.mkDerivation rec {
-  pname = "kiwix-lib";
-  version = "9.4.1";
+  pname = "libkiwix";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = pname;
     rev = version;
-    sha256 = "034nk6l623v78clrs2d0k1vg69sbzrd8c0q79qiqmlkinck1nkxw";
+    sha256 = "sha256-4FxLxJxVhqbeNqX4vorHkROUuRURvE6AXlteIZCEBtc=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +38,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     curl
     libmicrohttpd
+    libzim
     pugixml
-    zimlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -52,4 +51,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs scripts
   '';
+
+  meta = with lib; {
+    description = "Common code base for all Kiwix ports";
+    homepage = "https://kiwix.org";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ colinsane ];
+  };
 }

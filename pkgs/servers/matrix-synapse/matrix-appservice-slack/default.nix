@@ -1,28 +1,49 @@
-{ pkgs, nodejs, stdenv, fetchFromGitHub, lib, ... }:
+{ lib
+, fetchFromGitHub
+, fetchYarnDeps
+, makeWrapper
+, matrix-sdk-crypto-nodejs
+, mkYarnPackage
+, nodejs
+}:
+
 let
+  data = lib.importJSON ./pin.json;
+in
+mkYarnPackage rec {
+  pname = "matrix-appservice-slack";
+  version = data.version;
+
+  packageJSON = ./package.json;
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
-    rev = "1.10.0";
-    sha256 = "WnonduUhhrxCMuXOgLk8voNnn+f6R5CsJ7VKpEmGwzk=";
+    rev = data.version;
+    sha256 = data.srcHash;
   };
 
-  nodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = data.yarnHash;
   };
-in
-nodePackages.package.override {
-  pname = "matrix-appservice-slack";
+  packageResolutions = {
+    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+  };
 
-  inherit src;
+  nativeBuildInputs = [ makeWrapper ];
 
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  buildPhase = ''
+    runHook preBuild
+    yarn run build
+    runHook postBuild
+  '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" \
-    --add-flags "$out/lib/node_modules/matrix-appservice-slack/lib/app.js"
+    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" --add-flags \
+        "$out/libexec/matrix-appservice-slack/deps/matrix-appservice-slack/lib/app.js"
   '';
+
+  doDist = false;
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";

@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin CoreFoundation;
   doCheck = true;
 
+  FFLAGS = [ "-std=legacy" ];
+  FCFLAGS = [ "-std=legacy" ];
+
   meta = with lib; {
     description = "Fortran API to manipulate netcdf files";
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";

@@ -11,7 +11,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to add bandwhich to the global environment and configure a
           setcap wrapper for it.
         '';

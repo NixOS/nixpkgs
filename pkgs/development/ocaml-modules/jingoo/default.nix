@@ -1,9 +1,10 @@
 { lib, buildDunePackage, fetchFromGitHub
-, menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2 }:
+, menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2
+}:
 
 buildDunePackage rec {
   pname = "jingoo";
-  version = "1.4.2";
+  version = "1.4.4";
 
   useDune2 = true;
 
@@ -13,10 +14,10 @@ buildDunePackage rec {
     owner = "tategakibunko";
     repo = "jingoo";
     rev = "v${version}";
-    sha256 = "0q947aik4i4z5wjllhwlkxh60qczwgra21yyrrzwhi9y5bnf8346";
+    sha256 = "sha256-qIw69OE7wYyZYKnIc9QrmF8MzY5Fg5pBFyIpexmaYxA=";
   };
 
-  buildInputs = [ menhir ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];
   checkInputs = [ ounit2 ];
   doCheck = true;

@@ -1,11 +1,11 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
 , haversine
+, mock
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.8";
+  version = "0.11";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
-    rev = "v${version}";
-    sha256 = "0447scp5n906p8kfzy0lwdq06f6hkq71r2zala6g3vr6b3kla6h8";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Voc1ME0iGQCMaDfBXDSVnRp8olvId+fLhH8sqHwB2Ak=";
   };
 
   propagatedBuildInputs = [
@@ -33,18 +35,21 @@ buildPythonPackage rec {
     dateparser
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aio_georss_client" ];
+  pythonImportsCheck = [
+    "aio_georss_client"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-client";
+    changelog = "https://github.com/exxamalte/python-aio-georss-client/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

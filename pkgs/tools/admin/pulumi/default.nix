@@ -1,38 +1,122 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper }:
+{ stdenv
+, lib
+, buildGoModule
+, coreutils
+, fetchFromGitHub
+, installShellFiles
+, git
+  # passthru
+, runCommand
+, makeWrapper
+, pulumi
+, pulumiPackages
+}:
 
-with lib;
-
-let
-  data = import ./data.nix {};
-in stdenv.mkDerivation {
+buildGoModule rec {
   pname = "pulumi";
-  version = data.version;
+  version = "3.54.0";
 
-  postUnpack = ''
-    mv pulumi-* pulumi
+  # Used in pulumi-language packages, which inherit this prop
+  sdkVendorHash = "sha256-NstNzPKHlN8S+HSpYnG60ZtZtUQsh1Idr8Zz2Ef/jiw=";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-Rl0kh9NCliADfU9Nxc2SwnOIGDilYEeA0rcVCfal5N8=";
+    # Some tests rely on checkout directory name
+    name = "pulumi";
+  };
+
+  vendorSha256 = "sha256-Bkmpw+ZneB1zHmaV4S29LFNoCjB2QmO5nR/iwQQQPpo=";
+
+  sourceRoot = "${src.name}/pkg";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # Bundle release metadata
+  ldflags = [
+    # Omit the symbol table and debug information.
+    "-s"
+    # Omit the DWARF symbol table.
+    "-w"
+  ] ++ importpathFlags;
+
+  importpathFlags = [
+    "-X github.com/pulumi/pulumi/pkg/v3/version.Version=v${version}"
+  ];
+
+  doCheck = true;
+
+  disabledTests = [
+    # Flaky test
+    "TestPendingDeleteOrder"
+  ];
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  preCheck = ''
+    # The tests require `version.Version` to be unset
+    ldflags=''${ldflags//"$importpathFlags"/}
+
+    # Create some placeholders for plugins used in tests. Otherwise, Pulumi
+    # tries to donwload them and fails, resulting in really long test runs
+    dummyPluginPath=$(mktemp -d)
+    for name in pulumi-{resource-pkg{A,B},-pkgB}; do
+      ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
+    done
+
+    export PATH=$dummyPluginPath''${PATH:+:}$PATH
+
+    # Code generation tests also download dependencies from network
+    rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+    rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
+
+    # Only run tests not marked as disabled
+    buildFlagsArray+=("-run" "[^(${lib.concatStringsSep "|" disabledTests})]")
+  '' + lib.optionalString stdenv.isDarwin ''
+    export PULUMI_HOME=$(mktemp -d)
   '';
 
-  srcs = map (x: fetchurl x) data.pulumiPkgs.${stdenv.hostPlatform.system};
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp * $out/bin/
-  '' + optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+  doInstallCheck = true;
+  installCheckPhase = ''
+    PULUMI_SKIP_UPDATE_CHECK=1 $out/bin/pulumi version | grep v${version} > /dev/null
   '';
 
-  nativeBuildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  postInstall = ''
+    installShellCompletion --cmd pulumi \
+      --bash <($out/bin/pulumi gen-completion bash) \
+      --fish <($out/bin/pulumi gen-completion fish) \
+      --zsh  <($out/bin/pulumi gen-completion zsh)
+  '';
 
-  meta = {
+  passthru = {
+    pkgs = pulumiPackages;
+    withPackages = f: runCommand "${pulumi.name}-with-packages"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
+          --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
+      '';
+  };
+
+  meta = with lib; {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
-    license = with licenses; [ asl20 ];
-    platforms = builtins.attrNames data.pulumiPkgs;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
-      ghuntley
-      peterromfeldhk
-      jlesquembre
-      cpcloud
+      trundle
+      veehaitch
     ];
   };
 }

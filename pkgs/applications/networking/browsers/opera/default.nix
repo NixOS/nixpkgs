@@ -11,7 +11,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gtk3
 , gtk4
 , lib
@@ -42,27 +41,30 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
+, qt5
+, proprietaryCodecs ? false
+, vivaldi-ffmpeg-codecs
 }:
 
 let
-
   mirror = "https://get.geo.opera.com/pub/opera/desktop";
-
-in stdenv.mkDerivation rec {
-
+in
+stdenv.mkDerivation rec {
   pname = "opera";
-  version = "82.0.4227.23";
+  version = "95.0.4635.37";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    sha256 = "sha256-jA8fglRLH0aqhjsD65bsieplCLCJXgdBViPGrAu9sSQ=";
+    hash = "sha256-NQv9EVaBPfHygr76neYGACuk8A6Oc1GXAgizMa+jngw=";
   };
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
+  unpackPhase = "dpkg-deb -x $src .";
 
   nativeBuildInputs = [
+    dpkg
     autoPatchelfHook
     wrapGAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -79,7 +81,6 @@ in stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libX11
     libXScrnSaver
@@ -117,17 +118,24 @@ in stdenv.mkDerivation rec {
     # "Illegal instruction (core dumped)"
     gtk3
     gtk4
+  ] ++ lib.optional proprietaryCodecs [
+    vivaldi-ffmpeg-codecs
   ];
 
+  dontWrapQtApps = true;
+
   installPhase = ''
-    mkdir -p $out
-    cp -r . $out/
+    mkdir -p $out/bin
+    cp -r usr $out
+    cp -r usr/share $out/share
+    ln -s $out/usr/bin/opera $out/bin/opera
   '';
 
   meta = with lib; {
     homepage = "https://www.opera.com";
-    description = "Web browser";
+    description = "Faster, safer and smarter web browser";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

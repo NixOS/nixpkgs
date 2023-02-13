@@ -1,16 +1,25 @@
 { buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytest
+, pytestCheckHook
+, dill
 , h5py
 , hickle
 , numpy
+, opencv4
 , pandas
 , pillow
+, pycm
+, pyyaml
+, scipy
+, requests
+, scikitimage
 , six
-, pytorch
+, tabulate
+, torch
 , torchvision
 , tqdm
+, yacs
 , lib
 }:
 
@@ -27,22 +36,38 @@ buildPythonPackage rec {
     sha256 = "0wnijdvqgdpzfdsy1cga3bsr0n7zzsl8hp4dskqwxx087g5h1r84";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "opencv-python-headless" "opencv"
+  '';
+
   propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
+    dill
+    h5py
+    hickle
+    numpy
+    opencv4
+    pandas
+    pillow
+    pycm
+    pyyaml
+    scipy
+    requests
+    scikitimage
+    tabulate
+    torch
+    torchvision
+    tqdm
+    six
+    yacs
   ];
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    runHook preCheck
-    pytest tests/
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "High-level training framework for Pytorch";
     homepage = "https://github.com/achaiah/pywick";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true;  # Nixpkgs missing `albumentations` and `prodict`
   };
 }

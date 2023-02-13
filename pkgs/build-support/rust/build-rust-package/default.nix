@@ -5,11 +5,14 @@
 , stdenv
 , callPackage
 , cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
+, cargoNextestHook
 , cargoSetupHook
+, cargo
+, cargo-auditable
+, cargo-auditable-cargo-wrapper
 , rustc
 , libiconv
 , windows
@@ -40,6 +43,9 @@
 , checkNoDefaultFeatures ? buildNoDefaultFeatures
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
+, useNextest ? false
+, auditable ? false # TODO: change to true
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -52,15 +58,16 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
-  -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
+assert cargoVendorDir == null && cargoLock == null
+    -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
+    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
 let
 
   cargoDeps =
-    if cargoVendorDir == null
-    then if cargoLock != null then importCargoLock cargoLock
+    if cargoVendorDir != null then null
+    else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
       inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
       name = cargoDepsName;
@@ -69,12 +76,7 @@ let
       hash = args.cargoHash;
     } // lib.optionalAttrs (args ? cargoSha256) {
       sha256 = args.cargoSha256;
-    } // depsExtraArgs)
-    else null;
-
-  # If we have a cargoSha256 fixed-output derivation, validate it at build time
-  # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
+    } // depsExtraArgs);
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
@@ -98,7 +100,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
@@ -117,11 +119,14 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.o
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (cargo-auditable-cargo-wrapper.override {
+      inherit cargo cargo-auditable;
+    })
+  ] ++ [
     cacert
-    git
     cargoBuildHook
-    cargoCheckHook
+    (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
     cargoSetupHook
     rustc

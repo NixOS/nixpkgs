@@ -10,16 +10,16 @@ in
 {
   options = {
     programs.gamemode = {
-      enable = mkEnableOption "GameMode to optimise system performance on demand";
+      enable = mkEnableOption (lib.mdDoc "GameMode to optimise system performance on demand");
 
-      enableRenice = mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness" // {
+      enableRenice = mkEnableOption (lib.mdDoc "CAP_SYS_NICE on gamemoded to support lowering process niceness") // {
         default = true;
       };
 
       settings = mkOption {
         type = settingsFormat.type;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           System-wide configuration for GameMode (/etc/gamemode.ini).
           See gamemoded(8) man page for available settings.
         '';

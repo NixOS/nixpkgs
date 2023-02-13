@@ -7,21 +7,21 @@
 
 buildPythonPackage rec {
   pname = "lightwave2";
-  version = "0.8.0";
+  version = "0.8.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f18ee4aba0431236a4c48a032de6714cfb56ff1e97c86d48cfe619eb961b21a";
+    hash = "sha256-S4nHJMaSX8qCYoUnMqb6AbObTR96Wg098FJAM+dQJTc=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python library to interact with LightWaveRF 2nd Gen lights and switches";
+    description = "Library to interact with LightWaveRF 2nd Gen lights and switches";
     homepage = "https://github.com/bigbadblunt/lightwave2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

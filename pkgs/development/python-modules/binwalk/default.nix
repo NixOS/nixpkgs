@@ -21,7 +21,7 @@
 , visualizationSupport ? false }:
 
 buildPythonPackage rec {
-  pname = "binwalk";
+  pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
   version = "2.3.3";
 
   src = fetchFromGitHub {
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   pythonImportsCheck = [ "binwalk" ];
 

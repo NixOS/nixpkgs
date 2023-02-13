@@ -2,6 +2,7 @@
 , buildPythonPackage
 , aiohttp
 , bitarray
+, chacha20poly1305-reuseable
 , cryptography
 , deepdiff
 , fetchFromGitHub
@@ -13,38 +14,66 @@
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
+, requests
 , srptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.6";
+  version = "0.10.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
+    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "async_timeout"
+    "bitarray"
+    "chacha20poly1305-reuseable"
+    "cryptography"
+    "ifaddr"
+    "mediafile"
+    "miniaudio"
+    "protobuf"
+    "requests"
+    "srptools"
+    "zeroconf"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     bitarray
+    chacha20poly1305-reuseable
     cryptography
     mediafile
     miniaudio
     netifaces
     protobuf
+    requests
     srptools
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytest-aiohttp
     pytest-asyncio
@@ -52,16 +81,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    # Remove all version pinning
-    sed -i -e "s/==[0-9.]*//" requirements/requirements.txt
-  '';
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox
     "tests/protocols/companion/test_companion_auth.py"
+    "tests/protocols/mrp/test_mrp_auth.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -73,7 +100,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
+    changelog = "https://github.com/postlund/pyatv/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ fab ];
   };
 }

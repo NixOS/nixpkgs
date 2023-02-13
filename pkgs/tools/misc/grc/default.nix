@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildPythonApplication }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, installShellFiles
+}:
 
 buildPythonApplication rec {
   pname = "grc";
@@ -19,15 +23,19 @@ buildPythonApplication rec {
     done
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
   installPhase = ''
     runHook preInstall
+
     ./install.sh "$out" "$out"
-    install -Dm444 -t $out/share/zsh/vendor-completions _grc
+    installShellCompletion --zsh --name _grc _grc
+
     runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
+    homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
     description = "A generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for

@@ -5,13 +5,15 @@
 , shortenPerlShebang
 , mysqlSupport ? false
 , postgresqlSupport ? false
+, templateToolkitSupport ? false
 }:
 
 let
   sqitch = perlPackages.AppSqitch;
   modules = with perlPackages; [ ]
     ++ lib.optional mysqlSupport DBDmysql
-    ++ lib.optional postgresqlSupport DBDPg;
+    ++ lib.optional postgresqlSupport DBDPg
+    ++ lib.optional templateToolkitSupport TemplateToolkit;
 in
 
 stdenv.mkDerivation {
@@ -37,7 +39,7 @@ stdenv.mkDerivation {
   '';
   dontStrip = true;
   postFixup = ''
-    wrapProgram $out/bin/sqitch --prefix PERL5LIB : ${perlPackages.makeFullPerlPath modules}
+    wrapProgram $out/bin/sqitch --prefix PERL5LIB : ${lib.escapeShellArg (perlPackages.makeFullPerlPath modules)}
   '';
 
   meta = {

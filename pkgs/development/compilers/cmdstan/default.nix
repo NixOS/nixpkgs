@@ -1,20 +1,46 @@
-{ lib, stdenv, fetchurl, python3, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, stanc, python3, buildPackages, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.17.1";
+  version = "2.31.0";
 
-  src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
-    sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
+  src = fetchFromGitHub {
+    owner = "stan-dev";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-Uh/ZhEnbhQwC8xGFjDzH9No3VRgVbHYk2KoC+e3YhJw=";
   };
+
+  nativeBuildInputs = [ stanc ];
 
   buildFlags = [ "build" ];
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ python3 ];
-  checkPhase = "python ./runCmdStanTests.py src/test/interface"; # see #5368
+  nativeCheckInputs = [ python3 ];
+
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_BOOST_LGAMMA";
+
+  postPatch = ''
+    substituteInPlace stan/lib/stan_math/make/libraries \
+      --replace "/usr/bin/env bash" "bash"
+    patchShebangs .
+  '' + lib.optionalString stdenv.isAarch64 ''
+    sed -z -i "s/TEST(CommandStansummary, check_console_output).*TEST(CommandStansummary, check_csv_output)/TEST(CommandStansummary, check_csv_output)/" \
+      src/test/interface/stansummary_test.cpp
+  '';
+
+  preConfigure = ''
+    mkdir -p bin
+    ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
+  '';
+
+  makeFlags = lib.optional stdenv.isDarwin "arch=${stdenv.hostPlatform.darwinArch}";
+
+  checkPhase = ''
+    ./runCmdStanTests.py -j$NIX_BUILD_CORES src/test/interface
+  '';
 
   installPhase = ''
     mkdir -p $out/opt $out/bin
@@ -28,7 +54,10 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/stan
   '';
 
-  meta = {
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rf stan";
+
+  meta = with lib; {
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
@@ -37,7 +66,8 @@ stdenv.mkDerivation rec {
       likelihood estimation with Optimization (L-BFGS).
     '';
     homepage = "https://mc-stan.org/interfaces/cmdstan.html";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

@@ -8,17 +8,18 @@
 , ncurses
 , autoreconfHook
 , buildPackages
+, memstreamHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.6.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-r2+jvmnW9EeQf/2X2cOxnOa+HGuGHV6YMftT2MxbSYQ=";
+    sha256 = "sha256-9gZeBAC7AGU5vb+692npjKbbqFEAr9iGLu1u68EJ0W8=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     libevent
     libressl
     ncurses
-  ];
+  ] ++ lib.optional stdenv.isDarwin memstreamHook;
 
   configureFlags = [
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"

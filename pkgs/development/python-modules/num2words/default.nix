@@ -7,17 +7,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.10";
+  version = "0.5.12";
   pname = "num2words";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0myc27k087rhgpwn1a1dffzl32rwz6ngdbf3rm2i0zlgcxh4zk9p";
+    sha256 = "sha256-fnwLDwgEBao6HdnTKxypCzvwO6sXuOVNsF4beDAaCYg=";
   };
 
   propagatedBuildInputs = [ docopt ];
 
-  checkInputs = [ delegator-py pytest ];
+  nativeCheckInputs = [ delegator-py pytest ];
 
   checkPhase = ''
     pytest -k 'not cli_with_lang'

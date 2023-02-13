@@ -19,7 +19,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dns-root-data-2019-01-11";
+  pname = "dns-root-data";
+  version = "2019-01-11";
 
   buildCommand = ''
     mkdir $out
@@ -31,5 +32,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "DNS root data including root zone and DNSSEC key";
     maintainers = with maintainers; [ fpletz vcunat ];
+    license = licenses.gpl3Plus;
   };
 }

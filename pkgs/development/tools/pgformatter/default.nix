@@ -2,13 +2,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.2";
+  version = "5.5";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    sha256 = "sha256-NNdg3H+tB5ovKWGneOs496c0b2dv/zFYF4CZhuH07Fs=";
+    hash = "sha256-4KtrsckO9Q9H0yIM0877YvWaDW02CQVAQiOKD919e9w=";
   };
 
   outputs = [ "out" ];
@@ -40,5 +40,6 @@ perlPackages.buildPerlPackage rec {
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
     maintainers = [ maintainers.marsam ];
     license = [ licenses.postgresql licenses.artistic2 ];
+    mainProgram = "pg_format";
   };
 }

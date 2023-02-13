@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
-  version = "0.15.2";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
-    sha256 = "sha256-E8f6UU/4Y9Nfk7LjDcdyV+TdeVj/zl3oFCyEu3Gz27w=";
+    sha256 = "sha256-9WdVUCwHFX6wlu3++QqzV0RgTDYDnUYqK7yUl83liko=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -1,7 +1,25 @@
 { pkgs ? (import ../.. {}), nixpkgs ? { }}:
 let
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
-  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+  inherit (pkgs) lib;
+  inherit (lib) hasPrefix removePrefix;
+
+  libsets = [
+    { name = "asserts"; description = "assertion functions"; }
+    { name = "attrsets"; description = "attribute set functions"; }
+    { name = "strings"; description = "string manipulation functions"; }
+    { name = "versions"; description = "version string functions"; }
+    { name = "trivial"; description = "miscellaneous functions"; }
+    { name = "lists"; description = "list manipulation functions"; }
+    { name = "debug"; description = "debugging functions"; }
+    { name = "options"; description = "NixOS / nixpkgs option handling"; }
+    { name = "path"; description = "path functions"; }
+    { name = "filesystem"; description = "filesystem functions"; }
+    { name = "sources"; description = "source filtering functions"; }
+    { name = "cli"; description = "command-line serialization functions"; }
+  ];
+
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs libsets; };
   version = pkgs.lib.version;
 
   epub-xsl = pkgs.writeText "epub.xsl" ''
@@ -23,6 +41,26 @@ let
       <xsl:import href="${./parameters.xml}"/>
     </xsl:stylesheet>
   '';
+
+  # NB: This file describes the Nixpkgs manual, which happens to use module
+  #     docs infra originally developed for NixOS.
+  optionsDoc = pkgs.nixosOptionsDoc {
+    inherit (pkgs.lib.evalModules { modules = [ ../../pkgs/top-level/config.nix ]; }) options;
+    documentType = "none";
+    transformOptions = opt:
+      opt // {
+        declarations =
+          map
+            (decl:
+              if hasPrefix (toString ../..) (toString decl)
+              then
+                let subpath = removePrefix "/" (removePrefix (toString ../..) (toString decl));
+                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
+              else decl)
+            opt.declarations;
+        };
+  };
+
 in pkgs.runCommand "doc-support" {}
 ''
   mkdir result
@@ -30,6 +68,7 @@ in pkgs.runCommand "doc-support" {}
     cd result
     ln -s ${locationsXml} ./function-locations.xml
     ln -s ${functionDocs} ./function-docs
+    ln -s ${optionsDoc.optionsDocBook} ./config-options.docbook.xml
 
     ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
     ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl

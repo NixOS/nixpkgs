@@ -22,15 +22,17 @@
 }:
 
 let
-  version = "11.50.19";
-  openjdk = "11.0.12";
+  version = "11.62.17";
+  openjdk = "11.0.18";
 
-  sha256_linux = "b8e8a63b79bc312aa90f3558edbea59e71495ef1a9c340e38900dd28a1c579f3";
-  sha256_darwin = "9bc6874932f7f88d0a48220d3200449ddf7dc5c0e82af2df2738bc13d21b0e4e";
+  sha256_x64_linux = "sha256-b65oEbDzrrsUw+WaX94USBz/QS74yiMiGZPxqzMmmqs=";
+  sha256_x64_darwin = "sha256-nRRWTWiog8bRblmmPIPE5YibA34St3ZrJpZN91qEDUg=";
+  sha256_aarch64_darwin = "sha256-TBTrBxOfGo6MV+Md49P3sDfqVG1e+NraqfVbw9WTppk=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
-  hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
+  hash = if stdenv.isAarch64 && stdenv.isDarwin then sha256_aarch64_darwin else if stdenv.isDarwin then sha256_x64_darwin else sha256_x64_linux;
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
+  architecture = if stdenv.isAarch64 then "aarch64" else "x64";
 
   runtimeDependencies = [
     cups
@@ -45,7 +47,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_${architecture}.${extension}";
     sha256 = hash;
   };
 
@@ -63,12 +65,16 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
   '' + lib.optionalString stdenv.isLinux ''
@@ -90,6 +96,8 @@ in stdenv.mkDerivation {
     for bin in $( find "$out" -executable -type f -not -name jspawnhelper ); do
       wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
     done
+  '' + ''
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -109,8 +117,8 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ fpletz ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "java";
   };
 }

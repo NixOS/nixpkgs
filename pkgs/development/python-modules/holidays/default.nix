@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.11.3.1";
+  version = "0.18";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SFWv4Ov0KO+8+EhHeCi4ifhRW+f08VriZoKRk2nZJ3Q=";
+    hash = "sha256-6U2dNTb/Gipw1tL1bLBV65qV0LmjpfuBuej5024zN4k=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     korean-lunar-calendar
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -36,9 +36,14 @@ buildPythonPackage rec {
     "holidays"
   ];
 
+  disabledTestPaths = [
+    "test/test_imports.py"
+  ];
+
   meta = with lib; {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/dr-prodigy/python-holidays";
+    changelog = "https://github.com/dr-prodigy/python-holidays/releases/tag/v.${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

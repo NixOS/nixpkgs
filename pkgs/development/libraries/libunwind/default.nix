@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz, buildPackages }:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -9,7 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
 
-  postPatch = if stdenv.cc.isClang then ''
+  patches = [
+    # Fix for aarch64 and non-4K pages. Remove once upgraded past 1.6.2.
+    (fetchpatch {
+      url = "https://github.com/libunwind/libunwind/commit/e85b65cec757ef589f28957d0c6c21c498a03bdf.patch";
+      sha256 = "1lnlygvhqrdrjgw303pg2k2k4ms4gaghpjsgmhk47q83vy1yjwfg";
+    })
+  ];
+
+  postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
     substituteInPlace configure.ac --replace "-lgcc_s" ""
   '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
@@ -37,8 +45,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
-    badPlatforms = [ "riscv32-linux" ];
+    # https://github.com/libunwind/libunwind#libunwind
+    platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd13" "i686-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "x86_64-freebsd13" "x86_64-linux" "x86_64-solaris" ];
     license = licenses.mit;
   };
 }

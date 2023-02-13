@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "multiprocess";
-  version = "0.70.12.2";
+  version = "0.70.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "multiprocess-${version}";
-    sha256 = "1npikdgj0qriqj384vg22qgq2xqylypk67sx1qfmdzvk6c4iyg0w";
+    rev = "refs/tags/multiprocess-${version}";
+    sha256 = "sha256-pjYOEOI5No9gT0XchmH6FSJ9uDqEnaLj/PyHT2a90jo=";
   };
 
   propagatedBuildInputs = [

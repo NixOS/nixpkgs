@@ -1,11 +1,34 @@
 { stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
-, bison ? null, flex ? null, python ? null, rsync ? null
+, bison, flex, rsync
+, writeTextFile
 }:
 
-assert stdenvNoCC.hostPlatform.isAndroid ->
-  (flex != null && bison != null && python != null && rsync != null);
-
 let
+
+  # As part of building a hostPlatform=mips kernel, Linux creates and runs a
+  # tiny utility `arch/mips/boot/tools/relocs_main.c` for the buildPlatform.
+  # This utility references a glibc-specific header `byteswap.h`.  There is a
+  # compatibility header in gnulib for most BSDs, but not for Darwin, so we
+  # synthesize one here.
+  darwin-endian-h = writeTextFile {
+    name = "endian-h";
+    text = ''
+      #include <byteswap.h>
+    '';
+    destination = "/include/endian.h";
+  };
+  darwin-byteswap-h = writeTextFile {
+    name = "byteswap-h";
+    text = ''
+      #pragma once
+      #include <libkern/OSByteOrder.h>
+      #define bswap_16 OSSwapInt16
+      #define bswap_32 OSSwapInt32
+      #define bswap_64 OSSwapInt64
+    '';
+    destination = "/include/byteswap.h";
+  };
+
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
     inherit src;
 
@@ -14,6 +37,9 @@ let
 
     ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
+    strictDeps = true;
+    enableParallelBuilding = true;
+
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -21,10 +47,14 @@ let
     nativeBuildInputs = [
       perl elf-header
     ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-      flex bison python rsync
+      bison flex rsync
+    ] ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin &&
+                        stdenvNoCC.hostPlatform.isMips) [
+      darwin-endian-h
+      darwin-byteswap-h
     ];
 
-    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
 
     inherit patches;
 
@@ -81,12 +111,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.15.5"; in
+  linuxHeaders = let version = "6.1"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "sha256-6VZaMBUlrIHBQs64MvkFPdVoXhB9vPdT0N5MWLyYhR8=";
+        url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+        sha256 = "sha256-LKHxcFGkMPb+0RluSVJxdQcXGs/ZfZZXchJQJwOyXes=";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

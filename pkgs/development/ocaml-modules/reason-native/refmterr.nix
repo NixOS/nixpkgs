@@ -3,7 +3,8 @@
 {
   pname = "refmterr";
 
-  buildInputs = [
+  nativeBuildInputs = [
+    atdgen
     reason
   ];
 

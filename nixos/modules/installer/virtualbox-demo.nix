@@ -25,7 +25,7 @@ with lib;
 
   installer.cloneConfigExtra = ''
   # Let demo build as a trusted user.
-  # nix.trustedUsers = [ "demo" ];
+  # nix.settings.trusted-users = [ "demo" ];
 
   # Mount a VirtualBox shared folder.
   # This is configurable in the VirtualBox menu at

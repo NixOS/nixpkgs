@@ -13,15 +13,23 @@ stdenv.mkDerivation rec {
   buildInputs = [ libcap zlib bzip2 perl ];
 
   hardeningDisable = [ "format" ];
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isMusl "-D__THROW=";
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
   patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace include/xconfig.h.in \
+        --replace "#define HAVE_RCMD 1" "#undef HAVE_RCMD"
+  '';
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
     ln -s $out/bin/genisoimage $out/bin/mkisofs
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
+
+  cmakeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "-DBITFIELDS_HTOL=0" ];
 
   makeFlags = [ "PREFIX=\$(out)" ];
 

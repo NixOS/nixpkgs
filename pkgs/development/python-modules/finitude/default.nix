@@ -5,6 +5,7 @@
 , pyserial
 , pythonOlder
 , pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-yCI5UCRDhw+dJoTKyjmHbAGBm3by2AyxHKlqCywnLcs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyserial

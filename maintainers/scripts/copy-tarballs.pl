@@ -164,6 +164,7 @@ elsif (defined $expr) {
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
         my $name = $fetch->{name};
+        my $isPatch = $fetch->{isPatch};
 
         if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
             $algo = $1;
@@ -186,6 +187,11 @@ elsif (defined $expr) {
 
         if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
             print STDERR "skipping $url (unsupported scheme)\n";
+            next;
+        }
+
+        if ($isPatch) {
+            print STDERR "skipping $url (support for patches is missing)\n";
             next;
         }
 

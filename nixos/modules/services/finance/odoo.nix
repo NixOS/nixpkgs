@@ -9,33 +9,33 @@ in
 {
   options = {
     services.odoo = {
-      enable = mkEnableOption "odoo";
+      enable = mkEnableOption (lib.mdDoc "odoo");
 
       package = mkOption {
         type = types.package;
         default = pkgs.odoo;
         defaultText = literalExpression "pkgs.odoo";
-        description = "Odoo package to use.";
+        description = lib.mdDoc "Odoo package to use.";
       };
 
       addons = mkOption {
         type = with types; listOf package;
         default = [];
         example = literalExpression "[ pkgs.odoo_enterprise ]";
-        description = "Odoo addons.";
+        description = lib.mdDoc "Odoo addons.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
-        description = ''
-          Odoo configuration settings. For more details see <link xlink:href="https://www.odoo.com/documentation/15.0/administration/install/deploy.html"/>
+        description = lib.mdDoc ''
+          Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';
       };
 
       domain = mkOption {
         type = with types; nullOr str;
-        description = "Domain to host Odoo with nginx";
+        description = lib.mdDoc "Domain to host Odoo with nginx";
         default = null;
       };
     };

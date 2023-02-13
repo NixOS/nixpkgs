@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
+, makeWrapper
 , xz
-, writeText
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -11,20 +11,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gzip";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
-    sha256 = "01vrly90rvc98af6rcmrb3gwv1l6pylasvsdka23dffwizb9b6lv";
+    sha256 = "sha256-zl4D5Rn2N+H4FAEazjXE+HszwLur7sNbr1+9NHnpGVY=";
   };
 
   outputs = [ "out" "man" "info" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ xz.bin ];
+  nativeBuildInputs = [ xz.bin makeWrapper ];
 
-  makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
+  makeFlags = [
+    "SHELL=/bin/sh"
+    "GREP=grep"
+    # gzip 1.12 doesn't build `zless` unless it can find `less`, but we
+    # can avoid having `less` as a build input if we just override these.
+    "ZLESS_MAN=zless.1"
+    "ZLESS_PROG=zless"
+  ];
 
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
@@ -33,12 +40,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
-  '';
-
-  # set GZIP env variable to "-n" to stop gzip from adding timestamps
+  ''
+  # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
   # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
-  setupHook = writeText "setup-hook" ''
-    export GZIP="-n"
+  # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
+  + ''
+    wrapProgram $out/bin/gzip \
+      --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
   meta = {

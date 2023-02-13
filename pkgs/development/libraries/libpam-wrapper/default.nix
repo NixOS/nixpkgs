@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "00mqhsashx7njrvxz085d0b88nizhdy7m3x17ip5yhvwsl63km6p";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional enablePython [ python ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enablePython [ python ];
 
   # We must use linux-pam, using openpam will result in broken fprintd.
   buildInputs = [ linux-pam ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wrapper for testing PAM modules";
     homepage = "https://cwrap.org/pam_wrapper.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.elyhaka ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

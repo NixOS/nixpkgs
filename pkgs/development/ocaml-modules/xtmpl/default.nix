@@ -1,39 +1,23 @@
-{ lib, stdenv, fetchFromGitLab, ocaml, findlib, iri, ppx_tools, js_of_ocaml
-, js_of_ocaml-ppx, re }:
+{ lib, buildDunePackage, fetchFromGitLab, iri, re, sedlex, uutf }:
 
-if lib.versionOlder ocaml.version "4.03"
-|| lib.versionAtLeast ocaml.version "4.11"
-then throw "xtmpl not supported for ocaml ${ocaml.version}"
-else
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-xtmpl-${version}";
-  version = "0.17.0";
+buildDunePackage rec {
+  pname = "xtmpl";
+  version = "0.19.0";
+  useDune2 = true;
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "xtmpl";
     rev = version;
-    sha256 = "1hq6y4rhz958q40145k4av8hx8jyvspg78xf741samd7vc3jd221";
+    sha256 = "sha256:0vwj0aayg60wm98d91fg3hmj90730liljy4cn8771dpxvz8m07bw";
   };
 
-  patches = [ ./jsoo.patch ];
-
-  postPatch = ''
-    substituteInPlace Makefile --replace js_of_ocaml.ppx js_of_ocaml-ppx
-  '';
-
-  buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
-  propagatedBuildInputs = [ iri re ];
-
-  createFindlibDestdir = true;
-
-  dontStrip = true;
+  propagatedBuildInputs = [ iri re sedlex uutf ];
 
   meta = with lib; {
     description = "XML templating library for OCaml";
     homepage = "https://www.good-eris.net/xtmpl/";
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];
   };
 }

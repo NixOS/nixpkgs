@@ -10,7 +10,7 @@
 , makeWrapper
 , pkg-config
 , ploticus
-, transfig
+, fig2dev
 , enableEmacs ? false, emacs
 , enableLout ? true, lout
 , enableTex ? true, tex
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec{
     guile-reader
     imagemagick
     ploticus
-    transfig
+    fig2dev
   ]
   ++ optional enableEmacs emacs
   ++ optional enableLout lout

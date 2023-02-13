@@ -6,7 +6,7 @@
 , jsonschema
 , numpy
 , pandas
-, pytest
+, pytestCheckHook
 , pythonOlder
 , recommonmark
 , six
@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "4.1.0";
+  version = "4.2.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c99q5dy6f275yg1f137ird08wmwc1z8wmvjickkf2mvyka31p9y";
+    sha256 = "sha256-OTmaJnxJsw0QLBBBHmerJjdBVqhLGuufzRUUBCm6ScU=";
   };
 
   propagatedBuildInputs = [
@@ -36,10 +36,10 @@ buildPythonPackage rec {
     jinja2
   ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     ipython
-    pytest
+    pytestCheckHook
     recommonmark
     sphinx
     vega_datasets
@@ -47,11 +47,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "altair" ];
 
-  checkPhase = ''
-    export LANG=en_US.UTF-8
-    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
-    rm altair/examples/histogram_responsive.py
-    pytest --doctest-modules altair
+  # avoid examples directory, which fetches web resources
+  preCheck = ''
+    cd altair/tests
   '';
 
   meta = with lib; {

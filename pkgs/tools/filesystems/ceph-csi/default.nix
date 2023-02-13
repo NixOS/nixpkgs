@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ceph-csi";
-  version = "3.4.0";
+  version = "3.7.2";
 
   nativeBuildInputs = [ go ];
   buildInputs = [ ceph ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "ceph";
     repo = "ceph-csi";
     rev = "v${version}";
-    sha256 = "sha256-5+eK+iN6ecWtcmNPjiThCj1rwFaHX3rVCW9lmUCWhU0=";
+    sha256 = "sha256-8RbuM+lXkwO5Z1H+SKDGHyNNYYC8VVG9feX46SHC/Q0=";
   };
 
   preConfigure = ''

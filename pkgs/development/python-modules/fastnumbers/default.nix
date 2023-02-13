@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fastnumbers
 , fetchFromGitHub
@@ -26,7 +27,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  # Tests fail due to numeric precision differences on ARM
+  # See https://github.com/SethMMorton/fastnumbers/issues/28
+  doCheck = !stdenv.hostPlatform.isAarch;
+
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

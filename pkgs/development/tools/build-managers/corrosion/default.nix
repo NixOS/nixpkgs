@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "unstable-2021-11-23";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "AndrewGaspar";
+    owner = "corrosion-rs";
     repo = "corrosion";
-    rev = "f679545a63a8b214a415e086f910126ab66714fa";
-    sha256 = "sha256-K+QdhWc5n5mH6yxiQa/v5HsrqnWJ5SM93IprVpyCVO0=";
+    rev = "v${version}";
+    hash = "sha256-HZdKnS0M8q4C42b7J93LZBXJycxYVahy2ywT6rISOzo=";
   };
-
-  patches = [
-    # https://github.com/AndrewGaspar/corrosion/issues/84
-    ./cmake-install-full-dir.patch
-  ];
 
   cargoRoot = "generator";
 
@@ -28,7 +23,7 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "sha256-ZvCRgXv+ASMIL00oc3luegV1qVNDieU9J7mbIhfayGk=";
+    hash = "sha256-vrAK5BrMSC8FMLvtP0rxw4sHRU9ySbnrZM50oXMJV1Q=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -41,16 +36,10 @@ stdenv.mkDerivation rec {
     rust.rustc
   ]);
 
-  cmakeFlags = [
-    "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
-
-    # tests cannot find cargo because Rust_CARGO is unset before tests
-    "-DCORROSION_BUILD_TESTS=OFF"
-  ];
-
   meta = with lib; {
     description = "Tool for integrating Rust into an existing CMake project";
-    homepage = "https://github.com/AndrewGaspar/corrosion";
+    homepage = "https://github.com/corrosion-rs/corrosion";
+    changelog = "https://github.com/corrosion-rs/corrosion/blob/${src.rev}/RELEASES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

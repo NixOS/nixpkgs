@@ -1,26 +1,24 @@
 { lib, buildDunePackage, fetchurl
-, fmt, mirage-flow, result, rresult, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf, bigarray-compat
+, fmt, mirage-flow, cstruct, logs, ke, lwt
+, alcotest, alcotest-lwt, bigstringaf
 }:
 
 buildDunePackage rec {
   pname = "mimic";
-  version = "0.0.3";
+  version = "0.0.6";
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
-    sha256 = "e4743cd2e4f8242eb1ce9d8086fd2affba0eb6a62131309ffa279108bd3dbbcb";
+    sha256 = "sha256-gVvBj4NqqKR2mn944g9F0bFZ8Me+WC87skti0dBW3Cg=";
   };
 
   propagatedBuildInputs = [
     fmt
     lwt
     mirage-flow
-    result
-    rresult
     logs
   ];
 
@@ -29,7 +27,6 @@ buildDunePackage rec {
     alcotest
     alcotest-lwt
     bigstringaf
-    bigarray-compat
     cstruct
     ke
   ];

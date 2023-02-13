@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aionanoleaf";
-  version = "0.1.1";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "milanmeu";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "10gi8fpv3xkdjaqig84723m3j0kxgxvqwqvjxmysq2sw4cjmsvz6";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f0TyXhuAzI0s0n6sXH9mKWA4nad2YchZkQ0+jw/Bmv0=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the Nanoleaf API";
     homepage = "https://github.com/milanmeu/aionanoleaf";
+    changelog = "https://github.com/milanmeu/aionanoleaf/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
   };

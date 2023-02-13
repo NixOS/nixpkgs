@@ -15,7 +15,7 @@
 , ninja
 , pkg-config
 , pulseaudio
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,6 +39,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
+
     patchShebangs build-aux/meson
   '';
 
@@ -47,15 +50,15 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     gettext
     glib
+    gobject-introspection
     gtk4
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

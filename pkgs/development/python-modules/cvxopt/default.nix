@@ -1,10 +1,14 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
 , python
-, blas, lapack # build segfaults with 64-bit blas
+, openblas
+, blas
+, lapack # build segfaults with 64-bit blas
 , suitesparse
+, unittestCheckHook
 , glpk ? null
 , gsl ? null
 , fftw ? null
@@ -17,22 +21,32 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.2.7";
+  version = "1.3.0";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f9db1f4d4e820aaea81d6fc21054c89dc6327c84f935dd5a1eda1af11e1d504";
+    sha256 = "sha256-ALGyMvnR+QLVeKnXWBS2f6AgdY1a5CLijKjO9iafpcY=";
   };
 
-  buildInputs = [ blas lapack ];
+  buildInputs = (if stdenv.isDarwin then [ openblas ] else [ blas lapack ]);
+  doCheck = !stdenv.isDarwin;
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
-  preConfigure = ''
+  preConfigure = (if stdenv.isDarwin then
+  ''
+    export CVXOPT_BLAS_LIB=openblas
+    export CVXOPT_LAPACK_LIB=openblas
+  ''
+  else
+  ''
     export CVXOPT_BLAS_LIB=blas
     export CVXOPT_LAPACK_LIB=lapack
+  '') +
+  ''
+    export CVXOPT_BUILD_DSDP=0
     export CVXOPT_SUITESPARSE_LIB_DIR=${lib.getLib suitesparse}/lib
     export CVXOPT_SUITESPARSE_INC_DIR=${lib.getDev suitesparse}/include
   '' + lib.optionalString withGsl ''
@@ -49,9 +63,9 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     homepage = "http://cvxopt.org/";

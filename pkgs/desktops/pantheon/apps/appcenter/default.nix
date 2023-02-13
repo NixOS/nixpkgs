@@ -2,14 +2,9 @@
 , stdenv
 , nix-update-script
 , appstream
-, appstream-glib
 , dbus
-, desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
 , flatpak
-, gettext
 , glib
 , granite
 , gtk3
@@ -30,27 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.9.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
+    sha256 = "sha256-XWDhQ5Nu+gGj0/TQ/fALxQJ+QXzMiHm0Qh9FlGiskEA=";
   };
 
   patches = [
-    # Introduces a packagekit_backend meson flag.
-    # Makes appcenter actually work by using only the flatpak backend.
-    # https://github.com/elementary/appcenter/pull/1739
-    ./add-packagekit-backend-option.patch
+    # Having a working nix packagekit backend will supersede this.
+    # https://github.com/NixOS/nixpkgs/issues/177946
+    ./disable-packagekit-backend.patch
   ];
 
   nativeBuildInputs = [
-    appstream-glib
     dbus # for pkg-config
-    desktop-file-utils
-    gettext
     meson
     ninja
     pkg-config
@@ -61,8 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
     granite
@@ -79,8 +68,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
-    # This option is introduced in add-packagekit-backend-option.patch
-    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''
@@ -89,9 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

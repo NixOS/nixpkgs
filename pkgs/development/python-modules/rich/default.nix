@@ -3,48 +3,54 @@
 , fetchFromGitHub
 , pythonOlder
 , CommonMark
-, colorama
-, dataclasses
 , poetry-core
 , pygments
 , typing-extensions
 , pytestCheckHook
+
+# for passthru.tests
+, enrich
+, httpie
+, rich-rst
+, textual
 }:
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "10.14.0";
+  version = "13.0.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "willmcgugan";
+    owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1j1m1064gmy07ah4crds5sd0k7dcwvf2b1z6rvjfvq4v9fx962qv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Mc2ZTpn2cPGXIBblwwukJGiD8etdVi8ag9Xb77gG62A=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     CommonMark
-    colorama
     pygments
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "rich" ];
 
+  passthru.tests = {
+    inherit enrich httpie rich-rst textual;
+  };
+
   meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
-    homepage = "https://github.com/willmcgugan/rich";
+    homepage = "https://github.com/Textualize/rich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ ris joelkoen ];
   };
 }

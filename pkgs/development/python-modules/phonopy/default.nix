@@ -8,15 +8,19 @@
 , scipy
 , spglib
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.12.0";
+  version = "2.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff65065f418ccbff9fbc1186b9a65581e83b42789aa4a656f45badfff9bd3f61";
+    hash = "sha256-t+1i1S8UVd0s9/Fda0H2kaouDDBVS+x6G40Meb2rLYc=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +32,7 @@ buildPythonPackage rec {
     spglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -37,9 +41,14 @@ buildPythonPackage rec {
     rm -r phonopy
   '';
 
+  pythonImportsCheck = [
+    "phonopy"
+  ];
+
   meta = with lib; {
-    description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
-    homepage = "https://atztogo.github.io/phonopy/";
+    description = "Modulefor phonon calculations at harmonic and quasi-harmonic levels";
+    homepage = "https://phonopy.github.io/phonopy/";
+    changelog = "https://github.com/phonopy/phonopy/blob/v${version}/doc/changelog.md";
     license = licenses.bsd0;
     maintainers = with maintainers; [ psyanticy ];
   };

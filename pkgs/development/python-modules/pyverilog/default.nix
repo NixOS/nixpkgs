@@ -5,7 +5,6 @@
 , jinja2
 , ply
 , verilog
-, pytest-pythonpath
 , pytestCheckHook
 }:
 
@@ -32,8 +31,12 @@ buildPythonPackage rec {
     verilog
   ];
 
-  checkInputs = [
-    pytest-pythonpath
+  preCheck = ''
+    substituteInPlace pytest.ini \
+      --replace "python_paths" "pythonpath"
+  '';
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

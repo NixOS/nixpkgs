@@ -5,38 +5,34 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "1.0.0";
-  format = "other";
+  version = "1.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VRO5ugr/+iZh+hh3tVs/JNAr7GXao/HK43O3FlkbcSM=";
+    hash = "sha256-V4/6VUlMizy8EN8ajN56YF+COn3/dfmD0997R+iR86g=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython
     netaddr
     lxml
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace dnsrecon.py \
-      --replace "namelist.txt" "../share/namelist.txt"
+  preFixup = ''
+    # Install wordlists, etc.
+    install -vD namelist.txt subdomains-*.txt snoop.txt -t $out/share/wordlists
   '';
 
-  installPhase = ''
-    runHook preInstall
+  # Tests require access to /etc/resolv.conf
+  doCheck = false;
 
-    install -vD dnsrecon.py $out/bin/dnsrecon
-    install -vD namelist.txt subdomains-*.txt -t $out/share
-    install -vd $out/${python3.sitePackages}/
-    cp -R lib tools msf_plugin $out/${python3.sitePackages}
-
-    runHook postInstall
-  '';
-
+  pythonImportsCheck = [
+    "dnsrecon"
+  ];
 
   meta = with lib; {
     description = "DNS Enumeration script";

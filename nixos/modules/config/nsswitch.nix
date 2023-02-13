@@ -13,10 +13,10 @@ with lib;
       type = types.listOf types.path;
       internal = true;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
-        <filename>/etc/nsswitch.conf</filename>.
+        {file}`/etc/nsswitch.conf`.
       '';
       apply = list:
         {
@@ -28,8 +28,8 @@ with lib;
     system.nssDatabases = {
       passwd = mkOption {
         type = types.listOf types.str;
-        description = ''
-          List of passwd entries to configure in <filename>/etc/nsswitch.conf</filename>.
+        description = lib.mdDoc ''
+          List of passwd entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
@@ -40,8 +40,8 @@ with lib;
 
       group = mkOption {
         type = types.listOf types.str;
-        description = ''
-          List of group entries to configure in <filename>/etc/nsswitch.conf</filename>.
+        description = lib.mdDoc ''
+          List of group entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
@@ -52,8 +52,8 @@ with lib;
 
       shadow = mkOption {
         type = types.listOf types.str;
-        description = ''
-          List of shadow entries to configure in <filename>/etc/nsswitch.conf</filename>.
+        description = lib.mdDoc ''
+          List of shadow entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
@@ -64,8 +64,8 @@ with lib;
 
       hosts = mkOption {
         type = types.listOf types.str;
-        description = ''
-          List of hosts entries to configure in <filename>/etc/nsswitch.conf</filename>.
+        description = lib.mdDoc ''
+          List of hosts entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended, and "dns" and "myhostname" are always appended.
 
@@ -76,8 +76,8 @@ with lib;
 
       services = mkOption {
         type = types.listOf types.str;
-        description = ''
-          List of services entries to configure in <filename>/etc/nsswitch.conf</filename>.
+        description = lib.mdDoc ''
+          List of services entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
@@ -95,11 +95,14 @@ with lib;
   config = {
     assertions = [
       {
-        # Prevent users from disabling nscd, with nssModules being set.
-        # If disabling nscd is really necessary, it's still possible to opt out
-        # by forcing config.system.nssModules to [].
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
-        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
+        message = ''
+          Loading NSS modules from system.nssModules (${config.system.nssModules.path}),
+          requires services.nscd.enable being set to true.
+
+          If disabling nscd is really necessary, it is possible to disable loading NSS modules
+          by setting `system.nssModules = lib.mkForce [];` in your configuration.nix.
+        '';
       }
     ];
 

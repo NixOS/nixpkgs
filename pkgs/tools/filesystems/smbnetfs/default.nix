@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
-    updateWalker = true;
     homepage = "https://sourceforge.net/projects/smbnetfs/";
   };
 }

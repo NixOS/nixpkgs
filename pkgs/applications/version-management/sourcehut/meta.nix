@@ -16,29 +16,34 @@
 , weasyprint
 , prometheus-client
 , python
+, unzip
 }:
 let
-  version = "0.53.14";
+  version = "0.61.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-/+r/XLDkcSTW647xPMh5bcJmR2xZNNH74AJ5jemna2k=";
+    hash = "sha256-wMcpdRSRvxYEV163mdTGOemk62gljua89SOtwe6qGXU=";
   };
 
-  buildApi = src: buildGoModule {
+  metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
-  };
+    modRoot = "api";
+    vendorHash = "sha256-ZoDRGmGe9o5pn89gJ60wjSp5Cc0yxRfvdhNnbwAhmSI=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
 
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
 
-  nativeBuildInputs = srht.nativeBuildInputs;
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   propagatedBuildInputs = [
     pgpy
@@ -63,13 +68,15 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
+    ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
   '';
+
+  pythonImportsCheck = [ "metasrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

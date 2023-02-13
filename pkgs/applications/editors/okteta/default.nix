@@ -4,11 +4,11 @@
 
 mkDerivation rec {
   pname = "okteta";
-  version = "0.26.6";
+  version = "0.26.9";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xWnNW1VQPkbfGltckWKwiIjEJqpSxvPy+SbGWL7gFEw=";
+    sha256 = "sha256-FoVMTU6Ug4IZrjEVpCujhf2lyH3GyYZayQ03dPjQX/s=";
   };
 
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
@@ -25,6 +25,8 @@ mkDerivation rec {
     karchive
     kcrash
   ];
+
+  outputs = [ "out" "dev" ];
 
   meta = with lib; {
     license = licenses.gpl2;

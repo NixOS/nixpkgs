@@ -1,11 +1,11 @@
 { lib
-, backports-datetime-fromisoformat
 , backports-zoneinfo
 , buildPythonPackage
 , cached-property
 , defusedxml
 , dnspython
 , fetchFromGitHub
+, fetchpatch
 , flake8
 , isodate
 , lxml
@@ -18,7 +18,7 @@
 , pyyaml
 , requests
 , requests_ntlm
-, requests_oauthlib
+, requests-oauthlib
 , requests-kerberos
 , requests-mock
 , tzdata
@@ -27,17 +27,31 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.6.2";
+  version = "4.7.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vax4xqjav6nr3kfkz390ism3cs69dxnbx6sc0f9ci4mn3rxjwdy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oarmdc2PuE4kQ/qUqQhuzdTpIrrMFCK72CrVmoSH1DI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests-timezones.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
+      hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
+    })
+    (fetchpatch {
+      name = "tests-timezones-2.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/419eafcd9261bfd0617823ee437204d5556a8271.diff";
+      excludes = [ "tests/test_ewsdatetime.py" ];
+      hash = "sha256-dSp6NkNT5dHOg8XgDi8sR3t3hq46sNtPjUXva2YfFSU=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cached-property
@@ -49,17 +63,15 @@ buildPythonPackage rec {
     pygments
     requests
     requests_ntlm
-    requests_oauthlib
+    requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     psutil
     python-dateutil

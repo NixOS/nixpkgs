@@ -1,23 +1,38 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook, perl
 , gdb, cctools, xnu, bootstrap_cmds
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.18.1";
+  version = "3.20.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AIWaoTp3Lt33giIl9LRu4NOa++Bx0yd42k2ZmECB9/U=";
+    sha256 = "sha256-hTbAMdvgeNNC8SH6iBqezSBctaeOY5AFrVcAEb2588Y=";
   };
 
   patches = [
-    # Fix tests on Musl.
-    # https://bugs.kde.org/show_bug.cgi?id=445300
+    # Fix checks on Musl.
+    # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
-      sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
+      sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
+    })
+    # Fix build on armv7l.
+    # https://bugs.kde.org/show_bug.cgi?id=454346
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
+      sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
+    })
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
+      sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
+    })
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
+      sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
     })
   ];
 
@@ -35,7 +50,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isDarwin (
+  preConfigure = lib.optionalString stdenv.isFreeBSD ''
+    substituteInPlace configure --replace '`uname -r`' \
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+  '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -59,11 +77,8 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/ld ${cctools}/bin/ld
     '');
 
-  # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
-  postPatch = "";
-
   configureFlags =
-    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    lib.optional stdenv.hostPlatform.isx86_64 "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = true;
@@ -76,6 +91,21 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
   '';
+
+  passthru = {
+    updateScript = writeScript "update-valgrind" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of:
+      #  'Current release: <a href="/downloads/current.html#current">valgrind-3.19.0</a>'
+      new_version="$(curl -s https://valgrind.org/ |
+          pcregrep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = {
     homepage = "http://www.valgrind.org/";
@@ -92,13 +122,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
-      "sparc-linux" "sparc64-linux"
-      "riscv32-linux" "riscv64-linux"
-      "alpha-linux"
-    ];
+    platforms = with lib.platforms; lib.intersectLists
+      (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
+      (darwin ++ freebsd ++ illumos ++ linux);
     broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

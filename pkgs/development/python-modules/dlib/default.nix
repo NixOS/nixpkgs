@@ -4,7 +4,17 @@
 }:
 
 buildPythonPackage {
-  inherit (dlib) name src nativeBuildInputs buildInputs meta;
+  inherit (dlib) pname version src nativeBuildInputs buildInputs meta;
+
+  patches = [ ./build-cores.patch ];
+
+  nativeCheckInputs = [ pytest more-itertools ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "more-itertools<6.0.0" "more-itertools" \
+      --replace "pytest==3.8" "pytest"
+  '';
 
   # although AVX can be enabled, we never test with it. Some Hydra machines
   # fail because of this, however their build results are probably used on hardware
@@ -17,16 +27,6 @@ buildPythonPackage {
     "--set USE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
     "--set USE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}"
   ];
-
-  patches = [ ./build-cores.patch ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "more-itertools<6.0.0" "more-itertools" \
-      --replace "pytest==3.8" "pytest"
-  '';
-
-  checkInputs = [ pytest more-itertools ];
 
   dontUseCmakeConfigure = true;
 }

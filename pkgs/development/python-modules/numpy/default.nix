@@ -6,11 +6,11 @@
 , gfortran
 , hypothesis
 , pytest
+, typing-extensions
 , blas
 , lapack
 , writeTextFile
 , cython
-, setuptoolsBuildHook
 , pythonOlder
 }:
 
@@ -40,14 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.21.4";
-  format = "pyproject.toml";
+  version = "1.23.5";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "e6c76a87633aa3fa16614b61ccedfae45b91df2767cf097aa9c933932a7ed1e0";
+    extension = "tar.gz";
+    hash = "sha256-Gxdm1vOXwYFT1AAV3fx53bcVyrrcBNLSKNTlqLxN7Ro=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -57,7 +57,7 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
   # we default openblas to build with 64 threads
@@ -75,14 +75,16 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    hypothesis
+    # "hypothesis" indirectly depends on numpy to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
+    typing-extensions
   ];
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.7.5";
+  version = "1.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fDKGlKLmjwPulx5jw72IWEZHA3OltTLPLJ8WAcQTsVM=";
+    sha256 = "sha256-+fduQQYfXr4n1P6SYA353WElIadoP5BNqzKLoCz/paI=";
   };
 
   propagatedBuildInputs = [
@@ -37,13 +37,9 @@ buildPythonPackage rec {
     "alembic"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pytestFlagsArray = [
-    "--numprocesses" "$NIX_BUILD_CORES"
   ];
 
   meta = with lib; {

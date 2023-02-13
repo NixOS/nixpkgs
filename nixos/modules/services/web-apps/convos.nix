@@ -7,26 +7,26 @@ let
 in
 {
   options.services.convos = {
-    enable = mkEnableOption "Convos";
+    enable = mkEnableOption (lib.mdDoc "Convos");
     listenPort = mkOption {
       type = types.port;
       default = 3000;
       example = 8080;
-      description = "Port the web interface should listen on";
+      description = lib.mdDoc "Port the web interface should listen on";
     };
     listenAddress = mkOption {
       type = types.str;
       default = "*";
       example = "127.0.0.1";
-      description = "Address or host the web interface should listen on";
+      description = lib.mdDoc "Address or host the web interface should listen on";
     };
     reverseProxy = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables reverse proxy support. This will allow Convos to automatically
-        pick up the <literal>X-Forwarded-For</literal> and
-        <literal>X-Request-Base</literal> HTTP headers set in your reverse proxy
+        pick up the `X-Forwarded-For` and
+        `X-Request-Base` HTTP headers set in your reverse proxy
         web server. Note that enabling this option without a reverse proxy in
         front will be a security issue.
       '';

@@ -1,52 +1,78 @@
 { lib
+, stdenv
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
 , libkrb5
 , zlib
 , openssl
+, callPackage
+, stdenvNoCC
 }:
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
-  version = "5.1.5.3";
+  # nixpkgs-update: no auto update
+  version = "5.4.1.11";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-H038maKHZujmbKhbi8fxsKR/tcSPrcl9L5xnr77yyXg=";
+    sha256 = "sha256-t4azVZVvAJmCCsg/2o+ZWroEmCLfdPYn2iWwVwdhIZw=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+
   nugetDeps = ./deps.nix;
 
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];
+  dotnetFlags = [
+    "-p:PublishSingleFile=true"
+    "-p:PublishTrimmed=true"
+  ];
+  selfContainedBuild = true;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
-  # Without this, it attempts to write to the store even though the `--path` flag is supplied.
-  patches = [ ./mutable-customdir.patch ];
-
   doCheck = true;
+
+  preBuild = ''
+    export projectFile=(ArchiSteamFarm)
+  '';
 
   preInstall = ''
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
-      --add-flags "--path ~/.config/archisteamfarm"
-      --run "mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}"
-      --run "cd ~/.config/archisteamfarm"
+      --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
+      --set "ASF_PATH" "~/.config/archisteamfarm"
     )
   '';
 
-  passthru.updateScript = ./updater.sh;
+  postInstall = ''
+    buildPlugin() {
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/${pname}/plugins/$1 --configuration Release \
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+     }
+
+     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  '';
+
+  passthru = {
+    # nix-shell maintainers/scripts/update.nix --argstr package ArchiSteamFarm
+    updateScript = ./update.sh;
+    ui = callPackage ./web-ui { };
+  };
 
   meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = dotnetCorePackages.aspnetcore_5_0.meta.platforms;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

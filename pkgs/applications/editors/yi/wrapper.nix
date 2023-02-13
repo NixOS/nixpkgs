@@ -28,6 +28,10 @@ stdenv.mkDerivation {
     # This wrapper and wrapper only is under PD
     license = licenses.publicDomain;
     maintainers = with maintainers; [ ];
+
+    # dependency yi-language no longer builds
+    hydraPlatforms = lib.platforms.none;
+    broken = true;
   };
 
 }

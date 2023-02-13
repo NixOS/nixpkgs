@@ -1,54 +1,53 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
 , pytestCheckHook
-, python
+, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.1.0";
+  version = "2.3.4";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0189168749ddea8601afd648146c502533f93ae33840eb76cd71f694742623cd";
+  src = fetchFromGitHub {
+    owner = "Marco-Sulla";
+    repo = "python-frozendict";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rDorFoVHiwbkRsIIA2MLKPHJ9HWJw2FKZ5iFHEiqzhg=";
   };
+
+  postPatch = ''
+    # https://github.com/Marco-Sulla/python-frozendict/pull/69
+    substituteInPlace setup.py \
+      --replace 'if impl == "PyPy":' 'if impl == "PyPy" or not src_path.exists():'
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "frozendict"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   preCheck = ''
-    rm -r frozendict
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    pushd test
   '';
 
-  disabledTests = [
-    # TypeError: unsupported operand type(s) for |=: 'frozendict.frozendict' and 'dict'
-    "test_union"
-    # non-standard assertions
-    "test_repr"
-    "test_format"
-    "test_str"
-  ];
-
-  disabledTestPaths = [
-    # unpackaged test dependency: coold
-    "test/test_coold.py"
-    "test/test_coold_subclass.py"
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/Marco-Sulla/python-frozendict/issues/68
+    "test_c_extension"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/slezica/python-frozendict";
-    description = "An immutable dictionary";
-    license = licenses.mit;
+    description = "Module for immutable dictionary";
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ ];
   };
 }

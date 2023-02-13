@@ -38,9 +38,8 @@ builder rec {
     buildPackages.stdenv.cc
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+    pkgsBuildBuild.guile_2_2;
   nativeBuildInputs = [
-    gawk
     makeWrapper
     pkg-config
   ];
@@ -83,9 +82,9 @@ builder rec {
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
-  # don't have "libgcc_s.so.1" on darwin
+  # don't have "libgcc_s.so.1" on clang
   LDFLAGS = lib.optionalString
-    (!stdenv.isDarwin && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+    (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
@@ -112,7 +111,7 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
             s|includedir=$out|includedir=$dev|g
             "

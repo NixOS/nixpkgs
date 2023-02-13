@@ -35,12 +35,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -56,6 +50,10 @@ stdenv.mkDerivation rec {
     switchboard
     wingpanel-indicator-bluetooth # settings schema
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Bluetooth Plug";

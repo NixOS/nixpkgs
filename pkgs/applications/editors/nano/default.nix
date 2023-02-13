@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
+, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
 , gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
-
-with lib;
 
 let
   nixSyntaxHighlight = fetchFromGitHub {
@@ -16,14 +14,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "6.0";
+  version = "7.2";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "k6yMtotK0Q4KrrgKLdFcW7ietmWkhE960Bxn78sWnqI=";
+    sha256 = "hvNEJ2i9KHPOxpP4PN+AtLRErTzBR2C3Q2FHT8h6RSY=";
   };
 
-  nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
+  nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
   buildInputs = [ ncurses ];
 
   outputs = [ "out" "info" ];
@@ -41,7 +39,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    tests = { inherit (nixosTests) nano; };
+    tests = { expect = callPackage ./test-with-expect.nix { }; };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
@@ -71,7 +69,7 @@ in stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;

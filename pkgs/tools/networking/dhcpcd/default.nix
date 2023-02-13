@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , udev
 , runtimeShellPackage
@@ -18,6 +19,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gZNXY07+0epc9E7AGyTT0/iFL+yLQkmSXcxWZ8VON2w=";
   };
 
+  patches = [
+    # dhcpcd with privsep SIGSYS's on dhcpcd -U
+    # https://github.com/NetworkConfiguration/dhcpcd/issues/147
+    (fetchpatch {
+      url = "https://github.com/NetworkConfiguration/dhcpcd/commit/38befd4e867583002b96ec39df733585d74c4ff5.patch";
+      hash = "sha256-nS2zmLuQBYhLfoPp0DOwxF803Hh32EE4OUKGBTTukE0=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     udev
@@ -34,12 +44,16 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ]
-  ++ lib.optionals enablePrivSep [
-    "--enable-privsep"
-    # dhcpcd disables privsep if it can't find the default user,
-    # so we explicitly specify a user.
-    "--privsepuser=dhcpcd"
-  ];
+  ++ (
+    if ! enablePrivSep
+    then [ "--disable-privsep" ]
+    else [
+      "--enable-privsep"
+      # dhcpcd disables privsep if it can't find the default user,
+      # so we explicitly specify a user.
+      "--privsepuser=dhcpcd"
+    ]
+  );
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -50,13 +64,16 @@ stdenv.mkDerivation rec {
   # Check that the udev plugin got built.
   postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
-  passthru.tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  passthru = {
+    inherit enablePrivSep;
+    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  };
 
   meta = with lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ eelco ];
   };
 }

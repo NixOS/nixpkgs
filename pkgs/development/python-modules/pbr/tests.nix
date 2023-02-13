@@ -1,8 +1,8 @@
 { buildPythonPackage
+, build
 , git
 , gnupg
 , pbr
-, mock
 , sphinx
 , stestr
 , testresources
@@ -24,12 +24,15 @@ buildPythonPackage rec {
 
   dontBuild = true;
   dontInstall = true;
+  preConfigure = ''
+    pythonOutputDistPhase() { touch $dist; }
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pbr
+    build
     git
     gnupg
-    mock
     sphinx
     stestr
     testresources

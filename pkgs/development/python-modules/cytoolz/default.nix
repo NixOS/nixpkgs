@@ -3,6 +3,7 @@
 , fetchPypi
 , isPyPy
 , pytestCheckHook
+, cython
 , toolz
 , python
 , isPy27
@@ -10,13 +11,15 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.11.2";
+  version = "0.12.1";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea23663153806edddce7e4153d1d407d62357c05120a4e8485bddf1bd5ab22b4";
+    sha256 = "sha256-/DOQk5dIHJDePOyDG/uI2X4iDckZOdmWkgIC8YS0ZI4=";
   };
+
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [ toolz ];
 
@@ -27,7 +30,7 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";

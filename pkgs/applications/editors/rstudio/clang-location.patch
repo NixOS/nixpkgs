@@ -1,8 +1,6 @@
-diff --git a/src/cpp/core/libclang/LibClang.cpp b/src/cpp/core/libclang/LibClang.cpp
-index 1186f3a..58e8cc7 100644
 --- a/src/cpp/core/libclang/LibClang.cpp
 +++ b/src/cpp/core/libclang/LibClang.cpp
-@@ -58,7 +58,7 @@ std::vector<std::string> defaultCompileArgs(LibraryVersion version)
+@@ -62,7 +62,7 @@
  
     // we need to add in the associated libclang headers as
     // they are not discovered / used by default during compilation
@@ -11,7 +9,7 @@ index 1186f3a..58e8cc7 100644
     boost::format fmt("%1%/lib/clang/%2%/include");
     fmt % llvmPath.getAbsolutePath() % version.asString();
     std::string includePath = fmt.str();
-@@ -70,46 +70,7 @@ std::vector<std::string> defaultCompileArgs(LibraryVersion version)
+@@ -74,47 +74,7 @@
  
  std::vector<std::string> systemClangVersions()
  {
@@ -55,7 +53,9 @@ index 1186f3a..58e8cc7 100644
 -   }
 -#endif
 -   
-+   std::vector<std::string> clangVersions = { "@libclang.so@" };
-    return clangVersions;
+-   return clangVersions;
++    return std::vector<std::string> { "@libclang.so@" };
  }
+ 
+ 
 

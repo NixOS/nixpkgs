@@ -19,6 +19,7 @@
 , parser-combinators
 , retry
 , lib
+, quickcheck-instances
 , text
 , unix
 , unordered-containers
@@ -28,13 +29,13 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.13.3";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    sha256 = "sha256-17tdlqG8z4GviI7kkLbktC6SqnQFDdZhWtejscG0n48=";
+    sha256 = "sha256-yoYkAypH+HQSVTvd/qKNFkL5krbB5mZw3ec9ojvy+Pw=";
   };
 
   buildTools = [ hpack ];
@@ -86,6 +87,7 @@ mkDerivation rec {
     optparse-applicative
     parser-combinators
     retry
+    quickcheck-instances
     text
     unix
     unordered-containers

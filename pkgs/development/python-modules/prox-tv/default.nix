@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , nose
 , numpy
+, stdenv
 }:
 
 buildPythonPackage {
@@ -19,7 +20,7 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
@@ -27,6 +28,11 @@ buildPythonPackage {
     numpy
     cffi
   ];
+
+  # this test is known to fail on darwin
+  checkPhase = ''
+    nosetests --exclude=test_tvp_1d ${lib.optionalString stdenv.isDarwin " --exclude=test_tv2_1d"}
+  '';
 
   propagatedNativeBuildInputs = [ cffi ];
 

@@ -1,4 +1,4 @@
-from colorama import Style
+from colorama import Style, Fore
 from contextlib import contextmanager
 from typing import Any, Dict, Iterator
 from queue import Queue, Empty
@@ -36,7 +36,7 @@ class Logger:
 
     def maybe_prefix(self, message: str, attributes: Dict[str, str]) -> str:
         if "machine" in attributes:
-            return "{}: {}".format(attributes["machine"], message)
+            return f"{attributes['machine']}: {message}"
         return message
 
     def log_line(self, message: str, attributes: Dict[str, str]) -> None:
@@ -62,9 +62,7 @@ class Logger:
     def log_serial(self, message: str, machine: str) -> None:
         self.enqueue({"msg": message, "machine": machine, "type": "serial"})
         if self._print_serial_logs:
-            self._eprint(
-                Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL
-            )
+            self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)
 
     def enqueue(self, item: Dict[str, str]) -> None:
         self.queue.put(item)
@@ -81,7 +79,11 @@ class Logger:
 
     @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
-        self._eprint(self.maybe_prefix(message, attributes))
+        self._eprint(
+            self.maybe_prefix(
+                Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL, attributes
+            )
+        )
 
         self.xml.startElement("nest", attrs={})
         self.xml.startElement("head", attributes)
@@ -93,7 +95,7 @@ class Logger:
         yield
         self.drain_log_queue()
         toc = time.time()
-        self.log("(finished: {}, in {:.2f} seconds)".format(message, toc - tic))
+        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")
 

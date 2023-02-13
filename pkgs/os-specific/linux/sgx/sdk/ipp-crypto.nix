@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , nasm
-, openssl
+, openssl_1_1
 , python3
 , extraCmakeFlags ? [ ]
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     nasm
-    openssl
+    openssl_1_1
     python3
   ];
 }

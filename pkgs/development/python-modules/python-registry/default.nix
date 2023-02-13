@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , unicodecsv
+, six
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,9 @@ buildPythonPackage rec {
     unicodecsv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    six
   ];
 
   disabledTestPaths = [

@@ -2,20 +2,26 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
-  version = "unstable-2021-08-11";
+  version = "1.3.236.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "e71feddb3f17c5586ff7f4cfb5ed1258b800574b";
-    sha256 = "sha256-9m0EBcgdya+KCNJHC3x+YV2sXoSNToTcgDkpeKzId6U=";
+    rev = "sdk-${version}";
+    hash = "sha256-eWI1MyIWxcg1JepRsnHBmitehDigDa+dR8kXvIkYejY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/KhronosGroup/SPIRV-Headers/issues/282
+  postPatch = ''
+    substituteInPlace SPIRV-Headers.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Machine-readable components of the Khronos SPIR-V Registry";
+    homepage = "https://github.com/KhronosGroup/SPIRV-Headers";
     license = licenses.mit;
     maintainers = [ maintainers.ralith ];
   };

@@ -4,6 +4,7 @@
 let
   inherit (lib.strings) toInt;
   inherit (lib.trivial) compare min;
+  inherit (lib.attrsets) mapAttrs;
 in
 rec {
 
@@ -35,7 +36,7 @@ rec {
   forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
-     `list` with `nul' as the starting value, i.e.,
+     `list` with `nul` as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
 
      Type: foldr :: (a -> b -> b) -> b -> [a] -> b
@@ -241,7 +242,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") firefox').
+     (e.g. `++ optional (system == "i686-linux") firefox`).
 
      Type: optional :: bool -> a -> [a]
 
@@ -282,7 +283,7 @@ rec {
   */
   toList = x: if isList x then x else [x];
 
-  /* Return a list of integers from `first' up to and including `last'.
+  /* Return a list of integers from `first` up to and including `last`.
 
      Type: range :: int -> int -> [int]
 
@@ -302,10 +303,22 @@ rec {
     else
       genList (n: first + n) (last - first + 1);
 
+  /* Return a list with `n` copies of an element.
+
+    Type: replicate :: int -> a -> [a]
+
+    Example:
+      replicate 3 "a"
+      => [ "a" "a" "a" ]
+      replicate 2 true
+      => [ true true ]
+  */
+  replicate = n: elem: genList (_: elem) n;
+
   /* Splits the elements of a list in two lists, `right` and
      `wrong`, depending on the evaluation of a predicate.
 
-     Type: (a -> bool) -> [a] -> { right :: [a], wrong :: [a] }
+     Type: (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
 
      Example:
        partition (x: x > 2) [ 5 1 2 3 4 ]
@@ -319,7 +332,7 @@ rec {
     ) { right = []; wrong = []; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
-     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+     Predicate should return a string which becomes keys of attrset `groupBy` returns.
 
      `groupBy'` allows to customise the combining function and initial value
 
@@ -340,15 +353,15 @@ rec {
        groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
        => { true = 12; false = 3; }
   */
-  groupBy' = op: nul: pred: lst:
-    foldl' (r: e:
-              let
-                key = pred e;
-              in
-                r // { ${key} = op (r.${key} or nul) e; }
-           ) {} lst;
+  groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
 
-  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+  groupBy = builtins.groupBy or (
+    pred: foldl' (r: e:
+       let
+         key = pred e;
+       in
+         r // { ${key} = (r.${key} or []) ++ [e]; }
+    ) {});
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -373,7 +386,7 @@ rec {
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
 
-     Type: zipLists :: [a] -> [b] -> [{ fst :: a, snd :: b}]
+     Type: zipLists :: [a] -> [b] -> [{ fst :: a; snd :: b; }]
 
      Example:
        zipLists [ 1 2 ] [ "a" "b" ]
@@ -506,7 +519,7 @@ rec {
        compareLists compare [ "a" ] []
        => 1
        compareLists compare [ "a" "b" ] [ "a" "c" ]
-       => 1
+       => -1
   */
   compareLists = cmp: a: b:
     if a == []

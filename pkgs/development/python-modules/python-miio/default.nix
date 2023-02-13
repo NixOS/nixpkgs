@@ -1,48 +1,52 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
 , android-backup
-, importlib-metadata
+, appdirs
+, attrs
+, buildPythonPackage
+, click
+, construct
 , croniter
+, cryptography
 , defusedxml
-, pytestCheckHook
+, fetchPypi
+, fetchpatch
+, importlib-metadata
+, micloud
+, netifaces
+, poetry-core
+, pytest-asyncio
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
 , pyyaml
+, tqdm
+, zeroconf
 }:
 
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.8";
-  disabled = pythonOlder "3.6";
+  version = "0.5.12";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-16XEah5rgem/L8A/zo1zPrifrU15VMk652rFLZcvjig=";
+    hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7"' 'click = "*"' \
-      --replace 'croniter = "^0"' 'croniter = "*"' \
-      --replace 'cryptography = "^3"' 'cryptography = "*"' \
-      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
-  '';
-
   nativeBuildInputs = [
-    poetry
+    poetry-core
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Fix pytest 7.2 compat
+      url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
+      hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -54,19 +58,25 @@ buildPythonPackage rec {
     croniter
     cryptography
     defusedxml
+    micloud
     netifaces
     pytz
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
-
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  pythonImportsCheck = [ "miio" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "miio"
+  ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , glib
 , meson
 , ninja
@@ -15,24 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-lint";
-  version = "unstable-2021-11-18";
+  version = "unstable-2022-09-15";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "2db018056befba76136e6c69a78d905a128a6165";
-    sha256 = "sha256-bQaj2bETzl6ykgrpE2iLAvx691aGDLFteL/ulfoKuEk=";
+    rev = "923adb5d3983ed654566304284607e3367998e22";
+    sha256 = "sha256-AHyc6jJyEPfUON7yf/6O2jfcnRD3fW2R9UfIsx2Zmdc=";
   };
-
-  patches = [
-    # Fix build against vala-0.54.3+. Pull fix pending upstream
-    # inclusion: https://github.com/vala-lang/vala-lint/pull/155
-    (fetchpatch {
-      name = "vala-0.54.patch";
-      url = "https://github.com/vala-lang/vala-lint/commit/739f9a0b7d3e92db41eb32f2bfa527efdacc223b.patch";
-      sha256 = "sha256-1IbQu3AQXRCrrjoMZKhEOqzExmPAo1SQOFHa/IrqnNA=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext

@@ -1,18 +1,30 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXtst
+, qmake
+, qtbase
+, qttools
+, qtwayland
+, openssl
+, libscrypt
+, wrapQtAppsHook
+}:
 
-mkDerivation rec {
-  name = "qMasterPassword";
-  version = "1.2.2";
+stdenv.mkDerivation rec {
+  pname = "qMasterPassword";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "bkueng";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0l0jarvfdc69rcjl2wa0ixq8gp3fmjsy9n84m38sxf3n9j2bh13c";
+    sha256 = "sha256-VQ1ZkXaZ5sUbtWa/GreTr5uXvnZ2Go6owJ2ZBK25zns=";
   };
 
-  buildInputs = [ qtbase libX11 libXtst openssl libscrypt ];
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qtwayland libX11 libXtst openssl libscrypt ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   # Upstream install is mostly defunct. It hardcodes target.path and doesn't
   # install anything but the binary.
@@ -22,12 +34,16 @@ mkDerivation rec {
     ln -s ../Applications/qMasterPassword.app/Contents/MacOS/qMasterPassword "$out"/bin/qMasterPassword
   '' else ''
     mkdir -p $out/bin
-    mkdir -p $out/share/{applications,doc/qMasterPassword,icons/qmasterpassword,icons/hicolor/512x512/apps}
+    mkdir -p $out/share/{applications,doc/qMasterPassword,icons/qmasterpassword,icons/hicolor/512x512/apps,qMasterPassword/translations}
     mv qMasterPassword $out/bin
     mv data/qMasterPassword.desktop $out/share/applications
     mv LICENSE README.md $out/share/doc/qMasterPassword
     mv data/icons/app_icon.png $out/share/icons/hicolor/512x512/apps/qmasterpassword.png
     mv data/icons/* $out/share/icons/qmasterpassword
+    lrelease ./data/translations/translation_de.ts
+    lrelease ./data/translations/translation_pl.ts
+    mv ./data/translations/translation_de.qm $out/share/qMasterPassword/translations/translation_de.qm
+    mv ./data/translations/translation_pl.qm $out/share/qMasterPassword/translations/translation_pl.qm
   '';
 
   meta = with lib; {
@@ -42,7 +58,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
-    maintainers = [ maintainers.tadeokondrak ];
+    maintainers = with lib.maintainers; [ tadeokondrak teutat3s ];
     platforms = platforms.all;
   };
 }

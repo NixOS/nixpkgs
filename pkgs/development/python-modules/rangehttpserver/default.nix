@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , nose
 , requests
 }:
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     sha256 = "1sy9j6y8kp5jiwv2vd652v94kspp1yd4dwxrfqfn6zwnfyv2mzv5";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     nose
     requests
   ];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     asyncio-mqtt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,43 +1,48 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, testers, temporal }:
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.12.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "1gdks7pzaqrsdihh2m3v597x0dw2qww95jlznj0h112jgicanimj";
+    hash = "sha256-j2+K/ZDDNakofrToxhyA1gh534l3Eq6G/fNXE0ktceY=";
   };
 
-  vendorSha256 = "sha256-dGmd6tCUKoK4uwhB5kXGOpXemtLn0VssabDE4iQWEAw=";
+  vendorHash = "sha256-KkgyL37VJy1DhfCB5RJpjczBPbzQwt1xsovQ0xCXGr4=";
 
-  # Errors:
-  #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
-  # gocql: unable to dial control conn 127.0.0.1:9042: dial tcp 127.0.0.1:9042: connect: connection refused
+  excludedPackages = [ "./build" ];
+
+  CGO_ENABLED = 0;
+
+  ldflags = [ "-s" "-w" ];
+
+  # There too many integration tests.
   doCheck = false;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -Dm755 "$GOPATH/bin/cli" -T $out/bin/tctl
-    install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra
+
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
-    install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql
+    install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
+    install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
+    install -Dm755 "$GOPATH/bin/tdbg" -T $out/bin/tdbg
+
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/tctl --version | grep ${version} > /dev/null
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = temporal;
+  };
 
   meta = with lib; {
     description = "A microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
-    downloadPage = "https://github.com/temporalio/temporal";
     homepage = "https://temporal.io";
+    changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ titanous ];
+    mainProgram = "temporal-server";
   };
 }

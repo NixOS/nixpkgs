@@ -1,20 +1,57 @@
-{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
-, which, python3, makeWrapper, docbook_xml_dtd_45, perl }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, protobuf, protobufc, asciidoc, iptables
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "3.15";
+  version = "3.17.1";
 
-  src = fetchurl {
-    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
-    sha256 = "09d0j24x0cyc7wkgi7cnxqgfjk7kbdlm79zxpj8d356sa3rw2z24";
+  src = fetchFromGitHub {
+    owner = "checkpoint-restore";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-0B0cdX5bemy4glF9iWjrQIXIqilyYcCcAN9x4Jjrwzk=";
   };
 
+  patches = [
+    # Fixes redefinition of rseq headers
+    (fetchpatch {
+      url = "https://github.com/checkpoint-restore/criu/commit/1e6e826ffb7ac05f33fa123051c2fc2ddf0f68ea.patch";
+      hash = "sha256-LJjk0jQ5v5wqeprvBMpxhjLXn7v+lSPldEGgazGUM44=";
+    })
+  ];
+
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython perl ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
-  propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
+  depsBuildBuild = [ protobufc buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+    xmlto
+    libpaper
+    docbook_xsl
+    which
+    makeWrapper
+    docbook_xml_dtd_45
+    python3
+    python3.pkgs.wrapPython
+    perl
+  ];
+  buildInputs = [
+    protobuf
+    libnl
+    libcap
+    libnet
+    nftables
+    libbsd
+  ];
+  propagatedBuildInputs = [
+    protobufc
+  ] ++ (with python3.pkgs; [
+    python
+    python3.pkgs.protobuf
+  ]);
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \
@@ -24,7 +61,27 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ASCIIDOC=${asciidoc}/bin/asciidoc" "XMLTO=${xmlto}/bin/xmlto" ];
+  makeFlags = let
+    # criu's Makefile infrastructure expects to be passed a target architecture
+    # which neither matches the config-tuple's first part, nor the
+    # targetPlatform.linuxArch attribute. Thus we take the latter and map it
+    # onto the expected string:
+    linuxArchMapping = {
+      "x86_64" = "x86";
+      "arm" = "arm";
+      "arm64" = "aarch64";
+      "powerpc" = "ppc64";
+      "s390" = "s390";
+      "mips" = "mips";
+    };
+  in [
+    "PREFIX=$(out)"
+    "ASCIIDOC=${buildPackages.asciidoc}/bin/asciidoc"
+    "XMLTO=${buildPackages.xmlto}/bin/xmlto"
+  ] ++ (lib.optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+    "ARCH=${linuxArchMapping."${stdenv.targetPlatform.linuxArch}"}"
+    "CROSS_COMPILE=${stdenv.targetPlatform.config}-"
+  ]);
 
   outputs = [ "out" "dev" "man" ];
 
@@ -39,7 +96,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/criu \
-      --prefix PATH : ${lib.makeBinPath [ iptables ]}
+      --set-default CR_IPTABLES ${iptables}/bin/iptables \
+      --set-default CR_IP_TOOL ${iproute2}/bin/ip
     wrapPythonPrograms
   '';
 
@@ -47,7 +105,7 @@ stdenv.mkDerivation rec {
     description = "Userspace checkpoint/restore for Linux";
     homepage    = "https://criu.org";
     license     = licenses.gpl2;
-    platforms   = [ "x86_64-linux" "aarch64-linux" ];
+    platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };
 }

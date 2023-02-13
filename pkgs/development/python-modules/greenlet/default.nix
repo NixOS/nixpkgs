@@ -2,31 +2,36 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, python
+, objgraph
+, psutil
+, pytestCheckHook
 }:
 
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "1.1.2";
-  disabled = isPyPy;  # builtin for pypy
+  version = "2.0.1";
+  format = "setuptools";
+  disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a";
+    hash = "sha256-QuYCVkRg2g6O5ny21yNjY+5eExqhWUO2Zw5E5cLtD2c=";
   };
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover -v greenlet.tests
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    objgraph
+    psutil
+    pytestCheckHook
+  ];
+
+  doCheck = false; # installed tests need to be executed, not sure how to accomplish that
 
   meta = with lib; {
     homepage = "https://github.com/python-greenlet/greenlet";
     description = "Module for lightweight in-process concurrent programming";
     license = with licenses; [
-      psfl  # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
       mit
     ];
   };

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
+{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-${version}";
-  version = "2021-11-16";
+  pname = "patchelf";
+  version = "unstable-2022-10-26";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "a174cf3006baf31e0e9eaa62bc9adead93af63f7";
-    sha256 = "sha256-cKZ4DE70R5XiIqfnIVAl2s7a1bJxaaPpuCmxs3pxFRU=";
+    rev = "af77f12554be9cc4b9e8b639df26f2659dd30500";
+    sha256 = "sha256-ajMOC1wyTVUOvP0rOt/uO6+1+S4bIAc1jWQ8Uwbzrn8=";
   };
 
   # Drop test that fails on musl (?)
@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   doCheck = !stdenv.isDarwin;
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/NixOS/patchelf.git";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/NixOS/patchelf";

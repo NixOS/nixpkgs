@@ -1,5 +1,4 @@
 { lib, stdenv
-, autoPatchelfHook
 , dpkg
 , fahviewer
 , fetchurl
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = "cp -ar usr $out";
 
   postFixup = ''
-    sed -e 's|/usr/bin|$out/bin|g' -i $out/share/applications/FAHControl.desktop
+    sed -e "s|/usr/bin|$out/bin|g" -i $out/share/applications/FAHControl.desktop
     wrapProgram "$out/bin/FAHControl" \
       --suffix PATH : "${fahviewer.outPath}/bin" \
       --set PYTHONPATH "$out/lib/python2.7/dist-packages"

@@ -1,7 +1,7 @@
-From 6fc23da651d54979e73776fcda38614e290d65dc Mon Sep 17 00:00:00 2001
+From 4849d5633b98e6d3514355436eab5ba537cbfd99 Mon Sep 17 00:00:00 2001
 From: David P <megver83@parabola.nu>
 Date: Fri, 23 Oct 2020 16:44:17 -0300
-Subject: [PATCH 2/2] remove bc_compute_full_version usage
+Subject: [PATCH] remove bc_compute_full_version usage
 
 ---
  linphone-app/CMakeLists.txt                           | 11 +----------
@@ -10,7 +10,7 @@ Subject: [PATCH 2/2] remove bc_compute_full_version usage
  3 files changed, 2 insertions(+), 24 deletions(-)
 
 diff --git a/linphone-app/CMakeLists.txt b/linphone-app/CMakeLists.txt
-index 3bc9420a..27b418ee 100644
+index de7f917f..ee14ff78 100644
 --- a/linphone-app/CMakeLists.txt
 +++ b/linphone-app/CMakeLists.txt
 @@ -21,17 +21,8 @@
@@ -30,8 +30,8 @@ index 3bc9420a..27b418ee 100644
 -
 -project(linphoneqt VERSION "${version_major}.${version_minor}.${version_patch}")
  
+ 
  if(ENABLE_BUILD_VERBOSE)
- 	#message("CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}")
 diff --git a/linphone-app/build/CMakeLists.txt b/linphone-app/build/CMakeLists.txt
 index 8ef03faa..97d94bd6 100644
 --- a/linphone-app/build/CMakeLists.txt
@@ -49,7 +49,7 @@ index 8ef03faa..97d94bd6 100644
  
  set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 diff --git a/linphone-app/cmake_builder/linphone_package/CMakeLists.txt b/linphone-app/cmake_builder/linphone_package/CMakeLists.txt
-index baea03cf..08ffc1b5 100644
+index ac85c68a..e6af5a66 100644
 --- a/linphone-app/cmake_builder/linphone_package/CMakeLists.txt
 +++ b/linphone-app/cmake_builder/linphone_package/CMakeLists.txt
 @@ -38,15 +38,7 @@ set(LINPHONE_QML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../ui")
@@ -70,5 +70,5 @@ index baea03cf..08ffc1b5 100644
  endif ()
  string(REGEX REPLACE "([0-9.]+)-?.*" "\\1" LINPHONE_VERSION "${APP_PROJECT_VERSION}")
 -- 
-2.29.2
+2.25.1
 

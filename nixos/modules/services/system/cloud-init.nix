@@ -20,14 +20,14 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the cloud-init service. This services reads
           configuration metadata in a cloud environment and configures
           the machine according to this metadata.
 
           This configuration is not completely compatible with the
           NixOS way of doing configuration, as configuration done by
-          cloud-init might be overriden by a subsequent nixos-rebuild
+          cloud-init might be overridden by a subsequent nixos-rebuild
           call. However, some parts of cloud-init fall outside of
           NixOS's responsibility, like filesystem resizing and ssh
           public key provisioning, and cloud-init is useful for that
@@ -39,7 +39,7 @@ in
       btrfs.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
@@ -47,8 +47,17 @@ in
       ext4.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allow the cloud-init service to operate `ext4` filesystem.
+        '';
+      };
+
+      network.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Allow the cloud-init service to configure network interfaces
+          through systemd-networkd.
         '';
       };
 
@@ -57,6 +66,8 @@ in
         default = ''
           system_info:
             distro: nixos
+            network:
+              renderers: [ 'networkd' ]
           users:
              - root
 
@@ -70,7 +81,8 @@ in
            - write-files
            - growpart
            - resizefs
-           - update_etc_hosts
+           - update_hostname
+           - resolv_conf
            - ca-certs
            - rsyslog
            - users-groups
@@ -98,7 +110,7 @@ in
            - final-message
            - power-state-change
           '';
-        description = "cloud-init configuration.";
+        description = lib.mdDoc "cloud-init configuration.";
       };
 
     };
@@ -109,9 +121,12 @@ in
 
     environment.etc."cloud/cloud.cfg".text = cfg.config;
 
+    systemd.network.enable = cfg.network.enable;
+
     systemd.services.cloud-init-local =
       { description = "Initial cloud-init job (pre-networking)";
         wantedBy = [ "multi-user.target" ];
+        before = ["systemd-networkd.service"];
         path = path;
         serviceConfig =
           { Type = "oneshot";
@@ -129,7 +144,7 @@ in
                   "sshd.service" "sshd-keygen.service" ];
         after = [ "network-online.target" "cloud-init-local.service" ];
         before = [ "sshd.service" "sshd-keygen.service" ];
-        requires = [ "network.target "];
+        requires = [ "network.target"];
         path = path;
         serviceConfig =
           { Type = "oneshot";

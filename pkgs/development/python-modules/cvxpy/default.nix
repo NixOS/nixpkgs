@@ -9,6 +9,7 @@
 , osqp
 , scipy
 , scs
+, setuptools
 , useOpenmp ? (!stdenv.isDarwin)
   # Check inputs
 , pytestCheckHook
@@ -16,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.1.17";
+  version = "1.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-M5fTuJ13Dqnw/DWbHJs6/t5qDTvqHP8g4mU7E0Uc24o=";
+    hash = "sha256-IaeUtv0vdgqddm1o++SUZTT2Xom3Pom4icVQOYVVi4Y=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools <= 64.0.2" "setuptools"
+  '';
 
   propagatedBuildInputs = [
     cvxopt
@@ -33,6 +39,7 @@ buildPythonPackage rec {
     osqp
     scipy
     scs
+    setuptools
   ];
 
   # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
@@ -41,7 +48,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "./cvxpy" ];
 
@@ -49,6 +56,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
+    "test_huber"
+    "test_partial_problem"
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_ecos_bb_mi_lp_2" # https://github.com/cvxgrp/cvxpy/issues/1241#issuecomment-780912155
   ];

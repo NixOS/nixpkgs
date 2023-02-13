@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, nixosTests
 , configFile ? "all"
@@ -16,11 +16,12 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_15 ? pkgs.linuxKernel.packages.linux_5_15
+, linuxPackages_6_1 ? pkgs.linuxKernel.packages.linux_6_1
 }:
 
-with lib;
 let
+  inherit (lib) any optionalString optionals optional makeBinPath;
+
   smartmon = smartmontools.override { inherit enableMail; };
 
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
@@ -51,7 +52,13 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [
+        (fetchpatch {
+          name = "musl.patch";
+          url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
+          sha256 = "XEaK227ubfOwlB2s851UvZ6xp/QOtYUWYsKTkEHzmo0=";
+        })
+      ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
@@ -113,7 +120,7 @@ let
       configureFlags = [
         "--with-config=${configFile}"
         "--with-tirpc=1"
-        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -200,9 +207,9 @@ let
         '';
         homepage = "https://github.com/openzfs/zfs";
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
-        license = licenses.cddl;
-        platforms = platforms.linux;
-        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
+        license = lib.licenses.cddl;
+        platforms = lib.platforms.linux;
+        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -215,28 +222,28 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
-    latestCompatibleLinuxPackages = linuxPackages_5_15;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.2";
+    version = "2.1.9";
 
-    sha256 = "sha256-7oSFZlmjCr+egImIVf429GrFOKn3L3r4SMnK3LHHmL8=";
+    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
-    latestCompatibleLinuxPackages = linuxPackages_5_15;
+    kernelCompatible = kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages = linuxPackages_6_1;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.2";
-    # rev = "0000000000000000000000000000000000000000";
+    version = "2.1.10-staging-2023-01-24";
+    rev = "92e0d9d183ce6752cd52f7277c8321d81df9ffee";
 
-    sha256 = "sha256-7oSFZlmjCr+egImIVf429GrFOKn3L3r4SMnK3LHHmL8=";
+    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
 
     isUnstable = true;
   };

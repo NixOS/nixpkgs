@@ -11,6 +11,7 @@
 , cpio
 , xar
 , libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -22,13 +23,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.26.4145";
-    x86_64-linux = "3.26.2941";
+    x86_64-darwin = "3.30.4506";
+    x86_64-linux = "3.30.3018";
   }.${system} or throwSystem;
 
-  sha256 = {
-    x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
-    x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
+  hash = {
+    x86_64-darwin = "sha256-+htDeNIuucB4qzNBNYoSUH1DbfgouZS08G5hxPtIuzY=";
+    x86_64-linux = "sha256-46WjFA+E9M7RfTOM/Xoho+9ooToSgQiZaMlcZ3lJvBQ=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -46,6 +47,7 @@ let
     '';
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
@@ -63,21 +65,19 @@ let
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
-      inherit sha256;
+        + "Wire-${version}_amd64.deb";
+      inherit hash;
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Network;InstantMessaging;Chat;VideoConference";
+      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
-      extraEntries = ''
-        StartupWMClass=Wire
-      '';
+      startupWMClass = "Wire";
     };
 
     dontBuild = true;
@@ -92,7 +92,7 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
 
     unpackPhase = ''
       runHook preUnpack
@@ -133,8 +133,8 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
-      inherit sha256;
+        + "macos%2F${version}/Wire.pkg";
+      inherit hash;
     };
 
     buildInputs = [

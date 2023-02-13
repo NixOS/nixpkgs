@@ -2,7 +2,9 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
+, setuptools
 , setuptools-scm
 , idna
 , sniffio
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.3.4";
+  version = "3.6.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aMnXZ+4dlybId2QhjE/3STY+Sj/vzI6K7wmqqx+P8yE=";
+    hash = "sha256-bootaulvx9zmobQGDirsMz5uxuLeCD9ggAvYkPaKnWo=";
   };
 
   preBuild = ''
@@ -35,6 +37,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -45,7 +48,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
     curio
     hypothesis
     pytest-mock
@@ -57,9 +63,17 @@ buildPythonPackage rec {
     mock
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
+  ];
+
   disabledTests = [
     # block devices access
     "test_is_block_device"
+    # INTERNALERROR> AttributeError: 'NonBaseMultiError' object has no attribute '_exceptions'. Did you mean: 'exceptions'?
+    "test_exception_group_children"
+    "test_exception_group_host"
+    "test_exception_group_filtering"
   ];
 
   disabledTestPaths = [
@@ -73,6 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anyio" ];
 
   meta = with lib; {
+    changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
     license = licenses.mit;

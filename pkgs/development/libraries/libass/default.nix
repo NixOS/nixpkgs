@@ -8,38 +8,32 @@
 
 assert fontconfigSupport -> fontconfig != null;
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
-with lib;
 stdenv.mkDerivation rec {
   pname = "libass";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-G+LfnESFpX14uxjAqO0Ve8h6Wo3UjGYZYcYlyxEoMv0=";
+    sha256 = "sha256-Xb3p4iM5EZz47tWe6mxiOgdG71qQtonmigkBCQeOPAg=";
   };
 
   configureFlags = [
-    (mkFlag fontconfigSupport "fontconfig")
-    (mkFlag rasterizerSupport "rasterizer")
-    (mkFlag largeTilesSupport "large-tiles")
+    (lib.enableFeature fontconfigSupport "fontconfig")
+    (lib.enableFeature rasterizerSupport "rasterizer")
+    (lib.enableFeature largeTilesSupport "large-tiles")
   ];
 
   nativeBuildInputs = [ pkg-config yasm ];
 
   buildInputs = [ freetype fribidi harfbuzz ]
-    ++ optional fontconfigSupport fontconfig
-    ++ optional stdenv.isDarwin libiconv;
+    ++ lib.optional fontconfigSupport fontconfig
+    ++ lib.optional stdenv.isDarwin libiconv;
 
-  meta = {
+  meta = with lib; {
     description = "Portable ASS/SSA subtitle renderer";
     homepage    = "https://github.com/libass/libass";
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
-    repositories.git = "git://github.com/libass/libass.git";
   };
 }

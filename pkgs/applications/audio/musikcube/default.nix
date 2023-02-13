@@ -1,67 +1,83 @@
-{ cmake
+{ lib
+, stdenv
+, cmake
 , pkg-config
-, alsa-lib
-, boost
 , curl
+, asio
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
+, gnutls
 , lame
 , libev
+, game-music-emu
 , libmicrohttpd
+, libopenmpt
+, mpg123
 , ncurses
-, pulseaudio
-, lib, stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+# Linux Dependencies
+, alsa-lib
+, pulseaudio
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.7";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1y00vwn1h10cfflxrm5bk271ak9gilhjycgi44hlkkhmf5bdgn35";
+    sha256 = "sha256-SbWL36GRIJPSvxZyj6sebJxTkSPsUcsKyC3TmcIq2O0";
   };
 
-  patches = [
-    # Fix pending upstream inclusion for ncuurses-6.3 support:
-    #  https://github.com/clangen/musikcube/pull/474
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/clangen/musikcube/commit/1240720e27232fdb199a4da93ca6705864442026.patch";
-      sha256 = "0bhjgwnj6d24wb1m9xz1vi1k9xk27arba1absjbcimggn54pinid";
-    })
-  ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsa-lib
-    boost
+    asio
     curl
     ffmpeg
+    gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
-    pulseaudio
     taglib
-  ] ++ lib.optional systemdSupport systemd;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
+  postFixup = lib.optionals stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
+
   meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse srapenne ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

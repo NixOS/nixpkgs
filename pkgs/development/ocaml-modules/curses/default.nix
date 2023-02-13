@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yy3wf8i7jgvzdc40bni7mvpkvclq97cgb5fw265mrjj0iqpkqpd";
   };
 
+  strictDeps = true;
+
   propagatedBuildInputs = [ ncurses ];
 
   nativeBuildInputs = [ ocaml findlib ];
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mbacarella/curses";
     license = licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
-    maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    maintainers = [ ];
+    inherit (ocaml.meta) platforms;
   };
 }

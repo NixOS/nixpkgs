@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , setuptools-scm
-, pydantic
+, lsprotocol
+, toml
 , typeguard
 , mock
 , pytest-asyncio
@@ -12,25 +13,30 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.11.3";
-  disabled = !isPy3k;
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
-    repo = pname;
+    repo = "pygls";
     rev = "v${version}";
-    sha256 = "sha256-/nmDaA67XzrrmfwlBm5syTS4hn25m30Zb3gvOdL+bR8=";
+    hash = "sha256-31J4+giK1RDBS52Q/Ia3Y/Zak7fp7gRVTQ7US/eFjtM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
 
   propagatedBuildInputs = [
-    pydantic
+    lsprotocol
     typeguard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -42,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${src.rev}/CHANGELOG.md";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     license = licenses.asl20;

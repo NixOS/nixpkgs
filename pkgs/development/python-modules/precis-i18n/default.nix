@@ -1,21 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "precis-i18n";
-  version = "1.0.3";
+  version = "1.0.5";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "byllyfish";
     repo = "precis_i18n";
-    rev = "v${version}";
-    hash = "sha256-pBmllX1RVdFnZsDSW7Hh5uVqK2d++kcp1NQLN/phXdU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DSm+KomveGs9ZzNFiT0B1gAjx2fh0BaUdKW0J+kW24U=";
   };
 
-  meta = {
-    homepage = "https://github.com/byllyfish/precis_i18n";
+  pythonImportsCheck = [
+    "precis_i18n"
+  ];
+
+  meta = with lib; {
     description = "Internationalized usernames and passwords";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/byllyfish/precis_i18n";
+    changelog = "https://github.com/byllyfish/precis_i18n/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

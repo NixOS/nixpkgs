@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -9,19 +9,23 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lxqt.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lxqt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the LXQt desktop manager";
+      description = lib.mdDoc "Enable the LXQt desktop manager";
     };
 
     environment.lxqt.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
-      description = "Which LXQt packages to exclude from the default environment";
+      description = lib.mdDoc "Which LXQt packages to exclude from the default environment";
     };
 
   };
@@ -51,7 +55,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (pkgs.gnome.removePackagesByName
+      (utils.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 
@@ -62,6 +66,10 @@ in
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
+
+    services.xserver.libinput.enable = mkDefault true;
+
+    xdg.portal.lxqt.enable = true;
   };
 
 }

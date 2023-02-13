@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
+{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison, fetchpatch
 , less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
@@ -20,9 +20,18 @@ let
 
 in stdenv.mkDerivation rec {
   version = "3.6.6";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  pname = if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
+
+  patches = [
+    # Don't unset `__warn_unused_result__`, breaks on glibc-2.34
+    (fetchpatch {
+      url = "https://github.com/NetHack/NetHack/commit/81d73ce417dda6a98e2e918e06922e68b67c53f7.patch";
+      sha256 = "sha256-PX9XtJTEE3K1yg/IwIzEIT+EZWi02gU+9msrsG9ZWQY=";
+      revert = true;
+    })
+  ];
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";

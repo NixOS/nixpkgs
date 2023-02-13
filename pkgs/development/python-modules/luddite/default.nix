@@ -25,13 +25,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook pytest-socket pytest-mock ];
+  nativeCheckInputs = [ pytestCheckHook pytest-socket pytest-mock ];
   pythonImportsCheck = [ "luddite" ];
 
   meta = with lib; {
     description = "Checks for out-of-date package versions";
     homepage = "https://github.com/jumptrading/luddite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

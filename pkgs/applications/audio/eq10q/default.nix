@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "LV2 EQ plugins and more, with 64 bit processing";
     longDescription = ''
       Up to 10-Bands parametric equalizer with mono and stereo versions.
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
       64 bits floating point internal audio processing.
       Nice GUI with powerful metering for every plugin.
     '';
-    homepage = "http://eq10q.sourceforge.net/";
+    homepage = "https://eq10q.sourceforge.net/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;

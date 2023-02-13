@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pycarwings2";
-  version = "2.12";
+  version = "2.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,9 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "filcole";
     repo = pname;
-    # release not tagged: https://github.com/filcole/pycarwings2/issues/33
-    rev = "0dc9e7e74cb119614c72c7f955801a366f303c56";
-    sha256 = "sha256-3lyAgLuaNrCDvRT2yYkgaDiLPKW9Hbg05cQlMIBUs6o=";
+    rev = "v${version}";
+    sha256 = "sha256-kqj/NZXqgPUsOnnzMPmIlICHek7RBxksmL3reNBK+bo=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -54,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
+    changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

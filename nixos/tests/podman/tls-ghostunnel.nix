@@ -113,9 +113,6 @@ import ../make-test-python.nix (
       podman.wait_for_unit("sockets.target")
       podman.wait_for_unit("ghostunnel-server-podman-socket.service")
 
-      with subtest("Create default network"):
-          podman.succeed("docker network create default")
-
       with subtest("Root docker cli also works"):
           podman.succeed("docker version")
 
@@ -129,7 +126,7 @@ import ../make-test-python.nix (
           podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
 
           client.succeed(
-            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
           )
           client.succeed("docker ps | grep sleeping")
           podman.succeed("docker ps | grep sleeping")

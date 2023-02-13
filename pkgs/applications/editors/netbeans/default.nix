@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+, jdk, perl
 }:
 
 let
-  version = "12.6";
+  version = "16";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
     comment = "Integrated Development Environment";
     desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = "netbeans";
   };
 in
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha512-K0HjEO/yw9h+2+Y5CvxyYG1+kx+KH9NSn+QsKCsvh/rG/ilYLYyy93iZfx+wzwrgEfRtfMpZGtDAxd6nyUSnCA==";
+    hash = "sha512-k+Zj6TKW0tOSYvM6V1okF4Qz62gZMETC6XG98W23Vtz3+vdiaddd8BC2DBg7p9Z1CofRq8sbwtpeTJM3FaXv0g==";
   };
 
   buildCommand = ''
@@ -58,12 +58,16 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ perl python libicns imagemagick ];
+  buildInputs = [ perl libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [ sander rszibele asbachb ];
     platforms = lib.platforms.unix;
   };

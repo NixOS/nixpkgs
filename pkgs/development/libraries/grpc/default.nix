@@ -16,11 +16,12 @@
 
 # tests
 , python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.43.0"; # N.B: if you change this, please update:
+  version = "1.51.1"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "sha256-NPyCQsrmD/gBs4UHPGbBACmGRTNQDj6WfnfLNdWulK4=";
+    hash = "sha256-o1C35mtA2lTGgugCKAQyRDNlCnutoJ1ol/DInJNobnc=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+  buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags = [
@@ -61,14 +62,9 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
-    # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-    # only an issue with the useLLVM stdenv, not the darwin stdenv…
-    # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    "-DCMAKE_CXX_STANDARD=11"
   ];
 
   # CMake creates a build directory by default, this conflicts with the
@@ -91,8 +87,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilds = true;
 
+  passthru.cxxStandard =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+    in
+    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
+
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
   };
 
   meta = with lib; {

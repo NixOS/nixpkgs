@@ -4,21 +4,26 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "e4f579963199f05476657f0066beaa32d1261aef2203382f3919e1ed4bc4594e";
+      sha256 = "sha256-HH/pLZmDr6m/B3e6MHafDGnNWR83oR2y1ijVMR/LOF0=";
+      webarchive = "20220519080155";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "69113bf33ba0c57a363305b76361f2866c3b8394b173eed0f49db1f50bfe0373";
+      sha256 = "sha256-28dmdnJf+qh9r3F0quwlYXB/UqcOzcHzuzFq8vt2bf0=";
+      webarchive = "20220519080430";
     };
 in
 stdenv.mkDerivation rec {
 
   pname = "yandex-disk";
-  version = "0.1.6.1074";
+  version = "0.1.6.1080";
 
   src = fetchurl {
-    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
+    urls = [
+      "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
+      "https://web.archive.org/web/${p.webarchive}/https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
+    ];
     sha256 = p.sha256;
   };
 
@@ -51,6 +56,7 @@ stdenv.mkDerivation rec {
     description = "A free cloud file storage service";
     maintainers = with lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     longDescription = ''
       Yandex.Disk console client for Linux lets you manage files on Disk without

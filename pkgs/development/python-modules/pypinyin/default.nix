@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.44.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "python-pinyin";
-    rev = "v${version}";
-    sha256 = "sha256-LYiiZvpM/V3QRyTUXGWGnSnR0AnqWfTW0xJB4Vnw7lI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-gt0jrDPr6FeLB5P9HCSosCHb/W1sAKSusTrCpkqO26E=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
       "--cov-report term-missing" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

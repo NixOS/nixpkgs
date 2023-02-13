@@ -4,6 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , regex
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,17 @@ buildPythonPackage rec {
     sha256 = "169ywzn5wfzwyknqavspkdpwbx31nycxsxkl7iywwk71gs1lskkw";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,6 +1,7 @@
-{ lib, pkgs, erlang }:
+{ lib, __splicedPackages, erlang }:
 
 let
+  pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
   lib' = pkgs.callPackage ./lib.nix { };
@@ -42,7 +43,12 @@ let
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
-      elixir = elixir_1_13;
+      elixir = elixir_1_14;
+
+      elixir_1_14 = lib'.callElixir ../interpreters/elixir/1.14.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_13 = lib'.callElixir ../interpreters/elixir/1.13.nix {
         inherit erlang;
@@ -60,11 +66,6 @@ let
       };
 
       elixir_1_10 = lib'.callElixir ../interpreters/elixir/1.10.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
-      elixir_1_9 = lib'.callElixir ../interpreters/elixir/1.9.nix {
         inherit erlang;
         debugInfo = true;
       };

@@ -1,15 +1,14 @@
 { buildDunePackage
 , lib
 , fetchurl
-, astring
 , asn1-combinators
 , uri
-, rresult
 , base64
 , logs
 , fmt
 , lwt
 , mirage-crypto
+, mirage-crypto-ec
 , mirage-crypto-pk
 , mirage-crypto-rng
 , x509
@@ -17,19 +16,20 @@
 , ounit
 , ptime
 , domain-name
+, cstruct
 }:
 
 buildDunePackage rec {
   pname = "letsencrypt";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-v${version}.tbz";
-    sha256 = "8772b7e6dbda0559a03a7b23b75c1431d42ae09a154eefd64b4c7e23b8d92deb";
+    hash = "sha256-+Qh19cm9yrTIvl7H6+nqdjAw+nCOAoVzAJlrsW58IHA=";
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   buildInputs = [
     fmt
@@ -43,12 +43,12 @@ buildDunePackage rec {
     lwt
     base64
     mirage-crypto
+    mirage-crypto-ec
     mirage-crypto-pk
     asn1-combinators
     x509
     uri
-    rresult
-    astring
+    cstruct
   ];
 
   doCheck = true;

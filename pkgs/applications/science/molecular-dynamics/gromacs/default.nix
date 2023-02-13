@@ -19,11 +19,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2021.4";
+  version = "2023";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "07ds8abxq0k7vfpjvxb8in3fhb6lz0pbdzbmlidyzaw37qz8lw6b";
+    sha256 = "sha256-rJLG2nL7vMpBT9io2Xnlbs8XxMHNq+0tpc+05yd7e6g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -63,6 +63,12 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$out/$out/" "$out/"
+  '';
+
   meta = with lib; {
     homepage = "http://www.gromacs.org";
     license = licenses.gpl2;
@@ -84,7 +90,7 @@ in stdenv.mkDerivation rec {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-      See: http://www.gromacs.org/About_Gromacs for details.
+      See: https://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ sheepforce markuskowa ];

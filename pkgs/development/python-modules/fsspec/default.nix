@@ -1,27 +1,46 @@
 { lib
 , stdenv
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
 , numpy
-, aiohttp
-, pytest-vcr
-, requests
 , paramiko
+, pytest-asyncio
+, pytest-mock
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
 , smbprotocol
+, tqdm
+
+# optionals
+, adlfs
+, dask
+, distributed
+, dropbox
+, fusepy
+, gcsfs
+, libarchive-c
+, ocifs
+, panel
+, pyarrow
+, pygit2
+, s3fs
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2021.10.1";
-  disabled = pythonOlder "3.6";
+  version = "2022.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "intake";
+    owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-LgrOHBXKs2bEgtgrdHb1OEhOeQ5Rbgr6X5YtgiqiCH0=";
+    hash = "sha256-+lPt/zqI3Mkt+QRNXq+Dxm3h/ryZJsfrmayVi/BTtbg=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +48,82 @@ buildPythonPackage rec {
     paramiko
     requests
     smbprotocol
+    tqdm
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    entrypoints = [
+    ];
+    abfs = [
+      adlfs
+    ];
+    adl = [
+      adlfs
+    ];
+    dask = [
+      dask
+      distributed
+    ];
+    dropbox = [
+      # missing dropboxdrivefs
+      requests
+      dropbox
+    ];
+    gcs = [
+      gcsfs
+    ];
+    git = [
+      pygit2
+    ];
+    github = [
+      requests
+    ];
+    gs = [
+      gcsfs
+    ];
+    hdfs = [
+      pyarrow
+    ];
+    arrow = [
+      pyarrow
+    ];
+    http = [
+      aiohttp
+      requests
+    ];
+    sftp = [
+      paramiko
+    ];
+    s3 = [
+      s3fs
+    ];
+    oci = [
+      ocifs
+    ];
+    smb = [
+      smbprotocol
+    ];
+    ssh = [
+      paramiko
+    ];
+    fuse = [
+      fusepy
+    ];
+    libarchive = [
+      libarchive-c
+    ];
+    gui = [
+      panel
+    ];
+    tqdm = [
+      tqdm
+    ];
+  };
+
+  nativeCheckInputs = [
     numpy
+    pytest-asyncio
+    pytest-mock
     pytest-vcr
     pytestCheckHook
   ];
@@ -54,12 +145,15 @@ buildPythonPackage rec {
     "test_touch"
   ];
 
-  pythonImportsCheck = [ "fsspec" ];
+  pythonImportsCheck = [
+    "fsspec"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/intake/filesystem_spec";
     description = "A specification that Python filesystems should adhere to";
+    homepage = "https://github.com/fsspec/filesystem_spec";
+    changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

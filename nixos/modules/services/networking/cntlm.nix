@@ -33,37 +33,37 @@ in
 
   options.services.cntlm = {
 
-    enable = mkEnableOption "cntlm, which starts a local proxy";
+    enable = mkEnableOption (lib.mdDoc "cntlm, which starts a local proxy");
 
     username = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Proxy account name, without the possibility to include domain name ('at' sign is interpreted literally).
       '';
     };
 
     domain = mkOption {
       type = types.str;
-      description = "Proxy account domain/workgroup name.";
+      description = lib.mdDoc "Proxy account domain/workgroup name.";
     };
 
     password = mkOption {
       default = "/etc/cntlm.password";
       type = types.str;
-      description = "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
+      description = lib.mdDoc "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
     };
 
     netbios_hostname = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         The hostname of your machine.
       '';
     };
 
     proxy = mkOption {
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of NTLM/NTLMv2 authenticating HTTP proxies.
 
         Parent proxy, which requires authentication. The same as proxy on the command-line, can be used more than  once  to  specify  unlimited
@@ -74,7 +74,7 @@ in
     };
 
     noproxy = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         A list of domains where the proxy is skipped.
       '';
       default = [];
@@ -85,19 +85,19 @@ in
     port = mkOption {
       default = [3128];
       type = types.listOf types.port;
-      description = "Specifies on which ports the cntlm daemon listens.";
+      description = lib.mdDoc "Specifies on which ports the cntlm daemon listens.";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Additional config appended to the end of the generated <filename>cntlm.conf</filename>.";
+      description = lib.mdDoc "Additional config appended to the end of the generated {file}`cntlm.conf`.";
     };
 
     configText = mkOption {
        type = types.lines;
        default = "";
-       description = "Verbatim contents of <filename>cntlm.conf</filename>.";
+       description = lib.mdDoc "Verbatim contents of {file}`cntlm.conf`.";
     };
 
   };

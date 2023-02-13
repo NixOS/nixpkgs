@@ -30,7 +30,7 @@ let
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -50,18 +50,6 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
-      # Revert: [Driver] Default to -fno-common for all targets
-      # https://reviews.llvm.org/D75056
-      #
-      # Maintains compatibility with packages that haven't been fixed yet, and
-      # matches gcc10's configuration in nixpkgs.
-      (fetchpatch {
-        revert = true;
-        url = "https://github.com/llvm/llvm-project/commit/0a9fc9233e172601e26381810d093e02ef410f65.diff";
-        stripLen = 1;
-        excludes = [ "docs/*" "test/*" ];
-        sha256 = "0gxgmi0qbm89mq911dahallhi8m6wa9vpklklqmxafx4rplrr8ph";
-      })
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
@@ -101,6 +89,7 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
+      patchShebangs $python/bin
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
@@ -125,6 +114,7 @@ let
         of tools that can be built using the Clang frontend as a library to
         parse C/C++ code.
       '';
+      mainProgram = "clang";
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";

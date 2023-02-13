@@ -6,15 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "21.10.2";
-
-  disabled = python3.pythonOlder "3.6";
+  version = "22.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0992wsy3plxpcqmq8cnnl0by1vkmkfb4lq2vb5rsj89wj900ci2n";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-PdLnR01BDfb3+WsOvOZTsDHWXRNK0pLTxCXOuWik0L0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -31,14 +30,22 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "prompt-toolkit==3.0.19" "prompt-toolkit>=3.0.19"
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "quark" ];
+  pythonImportsCheck = [
+    "quark"
+  ];
 
   meta = with lib; {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
+    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

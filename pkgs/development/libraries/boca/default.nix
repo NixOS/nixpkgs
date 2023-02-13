@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "BoCA";
-  version = "1.0.5";
+  version = "1.0.6a";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "boca";
     rev = "v${version}";
-    sha256 = "sha256-ooLPpwTxG7QBAGhEGhta4T06ZDWlPysocHbb/Sq7Wyo=";
+    sha256 = "sha256-LndlwdM5NlTv73Z1lMkHuIZkVfn48P/LssBnE4X9Sgc=";
   };
 
   nativeBuildInputs = [

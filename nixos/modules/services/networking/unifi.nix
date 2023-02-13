@@ -17,42 +17,42 @@ in
     services.unifi.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable the unifi controller service.
       '';
     };
 
     services.unifi.jrePackage = mkOption {
       type = types.package;
-      default = pkgs.jre8;
-      defaultText = literalExpression "pkgs.jre8";
-      description = ''
+      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
+      defaultText = literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
+      description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
     };
 
     services.unifi.unifiPackage = mkOption {
       type = types.package;
-      default = pkgs.unifiLTS;
-      defaultText = literalExpression "pkgs.unifiLTS";
-      description = ''
+      default = pkgs.unifi5;
+      defaultText = literalExpression "pkgs.unifi5";
+      description = lib.mdDoc ''
         The unifi package to use.
       '';
     };
 
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
-      default = pkgs.mongodb;
+      default = pkgs.mongodb-4_2;
       defaultText = literalExpression "pkgs.mongodb";
-      description = ''
-        The mongodb package to use.
+      description = lib.mdDoc ''
+        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.2.
       '';
     };
 
     services.unifi.openFirewall = mkOption {
       type = types.bool;
-      default = true;
-      description = ''
+      default = false;
+      description = lib.mdDoc ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -65,7 +65,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 1024;
-      description = ''
+      description = lib.mdDoc ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -75,8 +75,8 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 4096;
-      description = ''
-        Set the maximimum heap size for the JVM in MB. If this option isn't set, the
+      description = lib.mdDoc ''
+        Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
     };
@@ -84,10 +84,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    warnings = optional
-      (options.services.unifi.openFirewall.highestPrio >= (mkOptionDefault null).priority)
-      "The current services.unifi.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
 
     users.users.unifi = {
       isSystemUser = true;

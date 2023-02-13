@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
-  version = "unstable-2021-02-03";
+  version = "unstable-2021-04-08";
 
   src = fetchFromGitHub {
     owner = "rockchip-linux";
     repo = "rkdeveloptool";
-    rev = "e607a5d6ad3f6af66d3daf3f6370e6dc9763a20d";
-    sha256 = "08m0yfds5rpr5l0s75ynfarq3hrv94l3aadld17cz5gqapqcfs2n";
+    rev = "46bb4c073624226c3f05b37b9ecc50bbcf543f5a";
+    sha256 = "eIFzyoY6l3pdfCN0uS16hbVp0qzdG3MtcS1jnDX1Yk0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb1 ];
 
   # main.cpp:1568:36: error: '%s' directive output may be truncated writing up to 557 bytes into a region of size 5
-  CPPFLAGS = "-Wno-error=format-truncation";
+  CPPFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-error=format-truncation" ];
 
   meta = with lib; {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";

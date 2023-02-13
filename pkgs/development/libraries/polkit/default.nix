@@ -6,13 +6,14 @@
 , expat
 , pam
 , meson
+, mesonEmulatorHook
 , ninja
 , perl
 , rsync
 , python3
 , fetchpatch
 , gettext
-, spidermonkey_78
+, duktape
 , gobject-introspection
 , libxslt
 , docbook-xsl-nons
@@ -20,11 +21,9 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
-, useSystemd ? stdenv.isLinux
-, systemd
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, systemdMinimal
 , elogind
-# needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -38,7 +37,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "0.120";
+  version = "122";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "polkit";
     repo = "polkit";
     rev = version;
-    sha256 = "oEaRf1g13zKMD+cP1iwIA6jaCDwvNfGy2i8xY8vuVSo=";
+    sha256 = "fLY8i8h4McAnwVt8dLOqbyHM7v3SkbWqATz69NkUudU=";
   };
 
   patches = [
@@ -58,15 +57,10 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Make netgroup support optional (musl does not have it)
-    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
-    # We use the version of the patch that Alpine uses successfully.
-    (fetchpatch {
-      name = "make-innetgr-optional.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/polkit/make-innetgr-optional.patch?id=424ecbb6e9e3a215c978b58c05e5c112d88dddfc";
-      sha256 = "0iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
-    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -78,7 +72,8 @@ stdenv.mkDerivation rec {
     ninja
     perl
     rsync
-    (python3.withPackages (pp: with pp; [
+    gobject-introspection
+    (python3.pythonForBuild.withPackages (pp: with pp; [
       dbus-python
       (python-dbusmock.overridePythonAttrs (attrs: {
         # Avoid dependency cycle.
@@ -90,36 +85,36 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_412
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     expat
     pam
-    spidermonkey_78
+    dbus
+    duktape
   ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemd else elogind)
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
+    (if useSystemd then systemdMinimal else elogind)
   ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 
   mesonFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
-    "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString true}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
@@ -149,7 +144,7 @@ stdenv.mkDerivation rec {
       --replace   /bin/false ${coreutils}/bin/false
   '';
 
-  postConfigure = ''
+  postConfigure = lib.optionalString doCheck ''
     # Unpacked by meson
     chmod +x subprojects/mocklibc-1.0/bin/mocklibc
     patchShebangs subprojects/mocklibc-1.0/bin/mocklibc
@@ -172,7 +167,7 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}${system}"/* "$out"
     rm --recursive "${DESTDIR}${system}"/*
     rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done
@@ -185,7 +180,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.freedesktop.org/wiki/Software/polkit";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }

@@ -1,8 +1,14 @@
 { lib
 , buildPythonPackage
+, aiocoap
+, bleak
+, bleak-retry-connector
+, chacha20poly1305
+, chacha20poly1305-reuseable
 , commentjson
 , cryptography
 , fetchFromGitHub
+, orjson
 , poetry-core
 , pytest-aiohttp
 , pytestCheckHook
@@ -12,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.6.4";
+  version = "2.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-+W1nsJsiVL4hjtNUyKOsQNyX0Bki/C1FvmoD2OCwqeM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uFmQLeGPnFDABA4Uu1sL/2uUJnL+feclpGyJyISJx2E=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +35,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiocoap
+    bleak
+    bleak-retry-connector
+    chacha20poly1305
+    chacha20poly1305-reuseable
     commentjson
     cryptography
+    orjson
     zeroconf
   ];
 
-  checkInputs = [
+  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
+
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
@@ -55,6 +69,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.1.96";
+  version = "0.1.97";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jo8XlQJsnWpeeezDjNNhh6T473XMqe8fsApUr82Y3BU=";
+    sha256 = "sha256-T6qQtLmuPKVha0CwX4fBH7IQoAlwVj64X2qDecWd7s8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals withGPerfTools [ gperftools ];
 
   outputs = [ "bin" "dev" "out" ];
+
+  # https://github.com/google/sentencepiece/issues/754
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/google/sentencepiece";

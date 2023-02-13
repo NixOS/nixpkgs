@@ -10,7 +10,7 @@ with lib;
         type = types.str;
         default = "";
         example = "order=scsi0;net0";
-        description = ''
+        description = lib.mdDoc ''
           Default boot device. PVE will try all devices in its default order if this value is empty.
         '';
       };
@@ -18,39 +18,46 @@ with lib;
         type = types.str;
         default = "virtio-scsi-pci";
         example = "lsi";
-        description = ''
+        description = lib.mdDoc ''
           SCSI controller type. Must be one of the supported values given in
-          <link xlink:href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines"/>
+          <https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines>
         '';
       };
       virtio0 = mkOption {
         type = types.str;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
-        description = ''
-          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target sotrage.
+        description = lib.mdDoc ''
+          Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target storage.
           This parameter is required by PVE even if it isn't used.
         '';
       };
       ostype = mkOption {
         type = types.str;
         default = "l26";
-        description = ''
+        description = lib.mdDoc ''
           Guest OS type
         '';
       };
       cores = mkOption {
         type = types.ints.positive;
         default = 1;
-        description = ''
+        description = lib.mdDoc ''
           Guest core count
         '';
       };
       memory = mkOption {
         type = types.ints.positive;
         default = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Guest memory in MB
+        '';
+      };
+      bios = mkOption {
+        type = types.enum [ "seabios" "ovmf" ];
+        default = "seabios";
+        description = ''
+          Select BIOS implementation (seabios = Legacy BIOS, ovmf = UEFI).
         '';
       };
 
@@ -58,14 +65,14 @@ with lib;
       name = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}";
-        description = ''
+        description = lib.mdDoc ''
           VM name
         '';
       };
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the default interface. When restoring from VMA, check the
           "unique" box to ensure device mac is randomized.
         '';
@@ -74,7 +81,7 @@ with lib;
         type = types.str;
         default = "socket";
         example = "/dev/ttyS0";
-        description = ''
+        description = lib.mdDoc ''
           Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0),
           or create a unix socket on the host side (use qm terminal to open a terminal connection).
         '';
@@ -83,7 +90,7 @@ with lib;
         type = types.bool;
         apply = x: if x then "1" else "0";
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Expect guest to have qemu agent running
         '';
       };
@@ -95,15 +102,26 @@ with lib;
         cpu = "host";
         onboot = 1;
       }'';
-      description = ''
+      description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';
+    };
+    partitionTableType = mkOption {
+      type = types.enum [ "efi" "hybrid" "legacy" "legacy+gpt" ];
+      description = ''
+        Partition table type to use. See make-disk-image.nix partitionTableType for details.
+        Defaults to 'legacy' for 'proxmox.qemuConf.bios="seabios"' (default), other bios values defaults to 'efi'.
+        Use 'hybrid' to build grub-based hybrid bios+efi images.
+      '';
+      default = if config.proxmox.qemuConf.bios == "seabios" then "legacy" else "efi";
+      defaultText = lib.literalExpression ''if config.proxmox.qemuConf.bios == "seabios" then "legacy" else "efi"'';
+      example = "hybrid";
     };
     filenameSuffix = mkOption {
       type = types.str;
       default = config.proxmox.qemuConf.name;
       example = "999-nixos_template";
-      description = ''
+      description = lib.mdDoc ''
         Filename of the image will be vzdump-qemu-''${filenameSuffix}.vma.zstd.
         This will also determine the default name of the VM on restoring the VMA.
         Start this value with a number if you want the VMA to be detected as a backup of
@@ -122,21 +140,70 @@ with lib;
       ${lib.concatStrings (lib.mapAttrsToList cfgLine properties)}
       #qmdump#map:virtio0:drive-virtio0:local-lvm:raw:
     '';
+    inherit (cfg) partitionTableType;
+    supportEfi = partitionTableType == "efi" || partitionTableType == "hybrid";
+    supportBios = partitionTableType == "legacy" || partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
+    hasBootPartition = partitionTableType == "efi" || partitionTableType == "hybrid";
+    hasNoFsPartition = partitionTableType == "hybrid" || partitionTableType == "legacy+gpt";
   in {
+    assertions = [
+      {
+        assertion = config.boot.loader.systemd-boot.enable -> config.proxmox.qemuConf.bios == "ovmf";
+        message = "systemd-boot requires 'ovmf' bios";
+      }
+      {
+        assertion = partitionTableType == "efi" -> config.proxmox.qemuConf.bios == "ovmf";
+        message = "'efi' disk partitioning requires 'ovmf' bios";
+      }
+      {
+        assertion = partitionTableType == "legacy" -> config.proxmox.qemuConf.bios == "seabios";
+        message = "'legacy' disk partitioning requires 'seabios' bios";
+      }
+      {
+        assertion = partitionTableType == "legacy+gpt" -> config.proxmox.qemuConf.bios == "seabios";
+        message = "'legacy+gpt' disk partitioning requires 'seabios' bios";
+      }
+    ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
+      inherit partitionTableType;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
-        vma = pkgs.qemu_kvm.overrideAttrs ( super: {
-          patches = let
-            rev = "cc707c362ea5c8d832aac270d1ffa7ac66a8908f";
-            path = "debian/patches/pve/0025-PVE-Backup-add-vma-backup-format-code.patch";
-            vma-patch = pkgs.fetchpatch {
-              url = "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              sha256 = "1z467xnmfmry3pjy7p34psd5xdil9x0apnbvfz8qbj0bf9fgc8zf";
-            };
-          in super.patches ++ [ vma-patch ];
+        vma = (pkgs.qemu_kvm.override {
+          alsaSupport = false;
+          pulseSupport = false;
+          sdlSupport = false;
+          jackSupport = false;
+          gtkSupport = false;
+          vncSupport = false;
+          smartcardSupport = false;
+          spiceSupport = false;
+          ncursesSupport = false;
+          libiscsiSupport = false;
+          tpmSupport = false;
+          numaSupport = false;
+          seccompSupport = false;
+          guestAgentSupport = false;
+        }).overrideAttrs ( super: rec {
+
+          version = "7.0.0";
+          src = pkgs.fetchurl {
+            url= "https://download.qemu.org/qemu-${version}.tar.xz";
+            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+          };
+          patches = [
+            (pkgs.fetchpatch {
+              url =
+                let
+                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
+                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
+              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+            })
+          ];
+
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+
         });
       in
       ''
@@ -145,6 +212,9 @@ with lib;
         rm $diskImage
         ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+
+        mkdir -p $out/nix-support
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
       format = "raw";
       inherit config lib pkgs;
@@ -153,7 +223,18 @@ with lib;
     boot = {
       growPartition = true;
       kernelParams = [ "console=ttyS0" ];
-      loader.grub.device = lib.mkDefault "/dev/vda";
+      loader.grub = {
+        device = lib.mkDefault (if (hasNoFsPartition || supportBios) then
+          # Even if there is a separate no-fs partition ("/dev/disk/by-partlabel/no-fs" i.e. "/dev/vda2"),
+          # which will be used the bootloader, do not set it as loader.grub.device.
+          # GRUB installation fails, unless the whole disk is selected.
+          "/dev/vda"
+        else
+          "nodev");
+        efiSupport = lib.mkDefault supportEfi;
+        efiInstallAsRemovable = lib.mkDefault supportEfi;
+      };
+
       loader.timeout = 0;
       initrd.availableKernelModules = [ "uas" "virtio_blk" "virtio_pci" ];
     };
@@ -162,6 +243,10 @@ with lib;
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
       fsType = "ext4";
+    };
+    fileSystems."/boot" = lib.mkIf hasBootPartition {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
     };
 
     services.qemuGuest.enable = lib.mkDefault true;

@@ -1,27 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
+, more-itertools
 , setuptools-scm
-, more-itertools, backports_functools_lru_cache }:
+}:
 
 buildPythonPackage rec {
   pname = "jaraco.functools";
-  version = "3.4.0";
+  version = "3.5.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "659a64743047d00c6ae2a2aa60573c62cfc0b4b70eaa14fa50c80360ada32aa8";
+    sha256 = "sha256-RbBcFY860ocxB1VW/9R0m9JU7Gf5Hh6zZ9z+v/EVHbQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
+  propagatedBuildInputs = [
+    more-itertools
+  ];
 
   doCheck = false;
 
   pythonNamespaces = [ "jaraco" ];
 
+  pythonImportsCheck = [ "jaraco.functools" ];
+
   meta = with lib; {
     description = "Additional functools in the spirit of stdlib's functools";
     homepage = "https://github.com/jaraco/jaraco.functools";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

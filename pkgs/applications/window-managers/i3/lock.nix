@@ -1,25 +1,20 @@
-{ fetchurl, lib, stdenv, which, pkg-config, libxcb, xcbutilkeysyms, xcbutilimage,
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, libxcb, xcbutilkeysyms, xcbutilimage,
   xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
   pname = "i3lock";
-  version = "2.13";
+  version = "2.14.1";
 
-  src = fetchurl {
-    url = "https://i3wm.org/i3lock/${pname}-${version}.tar.bz2";
-    sha256 = "02szjsaz7rqrdkd0r2nwgwa85c4hwfrcskxw7ryk695kmjcfhzv3";
+  src = fetchFromGitHub {
+    owner = "i3";
+    repo = "i3lock";
+    rev = version;
+    sha256 = "sha256-cC908c47fkU6msLqZSxpEbKxO1/PatH81QeuCzBSZGw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
+  nativeBuildInputs = [ meson ninja pkg-config ];
+  buildInputs = [ libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
     pam libX11 libev cairo libxkbcommon libxkbfile ];
-
-  makeFlags = [ "all" ];
-  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" ];
-  postInstall = ''
-    mkdir -p $out/share/man/man1
-    cp *.1 $out/share/man/man1
-  '';
 
   meta = with lib; {
     description = "A simple screen locker like slock";

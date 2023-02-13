@@ -1,8 +1,10 @@
 { lib
 , aiohttp
 , aioresponses
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, orjson
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -10,27 +12,33 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "85";
-  disabled = pythonOlder "3.7";
+  version = "106";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
-    rev = "v${version}";
-    sha256 = "sha256-6GTMG3BfHcfLMoyabFbhsJFVDHmEICuzf32603+jyZ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-13of5ohz/hezlmGvSNqCu9QoOPKdPPtrhQHbxmG2/Do=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
+    orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pydeconz" ];
+  pythonImportsCheck = [
+    "pydeconz"
+  ];
 
   meta = with lib; {
     description = "Python library wrapping the Deconz REST API";

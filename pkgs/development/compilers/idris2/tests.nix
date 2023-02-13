@@ -11,7 +11,7 @@ let
       # is not the case with pure nix environments. Thus, we need to include zsh
       # when we build for darwin in tests. While this is impure, this is also what
       # we find in real darwin hosts.
-      nativeBuildInputs = lib.optional stdenv.isDarwin [ zsh ];
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ zsh ];
 
       buildCommand = ''
         set -eo pipefail
@@ -50,6 +50,7 @@ in {
   # Data.Vect.Sort is available via --package contrib
   use-contrib = testCompileAndRun {
     testName = "use-contrib";
+    packages = [ "contrib" ];
     code = ''
       module Main
 

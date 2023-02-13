@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
-, cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+, cudaSupport ? false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+, cudnnSupport ? cudaSupport
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 assert cudnnSupport -> cudaSupport;
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -22,11 +26,12 @@ in stdenv.mkDerivation rec {
   pname = "CNTK";
   version = "2.7";
 
-  # Submodules
-  src = fetchgit {
-    url = "https://github.com/Microsoft/CNTK";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "CNTK";
     rev = "v${version}";
-    sha256 = "18l9k7s966a26ywcf7flqyhm61788pcb9fj3wk61jrmgkhy2pcns";
+    sha256 = "sha256-2rIrPJyvZhnM5EO6tNhF6ARTocfUHce4N0IZk/SZiaI=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -115,13 +120,14 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # Newer cub is included with cudatoolkit now and it breaks the build.
-    # https://github.com/Microsoft/CNTK/issues/3191
-    broken = cudaSupport;
     homepage = "https://github.com/Microsoft/CNTK";
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ abbradar ];
+    # Newer cub is included with cudatoolkit now and it breaks the build.
+    # https://github.com/Microsoft/CNTK/issues/3191
+    # broken = cudaSupport;
+    broken = true; # at 2022-11-23
   };
 }

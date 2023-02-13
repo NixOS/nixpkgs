@@ -11,23 +11,18 @@
 , gobject-introspection
 , vala
 , libgee
-, overrideCC
-, gcc6
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , autoconf-archive
 , yelp-tools
 , mysqlSupport ? false
-, libmysqlclient ? null
+, libmysqlclient
 , postgresSupport ? false
-, postgresql ? null
+, postgresql
 }:
 
-assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
-
-(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libgda";
   version = "5.2.10";
 
@@ -42,13 +37,17 @@ assert postgresSupport -> postgresql != null;
       url = "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
       sha256 = "158sncc5bg9lkri1wb0i1ri1nhx4c34rzi47gbfkwphlp7qd4qqv";
     })
+    (fetchpatch {
+      name = "CVE-2021-39359.patch";
+      url = "https://src.fedoraproject.org/rpms/libgda5/raw/72bb769f12e861e27e883dac5fab34f1ba4bd97e/f/bebdffb4de586fb43fd07ac549121f4b22f6812d.patch";
+      sha256 = "sha256-hIKuY5NEqOzntdlLb541bA4xZU5ypTRmV1u765K6KbM=";
+    })
   ];
 
   nativeBuildInputs = [
     pkg-config
     intltool
     itstool
-    libxml2
     gobject-introspection
     vala
     autoreconfHook
@@ -65,6 +64,10 @@ assert postgresSupport -> postgresql != null;
     libmysqlclient
   ] ++ lib.optionals postgresSupport [
     postgresql
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
   ];
 
   configureFlags = [

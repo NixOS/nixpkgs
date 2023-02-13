@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeDesktopItem
 , jre
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "20.2.5";
+  version = "22.1.3";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "05f3yhzf6mvr6c5v6qvjrx97pzrrnkh9mp444zlkbnpgnrsmdc6v";
+    sha256 = "sha256-TnpjRFInqmlY02fGi7oxoS4P1DzahryFvNLitJ5NjM4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -34,7 +35,10 @@ stdenv.mkDerivation rec {
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre} \
-    ) \
+    )
+    # add missing shebang for start script
+    sed -i $out/bin/smartgit \
+      -e '1i#!/bin/bash'
   '';
 
   installPhase = ''
@@ -65,28 +69,25 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
-    categories = concatStringsSep ";" [
+    categories = [
       "Application"
       "Development"
       "RevisionControl"
     ];
-    mimeType = concatStringsSep ";" [
+    mimeTypes = [
       "x-scheme-handler/git"
       "x-scheme-handler/smartgit"
       "x-scheme-handler/sourcetree"
     ];
-    startupNotify = "true";
-    extraEntries = ''
-      Keywords=git
-      StartupWMClass=${name}
-      Version=1.0
-      Encoding=UTF-8
-    '';
+    startupNotify = true;
+    startupWMClass = name;
+    keywords = [ "git" ];
   };
 
   meta = with lib; {
     description = "GUI for Git, Mercurial, Subversion";
     homepage = "https://www.syntevo.com/smartgit/";
+    changelog = "https://www.syntevo.com/smartgit/changelog.txt";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];

@@ -1,18 +1,20 @@
 # Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
-{ lib, stdenv, fetchurl, mono, pkg-config, dotnetbuildhelpers, autoconf, automake, which }:
+{ lib, stdenv, fetchFromGitHub, mono, pkg-config, dotnetbuildhelpers, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
   pname = "fsharp";
   version = "4.0.1.1";
 
-  src = fetchurl {
-    url = "https://github.com/fsharp/fsharp/archive/${version}.tar.gz";
-    sha256 = "0mvmvwwpl4zq0yvgzdizww8l9azvlrc82xm32nz1fi1nw8x5qfqk";
+  src = fetchFromGitHub {
+    owner = "fsharp";
+    repo = "fsharp";
+    rev = version;
+    sha256 = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ mono dotnetbuildhelpers autoconf automake which ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ mono dotnetbuildhelpers which ];
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets

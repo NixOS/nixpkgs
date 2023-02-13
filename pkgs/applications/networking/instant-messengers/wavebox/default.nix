@@ -3,8 +3,6 @@
 , xorg
 }:
 
-with lib;
-
 let
   bits = "x86_64";
 
@@ -16,10 +14,10 @@ let
     icon = "wavebox";
     desktopName = name;
     genericName = name;
-    categories = "Network;";
+    categories = [ "Network" ];
   };
 
-  tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
+  tarball = "Wavebox_${lib.replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
 in stdenv.mkDerivation {
   pname = "wavebox";
@@ -40,7 +38,7 @@ in stdenv.mkDerivation {
     alsa-lib gtk3 nss
   ];
 
-  runtimeDependencies = [ (getLib udev) libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox
@@ -53,8 +51,9 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
-      --prefix PATH : ${xdg-utils}/bin
+      --suffix PATH : ${xdg-utils}/bin
   '';
 
   meta = with lib; {

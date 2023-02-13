@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
+{ stdenv, lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
 , pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,5 +46,7 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ leenaars ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

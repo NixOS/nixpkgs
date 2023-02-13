@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-formtools";
-  version = "2.3";
+  version = "2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9663b6eca64777b68d6d4142efad8597fe9a685924673b25aa8a1dcff4db00c3";
+    sha256 = "sha256-3rkyvlWx2UGeN9xNZd+/640we3HIwR/VLxWaul/A3u0=";
   };
 
   nativeBuildInputs = [

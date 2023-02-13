@@ -14,10 +14,11 @@ let lispPackages = rec {
 
     description = "The Common Lisp package manager";
     deps = [];
-    src = pkgs.fetchgit {
-      url = "https://github.com/quicklisp/quicklisp-client/";
-      rev = "refs/tags/version-${version}";
-      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
+    src = pkgs.fetchFromGitHub {
+      owner = "quicklisp";
+      repo = "quicklisp-client";
+      rev = "version-${version}";
+      sha256 = "sha256-1HLVPhl8aBaeG8dRLxBh0j0X/0wqFeNYK1CEfiELToA=";
     };
     overrides = x: rec {
       inherit clwrapper;
@@ -124,7 +125,7 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2.2.3";
+    version = "2.2.4";
 
     description = "Browser";
 
@@ -149,6 +150,17 @@ let lispPackages = rec {
 
       # Prevent nyxt from trying to obtain dependencies as submodules
       makeFlags = [ "NYXT_SUBMODULES=false" ] ++ x.buildFlags or [];
+
+      patches = x.patches or [] ++ [
+        # Work around crash when opening _any_ URL
+        # https://github.com/atlas-engineer/nyxt/issues/1781
+        # https://github.com/NixOS/nixpkgs/issues/158005
+        (pkgs.fetchpatch {
+          name = "nyxt-webkit-disable-sandbox.patch";
+          url = "https://github.com/atlas-engineer/nyxt/commit/48ac0d8727f1ca1428188a1ab2c05b7be5f6cc51.patch";
+          sha256 = "0570mcfn5wmjha6jmfdgglp0w5b7rpfnv3flzn77clgbknwbxi0m";
+        })
+      ];
     };
 
     deps = with pkgs.lispPackages; [
@@ -202,7 +214,7 @@ let lispPackages = rec {
       owner = "atlas-engineer";
       repo = "nyxt";
       rev = "${version}";
-      sha256 = "1v1szbj44pwxh3k70fvg78xjfkab29dqnlafa722sppdyqd06cqp";
+      sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
     packageName = "nyxt";

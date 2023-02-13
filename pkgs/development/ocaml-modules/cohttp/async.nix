@@ -7,6 +7,7 @@
 , async_unix
 , cohttp
 , conduit-async
+, core_unix
 , uri
 , uri-sexp
 , logs
@@ -25,9 +26,9 @@ buildDunePackage {
   inherit (cohttp)
     version
     src
-    minimumOCamlVersion
-    useDune2
     ;
+
+  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ];
 
@@ -38,6 +39,7 @@ buildDunePackage {
     async_unix
     async
     base
+    core_unix
     magic-mime
     logs
     fmt
@@ -47,7 +49,8 @@ buildDunePackage {
     ipaddr
   ];
 
-  doCheck = true;
+  # Examples don't compile with core 0.15.  See https://github.com/mirage/ocaml-cohttp/pull/864.
+  doCheck = false;
   checkInputs = [
     ounit
     mirage-crypto

@@ -5,13 +5,14 @@
 
 buildDunePackage rec {
   pname = "rpclib";
-  version = "8.1.0";
+  version = "9.0.0";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-rpc/releases/download/v${version}/rpclib-v${version}.tbz";
-    sha256 = "0fbajg8wq8hjhkvvfnq68br0m0pa8zf2qzadhfgi2nnr9713rada";
+    url = "https://github.com/mirage/ocaml-rpc/releases/download/${version}/rpclib-${version}.tbz";
+    hash = "sha256-ziPrdWwCjZN0vRmCMpa923wjfT8FVFLTDRz30VIW6WM=";
   };
 
   buildInputs = [ cmdliner yojson ];

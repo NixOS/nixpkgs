@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocamlPackages, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, ocamlPackages, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "mldonkey";
@@ -9,20 +9,30 @@ stdenv.mkDerivation rec {
     sha256 = "b926e7aa3de4b4525af73c88f1724d576b4add56ef070f025941dd51cb24a794";
   };
 
+  patches = [
+    # Fixes C++17 compat
+    (fetchpatch {
+      url = "https://github.com/ygrek/mldonkey/pull/66/commits/20ff84c185396f3d759cf4ef46b9f0bd33a51060.patch";
+      hash = "sha256-MCqx0jVfOaLkZhhv0b1cTdO6BK2/f6TxTWmx+NZjXME=";
+    })
+    # Fixes OCaml 4.12 compat
+    (fetchpatch {
+      url = "https://github.com/ygrek/mldonkey/commit/a153f0f7a4826d86d51d4bacedc0330b70fcbc34.patch";
+      hash = "sha256-/Muk3mPFjQJ48FqaozGa7o8YSPhDLXRz9K1EyfxlzC8=";
+    })
+  ];
+
   preConfigure = ''
     substituteInPlace Makefile --replace '+camlp4' \
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 
-  buildInputs = (with ocamlPackages; [
-    ocaml
-    camlp4
-    num
-  ]) ++ [
-    zlib
-  ];
+  strictDeps = true;
+  nativeBuildInputs = with ocamlPackages; [ ocaml camlp4];
+  buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Client for many p2p networks, with multiple frontends";
     homepage = "http://mldonkey.sourceforge.net/";
     license = lib.licenses.gpl2Only;

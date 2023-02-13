@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libcli";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
         sha256 = "0szjiw3gd7by1sv924shnngfxvc98xvaqvx228b575xq93xxjcwl";
       })
     ];
+
+  buildInputs = [ libxcrypt ];
 
   enableParallelBuilding = true;
 

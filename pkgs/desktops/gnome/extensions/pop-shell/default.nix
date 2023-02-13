@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
-  version = "unstable-2021-11-30";
+  version = "unstable-2022-10-11";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "4b65ee865d01436ec75a239a0586a2fa6051b8c3";
-    sha256 = "DHmp3kzBgbyxRe0TjER/CAqyUmD9LeRqAFQ9apQDzfk=";
+    rev = "886a069c0582b371e90ac3602b1747ea5fba616c";
+    hash = "sha256-DwJ3IFhYuEW0LQrmN/mOspEiudj4X5BCLhdOyP74EVs=";
   };
 
   nativeBuildInputs = [ glib nodePackages.typescript gjs ];
@@ -25,6 +25,16 @@ stdenv.mkDerivation rec {
     extensionUuid = "pop-shell@system76.com";
     extensionPortalSlug = "pop-shell";
   };
+
+  postPatch = ''
+    for file in */main.js; do
+      substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+    done
+  '';
+
+  preFixup = ''
+    chmod +x $out/share/gnome-shell/extensions/pop-shell@system76.com/*/main.js
+  '';
 
   meta = with lib; {
     description = "Keyboard-driven layer for GNOME Shell";

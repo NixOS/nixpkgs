@@ -1,8 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, openssl
 , stdenv
 , AppKit
 , Security
@@ -10,22 +8,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "synth";
-  version = "0.6.2";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
-    owner = "getsynth";
+    owner = "shuttle-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MeZ5bkOMTJVvaBfGahKsXvaYhfMKcYzPFsBp/p2dPQQ=";
+    sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
-  cargoSha256 = "sha256-lNeDpUla/PfGd/AogdcOtrmL1Jp+0Ji9LH1CF7uOEe0=";
+  cargoSha256 = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     AppKit
     Security
+  ];
+
+  checkFlags = [
+    # https://github.com/shuttle-hq/synth/issues/309
+    "--skip=docs_blog_2021_08_31_seeding_databases_tutorial_dot_md"
   ];
 
   # requires unstable rust features

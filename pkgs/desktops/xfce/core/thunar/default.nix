@@ -21,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.16.10";
+  version = "4.18.3";
 
-  sha256 = "sha256-BeEy8+zEsJ5fJAbvP37tfekqF5LTHil0RDcE5RY0f64=";
+  sha256 = "sha256-sYn1gBzqEFcB3jHWxmoqqv0Cxa3mui/j0kgBqJMgJrc=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -44,9 +44,7 @@ let unwrapped = mkXfceDerivation {
     xfconf
   ];
 
-  patches = [
-    ./thunarx_plugins_directory.patch
-  ];
+  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
 
   # the desktop file … is in an insecure location»
   # which pops up when invoking desktop files that are

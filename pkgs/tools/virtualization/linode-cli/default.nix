@@ -11,10 +11,10 @@
 }:
 
 let
-  sha256 = "10mlkkprky7qqjrkv43v1lzmlgdjpkzy3729k9xxdm5mpq5bjdwj";
+  sha256 = "0r5by5d6wr5zbsaj211s99qg28nr7wm8iri6jxnksx5b375dah6g";
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
-  specVersion = "4.112.0";
-  specSha256 = "1z509qf5iidn6q5x3p7m8aifxn4bmwifx36wv8ii3nn7l4s9aymr";
+  specVersion = "4.140.0";
+  specSha256 = "0ay54m4aa8bmmpjc7s66rfzqzk4w25h48b9a665y29g67ybb432g";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
     sha256 = specSha256;
@@ -24,7 +24,7 @@ in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.14.0";
+  version = "5.26.1";
 
   src = fetchFromGitHub {
     owner = "linode";
@@ -32,6 +32,10 @@ buildPythonApplication rec {
     rev = version;
     inherit sha256;
   };
+
+  patches = [
+    ./remove-update-check.patch
+  ];
 
   # remove need for git history
   prePatch = ''

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2021.10.0";
+  version = "2023.01.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-h89gfdZvk7H22xAczaPMscTYZu0YeFxvFfL6/Oz2cJw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-enNYzU65QBT/ryCUNwB08U+QiFvVb03fbYzZ5Qk6GTk=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     titlecase
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-aiohttp
@@ -48,12 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
     types-pytz
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'titlecase = "^2.3"' 'titlecase = "*"' \
-      --replace 'pytz = "^2021.3"' 'pytz = "*"'
-  '';
 
   disabledTests = [
     # AssertionError: assert datetime.date(...
@@ -72,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with Ridwell waste recycling";
     homepage = "https://github.com/bachya/aioridwell";
+    changelog = "https://github.com/bachya/aioridwell/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

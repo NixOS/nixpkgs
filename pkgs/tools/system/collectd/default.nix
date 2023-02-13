@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--disable-werror"
-  ] ++ plugins.configureFlags;
+  ] ++ plugins.configureFlags
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
@@ -60,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://collectd.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

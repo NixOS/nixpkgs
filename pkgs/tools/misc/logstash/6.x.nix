@@ -7,11 +7,9 @@
 , jre
 }:
 
-with lib;
-
 let this = stdenv.mkDerivation rec {
   version = elk6Version;
-  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
+  pname = "logstash${lib.optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}.tar.gz";
@@ -26,8 +24,12 @@ let this = stdenv.mkDerivation rec {
   dontStrip         = true;
   dontPatchShebangs = true;
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
-    makeWrapper jre
+    jre
   ];
 
   installPhase = ''
@@ -49,12 +51,17 @@ let this = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A data pipeline that helps you process logs and other event data from a variety of systems";
     homepage    = "https://www.elastic.co/products/logstash";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+      binaryNativeCode  # bundled jruby includes native code
+    ];
     license     = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
   passthru.tests =
-    optionalAttrs (!enableUnfree) (
+    lib.optionalAttrs (!enableUnfree) (
       assert this.drvPath == nixosTests.elk.ELK-6.elkPackages.logstash.drvPath;
       {
         elk = nixosTests.elk.ELK-6;

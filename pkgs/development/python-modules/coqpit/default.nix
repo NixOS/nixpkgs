@@ -6,17 +6,17 @@
 
 buildPythonPackage rec {
   pname = "coqpit";
-  version = "0.0.14";
+  version = "0.0.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "041sx7ph8vfx8ivvm6hjj6s83p9lni2agwyrrncqwhcbjy9pbdf1";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-FY3PYd8dY5HFKkhD6kBzPt0k1eFugdqsO3yIN4oDk3E=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

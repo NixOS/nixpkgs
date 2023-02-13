@@ -7,6 +7,7 @@
 , attrs
 , click
 , construct
+, construct-classes
 , ecdsa
 , hidapi
 , libusb1
@@ -15,8 +16,8 @@
 , protobuf
 , pyblake2
 , requests
-, rlp
 , shamir-mnemonic
+, simple-rlp
 , typing-extensions
 , trezor-udev-rules
 , pytestCheckHook
@@ -24,13 +25,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.0";
+  version = "0.13.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4571aa09dbfe88b31eb2f16c7c359b4809621b75a04b7b5bc9dbffe17046c99a";
+    sha256 = "sha256-jhUBca/+rDge/bFHgpKQhNZBTsd8zNyHHW8NZE/1e9g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     attrs
     click
     construct
+    construct-classes
     ecdsa
     hidapi
     libusb1
@@ -47,18 +49,25 @@ buildPythonPackage rec {
     protobuf
     pyblake2
     requests
-    rlp
     shamir-mnemonic
+    simple-rlp
     typing-extensions
   ] ++ lib.optionals stdenv.isLinux [
     trezor-udev-rules
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/test_stellar.py" # requires stellar-sdk
+    "tests/test_firmware.py" # requires network downloads
   ];
+
+  pythonImportsCheck = [ "trezorlib" ];
+
+  postCheck = ''
+    $out/bin/trezorctl --version
+  '';
 
   postFixup = ''
     mkdir completions
@@ -74,6 +83,6 @@ buildPythonPackage rec {
     description = "Python library for communicating with Trezor Hardware Wallet";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ np prusnak mmahut _1000101 ];
+    maintainers = with maintainers; [ np prusnak mmahut ];
   };
 }

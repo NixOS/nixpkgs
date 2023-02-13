@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
+, SDL, ffmpeg_4, frei0r, libjack2, libdv, libsamplerate, libexif
 , libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
-, gtk2, genericUpdater, common-updater-scripts, libebur128
+, gtk2, gitUpdater, libebur128, rubberband
 , jack2, ladspa-sdk, swig, which, ncurses
 , enablePython ? false, python3
 }:
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2.dev
+    SDL ffmpeg_4 frei0r libjack2 libdv libsamplerate libvorbis libxml2.dev
     movit sox libexif gtk2 fftw libebur128 opencv4 SDL2 jack2
-    ladspa-sdk
+    ladspa-sdk rubberband
   ] ++ lib.optional enablePython ncurses;
 
   nativeBuildInputs = [ pkg-config makeWrapper which ]
@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
     sed -i ${outPythonPath}/mlt/__init__.py -e "s|return importlib.import_module('_mlt')|return importlib.import_module('mlt._mlt')|g"
   '';
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org";
     license = with licenses; [ gpl3Only gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ tohl peti ];
+    maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;
   };
 }

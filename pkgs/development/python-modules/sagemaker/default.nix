@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , attrs
 , boto3
 , google-pasta
@@ -12,20 +13,26 @@
 , pandas
 , pathos
 , packaging
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.69.0";
+  version = "2.126.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e9051a44a82be07e32d83cfc12d724fd1cb76f83ade34cd9e69c45a8d37c676";
+    hash = "sha256-wuU53FmrtAY8E08Q+W4OhBoBQ8kks3LjJiR7kxlbfAg=";
   };
 
-  pythonImportsCheck = [
-    "sagemaker"
-    "sagemaker.lineage.visualizer"
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    # FIXME: Remove when >= 2.111.0
+    "attrs"
+    "protobuf"
   ];
 
   propagatedBuildInputs = [
@@ -42,11 +49,16 @@ buildPythonPackage rec {
     pandas
   ];
 
-  doCheck = false;
-
   postFixup = ''
     [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
   '';
+
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "sagemaker"
+    "sagemaker.lineage.visualizer"
+  ];
 
   meta = with lib; {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";

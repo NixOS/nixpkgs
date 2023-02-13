@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
@@ -8,7 +7,6 @@
 , blinker
 , brotli
 , certifi
-, click
 , cryptography
 , flask
 , h11
@@ -16,11 +14,11 @@
 , hyperframe
 , kaitaistruct
 , ldap3
+, mitmproxy-wireguard
 , msgpack
 , passlib
 , protobuf
 , publicsuffix2
-, pyasn1
 , pyopenssl
 , pyparsing
 , pyperclip
@@ -32,8 +30,6 @@
 , wsproto
 , zstandard
   # Additional check requirements
-, beautifulsoup4
-, glibcLocales
 , hypothesis
 , parver
 , pytest-asyncio
@@ -45,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "7.0.4";
-  disabled = pythonOlder "3.8";
+  version = "9.0.1";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
+    owner = "mitmproxy";
+    repo = "mitmproxy";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-CINKvRnBspciS+wefJB8gzBE13L8CjbYCkmLmTTeYlA=";
   };
 
   propagatedBuildInputs = [
@@ -62,7 +58,6 @@ buildPythonPackage rec {
     blinker
     brotli
     certifi
-    click
     cryptography
     flask
     h11
@@ -70,12 +65,12 @@ buildPythonPackage rec {
     hyperframe
     kaitaistruct
     ldap3
+    mitmproxy-wireguard
     msgpack
     passlib
     protobuf
-    publicsuffix2
-    pyasn1
     pyopenssl
+    publicsuffix2
     pyparsing
     pyperclip
     ruamel-yaml
@@ -86,9 +81,7 @@ buildPythonPackage rec {
     zstandard
   ];
 
-  checkInputs = [
-    beautifulsoup4
-    glibcLocales
+  nativeCheckInputs = [
     hypothesis
     parver
     pytest-asyncio
@@ -97,8 +90,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     # remove dependency constraints
@@ -115,7 +106,22 @@ buildPythonPackage rec {
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
     "test_integration"
+    "test_contentview_flowview"
+    "test_flowview"
+    # ValueError: Exceeds the limit (4300) for integer string conversion
+    "test_roundtrip_big_integer"
+
+    "test_wireguard"
+    "test_commands_exist"
+    "test_statusbar"
   ];
+
+  disabledTestPaths = [
+    # teardown of half the tests broken
+    "test/mitmproxy/addons/test_onboarding.py"
+  ];
+
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 
@@ -123,6 +129,6 @@ buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };
 }

@@ -1,31 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, redis
 , requests
-, six }:
+, six
+, urllib3
+}:
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.19.0";
+  version = "2.22.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kE9ugT26g3dY6VEMG+5R18ohfxaSRmJaE+aTcz3DNUM=";
+    hash = "sha256-VGgNvyQ6Kwz/DlkeHSaWkulCZSc7UquQmUpmFVXASsc=";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [
+    redis
+    requests
+    six
+    urllib3
+  ];
 
-  # tests want to access the spotify API
+  # Tests want to access the spotify API
   doCheck = false;
+
   pythonImportsCheck = [
     "spotipy"
     "spotipy.oauth2"
   ];
 
   meta = with lib; {
+    description = "Library for the Spotify Web API";
     homepage = "https://spotipy.readthedocs.org/";
     changelog = "https://github.com/plamere/spotipy/blob/${version}/CHANGELOG.md";
-    description = "A light weight Python library for the Spotify Web API";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];
   };

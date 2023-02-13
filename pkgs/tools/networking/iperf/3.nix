@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, fetchpatch, lksctp-tools }:
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "3.10.1";
+  version = "3.12";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
-    sha256 = "0nkisr2215w68ivadg3sx3q50iwamznwigs63lclb8jlrih9gg03";
+    sha256 = "sha256-cgNOz7an1tZ+OE4Z+27/8yNspPftTFGNfbZJxEfh/9Y=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
   configureFlags = [
     "--with-openssl=${openssl.dev}"
   ];

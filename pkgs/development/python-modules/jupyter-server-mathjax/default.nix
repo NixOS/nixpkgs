@@ -1,18 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , jupyter-packaging
-, jupyter_server
+, jupyter-server
 , pytest-tornasync
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-server-mathjax";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchPypi {
     inherit version;
     pname = "jupyter_server_mathjax";
-    sha256 = "564e8d1272019c6771208f577b5f9f2b3afb02b9e2bff3b34c042cef8ed84451";
+    sha256 = "sha256-ux5rbcBobB/jhqIrWIYWPbVIiTqZwoEMNjmenEyiOUM=";
   };
 
   nativeBuildInputs = [
@@ -20,19 +22,21 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-tornasync
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "jupyter_server_mathjax" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "MathJax resources as a Jupyter Server Extension";
-    homepage = "http://jupyter.org";
+    homepage = "https://jupyter.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer ];
   };

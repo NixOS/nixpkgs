@@ -9,7 +9,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/hasura" ];
 
-  vendorSha256 = "0c0zn3a3bq3g13zj1b7hz1gfd9mcc5wlch80vjgp31vgm23vvd8d";
+  vendorSha256 = "0rjh4rs92jj56il3hg8msjz0w0iv25lydnh9v1kxmvdzy1x75b2b";
 
   doCheck = false;
 

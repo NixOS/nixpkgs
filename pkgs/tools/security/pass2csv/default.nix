@@ -2,17 +2,22 @@
 , fetchPypi
 , lib
 , python-gnupg
+, setuptools
 }:
 
 buildPythonApplication rec {
   pname = "pass2csv";
-  version = "0.3.1";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qY094A5F7W2exGcsS9AJuO5RrBcAn0cCrJquOc6zGZM=";
+    sha256 = "sha256-a/PQl/nqdj9xOM2hfAIiLuGy5F4KmEWFJihZ4gilaJw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-gnupg

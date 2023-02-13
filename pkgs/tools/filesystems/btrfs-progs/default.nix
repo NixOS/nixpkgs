@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchurl, pkg-config, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+{ lib, stdenv, fetchurl
+, pkg-config, sphinx
+, zstd
+, acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
+, runCommand, btrfs-progs
+, gitUpdater
+, udevSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.14.1";
+  version = "6.1.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-1UqTRlRcpG3xKOPMt31gwJfZDJO34xSZAjbijPr4xVs=";
+    sha256 = "sha256-a+Zn2X89ZcC6V8MxyYsL07E89g2NMfqK0liCqtnXnXo=";
   };
 
   nativeBuildInputs = [
-    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-    python3 python3.pkgs.setuptools
+    pkg-config
+  ] ++ [
+    sphinx
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
-
-  # for python cross-compiling
-  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+  buildInputs = [ acl attr e2fsprogs libuuid lzo udev zlib zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -29,12 +32,39 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = [
+    # Built separately, see python3Packages.btrfsutil
+    "--disable-python"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ];
+
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    simple-filesystem = runCommand "btrfs-progs-create-fs" {} ''
+      mkdir -p $out
+      truncate -s110M $out/disc
+      ${btrfs-progs}/bin/mkfs.btrfs $out/disc | tee $out/success
+      ${btrfs-progs}/bin/btrfs check $out/disc | tee $out/success
+      [ -e $out/success ]
+    '';
+  };
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/kdave/btrfs-progs.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

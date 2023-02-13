@@ -45,8 +45,7 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      nativeBuildInputs = [ unzip ];
-      buildInputs = [ bash coreutils which zip ];
+      nativeBuildInputs = [ bash coreutils which zip unzip ];
       patchPhase = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
            --replace /bin/bash bash \
@@ -234,7 +233,7 @@ let
         sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
       };
 
-      buildInputs = [ ispell perl hunspell ];
+      nativeBuildInputs = [ ispell perl hunspell ];
 
       dontBuild = true;
 
@@ -845,5 +844,38 @@ rec {
       maintainers = with maintainers; [ toastal ]; # looking for a native speaker
       platforms = platforms.all;
     };
+  };
+
+  /* CROATIAN */
+
+  hr_HR = hr-hr;
+  hr-hr = mkDictFromLibreOffice {
+    shortName = "hr-hr";
+    dictFileName = "hr_HR";
+    shortDescription = "Croatian (Croatia)";
+    readmeFile = "README_hr_HR.txt";
+    license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
+  };
+
+  /* NORWEGIAN */
+
+  nb_NO = nb-no;
+  nb-no = mkDictFromLibreOffice {
+    shortName = "nb-no";
+    dictFileName = "nb_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Bokmål (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
+
+  nn_NO = nn-no;
+  nn-no = mkDictFromLibreOffice {
+    shortName = "nn-no";
+    dictFileName = "nn_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Nynorsk (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
   };
 }

@@ -1,37 +1,70 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
-, qmake
+
+, cmake
+, qttools
+, wrapQtAppsHook
+
 , curl
 , ffmpeg
 , libmediainfo
 , libzen
+, qt5compat ? null # qt6 only
 , qtbase
 , qtdeclarative
 , qtmultimedia
 , qtsvg
-, qttools
+, qtwayland
+, quazip
 }:
-
-mkDerivation rec {
+let
+  qtVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.12";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "1gx4m9cf81d0b2nk2rlqm4misz67f5bpkjqx7d1l76rw2pwc6azf";
+    sha256 = "sha256-hipOOG+ibfsJZKLcnB6a5+OOvSs4WUdpEY+RiVKJc+k=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
+  buildInputs = [
+    curl
+    ffmpeg
+    libmediainfo
+    libzen
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qtsvg
+    qtwayland
+    quazip
+  ] ++ lib.optional (qtVersion == "6") [
+    qt5compat
+  ];
 
-  prePatch = ''
-    substituteInPlace MediaElch.pro --replace "/usr" "$out"
-  '';
+
+  cmakeFlags = [
+    "-DDISABLE_UPDATER=ON"
+    "-DUSE_EXTERN_QUAZIP=ON"
+    "-DMEDIAELCH_FORCE_QT${qtVersion}=ON"
+  ];
+
+  # libmediainfo.so.0 is loaded dynamically
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib"
+  ];
 
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";

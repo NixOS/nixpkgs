@@ -1,23 +1,15 @@
-{lib, stdenv, fetchurl, java, makeWrapper}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="apache-jena-fuseki";
-    version = "4.3.1";
-    name="${baseName}-${version}";
-    url="https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+{ lib, stdenv, fetchurl, java, makeWrapper }:
+
+stdenv.mkDerivation rec {
+  pname = "apache-jena-fuseki";
+  version = "4.3.1";
+  src = fetchurl {
+    url = "https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
     sha256 = "1r0vfa7d55lzw22yfx46mxxmz8x8pkr666vggqw2m1rzzj52z9nx";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
   installPhase = ''
     cp -r . "$out"
     chmod +x $out/fuseki
@@ -29,14 +21,12 @@ stdenv.mkDerivation {
         ;
     done
   '';
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "SPARQL server";
-    license = lib.licenses.asl20;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-    homepage = "http://jena.apache.org";
-    downloadPage = "http://archive.apache.org/dist/jena/binaries/";
-    downloadURLRegexp = "apache-jena-fuseki-.*[.]tar[.]gz\$";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "https://jena.apache.org";
+    downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };
 }

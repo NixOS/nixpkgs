@@ -1,17 +1,15 @@
-{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, automake, pkg-config
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
-let
-  version = "3.10.12";
-  name = "xcircuit-${version}";
-  inherit (lib) getBin;
+stdenv.mkDerivation rec {
+  version = "3.10.37";
+  pname = "xcircuit";
 
-in stdenv.mkDerivation {
-  inherit name version;
-
-  src = fetchurl {
-    url = "http://opencircuitdesign.com/xcircuit/archive/${name}.tgz";
-    sha256 = "1h1ywc3mr7plvwnhdii2zgnnv5ih2nhyl4qbdjpi83dq0aq1s2mn";
+  src = fetchFromGitHub {
+    owner = "RTimothyEdwards";
+    repo = "XCircuit";
+    rev = "0056213308c92bec909e8469a0fa1515b72fc3d2";
+    sha256 = "sha256-LXU5VEkLF1aKYz9ynI1qQjJUwt/zKFMPYj153OgJOOI=";
   };
 
   nativeBuildInputs = [ autoreconfHook automake pkg-config ];
@@ -20,7 +18,7 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
-    "--with-ngspice=${getBin ngspice}/bin/ngspice"
+    "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
   buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];
@@ -30,6 +28,6 @@ in stdenv.mkDerivation {
     homepage = "http://opencircuitdesign.com/xcircuit";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ spacefrogg thoughtpolice ];
+    maintainers = with maintainers; [ john-shaffer spacefrogg thoughtpolice ];
   };
 }

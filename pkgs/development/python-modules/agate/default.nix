@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , cssselect
 , fetchFromGitHub
@@ -9,7 +9,7 @@
 , lxml
 , nose
 , parsedatetime
-, PyICU
+, pyicu
 , python-slugify
 , pytimeparse
 , pythonOlder
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     isodate
     leather
     parsedatetime
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     glibcLocales
     lxml
     nose
-    PyICU
+    pyicu
     pytz
   ];
 

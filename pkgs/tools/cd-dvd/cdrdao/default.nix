@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
-    homepage = "http://cdrdao.sourceforge.net/";
+    homepage = "https://cdrdao.sourceforge.net/";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

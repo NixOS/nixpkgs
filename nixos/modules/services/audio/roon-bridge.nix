@@ -8,25 +8,25 @@ let
 in {
   options = {
     services.roon-bridge = {
-      enable = mkEnableOption "Roon Bridge";
+      enable = mkEnableOption (lib.mdDoc "Roon Bridge");
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the bridge.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-bridge";
-        description = ''
+        description = lib.mdDoc ''
           User to run the Roon bridge as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-bridge";
-        description = ''
+        description = lib.mdDoc ''
           Group to run the Roon Bridge as.
         '';
       };
@@ -42,7 +42,7 @@ in {
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-bridge}/start.sh";
+        ExecStart = "${pkgs.roon-bridge}/bin/RoonBridge";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
@@ -53,12 +53,17 @@ in {
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [{ from = 9100; to = 9200; }];
       allowedUDPPorts = [ 9003 ];
-      extraCommands = ''
+      extraCommands = optionalString (!config.networking.nftables.enable) ''
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -s 240.0.0.0/5 -j ACCEPT
         iptables -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
         iptables -A INPUT -m pkttype --pkt-type broadcast -j ACCEPT
+      '';
+      extraInputRules = optionalString config.networking.nftables.enable ''
+        ip saddr { 224.0.0.0/4, 240.0.0.0/5 } accept
+        ip daddr 224.0.0.0/4 accept
+        pkttype { multicast, broadcast } accept
       '';
     };
 

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     exec = "prince";
     desktopName = "SDLPoP";
     comment = "An open-source port of Prince of Persia";
-    categories = "Game;AdventureGame;";
+    categories = [ "Game" "AdventureGame" ];
   }) ];
 
   meta = with lib; {

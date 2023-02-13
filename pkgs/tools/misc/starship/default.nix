@@ -2,48 +2,56 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, openssl
 , installShellFiles
-, libiconv
+, cmake
+, fetchpatch
+, git
+, nixosTests
 , Security
+, Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.1.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Rr0HCr/uJDsBQiKJIPdEL3WOaLgMY2Nq2JGOq4dEUxQ=";
+    hash = "sha256-HS+vtF+h5M6lbk7TROAXwrHpj92SeC+j0TjmP6ycH2Q=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
 
-  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
+    installShellCompletion --cmd starship \
+      --bash <($out/bin/starship completions bash) \
+      --fish <($out/bin/starship completions fish) \
+      --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoSha256 = "sha256-UT6t1GbyON/wrIF/oXXhsT3Z61LFjggSPWKpSDHp+PI=";
+  cargoHash = "sha256-hs0ImaozKH6QcUfts+oseUqecg7bGX5cx50ixnNamW8=";
+
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     HOME=$TMPDIR
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) starship;
+  };
+
   meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ bbigras danth davidtwco Br1ght0ne Frostman marsam ];
   };
 }

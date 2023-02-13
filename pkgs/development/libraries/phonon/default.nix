@@ -12,8 +12,6 @@
 , debug ? false
 }:
 
-with lib;
-
 let
   soname = "phonon4qt5";
   buildsystemdir = "share/cmake/${soname}";

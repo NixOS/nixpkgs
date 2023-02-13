@@ -3,6 +3,7 @@
 , tcl
 , libiconv
 , fetchurl
+, buildPackages
 , zlib
 , openssl
 , readline
@@ -16,12 +17,15 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.17";
+  version = "2.20";
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
-    sha256 = "0539rsfvwv49qyrf36z5m0k74kvnn6y5xasm9vvi6lbphx8yxmi1";
+    sha256 = "1knff50rr8f39myxj50fprb9ya87cslmwz7zzfya56l33r7i7jh3";
   };
+
+  # required for build time tool `./tools/translate.c`
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
 

@@ -13,21 +13,19 @@
 , libgee
 , libhandy
 , gcr
-, webkitgtk
+, webkitgtk_4_1
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.4.0";
-
-  repoName = "capnet-assist";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "capnet-assist";
     rev = version;
-    sha256 = "sha256-UdkS+w61c8z2TCJyG7YsDb0n0b2LOpFyaHzMbdCJsZI=";
+    sha256 = "sha256-06DWkLkVpdSYnKOR8zqA0tvWXYrglBM9R/XEIfIkwQU=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libhandy
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   postPatch = ''
@@ -55,9 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

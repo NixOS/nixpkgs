@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  buildFlags = lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
+  buildFlags = lib.optionals stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
-    updateWalker = true;
   };
 }

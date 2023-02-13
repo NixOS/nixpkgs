@@ -8,22 +8,23 @@
 , extlib
 }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
-then throw "javalib is not available for OCaml ${ocaml.version}"
-else
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
+  "javalib is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-javalib";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "javalib-team";
     repo = "javalib";
-    rev = "v${version}";
-    sha256 = "sha256-du1h+S+A7CetMXofsYxdGeSsobCgspDB9oUE9WNUbbo=";
+    rev = version;
+    hash = "sha256-XaI7GTU/O5UEWuYX4yqaIRmEoH7FuvCg/+gtKbE/P1s=";
   };
 
-  buildInputs = [ which ocaml findlib ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 

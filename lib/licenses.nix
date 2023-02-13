@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -65,6 +71,17 @@ in mkLicense lset) ({
     fullName = "AMD License Agreement";
     url = "https://developer.amd.com/amd-license-agreement/";
     free = false;
+  };
+
+  aom = {
+    fullName = "Alliance for Open Media Patent License 1.0";
+    url = "https://aomedia.org/license/patent-license/";
+  };
+
+  apsl10 = {
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
   };
 
   apsl20 = {
@@ -90,6 +107,26 @@ in mkLicense lset) ({
   asl20 = {
     spdxId = "Apache-2.0";
     fullName = "Apache License 2.0";
+  };
+
+  bitstreamVera = {
+    spdxId = "Bitstream-Vera";
+    fullName = "Bitstream Vera Font License";
+  };
+
+  bitTorrent10 = {
+     spdxId = "BitTorrent-1.0";
+     fullName = " BitTorrent Open Source License v1.0";
+  };
+
+  bitTorrent11 = {
+    spdxId = "BitTorrent-1.1";
+    fullName = " BitTorrent Open Source License v1.1";
+  };
+
+  bola11 = {
+    url = "https://blitiri.com.ar/p/bola/";
+    fullName = "Buena Onda License Agreement 1.1";
   };
 
   boost = {
@@ -127,6 +164,11 @@ in mkLicense lset) ({
     fullName = "BSD-2-Clause Plus Patent License";
   };
 
+  bsd2WithViews = {
+    spdxId = "BSD-2-Clause-Views";
+    fullName = "BSD 2-Clause with views sentence";
+  };
+
   bsd3 = {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
@@ -135,6 +177,11 @@ in mkLicense lset) ({
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
+  };
+
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
   };
 
   bsdOriginalUC = {
@@ -151,6 +198,11 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+  };
+
+  cal10 = {
+    fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    url = "https://opensource.org/licenses/CAL-1.0";
   };
 
   capec = {
@@ -280,10 +332,22 @@ in mkLicense lset) ({
     fullName = "DOC License";
   };
 
+  drl10 = {
+    spdxId = "DRL-1.0";
+    fullName = "Detection Rule License 1.0";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
     free = false;
+  };
+
+  ecl20 = {
+    fullName = "Educational Community License, Version 2.0";
+    url = "https://opensource.org/licenses/ECL-2.0";
+    shortName = "ECL 2.0";
+    spdxId = "ECL-2.0";
   };
 
   efl10 = {
@@ -384,6 +448,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  generaluser = {
+    fullName = "GeneralUser GS License v2.0";
+    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+  };
+
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
@@ -460,6 +529,11 @@ in mkLicense lset) ({
     spdxId = "imagemagick";
   };
 
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -494,10 +568,33 @@ in mkLicense lset) ({
     free = false;
   };
 
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
+  };
+
+  fair = {
+    fullName = "Fair License";
+    spdxId = "Fair";
+    free = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
     free = false;
+  };
+
+  lal12 = {
+    spdxId = "LAL-1.2";
+    fullName = "Licence Art Libre 1.2";
+  };
+
+  lal13 = {
+    spdxId = "LAL-1.3";
+    fullName = "Licence Art Libre 1.3";
   };
 
   lgpl2Only = {
@@ -545,6 +642,11 @@ in mkLicense lset) ({
     fullName = "PNG Reference Library version 2";
   };
 
+  libssh2 = {
+    fullName = "libssh2 License";
+    url = "https://www.libssh2.org/license.html";
+  };
+
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -586,6 +688,21 @@ in mkLicense lset) ({
     spdxId = "MIT";
     fullName = "MIT License";
   };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
+  };
+
+  mit0 = {
+    spdxId = "MIT-0";
+    fullName = "MIT No Attribution";
+  };
 
   mpl10 = {
     spdxId = "MPL-1.0";
@@ -615,7 +732,12 @@ in mkLicense lset) ({
 
   ncsa = {
     spdxId = "NCSA";
-    fullName  = "University of Illinois/NCSA Open Source License";
+    fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  nlpl = {
+    spdxId = "NLPL";
+    fullName = "No Limit Public License";
   };
 
   nposl3 = {
@@ -643,6 +765,11 @@ in mkLicense lset) ({
   ofl = {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
+  };
+
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
   };
 
   openldap = {
@@ -743,6 +870,12 @@ in mkLicense lset) ({
     fullName = "SGI Free Software License B v2.0";
   };
 
+  # Gentoo seems to treat it as a license:
+  # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
+  sgmlug = {
+    fullName = "SGML UG SGML Parser Materials license";
+  };
+
   sleepycat = {
     spdxId = "Sleepycat";
     fullName = "Sleepycat License";
@@ -774,6 +907,11 @@ in mkLicense lset) ({
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
   };
 
   ufl = {
@@ -830,6 +968,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+  };
+
   vsl10 = {
     spdxId = "VSL-1.0";
     fullName = "Vovida Software License v1.0";
@@ -860,6 +1003,11 @@ in mkLicense lset) ({
     fullName = "wxWindows Library Licence, Version 3.1";
   };
 
+  x11 = {
+    spdxId = "X11";
+    fullName = "X11 License";
+  };
+
   xfig = {
     fullName = "xfig";
     url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
@@ -884,26 +1032,6 @@ in mkLicense lset) ({
   agpl3 = {
     spdxId = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
-  fdl11 = {
-    spdxId = "GFDL-1.1";
-    fullName = "GNU Free Documentation License v1.1";
-    deprecated = true;
-  };
-  fdl12 = {
-    spdxId = "GFDL-1.2";
-    fullName = "GNU Free Documentation License v1.2";
-    deprecated = true;
-  };
-  fdl13 = {
-    spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.3";
-    deprecated = true;
-  };
-  gpl1 = {
-    spdxId = "GPL-1.0";
-    fullName = "GNU General Public License v1.0";
     deprecated = true;
   };
   gpl2 = {

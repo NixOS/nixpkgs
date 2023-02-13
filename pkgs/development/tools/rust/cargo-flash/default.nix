@@ -1,34 +1,32 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , libusb1
 , pkg-config
-, rustfmt
+, DarwinTools
 , AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";
-  version = "0.12.0";
+  version = "0.16.0";
 
-  src = fetchFromGitHub {
-    owner = "probe-rs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0s49q8x0iscy9rgn9zgymyg39cqm251a99m341znjn55lap3pdl8";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-Zwb9jUZwkvuBzvACMwKwpAHEMkjLVDkXfDLo4ntG3+k=";
   };
 
-  cargoSha256 = "0rb4s5bwjs7hri636r2viva96a6z9qjv9if6i220j9yglrvi7c8i";
+  cargoSha256 = "sha256-giGSTMtGTIw4ZZglHqbW2sGKO/D/3TVQR5olTgitBjE=";
 
-  nativeBuildInputs = [ pkg-config rustfmt ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";
     homepage = "https://probe.rs/";
-    changelog = "https://github.com/probe-rs/cargo-flash/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/cargo-flash/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ fooker ];
+    maintainers = with maintainers; [ fooker newam ];
   };
 }

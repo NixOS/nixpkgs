@@ -5,16 +5,21 @@
 
 buildGoModule rec {
   pname = "wprecon";
-  version = "1.6.3a";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "blackbinn";
     repo = pname;
     rev = version;
-    sha256 = "0gqi4799ha3mf8r7ini0wj4ilkfsh80vnnxijfv9a343r6z5w0dn";
+    hash = "sha256-23zJD3Nnkeko+J2FjPq5RA5dIjORMXvwt3wtAYiVlQs=";
   };
 
-  vendorSha256 = "1sab58shspll96rqy1rp659s0yikqdcx59z9b88d6p4w8a98ns87";
+  vendorSha256 = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";
+
+  postFixup = ''
+    # Rename binary
+    mv $out/bin/cli $out/bin/${pname}
+  '';
 
   meta = with lib; {
     description = "WordPress vulnerability recognition tool";

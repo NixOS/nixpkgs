@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, qtbase, qtx11extras
+, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, ninja, mpi, python3, tbb, libGLU, libGL
 , withDocs ? true
 }:
 
 let
-  version = "5.9.1";
+  version = "5.11.0";
 
   docFiles = [
     (fetchurl {
@@ -26,7 +26,7 @@ let
     })
   ];
 
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,20 +35,13 @@ in mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
+    sha256 = "sha256-WvkKGl5lG+apX6m4ULVZZVtDsSUjEVXe/seh95b+LmI=";
     fetchSubmodules = true;
   };
 
   # Find the Qt platform plugin "minimal"
   preConfigure = ''
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-  '';
-
-  # During build, binaries are called that rely on freshly built
-  # libraries.  These reside in build/lib, and are not found by
-  # default.
-  preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   cmakeFlags = [
@@ -75,6 +68,7 @@ in mkDerivation rec {
     makeWrapper
     ninja
     gfortran
+    wrapQtAppsHook
   ];
 
   buildInputs = [

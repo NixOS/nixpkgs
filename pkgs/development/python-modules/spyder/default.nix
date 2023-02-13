@@ -1,67 +1,122 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
-  jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint,
-  keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
-  cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
-  watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
-  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8, textdistance
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, atomicwrites
+, chardet
+, cloudpickle
+, cookiecutter
+, diff-match-patch
+, flake8
+, intervaltree
+, jedi
+, jellyfish
+, keyring
+, matplotlib
+, mccabe
+, nbconvert
+, numpy
+, numpydoc
+, psutil
+, pygments
+, pylint
+, pylint-venv
+, pyls-spyder
+, pyopengl
+, pyqtwebengine
+, python-lsp-black
+, python-lsp-server
+, pyxdg
+, pyzmq
+, pycodestyle
+, qdarkstyle
+, qstylizer
+, qtawesome
+, qtconsole
+, qtpy
+, rope
+, Rtree
+, scipy
+, spyder-kernels
+, textdistance
+, three-merge
+, watchdog
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.2.0";
+  version = "5.4.1";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd04acc88426acee9c4ce6bb91f50c13fc161a437e68bca701243b3415ce9d08";
+    hash = "sha256-kQBOYRXhjz+OQk7Vlxb/UKiDi92mA8ialsFQ+QzqhlE=";
   };
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  patches = [
+    ./dont-clear-pythonpath.patch
+  ];
+
+  nativeBuildInputs = [
+    pyqtwebengine.wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
-    atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
-    flake8 textdistance
-  ];
+    atomicwrites
+    chardet
+    cloudpickle
+    cookiecutter
+    diff-match-patch
+    intervaltree
+    jedi
+    jellyfish
+    keyring
+    matplotlib
+    nbconvert
+    numpy
+    numpydoc
+    psutil
+    pygments
+    pylint-venv
+    pyls-spyder
+    pyopengl
+    pyqtwebengine
+    python-lsp-black
+    python-lsp-server
+    pyxdg
+    pyzmq
+    qdarkstyle
+    qstylizer
+    qtawesome
+    qtconsole
+    qtpy
+    rope
+    Rtree
+    scipy
+    spyder-kernels
+    textdistance
+    three-merge
+    watchdog
+  ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
 
-  desktopItem = makeDesktopItem {
-    name = "Spyder";
-    exec = "spyder";
-    icon = "spyder";
-    comment = "Scientific Python Development Environment";
-    desktopName = "Spyder";
-    genericName = "Python IDE";
-    categories = "Development;IDE;";
-  };
-
   postPatch = ''
-    # remove dependency on pyqtwebengine
-    # this is still part of the pyqt 5.11 version we have in nixpkgs
+    # Remove dependency on pyqtwebengine
+    # This is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
-    # The major version bump in watchdog is due to changes in supported
-    # platforms, not API break.
-    # https://github.com/gorakhargosh/watchdog/issues/761#issuecomment-777001518
     substituteInPlace setup.py \
-      --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso" \
-      --replace "watchdog>=0.10.3,<2.0.0" "watchdog>=0.10.3,<3.0.0"
+      --replace "qdarkstyle>=3.0.2,<3.1.0" "qdarkstyle" \
+      --replace "ipython>=7.31.1,<8.0.0" "ipython"
   '';
 
   postInstall = ''
-    # add Python libs to env so Spyder subprocesses
+    # Add Python libs to env so Spyder subprocesses
     # created to run compute kernels don't fail with ImportErrors
     wrapProgram $out/bin/spyder --prefix PYTHONPATH : "$PYTHONPATH"
-
-    # Create desktop item
-    mkdir -p $out/share/icons
-    cp spyder/images/spyder.svg $out/share/icons
-    cp -r $desktopItem/share/applications/ $out/share
   '';
 
   dontWrapQtApps = true;
@@ -81,7 +136,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
+    platforms = platforms.linux;
   };
 }

@@ -1,50 +1,57 @@
-{ lib, buildPythonPackage, fetchPypi
-, coverage
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , mock
 , ply
-, pytest-runner
 , pytestCheckHook
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.2.1";
+  version = "3.3.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0xby5mpsms7b2rv8j6mvxzmzz5i9ii01brb9ylxz6kiv2i08piwv";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "dropbox";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
   };
 
   postPatch = ''
+    # https://github.com/dropbox/stone/issues/288
+    substituteInPlace stone/frontend/ir_generator.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
     substituteInPlace setup.py \
-      --replace "pytest-runner == 5.2.0" "pytest-runner" \
-      --replace "pytest < 5" "pytest"
-    substituteInPlace test/requirements.txt \
-      --replace "coverage==5.3" "coverage"
+      --replace "'pytest-runner == 5.2.0'," ""
   '';
 
-  nativeBuildInputs = [ pytest-runner ];
-
-  propagatedBuildInputs = [ ply six ];
-
-  checkInputs = [ pytestCheckHook coverage mock ];
-
-  # try to import from `test` directory, which is exported by the python interpreter
-  # and cannot be overriden without removing some py3 to py2 support
-  disabledTestPaths = [
-    "test/test_tsd_types.py"
-    "test/test_js_client.py"
+  propagatedBuildInputs = [
+    ply
+    six
   ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
+
   disabledTests = [
     "test_type_name_with_module"
   ];
 
-  pythonImportsCheck = [ "stone" ];
+  pythonImportsCheck = [
+    "stone"
+  ];
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
     homepage = "https://github.com/dropbox/stone";
+    changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "droidcam";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
     rev = "v${version}";
-    sha256 = "sha256-3iA7GDTiCx5vHawj8ZBFAK0BIfmxEFuQrVfL7Gi6FhM=";
+    sha256 = "sha256-AxJBpoiBnb+5Pq/h4giOYAeLlvOtAJT5sCwzPEKo7w4=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/droidcam.c \
-      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/droidcam.png"
+      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
+    substituteInPlace droidcam.desktop \
+      --replace "/opt/droidcam-icon.png" "droidcam" \
+      --replace "/usr/local/bin/droidcam" "droidcam"
   '';
 
   preBuild = ''
@@ -42,7 +45,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dt $out/bin droidcam droidcam-cli
-    install -D icon2.png $out/share/icons/hicolor/droidcam.png
+    install -D icon2.png $out/share/icons/hicolor/96x96/apps/droidcam.png
+    install -D droidcam.desktop $out/share/applications/droidcam.desktop
 
     runHook postInstall
   '';

@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, autoreconfHook, gettext, netbsd
+, fetchurl, autoreconfHook, gettext, freebsd, netbsd
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -23,7 +23,14 @@ stdenv.mkDerivation rec {
     ./preprocessor-warnings.patch
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
+
+  preConfigure = if !stdenv.hostPlatform.useAndroidPrebuilt then null else ''
+    sed -i 's|DISTSUBDIRS = lib po|DISTSUBDIRS = lib|g' Makefile.in
+    sed -i 's|SUBDIRS = lib @POSUB@|SUBDIRS = lib|g' Makefile.in
+  '';
 
   configureFlags = []
        # Configure check for dynamic lib support is broken, see
@@ -33,12 +40,16 @@ stdenv.mkDerivation rec {
        # on Darwin, so disable NLS for now.
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-nls";
 
+  strictDeps = true;
   nativeBuildInputs =
-    if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ]
+    (if stdenv.hostPlatform.isFreeBSD then [ freebsd.gencat ]
+     else if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ]
+     else [ gettext ])
        # Need to regenerate configure script with newer version in order to pass
-       # "mr_cv_target_elf=yes", but `autoreconfHook` brings in `makeWrapper`
-       # which doesn't work with the bootstrapTools bash, so can only do this
-       # for cross builds when `stdenv.shell` is a newer bash.
+       # "mr_cv_target_elf=yes" and determine integer sizes correctly when
+       # cross-compiling, but `autoreconfHook` brings in `makeWrapper` which
+       # doesn't work with the bootstrapTools bash, so can only do this for
+       # cross builds when `stdenv.shell` is a newer bash.
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) autoreconfHook;
 
   meta = {

@@ -1,39 +1,55 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
+, installShellFiles
 , mock
 , openstacksdk
 , pbr
 , python-keystoneclient
+, pythonOlder
 , stestr
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-swiftclient";
-  version = "3.13.0";
+  version = "4.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b200dcfbc6842bd4cac29efd0ea9ef34d3b8625957472ba7aa3ae0242437e2cc";
+    hash = "sha256-+CKY5KSPfL3WgPJjjIXRynrhp27b4wA20htM16KcCes=";
   };
 
-  propagatedBuildInputs = [ pbr python-keystoneclient ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    pbr
+    python-keystoneclient
+  ];
+
+  nativeCheckInputs = [
     mock
     openstacksdk
     stestr
   ];
 
   postInstall = ''
-    install -Dm644 tools/swift.bash_completion $out/share/bash_completion.d/swift
+    installShellCompletion --cmd swift \
+      --bash tools/swift.bash_completion
+    installManPage doc/manpages/*
   '';
 
   checkPhase = ''
     stestr run
   '';
 
-  pythonImportsCheck = [ "swiftclient" ];
+  pythonImportsCheck = [
+    "swiftclient"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/openstack/python-swiftclient";

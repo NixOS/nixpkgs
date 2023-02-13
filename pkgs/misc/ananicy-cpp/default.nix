@@ -1,27 +1,28 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitLab
-, makeWrapper
 , cmake
+, pkg-config
 , spdlog
 , nlohmann_json
 , systemd
 }:
 
-gcc11Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ananicy-cpp";
-  version = "unstable-2021-10-13";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "6a14fe7353221c89347eddbbcafb35cf5fee4758";
-    sha256 = "sha256-V0QPXC17ZD2c4MK3DAkzoPgKOU5V5BjfQKUk7I6f8WM=";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-iR7yIIGJbRwu62GIEYi70PjtlKXmkPYqSJtMddspBKA=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     cmake
+    pkg-config
   ];
 
   buildInputs = [
@@ -31,10 +32,16 @@ gcc11Stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DUSE_EXTERNAL_JSON=yON"
+    "-DUSE_EXTERNAL_JSON=ON"
     "-DUSE_EXTERNAL_SPDLOG=ON"
     "-DUSE_EXTERNAL_FMTLIB=ON"
+    "-DVERSION=${version}"
   ];
+
+  postInstall = ''
+    rm -rf "$out"/include
+    rm -rf "$out"/lib/cmake
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";

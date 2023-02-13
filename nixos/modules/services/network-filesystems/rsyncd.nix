@@ -10,12 +10,12 @@ in {
   options = {
     services.rsyncd = {
 
-      enable = mkEnableOption "the rsync daemon";
+      enable = mkEnableOption (lib.mdDoc "the rsync daemon");
 
       port = mkOption {
         default = 873;
         type = types.port;
-        description = "TCP port the daemon will listen on.";
+        description = lib.mdDoc "TCP port the daemon will listen on.";
       };
 
       settings = mkOption {
@@ -39,10 +39,9 @@ in {
             "secrets file" = "/etc/rsyncd.secrets";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for rsyncd. See
-          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`rsyncd.conf(5)`.
         '';
       };
 
@@ -50,7 +49,7 @@ in {
         default = false;
         type = types.bool;
         description =
-          "If enabled Rsync will be socket-activated rather than run persistently.";
+          lib.mdDoc "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
     };
@@ -79,7 +78,7 @@ in {
     in {
       services.rsync = {
         enable = !cfg.socketActivated;
-        aliases = [ "rsyncd" ];
+        aliases = [ "rsyncd.service" ];
 
         description = "fast remote file copy program daemon";
         after = [ "network.target" ];

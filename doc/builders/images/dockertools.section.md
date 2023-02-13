@@ -20,7 +20,12 @@ buildImage {
   fromImageName = null;
   fromImageTag = "latest";
 
-  contents = pkgs.redis;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.redis ];
+    pathsToLink = [ "/bin" ];
+  };
+
   runAsRoot = ''
     #!${pkgs.runtimeShell}
     mkdir -p /data
@@ -31,6 +36,9 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
+
+  diskSize = 1024;
+  buildVMMemorySize = 512;
 }
 ```
 
@@ -46,7 +54,7 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
 
-- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
+- `copyToRoot` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
@@ -54,11 +62,17 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
+- `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
+- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
+
+- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
+
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 
 At the end of the process, only one new single layer will be produced and added to the resulting image.
 
-The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage) it would be `redis/latest`.
+The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage), it would be `redis/latest`.
 
 It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
 
@@ -81,13 +95,17 @@ pkgs.dockerTools.buildImage {
   name = "hello";
   tag = "latest";
   created = "now";
-  contents = pkgs.hello;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.hello ];
+    pathsToLink = [ "/bin" ];
+  };
 
   config.Cmd = [ "/bin/hello" ];
 }
 ```
 
-and now the Docker CLI will display a reasonable date and sort the images as expected:
+Now the Docker CLI will display a reasonable date and sort the images as expected:
 
 ```ShellSession
 $ docker images
@@ -95,7 +113,7 @@ REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
 
-however, the produced images will not be binary reproducible.
+However, the produced images will not be binary reproducible.
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
 
@@ -119,13 +137,15 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `contents` _optional_
 
-: Top level paths in the container. Either a single derivation, or a list of derivations.
+: Top-level paths in the container. Either a single derivation, or a list of derivations.
 
     *Default:* `[]`
 
 `config` _optional_
 
-: Run-time configuration of the container. A full list of the options are available at in the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+`architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
+: Run-time configuration of the container. A full list of the options available is in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
     *Default:* `{}`
 
@@ -195,9 +215,9 @@ pkgs.dockerTools.buildLayeredImage {
 
 Increasing the `maxLayers` increases the number of layers which have a chance to be shared between different images.
 
-Modern Docker installations support up to 128 layers, however older versions support as few as 42.
+Modern Docker installations support up to 128 layers, but older versions support as few as 42.
 
-If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However it will be impossible to extend the image further.
+If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However, it will be impossible to extend the image further.
 
 The first (`maxLayers-2`) most "popular" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining "unpopular" paths, and finally layer \#`maxLayers` will contain the Image configuration.
 
@@ -213,7 +233,7 @@ The image produced by running the output script can be piped directly into `dock
 $(nix-build) | docker load
 ```
 
-Alternatively, the image be piped via `gzip` into `skopeo`, e.g. to copy it into a registry:
+Alternatively, the image be piped via `gzip` into `skopeo`, e.g., to copy it into a registry:
 
 ```ShellSession
 $(nix-build) | gzip --fast | skopeo copy docker-archive:/dev/stdin docker://some_docker_registry/myimage:tag
@@ -229,10 +249,10 @@ Its parameters are described in the example below:
 pullImage {
   imageName = "nixos/nix";
   imageDigest =
-    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+    "sha256:473a2b527958665554806aea24d0131bacec46d23af09fef4598eeab331850fa";
   finalImageName = "nix";
-  finalImageTag = "1.11";
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  finalImageTag = "2.11.1";
+  sha256 = "sha256-qvhj+Hlmviz+KEBVmsyPIzTB3QlVAFzwAY1zDPIBGxc=";
   os = "linux";
   arch = "x86_64";
 }
@@ -292,7 +312,44 @@ The parameters relative to the base image have the same synopsis as described in
 
 The `name` argument is the name of the derivation output, which defaults to `fromImage.name`.
 
-## shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
+## Environment Helpers {#ssec-pkgs-dockerTools-helpers}
+
+Some packages expect certain files to be available globally.
+When building an image from scratch (i.e. without `fromImage`), these files are missing.
+`pkgs.dockerTools` provides some helpers to set up an environment with the necessary files.
+You can include them in `copyToRoot` like this:
+
+```nix
+buildImage {
+  name = "environment-example";
+  copyToRoot = with pkgs.dockerTools; [
+    usrBinEnv
+    binSh
+    caCertificates
+    fakeNss
+  ];
+}
+```
+
+### usrBinEnv {#sssec-pkgs-dockerTools-helpers-usrBinEnv}
+
+This provides the `env` utility at `/usr/bin/env`.
+
+### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
+
+This provides `bashInteractive` at `/bin/sh`.
+
+### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
+
+This sets up `/etc/ssl/certs/ca-certificates.crt`.
+
+### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
+
+Provides `/etc/passwd` and `/etc/group` that contain root and nobody.
+Useful when packaging binaries that insist on using nss to look up
+username/groups (like nginx).
+
+### shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
 This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 
@@ -302,7 +359,7 @@ buildImage {
 
   runAsRoot = ''
     #!${pkgs.runtimeShell}
-    ${shadowSetup}
+    ${pkgs.dockerTools.shadowSetup}
     groupadd -r redis
     useradd -r -g redis redis
     mkdir /data
@@ -312,3 +369,171 @@ buildImage {
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+
+## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
+
+If your primary goal is providing a basic skeleton for user lookups to work,
+and/or a lesser privileged user, adding `pkgs.fakeNss` to
+the container image root might be the better choice than a custom script
+running `useradd` and friends.
+
+It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
+users and groups.
+
+It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
+first check `/etc/hosts`, before checking DNS, as the default in the absence of
+a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
+
+You can pair it with `binSh`, which provides `bin/sh` as a symlink
+to `bashInteractive` (as `/bin/sh` is configured as a shell).
+
+```nix
+buildImage {
+  name = "shadow-basic";
+
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ binSh pkgs.fakeNss ];
+    pathsToLink = [ "/bin" "/etc" "/var" ];
+  };
+}
+```
+
+## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
+
+Create a Docker image that sets up an environment similar to that of running `nix-shell` on a derivation.
+When run in Docker, this environment somewhat resembles the Nix sandbox typically used by `nix-build`, with a major difference being that access to the internet is allowed.
+It additionally also behaves like an interactive `nix-shell`, running things like `shellHook` and setting an interactive prompt.
+If the derivation is fully buildable (i.e. `nix-build` can be used on it), running `buildDerivation` inside such a Docker image will build the derivation, with all its outputs being available in the correct `/nix/store` paths, pointed to by the respective environment variables like `$out`, etc.
+
+::: {.warning}
+The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
+:::
+
+### Arguments
+
+`drv`
+
+: The derivation on which to base the Docker image.
+
+    Adding packages to the Docker image is possible by e.g. extending the list of `nativeBuildInputs` of this derivation like
+
+    ```nix
+    buildNixShellImage {
+      drv = someDrv.overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+          somethingExtra
+        ];
+      });
+      # ...
+    }
+    ```
+
+    Similarly, you can extend the image initialization script by extending `shellHook`
+
+`name` _optional_
+
+: The name of the resulting image.
+
+    *Default:* `drv.name + "-env"`
+
+`tag` _optional_
+
+: Tag of the generated image.
+
+    *Default:* the resulting image derivation output path's hash
+
+`uid`/`gid` _optional_
+
+: The user/group ID to run the container as. This is like a `nixbld` build user.
+
+    *Default:* 1000/1000
+
+`homeDirectory` _optional_
+
+: The home directory of the user the container is running as
+
+    *Default:* `/build`
+
+`shell` _optional_
+
+: The path to the `bash` binary to use as the shell. This shell is started when running the image.
+
+    *Default:* `pkgs.bashInteractive + "/bin/bash"`
+
+`command` _optional_
+
+: Run this command in the environment of the derivation, in an interactive shell. See the `--command` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+`run` _optional_
+
+: Same as `command`, but runs the command in a non-interactive shell instead. See the `--run` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+### Example
+
+The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
+
+```nix
+with import <nixpkgs> {};
+dockerTools.buildNixShellImage {
+  drv = hello;
+}
+```
+
+Build the derivation:
+
+```console
+nix-build hello.nix
+```
+
+    these 8 derivations will be built:
+      /nix/store/xmw3a5ln29rdalavcxk1w3m4zb2n7kk6-nix-shell-rc.drv
+    ...
+    Creating layer 56 from paths: ['/nix/store/crpnj8ssz0va2q0p5ibv9i6k6n52gcya-stdenv-linux']
+    Creating layer 57 with customisation...
+    Adding manifests...
+    Done.
+    /nix/store/cpyn1lc897ghx0rhr2xy49jvyn52bazv-hello-2.12-env.tar.gz
+
+Load the image:
+
+```console
+docker load -i result
+```
+
+    0d9f4c4cd109: Loading layer [==================================================>]   2.56MB/2.56MB
+    ...
+    ab1d897c0697: Loading layer [==================================================>]  10.24kB/10.24kB
+    Loaded image: hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+
+Run the container:
+
+```console
+docker run -it hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+```
+
+    [nix-shell:/build]$
+
+In the running container, run the build:
+
+```console
+buildDerivation
+```
+
+    unpacking sources
+    unpacking source archive /nix/store/8nqv6kshb3vs5q5bs2k600xpj5bkavkc-hello-2.12.tar.gz
+    ...
+    patching script interpreter paths in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12
+    checking for references to /build/ in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12...
+
+Check the build result:
+
+```console
+$out/bin/hello
+```
+
+    Hello, world!

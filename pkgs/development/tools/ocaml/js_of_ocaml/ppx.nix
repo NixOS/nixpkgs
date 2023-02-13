@@ -6,8 +6,11 @@
 buildDunePackage {
   pname = "js_of_ocaml-ppx";
 
-  inherit (js_of_ocaml-compiler) version src meta useDune2;
+  inherit (js_of_ocaml-compiler) version src;
+  duneVersion = "3";
 
   buildInputs = [ js_of_ocaml ];
   propagatedBuildInputs = [ ppxlib ];
+
+  meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

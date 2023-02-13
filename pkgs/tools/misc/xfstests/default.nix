@@ -3,14 +3,14 @@
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
 , time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xfstests";
-  version = "unstable-2019-09-08";
+  version = "2022.09.04";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "0837e907988a5f410cae0ae714f42f9c4242e072";
-    sha256 = "1f5cv0vwc1g9difzp69k49rc5nfd08y72vdg318j25nv3rwv7wc9";
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
+    rev = "v${version}";
+    sha256 = "sha256-hPFoqNmB8pewvBN1nzVMkTrMHCo0xc8tmmIODaiDeRw=";
   };
 
   nativeBuildInputs = [

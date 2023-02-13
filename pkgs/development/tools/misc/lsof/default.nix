@@ -1,22 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses }:
 
-let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
+let
+  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.94.0";
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ ncurses ];
+  version = "4.96.5";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "0yxv2jg6rnzys49lyrz9yjb4knamah4xvlqj596y6ix3vm4k3chp";
+    hash = "sha256-3ZEGCKc7inbqcE4LuhfKON3C8LebVOlZPEhOHVgx8Lo=";
   };
 
-  patches = [ ./no-build-info.patch ];
+  patches = [
+    ./no-build-info.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
@@ -24,9 +25,14 @@ stdenv.mkDerivation rec {
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl which ];
+  buildInputs = [ ncurses ];
+
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
@@ -51,8 +57,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
     license = licenses.purdueBsd;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.unix;
   };
 }

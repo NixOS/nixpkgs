@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
     rev = "v${version}";
-    sha256 = "sha256-Or7A/Br6BgiCF6OHRtN5TAt++Tu1RLS9mYRgD7Aljts=";
+    hash = "sha256-609Zme9IUl8eHNxzrYsRAg7bgZho/OklGM7oI+imyZQ=";
   };
 
   propagatedBuildInputs = [

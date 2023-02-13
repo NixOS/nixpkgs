@@ -1,11 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, buildPackages
-, gzip, libiconv, nkf, perl, which
+{ lib, stdenv, fetchFromGitHub, buildPackages
+, iconv, nkf, perl, which
 , skk-dicts
 }:
 
-let
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
-in
 stdenv.mkDerivation {
   pname = "cmigemo";
   version = "1.3e";
@@ -13,11 +10,11 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "koron";
     repo = "cmigemo";
-    rev = "5c014a885972c77e67d0d17d367d05017c5873f7";
-    sha256 = "0xrblwhaf70m0knkd5584iahaq84rlk0926bhdsrzmakpw77hils";
+    rev = "e0f6145f61e0b7058c3006f344e58571d9fdd83a";
+    sha256 = "00a6kdmxp16b8x0p04ws050y39qspd1bqlfq74bkirc55b77a2m1";
   };
 
-  nativeBuildInputs = [ gzip libiconv nkf perl which ];
+  nativeBuildInputs = [ iconv nkf perl which ];
 
   postUnpack = ''
     cp ${skk-dicts}/share/SKK-JISYO.L source/dict/
@@ -26,10 +23,6 @@ stdenv.mkDerivation {
   patches = [ ./no-http-tool-check.patch ];
 
   makeFlags = [ "INSTALL=install" ];
-
-  preBuild = ''
-    makeFlagsArray+=(FILTER_UTF8="${lib.getBin iconvBin}/bin/iconv -t utf-8 -f cp932")
-  '';
 
   buildFlags = [ (if stdenv.isDarwin then "osx-all" else "gcc-all") ];
 

@@ -3,17 +3,23 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
+
+# nativeBuildInputs
+, flit-core
+
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
+, importlib-metadata
 , jinja2
 , packaging
 , pygments
 , requests
-, setuptools
 , snowballstemmer
+, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -21,7 +27,9 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
+
 # check phase
+, cython
 , html5lib
 , pytestCheckHook
 , typed-ast
@@ -29,15 +37,17 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.3.1";
-  disabled = pythonOlder "3.5";
+  version = "5.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-8Yj6cPZFG8ycbbZtMR+fsIAOX0brxroi6nYjP+WhnxA=";
-    extraPostFetch = ''
+    rev = "refs/tags/v${version}";
+    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
@@ -45,8 +55,12 @@ buildPythonPackage rec {
     '';
   };
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize
@@ -54,7 +68,6 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    setuptools
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -64,14 +77,24 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cython
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
     typed-ast
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # requires network access
@@ -83,13 +106,15 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
     "test_auth_header_uses_first_match"
+    "test_linkcheck_allowed_redirects"
     "test_linkcheck_request_headers"
     "test_linkcheck_request_headers_no_slash"
     "test_follows_redirects_on_HEAD"
+    "test_get_after_head_raises_connection_error"
     "test_invalid_ssl"
     "test_connect_to_selfsigned_with_tls_verify_false"
     "test_connect_to_selfsigned_with_tls_cacerts"
@@ -114,6 +139,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.sphinx.members;
   };
 }

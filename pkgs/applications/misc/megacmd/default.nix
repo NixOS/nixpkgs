@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, autoconf
-, automake
+, autoreconfHook
 , c-ares
 , cryptopp
 , curl
@@ -14,7 +13,6 @@
 , libmediainfo
 , libraw
 , libsodium
-, libtool
 , libuv
 , libzen
 , pcre-cpp
@@ -25,22 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-Q1SZSDTPGgBA/W/ZVYfTQsiP41RE1LJ+esQ3PK9EjIc=";
+    sha256 = "sha256-qOXw/KGt3DyWQGBe/pbMujQITCMItHobxuK+1r00ZIs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkg-config
-  ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     c-ares
@@ -58,10 +52,6 @@ stdenv.mkDerivation rec {
     readline
     sqlite
   ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
 
   configureFlags = [
     "--disable-curl-checks"
@@ -82,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
-    homepage = "https://mega.nz/cmd";
+    homepage = "https://mega.io/cmd";
     license = with licenses; [ bsd2 gpl3Only ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ lunik1 ];

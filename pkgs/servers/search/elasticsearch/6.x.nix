@@ -5,6 +5,7 @@
 , makeWrapper
 , jre_headless
 , util-linux, gnugrep, coreutils
+, libxcrypt
 , autoPatchelfHook
 , zlib
 }:
@@ -37,7 +38,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre_headless util-linux ]
-             ++ optional enableUnfree zlib;
+             ++ optionals enableUnfree [ zlib libxcrypt ];
 
   installPhase = ''
     mkdir -p $out
@@ -56,15 +57,17 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional stdenv.isLinux autoPatchelfHook;
   runtimeDependencies = [ zlib ];
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
       echo "patching $exe..."
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"

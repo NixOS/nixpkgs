@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
 , cmake
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
-, pytest
-, pytest-pylint
+, pytestCheckHook
 , nbconvert
 , joblib
+, jupyter
 , jupyter-client
 , numpy
 , scipy
@@ -15,22 +15,26 @@
 , ninja
 , numba
 , pybind11
+, scikit-build
 }:
 
 buildPythonPackage rec {
   pname = "phik";
-  version = "0.12.0";
+  version = "0.12.3";
   disabled = !isPy3k;
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "959fd40482246e3f643cdac5ea04135b2c11a487e917af7d4e75843f47183549";
+  src = fetchFromGitHub {
+    owner = "KaveIO";
+    repo = "PhiK";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9o3EDhgmne2J1QfzjjNQc1mUcyCzoVrCnWXqjWkiZU0=";
   };
 
-  checkInputs = [
-    pytest
-    pytest-pylint
+  nativeCheckInputs = [
+    pytestCheckHook
     nbconvert
+    jupyter
     jupyter-client
   ];
 
@@ -50,16 +54,25 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     ninja
+    scikit-build
   ];
 
+  pythonImportsCheck = [ "phik" ];
+
   postInstall = ''
-  rm -r $out/bin
+    rm -r $out/bin
+  '';
+
+  preCheck = ''
+    # import from $out
+    rm -r phik
   '';
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";
     longDescription = "Phi_K is a new and practical correlation coefficient based on several refinements to Pearson’s hypothesis test of independence of two variables.";
     homepage = "https://phik.readthedocs.io/en/latest/";
+    changelog = "https://github.com/KaveIO/PhiK/blob/${src.rev}/CHANGES.rst";
     maintainers = with maintainers; [ melsigl ];
     license = licenses.asl20;
   };

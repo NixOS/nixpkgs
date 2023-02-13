@@ -22,7 +22,7 @@ mkDerivation rec{
     sha256 = "k1fEZbhzluNlAmj5s/O9X20aCVQxlWQm/Iw/euX7cmI=";
   };
 
-  extraCmakeFlags=["-DBUILD_TESTING=OFF"];
+  extraCmakeFlags = [ "-DBUILD_TESTING=OFF" ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
 

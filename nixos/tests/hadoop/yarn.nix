@@ -1,22 +1,30 @@
 # This only tests if YARN is able to start its services
-import ../make-test-python.nix ({...}: {
-  nodes = {
-    resourcemanager = {pkgs, ...}: {
-      services.hadoop.package = pkgs.hadoop;
-      services.hadoop.yarn.resourcemanager.enable = true;
-      services.hadoop.yarnSite = {
-        "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
-      };
-    };
-    nodemanager = {pkgs, ...}: {
-      services.hadoop.package = pkgs.hadoop;
-      services.hadoop.yarn.nodemanager.enable = true;
-      services.hadoop.yarnSite = {
-        "yarn.resourcemanager.hostname" = "resourcemanager";
-        "yarn.nodemanager.log-dirs" = "/tmp/userlogs";
-      };
-    };
+import ../make-test-python.nix ({ package, ... }: {
+  name = "hadoop-yarn";
 
+  nodes = {
+    resourcemanager = { ... }: {
+      services.hadoop = {
+        inherit package;
+        yarn.resourcemanager = {
+          enable = true;
+          openFirewall = true;
+        };
+      };
+    };
+    nodemanager = { options, lib, ... }: {
+      services.hadoop = {
+        inherit package;
+        yarn.nodemanager = {
+          enable = true;
+          openFirewall = true;
+        };
+        yarnSite = {
+          "yarn.resourcemanager.hostname" = "resourcemanager";
+          "yarn.nodemanager.log-dirs" = "/tmp/userlogs";
+        };
+      };
+    };
   };
 
   testScript = ''

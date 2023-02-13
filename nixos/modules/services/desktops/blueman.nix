@@ -9,7 +9,7 @@ in {
   ###### interface
   options = {
     services.blueman = {
-      enable = mkEnableOption "blueman";
+      enable = mkEnableOption (lib.mdDoc "blueman");
     };
   };
 

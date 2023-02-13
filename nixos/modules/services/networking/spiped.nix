@@ -11,7 +11,7 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = "Enable the spiped service module.";
+        description = lib.mdDoc "Enable the spiped service module.";
       };
 
       config = mkOption {
@@ -21,32 +21,32 @@ in
               encrypt = mkOption {
                 type    = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Take unencrypted connections from the
-                  <literal>source</literal> socket and send encrypted
-                  connections to the <literal>target</literal> socket.
+                  `source` socket and send encrypted
+                  connections to the `target` socket.
                 '';
               };
 
               decrypt = mkOption {
                 type    = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Take encrypted connections from the
-                  <literal>source</literal> socket and send unencrypted
-                  connections to the <literal>target</literal> socket.
+                  `source` socket and send unencrypted
+                  connections to the `target` socket.
                 '';
               };
 
               source = mkOption {
                 type    = types.str;
-                description = ''
+                description = lib.mdDoc ''
                   Address on which spiped should listen for incoming
                   connections.  Must be in one of the following formats:
-                  <literal>/absolute/path/to/unix/socket</literal>,
-                  <literal>host.name:port</literal>,
-                  <literal>[ip.v4.ad.dr]:port</literal> or
-                  <literal>[ipv6::addr]:port</literal> - note that
+                  `/absolute/path/to/unix/socket`,
+                  `host.name:port`,
+                  `[ip.v4.ad.dr]:port` or
+                  `[ipv6::addr]:port` - note that
                   hostnames are resolved when spiped is launched and are
                   not re-resolved later; thus if DNS entries change
                   spiped will continue to connect to the expired
@@ -56,24 +56,24 @@ in
 
               target = mkOption {
                 type    = types.str;
-                description = "Address to which spiped should connect.";
+                description = lib.mdDoc "Address to which spiped should connect.";
               };
 
               keyfile = mkOption {
                 type    = types.path;
-                description = ''
+                description = lib.mdDoc ''
                   Name of a file containing the spiped key. As the
-                  daemon runs as the <literal>spiped</literal> user, the
+                  daemon runs as the `spiped` user, the
                   key file must be somewhere owned by that user. By
                   default, we recommend putting the keys for any spipe
-                  services in <literal>/var/lib/spiped</literal>.
+                  services in `/var/lib/spiped`.
                 '';
               };
 
               timeout = mkOption {
                 type = types.int;
                 default = 5;
-                description = ''
+                description = lib.mdDoc ''
                   Timeout, in seconds, after which an attempt to connect to
                   the target or a protocol handshake will be aborted (and the
                   connection dropped) if not completed
@@ -83,7 +83,7 @@ in
               maxConns = mkOption {
                 type = types.int;
                 default = 100;
-                description = ''
+                description = lib.mdDoc ''
                   Limit on the number of simultaneous connections allowed.
                 '';
               };
@@ -91,14 +91,14 @@ in
               waitForDNS = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
-                  Wait for DNS. Normally when <literal>spiped</literal> is
+                description = lib.mdDoc ''
+                  Wait for DNS. Normally when `spiped` is
                   launched it resolves addresses and binds to its source
                   socket before the parent process returns; with this option
                   it will daemonize first and retry failed DNS lookups until
-                  they succeed. This allows <literal>spiped</literal> to
+                  they succeed. This allows `spiped` to
                   launch even if DNS isn't set up yet, but at the expense of
-                  losing the guarantee that once <literal>spiped</literal> has
+                  losing the guarantee that once `spiped` has
                   finished launching it will be ready to create pipes.
                 '';
               };
@@ -106,13 +106,13 @@ in
               disableKeepalives = mkOption {
                 type = types.bool;
                 default = false;
-                description = "Disable transport layer keep-alives.";
+                description = lib.mdDoc "Disable transport layer keep-alives.";
               };
 
               weakHandshake = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Use fast/weak handshaking: This reduces the CPU time spent
                   in the initial connection setup, at the expense of losing
                   perfect forward secrecy.
@@ -122,7 +122,7 @@ in
               resolveRefresh = mkOption {
                 type = types.int;
                 default = 60;
-                description = ''
+                description = lib.mdDoc ''
                   Resolution refresh time for the target socket, in seconds.
                 '';
               };
@@ -130,7 +130,7 @@ in
               disableReresolution = mkOption {
                 type = types.bool;
                 default = false;
-                description = "Disable target address re-resolution.";
+                description = lib.mdDoc "Disable target address re-resolution.";
               };
             };
           }
@@ -155,11 +155,11 @@ in
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Configuration for a secure pipe daemon. The daemon can be
           started, stopped, or examined using
-          <literal>systemctl</literal>, under the name
-          <literal>spiped@foo</literal>.
+          `systemctl`, under the name
+          `spiped@foo`.
         '';
       };
     };

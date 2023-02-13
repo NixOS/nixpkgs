@@ -1,0 +1,12 @@
+diff --git a/data/meson.build b/data/meson.build
+index 339b3cff..aca65efd 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -9,5 +9,6 @@ install_data(
+     'zenity-text.png',
+     'zenity-scale.png',
+     'zenity-entry.png',
+-    'zenity-notification.png']
++    'zenity-notification.png'],
++  install_dir: zenity_prefix / get_option('datadir') / 'icons/hicolor/48x48/apps',
+   )

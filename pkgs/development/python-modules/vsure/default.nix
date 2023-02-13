@@ -1,23 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, click
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "vsure";
-  version = "1.8.1";
+  version = "2.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
+    hash = "sha256-KMLW1270Xs9s2a4ROWTvwRpfr4n4RO9rIYlskNjGzFQ=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    click
+    requests
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "verisure" ];
+
+  pythonImportsCheck = [
+    "verisure"
+  ];
 
   meta = with lib; {
     description = "Python library for working with verisure devices";

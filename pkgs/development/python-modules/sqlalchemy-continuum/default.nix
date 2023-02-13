@@ -1,23 +1,30 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchPypi
 , flask
-, flask_login
-, flask_sqlalchemy
+, flask-login
+, flask-sqlalchemy
 , flexmock
+, psycopg2
+, pymysql
 , pytestCheckHook
+, pythonOlder
 , sqlalchemy
-, sqlalchemy-utils
 , sqlalchemy-i18n
+, sqlalchemy-utils
 }:
 
 buildPythonPackage rec {
-  pname = "SQLAlchemy-Continuum";
-  version = "1.3.11";
+  pname = "sqlalchemy-continuum";
+  version = "1.3.14";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1c9yd9s98crqgs39rc2ld2r0nchgyjrfbjdlqb99y4hhc6lv04xw";
+    pname = "SQLAlchemy-Continuum";
+    inherit version;
+    hash = "sha256-1+k/lx6R8tW9gM3M2kqaVEwpmx8cMhDXeqCjyd8O2hM=";
   };
 
   propagatedBuildInputs = [
@@ -25,23 +32,46 @@ buildPythonPackage rec {
     sqlalchemy-utils
   ];
 
+  passthru.optional-dependencies = {
+    flask = [
+      flask
+    ];
+    flask-login = [
+      flask-login
+    ];
+    flask-sqlalchemy = [
+      flask-sqlalchemy
+    ];
+    flexmock = [
+      flexmock
+    ];
+    i18n = [
+      sqlalchemy-i18n
+    ];
+  };
+
+  nativeCheckInputs = [
+    psycopg2
+    pymysql
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.flask
+  ++ passthru.optional-dependencies.flask-login
+  ++ passthru.optional-dependencies.flask-sqlalchemy
+  ++ passthru.optional-dependencies.flexmock
+  ++ passthru.optional-dependencies.i18n;
+
   # indicate tests that we don't have a database server at hand
   DB = "sqlite";
 
-  checkInputs = [
-    pytestCheckHook
-    sqlalchemy-i18n
-    flask
-    flask_login
-    flask_sqlalchemy
-    flexmock
+  pythonImportsCheck = [
+    "sqlalchemy_continuum"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     description = "Versioning and auditing extension for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
+    changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    # https://github.com/kvesteri/sqlalchemy-continuum/issues/255
-    broken = lib.versionAtLeast sqlalchemy.version "1.4";
+    maintainers = with maintainers; [ ];
   };
 }

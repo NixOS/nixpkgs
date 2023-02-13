@@ -4,7 +4,7 @@
 , faker
 , fetchPypi
 , flask
-, flask_sqlalchemy
+, flask-sqlalchemy
 , mongoengine
 , pytestCheckHook
 , sqlalchemy
@@ -25,10 +25,10 @@ buildPythonPackage rec {
     faker
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
-    flask_sqlalchemy
+    flask-sqlalchemy
     mongoengine
     pytestCheckHook
     sqlalchemy
@@ -37,6 +37,11 @@ buildPythonPackage rec {
   # Checks for MongoDB requires an a running DB
   disabledTests = [
     "MongoEngineTestCase"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with latest flask-sqlalchemy
+    "examples/flask_alchemy/test_demoapp.py"
   ];
 
   pythonImportsCheck = [

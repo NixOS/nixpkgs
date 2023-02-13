@@ -16,24 +16,24 @@
 , qtsvg
 , fftw
 , vid-stab
-, opencv3
+, opencv4
 , ladspa-sdk
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
 
 mkDerivation rec {
   pname = "mlt";
-  version = "7.0.1";
+  version = "7.12.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "13c5miph9jjbz69dhy0zvbkk5zbb05dr3vraaci0d5fdbrlhyscf";
+    sha256 = "sha256-Y7lbfwA0lkQB3PjYQIQaQ0BeXGcgyCmMnDqqZJ8zUaA=";
   };
 
   buildInputs = [
@@ -46,33 +46,42 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkg-config
     qtbase
     qtsvg
     sox
     fftw
     vid-stab
-    opencv3
+    opencv4
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake which pkg-config ];
 
   outputs = [ "out" "dev" ];
+
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
+  ];
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   passthru = {
     inherit ffmpeg;
   };
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "Genshi";
-  version = "0.7.5";
+  version = "0.7.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c12d6c2abf7df0ec661d9ff2e197522eae846e43dc58abd5a36443d05bc41135";
+    sha256 = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
   };
 
   # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)

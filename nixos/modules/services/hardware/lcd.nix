@@ -36,49 +36,46 @@ in with lib; {
       serverHost = mkOption {
         type = str;
         default = "localhost";
-        description = "Host on which LCDd is listening.";
+        description = lib.mdDoc "Host on which LCDd is listening.";
       };
 
       serverPort = mkOption {
         type = int;
         default = 13666;
-        description = "Port on which LCDd is listening.";
+        description = lib.mdDoc "Port on which LCDd is listening.";
       };
 
       server = {
         enable = mkOption {
           type = bool;
           default = false;
-          description = "Enable the LCD panel server (LCDd)";
+          description = lib.mdDoc "Enable the LCD panel server (LCDd)";
         };
 
         openPorts = mkOption {
           type = bool;
           default = false;
-          description = "Open the ports in the firewall";
+          description = lib.mdDoc "Open the ports in the firewall";
         };
 
         usbPermissions = mkOption {
           type = bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Set group-write permissions on a USB device.
-            </para>
-            <para>
+
             A USB connected LCD panel will most likely require having its
             permissions modified for lcdd to write to it. Enabling this option
             sets group-write permissions on the device identified by
-            <option>services.hardware.lcd.usbVid</option> and
-            <option>services.hardware.lcd.usbPid</option>. In order to find the
-            values, you can run the <command>lsusb</command> command. Example
+            {option}`services.hardware.lcd.usbVid` and
+            {option}`services.hardware.lcd.usbPid`. In order to find the
+            values, you can run the {command}`lsusb` command. Example
             output:
-            </para>
-            <para>
-            <literal>
+
+            ```
             Bus 005 Device 002: ID 0403:c630 Future Technology Devices International, Ltd lcd2usb interface
-            </literal>
-            </para>
-            <para>
+            ```
+
             In this case the vendor id is 0403 and the product id is c630.
           '';
         };
@@ -86,25 +83,25 @@ in with lib; {
         usbVid = mkOption {
           type = str;
           default = "";
-          description = "The vendor ID of the USB device to claim.";
+          description = lib.mdDoc "The vendor ID of the USB device to claim.";
         };
 
         usbPid = mkOption {
           type = str;
           default = "";
-          description = "The product ID of the USB device to claim.";
+          description = lib.mdDoc "The product ID of the USB device to claim.";
         };
 
         usbGroup = mkOption {
           type = str;
           default = "dialout";
-          description = "The group to use for settings permissions. This group must exist or you will have to create it.";
+          description = lib.mdDoc "The group to use for settings permissions. This group must exist or you will have to create it.";
         };
 
         extraConfig = mkOption {
           type = lines;
           default = "";
-          description = "Additional configuration added verbatim to the server config.";
+          description = lib.mdDoc "Additional configuration added verbatim to the server config.";
         };
       };
 
@@ -112,19 +109,19 @@ in with lib; {
         enable = mkOption {
           type = bool;
           default = false;
-          description = "Enable the LCD panel client (LCDproc)";
+          description = lib.mdDoc "Enable the LCD panel client (LCDproc)";
         };
 
         extraConfig = mkOption {
           type = lines;
           default = "";
-          description = "Additional configuration added verbatim to the client config.";
+          description = lib.mdDoc "Additional configuration added verbatim to the client config.";
         };
 
         restartForever = mkOption {
           type = bool;
           default = true;
-          description = "Try restarting the client forever.";
+          description = lib.mdDoc "Try restarting the client forever.";
         };
       };
     };

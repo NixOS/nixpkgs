@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "dev" "py" ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config gettext swig ];
+  strictDeps = true;
 
-  buildInputs = [ autoreconfHook glib cryptsetup nss util-linux gpgme ncurses ];
+  nativeBuildInputs = [ autoreconfHook gettext gpgme pkg-config swig ];
+
+  buildInputs = [ glib cryptsetup nss util-linux ncurses ];
 
   configureFlags = [
     "--with-gpgme-prefix=${gpgme.dev}"

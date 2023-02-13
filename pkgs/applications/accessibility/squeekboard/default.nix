@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
@@ -15,36 +16,34 @@
 , feedbackd
 , wrapGAppsHook
 , fetchpatch
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.14.0";
+  version = "1.20.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
+    sha256 = "sha256-wx3fKRX/SPYGAFuR9u03JAvVRhtYIPUvW8mAsCdx83I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     cargoUpdateHook = ''
-      cat Cargo.toml.in Cargo.deps > Cargo.toml
+      cat Cargo.toml.in Cargo.deps.newer > Cargo.toml
+      cp Cargo.lock.newer Cargo.lock
     '';
     name = "${pname}-${version}";
-    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
+    sha256 = "sha256-BbNkapqnqEW/NglrCse10Tm80SXYVQWWrOC5dTN6oi0=";
   };
 
-  patches = [
-    # remove when updating from 1.14.0
-    (fetchpatch {
-      name = "fix-rust-1.54-build.patch";
-      url = "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
-      sha256 = "sha256-8rWcfhQmGiwlc2lpkRvJ95XQp1Xg7St+0K85x8nQ0mk=";
-    })
+  mesonFlags = [
+    "-Dnewer=true"
   ];
 
   nativeBuildInputs = [
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     wayland
     wayland-protocols
     libxml2
@@ -70,11 +69,13 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
+  passthru.tests.phosh = nixosTests.phosh;
+
   meta = with lib; {
     description = "A virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

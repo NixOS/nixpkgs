@@ -2,33 +2,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cython
-, python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.3";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
-    rev = "v${version}";
-    sha256 = "0cqz6whq4zginxjnh4cfqlsh535p4qz295ymvjchp71fv8mz11f6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lYMRFFMS+ETjWd4xi12ezC8CVLbLJfynmOU1DpYQcck=";
   };
 
   propagatedBuildInputs = [
     cython
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    TEMPDIR=$(mktemp -d)
+    cp -R cymem/tests $TEMPDIR/
+    pushd $TEMPDIR
   '';
 
-  checkPhase = ''
-    cd cymem/tests
-    ${python.interpreter} -m unittest discover -p "*test*"
+  postCheck = ''
+    popd
   '';
+
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";

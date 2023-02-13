@@ -5,14 +5,14 @@
 
 buildGoModule rec {
   pname = "trillian";
-  version = "1.4.0";
-  vendorSha256 = "sha256-n5PD3CGgNGrqSYLJS+3joGFNue2fF/tdimC6CtO15yU=";
+  version = "1.5.1";
+  vendorSha256 = "sha256-L2aZYwlJq9yVaaKgxa9NoqXTKD/pUq2OMiFftP364Kw=";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c7Sii6GMWZOeD46OwdkXU/wt9zY+EyPSnahYPJQKJcA=";
+    sha256 = "sha256-v5feUTiK6ql0YcRR6RDAj+pS/PZ7vDnSf0ue2rtWb8k=";
   };
 
   subPackages = [

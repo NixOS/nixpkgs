@@ -2,38 +2,28 @@
 , stdenv
 , fetchurl
 , gtk2
-, glib
 , pkg-config
-, libgnome
-, libgnomeui
-, vte
 , curl
 , cdparanoia
 , libid3tag
-, ncurses
 , libtool
 }:
 
 stdenv.mkDerivation rec {
   pname = "grip";
-  version = "4.2.3";
+  version = "4.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/grip-${version}.tar.gz";
-    sha256 = "sha256-5Qgsf4+xs0ckhYJk2csKulXC3nWaLRAsQ15qaTkKkjw=";
+    sha256 = "sha256-lXu0mLLfcX8K1EmoFH0vp2cHluyRwhTL0/bW5Ax36mI=";
   };
 
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [
     gtk2
-    glib
-    libgnome
-    libgnomeui
-    vte
     curl
     cdparanoia
     libid3tag
-    ncurses
   ];
   enableParallelBuilding = true;
 

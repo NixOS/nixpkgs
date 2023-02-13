@@ -4,31 +4,30 @@
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
-, wrapt
+, setuptools
 , typing-extensions
 , typed-ast
-, pytestCheckHook
-, setuptools-scm
 , pylint
+, pytestCheckHook
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.9.0"; # Check whether the version is compatible with pylint
+  version = "2.12.13"; # Check whether the version is compatible with pylint
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6.2";
+  disabled = pythonOlder "3.7.2";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-sImWiWULZ1HS3JyQHfEhc4ZRZ6anOUTqZZGNIYj2MaY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-C4A/JOFdIRgaZuV/YOLc4nC05XTtRCC1i0BcGBEG5ps=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools-scm
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -36,15 +35,13 @@ buildPythonPackage rec {
     wrapt
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
-
-  checkInputs = [
-    pytestCheckHook
+  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
+    typed-ast
   ];
 
-  disabledTests = [
-    # assert (1, 1) == (1, 16)
-    "test_end_lineno_string"
+  nativeCheckInputs = [
+    pytestCheckHook
+    typing-extensions
   ];
 
   passthru.tests = {
@@ -55,7 +52,6 @@ buildPythonPackage rec {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

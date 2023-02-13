@@ -1,38 +1,55 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , pytest
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, six
 }:
 
 buildPythonPackage rec {
   pname = "pytest-remotedata";
-  version = "0.3.2";
+  version = "0.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e20c58d4b7c359c4975dc3c3d3d67be0905180d2368be0be3ae09b15a136cfc0";
+    hash = "sha256-viHFWONNfBGw9q61CVbAlSC//NArf86cb46FMaQBocg=";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    # these tests require a network connection
-    pytest --ignore tests/test_strict_check.py
-  '';
+  disabledTestPaths = [
+    # These tests require a network connection
+    "tests/test_strict_check.py"
+  ];
+
+  pythonImportsCheck = [
+    "pytest_remotedata"
+  ];
 
   meta = with lib; {
     description = "Pytest plugin for controlling remote data access";
-    homepage = "https://astropy.org";
+    homepage = "https://github.com/astropy/pytest-remotedata";
+    changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

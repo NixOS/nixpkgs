@@ -1,13 +1,13 @@
 diff --git a/libinput-gestures b/libinput-gestures
-index 66479b6..aca94ac 100755
+index 78c7c28..da04007 100755
 --- a/libinput-gestures
 +++ b/libinput-gestures
-@@ -6,7 +6,7 @@ from collections import OrderedDict
- from pathlib import Path
- from distutils.version import LooseVersion as Version
- 
--PROG = Path(sys.argv[0]).stem
-+PROG = "libinput-gestures"
- 
+@@ -27,7 +27,7 @@ except ImportError:
+
+ session_locked = False
+
+-PROGPATH = Path(sys.argv[0])
++PROGPATH = Path("libinput-gestures")
+ PROGNAME = PROGPATH.stem
+
  # Conf file containing gesture commands.
- # Search first for user file then system file.

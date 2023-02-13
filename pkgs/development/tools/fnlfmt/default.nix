@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromSourcehut, fennel, lua }:
+{ lib, stdenv, fetchFromSourcehut, luaPackages, lua }:
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZuSXeAhxfH0F/Y0nwqisxLMwh21Kub7viNcXD3FVYOc=";
+    sha256 = "sha256-FKmr5Xihyk+ikYN8WXBq5UFJziwEb8xaUBswNt/JMBg=";
   };
 
-  nativeBuildInputs = [ fennel ];
+  nativeBuildInputs = [ luaPackages.fennel ];
 
   buildInputs = [ lua ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     echo "#!${lua}/bin/lua" > fnlfmt
-    ${fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
+    ${luaPackages.fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
     chmod +x fnlfmt
 
     runHook postBuild
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~technomancy/fnlfmt";
     license = licenses.lgpl3Plus;
     platforms = lua.meta.platforms;
-    maintainers = with maintainers; [ gpanders chiroptical ];
+    maintainers = with maintainers; [ chiroptical ];
   };
 }

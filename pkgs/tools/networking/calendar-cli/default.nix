@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calendar-cli";
-  version = "0.12.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "tobixen";
     repo = "calendar-cli";
     rev = "v${version}";
-    sha256 = "0qjld2m7hl3dx90491pqbjcja82c1f5gwx274kss4lkb8aw0kmlv";
+    hash = "sha256-VVE4+qoUam2szbMsdWetq6hyhXoE1V3Pw5j/bYbfGVQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     caldav
     pytz
     tzlocal
+    click
     six
   ];
 

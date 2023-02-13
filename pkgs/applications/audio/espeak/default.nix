@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Compact open source software speech synthesizer";
-    homepage = "http://espeak.sourceforge.net/";
+    homepage = "https://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

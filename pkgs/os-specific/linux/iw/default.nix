@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iw";
-  version = "5.16";
+  version = "5.19";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TETkJ2L5A/kJS6WlmJmMgAqXpir9b9MeweCnmeMIZZw=";
+    sha256 = "sha256-8We76UfdU7uevAwdzvXbatc6wdYITyxvk3bFw2DMTU4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

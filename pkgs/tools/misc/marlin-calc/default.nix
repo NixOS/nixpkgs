@@ -11,6 +11,11 @@ stdenv.mkDerivation {
     sha256 = "14sqajm361gnrcqv84g7kbmyqm8pppbhqsabszc4j2cn7vbwkdg5";
   };
 
+  postPatch = ''
+    # missing header for gcc >= 11
+    sed -i '1i#include <limits>' Marlin/src/module/calc.cpp
+  '';
+
   buildPhase = ''
     cd Marlin/src
     c++ module/planner.cpp module/calc.cpp feature/fwretract.cpp \
@@ -27,5 +32,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/marlin-calc.x86_64-darwin
   };
 }

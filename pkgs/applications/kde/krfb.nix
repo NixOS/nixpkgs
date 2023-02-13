@@ -3,7 +3,7 @@
 , kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet
 , kwidgetsaddons, kwindowsystem, kxmlgui, kwayland
 , libvncserver, libXtst, libXdamage
-, qtx11extras
+, qtx11extras, pipewire, plasma-wayland-protocols, wayland
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/krfb/";
     description = "Desktop sharing (VNC)";
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = with lib.maintainers; [ jerith666 ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -20,6 +20,9 @@ mkDerivation {
     kconfig kcoreaddons kcrash kdbusaddons knotifications kwallet kwidgetsaddons
     kwindowsystem kxmlgui kwayland
     qtx11extras
+    pipewire
+    plasma-wayland-protocols
+    wayland
   ];
   propagatedBuildInputs = [ kdnssd ];
 }

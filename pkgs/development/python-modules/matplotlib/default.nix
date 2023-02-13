@@ -1,7 +1,7 @@
 { lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
 , which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
-, certifi, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
+, certifi, contourpy, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
 , enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
@@ -17,7 +17,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.5.1";
+  version = "3.6.2";
   pname = "matplotlib";
   format = "setuptools";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2e9810e09c3a47b73ce9cab5a72243a1258f61e7900969097a817232246ce1c";
+    sha256 = "sha256-sD/RChcJ0BAcBUiDtVD3xMXpdPdR4mgDGHWa8AWWSZA=";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -39,14 +39,20 @@ buildPythonPackage rec {
   buildInputs = [
     which
     sphinx
-  ] ++ lib.optional enableGhostscript [
+  ] ++ lib.optionals enableGhostscript [
     ghostscript
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
+  ];
+
+  # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "strictoverflow"
   ];
 
   propagatedBuildInputs = [
     certifi
+    contourpy
     cycler
     fonttools
     freetype
@@ -112,6 +118,9 @@ buildPythonPackage rec {
       echo "[libs]
       system_freetype=true
       system_qhull=true" > mplsetup.cfg
+
+      substituteInPlace setup.py \
+        --replace "setuptools_scm>=4,<7" "setuptools_scm>=4"
     '';
 
   # Matplotlib needs to be built against a specific version of freetype in

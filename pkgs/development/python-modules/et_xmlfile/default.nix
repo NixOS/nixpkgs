@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };
 
-  checkInputs = [ lxml pytest ];
+  nativeCheckInputs = [ lxml pytest ];
   checkPhase = ''
     py.test $out
   '';
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://pypi.python.org/pypi/et_xmlfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = with maintainers; [ ];
   };
 
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [ autoreconfHook ]
     ++ lib.optional withReadline readline;
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
   configureFlags = with lib;
     optional (!withReadline) "--without-readline"
     ++ optional enableEmu "--enable-emu"

@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     libgee
     libnotify
     libunity
-    pantheon.elementary-icon-theme
     pantheon.granite
     sqlite
     webkitgtk
@@ -73,10 +72,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Fix build with vala 0.56
+    # https://github.com/needle-and-thread/vocal/pull/503
+    substituteInPlace src/Vocal.vala \
+      --replace "public const OptionEntry[] app_options" "private const OptionEntry[] app_options"
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

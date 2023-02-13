@@ -22,16 +22,20 @@
 
 buildPythonPackage rec {
   pname = "qiskit-finance";
-  version = "0.2.1";
+  version = "0.3.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-fEhc/01j6iYYwS6mLle+TpX9j0DVn12oPUFamEecoAY=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-Ijoqn6nANLsEVKA5nycd1xbW5htJ+TQm6LkiMUWTsSs=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
+  '';
 
   propagatedBuildInputs = [
     fastdtw
@@ -46,7 +50,7 @@ buildPythonPackage rec {
     yfinance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt

@@ -1,20 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc, wayland-scanner
-, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland-scanner
+, aml
+, jansson
+, libxkbcommon
+, mesa
+, neatvnc
+, pam
+, pixman
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.4.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cws9jfnmxqycmlyllvvqzw4jsbrwwk10v9gy8wifv3c61rwgdkk";
+    sha256 = "sha256-yNWTTjlmMCMTed1SiRep3iUxchQya1GnTVoub1cpR14=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland-scanner ];
-  buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam ];
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    aml
+    jansson
+    libxkbcommon
+    mesa
+    neatvnc
+    pam
+    pixman
+    wayland
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "tests" true)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
@@ -29,6 +71,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

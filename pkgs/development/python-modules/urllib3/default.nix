@@ -1,40 +1,38 @@
 { lib
 , brotli
+, brotlicffi
 , buildPythonPackage
+, certifi
 , cryptography
-, python-dateutil
 , fetchPypi
 , idna
-, isPy27
+, isPyPy
 , mock
 , pyopenssl
 , pysocks
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
+, python-dateutil
 , tornado
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.7";
+  version = "1.26.13";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SYfGVVT3otvzDBj9SHeO8SSvb6t3GjdxA9oFheIzbs4=";
+    hash = "sha256-wIPdDc5o2/vhEp1SccuQ+UR96n1SCXxuASYSDFId3qg=";
   };
 
-  propagatedBuildInputs = [
-    brotli
-    pysocks
-  ] ++ lib.optionals isPy27 [
-    cryptography
-    idna
-    pyopenssl
-  ];
+  # FIXME: remove backwards compatbility hack
+  propagatedBuildInputs = passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
-  checkInputs = [
+  nativeCheckInputs = [
     python-dateutil
     mock
     pytest-freezegun
@@ -61,11 +59,32 @@ buildPythonPackage rec {
     export CI # Increases LONG_TIMEOUT
   '';
 
-  pythonImportsCheck = [ "urllib3" ];
+  pythonImportsCheck = [
+    "urllib3"
+  ];
+
+  passthru.optional-dependencies = {
+    brotli = if isPyPy then [
+      brotlicffi
+    ] else [
+      brotli
+    ];
+    # Use carefully since pyopenssl is not supported aarch64-darwin
+    secure = [
+      certifi
+      cryptography
+      idna
+      pyopenssl
+    ];
+    socks = [
+      pysocks
+    ];
+  };
 
   meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";
     homepage = "https://github.com/shazow/urllib3";
+    changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

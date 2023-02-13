@@ -1,0 +1,13 @@
+diff --git a/src/SConscript b/src/SConscript
+index b59f67a7..9f16e0a2 100644
+--- a/src/SConscript
++++ b/src/SConscript
+@@ -141,7 +141,7 @@ if not GetOption('disable_shared') or GetOption('enable_static') or GetOption('e
+                 desc='Real-time audio streaming over the network.',
+                 url='https://roc-streaming.org',
+                 version=env['ROC_VERSION'])
+-            env.AddDistFile(env['PKG_CONFIG_PATH'], pc_file)
++            env.AddDistFile(os.path.join(env['ROC_SYSTEM_LIBDIR'], 'pkgconfig'), pc_file)
+ 
+ if GetOption('enable_examples'):
+     examples_env = subenvs.examples.Clone()

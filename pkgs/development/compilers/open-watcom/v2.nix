@@ -2,30 +2,30 @@
 , lib
 , fetchFromGitHub
 , unstableGitUpdater
+, dosbox
 
 # Docs cause an immense increase in build time, up to 2 additional hours
 , withDocs ? false
-, dosbox
 , ghostscript
 , withGUI ? false
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-watcom-v2";
-  version = "unstable-2021-12-10";
-  name = "${pname}-unwrapped-${version}";
+  pname = "${passthru.prettyName}-unwrapped";
+  # nixpkgs-update: no auto update
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "ca685c1b780149f7210426f0bb78dd7b67b19e6d";
-    sha256 = "1nmmj94z5hips2426rcdqdcsm8015jjj51rm9fnx81qagdj52j5d";
+    rev = "996740acdbb173499ec1bf2ba6c8942f2a374220";
+    sha256 = "sha256-9m+0e2v1Hk8jYZHqJwb1mN02WgGDArsWbF7Ut3Z5OIg=";
   };
 
   postPatch = ''
     patchShebangs *.sh
 
-    for dateSource in cmnvars.sh bld/wipfc/configure; do
+    for dateSource in bld/wipfc/configure; do
       substituteInPlace $dateSource \
         --replace '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
     done
@@ -35,15 +35,17 @@ stdenv.mkDerivation rec {
       --replace '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
 
     substituteInPlace build/makeinit \
-      --replace '%__CYEAR__' '%OWCYEAR'
+      --replace '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
       --replace '-static' ""
   '';
 
-  nativeBuildInputs = [ ]
-    ++ lib.optional (withDocs || withGUI) dosbox
-    ++ lib.optional withDocs ghostscript;
+  nativeBuildInputs = [
+    dosbox
+  ] ++ lib.optionals withDocs [
+    ghostscript
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
     export OWGUINOBUILD=${if withGUI then "0" else "1"}
     export OWNOBUILD=
     export OWDISTRBUILD=0
-    export OWDOSBOX=${lib.optionalString (withDocs || withGUI) "${dosbox}/bin/dosbox"}
+    export OWDOSBOX=${dosbox}/bin/dosbox
     export OWVERBOSE=0
     export OWRELROOT=$out
 
@@ -83,8 +85,11 @@ stdenv.mkDerivation rec {
   # Stripping breaks many tools
   dontStrip = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/open-watcom/open-watcom-v2.git";
+  passthru = {
+    prettyName = "open-watcom-v2";
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/open-watcom/open-watcom-v2.git";
+    };
   };
 
   meta = with lib; {
@@ -118,7 +123,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://open-watcom.github.io";
     license = licenses.watcom;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-windows" "i686-windows" ];
+    platforms = with platforms; windows ++ unix;
+    badPlatforms = platforms.riscv ++ [ "powerpc64-linux" "powerpc64le-linux" "mips64el-linux" ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }

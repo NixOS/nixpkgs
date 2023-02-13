@@ -2,7 +2,7 @@
 , usePcre ? true
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests
-, openssl, zlib
+, openssl, zlib, libxcrypt
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
 
@@ -11,21 +11,21 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.3.14";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "0ah6xsxlk1a7jsxdg0pbdhzhssz9ysrfxd3bs5hm1shql1jmqzh4";
+    sha256 = "sha256-Y7xuwDAtDrvh+nacGWBmQN6DSsjLB0R7gHmctWPcDz8=";
   };
 
-  buildInputs = [ openssl zlib ]
+  buildInputs = [ openssl zlib libxcrypt ]
     ++ lib.optional useLua lua5_3
     ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
              else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [
-    "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o"
+    "USE_PROMEX=yes"
   ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
@@ -65,8 +65,9 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = "https://haproxy.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fuzzy-id ];
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

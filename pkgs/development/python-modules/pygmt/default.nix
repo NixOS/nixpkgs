@@ -17,15 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.5.0";
+  version = "0.8.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "v${version}";
-    sha256 = "1mazljxwh162df971cvv7cwnqr300r17qfs7k09s6yd6hajyhz49";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wbqJaibRZW7qiNyLArr7I/dzHprILHQpORtdHWkIfSE=";
   };
 
   postPatch = ''
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
 
   doCheck = false; # the *entire* test suite requires network access
-  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
   postBuild = ''
     export HOME=$TMP
   '';

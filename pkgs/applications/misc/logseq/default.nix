@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, appimage-run
+, makeWrapper
+, git
+}:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.5.4";
+  version = "0.8.17";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "PGrx2JBYmp5vQ8jLpOfiT1T1+SNeRt0W5oHUjHNKuBE=";
+    hash = "sha256-z7v59wXvSIDC7f4IMT8bblPgn+3+J54XqIPzXqWDses=";
     name = "${pname}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extract {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname src version;
   };
 
   dontUnpack = true;
@@ -24,20 +30,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/applications
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications $out/share/${pname}/resources/app/icons
+    cp -a ${appimageContents}/resources/app/icons/logseq.png $out/share/${pname}/resources/app/icons/logseq.png
     cp -a ${appimageContents}/Logseq.desktop $out/share/applications/${pname}.desktop
 
+    # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
+    makeWrapper ${appimage-run}/bin/appimage-run $out/bin/logseq \
+      --set "LOCAL_GIT_DIRECTORY" ${git} \
+      --add-flags ${src}
+
+    # Make the desktop entry run the app using appimage-run
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace Exec=Logseq Exec=${pname} \
+      --replace Exec=Logseq "Exec=$out/bin/logseq" \
       --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app
   '';
 
   passthru.updateScript = ./update.sh;
@@ -45,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
+    changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ weihua ];
     platforms = [ "x86_64-linux" ];

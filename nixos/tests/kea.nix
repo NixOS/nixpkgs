@@ -1,6 +1,8 @@
 import ./make-test-python.nix ({ pkgs, lib, ...}: {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
+  name = "kea";
+
   nodes = {
     router = { config, pkgs, ... }: {
       virtualisation.vlans = [ 1 ];

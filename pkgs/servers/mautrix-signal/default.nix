@@ -2,14 +2,28 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-11-12";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "2e57810e964c1701df2e69273c2f8cebbe021464";
-    sha256 = "sha256-xgn01nbY3LR4G1Yk2MgUhq116/wEhG+5vLH6HKqZE+8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UbetU1n9zD/mVFaJc9FECDq/Zell1TI/aYPsGXGB8Js=";
   };
+
+  postPatch = ''
+    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
+    substituteInPlace setup.py \
+      --replace 'version=version' 'version="${version}"'
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "mautrix"
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     CommonMark
@@ -22,7 +36,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
     ruamel-yaml
     unpaddedbase64
@@ -41,8 +55,8 @@ python3.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${python3}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   meta = with lib; {

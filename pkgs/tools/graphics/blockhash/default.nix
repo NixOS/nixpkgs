@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   meta = with lib; {
-    homepage = "http://blockhash.io/";
+    homepage = "https://github.com/commonsmachinery/blockhash";
     description = ''
       This is a perceptual image hash calculation tool based on algorithm
       descibed in Block Mean Value Based Image Perceptual Hashing by Bian Yang,

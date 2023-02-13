@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "allure-pytest";
-  version = "2.9.45";
+  version = "2.12.0";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18ys5gi64jlfya6a7shj5lqhwc6cplwgyq3s2n5mg5x513g0yqi0";
+    sha256 = "sha256-hbc7Hb6ZCLpPhLgBGKk+EEnALdWTIJJg2MHJUM8ob2w=";
   };
 
   buildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyhamcrest
     mock
     pytestCheckHook

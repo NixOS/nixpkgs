@@ -1,31 +1,27 @@
 { fetchFromGitHub, lib, python3Packages }:
 
-let
-  python3Packages2 = python3Packages.override {
-    overrides = self: super: {
-      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
-    };
-  };
-in
-let
-  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
-in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.0.3";
+  version = "3.7.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-asrhinANGlTsSBbtGToOxTRGGSCf+1c4VWnoE3ezoIA=";
+    sha256 = "sha256-sW6gaZWUh3WX+0+qHRlQ4gZzKU4bL8ePPNKWo9rdF84=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace 'docutils==0.16' 'docutils'
+      --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
+    substituteInPlace requirements.txt \
+      --replace 'tabulate==0.8.10' 'tabulate'
     substituteInPlace setup.py \
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
@@ -33,20 +29,28 @@ python3Packages.buildPythonApplication rec {
     setuptools
     docutils
     rst2ansi
+    tabulate
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
-
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
+    backoff
+    more-itertools
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   disabledTests = [
+    # require network
     "test_files_headers"
     "test_integration"
-    "test_get_account_info"
+  ];
+
+  disabledTestPaths = [
+    # requires network
+    "test/integration/test_b2_command_line.py"
   ];
 
   postInstall = ''
@@ -62,7 +66,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka kevincox ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
   };
 }

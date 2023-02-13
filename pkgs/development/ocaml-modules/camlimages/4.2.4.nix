@@ -15,7 +15,8 @@
 , ghostscript
 }:
 
-assert lib.versionOlder ocaml.version "4.06";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02" && lib.versionOlder ocaml.version "4.10")
+  "camlimages 4.2.4 is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
     rev = "c4f0ec4178fd18cb85872181965c5f020c349160";
     sha256 = "17hvsql5dml7ialjcags8wphs7w6z88b2rgjir1382bg8vn62bkr";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     omake
@@ -54,9 +57,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     omake install
-    runHook postBuild
+    runHook postInstall
   '';
 
   createFindlibDestdir = true;
@@ -64,6 +67,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     # 4.2.5 requires OCaml >= 4.06
     branch = "4.2.4";
+    # incompatible with omake >= 0.10
+    broken = true;
     homepage = "https://gitlab.com/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = licenses.lgpl2Only;

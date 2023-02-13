@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sstp-client";
-  version = "1.0.16";
+  version = "1.0.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/sstp-client/sstp-client/sstp-client-${version}.tar.gz";
-    sha256 = "sha256-r74U/RIveHX0+tDtmC0XRRNtLmbMNrl/cu8aERF4TKE=";
+    sha256 = "sha256-2Hn081q36uh0hu3Ei1D5mpr2X162+0QnmTyleLsODcg=";
   };
 
   postPatch = ''
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SSTP client for Linux";
-    homepage = "http://sstp-client.sourceforge.net/";
+    homepage = "https://sstp-client.sourceforge.net/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
   };
 }

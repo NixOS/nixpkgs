@@ -4,19 +4,26 @@
 , fetchPypi
 , fountains
 , parts
-, nose
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "fe25519";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-947DIkmg56mAegEgLKq8iqETWf2SCvtmeDZi5cxVSJA=";
+    hash = "sha256-/grXAiWERDeTCWgFnNC1Ok8D5I9MBlwd1501TW0yK5c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     bitlist
@@ -24,15 +31,13 @@ buildPythonPackage rec {
     parts
   ];
 
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1" \
-      --replace "parts~=1.1.2" "parts>=1.1.2"
+    substituteInPlace pyproject.toml \
+      --replace "--doctest-modules --ignore=docs --cov=fe25519 --cov-report term-missing" ""
   '';
 
   pythonImportsCheck = [

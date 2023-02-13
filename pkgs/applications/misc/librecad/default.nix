@@ -2,7 +2,7 @@
 , boost
 , fetchFromGitHub
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
 , pkg-config
 , qmake
@@ -10,35 +10,46 @@
 , qtsvg
 , qttools
 , runtimeShell
-, stdenv
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
+    sha256 = "sha256-horKTegmvcMg4m5NbZ4nzy4J6Ac/6+E5OkiZl0v6TBc=";
   };
 
-  postPatch = ''
-    substituteInPlace scripts/postprocess-unix.sh \
-      --replace /bin/sh ${runtimeShell}
+  buildInputs = [
+    boost
+    muparser
+    qtbase
+    qtsvg
+  ];
 
-    substituteInPlace librecad/src/lib/engine/rs_system.cpp \
-      --replace /usr/share $out/share
-
-    substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
-      --replace __DATE__ 0
-  '';
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
     "BOOST_DIR=${boost.dev}"
   ];
+
+  postPatch = ''
+    substituteInPlace scripts/postprocess-unix.sh \
+      --replace /bin/sh ${runtimeShell}
+
+    substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
+      --replace __DATE__ 0
+  '';
+
 
   installPhase = ''
     runHook preInstall
@@ -56,20 +67,6 @@ mkDerivationWith stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  buildInputs = [
-    boost
-    muparser
-    qtbase
-    qtsvg
-  ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-    qmake
-    qttools
-  ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";

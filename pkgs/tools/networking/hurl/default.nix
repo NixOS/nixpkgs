@@ -1,29 +1,27 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, python3
 , installShellFiles
 , libxml2
 , openssl
+, stdenv
 , curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "1.5.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    sha256 = "sha256-avgi3Y5PRI/RZLYw10ifYV6eKKEBi349NYtYs07GS2k=";
+    sha256 = "sha256-sY2bSCcC+mMuYqLmh+oH76nqg/ybh/nyz3trNH2xPQM=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    python3
     installShellFiles
   ];
 
@@ -37,19 +35,17 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access to a test server
   doCheck = false;
 
-  cargoSha256 = "sha256-GB+MnvWkXcdlJvaxtSItm3nGRyr8zWhxSq58smPk/aY=";
+  cargoSha256 = "sha256-Zv7TTQw4UcuQBhEdjD5nwcE1LonUHLUFf9BVhRWWuDo=";
 
   postInstall = ''
-    python ci/gen_manpage.py docs/hurl.md > hurl.1
-    python ci/gen_manpage.py docs/hurlfmt.md > hurlfmt.1
-    installManPage hurl.1 hurlfmt.1
+    installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
   '';
 
   meta = with lib; {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format.";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ eonpatapon ];
+    maintainers = with maintainers; [ eonpatapon figsoda ];
     license = licenses.asl20;
   };
 }

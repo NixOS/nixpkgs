@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "socialscan";
-  version = "1.4.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iojw";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "rT+/j6UqDOzuNBdN3I74YIxS6qkhd7BjHCGX+gGjprc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-jiyTcpJ00DvfweChawj1ugdCVHHAdwDbHEp9jivH7gs=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
     homepage = "https://github.com/iojw/socialscan";
+    changelog = "https://github.com/iojw/socialscan/releases/tag/v${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     })
     ./CVE-2020-14315.patch
     ./include-systypes.patch
-  ] ++ lib.optional stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     (fetchpatch {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/30-bug-632585-mmap-src-file-instead-of-malloc-read-it.patch";
       sha256 = "sha256-esbhz2/efUiuQDuF7LGfSeEn3/f1WbqCxQpTs2A0ulI=";

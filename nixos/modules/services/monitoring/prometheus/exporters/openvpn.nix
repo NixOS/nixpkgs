@@ -9,15 +9,15 @@ in {
   extraOpts = {
     statusPaths = mkOption {
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Paths to OpenVPN status files. Please configure the OpenVPN option
-        <literal>status</literal> accordingly.
+        `status` accordingly.
       '';
     };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };

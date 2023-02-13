@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.e16.enable = mkEnableOption "e16";
+    services.xserver.windowManager.e16.enable = mkEnableOption (lib.mdDoc "e16");
   };
 
   ###### implementation

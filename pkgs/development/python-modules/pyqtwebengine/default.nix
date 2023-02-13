@@ -1,10 +1,12 @@
-{ lib, pythonPackages, pkg-config
+{ lib, stdenv, pythonPackages, pkg-config
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
+, darwin
 }:
 
 let
   inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
+  inherit (darwin) autoSignDarwinBinariesHook;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
@@ -32,6 +34,9 @@ in buildPythonPackage rec {
     qtsvg
     qtwebengine
     pyqt-builder
+    pythonPackages.setuptools
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
@@ -66,6 +71,6 @@ in buildPythonPackage rec {
     description = "Python bindings for Qt5";
     homepage    = "http://www.riverbankcomputing.co.uk";
     license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
+    platforms   = lib.lists.intersectLists qtwebengine.meta.platforms platforms.mesaPlatforms;
   };
 }

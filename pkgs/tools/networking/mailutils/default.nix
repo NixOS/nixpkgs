@@ -1,31 +1,70 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkg-config
-, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python3, gss, libmysqlclient, system-sendmail }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, dejagnu
+, gettext
+, gnum4
+, pkg-config
+, texinfo
+, fribidi
+, gdbm
+, gnutls
+, gss
+, guile
+, libmysqlclient
+, mailcap
+, nettools
+, pam
+, readline
+, ncurses
+, python3
+, sasl
+, system-sendmail
+, libxcrypt
+}:
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.12";
+  version = "3.14";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0n51ng1f8yf5zfsnh8s0pj9bnw6icb2r0y78gl2kzijaghhzlhvd";
+    hash = "sha256-wMWzj+qLRaSvzUNkh/Knb9VSUJLQN4gTputVQsIScTk=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
     sed -i 's:/usr/lib/mysql:${libmysqlclient}/lib/mysql:' configure.ac
-    sed -i 's/0\.18/0.19/' configure.ac
   '';
 
   nativeBuildInputs = [
-    autoreconfHook gettext pkg-config
+    autoreconfHook
+    gettext
+    gnum4
+    pkg-config
+    texinfo
   ];
 
   buildInputs = [
-    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi
-    gss libmysqlclient python3
+    fribidi
+    gdbm
+    gnutls
+    gss
+    guile
+    libmysqlclient
+    mailcap
+    ncurses
+    pam
+    python3
+    readline
+    sasl
+    libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ];
 
   patches = [
@@ -47,6 +86,8 @@ stdenv.mkDerivation rec {
     "--with-gsasl"
     "--with-mysql"
     "--with-path-sendmail=${system-sendmail}/bin/sendmail"
+    "--with-mail-rc=/etc/mail.rc"
+    "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
   ];
 
   readmsg-tests = let
@@ -58,7 +99,7 @@ stdenv.mkDerivation rec {
     (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
   ];
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
   doCheck = false; # fails 1 out of a bunch of tests, looks like a bug
   doInstallCheck = false; # fails
 

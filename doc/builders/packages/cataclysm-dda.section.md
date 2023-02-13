@@ -103,7 +103,7 @@ let
         owner = "Someone";
         repo = "AwesomeMod";
         rev = "...";
-        sha256 = "...";
+        hash = "...";
       };
       # Path to be installed in the unpacked source (default: ".")
       modRoot = "contents/under/this/path/will/be/installed";

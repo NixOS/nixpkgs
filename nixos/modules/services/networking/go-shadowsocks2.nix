@@ -5,11 +5,11 @@ let
   cfg = config.services.go-shadowsocks2.server;
 in {
   options.services.go-shadowsocks2.server = {
-    enable = mkEnableOption "go-shadowsocks2 server";
+    enable = mkEnableOption (lib.mdDoc "go-shadowsocks2 server");
 
     listenAddress = mkOption {
       type = types.str;
-      description = "Server listen address or URL";
+      description = lib.mdDoc "Server listen address or URL";
       example = "ss://AEAD_CHACHA20_POLY1305:your-password@:8488";
     };
   };

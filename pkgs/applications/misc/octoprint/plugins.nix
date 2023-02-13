@@ -75,13 +75,13 @@ in
 
   costestimation = buildPlugin rec {
     pname = "CostEstimation";
-    version = "3.3.0";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "sha256-d7miGMCNJD0siaZb6EnoMZCkKot7vnZjxNZX2TunJcs=";
+      sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
     meta = with lib; {
@@ -311,8 +311,8 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
-      rev = version;
-      sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
+      rev = "refs/tags/${version}";
+      sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
 
     meta = with lib; {
@@ -417,6 +417,30 @@ in
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
       license = licenses.agpl3;
       maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
+  octolapse = buildPlugin rec {
+    pname = "Octolapse";
+    version = "0.4.1";
+
+    src = fetchFromGitHub {
+      owner = "FormerLurker";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "13q20g7brabplc198jh67lk65rn140r8217iak9b2jy3in8fggv4";
+    };
+
+    # Test fails due to code executed on import, see #136513
+    #pythonImportsCheck = [ "octoprint_octolapse" ];
+
+    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file-read-backwards ];
+
+    meta = with lib; {
+      description = "Stabilized timelapses for Octoprint";
+      homepage = "https://github.com/FormerLurker/OctoLapse";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ illustris j0hax ];
     };
   };
 

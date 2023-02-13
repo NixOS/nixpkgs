@@ -1,26 +1,28 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , pkg-config
-, openssl
-, olm
-, spdlog
-, nlohmann_json
 , coeurl
-, libevent
 , curl
+, libevent
+, nlohmann_json
+, olm
+, openssl
+, re2
+, spdlog
 }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.6.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "sha256-hTB0a5KXcQb0MCEX9YonDJOGlTmRkrOIP9UFlwuJc6g=";
+    hash = "sha256-34iwYn9EOAl2c9UWERyzgwlZ+539jW9FygNYwgZ7ClU=";
   };
 
   postPatch = ''
@@ -39,15 +41,20 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    spdlog
-    nlohmann_json
-    openssl
-    olm
     coeurl
-    libevent
     curl
+    libevent
+    nlohmann_json
+    olm
+    openssl
+    re2
+    spdlog
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   meta = with lib; {
     description = "Client API library for the Matrix protocol.";

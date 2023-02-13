@@ -1,0 +1,22 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index ac3125a..c02b11d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -431,7 +431,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "leftwm"
+-version = "0.4.0"
++version = "0.4.1"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -467,7 +467,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "leftwm-core"
+-version = "0.4.0"
++version = "0.4.1"
+ dependencies = [
+  "dirs-next",
+  "futures",

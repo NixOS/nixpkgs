@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "flake8-length";
-  version = "0.2.2";
+  version = "0.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3536fee1d2a19c01f56ebb909c4d81f686f8181091a9bc3ddf3a5621c464760a";
+    sha256 = "sha256-Dr1hTCU2G1STczXJsUPMGFYs1NpIAk1I95vxXsRTtRA=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "flake8_length"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/" ];
 

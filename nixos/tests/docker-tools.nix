@@ -315,7 +315,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+            == "${if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "amd64" else "arm64"}"
         )
 
     with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
@@ -346,7 +346,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.layeredImageWithFakeRootCommands}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
         )
 
     with subtest("Ensure docker load on merged images loads all of the constituent images"):
@@ -389,7 +389,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.mergedBashFakeRoot}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
         )
 
     with subtest("The image contains store paths referenced by the fakeRootCommands output"):
@@ -419,5 +419,84 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi layered-image-with-path",
         )
 
+    with subtest("Ensure correct architecture is present in manifests."):
+        docker.succeed("""
+            docker load --input='${examples.build-image-with-architecture}'
+            docker inspect build-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi build-image-with-architecture
+        """)
+        docker.succeed("""
+            ${examples.layered-image-with-architecture} | docker load
+            docker inspect layered-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi layered-image-with-architecture
+        """)
+
+    with subtest("etc"):
+        docker.succeed("${examples.etc} | docker load")
+        docker.succeed("docker run --rm etc | grep localhost")
+        docker.succeed("docker image rm etc:latest")
+
+    with subtest("image-with-certs"):
+        docker.succeed("<${examples.image-with-certs} docker load")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-bundle.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-certificates.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
+        docker.succeed("docker image rm image-with-certs:latest")
+
+    with subtest("buildNixShellImage: Can build a basic derivation"):
+        docker.succeed(
+            "${examples.nix-shell-basic} | docker load",
+            "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
+        )
+
+    with subtest("buildNixShellImage: Runs the shell hook"):
+        docker.succeed(
+            "${examples.nix-shell-hook} | docker load",
+            "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
+        )
+
+    with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
+        docker.succeed(
+            "${examples.nix-shell-inputs} | docker load",
+            "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
+        )
+
+    with subtest("buildNixShellImage: passAsFile works"):
+        docker.succeed(
+            "${examples.nix-shell-pass-as-file} | docker load",
+            "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
+        )
+
+    with subtest("buildNixShellImage: run argument works"):
+        docker.succeed(
+            "${examples.nix-shell-run} | docker load",
+            "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
+        )
+
+    with subtest("buildNixShellImage: command argument works"):
+        docker.succeed(
+            "${examples.nix-shell-command} | docker load",
+            "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
+        )
+
+    with subtest("buildNixShellImage: home directory is writable by default"):
+        docker.succeed(
+            "${examples.nix-shell-writable-home} | docker load",
+            "docker run --rm -it nix-shell-writable-home"
+        )
+
+    with subtest("buildNixShellImage: home directory can be made non-existent"):
+        docker.succeed(
+            "${examples.nix-shell-nonexistent-home} | docker load",
+            "docker run --rm -it nix-shell-nonexistent-home"
+        )
+
+    with subtest("buildNixShellImage: can build derivations"):
+        docker.succeed(
+            "${examples.nix-shell-build-derivation} | docker load",
+            "docker run --rm -it nix-shell-build-derivation"
+        )
   '';
 })

@@ -1,26 +1,63 @@
-{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome
-, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
+{ fetchurl
+, lib
+, stdenv
+, meson
+, ninja
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, pkg-config
+, glib
+, gtk3
+, cairo
+, sqlite
+, gnome
+, clutter-gtk
+, libsoup
+, libsoup_3
+, gobject-introspection /*, libmemphis */
+, withLibsoup3 ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
-  version = "0.12.20";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
-  };
+  version = "0.12.21";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "qRXNFyoMUpRMVXn8tGg/ioeMVxv16SglS12v78cn5ac=";
+  };
 
-  buildInputs = [ sqlite libsoup ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk ];
+  buildInputs = [
+    sqlite
+    (if withLibsoup3 then libsoup_3 else libsoup)
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    cairo
+    clutter-gtk
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dvapi=true"
+    (lib.mesonBool "libsoup3" withLibsoup3)
   ];
 
   passthru = {
@@ -44,7 +81,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = teams.gnome.members;
-     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

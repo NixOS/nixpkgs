@@ -6,7 +6,6 @@
 , emoji
 , fetchPypi
 , nose
-, python
 , pythonOlder
 , pytz
 , requests
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     emoji
     nose
@@ -46,7 +45,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     # Only coverage no real unit tests
-    ${python.interpreter} setup.py nosetests
+    nosetests
     runHook postCheck
   '';
 

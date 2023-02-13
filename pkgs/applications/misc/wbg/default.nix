@@ -16,11 +16,6 @@
 , libjpeg
 }:
 
-let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
-in
-
 stdenv.mkDerivation rec {
   pname = "wbg";
   version = "1.0.2";
@@ -51,8 +46,8 @@ stdenv.mkDerivation rec {
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "png" enablePNG)
-    (mesonFeatureFlag "jpeg" enableJPEG)
+    (lib.mesonEnable "png" enablePNG)
+    (lib.mesonEnable "jpeg" enableJPEG)
   ];
 
   meta = with lib; {

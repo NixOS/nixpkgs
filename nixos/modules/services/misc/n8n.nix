@@ -9,20 +9,19 @@ let
 in
 {
   options.services.n8n = {
-
-    enable = mkEnableOption "n8n server";
+    enable = mkEnableOption (lib.mdDoc "n8n server");
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = "Open ports in the firewall for the n8n web interface.";
+      description = lib.mdDoc "Open ports in the firewall for the n8n web interface.";
     };
 
     settings = mkOption {
       type = format.type;
       default = {};
-      description = ''
-        Configuration for n8n, see <link xlink:href="https://docs.n8n.io/reference/configuration.html"/>
+      description = lib.mdDoc ''
+        Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.
       '';
     };
@@ -43,7 +42,12 @@ in
         # This folder must be writeable as the application is storing
         # its data in it, so the StateDirectory is a good choice
         N8N_USER_FOLDER = "/var/lib/n8n";
+        HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+
+        # Don't phone home
+        N8N_DIAGNOSTICS_ENABLED = "false";
+        N8N_VERSION_NOTIFICATIONS_ENABLED = "false";
       };
       serviceConfig = {
         Type = "simple";

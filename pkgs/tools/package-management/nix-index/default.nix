@@ -1,25 +1,23 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl, sqlite
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-index";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "bennofs";
     repo = "nix-index";
     rev = "v${version}";
-    sha256 = "05fqfwz34n4ijw7ydw2n6bh4bv64rhks85cn720sy5r7bmhfmfa8";
+    sha256 = "sha256-TDGtnSgY897fRm1BWLlQZQa8v6Wu5/JIF4UH+1CZm4U=";
   };
 
-  cargoSha256 = "161lz96a52s53rhhkxxhcg41bsmh8w6rv6nl8gwqmg3biszy7hah";
+  cargoSha256 = "sha256-z1lLpZBD4HjO6gLw96wbucfchRgZs26Q8Gl+hpUB1xo=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl curl ]
+  buildInputs = [ openssl curl sqlite ]
     ++ lib.optional stdenv.isDarwin Security;
-
-  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     mkdir -p $out/etc/profile.d

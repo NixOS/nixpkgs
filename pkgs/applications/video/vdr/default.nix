@@ -5,12 +5,12 @@
 }: stdenv.mkDerivation rec {
 
   pname = "vdr";
-  version = "2.5.6";
+  version = "2.6.3";
 
   src = fetchgit {
     url = "git://git.tvdr.de/vdr.git";
     rev = version;
-    sha256 = "sha256-hgP8EIGwEPj30fijZzcujnvutG+acU4qqqvgY6FB/z4=";
+    sha256 = "sha256-SDaNk8tDaO70+V7sozMGTCzpnOqa52xdEQPURkyuTt8=";
   };
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@
     homepage = "http://www.tvdr.de/";
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
 }

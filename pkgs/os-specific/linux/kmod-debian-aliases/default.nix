@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
-  name = "kmod-debian-aliases-${version}.conf";
+  pname = "kmod-debian-aliases.conf";
   version = "22-1.1";
 
   src = fetchurl {

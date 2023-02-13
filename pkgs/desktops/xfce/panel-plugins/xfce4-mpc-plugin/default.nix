@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel,
-  libxfce4ui, gtk3, exo, xfce }:
+  libxfce4ui, gtk3, exo, gitUpdater }:
 
 let
   category = "panel-plugins";
@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     exo
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {

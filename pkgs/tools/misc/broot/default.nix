@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -9,20 +9,22 @@
 , oniguruma
 , libiconv
 , Security
-, libxcb
+, xorg
 , zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.7.4";
+  version = "1.20.1";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-laFLm6A0EeprSHuqBi3p4ykgBbCinYU1sf0iRV0PY/M=";
+  src = fetchFromGitHub {
+    owner = "Canop";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-W8B4e8x9IoINR4NSm8jVBqXZbe1T/4z3RVmNrLVzV1M=";
   };
 
-  cargoHash = "sha256-0ybig1S56cJjf6QGWuDasfsIiwRhK+bpWNKOjs4D7P8=";
+  cargoHash = "sha256-XEvIqzSkusOv+boNZbTRxXVN566SduNDcZSkomJRMsk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib

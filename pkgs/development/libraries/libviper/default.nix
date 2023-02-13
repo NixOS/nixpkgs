@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, pkg-config, glib, ncurses, gpm}:
 stdenv.mkDerivation rec {
-  name = "libviper-1.4.6";
+  pname = "libviper";
+  version = "1.4.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libviper/${name}.tar.gz";
+    url = "mirror://sourceforge/libviper/libviper-${version}.tar.gz";
     sha256 = "1jvm7wdgw6ixyhl0pcfr9lnr9g6sg6whyrs9ihjiz0agvqrgvxwc";
   };
 

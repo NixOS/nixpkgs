@@ -35,11 +35,24 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     then pname
     else ename;
 
-  packageBuild = fetchFromGitHub {
-    owner = "melpa";
-    repo = "package-build";
-    rev = "047801d301a73d4932f33f768d94a8ed26b8d524";
-    sha256 = "0ygzkpg7xc3mjjbxg1kcyz6fwbkb0prvca499f0ffmhfaiv28h59";
+  packageBuild = stdenv.mkDerivation {
+    name = "package-build";
+    src = fetchFromGitHub {
+      owner = "melpa";
+      repo = "package-build";
+      rev = "c3c535e93d9dc92acd21ebc4b15016b5c3b90e7d";
+      sha256 = "17z0wbqdd6fspbj43yq8biff6wfggk74xgnaf1xx6ynsp1i74is5";
+    };
+
+    patches = [ ./package-build-dont-use-mtime.patch ];
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = "
+      mkdir -p $out
+      cp -r * $out
+    ";
   };
 
   elpa2nix = ./elpa2nix.el;

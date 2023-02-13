@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "fwanalyzer";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "cruise-automation";
     repo = pname;
     rev = version;
-    sha256 = "1pj6s7lzw7490488a30pzvqy2riprfnhb4nzxm6sh2nsp51xalzv";
+    sha256 = "sha256-fcqtyfpxdjD+1GsYl05RSJaFDoLSYQDdWcQV6a+vNGA=";
   };
 
-  vendorSha256 = "1cjbqx75cspnkx7fgc665q920dsxnsdhqgyiawkvx0i8akczbflw";
+  vendorSha256 = "sha256-nLr12VQogr4nV9E/DJu2XTcgEi7GsOdOn/ZqVk7HS7I=";
 
   subPackages = [ "cmd/${pname}" ];
 

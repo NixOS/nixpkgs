@@ -3,26 +3,34 @@
 , build
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , git
 , mock
 , pep517
 , pytestCheckHook
 , toml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.47";
+  version = "0.48";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56dadd260a9c7d550b159796d2894b6d0bcc176a94cbc426d9bb93e5e48d12ce";
+    hash = "sha256-O1dfHa3nvrMHjvS/M6lFGYNEV8coHbxyaxXFRmtVxlc=";
   };
 
-  # Test requires filesystem access
-  postPatch = ''
-    substituteInPlace tests.py --replace "test_build_sdist" "no_test_build_sdist"
-  '';
+  patches = [
+    # Fix git submodule tests using file: protocol
+    (fetchpatch {
+      url = "https://github.com/mgedmin/check-manifest/pull/159.patch";
+      hash = "sha256-CDtuIoHgP4THLt+xF32C/OrjakwPOEVTKUh5JuQB5wM=";
+    })
+  ];
 
   propagatedBuildInputs = [
     build
@@ -30,18 +38,25 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     breezy
     git
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "check_manifest" ];
+  disabledTests = [
+    # Test wants to setup a venv
+    "test_build_sdist_pep517_isolated"
+  ];
+
+  pythonImportsCheck = [
+    "check_manifest"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/mgedmin/check-manifest";
     description = "Check MANIFEST.in in a Python source package for completeness";
+    homepage = "https://github.com/mgedmin/check-manifest";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
   };

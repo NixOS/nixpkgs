@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.1.1";
+  version = "4.1.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-26ngXHjOkQrnWgY1GlWSR5GRqNxXCsDNbRinfpgTiHM=";
+    sha256 = "sha256-c6WfDSFi0WJFNcPDt1+VZVa9uyBV6vVUp77xR9P5x2A=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytest
   ];

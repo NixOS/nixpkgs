@@ -21,12 +21,12 @@ chomp $OPAM_RELEASE_SHA256;
 
 my $OPAM_BASE_URL = "https://raw.githubusercontent.com/$OPAM_GITHUB_REPO/$OPAM_TAG";
 my $OPAM_OPAM = `curl -L --url \Q$OPAM_BASE_URL\E/opam-devel.opam`;
-my($OCAML_MIN_VERSION) = $OPAM_OPAM =~ /^  "ocaml" {>= "(.*)"}$/m
+my($OCAML_MIN_VERSION) = $OPAM_OPAM =~ /^  "ocaml" \{>= "(.*)"}$/m
   or die "could not parse ocaml version bound\n";
 
 print <<"EOF";
 { stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, aspcud, bubblewrap
+  ocaml, unzip, ncurses, curl, bubblewrap, Foundation
 }:
 
 assert lib.versionAtLeast ocaml.version "$OCAML_MIN_VERSION";
@@ -68,8 +68,12 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "$OPAM_RELEASE";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ curl ncurses ocaml getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
+  buildInputs = [ ncurses getconf ]
+    ++ lib.optionals stdenv.isLinux [ bubblewrap ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   src = srcs.opam;
 
@@ -114,7 +118,7 @@ print <<'EOF';
     mv $out/bin/opam $out/bin/.opam-wrapped
     makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
       --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
+      --suffix PATH : ${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
       --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
     $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';
@@ -124,7 +128,9 @@ print <<'EOF';
   meta = with lib; {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
+    changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
     maintainers = [ maintainers.henrytill maintainers.marsam ];
+    license = licenses.lgpl21Only;
     platforms = platforms.all;
   };
 }

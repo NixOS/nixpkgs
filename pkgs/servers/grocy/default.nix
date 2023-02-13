@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
-  version = "3.1.3";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    sha256 = "sha256-6vgnV9HQHwJGUHGxAMXxXXiEj2kNTWqGcHnpPHvma/Q=";
+    sha256 = "sha256-KF4zxrC8rlRUaBKc4iLIt6TSAHMJ+tOWptMsVcixVWs=";
   };
 
   nativeBuildInputs = [ unzip ];

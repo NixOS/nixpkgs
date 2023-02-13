@@ -1,30 +1,34 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
-, fetchpatch
 , appstream-glib
 , clutter
 , gjs
 , glib
 , gobject-introspection
 , gtk3
+, gtk4
+, gcr_4
+, libadwaita
 , meson
 , mutter
 , ninja
 , pango
 , pkg-config
 , vala
+, desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.42.2";
+  version = "43.1";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-VWtq1jPwUHHIDpVaSYQ0FiihlfulRofFmacMyv/buMw=";
+    sha256 = "sha256-wOxhaYWX76jSur3uh75vDfAedbiLh2ikoMuobCZx3jE=";
   };
 
   patches = [
@@ -38,7 +42,7 @@ stdenv.mkDerivation rec {
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
-    substituteInPlace src/libgpaste/settings/gpaste-settings.c \
+    substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
@@ -49,6 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    desktop-file-utils
     wrapGAppsHook
   ];
 
@@ -57,19 +62,19 @@ stdenv.mkDerivation rec {
     gjs
     glib
     gtk3
+    gtk4
+    gcr_4
+    libadwaita
     mutter
     pango
   ];
 
   mesonFlags = [
+    "-Dgcr3=false" # Build with gcr4
     "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";

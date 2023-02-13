@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , autoreconfHook
 , fetchurl
 , gettext
@@ -30,7 +31,7 @@
 }:
 let
   pname = "gnome-flashback";
-  version = "3.42.1";
+  version = "3.46.0";
 
   # From data/sessions/Makefile.am
   requiredComponentsCommon = enableGnomePanel:
@@ -61,7 +62,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "sha256:0kl4m05whm03m2v0y3jd69lghkggn8s0hxdhvchcas7jmhh940n8";
+      sha256 = "sha256-eo1cAzEOTfrdGKZeAKN3QQMq/upUGN1oBKl1xLCYAEU=";
     };
 
     # make .desktop Execs absolute
@@ -179,9 +180,11 @@ let
             dontWrapGApps = true; # We want to do the wrapping ourselves.
 
             # gnome-flashback and gnome-panel need to be added to XDG_DATA_DIRS so that their .desktop files can be found by gnome-session.
+            # We need to pass the --builtin flag so that gnome-session invokes gnome-session-binary instead of systemd.
+            # If systemd is used, it doesn't use the environment we set up here and so it can't find the .desktop files.
             preFixup = ''
               makeWrapper ${gnome-session}/bin/gnome-session $out \
-                --add-flags "--session=gnome-flashback-${wmName}" \
+                --add-flags "--session=gnome-flashback-${wmName} --builtin" \
                 --set-default XDG_CURRENT_DESKTOP 'GNOME-Flashback:GNOME' \
                 --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" ([ wmApplication gnomeSession gnome-flashback ] ++ lib.optional enableGnomePanel gnome-panel)}' \
                 "''${gappsWrapperArgs[@]}" \

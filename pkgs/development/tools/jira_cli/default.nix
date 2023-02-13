@@ -1,6 +1,6 @@
 { lib, libffi, openssl, python3Packages }:
 let
-  inherit (python3Packages) fetchPypi buildPythonApplication vcrpy mock hiro;
+  inherit (python3Packages) fetchPypi buildPythonApplication;
 in
   buildPythonApplication rec {
     pname = "jira-cli";
@@ -16,10 +16,10 @@ in
 
     # Tests rely on VCR cassettes being written during tests. R/O nix store prevents this.
     doCheck = false;
-    checkInputs = with python3Packages; [ vcrpy mock hiro ];
+    nativeCheckInputs = with python3Packages; [ vcrpy mock hiro ];
     buildInputs = [ libffi openssl ];
     propagatedBuildInputs = with python3Packages; [
-      ordereddict requests six suds-jurko termcolor keyring
+      requests six suds-jurko termcolor keyring
       jira  keyrings-alt
     ];
 

@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) any attrValues concatMapStringsSep flatten literalExpression;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.wordpress;
+let
+  cfg = config.services.wordpress;
   eachSite = cfg.sites;
   user = "wordpress";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
-
-  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -28,6 +22,7 @@ let
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ln -s ${cfg.fontsDir} $out/share/wordpress/wp-content/fonts
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -36,35 +31,60 @@ let
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
 
-      # copy additional plugin(s) and theme(s)
-      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
-      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      # copy additional plugin(s), theme(s) and language(s)
+      ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
+      ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
-  wpConfig = hostName: cfg: pkgs.writeText "wp-config-${hostName}.php" ''
-    <?php
-      define('DB_NAME', '${cfg.database.name}');
-      define('DB_HOST', '${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}');
-      define('DB_USER', '${cfg.database.user}');
-      ${optionalString (cfg.database.passwordFile != null) "define('DB_PASSWORD', file_get_contents('${cfg.database.passwordFile}'));"}
-      define('DB_CHARSET', 'utf8');
-      $table_prefix  = '${cfg.database.tablePrefix}';
+  mergeConfig = cfg: {
+    # wordpress is installed onto a read-only file system
+    DISALLOW_FILE_EDIT = true;
+    AUTOMATIC_UPDATER_DISABLED = true;
+    DB_NAME = cfg.database.name;
+    DB_HOST = "${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}";
+    DB_USER = cfg.database.user;
+    DB_CHARSET = "utf8";
+    # Always set DB_PASSWORD even when passwordFile is not set. This is the
+    # default Wordpress behaviour.
+    DB_PASSWORD =  if (cfg.database.passwordFile != null) then { _file = cfg.database.passwordFile; } else "";
+  } // cfg.settings;
 
-      require_once('${stateDir hostName}/secret-keys.php');
+  wpConfig = hostName: cfg: let
+    conf_gen = c: mapAttrsToList (k: v: "define('${k}', ${mkPhpValue v});") cfg.mergedConfig;
+  in pkgs.writeTextFile {
+    name = "wp-config-${hostName}.php";
+    text = ''
+      <?php
+        $table_prefix  = '${cfg.database.tablePrefix}';
 
-      # wordpress is installed onto a read-only file system
-      define('DISALLOW_FILE_EDIT', true);
-      define('AUTOMATIC_UPDATER_DISABLED', true);
+        require_once('${stateDir hostName}/secret-keys.php');
 
-      ${cfg.extraConfig}
+        ${cfg.extraConfig}
+        ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
 
-      if ( !defined('ABSPATH') )
-        define('ABSPATH', dirname(__FILE__) . '/');
+        if ( !defined('ABSPATH') )
+          define('ABSPATH', dirname(__FILE__) . '/');
 
-      require_once(ABSPATH . 'wp-settings.php');
-    ?>
-  '';
+        require_once(ABSPATH . 'wp-settings.php');
+      ?>
+    '';
+    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+  };
+
+  mkPhpValue = v: let
+    isHasAttr = s: isAttrs v && hasAttr s v;
+  in
+    if isString v then escapeShellArg v
+    # NOTE: If any value contains a , (comma) this will not get escaped
+    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isInt v then toString v
+    else if isBool v then boolToString v
+    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_raw" then v._raw
+    else abort "The Wordpress config value ${lib.generators.toPretty {} v} can not be encoded."
+  ;
 
   secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
   secretsScript = hostStateDir: ''
@@ -81,76 +101,100 @@ let
     fi
   '';
 
-  siteOpts = { lib, name, ... }:
+  siteOpts = { lib, name, config, ... }:
     {
       options = {
         package = mkOption {
           type = types.package;
           default = pkgs.wordpress;
           defaultText = literalExpression "pkgs.wordpress";
-          description = "Which WordPress package to use.";
+          description = lib.mdDoc "Which WordPress package to use.";
         };
 
         uploadsDir = mkOption {
           type = types.path;
           default = "/var/lib/wordpress/${name}/uploads";
-          description = ''
+          description = lib.mdDoc ''
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
           '';
         };
 
+        fontsDir = mkOption {
+          type = types.path;
+          default = "/var/lib/wordpress/${name}/fonts";
+          description = lib.mdDoc ''
+            This directory is used to download fonts from a remote location, e.g.
+            to host google fonts locally.
+          '';
+        };
+
         plugins = mkOption {
-          type = types.listOf types.path;
-          default = [];
-          description = ''
-            List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = {};
+          description = lib.mdDoc ''
+            Path(s) to respective plugin(s) which are copied from the 'plugins' directory.
+
+            ::: {.note}
+            These plugins need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
-            let
-              # Wordpress plugin 'embed-pdf-viewer' installation example
-              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-                name = "embed-pdf-viewer-plugin";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ embedPdfViewerPlugin ]
+            {
+              inherit (pkgs.wordpressPackages.plugins) embed-pdf-viewer-plugin;
+            }
           '';
         };
 
         themes = mkOption {
-          type = types.listOf types.path;
-          default = [];
-          description = ''
-            List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
+          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
+          description = lib.mdDoc ''
+            Path(s) to respective theme(s) which are copied from the 'theme' directory.
+
+            ::: {.note}
+            These themes need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
-            let
-              # Let's package the responsive theme
-              responsiveTheme = pkgs.stdenv.mkDerivation {
-                name = "responsive-theme";
-                # Download the theme from the wordpress site
+            {
+              inherit (pkgs.wordpressPackages.themes) responsive-theme;
+            }
+          '';
+        };
+
+        languages = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = lib.mdDoc ''
+            List of path(s) to respective language(s) which are copied from the 'languages' directory.
+          '';
+          example = literalExpression ''
+            [(
+              # Let's package the German language.
+              # For other languages try to replace language and country code in the download URL with your desired one.
+              # Reference https://translate.wordpress.org for available translations and
+              # codes.
+              language-de = pkgs.stdenv.mkDerivation {
+                name = "language-de";
                 src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
+                  url = "https://de.wordpress.org/wordpress-''${pkgs.wordpress.version}-de_DE.tar.gz";
+                  # Name is required to invalidate the hash when wordpress is updated
+                  name = "wordpress-''${pkgs.wordpress.version}-language-de"
+                  sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
                 };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
+                installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
               };
-            # And then pass this theme to the themes list like this:
-            in [ responsiveTheme ]
+            )];
           '';
         };
 
@@ -158,47 +202,47 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database host address.";
+            description = lib.mdDoc "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = "Database host port.";
+            description = lib.mdDoc "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database name.";
+            description = lib.mdDoc "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database user.";
+            description = lib.mdDoc "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/wordpress-dbpassword";
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password corresponding to
-              <option>database.user</option>.
+              {option}`database.user`.
             '';
           };
 
           tablePrefix = mkOption {
             type = types.str;
             default = "wp_";
-            description = ''
+            description = lib.mdDoc ''
               The $table_prefix is the value placed in the front of your database tables.
               Change the value if you want to use something other than wp_ for your database
               prefix. Typically this is changed if you are installing multiple WordPress blogs
               in the same database.
 
-              See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
+              See <https://codex.wordpress.org/Editing_wp-config.php#table_prefix>.
             '';
           };
 
@@ -206,13 +250,13 @@ let
             type = types.nullOr types.path;
             default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
-            description = "Path to the unix socket file to use for authentication.";
+            description = lib.mdDoc "Path to the unix socket file to use for authentication.";
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = lib.mdDoc "Create the database and database user locally.";
           };
         };
 
@@ -225,8 +269,8 @@ let
               enableACME = true;
             }
           '';
-          description = ''
-            Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
+          description = lib.mdDoc ''
+            Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           '';
         };
 
@@ -240,24 +284,65 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the WordPress PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
+          '';
+        };
+
+        settings = mkOption {
+          type = types.attrsOf types.anything;
+          default = {};
+          description = lib.mdDoc ''
+            Structural Wordpress configuration.
+            Refer to <https://developer.wordpress.org/apis/wp-config-php>
+            for details and supported values.
+          '';
+          example = literalExpression ''
+            {
+              WP_DEFAULT_THEME = "twentytwentytwo";
+              WP_SITEURL = "https://example.org";
+              WP_HOME = "https://example.org";
+              WP_DEBUG = true;
+              WP_DEBUG_DISPLAY = true;
+              WPLANG = "de_DE";
+              FORCE_SSL_ADMIN = true;
+              AUTOMATIC_UPDATER_DISABLED = true;
+            }
+          '';
+        };
+
+        mergedConfig = mkOption {
+          readOnly = true;
+          default = mergeConfig config;
+          defaultText = literalExpression ''
+            {
+              DISALLOW_FILE_EDIT = true;
+              AUTOMATIC_UPDATER_DISABLED = true;
+            }
+          '';
+          description = lib.mdDoc ''
+            Read only representation of the final configuration.
           '';
         };
 
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
-            settings, see <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php'/>.
+            settings, see <https://codex.wordpress.org/Editing_wp-config.php>.
+
+            **Note**: Please pass structured settings via
+            `services.wordpress.sites.${name}.settings` instead.
           '';
           example = ''
-            define( 'AUTOSAVE_INTERVAL', 60 ); // Seconds
+            @ini_set( 'log_errors', 'Off' );
+            @ini_set( 'display_errors', 'On' );
           '';
         };
+
       };
 
       config.virtualHost.hostName = mkDefault name;
@@ -266,48 +351,44 @@ in
 {
   # interface
   options = {
-    services.wordpress = mkOption {
-      type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
+    services.wordpress = {
 
-        # New interface
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more WordPress sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "httpd" "nginx" "caddy" ];
-          default = "httpd";
-          description = ''
-            Whether to use apache2 or nginx for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = lib.mdDoc "Specification of one or more WordPress sites to serve";
       };
-      default = {};
-      description = "Wordpress configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "httpd" "nginx" "caddy" ];
+        default = "httpd";
+        description = lib.mdDoc ''
+          Whether to use apache2 or nginx for virtual host management.
+
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
+
+          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
 
-    assertions = mapAttrsToList (hostName: cfg:
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
-      }
-    ) eachSite;
+    assertions =
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.user == user;
+          message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
+        }) eachSite) ++
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+          message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
+        }) eachSite);
 
-    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -359,7 +440,7 @@ in
 
             DirectoryIndex index.php
             Require all granted
-            Options +FollowSymLinks
+            Options +FollowSymLinks -Indexes
           </Directory>
 
           # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
@@ -376,6 +457,8 @@ in
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
+      "d '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
+      "Z '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
     systemd.services = mkMerge [

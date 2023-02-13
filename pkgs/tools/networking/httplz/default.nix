@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchCrate
+, fetchpatch
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -13,15 +14,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.12.2";
+  version = "1.12.5";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    sha256 = "sha256-FhxNYss6n0AJEszpJ7+6CAJE2sdsflWQkvSLakTnFdY=";
+    sha256 = "sha256-+nCqMTLrBYNQvoKo1PzkyzRCkKdlE88+NYoJcIlAJts=";
   };
 
-  cargoSha256 = "sha256-wyksA3RYpGkD6nhllNv8WkUwEdml4TiPM2a4GzfBD1o=";
+  patches = [
+    # https://github.com/thecoshman/http/pull/151
+    (fetchpatch {
+      name = "fix-rust-1.65-compile.patch";
+      url = "https://github.com/thecoshman/http/commit/6e4c8e97cce09d0d18d4936f90aa643659d813fc.patch";
+      hash = "sha256-mXclXfp2Nzq6Pr9VFmxiOzECGZEQRNOAcXoKhiOyuFs=";
+    })
+  ];
+
+  cargoSha256 = "sha256-odiVIfNJPpagoASnYvdOosHXa37gbQM8Zmvtnao0pAs=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -1,4 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2 }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, btrfs-progs
+, gpgme
+, lvm2
+}:
 
 buildGoModule rec {
   pname = "dive";
@@ -11,9 +20,14 @@ buildGoModule rec {
     sha256 = "sha256-1pmw8pUlek5FlI1oAuvLSqDow7hw5rw86DRDZ7pFAmA=";
   };
 
-  vendorSha256 = "sha256-0gJ3dAPoilh3IWkuesy8geNsuI1T0DN64XvInc9LvlM=";
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/wagoodman/dive/commit/fe9411c414418d839a8638bb9a12ccfc892b5845.patch";
+      sha256 = "sha256-c0TcUQ87CeOiXHoTQ3z/04i72aDr403DL7fIbXTJ9cY=";
+    })
+  ];
 
-  doCheck = false;
+  vendorSha256 = "sha256-YPkEei7d7mXP+5FhooNoMDARQLosH2fdSaLXGZ5C27o=";
 
   nativeBuildInputs = [ pkg-config ];
 

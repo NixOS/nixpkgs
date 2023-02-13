@@ -1,25 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cshatag";
-  version = "2019-12-03";
-
-  goPackagePath = "github.com/rfjakob/cshatag";
-  goDeps = ./deps.nix;
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
-    rev = "b169f0a9dd35a7381774eb176d4badf64d403560";
-    sha256 = "16kam3w75avh8khkk6jfdnxwggz2pw6ccv6v7d064j0fbb9y8x0v";
+    rev = "v${version}";
+    sha256 = "sha256-Ez8zGVX10A7xuggkh3n7w/qzda8f4t6EgSc9l6SPEZQ=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "GITVERSION=${version}" ];
+  vendorSha256 = "sha256-QTnwltsoyUbH4vob5go1KBrb9gwxaaPNW3S4sxVls3k=";
+
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
     # Install man page
-    cd go/src/${goPackagePath}
-    make install $makeFlags
+    install -D -m755 -t $out/share/man/man1/ cshatag.1
   '';
 
   meta = with lib; {
@@ -28,5 +26,4 @@ buildGoPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-
 }

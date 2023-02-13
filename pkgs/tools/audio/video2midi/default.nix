@@ -8,7 +8,7 @@ let
   });
 in pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
-  version = "0.4.0.2";
+  version = "0.4.6.5";
 
   format = "other";
 
@@ -16,7 +16,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "svsdval";
     repo = pname;
     rev = version;
-    sha256 = "174ijn8bc306529scd23szvgx1apanm2qmwk4lwmi64rhkm6dapx";
+    sha256 = "0qzrxqhsxn0h71nfrsi9g78hx3pqm3b8sr6fjq01k4k6dd2nwfam";
   };
 
   propagatedBuildInputs = with pythonPackages; [ opencv3_ midiutil pygame pyopengl ];
@@ -28,7 +28,7 @@ in pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     description = "Youtube synthesia video to midi conversion tool";
     homepage = src.meta.homepage;
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ ];
     platforms = platforms.linux;
   };

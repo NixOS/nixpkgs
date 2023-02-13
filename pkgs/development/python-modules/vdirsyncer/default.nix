@@ -7,24 +7,39 @@
 , click-threading
 , requests-toolbelt
 , requests
-, requests_oauthlib # required for google oauth sync
 , atomicwrites
 , hypothesis
 , pytestCheckHook
-, pytest-localserver
 , pytest-subtesthack
 , setuptools-scm
+, aiostream
+, aiohttp-oauthlib
+, aiohttp
+, pytest-asyncio
+, trustme
+, aioresponses
+, vdirsyncer
+, testers
 }:
 
 buildPythonPackage rec {
-  version = "0.18.0";
   pname = "vdirsyncer";
+  version = "0.19.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256:0995bavlv8s9j0127ncq3yzy5p72lam9qgpswyjfanc6l01q87lf";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
+
+    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     atomicwrites
@@ -32,24 +47,24 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests_oauthlib # required for google oauth sync
     requests-toolbelt
+    aiostream
+    aiohttp
+    aiohttp-oauthlib
   ];
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-    pytest-localserver
     pytest-subtesthack
+    pytest-asyncio
+    trustme
+    aioresponses
   ];
-
-  postPatch = ''
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
-  '';
 
   preCheck = ''
     export DETERMINISTIC_TESTS=true
@@ -60,6 +75,8 @@ buildPythonPackage rec {
     "test_request_ssl"
     "test_verbosity"
   ];
+
+  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";

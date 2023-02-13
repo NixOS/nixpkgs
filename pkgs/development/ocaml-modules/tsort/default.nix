@@ -2,13 +2,12 @@
 
 buildDunePackage rec {
   pname = "tsort";
-  useDune2 = true;
-  version = "2.0.0";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "dmbaturin";
     repo = "ocaml-tsort";
     rev = version;
-    sha256 = "0i67ys5p5i8q9p0nhkq4pjg9jav8dy0fiy975a365j7m6bhrwgc1";
+    sha256 = "sha256-SCd0R8iGwMeRhhSxMid9lzqj5fm+owCJ2dzwtLpFqB4=";
   };
 
   propagatedBuildInputs = [ containers ];

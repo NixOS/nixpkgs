@@ -1,6 +1,17 @@
-{ fetchurl, lib, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
-  autoconf, libtool, ghostscript, ncurses,
-  enableX11 ? false, xlibsWrapper }:
+{ fetchurl
+, lib
+, stdenv
+, makeWrapper
+, gnum4
+, texinfo
+, texLive
+, automake
+, autoconf
+, libtool
+, ghostscript
+, ncurses
+, enableX11 ? false, libX11
+}:
 
 let
   version = "11.2";
@@ -12,7 +23,8 @@ let
      "-x86-64";
 in
 stdenv.mkDerivation {
-  name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
+  pname = "mit-scheme" + lib.optionalString enableX11 "-x11";
+  inherit version;
 
   # MIT/GNU Scheme is not bootstrappable, so it's recommended to compile from
   # the platform-specific tarballs, which contain pre-built binaries.  It
@@ -28,7 +40,7 @@ stdenv.mkDerivation {
       sha256 = "17822hs9y07vcviv2af17p3va7qh79dird49nj50bwi9rz64ia3w";
     };
 
-  buildInputs = [ ncurses ] ++ lib.optional enableX11 xlibsWrapper;
+  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
 
   configurePhase = ''
     runHook preConfigure

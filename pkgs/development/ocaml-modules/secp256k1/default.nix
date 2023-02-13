@@ -2,15 +2,13 @@
 
 buildDunePackage rec {
   pname = "secp256k1";
-  version = "0.4.1";
-
-  useDune2 = true;
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "dakk";
     repo = "secp256k1-ml";
     rev = version;
-    sha256 = "0jkd7mc5kynhg0b76dfk70pww97qsq2jbd991634i16xf8qja9fj";
+    hash = "sha256-22+dZb3MC1W5Qvsz3+IHV1/XiGCRmJHTH+6IW2QX2hU=";
   };
 
   buildInputs = [ base stdio dune-configurator secp256k1 ];

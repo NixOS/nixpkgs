@@ -22,9 +22,9 @@ in
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.fcitx-engines;
             engines = concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
+              (map (name: "`${name}`") (attrNames enginesDrv));
           in
-            "Enabled Fcitx engines. Available engines are: ${engines}.";
+            lib.mdDoc "Enabled Fcitx engines. Available engines are: ${engines}.";
       };
     };
 
@@ -40,4 +40,7 @@ in
     };
     services.xserver.displayManager.sessionCommands = "${fcitxPackage}/bin/fcitx";
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

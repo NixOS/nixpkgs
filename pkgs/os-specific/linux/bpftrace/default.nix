@@ -1,35 +1,31 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, flex, bison
 , llvmPackages, elfutils
-, libelf, libbfd, libbpf, libopcodes, bcc
+, libbfd, libbpf, libopcodes, bcc
 , cereal, asciidoctor
 , nixosTests
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "sha256-rlaajNfpoiMtU/4aNAnbQ0VixPz9/302TZMarGzsb58=";
+    sha256 = "sha256-PBqq3u8zym+RY6xudJ66ItzDZEJBNvJDtve1GtxcOdQ=";
   };
-
-  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
-  # btf_dump__new() but that's not valid c++.
-  # see https://github.com/iovisor/bpftrace/issues/2068
-  patches = [ ./btf-dump-new-0.6.0.patch ];
 
   buildInputs = with llvmPackages;
     [ llvm libclang
-      elfutils libelf bcc
+      elfutils bcc
       libbpf libbfd libopcodes
       cereal asciidoctor
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev util-linux ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
@@ -39,12 +35,13 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
       "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+      "-DINSTALL_TOOL_DOCS=off"
     ];
 
-  # nuke the example/reference output .txt files, for the included tools,
-  # stuffed inside $out. we don't need them at all.
+  # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
+  # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
-    rm -rf $out/share/bpftrace/tools/doc
+    ln -s $out/share/bpftrace/tools/*.bt $out/bin/
   '';
 
   outputs = [ "out" "man" ];

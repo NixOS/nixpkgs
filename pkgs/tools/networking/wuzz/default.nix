@@ -1,25 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wuzz";
-  version = "0.2.0";
-  rev = "v${version}";
-
-  goPackagePath = "https://github.com/asciimoo/wuzz";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
-    repo = "wuzz";
-    inherit rev;
-    sha256 = "1fcr5jr0vn5w60bn08lkh2mi0hdarwp361h94in03139j7hhqrfs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = null; #vendorSha256 = "";
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
     license = licenses.agpl3;
     maintainers = with maintainers; [ pradeepchhetri ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

@@ -11,6 +11,8 @@
 
   url_hint = callPackage ./url_hint { };
 
+  weechat-grep = callPackage ./weechat-grep { };
+
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;
   };

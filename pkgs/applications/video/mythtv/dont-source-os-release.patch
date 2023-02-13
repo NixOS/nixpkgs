@@ -1,0 +1,15 @@
+--- a/configure
++++ b/configure
+@@ -5894,9 +5894,9 @@ else
+     die "ERROR: cannot find soundtouch 1.8.0 or later."
+ fi
+ 
+-if [ $target_os = "linux" ] ; then
+-    . /etc/os-release
+-fi
++# if [ $target_os = "linux" ] ; then
++#     . /etc/os-release
++# fi
+ 
+ # libudfread
+ if enabled system_libudfread ; then

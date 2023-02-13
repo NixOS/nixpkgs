@@ -1,33 +1,35 @@
 cargoSetupPostUnpackHook() {
     echo "Executing cargoSetupPostUnpackHook"
 
+    export NIX_LDFLAGS+=" @aarch64LinuxGccWorkaround@"
+
     # Some cargo builds include build hooks that modify their own vendor
     # dependencies. This copies the vendor directory into the build tree and makes
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
         unpackFile "$cargoDeps"
-        export cargoDepsCopy=$(stripHash $cargoDeps)
+        export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
     else
-      cargoDepsCopy="$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}"
+        cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
     fi
 
     if [ ! -d .cargo ]; then
         mkdir .cargo
     fi
 
-    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    config="$cargoDepsCopy/.cargo/config";
     if [[ ! -e $config ]]; then
       config=@defaultConfig@
     fi;
 
     tmp_config=$(mktemp)
     substitute $config $tmp_config \
-      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
+      --subst-var-by vendor "$cargoDepsCopy"
     cat ${tmp_config} >> .cargo/config
 
     cat >> .cargo/config <<'EOF'
-    @rustTarget@
+    @cargoConfig@
 EOF
 
     echo "Finished cargoSetupPostUnpackHook"
@@ -39,8 +41,8 @@ EOF
 cargoSetupPostPatchHook() {
     echo "Executing cargoSetupPostPatchHook"
 
-    cargoDepsLockfile="$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock"
-    srcLockfile="$NIX_BUILD_TOP/$sourceRoot/${cargoRoot:+$cargoRoot/}/Cargo.lock"
+    cargoDepsLockfile="$cargoDepsCopy/Cargo.lock"
+    srcLockfile="$(pwd)/${cargoRoot:+$cargoRoot/}Cargo.lock"
 
     echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
     if ! @diff@ $srcLockfile $cargoDepsLockfile; then

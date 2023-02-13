@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, buildPackages
 , coreutils
 , pam
 , groff
@@ -13,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.7p2";
+  version = "1.9.12p2";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KLXucl2/iaeFL0LzCcqHfSgQqVMbTuz+WfOoS2tK/Kg=";
+    hash = "sha256-uaCxrg8d3Zvn8+r+cL4F7oH1cvb1NmMsRM1BAbsqhTk=";
   };
 
   prePatch = ''
@@ -34,10 +35,10 @@ stdenv.mkDerivation rec {
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
     "--enable-tmpfiles.d=no"
-  ] ++ lib.optional withInsults [
+  ] ++ lib.optionals withInsults [
     "--with-insults"
     "--with-all-insults"
-  ] ++ lib.optional withSssd [
+  ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
   ];
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
       installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ groff ];
   buildInputs = [ pam ];
 

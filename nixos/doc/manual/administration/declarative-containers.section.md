@@ -9,7 +9,7 @@ containers.database =
   { config =
       { config, pkgs, ... }:
       { services.postgresql.enable = true;
-      services.postgresql.package = pkgs.postgresql_10;
+      services.postgresql.package = pkgs.postgresql_14;
       };
   };
 ```
@@ -40,7 +40,7 @@ section for details on container networking.)
 To disable the container, just remove it from `configuration.nix` and
 run `nixos-rebuild
   switch`. Note that this will not delete the root directory of the
-container in `/var/lib/containers`. Containers can be destroyed using
+container in `/var/lib/nixos-containers`. Containers can be destroyed using
 the imperative method: `nixos-container destroy foo`.
 
 Declarative containers can be started and stopped using the

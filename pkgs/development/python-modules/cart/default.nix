@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, unittest2
 }:
 
 buildPythonPackage rec {
@@ -25,9 +24,8 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    unittest2
   ];
 
   pytestFlagsArray = [

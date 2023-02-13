@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1p8r6bac64y98ln0wzmnixysckq3crca69ys7p16sy9d04i975lv";
+    sha256 = "sha256-fVsLYGJSHkYn4JnkydyCSNMqMChelZt+7Kp4DPjP1KQ=";
   };
 
   enableParallelBuilding = true;
@@ -67,6 +67,12 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+
+    # fix parsing lines with optional fields in fstab etc. NOTE: Remove for the next release since it has been merged upstream
+    (fetchurl {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
+      sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
+    })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
@@ -79,7 +85,7 @@ stdenv.mkDerivation rec {
     "--syslibdir=${placeholder "out"}/lib"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "bin" "dev" ];
 
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
@@ -102,19 +108,12 @@ stdenv.mkDerivation rec {
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-    # Strip debug out of the static library
-    $STRIP -S $out/lib/libc.a
-    mkdir -p $out/bin
-
-
-    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
-      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a
-      $STRIP -S $out/lib/libssp_nonshared.a"
-      else ""
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
+      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"
     }
 
     # Create 'ldd' symlink, builtin
-    ln -rs $out/lib/libc.so $out/bin/ldd
+    ln -s $out/lib/libc.so $bin/bin/ldd
 
     # (impure) cc wrapper around musl for interactive usuage
     for i in musl-gcc musl-clang ld.musl-clang; do
@@ -125,7 +124,7 @@ stdenv.mkDerivation rec {
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
-    $CC ${iconv_c} -o $out/bin/iconv \
+    $CC ${iconv_c} -o $bin/bin/iconv \
       -I$dev/include \
       -L$out/lib -Wl,-rpath=$out/lib \
       -lc \
