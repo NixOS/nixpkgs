@@ -36,6 +36,7 @@ rec {
     products = [
       native-image-installable-svm-java11
       python-installable-svm-java11
+      wasm-installable-svm-java11
     ];
   };
 
@@ -51,6 +52,12 @@ rec {
     src = fetchurl (source "native-image-installable-svm" javaVersion);
   };
 
+  wasm-installable-svm-java11 = callPackage ./wasm-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "wasm-installable-svm" javaVersion);
+  };
+
   graalvm17-ce = buildGraalvm rec {
     version = "22.3.1";
     javaVersion = "17";
@@ -64,6 +71,7 @@ rec {
     products = [
       native-image-installable-svm-java17
       python-installable-svm-java17
+      wasm-installable-svm-java17
     ];
   };
 
@@ -77,5 +85,11 @@ rec {
     javaVersion = "17";
     version = "22.3.1";
     src = fetchurl (source "native-image-installable-svm" javaVersion);
+  };
+
+  wasm-installable-svm-java17 = callPackage ./wasm-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "wasm-installable-svm" javaVersion);
   };
 }

@@ -109,6 +109,9 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
+      echo "Testing Jshell"
+      echo '1 + 1' | $out/bin/jshell
+
       echo ${
         lib.escapeShellArg ''
           public class HelloWorld {
