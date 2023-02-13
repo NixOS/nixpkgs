@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "example-robot-data";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-rxVyka8tcF/CmGTVNyh3FPR1LVa6JOAN+9zjElgqCak=";
+    sha256 = "sha256-5FqMRChv/YGeoZq/jLSEJI5iQazQIDwslT78fbERVfs=";
   };
 
   strictDeps = true;
