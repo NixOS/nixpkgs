@@ -276,7 +276,7 @@ stdenv.mkDerivation ({
   inherit (callFile ../common/dependencies.nix { })
     depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = callFile ../common/pre-configure.nix { };
 
@@ -287,7 +287,6 @@ stdenv.mkDerivation ({
   configureFlags = callFile ../common/configure-flags.nix { };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
-  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

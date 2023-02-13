@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VaUr63v7mzhh4VBghH7a7qrqOYwl6vucmmKzTi9yAjY=";
   }) ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+  ];
+
   postInstall = ''
     mkdir $out/bin
     mv $out/octopus $out/bin

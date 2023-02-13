@@ -13,28 +13,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.10.0";
+  version = "unstable-2023-01-29"; # Musl fix hasn't been released yet.
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YJSIZ7o191/0QJf1fH6LUYykS2pvP17knSeRO2WcDeM=";
+    repo = "libcbor";
+    rev = "cb4162f40d94751141b4d43b07c4add83e738a68";
+    sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DBUILD_SHARED_LIBS=on"
-  ] ++ lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON";
+  cmakeFlags = lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON"
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
 
-  # 2 tests are not 32-bit clean: overflow size_t:
-  #   https://github.com/PJK/libcbor/issues/263
-  doCheck =
-    !stdenv.hostPlatform.is32bit
-    && (!stdenv.hostPlatform.isStatic)
+  # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
+  # https://github.com/NixOS/nixpkgs/issues/213623
+  doCheck = !stdenv.hostPlatform.isStatic
     && stdenv.hostPlatform == stdenv.buildPlatform;
+
   nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {

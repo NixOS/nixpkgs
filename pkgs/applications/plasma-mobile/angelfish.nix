@@ -3,7 +3,7 @@
 , cmake
 , corrosion
 , extra-cmake-modules
-, gcc11
+, gcc12
 , kconfig
 , kcoreaddons
 , kdbusaddons
@@ -46,7 +46,7 @@ mkDerivation rec {
     cmake
     corrosion
     extra-cmake-modules
-    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
+    gcc12 # doesn't build with GCC 9 from stdenv on aarch64
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

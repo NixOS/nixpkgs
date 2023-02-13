@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
         "-L${variables.libdir}"
         "-Wl,--rpath ${variables.libdir}"
         "-ltcc"
-        "-ldl"
       ];
       variables = rec {
         prefix = "${placeholder "out"}";

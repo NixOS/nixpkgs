@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "AR=${stdenv.cc.targetPrefix}ar" "PREFIX=$(out)" ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=address"
+  ];
+
   meta = with lib; {
     description = "Emulate a Cisco-style telnet command-line interface";
     homepage = "http://sites.dparrish.com/libcli";

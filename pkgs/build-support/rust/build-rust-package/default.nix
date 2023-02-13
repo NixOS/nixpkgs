@@ -4,7 +4,6 @@
 , rust
 , stdenv
 , callPackage
-, cacert
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
@@ -124,7 +123,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       inherit cargo cargo-auditable;
     })
   ] ++ [
-    cacert
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook

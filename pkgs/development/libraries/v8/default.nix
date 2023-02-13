@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
         --replace "-Wl,-fatal_warnings" ""
     ''}
     touch build/config/gclient_args.gni
+    sed '1i#include <utility>' -i src/heap/cppgc/prefinalizer-handler.h # gcc12
   '';
 
   llvmCcAndBintools = symlinkJoin { name = "llvmCcAndBintools"; paths = [ stdenv.cc llvmPackages.llvm ]; };

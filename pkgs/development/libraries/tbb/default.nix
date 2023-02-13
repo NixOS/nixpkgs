@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   pname = "tbb";
   version = "2020.3";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";

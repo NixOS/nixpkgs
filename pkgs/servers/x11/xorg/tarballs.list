@@ -8,7 +8,7 @@ https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2
 https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2
 https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2
 mirror://xorg/individual/app/appres-1.0.5.tar.bz2
-mirror://xorg/individual/app/bdftopcf-1.1.tar.bz2
+https://xorg.freedesktop.org/archive/individual/util/bdftopcf-1.1.1.tar.xz
 mirror://xorg/individual/app/bitmap-1.0.9.tar.gz
 mirror://xorg/individual/app/editres-1.0.7.tar.bz2
 mirror://xorg/individual/app/fonttosfnt-1.2.2.tar.bz2
@@ -64,7 +64,7 @@ mirror://xorg/individual/app/xprop-1.2.6.tar.xz
 mirror://xorg/individual/app/xrandr-1.5.1.tar.xz
 mirror://xorg/individual/app/xrdb-1.2.1.tar.bz2
 mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2
-mirror://xorg/individual/app/xset-1.2.4.tar.bz2
+mirror://xorg/individual/app/xset-1.2.5.tar.xz
 mirror://xorg/individual/app/xsetroot-1.1.2.tar.bz2
 mirror://xorg/individual/app/xsm-1.0.4.tar.bz2
 mirror://xorg/individual/app/xstdcmap-1.0.4.tar.bz2
@@ -135,7 +135,7 @@ mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2
 mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2
 mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2
 mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2
-mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2
+mirror://xorg/individual/font/font-alias-1.0.4.tar.bz2
 mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2
 mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2
 mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2
@@ -174,7 +174,7 @@ mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.8.1.tar.xz
+mirror://xorg/individual/lib/libX11-1.8.3.tar.xz
 mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.14.tar.bz2
 mirror://xorg/individual/lib/libxcb-1.14.tar.xz
@@ -213,7 +213,7 @@ mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz
 mirror://xorg/individual/proto/xorgproto-2021.5.tar.bz2
 mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2
 mirror://xorg/individual/util/imake-1.0.8.tar.bz2
-mirror://xorg/individual/util/lndir-1.0.3.tar.bz2
+mirror://xorg/individual/util/lndir-1.0.4.tar.xz
 mirror://xorg/individual/util/makedepend-1.0.6.tar.bz2
 mirror://xorg/individual/util/util-macros-1.19.3.tar.bz2
 mirror://xorg/individual/util/xorg-cf-files-1.0.7.tar.bz2

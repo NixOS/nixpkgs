@@ -16,6 +16,7 @@
 , geoalchemy2
 , geopandas
 , graphviz-nox
+, hypothesis
 , lz4
 , multipledispatch
 , numpy
@@ -30,8 +31,9 @@
 , pymysql
 , pyspark
 , pytest-benchmark
-, pytest-randomly
 , pytest-mock
+, pytest-randomly
+, pytest-snapshot
 , pytest-xdist
 , python
 , pytz
@@ -62,7 +64,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.2.0";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -71,10 +73,12 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = version;
-    hash = "sha256-YRP1nGJs4btqXQirm0GfEDKNPCVXexVrwQ6sE8JtD2o=";
+    hash = "sha256-G3kMd6Jyib7ZXHFP6t2CEPlDD5n5zHE2jq/0he3U4Nk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     atpublic
@@ -95,28 +99,30 @@ buildPythonPackage rec {
     pytestCheckHook
     click
     filelock
+    hypothesis
     pytest-benchmark
     pytest-mock
     pytest-randomly
+    pytest-snapshot
     pytest-xdist
     rsync
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
-
-  preBuild = ''
-    # setup.py exists only for developer convenience and is automatically generated
-    # it gets in the way in nixpkgs so we remove it
-    rm setup.py
-  '';
 
   pytestFlagsArray = [
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
-    # this test fails on nixpkgs datafusion version (0.4.0), but works on
-    # datafusion 0.6.0
-    "-k"
-    "'not datafusion-no_op'"
   ];
+
+  # remove when sqlalchemy backend no longer uses deprecated methods
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  # patch out tests that check formatting with black
+  postPatch = ''
+    find ibis/tests -type f -name '*.py' -exec sed -i \
+      -e '/^ *assert_decompile_roundtrip/d' \
+      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
+  '';
 
   preCheck = ''
     set -eo pipefail

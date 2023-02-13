@@ -17,16 +17,21 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.45";
+  version = "1.46";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Vw+O5PtL/3t0lc/5IMJ1ACrqIUfpodIgwGghMmf4CiY=";
+    sha256 = "sha256-t+EaZCRrvl7zd0jeQ7JFq9cs/NU8muXn/FylnxyBJo0=";
   };
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
   '';
+
+  configureFlags = [
+    # See https://dev.gnupg.org/T6257#164567
+    "--enable-install-gpg-error-config"
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely

@@ -28,9 +28,9 @@
       "tegra" # Nvidia Tegra SoCs
       "v3d" # Broadcom VC5 (Raspberry Pi 4)
       "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-    ] ++ lib.optionals stdenv.isx86_64 [
-      "iris" # new Intel, could work on non-x86_64 with PCIe cards, but doesn't build as of 22.3.4
-      "crocus" # Intel legacy, x86_64 only
+    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+      "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
+      "crocus" # Intel legacy, x86 only
     ]
   else [ "auto" ]
 , vulkanDrivers ?
@@ -326,10 +326,6 @@ self = stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
-
-    # Work around regression from https://github.com/NixOS/nixpkgs/pull/210004
-    # TODO(trofi): remove
-    "--sysroot=/"
   ];
 
   passthru = {

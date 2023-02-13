@@ -117,6 +117,10 @@ stdenv.mkDerivation rec {
       --subst-var-by mamePath "$out/opt/mame"
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=use-after-free"
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "MAME";

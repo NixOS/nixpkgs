@@ -46,6 +46,11 @@ in stdenv.mkDerivation rec {
     "-DBLADERF_GROUP=bladerf"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ];
+
   hardeningDisable = [ "fortify" ];
 
   meta = with lib; {

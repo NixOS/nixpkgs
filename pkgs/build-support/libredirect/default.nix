@@ -46,14 +46,14 @@ else stdenv.mkDerivation rec {
       -L${llvmPackages_13.clang.libc}/lib \
       -Wl,-install_name,$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
-      -ldl -shared -o "$libName"
+      -shared -o "$libName"
     '' else if stdenv.isDarwin then ''
     $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
       -Wl,-install_name,$out/lib/$libName \
-      -ldl -shared -o "$libName"
+      -shared -o "$libName"
     '' else ''
     $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
-      -ldl -shared -o "$libName"
+      -shared -o "$libName"
     ''}
 
     if [ -n "$doInstallCheck" ]; then

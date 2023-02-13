@@ -57,8 +57,12 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [ perl libelf ]
-    ++ optional (lib.versionAtLeast version "5.13") zstd;
+  moduleBuildDependencies = [
+    perl
+    libelf
+    # module makefiles often run uname commands to find out the kernel version
+    (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+  ] ++ optional (lib.versionAtLeast version "5.13") zstd;
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let

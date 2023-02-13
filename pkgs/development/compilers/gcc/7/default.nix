@@ -226,7 +226,7 @@ stdenv.mkDerivation ({
     depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = callFile ../common/pre-configure.nix { };
 
@@ -240,7 +240,6 @@ stdenv.mkDerivation ({
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
-  targetPlatformConfig = targetPlatform.config;
 
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)

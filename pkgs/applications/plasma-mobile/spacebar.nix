@@ -1,6 +1,6 @@
 { lib
 , mkDerivation
-, gcc11Stdenv
+, gcc12Stdenv
 , srcs
 
 , cmake
@@ -24,8 +24,8 @@
 , qtquickcontrols2
 }:
 
-# Workaround for AArch64 not using GCC11 yet.
-gcc11Stdenv.mkDerivation rec {
+# Workaround for AArch64 still using GCC9.
+gcc12Stdenv.mkDerivation rec {
   pname = "spacebar";
   inherit (srcs.spacebar) version src;
 
