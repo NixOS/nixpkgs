@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_patcher_existing_locks_locked"
     # broken with pyopenssl 22.0.0
     "test_sendall_timeout"
-  ] ++ lib.optionals stdenv.isAarch64 [
+    # broken on aarch64 and when using march in gcc
     "test_fork_after_monkey_patch"
   ];
 
