@@ -60,7 +60,7 @@ let
         buildGrammar {
           language = grammar.language or name;
           inherit version;
-          src = grammar.src or fetchGrammar grammar;
+          src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;

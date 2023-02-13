@@ -1,75 +1,52 @@
-{ callPackage, Foundation }:
-/*
-  Add new graal versions and products here and then see update.nix on how to
-  generate the sources.
-*/
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, Foundation
+}:
 
 let
-  mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
-    inherit Foundation;
+  buildGraalvm = callPackage ./buildGraalvm.nix { inherit Foundation; };
+  buildGraalvmProduct = callPackage ./buildGraalvmProduct.nix { };
+  javaPlatform = {
+    "aarch64-linux" = "linux-aarch64";
+    "x86_64-linux" = "linux-amd64";
+    "aarch64-darwin" = "darwin-aarch64";
+    "x86_64-darwin" = "darwin-amd64";
   };
-
-  /*
-    Looks a bit ugly but makes version update in the update script using sed
-    much easier
-
-    Don't change these values! They will be updated by the update script, see ./update.nix.
-  */
-  graalvm11-ce-release-version = "22.3.0";
-  graalvm17-ce-release-version = "22.3.0";
-
-  products = [
-    "graalvm-ce"
-    "native-image-installable-svm"
-  ];
+  javaPlatformVersion = javaVersion:
+    "${javaVersion}-${javaPlatform.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}")}";
+  source = product: javaVersion: (import ./hashes.nix).${product}.${javaPlatformVersion javaVersion};
 
 in
-{
-  inherit mkGraal;
+rec {
+  inherit buildGraalvm buildGraalvmProduct;
 
-  graalvm11-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        inherit products;
-        arch = "darwin-amd64";
-      };
-      x86_64-linux = {
-        inherit products;
-        arch = "linux-amd64";
-      };
-      aarch64-darwin = {
-        inherit products;
-        arch = "darwin-aarch64";
-      };
-      aarch64-linux = {
-        inherit products;
-        arch = "linux-aarch64";
-      };
-    };
-    defaultVersion = graalvm11-ce-release-version;
+  graalvm11-ce = buildGraalvm rec {
+    version = "22.3.1";
     javaVersion = "11";
+    src = fetchurl (source "graalvm-ce" javaVersion);
+    meta.platforms = builtins.attrNames javaPlatform;
+    products = [ native-image-installable-svm-java11 ];
   };
 
-  graalvm17-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        inherit products;
-        arch = "darwin-amd64";
-      };
-      x86_64-linux = {
-        inherit products;
-        arch = "linux-amd64";
-      };
-      aarch64-darwin = {
-        inherit products;
-        arch = "darwin-aarch64";
-      };
-      aarch64-linux = {
-        inherit products;
-        arch = "linux-aarch64";
-      };
-    };
-    defaultVersion = graalvm17-ce-release-version;
+  native-image-installable-svm-java11 = callPackage ./native-image-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "native-image-installable-svm" javaVersion);
+  };
+
+  graalvm17-ce = buildGraalvm rec {
+    version = "22.3.1";
     javaVersion = "17";
+    src = fetchurl (source "graalvm-ce" javaVersion);
+    meta.platforms = builtins.attrNames javaPlatform;
+    products = [ native-image-installable-svm-java17 ];
+  };
+
+  native-image-installable-svm-java17 = callPackage ./native-image-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "native-image-installable-svm" javaVersion);
   };
 }
