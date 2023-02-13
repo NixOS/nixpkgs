@@ -37,11 +37,9 @@ deployAndroidPackage {
         addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
     fi
 
-    if [ -d toolchains/llvm/prebuilt/linux-x86_64 ]; then
-        find toolchains/llvm/prebuilt/linux-x86_64 -type d -name bin -or -name lib64 | while read dir; do
-            autoPatchelf "$dir"
-        done
-    fi
+    find toolchains -type d -name bin -or -name lib64 | while read dir; do
+        autoPatchelf "$dir"
+    done
 
     # fix ineffective PROGDIR / MYNDKDIR determination
     for progname in ndk-build; do
