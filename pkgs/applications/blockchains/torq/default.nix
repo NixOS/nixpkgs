@@ -29,7 +29,7 @@ let
     # override npmInstallHook, we only care about the build/ directory
     installPhase = ''
       mkdir $out
-      cp -r build $out/
+      cp -r build/* $out/
     '';
   };
 in
@@ -47,7 +47,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    ln -s ${web} $out/web
+    mkdir -p $out/web/build
+    cp -r ${web}/* $out/web/build/
   '';
 
   meta = with lib; {
