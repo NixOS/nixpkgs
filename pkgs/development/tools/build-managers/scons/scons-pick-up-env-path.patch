@@ -1,0 +1,24 @@
+Pick up PATH from build environment.
+Source: https://github.com/NixOS/nixpkgs/pull/163183#issuecomment-1064534121
+--
+diff --git a/../base/SCons/Platform/posix.py b/SCons/Platform/posix.py
+index 75b6c0b..0bfb461 100644
+--- a/../base/SCons/Platform/posix.py
++++ b/SCons/Platform/posix.py
+@@ -28,6 +28,7 @@ will usually be imported through the generic SCons.Platform.Platform()
+ selection method.
+ """
+ 
++import os
+ import platform
+ import subprocess
+ 
+@@ -82,7 +83,7 @@ def generate(env):
+ 
+     if 'ENV' not in env:
+         env['ENV']        = {}
+-    env['ENV']['PATH']    = '/usr/local/bin:/opt/bin:/bin:/usr/bin:/snap/bin'
++    env['ENV']['PATH']    = os.environ["PATH"]
+     env['OBJPREFIX']      = ''
+     env['OBJSUFFIX']      = '.o'
+     env['SHOBJPREFIX']    = '$OBJPREFIX'

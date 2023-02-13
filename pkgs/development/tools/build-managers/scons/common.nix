@@ -16,6 +16,11 @@ python.pkgs.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
+  patches = [
+    # Pick up PATH from build environment
+    ./scons-pick-up-env-path.patch
+  ];
+
   postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
     substituteInPlace setup.cfg \
       --replace "build/dist" "dist"
