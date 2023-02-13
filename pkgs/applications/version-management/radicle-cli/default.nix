@@ -12,6 +12,8 @@
 , AppKit
 , git
 , openssh
+, testers
+, radicle-cli
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,6 +60,10 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     eval $(ssh-agent)
   '';
+
+  passthru.tests = {
+    version = testers.testVersion { package = radicle-cli; };
+  };
 
   meta = {
     description = "Command-line tooling for Radicle, a decentralized code collaboration network";
