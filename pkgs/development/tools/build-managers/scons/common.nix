@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, hash }:
 
 { fetchurl, python, lib }:
 
@@ -11,7 +11,7 @@ python.pkgs.buildPythonApplication rec {
       "mirror://sourceforge/project/scons/scons/${version}/SCons-${version}.tar.gz"
     else
       "mirror://sourceforge/scons/scons-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   setupHook = ./setup-hook.sh;
