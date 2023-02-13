@@ -96,6 +96,10 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
+  # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
+  protolude = doJailbreak super.protolude;
+
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
