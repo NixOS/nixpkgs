@@ -6194,6 +6194,8 @@ self: super: with self; {
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
+  n2g = callPackage ../development/python-modules/n2g { };
+
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
@@ -6429,6 +6431,8 @@ self: super: with self; {
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
   normality = callPackage ../development/python-modules/normality { };
+
+  nornir = callPackage ../development/python-modules/nornir { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
