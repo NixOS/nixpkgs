@@ -1,20 +1,19 @@
 diff --git a/uwufetch.c b/uwufetch.c
-index f2d7857..8191888 100644
+index cb10909..ddbec3a 100644
 --- a/uwufetch.c
 +++ b/uwufetch.c
-@@ -160,9 +160,9 @@ void print_image(struct info* user_info) {
- 		if (strcmp(user_info->os_name, "android") == 0)
- 			sprintf(command, "viu -t -w 18 -h 8 /data/data/com.termux/files/usr/lib/uwufetch/%s.png 2> /dev/null", user_info->os_name); // image command for android
- 		else if (strcmp(user_info->os_name, "macos") == 0)
--			sprintf(command, "viu -t -w 18 -h 8 /usr/local/lib/uwufetch/%s.png 2> /dev/null", user_info->os_name);
-+			sprintf(command, "viu -t -w 18 -h 8 @out@/lib/uwufetch/%s.png 2> /dev/null", user_info->os_name);
- 		else
--			sprintf(command, "viu -t -w 18 -h 8 /usr/lib/uwufetch/%s.png 2> /dev/null", user_info->os_name); // image command for other systems
-+			sprintf(command, "viu -t -w 18 -h 8 @out@/lib/uwufetch/%s.png 2> /dev/null", user_info->os_name); // image command for other systems
+@@ -179,8 +179,8 @@ int print_image(struct info* user_info) {
+ 	char command[256];
+ 	if (strlen(user_info->image_name) < 1) {
+ 		char* repl_str = strcmp(user_info->os_name, "android") == 0 ? "/data/data/com.termux/files/usr/lib/uwufetch/%s.png"
+-										 : strcmp(user_info->os_name, "macos") == 0 ? "/usr/local/lib/uwufetch/%s.png"
+-																																: "/usr/lib/uwufetch/%s.png";
++										 : strcmp(user_info->os_name, "macos") == 0 ? "@out@/lib/uwufetch/%s.png"
++																																: "@out@/lib/uwufetch/%s.png";
+ 		sprintf(user_info->image_name, repl_str, user_info->os_name); // image command for android
+ 		LOG_V(user_info->image_name);
  	}
- 	printf("\n");
- 	if (system(command) != 0) // if viu is not installed or the image is missing
-@@ -587,9 +587,9 @@ void print_ascii(struct info* user_info) {
+@@ -572,9 +572,9 @@ int print_ascii(struct info* user_info) {
  		if (strcmp(user_info->os_name, "android") == 0)
  			sprintf(ascii_file, "/data/data/com.termux/files/usr/lib/uwufetch/ascii/%s.txt", user_info->os_name);
  		else if (strcmp(user_info->os_name, "macos") == 0)
@@ -23,6 +22,6 @@ index f2d7857..8191888 100644
  		else
 -			sprintf(ascii_file, "/usr/lib/uwufetch/ascii/%s.txt", user_info->os_name);
 +			sprintf(ascii_file, "@out@/lib/uwufetch/ascii/%s.txt", user_info->os_name);
+ 		LOG_V(ascii_file);
  
  		file = fopen(ascii_file, "r");
- 		if (!file) {

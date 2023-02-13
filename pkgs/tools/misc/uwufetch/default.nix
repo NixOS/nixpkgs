@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uwufetch";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
     repo = pname;
     rev = version;
-    hash = "sha256-2kktKdQ1xjQRIQR2auwveHgNWGaX1jdJsdlgWrH6l2g=";
+    hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
   patches = [
