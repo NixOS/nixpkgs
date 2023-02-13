@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import json
 
@@ -10,6 +12,7 @@ from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 
+from . import parallel
 from .docbook import DocBookRenderer, make_xml_id
 from .manpage import ManpageRenderer, man_escape
 from .md import Converter, md_escape
@@ -148,15 +151,33 @@ class BaseConverter(Converter):
 
         return [ l for part in blocks for l in part ]
 
+    # this could return a TState parameter, but that does not allow dependent types and
+    # will cause headaches when using BaseConverter as a type bound anywhere. Any is the
+    # next best thing we can use, and since this is internal it will be mostly safe.
+    @abstractmethod
+    def _parallel_render_prepare(self) -> Any: raise NotImplementedError()
+    # this should return python 3.11's Self instead to ensure that a prepare+finish
+    # round-trip ends up with an object of the same type. for now we'll use BaseConverter
+    # since it's good enough so far.
+    @classmethod
+    @abstractmethod
+    def _parallel_render_init_worker(cls, a: Any) -> BaseConverter: raise NotImplementedError()
+
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         try:
             return RenderedOption(option['loc'], self._convert_one(option))
         except Exception as e:
             raise Exception(f"Failed to render option {name}") from e
 
+    @classmethod
+    def _parallel_render_step(cls, s: BaseConverter, a: Any) -> RenderedOption:
+        return s._render_option(*a)
+
     def add_options(self, options: dict[str, Any]) -> None:
-        for (name, option) in options.items():
-            self._options[name] = self._render_option(name, option)
+        mapped = parallel.map(self._parallel_render_step, options.items(), 100,
+                              self._parallel_render_init_worker, self._parallel_render_prepare())
+        for (name, option) in zip(options.keys(), mapped):
+            self._options[name] = option
 
     @abstractmethod
     def finalize(self) -> str: raise NotImplementedError()
@@ -193,6 +214,13 @@ class DocBookConverter(BaseConverter):
         self._document_type = document_type
         self._varlist_id = varlist_id
         self._id_prefix = id_prefix
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._manpage_urls, self._revision, self._markdown_by_default, self._document_type,
+                self._varlist_id, self._id_prefix)
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> DocBookConverter:
+        return cls(*a)
 
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
         if lit := option_is(option, key, 'literalDocBook'):
@@ -283,9 +311,18 @@ class ManpageConverter(BaseConverter):
     _options_by_id: dict[str, str]
     _links_in_last_description: Optional[list[str]] = None
 
-    def __init__(self, revision: str, markdown_by_default: bool):
-        self._options_by_id = {}
+    def __init__(self, revision: str, markdown_by_default: bool,
+                 *,
+                 # only for parallel rendering
+                 _options_by_id: Optional[dict[str, str]] = None):
+        self._options_by_id = _options_by_id or {}
         super().__init__({}, revision, markdown_by_default)
+
+    def _parallel_render_prepare(self) -> Any:
+        return ((self._revision, self._markdown_by_default), { '_options_by_id': self._options_by_id })
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> ManpageConverter:
+        return cls(*a[0], **a[1])
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         assert isinstance(self._md.renderer, OptionsManpageRenderer)
