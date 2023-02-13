@@ -2223,6 +2223,7 @@ self: super: {
             # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
             # likely be removed when purescript-0.14.6 is released.
             doJailbreak
+            (appendPatch ./patches/purescript-jailbreak-build-tool-depends.patch)
             # Generate shell completions
             (self.generateOptparseApplicativeCompletions [ "purs" ])
           ]);

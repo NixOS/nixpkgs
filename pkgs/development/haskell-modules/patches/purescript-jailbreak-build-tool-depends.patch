@@ -1,0 +1,32 @@
+diff --git a/purescript.cabal b/purescript.cabal
+index ac78a66075f..96cefbb9abf 100644
+--- a/purescript.cabal
++++ b/purescript.cabal
+@@ -233,7 +233,7 @@ library
+         Language.PureScript.Types
+         System.IO.UTF8
+ 
+-    build-tool-depends: happy:happy ==1.20.0
++    build-tool-depends: happy:happy
+     hs-source-dirs:     src
+     other-modules:
+         Data.Text.PureScript
+@@ -322,7 +322,7 @@ library
+ 
+ executable purs
+     main-is:            Main.hs
+-    build-tool-depends: happy:happy ==1.20.0
++    build-tool-depends: happy:happy
+     hs-source-dirs:     app
+     other-modules:
+         Command.Bundle
+@@ -435,8 +435,7 @@ test-suite tests
+     type:               exitcode-stdio-1.0
+     main-is:            Main.hs
+     build-tool-depends:
+-        happy:happy ==1.20.0, hspec-discover:hspec-discover,
+-        purescript:purs
++        happy:happy, hspec-discover:hspec-discover, purescript:purs
+ 
+     hs-source-dirs:     tests
+     other-modules:
