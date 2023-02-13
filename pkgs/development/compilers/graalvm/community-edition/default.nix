@@ -7,7 +7,7 @@
 
 let
   buildGraalvm = lib.makeOverridable (callPackage ./buildGraalvm.nix { inherit Foundation; });
-  buildGraalvmProduct = callPackage ./buildGraalvmProduct.nix { };
+  buildGraalvmProduct = lib.makeOverridable (callPackage ./buildGraalvmProduct.nix { });
   javaPlatform = {
     "aarch64-linux" = "linux-aarch64";
     "x86_64-linux" = "linux-amd64";

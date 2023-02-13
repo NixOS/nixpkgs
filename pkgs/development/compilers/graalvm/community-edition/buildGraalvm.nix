@@ -139,7 +139,6 @@ let
     };
 
     meta = with lib; ({
-      inherit platforms;
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
