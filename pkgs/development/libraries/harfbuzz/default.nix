@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "6.0.0";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
-    sha256 = "HRAQoXUdB21SkeQzwThQKnlNZ5p0mNEmjuIeLUoUDrQ=";
+    hash = "sha256-e0aFtwZsXGuNxs17AvY8VU+4zBxN3PxEvChO+jwgzyg=";
   };
 
   postPatch = ''
