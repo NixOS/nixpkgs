@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share
     cp -r docs $out/share/docs
     wrapProgram $out/bin/bbin \
-      --prefix PATH : "${lib.makeBinPath [ babashka graalvm17-ce ]}"
+      --prefix PATH : "${lib.makeBinPath [ babashka babashka.graalvmDrv ]}"
 
     runHook postInstall
   '';

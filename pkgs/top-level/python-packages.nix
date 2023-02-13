@@ -5464,8 +5464,6 @@ self: super: with self; {
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
-  lightning = callPackage ../development/python-modules/lightning { };
-
   lightning-utilities  = callPackage ../development/python-modules/lightning-utilities { };
 
   lightparam = callPackage ../development/python-modules/lightparam { };
@@ -6197,6 +6195,8 @@ self: super: with self; {
   myst-nb = callPackage ../development/python-modules/myst-nb { };
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
+
+  n3fit = callPackage ../development/python-modules/n3fit { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
