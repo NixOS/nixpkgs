@@ -42,7 +42,7 @@
 # Additional arguments are:
 #   - `postgresql` postgresql package of the version of postgresql this extension should be build for.
 #                  Needs to be the build platform variant.
-#   - `useFakeRustfmt` Wether to use a noop fake command as rustfmt. cargo-pgx tries to call rustfmt.
+#   - `useFakeRustfmt` Whether to use a noop fake command as rustfmt. cargo-pgx tries to call rustfmt.
 #                      If the generated rust bindings aren't needed to use the extension, its a
 #                      unnecessary and heavy dependency. If you set this to true, you also
 #                      have to add `rustfmt` to `nativeBuildInputs`.
@@ -106,7 +106,6 @@ let
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
       cargo-pgx
       postgresql
-      rustPlatform.rust.rustc
       pkg-config
       rustPlatform.bindgenHook
     ] ++ lib.optionals useFakeRustfmt [ fakeRustfmt ];
@@ -121,10 +120,10 @@ let
       NIX_PGLIBDIR="${postgresql}/lib" \
       PGX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       cargo-pgx pgx package \
-      --pg-config ${postgresql}/bin/pg_config \
-      ${maybeDebugFlag} \
-      --features "${builtins.concatStringsSep " " buildFeatures}" \
-      --out-dir "$out"
+        --pg-config ${postgresql}/bin/pg_config \
+        ${maybeDebugFlag} \
+        --features "${builtins.concatStringsSep " " buildFeatures}" \
+        --out-dir "$out"
 
       ${maybeLeaveBuildAndTestSubdir}
 
