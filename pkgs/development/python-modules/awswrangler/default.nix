@@ -1,5 +1,5 @@
 { backoff
-, SPARQLWrapper
+, sparqlwrapper
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
@@ -75,7 +75,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     sqlserver = [ pyodbc ];
-    sparql = [ SPARQLWrapper ];
+    sparql = [ sparqlwrapper ];
   };
 
   meta = {
