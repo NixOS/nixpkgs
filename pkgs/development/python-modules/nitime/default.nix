@@ -26,8 +26,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
 
   disabledTests = [
-    # https://github.com/nipy/nitime/issues/197
-    "test_FilterAnalyzer"
+    "test_FilterAnalyzer" # https://github.com/nipy/nitime/issues/197
+    "test_psd_matlab"
   ];
 
   meta = with lib; {
