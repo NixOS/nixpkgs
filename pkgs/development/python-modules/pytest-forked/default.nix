@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
+, setuptools
 , setuptools-scm
+, wheel
 , py
 , pytest
 , pytestCheckHook
@@ -11,28 +12,26 @@
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "1.4.0";
+  version = "1.6.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-i2dYfI+Yy7rf3YBFOe1UVbbtA4AiA0hd0vU8FCLXRA4=";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-forked";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-owkGwF5WQ17/CXwTsIYJ2AgktekRB4qhtsDxR0LCI/k=";
   };
 
-  patches = [
-    # pytest 7.2.0 compat, remove after 1.4.0
-    (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-forked/commit/c3c753e96916a4bc5a8a37699e75c6cbbd653fa2.patch";
-      hash = "sha256-QPgxBeMQ0eKJyHXYZyBicVbE+JyKPV/Kbjsb8gNJBGA=";
-    })
-    (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-forked/commit/de584eda15df6db7912ab6197cfb9ff23024ef23.patch";
-      hash = "sha256-VLE32xZRwFK0nEgCWuSoMW/yyFHEURtNFU9Aa9haLhk=";
-    })
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pytest
@@ -50,6 +49,7 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
+    changelog = "https://github.com/pytest-dev/pytest-forked/blob/${src.rev}/CHANGELOG.rst";
     description = "Run tests in isolated forked subprocesses";
     homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;
