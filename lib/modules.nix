@@ -1251,7 +1251,6 @@ let
     {
       inherit
         applyModuleArgsIfFunction
-        collectModules
         dischargeProperties
         evalOptionValue
         mergeModules
@@ -1259,6 +1258,7 @@ let
         pushDownProperties
         unifyModuleSyntax
         ;
+      collectModules = collectModules null;
     };
 
 in
