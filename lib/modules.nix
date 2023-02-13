@@ -63,10 +63,6 @@ let
           decls
       ));
 
-in
-
-rec {
-
   /*
     Evaluate a set of modules.  The result is a set with the attributes:
 
@@ -1218,4 +1214,56 @@ rec {
     _file = file;
     config = lib.importTOML file;
   };
+
+in
+{
+  inherit
+    applyModuleArgsIfFunction
+    collectModules
+    defaultOrderPriority
+    defaultOverridePriority
+    defaultPriority
+    dischargeProperties
+    doRename
+    evalModules
+    evalOptionValue
+    filterOverrides
+    filterOverrides'
+    fixMergeModules
+    fixupOptionType
+    importJSON
+    importTOML
+    mergeDefinitions
+    mergeModules
+    mergeModules'
+    mergeOptionDecls
+    mkAfter
+    mkAliasAndWrapDefinitions
+    mkAliasAndWrapDefsWithPriority
+    mkAliasDefinitions
+    mkAliasIfDef
+    mkAliasOptionModule
+    mkAliasOptionModuleMD
+    mkAssert
+    mkBefore
+    mkChangedOptionModule
+    mkDefault
+    mkDerivedConfig
+    mkFixStrictness
+    mkForce
+    mkIf
+    mkImageMediaOverride
+    mkMerge
+    mkMergedOptionModule
+    mkOptionDefault
+    mkOrder
+    mkOverride
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    mkRenamedOptionModuleWith
+    mkVMOverride
+    pushDownProperties
+    setDefaultModuleLocation
+    sortProperties
+    unifyModuleSyntax;
 }
