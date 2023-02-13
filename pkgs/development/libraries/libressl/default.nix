@@ -90,8 +90,8 @@ in {
   };
 
   libressl_3_5 = generic {
-    version = "3.5.3";
-    hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
+    version = "3.5.4";
+    hash = "sha256-A3naE0Si9xrUpOO+MO+dgu7N3Of43CrmZjGh3+FDQ6w=";
 
     patches = [
       # Fix endianness detection on aarch64-darwin, issue #181187
