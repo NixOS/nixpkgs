@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.2";
+  version = "3.2.2.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-bGvFrQNiGXBMyYd4cyDrZs4D7hKo/WqYkDRoGT5t5a0=";
+    hash = "sha256-u+INjo9EkW433OYoCDZpw5pcW1DyF/t/J5ntLZX+6aA=";
   };
 
   # Workaround for pkgsMusl.wxGTK32 failing as:
