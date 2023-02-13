@@ -7,16 +7,14 @@ let
   apptainer = callPackage
     (import ./generic.nix rec {
       pname = "apptainer";
-      # TODO: Upgrade to 1.1.4 only after https://github.com/apptainer/apptainer/pull/967 get merge
-      # and https://github.com/apptainer/apptainer/issues/958 get fixed
-      version = "1.1.3";
+      version = "1.1.5";
       projectName = "apptainer";
 
       src = fetchFromGitHub {
         owner = "apptainer";
         repo = "apptainer";
         rev = "v${version}";
-        hash = "sha256-QFg6RC77OE/a6Qlzn6Zi5I7Iaq/U3/m0eI9yLArzuNc=";
+        hash = "sha256-onJkpHJNsO0cQO2m+TmdMuMkuvH178mDhOeX41bYFic=";
       };
 
       # Update by running

@@ -2859,6 +2859,8 @@ with pkgs;
 
   boxes = callPackage ../tools/text/boxes { };
 
+  boxxy = callPackage ../tools/misc/boxxy { };
+
   boundary = callPackage ../tools/networking/boundary { };
 
   chamber = callPackage ../tools/admin/chamber {  };
@@ -7730,6 +7732,8 @@ with pkgs;
 
   gnucap = callPackage ../applications/science/electronics/gnucap { };
 
+  gnu-cim = callPackage ../development/compilers/gnu-cim { };
+
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
 
   gnuclad = callPackage ../applications/graphics/gnuclad { };
@@ -7937,6 +7941,8 @@ with pkgs;
   groonga = callPackage ../servers/search/groonga { };
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
+
+  grpc_cli = callPackage ../tools/networking/grpc_cli { };
 
   grpc-gateway = callPackage ../development/tools/grpc-gateway { };
 
@@ -9780,7 +9786,13 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mirakurun = callPackage ../applications/video/mirakurun { };
+  mirakurun = callPackage ../applications/video/mirakurun {
+    yarn = yarn.override { nodejs = nodejs-16_x; };
+    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+      nodejs = nodejs-16_x;
+      yarn = yarn.override { nodejs = nodejs-16_x; };
+    }) mkYarnPackage;
+  };
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -10791,8 +10803,6 @@ with pkgs;
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
-
-  jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
@@ -13839,6 +13849,8 @@ with pkgs;
   agdsn-zsh-config = callPackage ../shells/zsh/agdsn-zsh-config { };
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
+
+  nix-your-shell = callPackage ../shells/nix-your-shell { };
 
   bash = lowPrio (callPackage ../shells/bash/5.nix {
     binutils = stdenv.cc.bintools;
@@ -16939,9 +16951,7 @@ with pkgs;
 
   adtool = callPackage ../tools/admin/adtool { };
 
-  inherit (callPackage ../development/tools/alloy {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  })
+  inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
     alloy;
@@ -20523,6 +20533,8 @@ with pkgs;
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
+  jbig2enc = callPackage ../development/libraries/jbig2enc { };
+
   jcal = callPackage ../development/libraries/jcal { };
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
@@ -22723,13 +22735,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  # https://github.com/protocolbuffers/protobuf/issues/10418
-  # protobuf versions have to match between build-time and run-time
-  # Using "targetPlatform" in the check makes sure that the version of
-  # pkgsCross.armv7l-hf-multiplatform.buildPackages.protobuf matches the
-  # version of pkgsCross.armv7l-hf-multiplatform.protobuf
-  protobuf = if stdenv.targetPlatform.is32bit then protobuf3_20 else
-    protobuf3_21;
+  protobuf = protobuf3_21;
 
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
@@ -32116,7 +32122,9 @@ with pkgs;
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
-  paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
+  paraview = libsForQt5.callPackage ../applications/graphics/paraview {
+    python3 = python39;
+  };
 
   parlatype = callPackage ../applications/audio/parlatype { };
 

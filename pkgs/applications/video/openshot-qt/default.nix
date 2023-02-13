@@ -7,6 +7,7 @@
 , gtk3
 , libopenshot
 , python3
+, qtbase
 , qtsvg
 , wrapGAppsHook
 }:
@@ -55,7 +56,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication rec {
   ''
   # Fix toolbar icons on Darwin
   + lib.optionalString stdenv.isDarwin ''
-    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
+    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
   '' + ''
     "''${gappsWrapperArgs[@]}" \
     "''${qtWrapperArgs[@]}"

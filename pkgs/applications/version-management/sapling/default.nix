@@ -88,111 +88,93 @@ let
       runHook postInstall
     '';
   };
-
-  # Builds the main `sl` binary and its Python extensions
-  sapling = python3Packages.buildPythonPackage {
-    pname = "sapling-main";
-    inherit src version;
-
-    sourceRoot = "source/eden/scm";
-
-    # Upstream does not commit Cargo.lock
-    cargoDeps = rustPlatform.importCargoLock {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "cloned-0.1.0" = "sha256-DYQTK722wgeDUJtOVXHLt42G6gpe6A62rET+JH+bPKU=";
-        "deltae-0.3.0" = "sha256-a9Skaqs+tVTw8x83jga+INBr+TdaMmo35Bf2wbfR6zs=";
-        "fb303_core-0.0.0" = "sha256-YEFNTYvtgp8nc/1O7AbdyxCD3Xx2xCjbS17fTTEsUL0=";
-        "fbthrift-0.0.1+unstable" = "sha256-mDoYhXOzQIDqP7XdmiBbmq5VmAKAgggTNH/kW2kHv4k=";
-        "reqwest-0.11.11" = "sha256-uhc8XhkGW22XDNo0qreWdXeFF2cslOOZHfTRQ30IBcE=";
-        "serde_bser-0.3.1" = "sha256-/zn1NfXWytXvnalkgPsg9BdujVV97PGkXwmPtQGVeCc=";
-      };
-    };
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-    '';
-
-    # Since the derivation builder doesn't have network access to remain pure,
-    # fetch the artifacts manually and link them. Then replace the hardcoded URLs
-    # with filesystem paths for the curl calls.
-    postUnpack = ''
-      mkdir $sourceRoot/hack_pydeps
-      ${lib.concatStrings (map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links)}
-      sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
-    '';
-
-    # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
-    # package, so that the command can actually work. NOTES:
-    #
-    # 1) This applies on all systems (so no conditional a la postFixup)
-    # 2) This doesn't require any kind of fixup itself, so we leave it out
-    #    of postFixup for that reason, too
-    # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
-    #    so that 'sl web' always works
-    # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
-    preFixup = ''
-      sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
-      chmod +w $sitepackages
-      cp -r ${isl} $sitepackages/edenscm-isl
-    '' + lib.optionalString (!enableMinimal) ''
-      chmod +w $sitepackages/edenscm-isl/run-isl
-      substituteInPlace $sitepackages/edenscm-isl/run-isl \
-        --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
-    '';
-
-    postFixup = lib.optionalString stdenv.isLinux ''
-      wrapProgram $out/bin/sl \
-        --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-    '';
-
-    nativeBuildInputs = [
-      curl
-      pkg-config
-    ] ++ (with rustPlatform; [
-      myCargoSetupHook
-      rust.cargo
-      rust.rustc
-    ]);
-
-    buildInputs = [
-      openssl
-    ] ++ lib.optionals stdenv.isDarwin [
-      curl
-      libiconv
-      CoreFoundation
-      CoreServices
-      Security
-    ];
-
-    doCheck = false;
-
-    HGNAME = "sl";
-    SAPLING_OSS_BUILD = "true";
-    SAPLING_VERSION = version;
-    SAPLING_VERSION_HASH = versionHash;
-  };
 in
-stdenv.mkDerivation {
+# Builds the main `sl` binary and its Python extensions
+python3Packages.buildPythonApplication {
   pname = "sapling";
-  inherit version;
+  inherit src version;
 
-  dontUnpack = true;
+  sourceRoot = "source/eden/scm";
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -r ${sapling}/* $out
-
-    runHook postInstall
+  # Upstream does not commit Cargo.lock
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cloned-0.1.0" = "sha256-DYQTK722wgeDUJtOVXHLt42G6gpe6A62rET+JH+bPKU=";
+      "deltae-0.3.0" = "sha256-a9Skaqs+tVTw8x83jga+INBr+TdaMmo35Bf2wbfR6zs=";
+      "fb303_core-0.0.0" = "sha256-YEFNTYvtgp8nc/1O7AbdyxCD3Xx2xCjbS17fTTEsUL0=";
+      "fbthrift-0.0.1+unstable" = "sha256-mDoYhXOzQIDqP7XdmiBbmq5VmAKAgggTNH/kW2kHv4k=";
+      "reqwest-0.11.11" = "sha256-uhc8XhkGW22XDNo0qreWdXeFF2cslOOZHfTRQ30IBcE=";
+      "serde_bser-0.3.1" = "sha256-/zn1NfXWytXvnalkgPsg9BdujVV97PGkXwmPtQGVeCc=";
+    };
+  };
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
   '';
+
+  # Since the derivation builder doesn't have network access to remain pure,
+  # fetch the artifacts manually and link them. Then replace the hardcoded URLs
+  # with filesystem paths for the curl calls.
+  postUnpack = ''
+    mkdir $sourceRoot/hack_pydeps
+    ${lib.concatStrings (map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links)}
+    sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
+  '';
+
+  # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
+  # package, so that the command can actually work. NOTES:
+  #
+  # 1) This applies on all systems (so no conditional a la postFixup)
+  # 2) This doesn't require any kind of fixup itself, so we leave it out
+  #    of postFixup for that reason, too
+  # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
+  #    so that 'sl web' always works
+  # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
+  preFixup = ''
+    sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
+    chmod +w $sitepackages
+    cp -r ${isl} $sitepackages/edenscm-isl
+  '' + lib.optionalString (!enableMinimal) ''
+    chmod +w $sitepackages/edenscm-isl/run-isl
+    substituteInPlace $sitepackages/edenscm-isl/run-isl \
+      --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/sl \
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+  '';
+
+  nativeBuildInputs = [
+    curl
+    pkg-config
+  ] ++ (with rustPlatform; [
+    myCargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    libiconv
+    CoreFoundation
+    CoreServices
+    Security
+  ];
+
+  HGNAME = "sl";
+  SAPLING_OSS_BUILD = "true";
+  SAPLING_VERSION = version;
+  SAPLING_VERSION_HASH = versionHash;
 
   # just a simple check phase, until we have a running test suite. this should
   # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
   doCheck = true;
-  checkPhase = ''
+  installCheckPhase = ''
     echo -n "testing sapling version; should be \"${version}\"... "
-    ${sapling}/bin/sl version | grep -qw "${version}"
+    $out/bin/sl version | grep -qw "${version}"
     echo "OK!"
   '';
 

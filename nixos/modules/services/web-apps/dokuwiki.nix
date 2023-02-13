@@ -82,7 +82,7 @@ let
     basePackage = cfg.package;
     localConfig = dokuwikiLocalConfig hostName cfg;
     pluginsConfig = dokuwikiPluginsLocalConfig hostName cfg;
-    aclConfig = if cfg.aclUse && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
+    aclConfig = if cfg.settings.useacl && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
   };
 
   aclOpts = { ... }: {
