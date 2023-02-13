@@ -18093,6 +18093,10 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
   };
 
+  listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lit = callPackage ../development/tools/misc/lit { };
 
   litecli = callPackage ../development/tools/database/litecli {};
