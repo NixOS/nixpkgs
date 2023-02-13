@@ -8,6 +8,15 @@
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 , nix-update-script
+
+# for passthru.tests
+, libarchive
+, rocksdb
+, arrow-cpp
+, libzip
+, curl
+, python3Packages
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -91,6 +100,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit libarchive rocksdb arrow-cpp;
+      libzip = libzip.override { withZstd = true; };
+      curl = curl.override { zstdSupport = true; };
+      python-zstd = python3Packages.zstd;
+      haskell-zstd = haskellPackages.zstd;
+      haskell-hs-zstd = haskellPackages.hs-zstd;
+    };
   };
 
   meta = with lib; {

@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
