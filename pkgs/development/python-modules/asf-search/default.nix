@@ -1,17 +1,19 @@
 { lib
 , buildPythonPackage
-, dateparser
 , fetchFromGitHub
+, pythonOlder
+, requests
+, shapely
+, python-dateutil
+, pytz
 , importlib-metadata
 , numpy
+, dateparser
+, jinja2
+, remotezip
 , pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
 , requests-mock
-, shapely
-, wktutils
+, defusedxml
 }:
 
 buildPythonPackage rec {
@@ -29,25 +31,25 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    dateparser
-    importlib-metadata
-    numpy
-    python-dateutil
-    pytz
     requests
     shapely
-    wktutils
+    python-dateutil
+    pytz
+    importlib-metadata
+    numpy
+    dateparser
+    jinja2
+    remotezip
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    requests-mock
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "WKTUtils==" "WKTUtils>="
-  '';
+  checkInputs = [
+    requests-mock
+    defusedxml
+  ];
 
   pythonImportsCheck = [
     "asf_search"

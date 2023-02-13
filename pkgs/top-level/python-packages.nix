@@ -9945,6 +9945,8 @@ self: super: with self; {
 
   remote-pdb = callPackage ../development/python-modules/remote-pdb { };
 
+  remotezip = callPackage ../development/python-modules/remotezip { };
+
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
