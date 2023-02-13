@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , autoPatchelfHook
+, graalvm-ce
 , makeWrapper
 , perl
 , unzip
@@ -64,10 +65,7 @@ stdenv.mkDerivation (args // {
   passthru = { inherit product; } // passthru;
 
   meta = with lib; ({
-    homepage = "https://www.graalvm.org/";
+    inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
-    license = with licenses; [ upl gpl2Classpath bsd3 ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
   } // meta);
 })
