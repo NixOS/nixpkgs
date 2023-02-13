@@ -16490,7 +16490,7 @@
     name = "zimbatm";
   };
   Zimmi48 = {
-    email = "theo.zimmermann@univ-paris-diderot.fr";
+    email = "theo.zimmermann@telecom-paris.fr";
     github = "Zimmi48";
     githubId = 1108325;
     name = "Théo Zimmermann";

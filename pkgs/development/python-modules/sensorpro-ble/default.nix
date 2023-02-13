@@ -19,9 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Zqa6qa0Jw79Iu4VEw6KN0GsZcC1X7OpiYUiyT4zwKyY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -36,11 +41,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "sensorpro_ble"

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-re5HjPtssFkpcltCr0HEJmJyHbXJdkr2wDgaAHfy2Tk=";
   };
 
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
