@@ -15,13 +15,19 @@
 , freetype
 , makeDesktopItem
 }:
+
+
+let
+  srcInfo = (builtins.fromJSON (builtins.readFile ./src.json)).${stdenv.hostPlatform.system}
+    or (throw "ida-free is not available for the platform ${stdenv.hostPlatform.system}");
+in
+
 stdenv.mkDerivation rec {
-  pname = "ida-free";
-  version = "8.2.230124";
+    pname = "ida-free";
+  inherit (srcInfo) version;
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230213091148if_/https://out7.hex-rays.com/files/idafree82_linux.run";
-    sha256 = "sha256-pcyb8M39FJVsWUAQiXy17nOtVUhPkPsE24YqhK9rK58=";
+    inherit (srcInfo) url hash;
   };
 
   icon = fetchurl {
