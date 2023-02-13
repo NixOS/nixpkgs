@@ -38,6 +38,14 @@ in stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "build-core" ];
+
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=address"
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=use-after-free"
+  ];
+
   installPhase = ''
     runHook preInstall
 

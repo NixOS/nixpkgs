@@ -62,6 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ];
+
   postPatch = ''
     export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
   '' + lib.optionalString (!buildTests) ''

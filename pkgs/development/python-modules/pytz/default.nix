@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2022.7";
+  version = "2022.7.1";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fM+ue0ssBnRkpnM8YmFnP9uP0b6QVGA5a5egc+n6aDo=";
+    hash = "sha256-AaBoHEuWhKKDBGFeulXRqzGuAL9o7BV+w3CKgYLbvNA=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];
