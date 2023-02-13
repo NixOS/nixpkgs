@@ -759,9 +759,13 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
     hspec = self.hspec_2_10_9;
-    hspec-wai = super.hspec-wai.override {
+    hspec-wai = self.hspec-wai.override {
       hspec = self.hspec_2_10_9;
     };
+    hspec-contrib = self.hspec-contrib.override {
+      hspec-core = self.hspec-core_2_10_9;
+    };
+    fsnotify = self.fsnotify_0_4_1_0;
   });
 
   # Depends on broken fluid.
