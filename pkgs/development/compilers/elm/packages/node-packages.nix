@@ -16415,10 +16415,10 @@ in
   elm-pages = nodeEnv.buildNodePackage {
     name = "elm-pages";
     packageName = "elm-pages";
-    version = "2.1.11";
+    version = "2.1.12";
     src = fetchurl {
-      url = "https://registry.npmjs.org/elm-pages/-/elm-pages-2.1.11.tgz";
-      sha512 = "Xs1ZlHIM5VZ/7QyerY+JNyNzB5VqBdBeVudZznX672xINgZUa36fAKwIp+LJ01A7u/+9rHEP9MItVurZ/aBzNQ==";
+      url = "https://registry.npmjs.org/elm-pages/-/elm-pages-2.1.12.tgz";
+      sha256 = "sha256-olt6d5r0YFsXkvGt3nbNBXLa7BrDsA2KSUgb0VFS8BU=";
     };
     dependencies = [
       sources."@jridgewell/gen-mapping-0.3.2"
