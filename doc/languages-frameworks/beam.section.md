@@ -171,6 +171,7 @@ let
     inherit src version;
     # nix will complain and tell you the right value to replace this with
     hash = lib.fakeHash;
+    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
     # if you have build time environment variables add them here
     MY_ENV_VAR="my_value";
   };
