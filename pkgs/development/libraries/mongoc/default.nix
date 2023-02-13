@@ -13,15 +13,21 @@
 }:
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.23.1";
+  version = "1.23.2";
 
   src = fetchzip {
     url = "https://github.com/mongodb/mongo-c-driver/releases/download/${version}/mongo-c-driver-${version}.tar.gz";
-    sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
+    sha256 = "08v7xc5m86apd338swd8g83ccvd6ni75xbdhqqwkrjbznljf8fjf";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/25585
   preFixup = ''rm -rf "$(pwd)" '';
+  postPatch = ''
+    substituteInPlace src/libmongoc/CMakeLists.txt \
+      --replace "\\\''${prefix}/" ""
+    substituteInPlace src/libbson/CMakeLists.txt \
+      --replace "\\\''${prefix}/" ""
+  '';
 
   nativeBuildInputs = [cmake pkg-config perl];
   buildInputs = [openssl zlib cyrus_sasl];
