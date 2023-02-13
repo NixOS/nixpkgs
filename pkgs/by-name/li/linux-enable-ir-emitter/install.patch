@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index d5ce13e..5b2092a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -167,10 +167,6 @@ endif
+ ######
+ # Conf
+ ######
+-install_subdir(
+-    meson.project_name(),
+-    install_dir: get_option('sysconfdir'),
+-)
+ 
+ ##################
+ # Shell completion
