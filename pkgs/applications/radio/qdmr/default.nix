@@ -9,11 +9,11 @@
   docbook_xsl_ns,
   wrapQtAppsHook,
   libusb1,
-  libyamlcpp,
   qtlocation,
   qtserialport,
   qttools,
   qtbase,
+  yaml-cpp,
 }:
 
 let
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libyamlcpp
     libusb1
     qtlocation
     qtserialport
     qttools
     qtbase
+    yaml-cpp
   ];
 
   postPatch = lib.optionalString isLinux ''
