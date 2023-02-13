@@ -2,15 +2,18 @@
 , makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
+# NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
+# can be removed again!
+
 let
   pname = "signald";
-  version = "0.23.0";
+  version = "0.23.2";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-RN0OYjOmVtHKeFkviep952uf3qWuBj8lhcaP1Lk/gDo=";
+    sha256 = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
   };
 
   jre' = jre_minimal.override {
@@ -42,11 +45,30 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
     '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/okio-jvm/okio/r)}" #e' \
-        | sh
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
+        | sh -x
+
+      # WARNING: don't try this at home and wear safety-goggles while working with this!
+      # We patch around in the dependency tree to resolve some spurious dependency resolution errors.
+      # Whenever this package gets updated, please check if some of these hacks are obsolete!
+
+      # Mimic existence of okio-3.2.0.jar. Originally known as okio-jvm-3.2.0 (and renamed),
+      # but gradle doesn't detect such renames, only fetches the latter and then fails
+      # in `signald.buildPhase` because it cannot find `okio-3.2.0.jar`.
+      pushd $out/com/squareup/okio/okio/3.2.0 &>/dev/null
+        cp -v ../../okio-jvm/3.2.0/okio-jvm-3.2.0.jar okio-3.2.0.jar
+      popd &>/dev/null
+
+      # For some reason gradle fetches 2.14.1 instead of 2.14.0 here even though 2.14.0 is required
+      # according to `./gradlew -q dependencies`, so we pretend to have 2.14.0 available here.
+      # According to the diff in https://github.com/FasterXML/jackson-dataformats-text/compare/jackson-dataformats-text-2.14.0...jackson-dataformats-text-2.14.1
+      # the only relevant change is in the code itself (and in the tests/docs), so this seems
+      # binary-compatible.
+      cp -v \
+        $out/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.14.1/jackson-dataformat-toml-2.14.1.jar \
+        $out/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.14.0/jackson-dataformat-toml-2.14.0.jar
     '';
     # Don't move info to share/
     forceShare = [ "dummy" ];
@@ -54,12 +76,12 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "sha256-ANiNDdTuCuDEH5zUPsrVF6Uegdq3zVsMv+uMtYRX0jE=";
-      aarch64-linux = "sha256-V9zn4v/ZeLELAwFJ5y7OVAeJwZp4DmHm4KWxE6KpwGs=";
+      x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
+      aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit pname src version;
 
   patches = [
@@ -68,6 +90,11 @@ in stdenv.mkDerivation rec {
       inherit deps;
     })
   ];
+
+  passthru = {
+    # Mostly for debugging purposes.
+    inherit deps;
+  };
 
   buildPhase = ''
     runHook preBuild
