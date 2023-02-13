@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
+    installManPage pspg.1
     installShellCompletion --bash --cmd pspg bash-completion.sh
   '';
 
