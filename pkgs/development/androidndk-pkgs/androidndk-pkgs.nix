@@ -131,10 +131,7 @@ rec {
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
-      echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
-      echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
-      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
-      echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
+      echo "-target ${targetInfo.triple}" >> $out/nix-support/cc-cflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake
         echo "--fix-cortex-a8" >> $out/nix-support/cc-ldflags
@@ -147,7 +144,9 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries = runCommand "bionic-prebuilt" {} ''
+  libraries = runCommand "bionic-prebuilt" {
+     outputs = [ "headers" "out" ];
+  } ''
     lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
     if [ ! -d $lpath ]; then
       echo "NDK does not contain libraries for SDK version ${sdkVer} <$lpath>"
@@ -157,5 +156,6 @@ rec {
     cp $lpath/*.so $lpath/*.a $out/lib
     chmod +w $out/lib/*
     cp $lpath/* $out/lib
+    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/include $headers
   '';
 }
