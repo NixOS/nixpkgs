@@ -105,11 +105,7 @@ in stdenv.mkDerivation rec {
   # We remove the build flags from buildInfo data.
   inherit patches;
 
-  postPatch = ''
-    # fix environment variable reading
-    substituteInPlace SConstruct \
-        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-   '' + lib.optionalString (versionAtLeast version "4.4") ''
+  postPatch = lib.optionalString (versionAtLeast version "4.4") ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
     substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
