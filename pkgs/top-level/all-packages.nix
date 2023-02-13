@@ -368,6 +368,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  c64-debugger = callPackage ../applications/emulators/c64-debugger { };
+
   caroline = callPackage ../development/libraries/caroline { };
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
