@@ -14,6 +14,13 @@ let
 
   tests = builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
 
+  # Only even numbered versions compile on aarch64; odd numbered versions have avx enabled.
+  avxEnabled = version:
+    let
+      isOdd = n: lib.trivial.mod n 2 != 0;
+      patch = lib.toInt (lib.versions.patch version);
+    in isOdd patch;
+
   makeFdb =
     { version
     , sha256
@@ -81,6 +88,8 @@ let
         env.NIX_CFLAGS_COMPILE = toString [
           # Needed with GCC 12
           "-Wno-error=missing-template-keyword"
+          # Needed to compile on aarch64
+          (lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc")
         ];
 
         inherit patches;
@@ -132,7 +141,8 @@ let
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
-          platforms   = [ "x86_64-linux" ];
+          platforms   = [ "x86_64-linux" ]
+            ++ lib.optionals (lib.versionAtLeast version "7.1.0" && !(avxEnabled version)) [ "aarch64-linux" ];
           maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };
