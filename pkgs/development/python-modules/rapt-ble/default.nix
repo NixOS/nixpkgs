@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-upTtVqxVHrqLSGTSGCiCVlDa2NEuuqe+0W2DM+UhTnc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=rapt_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -39,11 +44,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=rapt_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
   pythonImportsCheck = [
     "rapt_ble"
   ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for RAPT Pill hydrometer BLE devices";
     homepage = "https://github.com/sairon/rapt-ble";
+    changelog = "https://github.com/sairon/rapt-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
