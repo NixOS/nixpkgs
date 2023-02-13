@@ -30,6 +30,10 @@ Options:
     exit 1
 }
 
+skopeo(){
+    command skopeo --insecure-policy --tmpdir "$TMPDIR" --override-os "$os" --override-arch "$arch" "$@"
+}
+
 get_image_digest(){
     local imageName=$1
     local imageTag=$2
@@ -38,7 +42,7 @@ get_image_digest(){
         imageTag="latest"
     fi
 
-    skopeo --insecure-policy --tmpdir=$TMPDIR inspect "docker://$imageName:$imageTag" | jq '.Digest' -r
+    skopeo inspect "docker://$imageName:$imageTag" | jq '.Digest' -r
 }
 
 get_name() {
@@ -127,9 +131,9 @@ trap "rm -rf \"$tmpPath\"" EXIT
 tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
 
 if test -z "$QUIET"; then
-    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" >&2
+    skopeo copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" >&2
 else
-    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
+    skopeo copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
 fi
 
 # Compute the hash.
