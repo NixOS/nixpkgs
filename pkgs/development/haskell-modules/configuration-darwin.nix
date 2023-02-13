@@ -321,4 +321,7 @@ self: super: ({
   # same
   # https://hydra.nixos.org/build/174540882/nixlog/9
   jacinda = dontCheck super.jacinda;
+
+  # "resource exhausted (Too many open files)' (after 100 tests)"
+  tz = dontCheck super.tz;
 })
