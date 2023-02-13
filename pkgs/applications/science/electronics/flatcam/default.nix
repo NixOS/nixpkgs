@@ -53,5 +53,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://bitbucket.org/jpcgt/flatcam";
     license = licenses.mit;
     maintainers = with maintainers; [ trepetti ];
+    broken = true;
   };
 }
