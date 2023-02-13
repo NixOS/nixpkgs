@@ -19,7 +19,9 @@
 , libwpd
 , libxslt
 , lyx
+, makeWrapper
 , perl
+, perlPackages
 , pkg-config
 , poppler_utils
 , python3Packages
@@ -66,6 +68,7 @@ mkDerivation rec {
     file
     pkg-config
     python3Packages.setuptools
+    makeWrapper
     which
   ];
 
@@ -73,6 +76,7 @@ mkDerivation rec {
     bison
     chmlib
     python3Packages.python
+    python3Packages.mutagen
     xapian
     zlib
   ] ++ lib.optional withGui [
@@ -111,6 +115,10 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
       fi
     done
+    wrapProgram $out/share/recoll/filters/rclaudio.py \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rclimg \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
@@ -130,6 +138,6 @@ mkDerivation rec {
     changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming ehmry ];
   };
 }
