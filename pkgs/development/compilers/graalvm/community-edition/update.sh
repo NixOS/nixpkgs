@@ -40,9 +40,9 @@ fi
 declare -r -A products_urls=(
   [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/graalvm-ce-java@platform@-${new_version}.tar.gz"
   [native-image-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/native-image-installable-svm-java@platform@-${new_version}.jar"
-  # [ruby-installable-svm]="https://github.com/oracle/truffleruby/releases/download/vm-${new_version}/ruby-installable-svm-java@platform@-${new_version}.jar"
-  # [wasm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/wasm-installable-svm-java@platform@-${new_version}.jar"
-  # [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
+  [ruby-installable-svm]="https://github.com/oracle/truffleruby/releases/download/vm-${new_version}/ruby-installable-svm-java@platform@-${new_version}.jar"
+  [wasm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/wasm-installable-svm-java@platform@-${new_version}.jar"
+  [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
 )
 
 readonly platforms=(

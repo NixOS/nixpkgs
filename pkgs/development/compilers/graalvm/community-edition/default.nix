@@ -6,7 +6,7 @@
 }:
 
 let
-  buildGraalvm = callPackage ./buildGraalvm.nix { inherit Foundation; };
+  buildGraalvm = lib.makeOverridable (callPackage ./buildGraalvm.nix { inherit Foundation; });
   buildGraalvmProduct = callPackage ./buildGraalvmProduct.nix { };
   javaPlatform = {
     "aarch64-linux" = "linux-aarch64";
@@ -16,7 +16,8 @@ let
   };
   javaPlatformVersion = javaVersion:
     "${javaVersion}-${javaPlatform.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}")}";
-  source = product: javaVersion: (import ./hashes.nix).${product}.${javaPlatformVersion javaVersion};
+  source = product: javaVersion: (import ./hashes.nix).${product}.${javaPlatformVersion javaVersion}
+    or (throw "Unsupported product combination: product=${product} java=${javaVersion} system=${stdenv.system}");
 
 in
 rec {
@@ -28,6 +29,20 @@ rec {
     src = fetchurl (source "graalvm-ce" javaVersion);
     meta.platforms = builtins.attrNames javaPlatform;
     products = [ native-image-installable-svm-java11 ];
+  };
+
+  # Mostly available for testing, do not expose in all-packages
+  graalvm11-ce-full = graalvm11-ce.override {
+    products = [
+      native-image-installable-svm-java11
+      python-installable-svm-java11
+    ];
+  };
+
+  python-installable-svm-java11 = callPackage ./python-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "python-installable-svm" javaVersion);
   };
 
   native-image-installable-svm-java11 = callPackage ./native-image-installable-svm.nix rec {
@@ -42,6 +57,20 @@ rec {
     src = fetchurl (source "graalvm-ce" javaVersion);
     meta.platforms = builtins.attrNames javaPlatform;
     products = [ native-image-installable-svm-java17 ];
+  };
+
+  # Mostly available for testing, do not expose in all-packages
+  graalvm17-ce-full = graalvm17-ce.override {
+    products = [
+      native-image-installable-svm-java17
+      python-installable-svm-java17
+    ];
+  };
+
+  python-installable-svm-java17 = callPackage ./python-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "python-installable-svm" javaVersion);
   };
 
   native-image-installable-svm-java17 = callPackage ./native-image-installable-svm.nix rec {
