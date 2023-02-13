@@ -48,6 +48,7 @@ with builtins;
 
 let majorVersion = "11";
     version = "${majorVersion}.3.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -115,6 +116,7 @@ let majorVersion = "11";
         enableMultilib
         enablePlugin
         enableShared
+        disableBootstrap
         fetchpatch
         fetchurl
         gettext

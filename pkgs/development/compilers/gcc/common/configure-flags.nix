@@ -23,6 +23,7 @@
 , langObjC
 , langObjCpp
 , langJit
+, disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -214,7 +215,7 @@ let
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
     ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
-    ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
+    ++ lib.optional disableBootstrap "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"

@@ -53,6 +53,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -142,6 +143,7 @@ let majorVersion = "12";
         buildPackages
         cloog
         crossStageStatic
+        disableBootstrap
         enableLTO
         enableMultilib
         enablePlugin
