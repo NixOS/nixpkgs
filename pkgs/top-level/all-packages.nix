@@ -15427,7 +15427,7 @@ with pkgs;
 
   ponyc = callPackage ../development/compilers/ponyc {
     # Upstream pony has dropped support for versions compiled with gcc.
-    stdenv = llvmPackages_9.stdenv;
+    stdenv = clangStdenv;
   };
 
   blaze = callPackage ../development/libraries/blaze { };
