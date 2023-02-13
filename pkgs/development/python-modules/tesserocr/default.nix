@@ -24,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "1bmj76gi8401lcqdaaznfmz9yf11myy1bzivqwwq08z3dwzxswck";
   };
 
+  # https://github.com/sirfz/tesserocr/issues/314
+  postPatch = ''
+    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesseract.pxd
+  '';
+
   nativeBuildInputs = [
     cython
     pkg-config

@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    # https://github.com/CCExtractor/ccextractor/issues/1467
+    sed -i '/allheaders.h/a#include <leptonica/pix_internal.h>' src/lib_ccx/ocr.c
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/CMakeLists.txt \
     --replace 'add_definitions(-DGPAC_CONFIG_LINUX)' 'add_definitions(-DGPAC_CONFIG_DARWIN)'
   '';

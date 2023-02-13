@@ -57,14 +57,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.7";
+  version = "9.8";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-MYpCp18wqKwCa+tcJ7He14p1FXDlVm1vubQqQS9g3LY=";
+    sha256 = "sha256-dDbrzJXsOBARYfJz0r7n3LbaoXHnx7Acz6HBa95NV9o=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -89,14 +89,6 @@ stdenv.mkDerivation rec {
     # To help debug the transient error in
     # https://trac.sagemath.org/ticket/23087 when it next occurs.
     ./patches/configurationpy-error-verbose.patch
-
-    # https://trac.sagemath.org/ticket/33907
-    (fetchSageDiff {
-      name = "interfaces-expectpy-intermittent.patch";
-      base = "9.8.beta6";
-      rev = "6f5c1c2fc8bcfb5e6555716d05ce70511795ffa1";
-      sha256 = "sha256-z8FQxtrk62MHzPjrUTad+fMAE6XV8GTsLWKgGOM3zBg=";
-    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -119,28 +111,12 @@ stdenv.mkDerivation rec {
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
-    # https://trac.sagemath.org/ticket/34118
-    (fetchSageDiff {
-      name = "sympy-1.11-upgrade.patch";
-      base = "9.7";
-      rev = "52815744bde2b682245b6f985a112f7cb8666056";
-      sha256 = "sha256-gv6z6JkQ6S6oCJQNkVgcPVvzlplyvR1nC7pWmcUiSc0=";
-    })
-
-    # https://trac.sagemath.org/ticket/34460
-    (fetchSageDiff {
-      name = "ipywidgets-8-upgrade.patch";
-      base = "9.7";
-      rev = "2816dbacb342398a23bb3099e20c92c8020ab0fa";
-      sha256 = "sha256-tCOsMxXwPkRg3FJGVvTqDzlWdra78UfDY6nci0Nr9GI=";
-    })
-
     # https://trac.sagemath.org/ticket/34391
     (fetchSageDiff {
       name = "gap-4.12-upgrade.patch";
-      base = "9.8.beta2";
-      rev = "eb8cd42feb58963adba67599bf6e311e03424328";
-      sha256 = "sha256-0dKewOZe2n3PqSdxCJt18FkqwTdrD0VA5MXAMiTW8Tw=";
+      base = "9.8.beta7";
+      rev = "dd4a17281adcda74e11f998ef519b6bd0dafb043";
+      sha256 = "sha256-UQT9DO9xd5hh5RucvUkIm+rggPKu8bc1YaSI6LVYH98=";
     })
 
     # https://trac.sagemath.org/ticket/34701
@@ -149,46 +125,6 @@ stdenv.mkDerivation rec {
       base = "eb8cd42feb58963adba67599bf6e311e03424328"; # TODO: update when #34391 lands
       rev = "90acc7f1c13a80b8aa673469a2668feb9cd4207f";
       sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
-    })
-
-    # https://trac.sagemath.org/ticket/34537
-    (fetchSageDiff {
-      name = "pari-2.15.1-upgrade.patch";
-      squashed = true;
-      base = "54cd6fe6de52aee5a433e0569e8c370618cb2047"; # 9.8.beta1
-      rev = "1e86aa26790d84bf066eca67f98a60a8aa3d4d3a";
-      sha256 = "sha256-LUgcMqrKXWb72Kxl0n6MV5unLXlQSeG8ncN41F7TRSc=";
-      excludes = ["build/*"
-                  "src/sage/geometry/polyhedron/base_number_field.py"
-                  "src/sage/geometry/polyhedron/backend_normaliz.py"
-                  "src/sage/lfunctions/pari.py"];
-    })
-    # Some files were excluded from the above patch due to
-    # conflicts. The patch below contains rebased versions.
-    ./patches/pari-2.15.1-upgrade-rebased.patch
-
-    # https://trac.sagemath.org/ticket/34668
-    (fetchSageDiff {
-      name = "matplotlib-3.6-upgrade.patch";
-      base = "9.8.beta2";
-      rev = "5501e0de0dca1cff0355326dd42bd8c7e5749568";
-      sha256 = "sha256-ceJkVaecIsZewN8v/3gPQXFbFjv5Akz6zEFg/ToXdek=";
-    })
-
-    # https://trac.sagemath.org/ticket/34693
-    (fetchSageDiff {
-      name = "matplotlib-3.6-docbuilding.patch";
-      base = "9.8.beta4";
-      rev = "64589686c261d33e6b5aff2589bcae8af004bcc6";
-      sha256 = "sha256-j5AMY1TmhP+HBBBYaFZSkABJ5vtwe6iP2LRfGEgSm8Q=";
-    })
-
-    # https://trac.sagemath.org/ticket/34615
-    (fetchSageDiff {
-      name = "sphinx-5.2-upgrade.patch";
-      base = "9.8.beta1";
-      rev = "8f8af65e54d3a9962cfab40f15dc23f4e955b43f";
-      sha256 = "sha256-yhDdyxnXSSkqLcuOPBWSEBc26rk1Od3gLcWW8S2p8bY=";
     })
 
     # temporarily paper over https://github.com/jupyter-widgets/ipywidgets/issues/3669
