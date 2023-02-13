@@ -1215,28 +1215,41 @@ let
     config = lib.importTOML file;
   };
 
+  private = lib.mapAttrs
+    (k: lib.warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
+    {
+      inherit
+        applyModuleArgsIfFunction
+        collectModules
+        dischargeProperties
+        evalOptionValue
+        mergeModules
+        mergeModules'
+        pushDownProperties
+        unifyModuleSyntax
+        ;
+    };
+
 in
+private //
 {
+  # NOTE: not all of these functions are necessarily public interfaces; some
+  #       are just needed by types.nix, but are not meant to be consumed
+  #       externally.
   inherit
-    applyModuleArgsIfFunction
-    collectModules
     defaultOrderPriority
     defaultOverridePriority
     defaultPriority
-    dischargeProperties
     doRename
     evalModules
-    evalOptionValue
     filterOverrides
     filterOverrides'
     fixMergeModules
-    fixupOptionType
+    fixupOptionType  # should be private?
     importJSON
     importTOML
     mergeDefinitions
-    mergeModules
-    mergeModules'
-    mergeOptionDecls
+    mergeOptionDecls  # should be private?
     mkAfter
     mkAliasAndWrapDefinitions
     mkAliasAndWrapDefsWithPriority
@@ -1262,8 +1275,6 @@ in
     mkRenamedOptionModule
     mkRenamedOptionModuleWith
     mkVMOverride
-    pushDownProperties
     setDefaultModuleLocation
-    sortProperties
-    unifyModuleSyntax;
+    sortProperties;
 }
