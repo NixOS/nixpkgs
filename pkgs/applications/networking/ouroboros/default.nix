@@ -1,6 +1,5 @@
 { stdenv
 , lib
-
 , cmake
 , dnsutils
 , fetchgit
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSYSTEMD_UNITDIR=${placeholder "out"}/etc/systemd/system" ];
   meta = {
     description = "A future network prototype descended from RINA";
-    homepage = https://ouroboros.rocks/;
+    homepage = "https://ouroboros.rocks/";
     license = with lib.licenses; [
       lgpl21 # library
       gpl2 # daemons
