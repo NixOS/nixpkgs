@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, aiocache
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -9,39 +8,29 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
-, msgpack
 , ujson
 }:
 
 buildPythonPackage rec {
-  pname = "pyflunearyou";
-  version = "2021.10.0";
+  pname = "pyoutbreaksnearme";
+  version = "2022.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-Q65OSE4qckpvaIvZULBR434i7hwuVM97eSq1Blb1oIU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-D7oXkKDSg+yF+j1WyG/VVY12hLU6oyhEtxLrF6IkMSA=";
   };
-
-  pythonRelaxDeps = [
-    "aiocache"
-    "ujson"
-  ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     aiohttp
-    aiocache
-    msgpack
     ujson
   ];
 
@@ -58,12 +47,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "pyflunearyou"
+    "pyoutbreaksnearme"
   ];
 
   meta = with lib; {
-    description = "Python library for retrieving UV-related information from Flu Near You";
-    homepage = "https://github.com/bachya/pyflunearyou";
+    description = "Library for retrieving data from for Outbreaks Near Me";
+    homepage = "https://github.com/bachya/pyoutbreaksnearme";
+    changelog = "https://github.com/bachya/pyoutbreaksnearme/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, arrow-cpp
 , bokeh
 , buildPythonPackage
 , click
@@ -70,13 +71,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    fastparquet
-    pyarrow
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
     scipy
     zarr
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    fastparquet
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;

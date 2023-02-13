@@ -182,9 +182,12 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   inherit (pkgs.callPackages ../os-specific/darwin/xcode { })
     xcode_8_1 xcode_8_2
-    xcode_9_1 xcode_9_2 xcode_9_4 xcode_9_4_1
-    xcode_10_2 xcode_10_2_1 xcode_10_3
-    xcode_11
+    xcode_9_1 xcode_9_2 xcode_9_3 xcode_9_4 xcode_9_4_1
+    xcode_10_1 xcode_10_2 xcode_10_2_1 xcode_10_3
+    xcode_11 xcode_11_1 xcode_11_2 xcode_11_3_1 xcode_11_4 xcode_11_5 xcode_11_6 xcode_11_7
+    xcode_12 xcode_12_0_1 xcode_12_1 xcode_12_2 xcode_12_3 xcode_12_4 xcode_12_5 xcode_12_5_1
+    xcode_13 xcode_13_1 xcode_13_2 xcode_13_3 xcode_13_3_1 xcode_13_4 xcode_13_4_1
+    xcode_14 xcode_14_1
     xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
