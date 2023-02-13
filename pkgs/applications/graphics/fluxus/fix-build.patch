@@ -16,14 +16,6 @@ While at it ported to python3-style print().
  
  MajorVersion = "0"
  MinorVersion = "19"
-@@ -100,6 +100,7 @@ IncludePaths = [
- paranoid = ' -W -Wcast-qual -Wwrite-strings -Wcast-align -Wpointer-arith -Wconversion -Wredundant-decls -Wunreachable-code -Winline -Wlarger-than-256'
- 
- env = Environment(CCFLAGS = '-ggdb -pipe -Wall -O3 -ffast-math -Wno-unused -fPIC -pthread',
-+                  ENV = os.environ,
-                   VERSION_NUM = FluxusVersion)
- env.MergeFlags(ARGUMENTS.get('CCFLAGS', '').split())
- env.MergeFlags(ARGUMENTS.get('LDFLAGS', '').split())
 @@ -229,9 +230,9 @@ if env['PLATFORM'] == 'posix':
  # Make sure we have these libraries availible
  
