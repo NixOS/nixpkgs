@@ -11038,6 +11038,8 @@ with pkgs;
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
   };
 
+  posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor {};
+
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
   povray = callPackage ../tools/graphics/povray {
