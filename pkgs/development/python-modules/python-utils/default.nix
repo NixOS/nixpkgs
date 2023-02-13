@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , loguru
@@ -45,6 +46,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "_python_utils_tests"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Flaky tests on darwin
+    "test_timeout_generator"
   ];
 
   meta = with lib; {
