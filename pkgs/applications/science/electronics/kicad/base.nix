@@ -76,11 +76,10 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = if (!stable) then ''
+  postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
-  ''
-  else "";
+  '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 

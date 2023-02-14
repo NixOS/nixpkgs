@@ -406,7 +406,7 @@ rec {
       eval "$origPostHook"
     '';
 
-    origPostHook = if attrs ? postHook then attrs.postHook else "";
+    origPostHook = lib.optionalString (attrs ? postHook) attrs.postHook;
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";

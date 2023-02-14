@@ -26,7 +26,7 @@ let
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else if isPy3k then "3" else ""}";
+    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else lib.optionalString isPy3k "3"}";
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
     inherit pythonAttr;

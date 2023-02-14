@@ -386,9 +386,7 @@ stdenv.mkDerivation rec {
   # save target that grub is compiled for
   grubTarget = if efiSupport
                then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
-               else if inPCSystems
-                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-                    else "";
+               else lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
   doCheck = false;
   enableParallelBuilding = true;

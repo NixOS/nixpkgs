@@ -59,9 +59,7 @@ let
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if (buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null"
-    then import ../expand-response-params { inherit (buildPackages) stdenv; }
-    else "";
+    lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
   useGccForLibs = isClang
     && libcxx == null

@@ -79,8 +79,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
 
   installPhase = let
     buildType = if debugBuild then "fastdebug" else "release";
-    debugSuffix = if debugBuild then "-fastdebug" else "";
-    jcefSuffix = if debugBuild then "" else "_jcef";
+    debugSuffix = lib.optionalString debugBuild "-fastdebug";
+    jcefSuffix = lib.optionalString (!debugBuild) "_jcef";
   in ''
     runHook preInstall
 

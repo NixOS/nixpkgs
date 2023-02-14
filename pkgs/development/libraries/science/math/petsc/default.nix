@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
         "--with-fc=mpif90"
         "--with-mpi=1"
       ''}
-      ${if withp4est then ''
+      ${lib.optionalString withp4est ''
         "--with-p4est=1"
         "--with-zlib-include=${zlib.dev}/include"
         "--with-zlib-lib=-L${zlib}/lib -lz"
-      '' else ""}
+      ''}
       "--with-blas=1"
       "--with-lapack=1"
     )
