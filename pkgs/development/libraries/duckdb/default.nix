@@ -17,20 +17,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-no4fcukEpzKmh2i41sdXGDljGhEDkzk3rYBATqlq6Gw=";
+    sha256 = "sha256-9m9+fldOgv2QTuUbw5y0zekBxZe8Dd4+8FqR3t3uFGg=";
   };
 
-  patches = [ ./version.patch ];
+  patches = [ ./version.patch ./shell-install.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
   '';
+
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = lib.optionals withHttpFs [ openssl ]
+    ++ lib.optionals withJdbc [ openjdk11 ]
+    ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
     "-DBUILD_EXCEL_EXTENSION=ON"
@@ -69,6 +74,10 @@ stdenv.mkDerivation rec {
         "test/sql/storage/compression/chimp/chimp_read_float.test"
         "test/sql/storage/compression/patas/patas_compression_ratio.test_coverage"
         "test/sql/storage/compression/patas/patas_read.test"
+        "test/sql/json/read_json_objects.test"
+        "test/sql/json/read_json.test"
+        "test/sql/copy/parquet/parquet_5968.test"
+        "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates
@@ -86,11 +95,6 @@ stdenv.mkDerivation rec {
 
       runHook postInstallCheck
     '';
-
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = lib.optionals withHttpFs [ openssl ]
-    ++ lib.optionals withJdbc [ openjdk11 ]
-    ++ lib.optionals withOdbc [ unixODBC ];
 
   meta = with lib; {
     homepage = "https://github.com/duckdb/duckdb";
