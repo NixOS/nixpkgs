@@ -16,7 +16,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/m00qek/swaynag-battery";
     description = "Shows a message when your battery is discharging ";
-    maintainers = with maintainers; [ asbachb ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
 }
