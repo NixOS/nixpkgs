@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    rev = "e1bbfe801986cd7171f36443a1573b0f69f3702d";
-    sha256 = "sha256-DngfmejNFw5pogTo7Ec5aUey2LUQIojvJybLmtCfvVY=";
+    rev = "06c4266acf3378d646232d530a78b1cd4717dda8";
+    sha256 = "sha256-02+4/ZTCvqHIh9Ookaly+20pnnhGoUQpQpTWIrfPR9E=";
     fetchSubmodules = true;
   };
 
