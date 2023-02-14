@@ -34,12 +34,19 @@ rec {
   # Mostly available for testing, not to be exposed at the top level
   graalvm11-ce-full = graalvm11-ce.override {
     products = [
+      js-installable-svm-java11
       llvm-installable-svm-java11
       native-image-installable-svm-java11
       python-installable-svm-java11
       ruby-installable-svm-java11
       wasm-installable-svm-java11
     ];
+  };
+
+  js-installable-svm-java11 = callPackage ./js-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "js-installable-svm" javaVersion);
   };
 
   llvm-installable-svm-java11 = callPackage ./llvm-installable-svm.nix rec {
@@ -84,12 +91,19 @@ rec {
   # Mostly available for testing, not to be exposed at the top level
   graalvm17-ce-full = graalvm17-ce.override {
     products = [
+      js-installable-svm-java17
       llvm-installable-svm-java17
       native-image-installable-svm-java17
       python-installable-svm-java17
       ruby-installable-svm-java17
       wasm-installable-svm-java17
     ];
+  };
+
+  js-installable-svm-java17 = callPackage ./js-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "js-installable-svm" javaVersion);
   };
 
   llvm-installable-svm-java17 = callPackage ./llvm-installable-svm.nix rec {

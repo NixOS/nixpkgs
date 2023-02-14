@@ -60,6 +60,40 @@
       url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java17-darwin-amd64-22.3.1.jar";
     };
   };
+  "js-installable-svm" = {
+    "11-linux-aarch64" = {
+      sha256 = "1b8vnjjsa548c6j3dycxp57i9xmyvndiz2xhv7fm10izcplyspxq";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java11-linux-aarch64-22.3.1.jar";
+    };
+    "17-linux-aarch64" = {
+      sha256 = "1kcy3mjk908zs7f3k95awp6294cwr06hand4cbw1lsnfvp0qwhk7";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java17-linux-aarch64-22.3.1.jar";
+    };
+    "11-linux-amd64" = {
+      sha256 = "0sq80a4nnvik560whgv5vwlsszi8z02idvpd92p0caf03bra9x2b";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java11-linux-amd64-22.3.1.jar";
+    };
+    "17-linux-amd64" = {
+      sha256 = "0fd160yxsi09m97z7vqh5kwf1g0p0hn4niy48glj9jhirfqzzw0c";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java17-linux-amd64-22.3.1.jar";
+    };
+    "11-darwin-aarch64" = {
+      sha256 = "18g0xixzk45yrxv3zfs7qrdyj0b3ksp59jhbcis0vwy9gx8094wq";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java11-darwin-aarch64-22.3.1.jar";
+    };
+    "17-darwin-aarch64" = {
+      sha256 = "0cf4iivkniilvbqyniqxcz1qf49cs4lxi0axjsk9sz1zmxcq0bnk";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java17-darwin-aarch64-22.3.1.jar";
+    };
+    "11-darwin-amd64" = {
+      sha256 = "0ibcz6ivx068ndf45j9pghm8qwq287glqxf0xx08kjxnhms67p52";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java11-darwin-amd64-22.3.1.jar";
+    };
+    "17-darwin-amd64" = {
+      sha256 = "16q7whnvdrk8lb4fp96qr3p567kggyk9q5iqcn081qk8xjkbx0zv";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/js-installable-svm-java17-darwin-amd64-22.3.1.jar";
+    };
+  };
   "python-installable-svm" = {
     "11-linux-aarch64" = {
       sha256 = "1yl36x5svld7qnm3m6vmacm2n4d6l9vhdxhaypvlv2bbfbnym3c5";

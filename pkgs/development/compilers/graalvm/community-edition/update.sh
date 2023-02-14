@@ -40,6 +40,7 @@ fi
 
 declare -r -A products_urls=(
   [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/graalvm-ce-java@platform@-${new_version}.tar.gz"
+  [js-installable-svm]="https://github.com/graalvm/graaljs/releases/download/vm-${new_version}/js-installable-svm-java@platform@-${new_version}.jar"
   [llvm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/llvm-installable-svm-java@platform@-${new_version}.jar"
   [native-image-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/native-image-installable-svm-java@platform@-${new_version}.jar"
   [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
