@@ -27,21 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.10.4";
+  version = "1.10.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "eecw3aGfmzSIb0BkqhcPGiMmsIMp1lXYC2fpBsf3i3w=";
+    sha256 = "U6b7KxkK03xZhsrtPpi+3nw8YCOZ7k+TyPwFQwPXbas=";
   };
 
   patches = [
     # Needed for wingpanel-indicator-network and switchboard-plug-network
     ./hardcode-gsettings.patch
-    # Removing path from eap schema to fix bug when creating new VPN connection
-    # https://gitlab.gnome.org/GNOME/libnma/-/issues/18
-    ./remove-path-from-eap.patch
   ];
 
   nativeBuildInputs = [

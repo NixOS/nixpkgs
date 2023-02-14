@@ -4205,6 +4205,10 @@ self: super: with self; {
 
   hiro = callPackage ../development/python-modules/hiro { };
 
+  hist = callPackage ../development/python-modules/hist { };
+
+  histoprint = callPackage ../development/python-modules/histoprint { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hjson = callPackage ../development/python-modules/hjson { };
@@ -11528,6 +11532,8 @@ self: super: with self; {
   uharfbuzz = callPackage ../development/python-modules/uharfbuzz {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  uhi = callPackage ../development/python-modules/uhi { };
 
   ujson = callPackage ../development/python-modules/ujson { };
 

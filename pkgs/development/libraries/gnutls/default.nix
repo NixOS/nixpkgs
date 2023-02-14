@@ -7,6 +7,19 @@
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
 , withSecurity ? true, Security  # darwin Security.framework
 # certificate compression - only zlib now, more possible: zstd, brotli
+
+# for passthru.tests
+, curlWithGnuTls
+, emacs
+, ffmpeg
+, haskellPackages
+, knot-resolver
+, ngtcp2-gnutls
+, ocamlPackages
+, python3Packages
+, qemu
+, rsyslog
+, samba
 }:
 
 assert guileBindings -> guile != null;
@@ -104,6 +117,14 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/lib/libgnutls.la" \
       --replace "-lunistring" ""
   '';
+
+  passthru.tests = {
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+    inherit (ocamlPackages) ocamlnet;
+    haskell-gnutls = haskellPackages.gnutls;
+    python3-gnutls = python3Packages.python3-gnutls;
+    rsyslog = rsyslog.override { withGnutls = true; };
+  };
 
   meta = with lib; {
     description = "The GNU Transport Layer Security Library";
