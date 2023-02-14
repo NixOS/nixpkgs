@@ -2,15 +2,12 @@
 , testers
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnome-keyring";
   version = "3.12.0";
-in
-stdenv.mkDerivation (finalAttrs: {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnome-keyring/${lib.versions.majorMinor finalAttrs.version}/libgnome-keyring-${finalAttrs.version}.tar.xz";
     sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
