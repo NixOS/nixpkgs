@@ -2,7 +2,7 @@ diff --git a/collectors/Makefile.am b/collectors/Makefile.am
 index a0a972e8f..b4a2a5f53 100644
 --- a/collectors/Makefile.am
 +++ b/collectors/Makefile.am
-@@ -32,7 +32,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
+@@ -30,7 +30,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
  usergoconfigdir=$(configdir)/go.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -78,15 +78,7 @@ diff --git a/system/Makefile.am b/system/Makefile.am
 index a88ccab65..bda6ee2b6 100644
 --- a/system/Makefile.am
 +++ b/system/Makefile.am
-@@ -3,7 +3,6 @@
- 
- MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
- CLEANFILES = \
--    edit-config \
-     netdata-openrc \
-     netdata.logrotate \
-     netdata.service \
-@@ -20,15 +19,13 @@ include $(top_srcdir)/build/subst.inc
+@@ -19,15 +19,13 @@ include $(top_srcdir)/build/subst.inc
  SUFFIXES = .in
  
  dist_config_SCRIPTS = \
