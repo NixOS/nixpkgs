@@ -26182,6 +26182,8 @@ with pkgs;
     ipu6-camera-bin = ipu6ep-camera-bin;
   };
 
+  ivsc-firmware = callPackage ../os-specific/linux/firmware/ivsc-firmware { };
+
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
