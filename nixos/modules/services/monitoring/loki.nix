@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
+  inherit (lib) escapeShellArgs mkEnableOption mkIf mkMerge mkOption types;
 
   cfg = config.services.loki;
 
@@ -54,6 +54,15 @@ in {
       '';
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Specify a file containing environment variables to set when running Loki.
+      '';
+    };
+
+
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -97,18 +106,23 @@ in {
         conf = if cfg.configFile == null
                then prettyJSON cfg.configuration
                else cfg.configFile;
-      in
-      {
-        ExecStart = "${pkgs.grafana-loki}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
-        User = cfg.user;
-        Restart = "always";
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "full";
-        DevicePolicy = "closed";
-        NoNewPrivileges = true;
-        WorkingDirectory = cfg.dataDir;
-      };
+      in mkMerge [
+        {
+          ExecStart = "${pkgs.grafana-loki}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+          User = cfg.user;
+          Restart = "always";
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          DevicePolicy = "closed";
+          NoNewPrivileges = true;
+          WorkingDirectory = cfg.dataDir;
+        }
+
+        (mkIf (cfg.environmentFile != null) {
+          EnvironmentFile = cfg.environmentFile;
+        })
+      ];
     };
   };
 }
