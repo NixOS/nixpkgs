@@ -3,37 +3,32 @@
 with pkgs;
 
 {
-  cc-wrapper = callPackage ./cc-wrapper { };
-  cc-wrapper-gcc = callPackage ./cc-wrapper { stdenv = gccStdenv; };
-  cc-wrapper-gcc7 = callPackage ./cc-wrapper { stdenv = gcc7Stdenv; };
-  cc-wrapper-gcc8 = callPackage ./cc-wrapper { stdenv = gcc8Stdenv; };
-  cc-wrapper-gcc9 = callPackage ./cc-wrapper { stdenv = gcc9Stdenv; };
-  cc-wrapper-clang = callPackage ./cc-wrapper { stdenv = llvmPackages.stdenv; };
-  cc-wrapper-libcxx = callPackage ./cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
-  cc-wrapper-clang-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.stdenv; };
-  cc-wrapper-libcxx-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
-  cc-wrapper-clang-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.stdenv; };
-  cc-wrapper-libcxx-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
-  cc-wrapper-clang-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.stdenv; };
-  cc-wrapper-libcxx-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.libcxxStdenv; };
-  cc-wrapper-clang-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.stdenv; };
-  cc-wrapper-libcxx-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.libcxxStdenv; };
-  cc-wrapper-clang-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.stdenv; };
-  cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
-  cc-wrapper-clang-10 = callPackage ./cc-wrapper { stdenv = llvmPackages_10.stdenv; };
-  cc-wrapper-libcxx-10 = callPackage ./cc-wrapper { stdenv = llvmPackages_10.libcxxStdenv; };
-  cc-wrapper-clang-11 = callPackage ./cc-wrapper { stdenv = llvmPackages_11.stdenv; };
-  cc-wrapper-libcxx-11 = callPackage ./cc-wrapper { stdenv = llvmPackages_11.libcxxStdenv; };
-  cc-wrapper-clang-12 = callPackage ./cc-wrapper { stdenv = llvmPackages_12.stdenv; };
-  cc-wrapper-libcxx-12 = callPackage ./cc-wrapper { stdenv = llvmPackages_12.libcxxStdenv; };
-  cc-wrapper-clang-13 = callPackage ./cc-wrapper { stdenv = llvmPackages_13.stdenv; };
-  cc-wrapper-libcxx-13 = callPackage ./cc-wrapper { stdenv = llvmPackages_13.libcxxStdenv; };
-  cc-wrapper-clang-14 = callPackage ./cc-wrapper { stdenv = llvmPackages_14.stdenv; };
-  cc-wrapper-libcxx-14 = callPackage ./cc-wrapper { stdenv = llvmPackages_14.libcxxStdenv; };
-  cc-wrapper-clang-15 = callPackage ./cc-wrapper { stdenv = llvmPackages_15.stdenv; };
-  cc-wrapper-libcxx-15 = callPackage ./cc-wrapper { stdenv = llvmPackages_15.libcxxStdenv; };
-  cc-wrapper-clang-git = callPackage ./cc-wrapper { stdenv = llvmPackages_git.stdenv; };
-  cc-wrapper-libcxx-git = callPackage ./cc-wrapper { stdenv = llvmPackages_git.libcxxStdenv; };
+  cc-wrapper = with builtins; let
+    pkgNames = (attrNames pkgs);
+    llvmTests = let
+      pkgSets = lib.pipe pkgNames [
+        (filter (lib.hasPrefix "llvmPackages"))
+        (filter (n: n != "llvmPackages_rocm"))
+        (filter (n: n != "llvmPackages_latest"))
+        (filter (n: n != "llvmPackages_git"))
+      ];
+      tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
+        clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
+        libcxx = callPackage ./cc-wrapper { stdenv = pkgs.${name}.libcxxStdenv; };
+      });
+    in
+      recurseIntoAttrs tests;
+    gccTests = let
+      pkgSets = lib.pipe (attrNames pkgs) [
+        (filter (lib.hasPrefix "gcc"))
+        (filter (lib.hasSuffix "Stdenv"))
+        (filter (n: n != "gccCrossLibcStdenv"))
+      ];
+    in lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
+  in recurseIntoAttrs {
+    default = callPackage ./cc-wrapper { };
+  } // llvmTests // gccTests;
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
