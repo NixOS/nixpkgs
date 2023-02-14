@@ -34,7 +34,7 @@ rec {
   # Mostly available for testing, not to be exposed at the top level
   graalvm11-ce-full = graalvm11-ce.override {
     products = [
-      llvm-installable-svm-java17
+      llvm-installable-svm-java11
       native-image-installable-svm-java11
       python-installable-svm-java11
       ruby-installable-svm-java11
