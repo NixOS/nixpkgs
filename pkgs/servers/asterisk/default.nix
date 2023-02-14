@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchsvn, fetchFromGitHub,
+{ stdenv, lib, fetchurl, fetchsvn, fetchFromGitHub, nixosTests,
   jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
   util-linux, dmidecode, libuuid, newt,
   lua, speex, libopus, opusfile, libogg,
@@ -162,7 +162,10 @@ in {
   asterisk-lts = versions.asterisk_18;
   asterisk-stable = versions.asterisk_19;
   asterisk = versions.asterisk_19.overrideAttrs (o: {
-    passthru = (o.passthru or {}) // { inherit updateScript; };
+    passthru = (o.passthru or {}) // {
+      inherit updateScript;
+      tests = { inherit (nixosTests) asterisk; };
+    };
   });
 
 } // versions
