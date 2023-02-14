@@ -2,6 +2,8 @@
 
 set -e -o pipefail
 
+TMPDIR=${TMPDIR:-/tmp}
+
 os=
 arch=
 imageName=
