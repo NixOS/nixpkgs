@@ -23,7 +23,6 @@ in buildFHSUserEnv rec {
     xorg.libSM
     zlib
     dbus
-    libxcrypt
     # qsys requirements
     xorg.libXtst
     xorg.libXi
@@ -46,6 +45,7 @@ in buildFHSUserEnv rec {
     xorg.libXext
     xorg.libXrender
     libudev0-shim
+    libxcrypt
   ];
 
   passthru = { inherit unwrapped; };
