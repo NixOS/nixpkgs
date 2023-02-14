@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikegami-yukino";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-uzGHvklFHVoNloZauczgITeHQIgYQAfI9cjLWgG/vyI=";
   };
 
