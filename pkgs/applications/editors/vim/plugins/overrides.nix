@@ -941,6 +941,10 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-undo-nvim = super.telescope-undo-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+  });
+
   telescope-z-nvim = super.telescope-z-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
   });
@@ -1088,7 +1092,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-jpO26OXaYcWirQ5tTKIwlva7dHIfdmnruF4WdwSq0nI=";
+          cargoSha256 = "sha256-JQwT7IFYC/K+t3YO34hoalxdt1TEsmEcBXtDKFVdles=";
         };
       in
       ''

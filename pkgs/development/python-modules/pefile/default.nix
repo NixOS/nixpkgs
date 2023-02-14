@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2022.5.30";
+  version = "2023.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erocarrera";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Cv20hJsErHFSuS5Q1kqLNp4DAsPXv/eFhaU9oYECSeI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lD8GpNl+cVNYTZUKFRF1/2kDwEbn/ekRBNBTYuFmFW0=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
+    changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ pamplemousse ];
   };

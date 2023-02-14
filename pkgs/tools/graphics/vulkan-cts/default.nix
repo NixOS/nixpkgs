@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchurl
 , cmake
+, ffmpeg
 , libdrm
 , libglvnd
 , libffi
@@ -29,6 +30,7 @@ let
   # does not search for system-wide installations.
   # It also expects the version specified in the repository, which can be incompatible
   # with the version in nixpkgs (e.g. for SPIRV-Headers), so we don't want to patch in our packages.
+  # The revisions are extracted from https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/fetch_sources.py#L290
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
@@ -44,43 +46,49 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "22d39cd684d136a81778cc17a0226ffad40d1cee";
-    hash = "sha256-6LplxN7HOMK1NfeD32P5JAMpCBlouttxLEOT/XTVpLw=";
+    rev = "a0ad0d7067521fff880e36acfb8ce453421c3f25";
+    hash = "sha256-ZKkFHGitLjw5LPJW1TswIJ+KulkrS8C4G3dUF5U/F2c=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "b930e734ea198b7aabbbf04ee1562cf6f57962f0";
-    hash = "sha256-NWpFSRoxtYWi+hLUt9gpw0YScM3shcUwv9yUmbivRb0=";
+    rev = "f98473ceeb1d33700d01e20910433583e5256030";
+    hash = "sha256-RSUmfp9QZ7yRbLdFygz9mDfrgUUT8og+ZD9/6VkghMo=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "36c0c1596225e728bd49abb7ef56a3953e7ed468";
-    hash = "sha256-t1UMJnYONWOtOxc9zUgxr901QFNvqkgurjpFA8UzhYc=";
+    rev = "87d5b782bec60822aa878941e6b13c0a9a954c9b";
+    hash = "sha256-Bv10LM6YXaH2V64oqAcrps23higHzCjlIYYBob5zS4A=";
+  };
+  video-parser = fetchFromGitHub {
+    owner = "nvpro-samples";
+    repo = "vk_video_samples";
+    rev = "7d68747d3524842afaf050c5e00a10f5b8c07904";
+    hash = "sha256-L5IYDm0bLq+NlNrzozu0VQx8zL1na6AhrkjZKxOWSnU=";
   };
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "135da3a538263ef0d194cab25e2bb091119bdc42";
-    hash = "sha256-VZ8JxIuOEG7IjsVcsJOcC+EQeZbd16/+czLcO9t7dY4=";
+    rev = "9a2e576a052a1e65a5d41b593e693ff02745604b";
+    hash = "sha256-DBA2FeV0G/HI8GUMtGYO52jk7wM4HMlKLDA4b+Wmo+k=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.4.1";
+  version = "1.3.5.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-XUFlYdudyRqa6iupB8N5QkUpumasyLLQEWcr4M4uP1g=";
+    hash = "sha256-RPuhcLJ5Ad41SFPjJBdghcNBPIGzZBeVWTjySWOp0KA=";
   };
 
   outputs = [ "out" "lib" ];
 
   prePatch = ''
-    mkdir -p external/renderdoc/src external/spirv-headers external/vulkan-docs
+    mkdir -p external/renderdoc/src external/spirv-headers external/video-parser external/vulkan-docs
 
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
@@ -89,11 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${glslang} external/glslang/src
     cp -r ${spirv-tools} external/spirv-tools/src
     cp -r ${spirv-headers} external/spirv-headers/src
+    cp -r ${video-parser} external/video-parser/src
     cp -r ${vulkan-docs} external/vulkan-docs/src
     chmod u+w -R external
   '';
 
   buildInputs = [
+    ffmpeg
     libdrm
     libffi
     libglvnd

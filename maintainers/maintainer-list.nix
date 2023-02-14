@@ -932,6 +932,12 @@
     githubId = 106511;
     name = "Andrew Kelley";
   };
+  andrewsmith = {
+    email = "andrew@velvet.software";
+    github = "andrewsmith";
+    githubId = 29887;
+    name = "Andrew Smith";
+  };
   andsild = {
     email = "andsild@gmail.com";
     github = "andsild";
