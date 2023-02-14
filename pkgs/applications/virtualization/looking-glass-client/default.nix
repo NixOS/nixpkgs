@@ -2,6 +2,7 @@
 , freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
 , libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
 , libXcursor, libXpresent, wayland, wayland-protocols
+, terminal ? true
 }:
 
 let
@@ -11,7 +12,7 @@ let
     type = "Application";
     exec = "looking-glass-client";
     icon = "lg-logo";
-    terminal = true;
+    inherit terminal;
   };
 in
 stdenv.mkDerivation rec {
