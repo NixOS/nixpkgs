@@ -8,6 +8,7 @@
 , coreutils
 , autoPatchelfHook
 , zlib
+, nixosTests
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -40,6 +41,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) opensearch; };
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
