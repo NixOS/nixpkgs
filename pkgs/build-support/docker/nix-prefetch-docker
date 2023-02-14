@@ -69,6 +69,7 @@ for arg; do
             --quiet) QUIET=true;;
             --json) format=json;;
             --help) usage; exit;;
+            -*) echo >&2 echo "Unknown flag $arg"; usage; exit;;
             *)
                 : $((++argi))
                 case $argi in
