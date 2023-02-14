@@ -266,6 +266,10 @@
 , MediaToolbox
 , VideoDecodeAcceleration
 , VideoToolbox
+/*
+ *  Testing
+ */
+, testers
 }:
 
 /* Maintainer notes:
@@ -321,13 +325,13 @@ assert buildAvformat -> buildAvcodec && buildAvutil; # configure flag since 0.6
 assert buildPostproc -> buildAvutil;
 assert buildSwscale -> buildAvutil;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpeg" + (if ffmpegVariant == "small" then "" else "-${ffmpegVariant}");
   inherit version;
 
   src = fetchgit {
     url = "https://git.ffmpeg.org/ffmpeg.git";
-    rev = "n${version}";
+    rev = "n${finalAttrs.version}";
     inherit sha256;
   };
 
@@ -522,7 +526,7 @@ stdenv.mkDerivation rec {
   # outputs where we don't want them. Patch the generated config.h to remove all
   # such references except for data.
   postConfigure = let
-    toStrip = lib.remove "data" outputs; # We want to keep references to the data dir.
+    toStrip = lib.remove "data" finalAttrs.outputs; # We want to keep references to the data dir.
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${placeholder o}") toStrip)} config.h";
 
@@ -656,6 +660,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
@@ -671,7 +677,8 @@ stdenv.mkDerivation rec {
       ++ optional withGPL gpl2Plus
       ++ optional withGPLv3 gpl3Plus
       ++ optional withUnfree unfreeRedistributable;
+    pkgConfigModules = [ "libavutil" ];
     platforms = platforms.all;
     maintainers = with maintainers; [ atemu ];
   };
-}
+})

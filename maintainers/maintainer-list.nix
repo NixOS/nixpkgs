@@ -12827,6 +12827,12 @@
     githubId = 5236428;
     name = "Gaëtan André";
   };
+  rvnstn = {
+    email = "github@rvnstn.de";
+    github = "rvnstn";
+    githubId = 2364742;
+    name = "Tobias Ravenstein";
+  };
   rvolosatovs = {
     email = "rvolosatovs@riseup.net";
     github = "rvolosatovs";
