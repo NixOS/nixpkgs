@@ -266,6 +266,7 @@ let
     , license
     , readmeFile ? "README_${dictFileName}.txt"
     , sourceRoot ? dictFileName
+    , maintainers ? with lib.maintainers; [ vlaci ]
     }:
     mkDict rec {
       pname = "hunspell-dict-${shortName}-libreoffice";
@@ -283,9 +284,8 @@ let
       meta = with lib; {
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = license;
-        maintainers = with maintainers; [ vlaci ];
         platforms = platforms.all;
+        inherit license maintainers;
       };
     };
 
@@ -877,5 +877,27 @@ rec {
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
     license = with lib.licenses; [ gpl2Only ];
+  };
+
+  /* PORTUGUESE */
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    readmeFile = "README_pt_PT.txt";
+    shortDescription = "Portuguese (Portugal)";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+    maintainers = with lib.maintainers; [ baduhai ];
+  };
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromLibreOffice {
+    shortName = "pt-br";
+    dictFileName = "pt_BR";
+    readmeFile = "README_pt_BR.txt";
+    shortDescription = "Brazilian Portuguese (Brazil)";
+    license = with lib.licenses; [ lgpl3 ];
+    maintainers = with lib.maintainers; [ baduhai ];
   };
 }
