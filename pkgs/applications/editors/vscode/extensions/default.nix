@@ -2737,8 +2737,8 @@ let
         mktplcRef = {
           name = "pdf";
           publisher = "tomoki1207";
-          version = "1.2.0";
-          sha256 = "1bcj546bp0w4yndd0qxwr8grhiwjd1jvf33jgmpm0j96y34vcszz";
+          version = "1.2.2";
+          sha256 = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
         };
         meta = {
           description = "Show PDF preview in VSCode";
