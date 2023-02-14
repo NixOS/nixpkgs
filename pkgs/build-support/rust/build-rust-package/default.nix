@@ -12,6 +12,7 @@
 , cargo
 , cargo-auditable
 , cargo-auditable-cargo-wrapper
+, cargo-cyclonedx
 , rustc
 , libiconv
 , windows
@@ -154,7 +155,28 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
+  passthru = {
+    inherit cargoDeps;
+    sbom = stdenv.mkDerivation {
+      name = "${args.pname}-${args.version}-sbom.json";
+      nativeBuildInputs = [
+        cargoSetupHook
+        cargoBuildHook
+        cargo-cyclonedx
+      ];
+      inherit src cargoDeps;
+
+      buildPhase = ''
+        eval "$cargoDepsHook"
+
+        # Ignore badly written licenses for now: https://github.com/CycloneDX/cyclonedx-rust-cargo/issues/321
+        cargo cyclonedx -vv -f json || :
+      '';
+      installPhase = ''
+        mv /build/source/bom.json $out
+      '';
+    };
+  } // (args.passthru or { });
 
   meta = {
     # default to Rust's platforms
