@@ -14,7 +14,7 @@
 }:
 let
   inherit (darwin.apple_sdk.frameworks) Security;
-in  
+in
 stdenv.mkDerivation rec {
   pname = "mongoc";
   version = "1.23.2";
