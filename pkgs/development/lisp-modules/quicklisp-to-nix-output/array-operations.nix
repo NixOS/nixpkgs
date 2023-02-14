@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "array-operations";
-  version = "20210411-git";
+  version = "20220220-git";
 
   parasites = [ "array-operations/tests" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."alexandria" args."anaphora" args."clunit2" args."let-plus" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/array-operations/2021-04-11/array-operations-20210411-git.tgz";
-    sha256 = "0l6wxd3a1xdcmcsc93prq8ymainfsy15imiwnaik1i9g94fcbjz8";
+    url = "http://beta.quicklisp.org/archive/array-operations/2022-02-20/array-operations-20220220-git.tgz";
+    sha256 = "0c326nl5hssx9ffh1wi0xqk9ii68djzfaw6vr9npygx4da9lssrl";
   };
 
   packageName = "array-operations";
@@ -22,11 +22,11 @@ rec {
 }
 /* (SYSTEM array-operations DESCRIPTION
     Simple array operations library for Common Lisp. SHA256
-    0l6wxd3a1xdcmcsc93prq8ymainfsy15imiwnaik1i9g94fcbjz8 URL
-    http://beta.quicklisp.org/archive/array-operations/2021-04-11/array-operations-20210411-git.tgz
-    MD5 902c6034c006bc6ca88ef59e7ff2b1aa NAME array-operations FILENAME
+    0c326nl5hssx9ffh1wi0xqk9ii68djzfaw6vr9npygx4da9lssrl URL
+    http://beta.quicklisp.org/archive/array-operations/2022-02-20/array-operations-20220220-git.tgz
+    MD5 9bdd752321c39e98699bc07800b582e7 NAME array-operations FILENAME
     array-operations DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME clunit2 FILENAME clunit2) (NAME let-plus FILENAME let-plus))
-    DEPENDENCIES (alexandria anaphora clunit2 let-plus) VERSION 20210411-git
+    DEPENDENCIES (alexandria anaphora clunit2 let-plus) VERSION 20220220-git
     SIBLINGS NIL PARASITES (array-operations/tests)) */

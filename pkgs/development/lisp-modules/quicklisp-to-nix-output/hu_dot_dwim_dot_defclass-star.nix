@@ -11,8 +11,8 @@ rec {
   deps = [ args."hu_dot_dwim_dot_asdf" args."hu_dot_dwim_dot_common" args."hu_dot_dwim_dot_stefil_plus_hu_dot_dwim_dot_def_plus_swank" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-12-09/hu.dwim.defclass-star-stable-git.tgz";
-    sha256 = "0draahmhi5mmrj9aqabqdaipqcb9adxqdypjbdiawg55dw36g0cy";
+    url = "http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-12-30/hu.dwim.defclass-star-stable-git.tgz";
+    sha256 = "13isdvccyf383p0s5s63a3dh7j7jr7dvl2ywbaprv6c1gpx7fbdj";
   };
 
   packageName = "hu.dwim.defclass-star";
@@ -22,9 +22,9 @@ rec {
 }
 /* (SYSTEM hu.dwim.defclass-star DESCRIPTION
     Simplify class like definitions with defclass* and friends. SHA256
-    0draahmhi5mmrj9aqabqdaipqcb9adxqdypjbdiawg55dw36g0cy URL
-    http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-12-09/hu.dwim.defclass-star-stable-git.tgz
-    MD5 e35fa9767089eb2fb03befaec18d5081 NAME hu.dwim.defclass-star FILENAME
+    13isdvccyf383p0s5s63a3dh7j7jr7dvl2ywbaprv6c1gpx7fbdj URL
+    http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-12-30/hu.dwim.defclass-star-stable-git.tgz
+    MD5 4ea430dc53b6fdca3de78bb18ec04d31 NAME hu.dwim.defclass-star FILENAME
     hu_dot_dwim_dot_defclass-star DEPS
     ((NAME hu.dwim.asdf FILENAME hu_dot_dwim_dot_asdf)
      (NAME hu.dwim.common FILENAME hu_dot_dwim_dot_common)

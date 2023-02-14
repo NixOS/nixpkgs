@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "slynk";
-  version = "sly-20210411-git";
+  version = "sly-20220220-git";
 
   parasites = [ "slynk/arglists" "slynk/fancy-inspector" "slynk/indentation" "slynk/mrepl" "slynk/package-fu" "slynk/profiler" "slynk/retro" "slynk/stickers" "slynk/trace-dialog" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/sly/2021-04-11/sly-20210411-git.tgz";
-    sha256 = "1a96aapsz3fhnnnb8njn8v2ddrh6kwisppd90cc7v8knh043xgks";
+    url = "http://beta.quicklisp.org/archive/sly/2022-02-20/sly-20220220-git.tgz";
+    sha256 = "0g24mmh7fpiinhzjay6ffm8mqpgl6f7hpw3rz2c0rx92xl3mvmhm";
   };
 
   packageName = "slynk";
@@ -21,10 +21,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM slynk DESCRIPTION System lacks description SHA256
-    1a96aapsz3fhnnnb8njn8v2ddrh6kwisppd90cc7v8knh043xgks URL
-    http://beta.quicklisp.org/archive/sly/2021-04-11/sly-20210411-git.tgz MD5
-    7f0ff6b8a07d23599c77cd33c6d59ea6 NAME slynk FILENAME slynk DEPS NIL
-    DEPENDENCIES NIL VERSION sly-20210411-git SIBLINGS NIL PARASITES
+    0g24mmh7fpiinhzjay6ffm8mqpgl6f7hpw3rz2c0rx92xl3mvmhm URL
+    http://beta.quicklisp.org/archive/sly/2022-02-20/sly-20220220-git.tgz MD5
+    87d214f13d8ed08a9b266555d3cac095 NAME slynk FILENAME slynk DEPS NIL
+    DEPENDENCIES NIL VERSION sly-20220220-git SIBLINGS NIL PARASITES
     (slynk/arglists slynk/fancy-inspector slynk/indentation slynk/mrepl
      slynk/package-fu slynk/profiler slynk/retro slynk/stickers
      slynk/trace-dialog)) */

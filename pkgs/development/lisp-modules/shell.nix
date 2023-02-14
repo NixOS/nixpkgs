@@ -7,7 +7,7 @@ self = rec {
   buildInputs = [
     gcc
     openssl fuse libuv libmysqlclient libfixposix libev sqlite
-    freetds
+    freetds openblas
     lispPackages.quicklisp-to-nix lispPackages.quicklisp-to-nix-system-info
   ];
   CPATH = lib.makeSearchPath "include"
@@ -22,6 +22,7 @@ self = rec {
       gobject-introspection
       gtk3
       libev
+      libffi
       libfixposix
       libmysqlclient
       libuv

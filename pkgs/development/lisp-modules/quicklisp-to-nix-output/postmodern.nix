@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "postmodern";
-  version = "20211209-git";
+  version = "20220220-git";
 
   parasites = [ "postmodern/tests" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-postgres" args."cl-postgres_plus_local-time" args."cl-postgres_slash_tests" args."cl-ppcre" args."closer-mop" args."fiveam" args."global-vars" args."ironclad" args."local-time" args."md5" args."s-sql" args."s-sql_slash_tests" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."uiop" args."usocket" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz";
-    sha256 = "1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6";
+    url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
+    sha256 = "17g6360phwcjy28j1gjj77p67y6fl1l9nrpgf9x9jmmx16mk44d5";
   };
 
   packageName = "postmodern";
@@ -21,9 +21,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM postmodern DESCRIPTION PostgreSQL programming API SHA256
-    1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6 URL
-    http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz
-    MD5 6d14c4b5fec085594dc66d520174e0e6 NAME postmodern FILENAME postmodern
+    17g6360phwcjy28j1gjj77p67y6fl1l9nrpgf9x9jmmx16mk44d5 URL
+    http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz
+    MD5 d30fbcddd0b858445622f4f04676561e NAME postmodern FILENAME postmodern
     DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -46,5 +46,5 @@ rec {
      cl-postgres/tests cl-ppcre closer-mop fiveam global-vars ironclad
      local-time md5 s-sql s-sql/tests simple-date simple-date/postgres-glue
      split-sequence uax-15 uiop usocket)
-    VERSION 20211209-git SIBLINGS (cl-postgres s-sql simple-date) PARASITES
+    VERSION 20220220-git SIBLINGS (cl-postgres s-sql simple-date) PARASITES
     (postmodern/tests)) */

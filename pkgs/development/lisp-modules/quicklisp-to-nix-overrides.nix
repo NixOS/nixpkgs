@@ -113,7 +113,19 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
-  cffi = addNativeLibs [pkgs.libffi];
+
+  cffi = x: {
+    overrides = y: (x.overrides y) // {
+      propagatedBuildInputs = [ pkgs.libffi ];
+      patches = [
+        pkgs.fetchpatch {
+          url = "https://github.com/cffi/cffi/pull/192.diff";
+          sha256 = "1n4pkzxas7zv065829z27vbx1ylxbl289h614b3lxm18xzv477ag";
+        }
+      ];
+    };
+  };
+
   cl-mysql = x: {
     propagatedBuildInputs = [pkgs.libmysqlclient];
     overrides = y: (x.overrides y) // {
@@ -292,5 +304,6 @@ $out/lib/common-lisp/query-fs"
     };
   };
   lla = addNativeLibs [ pkgs.openblas ];
+  magicl = addNativeLibs [ pkgs.libffi ];
 #  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }

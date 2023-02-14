@@ -203,6 +203,7 @@ proc-parse
 prove
 prove-asdf
 puri
+py4cl
 pythonic-string-reader
 query-fs
 quri

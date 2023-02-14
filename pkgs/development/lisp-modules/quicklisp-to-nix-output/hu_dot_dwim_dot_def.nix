@@ -2,15 +2,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "hu_dot_dwim_dot_def";
-  version = "20201016-darcs";
+  version = "stable-git";
+
+  parasites = [ "hu.dwim.def/namespace" ];
 
   description = "General purpose, homogenous, extensible definer macro.";
 
-  deps = [ args."alexandria" args."anaphora" args."hu_dot_dwim_dot_asdf" args."iterate" args."metabang-bind" ];
+  deps = [ args."alexandria" args."anaphora" args."bordeaux-threads" args."hu_dot_dwim_dot_asdf" args."hu_dot_dwim_dot_util" args."iterate" args."metabang-bind" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/hu.dwim.def/2020-10-16/hu.dwim.def-20201016-darcs.tgz";
-    sha256 = "0m9id405f0s1438yr2qppdw5z7xdx3ajaa1frd04pibqgf4db4cj";
+    url = "http://beta.quicklisp.org/archive/hu.dwim.def/2021-12-30/hu.dwim.def-stable-git.tgz";
+    sha256 = "1jmm9g2zacx3c6pd9v5ff1x5fzp9srz5844x0qpxj3bz9jfk2sgz";
   };
 
   packageName = "hu.dwim.def";
@@ -20,17 +22,21 @@ rec {
 }
 /* (SYSTEM hu.dwim.def DESCRIPTION
     General purpose, homogenous, extensible definer macro. SHA256
-    0m9id405f0s1438yr2qppdw5z7xdx3ajaa1frd04pibqgf4db4cj URL
-    http://beta.quicklisp.org/archive/hu.dwim.def/2020-10-16/hu.dwim.def-20201016-darcs.tgz
-    MD5 c4d7469472f57cd700d8319e35dd5f32 NAME hu.dwim.def FILENAME
+    1jmm9g2zacx3c6pd9v5ff1x5fzp9srz5844x0qpxj3bz9jfk2sgz URL
+    http://beta.quicklisp.org/archive/hu.dwim.def/2021-12-30/hu.dwim.def-stable-git.tgz
+    MD5 701fd28dce4536e91607fe5d2e1e8164 NAME hu.dwim.def FILENAME
     hu_dot_dwim_dot_def DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME hu.dwim.asdf FILENAME hu_dot_dwim_dot_asdf)
+     (NAME hu.dwim.util FILENAME hu_dot_dwim_dot_util)
      (NAME iterate FILENAME iterate)
-     (NAME metabang-bind FILENAME metabang-bind))
-    DEPENDENCIES (alexandria anaphora hu.dwim.asdf iterate metabang-bind)
-    VERSION 20201016-darcs SIBLINGS
+     (NAME metabang-bind FILENAME metabang-bind)
+     (NAME trivial-garbage FILENAME trivial-garbage))
+    DEPENDENCIES
+    (alexandria anaphora bordeaux-threads hu.dwim.asdf hu.dwim.util iterate
+     metabang-bind trivial-garbage)
+    VERSION stable-git SIBLINGS
     (hu.dwim.def+cl-l10n hu.dwim.def+contextl hu.dwim.def+hu.dwim.common
-     hu.dwim.def+hu.dwim.delico hu.dwim.def+swank hu.dwim.def.documentation
-     hu.dwim.def.namespace hu.dwim.def.test)
-    PARASITES NIL) */
+     hu.dwim.def+hu.dwim.delico hu.dwim.def+swank)
+    PARASITES (hu.dwim.def/namespace)) */

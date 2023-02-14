@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-json";
-  version = "20141217-git";
+  version = "20220220-git";
 
   parasites = [ "cl-json.test" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-json/2014-12-17/cl-json-20141217-git.tgz";
-    sha256 = "00cfppyi6njsbpv1x03jcv4zwplg0q1138174l3wjkvi3gsql17g";
+    url = "http://beta.quicklisp.org/archive/cl-json/2022-02-20/cl-json-20220220-git.tgz";
+    sha256 = "106w8afxyl02hl3zci2wxryrvdapjw3fmjwn6bxwbzl0nnz557k7";
   };
 
   packageName = "cl-json";
@@ -22,8 +22,8 @@ rec {
 }
 /* (SYSTEM cl-json DESCRIPTION
     JSON in Lisp. JSON (JavaScript Object Notation) is a lightweight data-interchange format.
-    SHA256 00cfppyi6njsbpv1x03jcv4zwplg0q1138174l3wjkvi3gsql17g URL
-    http://beta.quicklisp.org/archive/cl-json/2014-12-17/cl-json-20141217-git.tgz
-    MD5 9d873fa462b93c76d90642d8e3fb4881 NAME cl-json FILENAME cl-json DEPS
-    ((NAME fiveam FILENAME fiveam)) DEPENDENCIES (fiveam) VERSION 20141217-git
+    SHA256 106w8afxyl02hl3zci2wxryrvdapjw3fmjwn6bxwbzl0nnz557k7 URL
+    http://beta.quicklisp.org/archive/cl-json/2022-02-20/cl-json-20220220-git.tgz
+    MD5 8781f6947923afb0bd7b3ec328b815a3 NAME cl-json FILENAME cl-json DEPS
+    ((NAME fiveam FILENAME fiveam)) DEPENDENCIES (fiveam) VERSION 20220220-git
     SIBLINGS NIL PARASITES (cl-json.test)) */
