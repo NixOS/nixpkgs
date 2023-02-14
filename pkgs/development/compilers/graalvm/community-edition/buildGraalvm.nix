@@ -18,7 +18,8 @@
 { javaVersion
 , meta ? { }
 , products ? [ ]
-, ... } @ args:
+, ...
+} @ args:
 
 let
   runtimeLibraryPath = lib.makeLibraryPath
@@ -150,4 +151,5 @@ let
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
     } // meta);
   } // (builtins.removeAttrs args [ "javaVersion" "meta" "products" ]));
-in graalvmXXX-ce
+in
+graalvmXXX-ce

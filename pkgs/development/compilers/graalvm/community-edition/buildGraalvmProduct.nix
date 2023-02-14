@@ -14,7 +14,8 @@
 , graalvmPhases ? { }
 , meta ? { }
 , passthru ? { }
-, ... } @ args:
+, ...
+} @ args:
 
 stdenv.mkDerivation ({
   pname = "${product}-java${javaVersion}";
