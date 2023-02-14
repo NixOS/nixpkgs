@@ -111,10 +111,7 @@ stdenv.mkDerivation (self: {
     '';
     changelog = "https://github.com/dosbox-staging/dosbox-staging/releases/tag/v${self.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = [
-      lib.maintainers.joshuafern
-      lib.maintainers.AndersonTorres
-    ];
+    maintainers = with lib.maintainers; [ joshuafern AndersonTorres ];
     platforms = lib.platforms.unix;
     priority = 101;
   };
