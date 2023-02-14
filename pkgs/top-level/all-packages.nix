@@ -19615,6 +19615,8 @@ with pkgs;
   fftwQuad = fftw.override { precision = "quad-precision"; };
   fftwMpi = fftw.override { enableMpi = true; };
 
+  filament = callPackage ../development/libraries/filament { };
+
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
   filtron = callPackage ../servers/filtron { };
