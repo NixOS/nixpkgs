@@ -12314,6 +12314,13 @@
     githubId = 21069876;
     name = "Reed Williams";
   };
+  refi64 = {
+    name = "Ryan Gonzalez";
+    email = "git@refi64.dev";
+    matrix = "@refi64:linuxcafe.chat";
+    github = "refi64";
+    githubId = 1690697;
+  };
   refnil = {
     email = "broemartino@gmail.com";
     github = "refnil";
