@@ -31,7 +31,7 @@ rec {
     products = [ native-image-installable-svm-java11 ];
   };
 
-  # Mostly available for testing, do not expose in all-packages
+  # Mostly available for testing, not to be exposed at the top level
   graalvm11-ce-full = graalvm11-ce.override {
     products = [
       llvm-installable-svm-java17
@@ -81,7 +81,7 @@ rec {
     products = [ native-image-installable-svm-java17 ];
   };
 
-  # Mostly available for testing, do not expose in all-packages
+  # Mostly available for testing, not to be exposed at the top level
   graalvm17-ce-full = graalvm17-ce.override {
     products = [
       llvm-installable-svm-java17
