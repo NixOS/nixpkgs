@@ -57,6 +57,7 @@
 , plasma-framework
 , libqaccessibilityclient
 , python3
+, gcc12Stdenv
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -144,9 +145,13 @@ mkDerivation {
     })
   ];
 
+  stdenv = if stdenv.isAarch64 then gcc12Stdenv else stdenv;
+
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
-  ];
+  ]
+  ++ lib.optional stdenv.isAarch64 "-mno-outline-atomics";
+
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.
     # I would prefer to patch those packages, but I cannot find them!
