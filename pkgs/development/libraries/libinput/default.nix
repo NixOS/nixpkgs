@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
       test/check-leftover-udev-rules.sh \
       test/helper-copy-and-exec-from-tmp.sh
 
-    # Don't create an empty /etc directory.
-    sed -i "/install_subdir('libinput', install_dir : dir_etc)/d" meson.build
+    # Don't create an empty directory under /etc.
+    sed -i "/install_emptydir(dir_etc \/ 'libinput')/d" meson.build
   '';
 
   passthru = {
