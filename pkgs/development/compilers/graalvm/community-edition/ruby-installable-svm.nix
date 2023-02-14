@@ -26,7 +26,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
 
   graalvmPhases.installCheckPhase = ''
     echo "Testing TruffleRuby"
-    # Hide warnings about wrong locale
+    # Fixup/silence warnings about wrong locale
     export LANG=C
     export LC_ALL=C
     $out/bin/ruby -e 'puts(1 + 1)'
