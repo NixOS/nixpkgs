@@ -77,14 +77,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = let
     # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
-    libcxx_cxx_abi_opt = {
-      "c++abi" = "system-libcxxabi";
-      "cxxrt" = "libcxxrt";
+    # And: https://github.com/llvm/llvm-project/blob/aa656f6c2dec73faceeed21e15401d8f0c743c8b/libcxx/cmake/Modules/HandleLibCXXABI.cmake#L82-L180
+    libcxx_cxx_abi_options = {
+      "c++abi" = { name = "system-libcxxabi"; headers = "${cxxabi.dev}/include/c++/v1"; };
+      "cxxrt" = { name = "libcxxrt"; headers = "${cxxabi}/include"; };
     }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
   in [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
-  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
+    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_options.name}"
+  ] ++ lib.optional (!headersOnly) "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${libcxx_cxx_abi_options.headers}"
+    ++ lib.optional (!headersOnly) "-DLIBCXX_CXX_ABI_LIBRARY_PATH=${cxxabi}/lib"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
       "-DLIBCXX_USE_COMPILER_RT=ON"
