@@ -391,8 +391,9 @@ let self = {
         name = "pagespeed";
         owner = "pagespeed";
         repo = "ngx_pagespeed";
-        rev = "v${psol.version}-stable";
-        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
+        # using unstable version to fix compilation against nginx 1.23.0
+        rev = "71e24c1c47113acb5924d8cb523d572b376e9dd0";
+        sha256 = "sha256-Fvshj+D/rDqsD0B6T6srYYvmJ9dpT3k8IMLyUfRl/TQ=";
       };
     in runCommand "ngx_pagespeed" {
       meta = {
