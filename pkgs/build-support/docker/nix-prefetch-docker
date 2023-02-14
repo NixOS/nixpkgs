@@ -126,21 +126,30 @@ fi
 sourceUrl="docker://$imageName@$imageDigest"
 
 tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/skopeo-copy-tmp-XXXXXXXX")"
-trap "rm -rf \"$tmpPath\"" EXIT
 
-tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
-
-if test -z "$QUIET"; then
-    skopeo copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" >&2
+if [[ -z "${IS_FETCHER:-}" ]]; then
+    # prefetcher
+    trap "rm -rf \"$tmpPath\"" EXIT
+    outFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
 else
-    skopeo copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
+    # fetcher
+    outFile="$out"
 fi
 
+if test -z "$QUIET"; then
+    skopeo copy "$sourceUrl" "docker-archive://$outFile:$finalImageName:$finalImageTag" >&2
+else
+    skopeo copy "$sourceUrl" "docker-archive://$outFile:$finalImageName:$finalImageTag" > /dev/null
+fi
+
+if [[ -z "${IS_FETCHER:-}" ]]; then
+# prefetcher
+
 # Compute the hash.
-imageHash=$(nix-hash --flat --type $hashType --base32 "$tmpFile")
+imageHash=$(nix-hash --flat --type $hashType --base32 "$outFile")
 
 # Add the downloaded file to Nix store.
-finalPath=$(nix-store --add-fixed "$hashType" "$tmpFile")
+finalPath=$(nix-store --add-fixed "$hashType" "$outFile")
 
 if test -z "$QUIET"; then
     echo "-> ImageName: $imageName" >&2
@@ -174,4 +183,7 @@ cat <<EOF
 }
 EOF
 
+fi
+
+# end if prefetcher
 fi
