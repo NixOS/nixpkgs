@@ -18728,6 +18728,7 @@ with pkgs;
 
   eccodes = callPackage ../development/libraries/eccodes {
     pythonPackages = python3Packages;
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
   };
 
   eclib = callPackage ../development/libraries/eclib {};
