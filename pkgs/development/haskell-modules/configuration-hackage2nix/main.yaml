@@ -274,6 +274,8 @@ package-maintainers:
     - wstunnel
   gridaphobe:
     - located-base
+  iblech:
+    - Agda
   ivanbrennan:
     - xmonad
     - xmonad-contrib
