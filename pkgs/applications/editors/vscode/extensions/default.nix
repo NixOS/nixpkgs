@@ -1929,8 +1929,8 @@ let
         mktplcRef = {
           name = "PowerShell";
           publisher = "ms-vscode";
-          version = "2022.11.0";
-          sha256 = "01pq84rqh2q6rd0ljfql37q6i1kg597qy0mr7fiz5ddi15zcfn19";
+          version = "2023.1.0";
+          sha256 = "sha256-OiVb88BGvzsPTzKU1rGLGSMQSwKV4zI9FthOmutz34U=";
         };
         meta = with lib; {
           description = "A Visual Studio Code extension for PowerShell language support";
