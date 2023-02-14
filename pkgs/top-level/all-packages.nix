@@ -366,6 +366,9 @@ with pkgs;
   buildFHSUserEnvChroot = callPackage ../build-support/build-fhs-userenv { };
   buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
+  buildGOGPackage = callPackage ../build-support/build-gog-package { };
+  gogextract = callPackage ../build-support/build-gog-package/gogextract.nix { };
+
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   caroline = callPackage ../development/libraries/caroline { };
@@ -767,6 +770,8 @@ with pkgs;
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
+
+  fetchGOG = callPackage ../build-support/fetchgog { };
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
@@ -35698,6 +35703,8 @@ with pkgs;
   steamcmd = steamPackages.steamcmd;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
+
+  stellaris = callPackage ../games/stellaris { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;
