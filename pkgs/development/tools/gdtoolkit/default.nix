@@ -1,29 +1,23 @@
 { lib
-, buildPythonPackage
+, python3Packages
 , fetchFromGitHub
-, pythonOlder
-, lark
-, docopt
-, pyyaml
-, setuptools
-, pytestCheckHook
 , godot-server
-, hypothesis
 }:
 
-let lark080 = lark.overrideAttrs (old: rec {
+let lark080 = python3Packages.lark.overrideAttrs (old: rec {
   # gdtoolkit needs exactly this lark version
   version = "0.8.0";
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "su7kToZ05OESwRCMPG6Z+XlFUvbEb3d8DgsTEcPJMg4=";
+    hash = "sha256-KN9buVlH8hJ8t0ZP5yefeYM5vH5Gg7a7TEDGKJYpozs=";
+    fetchSubmodules = true;
   };
 });
 
 in
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "gdtoolkit";
   version = "3.3.1";
 
@@ -35,18 +29,18 @@ buildPythonPackage rec {
     sha256 = "13nnpwy550jf5qnm9ixpxl1bwfnhhbiys8vqfd25g3aim4bm3gnn";
   };
 
-  disabled = pythonOlder "3.7";
+  disabled = python3Packages.pythonOlder "3.7";
 
-  propagatedBuildInputs = [
-    lark080
+  propagatedBuildInputs = [ lark080
+  ] ++ (with python3Packages; [
     docopt
     pyyaml
     setuptools
-  ];
+  ]);
 
   doCheck = true;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     hypothesis
     godot-server
