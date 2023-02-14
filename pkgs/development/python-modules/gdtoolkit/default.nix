@@ -1,4 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, lark, docopt, pyyaml, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, lark
+, docopt
+, pyyaml
+, setuptools
+, pytestCheckHook
+, godot-server
+, hypothesis
+}:
 
 let lark080 = lark.overrideAttrs (old: rec {
   # gdtoolkit needs exactly this lark version
@@ -16,13 +27,6 @@ buildPythonPackage rec {
   pname = "gdtoolkit";
   version = "3.3.1";
 
-  propagatedBuildInputs = [
-    lark080
-    docopt
-    pyyaml
-    setuptools
-  ];
-
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {
     owner = "Scony";
@@ -33,8 +37,48 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  # Tests cannot be run because they need network to install additional dependencies using pip and tox
-  doCheck = false;
+  propagatedBuildInputs = [
+    lark080
+    docopt
+    pyyaml
+    setuptools
+  ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    godot-server
+  ];
+
+  preCheck =
+    let
+      godotServerMajorVersion = lib.versions.major godot-server.version;
+      gdtoolkitMajorVersion = lib.versions.major version;
+      msg = ''
+        gdtoolkit major version ${gdtoolkitMajorVersion} does not match godot-server major version ${godotServerMajorVersion}!
+        gdtoolkit needs a matching godot-server for its tests.
+        If you see this error, you can either:
+         - disable doCheck for gdtoolkit, or
+         - provide a compatible godot-server version to gdtoolkit"
+      '';
+    in lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
+      # The tests want to run the installed executables
+      export PATH=$out/bin:$PATH
+
+      # gdtoolkit tries to write cache variables to $HOME/.cache
+      export HOME=$TMP
+
+      # Work around https://github.com/godotengine/godot/issues/20503
+      # Without this, Godot will complain about a missing project file
+      touch project.godot
+
+      # Remove broken test case
+      # (hard to skip via disabledTests since the test name contains an absolute path)
+      rm tests/potential-godot-bugs/multiline-subscription-expression.gd
+    '';
+
   pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
 
   meta = with lib; {
