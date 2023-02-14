@@ -34,22 +34,29 @@ rec {
   # Mostly available for testing, do not expose in all-packages
   graalvm11-ce-full = graalvm11-ce.override {
     products = [
+      llvm-installable-svm-java17
       native-image-installable-svm-java11
       python-installable-svm-java11
       wasm-installable-svm-java11
     ];
   };
 
-  python-installable-svm-java11 = callPackage ./python-installable-svm.nix rec {
+  llvm-installable-svm-java11 = callPackage ./llvm-installable-svm.nix rec {
     javaVersion = "11";
     version = "22.3.1";
-    src = fetchurl (source "python-installable-svm" javaVersion);
+    src = fetchurl (source "llvm-installable-svm" javaVersion);
   };
 
   native-image-installable-svm-java11 = callPackage ./native-image-installable-svm.nix rec {
     javaVersion = "11";
     version = "22.3.1";
     src = fetchurl (source "native-image-installable-svm" javaVersion);
+  };
+
+  python-installable-svm-java11 = callPackage ./python-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "python-installable-svm" javaVersion);
   };
 
   wasm-installable-svm-java11 = callPackage ./wasm-installable-svm.nix rec {
@@ -69,22 +76,29 @@ rec {
   # Mostly available for testing, do not expose in all-packages
   graalvm17-ce-full = graalvm17-ce.override {
     products = [
+      llvm-installable-svm-java17
       native-image-installable-svm-java17
       python-installable-svm-java17
       wasm-installable-svm-java17
     ];
   };
 
-  python-installable-svm-java17 = callPackage ./python-installable-svm.nix rec {
+  llvm-installable-svm-java17 = callPackage ./llvm-installable-svm.nix rec {
     javaVersion = "17";
     version = "22.3.1";
-    src = fetchurl (source "python-installable-svm" javaVersion);
+    src = fetchurl (source "llvm-installable-svm" javaVersion);
   };
 
   native-image-installable-svm-java17 = callPackage ./native-image-installable-svm.nix rec {
     javaVersion = "17";
     version = "22.3.1";
     src = fetchurl (source "native-image-installable-svm" javaVersion);
+  };
+
+  python-installable-svm-java17 = callPackage ./python-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "python-installable-svm" javaVersion);
   };
 
   wasm-installable-svm-java17 = callPackage ./wasm-installable-svm.nix rec {
