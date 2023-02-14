@@ -10,7 +10,11 @@
   cyrus_sasl,
   libbson,
   snappy,
+  darwin,
 }:
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in  
 stdenv.mkDerivation rec {
   pname = "mongoc";
   version = "1.23.2";
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [cmake pkg-config perl];
-  buildInputs = [openssl zlib cyrus_sasl];
+  buildInputs = [openssl zlib cyrus_sasl] ++ lib.optionals stdenv.isDarwin [Security];
   propagatedBuildInputs = [libbson snappy];
 
   # -DMONGOC_TEST_USE_CRYPT_SHARED=OFF
