@@ -1,0 +1,99 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-systemd-handling-dependencies">
+  <title>Handling dependencies</title>
+  <para>
+    When a systemd service A depends on another service B. There are 3
+    choices to make wants vs requires vs bindsTo:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        use <literal>wants = [ &quot;B&quot; ];</literal>, if service A
+        can start even if B fails. Systemd will try to start B but will
+        start A even in case of a failure of B.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        use <literal>requires = [ &quot;B&quot; ];</literal>, if service
+        A will not start without B. Systemd will try to start B and will
+        not start A in case B fails.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        use <literal>bindsTo = [ &quot;B&quot; ];</literal>, if service
+        A should be shutdown in case of a failure of B.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <para>
+    After:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        use <literal>after = [ &quot;B&quot; ];</literal>, if service A
+        needs B to active before it is started. Note that with this
+        setting, if you shutdown B, A will be shut down first.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <para>
+    PartOf:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        use <literal>partOf = [ &quot;B&quot; ];</literal>, if service A
+        needs to re-started when service B is.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <para>
+    Note that <literal>wants,requires,bindsTo</literal> are orthogonal
+    to <literal>after</literal>. The most common occurence in nixpkgs is
+    <literal>requires</literal> and <literal>after</literal>.
+  </para>
+  <section xml:id="sec-systemd-handling-dependencies-examples">
+    <title>Examples</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Web-app dependency on a database. If the web-app cannot start
+          without the database, use <literal>requires</literal> and
+          <literal>after</literal>. If you would rather have it operate
+          even without a database use <literal>wants</literal> and
+          <literal>after</literal>.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L169">example
+          in nixpkgs</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Database migration and setup script for a web-app. It is
+          common to make a service for database setup and migration.
+          This service should be <literal>partOf</literal> the webapp
+          service as everytime the webapp is restarted, this service
+          should be restarted as well.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L214">example
+          in nixpkgs</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A web-app has two separate services, a UI and a server. The ui
+          <literal>requires</literal> <literal>after</literal> the
+          server.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L205">example
+          in nixpkgs</link>
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Note there are many other settings, for a complete reference and
+      more detailed explanations, see the
+      <link xlink:href="https://man.archlinux.org/man/systemd.unit.5#%5BUNIT%5D_SECTION_OPTIONS">systemd
+      manual section</link>
+    </para>
+  </section>
+</section>
