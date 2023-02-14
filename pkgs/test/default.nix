@@ -59,7 +59,6 @@ with pkgs;
 
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
-            (filter (n: n != "llvmPackages_15"))
           ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
             # libcxx does not build for some reason on aarch64-linux
             (filter (n: n != "llvmPackages_7"))
