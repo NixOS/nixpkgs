@@ -51,9 +51,9 @@ let
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) { };
+  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) {};
 
-  packages = self: with self;
+  packages = self:
     let
 
       propagate = out:
@@ -98,6 +98,7 @@ let
 
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
+            nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ libsForQt5.wrapQtAppsHook ];
 
             meta =
               let meta = args.meta or { }; in
@@ -109,8 +110,8 @@ let
                 broken = meta.broken or broken;
               };
           in
-          mkDerivation (args // {
-            inherit pname version meta outputs setupHook src;
+          (args.stdenv or qtStdenv).mkDerivation (args // {
+            inherit pname version meta outputs setupHook src nativeBuildInputs;
           });
       };
 
