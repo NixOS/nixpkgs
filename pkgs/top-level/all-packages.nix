@@ -10610,6 +10610,12 @@ with pkgs;
 
   nerdfix = callPackage ../tools/text/nerdfix { };
 
+  neothesia = callPackage ../applications/audio/neothesia { };
+
+  neothesia-cli = neothesia.override {
+    cli = true;
+  };
+
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
