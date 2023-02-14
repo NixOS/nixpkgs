@@ -206,86 +206,63 @@ rec {
 
   # -- DEPRECATED --
 
-  traceShowVal = x: trace (showVal x) x;
-  traceShowValMarked = str: x: trace (str + showVal x) x;
+  traceShowVal = _:
+    throw ( "`traceShowVal` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `FILL IN`." );
+  traceShowValMarked = _:
+    throw ( "`traceShowValMarked` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `FILL IN`." );
 
-  attrNamesToStr = a:
-    trace ( "Warning: `attrNamesToStr` is deprecated "
-          + "and will be removed in the next release. "
+  attrNamesToStr =  _:
+    throw ( "`attrNamesToStr` is deprecated "
+          + "and will be removed in release 23.05. "
           + "Please use more specific concatenation "
-          + "for your uses (`lib.concat(Map)StringsSep`)." )
-    (concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
+          + "for your uses (`lib.concat(Map)StringsSep`)." );
 
-  showVal =
-    trace ( "Warning: `showVal` is deprecated "
-          + "and will be removed in the next release, "
-          + "please use `traceSeqN`" )
-    (let
-      modify = v:
-        let pr = f: { __pretty = f; val = v; };
-        in   if isDerivation v then pr
-          (drv: "<δ:${drv.name}:${concatStringsSep ","
-                                 (attrNames drv)}>")
-        else if [] ==   v then pr (const "[]")
-        else if isList  v then pr (l: "[ ${go (head l)}, … ]")
-        else if isAttrs v then pr
-          (a: "{ ${ concatStringsSep ", " (attrNames a)} }")
-        else v;
-      go = x: generators.toPretty
-        { allowPrettyValues = true; }
-        (modify x);
-    in go);
+  showVal = _:
+    throw ( "`showVal` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "please use `traceSeqN`" );
 
-  traceXMLVal = x:
-    trace ( "Warning: `traceXMLVal` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `traceValFn builtins.toXML`." )
-    (trace (builtins.toXML x) x);
-  traceXMLValMarked = str: x:
-    trace ( "Warning: `traceXMLValMarked` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `traceValFn (x: str + builtins.toXML x)`." )
-    (trace (str + builtins.toXML x) x);
+  traceXMLVal = _:
+    throw ( "`traceXMLVal` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `traceValFn builtins.toXML`." );
+  traceXMLValMarked = _:
+    throw ( "`traceXMLValMarked` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `traceValFn (x: str + builtins.toXML x)`." );
 
-  # trace the arguments passed to function and its result
-  # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
-  traceCall  = n: f: a: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
-  traceCall2 = n: f: a: b: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
-  traceCall3 = n: f: a: b: c: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+  traceCall  = _:
+    throw ( "`traceCall` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `FILL IN`." );
 
-  traceValIfNot = c: x:
-    trace ( "Warning: `traceValIfNot` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `if/then/else` and `traceValSeq 1`.")
-    (if c x then true else traceSeq (showVal x) false);
+  traceCall2 = _:
+    throw ( "`traceCall2` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `FILL IN`." );
+
+  traceCall3 = _:
+    throw ( "`traceCall3` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `FILL IN`." );
+
+  traceValIfNot = _:
+    throw ( "`traceValIfNot` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `if/then/else` and `traceValSeq 1`.");
 
 
-  addErrorContextToAttrs = attrs:
-    trace ( "Warning: `addErrorContextToAttrs` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `builtins.addErrorContext` directly." )
-    (mapAttrs (a: v: addErrorContext "while evaluating ${a}" v) attrs);
+  addErrorContextToAttrs = _:
+    throw ( "`addErrorContextToAttrs` is deprecated "
+          + "and will be removed in release 23.05. "
+          + "Please use `builtins.addErrorContext` directly." );
 
-  # example: (traceCallXml "myfun" id 3) will output something like
-  # calling myfun arg 1: 3 result: 3
-  # this forces deep evaluation of all arguments and the result!
-  # note: if result doesn't evaluate you'll get no trace at all (FIXME)
-  #       args should be printed in any case
-  traceCallXml = a:
-    trace ( "Warning: `traceCallXml` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please complain if you use the function regularly." )
-    (if !isInt a then
-      traceCallXml 1 "calling ${a}\n"
-    else
-      let nr = a;
-      in (str: expr:
-          if isFunction expr then
-            (arg:
-              traceCallXml (builtins.add 1 nr) "${str}\n arg ${builtins.toString nr} is \n ${builtins.toXML (builtins.seq arg arg)}" (expr arg)
-            )
-          else
-            let r = builtins.seq expr expr;
-            in trace "${str}\n result:\n${builtins.toXML r}" r
-      ));
+  traceCallXml = _:
+    throw ( "`traceCallXml` is deprecated "
+          + "and will be removed in release 23.05. "
+          );
 }
