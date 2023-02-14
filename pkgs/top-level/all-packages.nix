@@ -19467,6 +19467,7 @@ with pkgs;
 
   eccodes = callPackage ../development/libraries/eccodes {
     pythonPackages = python3Packages;
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
   };
 
   eclib = callPackage ../development/libraries/eclib {};
@@ -30410,6 +30411,16 @@ with pkgs;
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     python = python3;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
+  };
+
+  ikiwiki-full = ikiwiki.override {
+    bazaarSupport = false;      # tests broken
+    cvsSupport = true;
+    docutilsSupport = true;
+    gitSupport = true;
+    mercurialSupport = true;
+    monotoneSupport = true;
+    subversionSupport = true;
   };
 
   iksemel = callPackage ../development/libraries/iksemel {

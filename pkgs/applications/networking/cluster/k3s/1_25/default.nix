@@ -322,8 +322,7 @@ buildGoModule rec {
   # Fix-Me: Needs to be adapted specifically for 1.25
   # passthru.updateScript = ./update.sh;
 
-  # Fix-Me: Needs to be adapted specifically for 1.25
-  # passthru.tests = nixosTests.k3s;
+  passthru.tests = k3s.passthru.mkTests k3sVersion;
 
   meta = baseMeta;
 }
