@@ -3,7 +3,7 @@
 , fetchurl
 , fetchFromGitHub
 , lib
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 , openjdk17
@@ -27,6 +27,8 @@ let
     rev = "Ghidra_${version}_build";
     sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
   };
+
+  gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
     name = "ghidra";
