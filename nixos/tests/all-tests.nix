@@ -137,6 +137,7 @@ in {
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
   cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
+  cockroachdb-single-node = handleTest ./cockroachdb-single-node.nix {};
   collectd = handleTest ./collectd.nix {};
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
