@@ -3171,6 +3171,8 @@ self: super: with self; {
 
   fasttext = callPackage ../development/python-modules/fasttext { };
 
+  fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
