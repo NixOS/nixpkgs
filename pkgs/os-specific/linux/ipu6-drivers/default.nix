@@ -1,17 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, ivsc-driver
 , kernel
 }:
-
-let
-  ivsc-driver = fetchFromGitHub {
-    owner = "intel";
-    repo = "ivsc-driver";
-    rev = "94ecb88b3ac238d9145ac16230d6e0779bb4fd32";
-    hash = "sha256-Q7iyKw4WFSX42E4AtoW/zYRKpknWZSU66V5VPAx6AjA=";
-  };
-in
 
 stdenv.mkDerivation rec {
   pname = "ipu6-drivers";
@@ -26,9 +18,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \
-      ${ivsc-driver}/backport-include \
-      ${ivsc-driver}/drivers \
-      ${ivsc-driver}/include \
+      ${ivsc-driver.src}/backport-include \
+      ${ivsc-driver.src}/drivers \
+      ${ivsc-driver.src}/include \
       .
   '';
 
