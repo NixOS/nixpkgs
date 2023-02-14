@@ -12,7 +12,13 @@ let
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
-  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
+  generic =
+    { version
+    , hash
+    , patches ? []
+    , knownVulnerabilities ? []
+    }: stdenv.mkDerivation rec
+  {
     pname = "libressl";
     inherit version;
 
@@ -80,6 +86,7 @@ let
       license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice fpletz ];
+      knownVulnerabilities = knownVulnerabilities;
     };
   };
 
@@ -87,6 +94,10 @@ in {
   libressl_3_4 = generic {
     version = "3.4.3";
     hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
+    knownVulnerabilities = [
+      "Support ended 2022-10-14."
+      "https://marc.info/?l=libressl&m=167582148932407&w=2"
+    ];
   };
 
   libressl_3_5 = generic {
