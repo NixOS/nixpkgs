@@ -3089,6 +3089,22 @@ let
         };
       };
 
+      zhwu95.riscv = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "riscv";
+          publisher = "zhwu95";
+          version = "0.0.8";
+          sha256 = "sha256-PXaHSEXoN0ZboHIoDg37tZ+Gv6xFXP4wGBS3YS/53TY=";
+        };
+        meta = with lib; {
+          description = "Basic RISC-V colorization and snippets support.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=zhwu95.riscv";
+          homepage = "https://github.com/zhuanhao-wu/vscode-riscv-support";
+          license = licenses.mit;
+          maintainers = [ maintainers.CardboardTurkey ];
+        };
+      };
+
       zxh404.vscode-proto3 = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-proto3";

@@ -2388,6 +2388,12 @@
     github = "CaptainJawZ";
     githubId = 43111068;
   };
+  CardboardTurkey = {
+    name = "Kiran Ostrolenk";
+    email = "kostrolenk@gmail.com";
+    github = "CardboardTurkey";
+    githubId = 34030186;
+  };
   carlosdagos = {
     email = "m@cdagostino.io";
     github = "carlosdagos";
