@@ -10421,6 +10421,8 @@ self: super: with self; {
 
   segments = callPackage ../development/python-modules/segments { };
 
+  segments-ai = callPackage ../development/python-modules/segments-ai { };
+
   segno = callPackage ../development/python-modules/segno { };
 
   segyio = toPythonModule (callPackage ../development/python-modules/segyio {
@@ -11825,6 +11827,8 @@ self: super: with self; {
   types-futures = callPackage ../development/python-modules/types-futures { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+  types-pillow = callPackage ../development/python-modules/types-pillow { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
