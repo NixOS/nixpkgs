@@ -62,14 +62,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-asyncio
     pytest-freezegun
     pytest-httpx
     pytest-mock
+    pytestCheckHook
     respx
     ipython
   ];

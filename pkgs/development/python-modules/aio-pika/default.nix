@@ -28,10 +28,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  checkInputs = [
     aiomisc
+    pytestCheckHook
     shortuuid
   ];
   # Tests attempt to connect to a RabbitMQ server

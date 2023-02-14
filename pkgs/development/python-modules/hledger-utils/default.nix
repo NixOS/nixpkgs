@@ -45,13 +45,10 @@ buildPythonPackage rec {
     asteval
   ];
 
-  checkInputs = [
-    unittestCheckHook
-  ];
-
   nativeCheckInputs = [
     hledger
     perl
+    unittestCheckHook
   ];
 
   preCheck = ''

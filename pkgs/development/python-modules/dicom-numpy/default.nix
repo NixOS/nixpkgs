@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pydicom
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -96,14 +96,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     fastapi
     httpx
     nest-asyncio
     pytest-asyncio
+    pytestCheckHook
   ] ++ passthru.optional-dependencies.all;
 
   disabledTestPaths = [

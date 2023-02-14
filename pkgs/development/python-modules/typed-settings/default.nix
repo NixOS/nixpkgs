@@ -43,7 +43,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     typing-extensions
   ] ++ passthru.optional-dependencies.click;

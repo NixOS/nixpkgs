@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "flask_babel"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

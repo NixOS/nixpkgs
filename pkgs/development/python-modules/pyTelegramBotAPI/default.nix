@@ -63,7 +63,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ] ++ passthru.optional-dependencies.watchdog

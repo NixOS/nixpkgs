@@ -38,7 +38,7 @@ buildPythonPackage rec {
     igraph-c
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     unittestCheckHook
   ];

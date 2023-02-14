@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace "install_requires=install_requires" "install_requires=[],"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

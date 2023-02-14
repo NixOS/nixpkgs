@@ -29,7 +29,7 @@ buildPythonPackage rec {
     django
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
   ];
 

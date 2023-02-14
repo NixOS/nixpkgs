@@ -51,11 +51,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-asyncio
+    pytestCheckHook
     aiosqlite
     sqlalchemy
     asyncpg

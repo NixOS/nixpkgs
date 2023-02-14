@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     tox
     pytestCheckHook

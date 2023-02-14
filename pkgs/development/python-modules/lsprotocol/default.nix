@@ -5,9 +5,8 @@
 , fetchFromGitHub
 , flit-core
 , jsonschema
-, nox
 , pyhamcrest
-, pytest
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    nox
   ];
 
   propagatedBuildInputs = [
@@ -36,22 +34,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
-  ];
-
-  checkInputs = [
     jsonschema
     pyhamcrest
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    sed -i "/^    _install_requirements/d" noxfile.py
-    nox --session tests
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [
     "lsprotocol"

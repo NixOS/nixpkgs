@@ -20,12 +20,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     factory_boy
     faker
+    pytestCheckHook
   ];
 
   # These tests require network access, but disabledTestPaths doesn't work.

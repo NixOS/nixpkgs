@@ -35,7 +35,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     awkward
     notebook
     numba

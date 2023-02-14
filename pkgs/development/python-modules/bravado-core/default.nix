@@ -47,11 +47,8 @@ buildPythonPackage rec {
   ] ++ jsonschema.optional-dependencies.format;
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     mock
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

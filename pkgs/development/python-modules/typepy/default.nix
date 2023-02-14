@@ -22,8 +22,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mbstrdecoder python-dateutil pytz packaging ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  checkInputs = [ tcolorpy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tcolorpy
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/thombashi/typepy";

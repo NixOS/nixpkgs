@@ -123,7 +123,7 @@ buildPythonPackage rec {
     "apache_beam"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     hypothesis
     mock

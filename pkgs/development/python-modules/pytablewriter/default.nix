@@ -35,8 +35,14 @@ buildPythonPackage rec {
     typepy
   ];
 
-  checkInputs = [ pyyaml toml elasticsearch dominate ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+    toml
+    elasticsearch
+    dominate
+   ];
+
   # Circular dependency
   disabledTests = [
     "test_normal_from_file"

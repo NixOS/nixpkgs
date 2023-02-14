@@ -19,8 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ chardet ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  checkInputs = [ faker ];
+  nativeCheckInputs = [
+    faker
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/thombashi/mbstrdecoder";

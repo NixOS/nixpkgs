@@ -76,7 +76,7 @@ buildPythonPackage rec {
       --replace "--cov=papis" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

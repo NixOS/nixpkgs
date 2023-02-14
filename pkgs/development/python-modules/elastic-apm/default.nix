@@ -54,10 +54,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
     asynctest
     ecs-logging
     jinja2
@@ -70,6 +66,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-localserver
     pytest-random-order
+    pytestCheckHook
     sanic-testing
     structlog
     webob

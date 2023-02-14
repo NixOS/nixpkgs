@@ -75,7 +75,7 @@ buildPythonPackage rec {
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
   checkPhase = ''
     runHook preCheck
 

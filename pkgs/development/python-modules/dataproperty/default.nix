@@ -20,8 +20,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mbstrdecoder typepy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  checkInputs = [ termcolor ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    termcolor
+   ];
 
   # Tests fail, even on non-nixos
   pytestFlagsArray = [

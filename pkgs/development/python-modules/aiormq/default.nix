@@ -35,11 +35,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiomisc
     pytestCheckHook
   ];
-  checkInputs = [
-    aiomisc
-  ];
+
   # Tests attempt to connect to a RabbitMQ server
   disabledTestPaths = [
     "tests/test_channel.py"
