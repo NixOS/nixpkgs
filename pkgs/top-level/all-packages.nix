@@ -20903,6 +20903,8 @@ with pkgs;
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
+  libdisplay-info = callPackage ../development/libraries/libdisplay-info { };
+
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
