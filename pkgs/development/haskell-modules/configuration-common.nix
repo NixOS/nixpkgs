@@ -1793,7 +1793,12 @@ self: super: {
       relative = "llvm-hs-pure";
       excludes = [ "**/Triple.hs" ]; # doesn't exist in 9.0.0
     })
-  ] super.llvm-hs-pure;
+  ] (overrideCabal {
+    # Hackage Revision prevents patch from applying. Revision 1 does not allow
+    # bytestring-0.11.4 which is bundled with 9.2.6.
+    editedCabalFile = null;
+    revision = null;
+  } super.llvm-hs-pure);
 
   # * Fix build failure by picking patch from 8.5, we need
   #   this version of sbv for petrinizer
