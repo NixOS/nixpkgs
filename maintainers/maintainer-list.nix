@@ -932,6 +932,12 @@
     githubId = 106511;
     name = "Andrew Kelley";
   };
+  andrewsmith = {
+    email = "andrew@velvet.software";
+    github = "andrewsmith";
+    githubId = 29887;
+    name = "Andrew Smith";
+  };
   andsild = {
     email = "andsild@gmail.com";
     github = "andsild";
@@ -12826,6 +12832,12 @@
     github = "rvlander";
     githubId = 5236428;
     name = "Gaëtan André";
+  };
+  rvnstn = {
+    email = "github@rvnstn.de";
+    github = "rvnstn";
+    githubId = 2364742;
+    name = "Tobias Ravenstein";
   };
   rvolosatovs = {
     email = "rvolosatovs@riseup.net";

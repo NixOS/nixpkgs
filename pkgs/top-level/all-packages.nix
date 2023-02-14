@@ -5666,6 +5666,8 @@ with pkgs;
 
   sqlint = callPackage ../development/tools/sqlint { };
 
+  squawk = callPackage ../development/tools/squawk { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };
@@ -7041,6 +7043,8 @@ with pkgs;
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
     boost = boost172;
   };
+
+  enc = callPackage ../tools/security/enc { };
 
   endlessh = callPackage ../servers/endlessh { };
 
