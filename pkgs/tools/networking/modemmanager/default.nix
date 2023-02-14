@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-OWP23EQ7a8rghhV7AC9yinCxRI0xwcntB5dl9XtgK6M=";
   };
 
+  patches = [
+    # Since /etc is the domain of NixOS, not Nix, we cannot install files there.
+    # But these are just placeholders so we do not need to install them at all.
+    ./no-dummy-dirs-in-sysconfdir.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -64,6 +70,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
+    "-Ddbus_policy_dir=${placeholder "out"}/share/dbus-1/system.d"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "-Dvapi=true"
