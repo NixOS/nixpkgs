@@ -3,15 +3,7 @@
 , lib ? pkgs.lib
 }:
 let
-  allK3s = {
-    inherit (pkgs)
-      k3s
-      k3s_1_23
-      k3s_1_24
-      k3s_1_25
-      k3s_1_26
-      ;
-  };
+  allK3s = lib.filterAttrs (n: _: lib.strings.hasPrefix "k3s_" n) pkgs;
 in
 {
   # Run a single node k3s cluster and verify a pod can run
