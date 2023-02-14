@@ -85,6 +85,6 @@ buildPythonPackage rec {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
     license = licenses.mit;
-    maintainers = with maintainers; [ shiryel ];
+    maintainers = with maintainers; [ shiryel tmarkus ];
   };
 }
