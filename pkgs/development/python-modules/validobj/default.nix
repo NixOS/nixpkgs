@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchPypi
 , flit
 , hypothesis
@@ -10,6 +11,9 @@ buildPythonPackage rec {
   pname = "validobj";
   version = "0.6";
   format = "pyproject";
+
+  # https://github.com/Zaharid/validobj/issues/8
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;

@@ -270,7 +270,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.2.3";
+  hassVersion = "2023.2.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -288,7 +288,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-cRdxlmlgkKTnrtqGQPbSpBLHf+vfI9T6sdETcGshN9M=";
+    hash = "sha256-Lt/t4S6To0MvdvmdKir7VytrNXPGhC7sMfjQmgox5XY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

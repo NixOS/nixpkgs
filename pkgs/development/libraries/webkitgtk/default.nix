@@ -64,6 +64,7 @@
 , enableGeoLocation ? true
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -232,10 +233,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
+    pkgConfigModules = [
+      "javascriptcoregtk-4.0"
+      "webkit2gtk-4.0"
+      "webkit2gtk-web-extension-4.0"
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;

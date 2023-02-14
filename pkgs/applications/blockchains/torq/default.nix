@@ -6,20 +6,20 @@
 
 let
   pname = "torq";
-  version = "0.17.3";
+  version = "0.18.17";
 
   src = fetchFromGitHub {
     owner = "lncapital";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fqHJZi1NQCrZqsa+N+FVYZ8s9o0D555Sqn5qNlJ1MmI=";
+    hash = "sha256-xiA66yGo8b1+zZ7jQ7SFOtNPmqbdna7fUCT21uibrIM=";
   };
 
   web = buildNpmPackage {
     pname = "${pname}-frontend";
     inherit version;
     src = "${src}/web";
-    npmDepsHash = "sha256-8mUfTFzPjQlQvhC3zZf+WruDBkYnmGt3yckNi0CPWs0=";
+    npmDepsHash = "sha256-/7x5RWYIB5BChYMnMuFVVaZd0pVkew4i4QrF7hSFnCM=";
 
     # copied from upstream Dockerfile
     npmInstallFlags = [ "--legacy-peer-deps" ];
@@ -29,14 +29,14 @@ let
     # override npmInstallHook, we only care about the build/ directory
     installPhase = ''
       mkdir $out
-      cp -r build $out/
+      cp -r build/* $out/
     '';
   };
 in
 buildGoModule rec {
   inherit pname version src;
 
-  vendorHash = "sha256-HETN2IMnpxnTyg6bQDpoD0saJu+gKocdEf0VzEi12Gs=";
+  vendorHash = "sha256-bvisI589Gq9IdyJEqI+uzs3iDPOTUkq95P3n/KoFhF0=";
 
   subPackages = [ "cmd/torq" ];
 
@@ -47,7 +47,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    ln -s ${web} $out/web
+    mkdir -p $out/web/build
+    cp -r ${web}/* $out/web/build/
   '';
 
   meta = with lib; {
