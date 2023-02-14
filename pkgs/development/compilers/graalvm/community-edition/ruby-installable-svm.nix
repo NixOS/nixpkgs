@@ -18,7 +18,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
     openssl
   ];
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/languages/ruby/lib/mri/openssl.so \
       --replace-needed libssl.so.10 libssl.so \
       --replace-needed libcrypto.so.10 libcrypto.so
