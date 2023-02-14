@@ -10103,6 +10103,8 @@ with pkgs;
 
   nfs-ganesha = callPackage ../servers/nfs-ganesha { };
 
+  nfs4-acl-tools = callPackage ../tools/filesystems/nfs4-acl-tools { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = callPackage ../tools/networking/ngrok { };
