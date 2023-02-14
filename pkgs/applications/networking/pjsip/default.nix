@@ -6,7 +6,10 @@
 , libsamplerate
 , swig
 , alsa-lib
+, fixDarwinDylibNames
 , AppKit
+, CoreFoundation
+, Security
 , python3
 , pythonSupport ? true
 }:
@@ -37,11 +40,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    lib.optionals pythonSupport [ swig python3 ];
+    lib.optionals pythonSupport [ swig python3 ]
+    # Some of the .dylib files contain relative references. fixDarwinDylibNames
+    # fixes these.
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ openssl libsamplerate ]
     ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
   preConfigure = ''
     export LD=$CC
@@ -54,7 +60,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ]
     ++ lib.optional pythonSupport "py";
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = [ "--enable-shared" ]
+    # darwin-ssl is a deprecated SSL library that requires
+    # a more recent version of Apple SDK 10 which is not in nixpkgs.
+    ++ lib.optional stdenv.isDarwin "--disable-darwin-ssl";
 
   postInstall = ''
     mkdir -p $out/bin
@@ -65,13 +74,14 @@ stdenv.mkDerivation rec {
     (cd pjsip-apps/src/swig/python && \
       python setup.py install --prefix=$py
     )
+  '' + lib.optionalString (stdenv.isDarwin && pythonSupport) ''
+    install_name_tool -change libpjsua2.dylib.2 $out/lib/libpjsua2.dylib.2 $py/${python3.sitePackages}/*.so
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
