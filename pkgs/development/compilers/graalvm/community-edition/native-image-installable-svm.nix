@@ -27,14 +27,14 @@ graalvmCEPackages.buildGraalvmProduct rec {
   inherit src javaVersion version;
   product = "native-image-installable-svm";
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  graalvmPhases.postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/native-image \
       --prefix PATH : ${binPath} \
       ${lib.concatStringsSep " "
         (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
   '';
 
-  installCheckPhase = ''
+  graalvmPhases.installCheckPhase = ''
     echo "Ahead-Of-Time compilation"
     $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
     ./helloworld | fgrep 'Hello World'

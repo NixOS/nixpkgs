@@ -23,10 +23,10 @@
 let
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
-  mapProducts = key: default: (map (p: p.${key} or default) products);
+  mapProducts = key: default: (map (p: p.graalvmPhases.${key} or default) products);
   concatProducts = key: lib.concatStringsSep "\n" (mapProducts key "");
 
-  graalvmXXX-ce = stdenv.mkDerivation (args // {
+  graalvmXXX-ce = stdenv.mkDerivation ({
     pname = "graalvm${javaVersion}-ce";
 
     unpackPhase = ''
@@ -146,5 +146,5 @@ let
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
     } // meta);
-  });
+  } // (builtins.removeAttrs args [ "javaVersion" "meta" "products" ]));
 in graalvmXXX-ce

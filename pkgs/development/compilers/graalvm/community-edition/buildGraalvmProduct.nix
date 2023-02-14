@@ -9,13 +9,14 @@
 }:
 { product
 , javaVersion
-, extraNativeBuildInputs ? [ ]
 , extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, graalvmPhases ? { }
 , meta ? { }
 , passthru ? { }
 , ... } @ args:
 
-stdenv.mkDerivation (args // {
+stdenv.mkDerivation ({
   pname = "${product}-java${javaVersion}";
 
   nativeBuildInputs = [ perl unzip makeWrapper ]
@@ -56,16 +57,27 @@ stdenv.mkDerivation (args // {
   dontInstall = true;
   dontBuild = true;
   dontStrip = true;
-  # installCheckPhase is going to run in GraalVM main derivation (see buildGraalvm.nix)
-  # to make sure that it has everything it needs to run correctly.
-  # Other hooks like fixupPhase/installPhase are also going to run there for the
-  # same reason.
-  doInstallCheck = false;
 
-  passthru = { inherit product; } // passthru;
+  passthru = {
+    inherit product javaVersion;
+    # build phases that are going to run during GraalVM derivation build,
+    # since they depend in having the fully setup GraalVM environment
+    # e.g.: graalvmPhases.installCheckPhase will run the checks only after
+    # GraalVM+products is build
+    # see buildGraalvm.nix file for the available phases
+    inherit graalvmPhases;
+  } // passthru;
 
   meta = with lib; ({
     inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
   } // meta);
-})
+} // (builtins.removeAttrs args [
+  "product"
+  "javaVersion"
+  "extraBuildInputs"
+  "extraNativeBuildInputs"
+  "graalvmPhases"
+  "meta"
+  "passthru"
+]))

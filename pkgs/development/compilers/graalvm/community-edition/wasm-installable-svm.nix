@@ -12,7 +12,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
   product = "wasm-installable-svm";
 
   # TODO: improve this test
-  installCheckPhase = ''
+  graalvmPhases.installCheckPhase = ''
     echo "Testing wasm"
     $out/bin/wasm --help
   '';

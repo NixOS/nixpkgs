@@ -15,7 +15,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
   '';
 
   # TODO: improve this test
-  installCheckPhase = ''
+  graalvmPhases.installCheckPhase = ''
     echo "Testing llvm"
     $out/bin/lli --help
   '';

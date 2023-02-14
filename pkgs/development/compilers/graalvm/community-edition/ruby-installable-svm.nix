@@ -24,7 +24,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
       --replace-needed libcrypto.so.10 libcrypto.so
   '';
 
-  installCheckPhase = ''
+  graalvmPhases.installCheckPhase = ''
     echo "Testing TruffleRuby"
     # Hide warnings about wrong locale
     export LANG=C
