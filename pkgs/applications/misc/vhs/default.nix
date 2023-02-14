@@ -14,7 +14,6 @@ buildGoModule rec {
   vendorHash = "sha256-9nkRr5Jh1nbI+XXbPj9KB0ZbLybv5JUVovpB311fO38=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ttyd ffmpeg ];
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
