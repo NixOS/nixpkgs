@@ -18729,6 +18729,7 @@ with pkgs;
   eccodes = callPackage ../development/libraries/eccodes {
     pythonPackages = python3Packages;
     stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+    gfortran = if stdenv.isDarwin then gfortran12 else gfortran;
   };
 
   eclib = callPackage ../development/libraries/eclib {};
