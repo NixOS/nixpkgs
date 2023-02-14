@@ -11,6 +11,7 @@
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
+, useSystemLibffi ? true
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -45,7 +46,7 @@ let
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
-              cupsSupport pulseSupport ungoogled;
+              cupsSupport pulseSupport ungoogled useSystemLibffi;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
