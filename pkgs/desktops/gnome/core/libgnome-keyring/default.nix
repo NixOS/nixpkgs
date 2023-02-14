@@ -23,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     pkgConfigModules = [ "gnome-keyring-1" ];
-    inherit (glib.meta) platforms maintainers;
+    platforms = lib.platforms.unix;
+    maintainers = [];
 
     longDescription = ''
       gnome-keyring is a program that keeps password and other secrets for
