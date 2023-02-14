@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , fetchPypi
 , flit
 , hypothesis
@@ -9,15 +8,12 @@
 
 buildPythonPackage rec {
   pname = "validobj";
-  version = "0.6";
+  version = "0.7";
   format = "pyproject";
-
-  # https://github.com/Zaharid/validobj/issues/8
-  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BvnHn0Erk87Ce3tYwYf0tBwRJMrG19Af/Y568VJ02uo=";
+    sha256 = "cbij55HZKVLO3MLoDTtFT2YYNVZwbNaYEk+35gIcGdo=";
   };
 
   nativeBuildInputs = [ flit ];
