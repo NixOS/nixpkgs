@@ -17765,6 +17765,8 @@ with pkgs;
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
 
+  pifpaf = callPackage ../development/tools/pifpaf { };
+
   pmd = callPackage ../development/tools/analysis/pmd {
     openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
