@@ -985,6 +985,8 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
+  livechart = callPackage ../development/libraries/livechart { };
+
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
