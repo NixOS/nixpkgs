@@ -44,8 +44,11 @@ rec {
     vendor_ = platform.rustc.platform.vendor or {
       "w64" = "pc";
     }.${vendor.name} or vendor.name;
-  in platform.rustc.config
-    or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+    target =
+      if platform.isWasi then "${cpu_}-wasi"
+      else "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+  in
+    platform.rustc.config or target;
 
   # Returns the name of the rust target if it is standard, or the json file
   # containing the custom target spec.
