@@ -91,13 +91,12 @@ stdenv.mkDerivation (self: {
     # original dosbox. Doing it this way allows us to work with frontends and
     # launchers that expect the binary to be named dosbox, but get out of the
     # way of vanilla dosbox if the user desires to install that as well.
-    mv $out/bin/dosbox $out/bin/${self.pname}
+    mv $out/bin/dosbox $out/bin/dosbox-staging
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
 
-    # Create a symlink to dosbox manual instead of merely copying it
+    # Create a symlink to dosbox manual instead of copying it
     pushd $out/share/man/man1/
-    mv dosbox.1.gz ${self.pname}.1.gz
-    ln -s ${self.pname}.1.gz dosbox.1.gz
+    ln -s dosbox.1.gz dosbox-staging.1.gz
     popd
   '';
 
