@@ -11608,6 +11608,8 @@ self: super: with self; {
 
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
+  torchaudio = callPackage ../development/python-modules/torchaudio { };
+
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
