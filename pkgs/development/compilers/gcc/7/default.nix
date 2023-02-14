@@ -16,6 +16,7 @@
 , zlib ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enableFramePointer ? false
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -110,6 +111,7 @@ let majorVersion = "7";
         buildPackages
         cloog
         crossStageStatic
+        enableFramePointer
         enableLTO
         enableMultilib
         enablePlugin
