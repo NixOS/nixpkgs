@@ -37655,6 +37655,8 @@ with pkgs;
 
   infnoise = callPackage ../misc/drivers/infnoise { };
 
+  itamae = callPackage ../tools/admin/itamae { };
+
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
