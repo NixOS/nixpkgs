@@ -14,21 +14,21 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.54.0";
+  version = "3.55.0";
 
   # Used in pulumi-language packages, which inherit this prop
-  sdkVendorHash = "sha256-NstNzPKHlN8S+HSpYnG60ZtZtUQsh1Idr8Zz2Ef/jiw=";
+  sdkVendorHash = "sha256-ZE+df01jRx3nDiPGdlh1JNJn5NqsHW22fiUzeNlkzF8=";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Rl0kh9NCliADfU9Nxc2SwnOIGDilYEeA0rcVCfal5N8=";
+    hash = "sha256-x5XebYFpxFi2QgrrK+wdMFOLiJLnRmar4gsply8F718=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorSha256 = "sha256-Bkmpw+ZneB1zHmaV4S29LFNoCjB2QmO5nR/iwQQQPpo=";
+  vendorSha256 = "sha256-8vchyD3MTi9Fxrd6SiywFK4tadyauvDxjs9RmoJuULA=";
 
   sourceRoot = "${src.name}/pkg";
 
