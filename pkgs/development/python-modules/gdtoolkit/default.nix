@@ -1,23 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, lark, docopt, pyyaml, setuptools }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, lark, docopt, pyyaml, setuptools, pythonRelaxDepsHook }:
 
-let lark080 = lark.overrideAttrs (old: rec {
-  # gdtoolkit needs exactly this lark version
-  version = "0.8.0";
-  src = fetchFromGitHub {
-    owner = "lark-parser";
-    repo = "lark";
-    rev = version;
-    sha256 = "su7kToZ05OESwRCMPG6Z+XlFUvbEb3d8DgsTEcPJMg4=";
-  };
-});
-
-in
 buildPythonPackage rec {
   pname = "gdtoolkit";
   version = "3.3.1";
 
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [ "lark-parser" ];
+
   propagatedBuildInputs = [
-    lark080
+    lark
     docopt
     pyyaml
     setuptools
