@@ -10,6 +10,8 @@
 , libjpeg_turbo
 , gumbo
 , pythonOlder
+, stdenv
+, xcbuild
 }:
 
 buildPythonPackage rec {
@@ -31,6 +33,8 @@ buildPythonPackage rec {
   '';
   nativeBuildInputs = [
     swig
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild
   ];
 
   buildInputs = [
@@ -55,6 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ teto ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
