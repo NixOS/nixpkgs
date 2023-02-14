@@ -203,7 +203,8 @@ self: super: {
   wai-cors = dontCheck super.wai-cors;
 
   # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
-  streamly-bytestring = dontCheck super.streamly-bytestring;
+  # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
+  streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
 
   # base bound
   digit = doJailbreak super.digit;
