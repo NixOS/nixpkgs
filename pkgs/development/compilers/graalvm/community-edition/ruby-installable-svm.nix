@@ -6,13 +6,17 @@
 , musl
 , src
 , version
+, llvm-installable-svm
 }:
 
 graalvmCEPackages.buildGraalvmProduct rec {
   inherit src javaVersion version;
   product = "ruby-installable-svm";
 
-  extraBuildInputs = [ openssl ];
+  extraBuildInputs = [
+    llvm-installable-svm
+    openssl
+  ];
 
   preFixup = ''
     patchelf $out/languages/ruby/lib/mri/openssl.so \
@@ -26,5 +30,6 @@ graalvmCEPackages.buildGraalvmProduct rec {
     export LANG=C
     export LC_ALL=C
     $out/bin/ruby -e 'puts(1 + 1)'
+    echo '1 + 1' | $out/bin/irb
   '';
 }

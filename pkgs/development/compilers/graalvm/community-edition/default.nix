@@ -37,6 +37,7 @@ rec {
       llvm-installable-svm-java17
       native-image-installable-svm-java11
       python-installable-svm-java11
+      ruby-installable-svm-java11
       wasm-installable-svm-java11
     ];
   };
@@ -59,6 +60,13 @@ rec {
     src = fetchurl (source "python-installable-svm" javaVersion);
   };
 
+  ruby-installable-svm-java11 = callPackage ./ruby-installable-svm.nix rec {
+    javaVersion = "11";
+    version = "22.3.1";
+    src = fetchurl (source "ruby-installable-svm" javaVersion);
+    llvm-installable-svm = llvm-installable-svm-java11;
+  };
+
   wasm-installable-svm-java11 = callPackage ./wasm-installable-svm.nix rec {
     javaVersion = "11";
     version = "22.3.1";
@@ -79,6 +87,7 @@ rec {
       llvm-installable-svm-java17
       native-image-installable-svm-java17
       python-installable-svm-java17
+      ruby-installable-svm-java17
       wasm-installable-svm-java17
     ];
   };
@@ -99,6 +108,13 @@ rec {
     javaVersion = "17";
     version = "22.3.1";
     src = fetchurl (source "python-installable-svm" javaVersion);
+  };
+
+  ruby-installable-svm-java17 = callPackage ./ruby-installable-svm.nix rec {
+    javaVersion = "17";
+    version = "22.3.1";
+    src = fetchurl (source "ruby-installable-svm" javaVersion);
+    llvm-installable-svm = llvm-installable-svm-java17;
   };
 
   wasm-installable-svm-java17 = callPackage ./wasm-installable-svm.nix rec {

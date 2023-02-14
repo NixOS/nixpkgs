@@ -10,7 +10,7 @@ graalvmCEPackages.buildGraalvmProduct rec {
   inherit src javaVersion version;
   product = "llvm-installable-svm";
 
-  preFixup = ''
+  postUnpack = ''
     ln -s $out/languages/llvm/native/lib/*.so $out/lib
   '';
 
