@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   path = lib.makeBinPath ([
     coreutils findutils gnugrep
-  ] ++ (if stdenv.isDarwin then [ darwin.DarwinTools ] else []));
+  ] ++ (lib.optionals stdenv.isDarwin [ darwin.DarwinTools ]));
   is_darwin = if stdenv.isDarwin then "yes" else "no";
 
   sandboxtest = ./sandbox.nix;
