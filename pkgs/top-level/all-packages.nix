@@ -38079,7 +38079,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  pounce = callPackage ../servers/pounce { };
+  inherit (callPackage ../servers/pounce { })
+    pounce pounce-extra;
 
   pt = callPackage ../applications/misc/pt { };
 
