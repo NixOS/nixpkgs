@@ -30,6 +30,9 @@ graalvmCEPackages.buildGraalvmProduct rec {
     export LANG=C
     export LC_ALL=C
     $out/bin/ruby -e 'puts(1 + 1)'
-    echo '1 + 1' | $out/bin/irb
+    ${# broken in darwin with sandbox enabled
+      lib.optionalString stdenv.isLinux ''
+      echo '1 + 1' | $out/bin/irb
+    ''}
   '';
 }
