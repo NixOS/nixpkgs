@@ -79,7 +79,8 @@ stdenv.mkDerivation {
             # dependencies from nix.
             patchelf \
                 --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                --set-rpath "$libPath" --force-rpath \
+                --set-rpath "$libPath:$out/$prefix/bin/lin64:$out/$prefix/ispfpga/bin/lin64" \
+                --force-rpath \
                 $f
         done
     done
