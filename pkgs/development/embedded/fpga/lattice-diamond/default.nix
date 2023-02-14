@@ -87,11 +87,10 @@ stdenv.mkDerivation {
     # Remove 32-bit libz.
     rm $out/$prefix/bin/lin64/libz.{so,so.1}
 
-    # Make wrappers (should these target more than the 'diamond' tool?).
-    # The purpose of these is just to call the target program using its
-    # absolute path - otherwise, it will crash.
+    # Make wrappers. The purpose of these is just to call the target program
+    # using its absolute path - otherwise, it will crash.
     mkdir -p bin
-    for tool in diamond ; do
+    for tool in diamond pnmainc ddtcmd ; do
         makeWrapper $out/$prefix/bin/lin64/$tool $out/bin/$tool
     done
   '';
