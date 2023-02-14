@@ -1,0 +1,47 @@
+{
+  "name": "gdbgui",
+  "version": "0.1.0",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack --mode development --watch --config webpack.config.js",
+    "test": "jest",
+    "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
+    "format": "prettier ./gdbgui/src/js/** --write",
+    "lint": "prettier ./gdbgui/src/js/** --check"
+  },
+  "dependencies": {
+    "react": "^16.8",
+    "react-dom": "^16.4",
+    "socket.io": "^4.1",
+    "socket.io-client": "^4.1",
+    "statorgfc": "^0.1.6",
+    "xterm": "4.8.0",
+    "xterm-addon-fit": "^0.4.0",
+    "xterm-addon-web-links": "^0.4.0",
+    "xterm-addon-webgl": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/jquery": "^3.5.1",
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
+    "@types/socket.io": "^2.1.11",
+    "@types/socket.io-client": "^1.4.33",
+    "autoprefixer": "^9.8.5",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.6.0",
+    "fork-ts-checker-webpack-plugin": "^1.0.0",
+    "jest": "^24.3.1",
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-cli": "^7.1.1",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.12.0",
+    "style-loader": "^1.2.1",
+    "tailwindcss": "^1.5.1",
+    "ts-jest": "^24.0.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3333",
+    "webpack": "4.19.0",
+    "webpack-cli": "^2.0.14"
+  }
+}
