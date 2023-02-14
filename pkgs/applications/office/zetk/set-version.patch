@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54edcbd..645c5e1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -119,7 +119,7 @@ cpmaddpackage(
+ #
+ # Version derivation based on git tag
+ #
+-if(NOT ${PROJECT_NAME}_SOURCE_DIST)
++if(NOT DEFINED PROJECT_VERSION)
+   include(VersionFromGit)
+   version_from_git(
+     INCLUDE_HASH ON
