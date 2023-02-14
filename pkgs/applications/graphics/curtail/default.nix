@@ -40,19 +40,27 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     appstream-glib
-    python3.pkgs.pygobject3
     gettext
     gtk3
+  ];
+
+  propagatedBuildInputs = [
+    python3.pkgs.pygobject3
   ];
 
   preInstall = ''
     patchShebangs ../build-aux/meson/postinstall.py
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/curtail --prefix PATH : ${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}"
+    )
   '';
 
   meta = with lib; {
