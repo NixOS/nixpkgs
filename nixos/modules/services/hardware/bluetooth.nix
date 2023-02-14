@@ -40,6 +40,8 @@ in
 
       hsphfpd.enable = mkEnableOption (lib.mdDoc "support for hsphfpd[-prototype] implementation");
 
+      experimental.enable = mkEnableOption (lib.mdDoc "support for experimental interfaces");
+
       powerOnBoot = mkOption {
         type = types.bool;
         default = true;
@@ -123,7 +125,9 @@ in
           # if/when the bluez derivation is changed.
           args = [ "-f" "/etc/bluetooth/main.conf" ]
             ++ optional hasDisabledPlugins
-            "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+            "--noplugin=${concatStringsSep "," cfg.disabledPlugins}"
+            ++ optional cfg.experimental.enable
+            "-E";
         in
         {
           wantedBy = [ "bluetooth.target" ];
