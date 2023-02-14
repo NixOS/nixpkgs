@@ -34,6 +34,7 @@
 , which
 , libdrm
 , udev
+, nix-update-script
 , util-linux
 , xmlsec
 , withX ? true
@@ -134,6 +135,10 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
     substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {};
+  };
 
   meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
