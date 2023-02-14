@@ -62,9 +62,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = lib.optionalString (stdenv.isDarwin) ''
-    substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
-  '' + ''
+  checkPhase = ''
     ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
   '';
 
