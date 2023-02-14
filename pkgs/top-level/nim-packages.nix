@@ -114,6 +114,8 @@ lib.makeScope newScope (self:
 
     vmath = callPackage ../development/nim-packages/vmath { };
 
+    x11 = callPackage ../development/nim-packages/x11 { };
+
     zippy = callPackage ../development/nim-packages/zippy { };
 
   })
