@@ -6,8 +6,8 @@
 , perl
 , unzip
 , zlib
-}:
-{ product
+  # extra params
+, product
 , javaVersion
 , extraBuildInputs ? [ ]
 , extraNativeBuildInputs ? [ ]
@@ -17,6 +17,25 @@
 , ...
 } @ args:
 
+let
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
+    "autoPatchelfHook"
+    "graalvm-ce"
+    "makeWrapper"
+    "perl"
+    "unzip"
+    "zlib"
+    "product"
+    "javaVersion"
+    "extraBuildInputs"
+    "extraNativeBuildInputs"
+    "graalvmPhases"
+    "meta"
+    "passthru"
+  ];
+in
 stdenv.mkDerivation ({
   pname = "${product}-java${javaVersion}";
 
@@ -73,12 +92,4 @@ stdenv.mkDerivation ({
     inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
   } // meta);
-} // (builtins.removeAttrs args [
-  "product"
-  "javaVersion"
-  "extraBuildInputs"
-  "extraNativeBuildInputs"
-  "graalvmPhases"
-  "meta"
-  "passthru"
-]))
+} // extraArgs)

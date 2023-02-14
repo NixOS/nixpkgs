@@ -4,24 +4,45 @@
 , autoPatchelfHook
 , cairo
 , cups
+, darwin
 , fontconfig
-, Foundation
 , glib
 , gtk3
-, gtkSupport ? stdenv.isLinux
 , makeWrapper
 , setJavaClassPath
 , unzip
 , xorg
 , zlib
-}:
-{ javaVersion
+  # extra params
+, javaVersion
 , meta ? { }
 , products ? [ ]
+, gtkSupport ? stdenv.isLinux
 , ...
 } @ args:
 
 let
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
+    "alsa-lib"
+    "autoPatchelfHook"
+    "cairo"
+    "cups"
+    "darwin"
+    "fontconfig"
+    "glib"
+    "gtk3"
+    "makeWrapper"
+    "setJavaClassPath"
+    "unzip"
+    "xorg"
+    "zlib"
+    "javaVersion"
+    "meta"
+    "products"
+    "gtkSupport"
+  ];
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
   mapProducts = key: default: (map (p: p.graalvmPhases.${key} or default) products);
@@ -72,7 +93,7 @@ let
       ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin Foundation;
+      ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -150,6 +171,6 @@ let
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
     } // meta);
-  } // (builtins.removeAttrs args [ "javaVersion" "meta" "products" ]));
+  } // extraArgs);
 in
 graalvmXXX-ce
