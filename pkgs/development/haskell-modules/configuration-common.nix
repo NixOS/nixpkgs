@@ -60,6 +60,15 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # patat main branch has an unreleased commit that fixes the build by
+  # relaxing restrictive upper boundaries. This can be removed once there's a
+  # new release following version 0.8.8.0.
+  patat = appendPatch (fetchpatch {
+    url = "https://github.com/jaspervdj/patat/commit/be9e0fe5642ba6aa7b25705ba17950923e9951fa.patch";
+    sha256 = "sha256-Vxxi46qrkIyzYQZ+fe1vNTPldcQEI2rX2H40GvFJR2M=";
+    excludes = ["stack.yaml" "stack.yaml.lock"];
+  }) super.patat;
+
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
   # and the upper bound doesn't exist in code anymore:
