@@ -30,8 +30,8 @@ with lib;
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
-      ffmpeg_4 = super.ffmpeg_4-headless;
-      ffmpeg_5 = super.ffmpeg_5-headless;
+      ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
+      ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support
       gd = super.gd.override { withXorg = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
