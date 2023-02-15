@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, graalvm-ce
 , graalvmCEPackages
 , javaVersion
 , src
