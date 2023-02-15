@@ -1621,8 +1621,6 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { };
 
-  cchardet = callPackage ../development/python-modules/cchardet { };
-
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   celery = callPackage ../development/python-modules/celery { };
@@ -3324,6 +3322,8 @@ self: super: with self; {
   fasttext = callPackage ../development/python-modules/fasttext { };
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
+
+  faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
 
   favicon = callPackage ../development/python-modules/favicon { };
 

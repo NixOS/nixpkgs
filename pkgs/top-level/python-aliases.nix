@@ -47,6 +47,7 @@ mapAliases ({
   bsblan = python-bsblan; # added 2022-11-04
   bt_proximity = bt-proximity; # added 2021-07-02
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
+  cchardet = faust-cchardet; # added 2023-02-14
   class-registry = phx-class-registry; # added 2021-10-05
   codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ConfigArgParse = configargparse; # added 2021-03-18
