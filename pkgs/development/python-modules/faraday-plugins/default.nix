@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-KAfy2AQWZYFT/+rX8dNe8aWTFI0kkGg5IaSHhwYGk3A=";
+    hash = "sha256-P8zR2EhfveuIN/O5cHMuB7tY/5i6a/eKVAnj6Da0j9g=";
   };
 
   propagatedBuildInputs = [
