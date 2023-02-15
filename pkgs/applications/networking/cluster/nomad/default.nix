@@ -55,10 +55,10 @@ rec {
   };
 
   nomad_1_3 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.3.8";
-    sha256 = "sha256-hUmDWgGV8HAXew8SpcbhaiaF9VfBN5mk1W7t5lhnZ9I=";
-    vendorSha256 = "sha256-IfYobyDFriOldJnNfRK0QVKBfttoZZ1iOkt4cBQxd00=";
+    buildGoModule = buildGo120Module;
+    version = "1.3.9";
+    sha256 = "sha256-xfoIzLDG/OfqAPQqeLvQZ11uESWFNyOyLP6Imi+S96w=";
+    vendorSha256 = "sha256-kW0goicoM1lM1NEHPTfozg2EKR1daf33UxT/mVabyfY=";
   };
 
   nomad_1_4 = generic {
