@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "0.10.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pXSUVeTrxtSqKTa286xdCAAFipg38iR4XSO6CRfWXtc=";
+    hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
 
   nativeBuildInputs = [
