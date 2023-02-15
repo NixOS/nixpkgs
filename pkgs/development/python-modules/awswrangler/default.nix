@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "numpy"
     "pandas"
     "pg8000"
+    "pyarrow"
   ];
 
   nativeCheckInputs = [ moto pytestCheckHook ];
