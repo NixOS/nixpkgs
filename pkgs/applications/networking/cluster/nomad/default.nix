@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , buildGo119Module
+, buildGo120Module
 , fetchFromGitHub
 , nixosTests
 }:
@@ -47,10 +48,10 @@ rec {
   nomad = nomad_1_4;
 
   nomad_1_2 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.2.15";
-    sha256 = "sha256-p9yRjSapQAhuHv+slUmYI25bUb1N1A7LBiJOdk1++iI=";
-    vendorSha256 = "sha256-6d3tE337zVAIkzQzAnV2Ya5xwwhuzmKgtPUJcJ9HRto=";
+    buildGoModule = buildGo120Module;
+    version = "1.2.16";
+    sha256 = "sha256-fhfUpcG91EgIzJ4mCS7geyIJyTSHS2e8t4yYiI3PqpQ=";
+    vendorSha256 = "sha256-kwCDsGFw+25Mimgt/cTK/Z2H7Qh5n4rjr3kIBvjcPL8=";
   };
 
   nomad_1_3 = generic {
