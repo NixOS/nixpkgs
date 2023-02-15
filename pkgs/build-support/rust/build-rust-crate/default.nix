@@ -299,7 +299,7 @@ crate_: lib.makeOverridable
         );
 
       libName = if crate ? libName then crate.libName else crate.crateName;
-      libPath = if crate ? libPath then crate.libPath else "";
+      libPath = lib.optionalString (crate ? libPath) crate.libPath;
 
       # Seed the symbol hashes with something unique every time.
       # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols

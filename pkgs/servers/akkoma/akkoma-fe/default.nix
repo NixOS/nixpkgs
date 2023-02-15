@@ -6,20 +6,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "pleroma-fe";
-  version = "unstable-2022-12-10";
+  pname = "akkoma-fe";
+  version = "unstable-2023-02-11";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
-    repo = "pleroma-fe";
-    rev = "9c9b4cc07c018a21c8261dd7680a97aa3a670756";
-    hash = "sha256-jYJcG2Q5kxOH29G5WV/6Cx7a+b7FuFROEn/8ruh7cDc=";
+    repo = "akkoma-fe";
+    rev = "8569b5946eebdb4e7c91252e1dcf88795c8e2538";
+    hash = "sha256-fIkfKAFrcCioma3Hb0c20rfSWXevwWeJbyJm+dUSNlQ=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-pz6NHBYZRi+Rwx6H74895vFWGLSivI7Ul8XV6wMbgJg=";
+    hash = "sha256-Uet3zdjLdI4qpiuU4CtW2WwWGcFaOhotLLKfnsAUqho=";
   };
 
   nativeBuildInputs = [
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Frontend for Akkoma and Pleroma";
-    homepage = "https://akkoma.dev/AkkomaGang/pleroma-fe/";
+    description = "Frontend for Akkoma";
+    homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mvs ];
   };

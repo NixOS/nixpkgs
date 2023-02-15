@@ -34,11 +34,11 @@ in stdenv.mkDerivation rec {
 
     wrapVifmMedia = "wrapProgram $out/share/vifm/vifm-media --prefix PATH : ${path}";
   in ''
-    ${if mediaSupport then wrapVifmMedia else ""}
+    ${lib.optionalString mediaSupport wrapVifmMedia}
   '';
 
   meta = with lib; {
-    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
+    description = "A vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;

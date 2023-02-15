@@ -83,12 +83,12 @@ stdenv.mkDerivation {
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libblas${canonicalExtension} $out/lib/libblas${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libblas${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
+'' else lib.optionalString (stdenv.hostPlatform.isDarwin) ''
   install_name_tool \
     -id $out/lib/libblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider'}/lib \
     $out/lib/libblas${canonicalExtension}
-'' else "") + ''
+'') + ''
 
   if [ "$out/lib/libblas${canonicalExtension}" != "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
     ln -s $out/lib/libblas${canonicalExtension} "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
@@ -115,12 +115,12 @@ EOF
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libcblas${canonicalExtension} $out/lib/libcblas${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libcblas${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
+'' else lib.optionalString stdenv.hostPlatform.isDarwin ''
   install_name_tool \
     -id $out/lib/libcblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider'}/lib \
     $out/lib/libcblas${canonicalExtension}
-'' else "") + ''
+'') + ''
   if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
     ln -s $out/lib/libcblas${canonicalExtension} "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}"
   fi
