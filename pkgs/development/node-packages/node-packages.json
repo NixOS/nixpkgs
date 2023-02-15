@@ -10,6 +10,7 @@
 , "@emacs-eask/cli"
 , "@forge/cli"
 , "@google/clasp"
+, "@marp-team/marp-cli"
 , "@medable/mdctl-cli"
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
