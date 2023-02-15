@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
+    changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
     longDescription = ''
