@@ -3,7 +3,7 @@
 , fetchurl
 , makeWrapper
 , pkg-config
-, perl
+, libOnly ? false # whether to build only the library
 , withAlsa ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , withPulse ? stdenv.hostPlatform.isLinux
@@ -14,29 +14,32 @@
 , withJack ? stdenv.hostPlatform.isUnix
 , jack
 , withConplay ? !stdenv.hostPlatform.isWindows
+, perl
 }:
 
 stdenv.mkDerivation rec {
-  pname = "mpg123";
+  pname = "${lib.optionalString libOnly "lib"}mpg123";
   version = "1.31.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
     sha256 = "sha256-sX8ikF4x9DtrQB399qce0Ru30Fb2jbRJ1wufmug5x94=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals withConplay [ "conplay" ];
+  outputs = [ "out" ] ++ lib.optionals (!libOnly && withConplay) [ "conplay" ];
 
-  nativeBuildInputs = lib.optionals withConplay [ makeWrapper ]
-    ++ lib.optionals (withPulse || withJack) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (!libOnly)
+    (lib.optionals withConplay [ makeWrapper ]
+     ++ lib.optionals (withPulse || withJack) [ pkg-config ]);
 
-  buildInputs = lib.optionals withConplay [ perl ]
-    ++ lib.optionals withAlsa [ alsa-lib ]
-    ++ lib.optionals withPulse [ libpulseaudio ]
-    ++ lib.optionals withCoreAudio [ AudioUnit AudioToolbox ]
-    ++ lib.optionals withJack [ jack ];
+  buildInputs = lib.optionals (!libOnly)
+    (lib.optionals withConplay [ perl ]
+     ++ lib.optionals withAlsa [ alsa-lib ]
+     ++ lib.optionals withPulse [ libpulseaudio ]
+     ++ lib.optionals withCoreAudio [ AudioUnit AudioToolbox ]
+     ++ lib.optionals withJack [ jack ]);
 
-  configureFlags = [
+  configureFlags = lib.optionals (!libOnly) [
     "--with-audio=${lib.strings.concatStringsSep "," (
       lib.optional withJack "jack"
       ++ lib.optional withPulse "pulse"
@@ -48,16 +51,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString withConplay ''
+  postInstall = lib.optionalString (!libOnly && withConplay) ''
     mkdir -p $conplay/bin
     mv scripts/conplay $conplay/bin/
   '';
 
-  preFixup = lib.optionalString withConplay ''
+  preFixup = lib.optionalString (!libOnly && withConplay) ''
     patchShebangs $conplay/bin/conplay
   '';
 
-  postFixup = lib.optionalString withConplay ''
+  postFixup = lib.optionalString (!libOnly && withConplay) ''
     wrapProgram $conplay/bin/conplay \
       --prefix PATH : $out/bin
   '';

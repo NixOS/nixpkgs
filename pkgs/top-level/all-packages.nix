@@ -31406,6 +31406,10 @@ with pkgs;
     jack = libjack2;
   };
 
+  libmpg123 = mpg123.override {
+    libOnly = true;
+  };
+
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
   mpc-cli = callPackage ../applications/audio/mpc {
