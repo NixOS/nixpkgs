@@ -63,7 +63,7 @@
           hooks = import ./hooks/default.nix;
           keep = lib.extends hooks pythonPackagesFun;
           extra = _: {};
-          optionalExtensions = cond: as: if cond then as else [];
+          optionalExtensions = cond: as: lib.optionals cond as;
           pythonExtension = import ../../../top-level/python-packages.nix;
           python2Extension = import ../../../top-level/python2-packages.nix;
           extensions = lib.composeManyExtensions ([
