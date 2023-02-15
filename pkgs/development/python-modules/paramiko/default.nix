@@ -5,54 +5,56 @@
 , fetchpatch
 , fetchPypi
 , gssapi
+, icecream
 , invoke
 , mock
 , pyasn1
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.11.0";
+  version = "3.0.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
+    hash = "sha256-/tybHdQ7wdRfZ/HOyhC8M2YFQnpG3N+N7Gv+o+31eWU=";
   };
 
   patches = [
-    # Fix usage of dsa keys
-    # https://github.com/paramiko/paramiko/pull/1606/
+    # Fix usage of dsa keys, https://github.com/paramiko/paramiko/pull/1606/
     (fetchpatch {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
-    })
-    (fetchpatch {
-      name = "fix-sftp-tests.patch";
-      url = "https://github.com/paramiko/paramiko/commit/47cfed55575c21ac558e6d00a4ab1814406be651.patch";
-      hash = "sha256-H3nKT8+4CTEDoiqnlhFfuKnc/65GGfwwAm9H2lwrlK8=";
     })
   ];
 
   propagatedBuildInputs = [
     bcrypt
     cryptography
-    pyasn1
-    six
-  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
+    pynacl
+  ];
 
   passthru.optional-dependencies = {
-    gssapi = [ pyasn1 gssapi ];
-    ed25519 = [ pynacl bcrypt ];
-    invoke = [ invoke ];
+    gssapi = [
+      gssapi
+      pyasn1
+    ];
+    ed25519 = [ ];
+    invoke = [
+      invoke
+    ];
   };
 
   nativeCheckInputs = [
     mock
+    icecream
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
