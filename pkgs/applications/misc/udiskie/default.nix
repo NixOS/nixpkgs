@@ -43,7 +43,6 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libappindicator-gtk3
     libnotify

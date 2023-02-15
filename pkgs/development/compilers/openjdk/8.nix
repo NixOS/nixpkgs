@@ -20,7 +20,7 @@ let
     powerpc64le-linux = "ppc64le";
   }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
-  update = "352";
+  update = "362";
   build = "ga";
 
   openjdk8 = stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ let
       owner = "openjdk";
       repo = "jdk8u";
       rev = "jdk${version}";
-      sha256 = "sha256-xDiiALDjStD9IPhbBr997rm/v2Q/WdS10cILBCmdJIQ=";
+      sha256 = "sha256-C5dQwfIIpIrLeO3JWERyFCQHUSgG8gARuc3qXAeLkJ4=";
     };
     outputs = [ "out" "jre" ];
 

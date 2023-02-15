@@ -163,7 +163,7 @@ mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2
 mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2
 mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2
 mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2
-mirror://xorg/individual/font/font-util-1.3.1.tar.bz2
+mirror://xorg/individual/font/font-util-1.3.3.tar.xz
 mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2
 mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2
@@ -174,7 +174,7 @@ mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.8.3.tar.xz
+mirror://xorg/individual/lib/libX11-1.8.4.tar.xz
 mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.14.tar.bz2
 mirror://xorg/individual/lib/libxcb-1.14.tar.xz

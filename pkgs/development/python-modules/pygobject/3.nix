@@ -42,8 +42,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to these
-    gobject-introspection
+    # # .so files link to this
     glib
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses

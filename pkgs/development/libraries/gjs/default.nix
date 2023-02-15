@@ -27,7 +27,6 @@
 
 let
   testDeps = [
-    gobject-introspection # for Gio and cairo typelibs
     gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {

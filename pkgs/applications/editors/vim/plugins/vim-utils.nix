@@ -363,7 +363,7 @@ rec {
   vimGenDocHook = callPackage ({ vim }:
     makeSetupHook {
       name = "vim-gen-doc-hook";
-      deps = [ vim ];
+      propagatedBuildInputs = [ vim ];
       substitutions = {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
@@ -373,7 +373,7 @@ rec {
   vimCommandCheckHook = callPackage ({ neovim-unwrapped }:
     makeSetupHook {
       name = "vim-command-check-hook";
-      deps = [ neovim-unwrapped ];
+      propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
@@ -383,7 +383,7 @@ rec {
   neovimRequireCheckHook = callPackage ({ neovim-unwrapped }:
     makeSetupHook {
       name = "neovim-require-check-hook";
-      deps = [ neovim-unwrapped ];
+      propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;

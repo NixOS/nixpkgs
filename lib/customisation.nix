@@ -213,7 +213,14 @@ rec {
             outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
-          };
+          } //
+            # TODO: give the derivation control over the outputs.
+            #       `overrideAttrs` may not be the only attribute that needs
+            #       updating when switching outputs.
+            lib.optionalAttrs (passthru?overrideAttrs) {
+              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
+            };
         };
 
       outputsList = map outputToAttrListElement outputs;

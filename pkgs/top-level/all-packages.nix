@@ -160,14 +160,14 @@ with pkgs;
   ### BUILD SUPPORT
 
   auditBlasHook = makeSetupHook
-    { name = "auto-blas-hook"; deps = [ blas lapack ]; }
+    { name = "auto-blas-hook"; propagatedBuildInputs = [ blas lapack ]; }
     ../build-support/setup-hooks/audit-blas.sh;
 
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {
       name = "autoreconf-hook";
-      deps = [ autoconf automake gettext libtool ];
+      propagatedBuildInputs = [ autoconf automake gettext libtool ];
     } ../build-support/setup-hooks/autoreconf.sh
   ) { };
 
@@ -184,7 +184,7 @@ with pkgs;
 
   autoPatchelfHook = makeSetupHook {
     name = "auto-patchelf-hook";
-    deps = [ bintools ];
+    propagatedBuildInputs = [ bintools ];
     substitutions = {
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
@@ -356,7 +356,7 @@ with pkgs;
 
   gogUnpackHook = makeSetupHook {
     name = "gog-unpack-hook";
-    deps = [ innoextract file-rename ]; }
+    propagatedBuildInputs = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
@@ -1016,7 +1016,7 @@ with pkgs;
 
   makeShellWrapper = makeSetupHook {
     name = "make-shell-wrapper-hook";
-    deps = [ dieHook ];
+    propagatedBuildInputs = [ dieHook ];
     substitutions = {
       # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
       shell = if targetPackages ? runtimeShell then targetPackages.runtimeShell else throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
@@ -1069,7 +1069,7 @@ with pkgs;
 
   shortenPerlShebang = makeSetupHook {
     name = "shorten-perl-shebang-hook";
-    deps = [ dieHook ];
+    propagatedBuildInputs = [ dieHook ];
   } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
@@ -1121,7 +1121,7 @@ with pkgs;
 
   desktopToDarwinBundle = makeSetupHook {
     name = "desktop-to-darwin-bundle-hook";
-    deps = [ writeDarwinBundle librsvg imagemagick python3Packages.icnsutil ];
+    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick python3Packages.icnsutil ];
   } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook {
@@ -1134,7 +1134,7 @@ with pkgs;
 
   makeGCOVReport = makeSetupHook {
     name = "make-gcov-report-hook";
-    deps = [ lcov enableGCOVInstrumentation ];
+    propagatedBuildInputs = [ lcov enableGCOVInstrumentation ];
   } ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
@@ -1169,7 +1169,7 @@ with pkgs;
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
   validatePkgConfig = makeSetupHook
-    { name = "validate-pkg-config"; deps = [ findutils pkg-config ]; }
+    { name = "validate-pkg-config"; propagatedBuildInputs = [ findutils pkg-config ]; }
     ../build-support/setup-hooks/validate-pkg-config.sh;
 
   patchPpdFilesHook = callPackage ../build-support/setup-hooks/patch-ppd-files {};
@@ -2941,7 +2941,9 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
+    openjdk11 = openjdk11.override { enableJavaFX = true; };
+  };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -14964,7 +14966,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -17789,8 +17791,6 @@ with pkgs;
     openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  pmdk = callPackage ../development/libraries/pmdk { };
-
   jdepend = callPackage ../development/tools/analysis/jdepend {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -18815,13 +18815,13 @@ with pkgs;
   xcbuild = xcodebuild;
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
-    deps = [ xcbuild ];
+    propagatedBuildInputs = [ xcbuild ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
   # xcbuild with llvm 6
   xcbuild6Hook = makeSetupHook {
     name = "xcbuild6-hook";
-    deps = [ xcodebuild6 ];
+    propagatedBuildInputs = [ xcodebuild6 ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
@@ -22104,7 +22104,7 @@ with pkgs;
   memorymapping = callPackage ../development/libraries/memorymapping { };
   memorymappingHook = makeSetupHook {
     name = "memorymapping-hook";
-    deps = [ memorymapping ];
+    propagatedBuildInputs = [ memorymapping ];
   } ../development/libraries/memorymapping/setup-hook.sh;
 
   memray = callPackage ../development/tools/memray { };
@@ -22112,7 +22112,7 @@ with pkgs;
   memstream = callPackage ../development/libraries/memstream { };
   memstreamHook = makeSetupHook {
     name = "memstream-hook";
-    deps = [ memstream ];
+    propagatedBuildInputs = [ memstream ];
   } ../development/libraries/memstream/setup-hook.sh;
 
   menu-cache = callPackage ../development/libraries/menu-cache { };
@@ -25452,8 +25452,7 @@ with pkgs;
       inherit (buildPackages.darwin) bootstrap_cmds;
       udev = if stdenv.isLinux then udev else null;
       libdrm = if stdenv.isLinux then libdrm else null;
-      abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
-        or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
+      abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
     };
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix {};
@@ -31832,7 +31831,9 @@ with pkgs;
 
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic {
+    jdk19 = openjdk19.override { enableJavaFX = true; };
+  };
 
   mupdf = callPackage ../applications/misc/mupdf { };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };

@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.236.0";
+  version = "1.3.239.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-ExtensionLayer";
       rev = "sdk-${version}";
-      hash = "sha256-NlBS7UuV2AZPY5VyoqTnTf63M7fHIPQDZRtMZ4XwMzA=";
+      hash = "sha256-0t9HGyiYk3twYQLFCcWsrPiXY1dqjdCadjP4yMLoFwA=";
     });
 
   nativeBuildInputs = [ cmake jq ];

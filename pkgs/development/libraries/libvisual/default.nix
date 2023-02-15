@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , SDL
+, autoreconfHook
 , glib
 , pkg-config
 }:
@@ -15,12 +17,36 @@ stdenv.mkDerivation rec {
     hash = "sha256-qhKHdBf3bTZC2fTHIzAjgNgzF1Y51jpVZB0Bkopd230=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  patches = [
+    # pull upstream fix for SDL1 cross-compilation.
+    #   https://github.com/Libvisual/libvisual/pull/238
+    (fetchpatch {
+      name = "sdl-cross-prereq.patch";
+      url = "https://github.com/Libvisual/libvisual/commit/7902d24aa1a552619a5738339b3823e90dd3b865.patch";
+      hash = "sha256-84u8klHDAw/q4d+9L4ROAr7XsbXItHrhaEKkTEMSPcc=";
+      # remove extra libvisual prefix
+      stripLen = 1;
+      # pull in only useful configure.ac changes.
+      excludes = [ "Makefile.am" ];
+    })
+    (fetchpatch {
+      name = "sdl-cross-pc.patch";
+      url = "https://github.com/Libvisual/libvisual/commit/f79a2e8d21ad1d7fe26e2aa83cea4c9f48f9e392.patch";
+      hash = "sha256-8c7SdLxXC8K9BAwj7DzozsZAcbs5l1xuBqky9LJ1MfM=";
+      # remove extra libvisual prefix
+      stripLen = 1;
+    })
+  ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ SDL glib ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
+    # Remove once "sdl-cross-prereq.patch" patch above is removed.
+    "--disable-lv-tool"
   ];
 
   meta = {

@@ -55,8 +55,6 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals stdenv.isLinux [
     libcap_ng
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ];
 
   strictDeps = true;

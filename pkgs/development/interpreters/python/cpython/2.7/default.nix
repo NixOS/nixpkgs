@@ -24,7 +24,7 @@
 , pkgsHostHost
 , pkgsTargetTarget
 , sourceVersion
-, sha256
+, hash
 , passthruFun
 , static ? stdenv.hostPlatform.isStatic
 , stripBytecode ? reproducibleBuild
@@ -87,7 +87,7 @@ let
     owner = "ActiveState";
     repo = "cpython";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);

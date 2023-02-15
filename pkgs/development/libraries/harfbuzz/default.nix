@@ -10,6 +10,8 @@
 , meson
 , ninja
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , icu
 , graphite2
 , harfbuzz # The icu variant uses and propagates the non-icu one.
@@ -32,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "6.0.0";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
-    sha256 = "HRAQoXUdB21SkeQzwThQKnlNZ5p0mNEmjuIeLUoUDrQ=";
+    hash = "sha256-e0aFtwZsXGuNxs17AvY8VU+4zBxN3PxEvChO+jwgzyg=";
   };
 
   postPatch = ''
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "coretext" withCoreText)
     (lib.mesonEnable "graphite" withGraphite2)
     (lib.mesonEnable "icu" withIcu)
+    (lib.mesonEnable "introspection" withIntrospection)
   ];
 
   depsBuildBuild = [
@@ -70,14 +73,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    gobject-introspection
     libintl
     pkg-config
     python3
+    glib
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ];
+  ] ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [ glib freetype ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
@@ -107,6 +110,6 @@ stdenv.mkDerivation rec {
     homepage = "https://harfbuzz.github.io/";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

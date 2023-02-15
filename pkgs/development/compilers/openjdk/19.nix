@@ -7,15 +7,15 @@
 # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
 # which should be fixable, this is a no-rebuild workaround for GHC.
 , headless ? stdenv.targetPlatform.isGhcjs
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   version = {
     feature = "19";
-    interim = ".0.1";
-    build = "10";
+    interim = ".0.2";
+    build = "7";
   };
 
   openjdk = stdenv.mkDerivation {
@@ -26,7 +26,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      hash = "sha256-IS6ABnVdW1qJ4gu4YSgMVFXBTNdtWFdbNNz+kMaiyk8=";
+      hash = "sha256-pBEHmBtIgG4Czou4C/zpBBYZEDImvXiLoA5CjOzpeyI=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
@@ -57,8 +57,8 @@ let
       # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
       # This is applied anywhere to prevent patchrot.
       (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=b93d1fc37fcf106144958d957bb97c7db67bd41f";
-        hash = "sha256-cnpeYcVoRYjuDgrl2x27frv6KUAnu1+1MVPehPZy/Cg=";
+        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=93dc07f97ff716b647c5f57c6224901ea06da560";
+        hash = "sha256-H4X3Yip5bCpXMH7MSu9BgXIOYRVUBMZPZW8EvZSWI5k=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch

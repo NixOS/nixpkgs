@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     dbus
+    gettext
     glib
     polkit
     systemd

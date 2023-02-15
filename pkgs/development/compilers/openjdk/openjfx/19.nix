@@ -1,11 +1,14 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
-, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
-, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68 }:
+, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk3, libXtst
+, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "19";
-  update = "";
-  build = "+11";
+  update = ".0.2.1";
+  build = "+1";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
@@ -19,7 +22,7 @@ let
       owner = "openjdk";
       repo = "jfx";
       rev = repover;
-      hash = "sha256-UXTaXtJ8py83V7IQK9wACIEWDAMRUaYNgH9e/Aeyuzc=";
+      hash = "sha256-A08GhCGpzWlUG1+f6mcjvkJmMNaOReacQKPEmNpUvLs=";
     };
 
     patches = [
@@ -35,7 +38,7 @@ let
       })
     ];
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
+    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -83,8 +86,8 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''

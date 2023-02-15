@@ -117,23 +117,24 @@
   };
 
   sources = {
-    python39 = {
-      sourceVersion = {
-        major = "3";
-        minor = "9";
-        patch = "16";
-        suffix = "";
-      };
-      sha256 = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
-    };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "9";
+        patch = "10";
         suffix = "";
       };
-      sha256 = "sha256-WuA+MIJgFkuro5kh/bTb+ObQPYI1qTnUWCsz8LXkaoM=";
+      hash = "sha256-BBnpCFv1G3pnIAmz9Q2/GFms3xi6cl0OwZqlyFA/DqM=";
+    };
+
+    python311 = {
+      sourceVersion = {
+        major = "3";
+        minor = "11";
+        patch = "2";
+        suffix = "";
+      };
+      hash = "sha256-KeS49fFlhUKowT4t0nc1jJxI8rL3MYZS7xZ15AK50q8=";
     };
   };
 
@@ -147,7 +148,7 @@ in {
       patch = "18";
       suffix = ".6"; # ActiveState's Python 2 extended support
     };
-    sha256 = "sha256-+I0QOBkuTHMIQz71lgNn1X1vjPsjJMtFbgC0xcGTwWY=";
+    hash = "sha256-+I0QOBkuTHMIQz71lgNn1X1vjPsjJMtFbgC0xcGTwWY=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -160,16 +161,23 @@ in {
       patch = "16";
       suffix = "";
     };
-    sha256 = "sha256-2F27N3QTJHPYCB3LFY80oQzK16kLlsflDqS7YfXORWI=";
+    hash = "sha256-2F27N3QTJHPYCB3LFY80oQzK16kLlsflDqS7YfXORWI=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python39 = callPackage ./cpython ({
+  python39 = callPackage ./cpython {
     self = __splicedPackages.python39;
+    sourceVersion = {
+      major = "3";
+      minor = "9";
+      patch = "16";
+      suffix = "";
+    };
+    hash = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python39);
+  };
 
   python310 = callPackage ./cpython ({
     self = __splicedPackages.python310;
@@ -177,18 +185,11 @@ in {
     inherit passthruFun;
   } // sources.python310);
 
-  python311 = callPackage ./cpython {
+  python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
-    sourceVersion = {
-      major = "3";
-      minor = "11";
-      patch = "1";
-      suffix = "";
-    };
-    sha256 = "sha256-hYeRkvLP/VbLFsCSkFlJ6/Pl45S392RyNSljeQHftY8=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python311);
 
   python312 = callPackage ./cpython {
     self = __splicedPackages.python312;
@@ -198,7 +199,7 @@ in {
       patch = "0";
       suffix = "a5";
     };
-    sha256 = "sha256-1m73o0L+OjVvnO47uXrcHl+0hA9rbP994P991JX4Mjs=";
+    hash = "sha256-1m73o0L+OjVvnO47uXrcHl+0hA9rbP994P991JX4Mjs=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -241,7 +242,7 @@ in {
       patch = "11";
     };
 
-    sha256 = "sha256-ERevtmgx2k6m852NIIR4enRon9AineC+MB+e2bJVCTw=";
+    hash = "sha256-ERevtmgx2k6m852NIIR4enRon9AineC+MB+e2bJVCTw=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
@@ -258,7 +259,7 @@ in {
       patch = "11";
     };
 
-    sha256 = "sha256-sPMWb7Klqt/VzrnbXN1feSmg7MygK0omwNrgSS98qOo=";
+    hash = "sha256-sPMWb7Klqt/VzrnbXN1feSmg7MygK0omwNrgSS98qOo=";
     pythonVersion = "3.9";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = __splicedPackages.pypy27;
@@ -270,7 +271,7 @@ in {
   pypy38 = __splicedPackages.pypy39.override {
     self = __splicedPackages.pythonInterpreters.pypy38;
     pythonVersion = "3.8";
-    sha256 = "sha256-TWdpv8pzc06GZv1wUDt86wam4lkRDmFzMbs4mcpOYFg=";
+    hash = "sha256-TWdpv8pzc06GZv1wUDt86wam4lkRDmFzMbs4mcpOYFg=";
   };
 
   pypy37 = throw "pypy37 has been removed from nixpkgs since it is no longer supported upstream"; # Added 2023-01-04
@@ -284,7 +285,7 @@ in {
       patch = "11";
     };
 
-    sha256 = {
+    hash = {
       aarch64-linux = "sha256-6pJNod7+kyXvdg4oiwT5hGFOQFWA9TIetqXI9Tm9QVo=";
       x86_64-linux = "sha256-uo7ZWKkFwHNaTP/yh1wlCJlU3AIOCH2YKw/6W52jFs0=";
       aarch64-darwin = "sha256-zFaWq0+TzTSBweSZC13t17pgrAYC+hiQ02iImmxb93E=";
@@ -302,7 +303,7 @@ in {
       minor = "3";
       patch = "11";
     };
-    sha256 = {
+    hash = {
       aarch64-linux = "sha256-CRddxlLtiV2Y6a1j0haBK/PufjmNkAqb+espBrqDArk=";
       x86_64-linux = "sha256-1QYXLKEQcSdBdddOnFgcMWZDLQF5sDZHDjuejSDq5YE=";
       aarch64-darwin = "sha256-ka11APGjlTHb76CzRaPc/5J/+ZcWVOjS6e98WuMR9X4=";

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , gmp
 }:
 
@@ -11,22 +10,15 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.16.0";
+  version = "3.17.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
     rev = "v${version}";
-    hash = "sha256-8EAgeAU3HQiPrMKOtoVQQLbgq47cbveU2eQYp15XS/U=";
+    hash = "sha256-xsfd+dbaNOPuD0ulvpLPBPtcFgmJqX1VuunwNMcqh+Q=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Legrandin/pycryptodome/commit/1c043abb089ddbc2fc43d1c169672688ccc64c64.patch";
-      sha256 = "sha256-QklwOlFpQNAH0CpR06fWSZqx8C97RV8BRsKbp2j8js8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace lib/Crypto/Math/_IntegerGMP.py \
