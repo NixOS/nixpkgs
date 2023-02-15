@@ -56,6 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
