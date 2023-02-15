@@ -2,6 +2,7 @@
 , buildPythonPackage
 , cython
 , fetchPypi
+, fuzzytm
 , mock
 , numpy
 , scipy
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    fuzzytm
     smart-open
     numpy
     scipy
@@ -56,8 +58,5 @@ buildPythonPackage rec {
     homepage = "https://radimrehurek.com/gensim/";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ jyp ];
-    # python310 errors as: No matching distribution found for FuzzyTM>=0.4.0
-    # python311 errors as: longintrepr.h: No such file or directory
-    broken = true; # At 2023-02-05
   };
 }
