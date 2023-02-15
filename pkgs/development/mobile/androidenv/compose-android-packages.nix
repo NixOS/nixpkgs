@@ -186,7 +186,7 @@ rec {
   system-images = lib.flatten (map (apiVersion:
     map (type:
       map (abiVersion:
-        if lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages then
+        lib.optionals (lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages) (
           deployAndroidPackage {
             inherit os;
             package = system-images-packages.${apiVersion}.${type}.${abiVersion};
@@ -197,7 +197,7 @@ rec {
               sed -i '/^Addon.Vendor/d' source.properties
             '';
           }
-        else []
+        )
       ) abiVersions
     ) systemImageTypes
   ) platformVersions);
@@ -217,7 +217,7 @@ rec {
     };
 
   # All NDK bundles.
-  ndk-bundles = if includeNDK then map makeNdkBundle ndkVersions else [];
+  ndk-bundles = lib.optionals includeNDK (map makeNdkBundle ndkVersions);
 
   # The "default" NDK bundle.
   ndk-bundle = if includeNDK then lib.findFirst (x: x != null) null ndk-bundles else null;
