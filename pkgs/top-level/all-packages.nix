@@ -26978,6 +26978,8 @@ with pkgs;
 
   barlow = callPackage ../data/fonts/barlow { };
 
+  base16-schemes = callPackage ../data/themes/base16-schemes { };
+
   bgnet = callPackage ../data/documentation/bgnet { };
 
   bibata-cursors = callPackage ../data/icons/bibata-cursors { attrs = python3Packages.attrs; };
