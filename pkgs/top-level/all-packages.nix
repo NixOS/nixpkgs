@@ -30197,7 +30197,6 @@ with pkgs;
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
-    inherit (haskellPackages) ghcWithPackages;
     packages = self: with self; [];
   };
 
