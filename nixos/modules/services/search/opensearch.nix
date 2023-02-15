@@ -9,6 +9,9 @@ let
 
   configDir = cfg.dataDir + "/config";
 
+  usingDefaultDataDir = cfg.dataDir == "/var/lib/opensearch";
+  usingDefaultUserAndGroup = cfg.user == "opensearch" && cfg.group == "opensearch";
+
   opensearchYml = settingsFormat.generate "opensearch.yml" cfg.settings;
 
   loggingConfigFilename = "log4j2.properties";
@@ -20,9 +23,9 @@ in
 {
 
   options.services.opensearch = {
-    enable = mkEnableOption (lib.mdDoc "Whether to enable OpenSearch.");
+    enable = mkEnableOption (lib.mdDoc "OpenSearch");
 
-    package = lib.mkPackageOptionMD pkgs "OpenSearch package to use." {
+    package = lib.mkPackageOptionMD pkgs "OpenSearch" {
       default = [ "opensearch" ];
     };
 
@@ -99,13 +102,37 @@ in
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/opensearch";
+      apply = converge (removeSuffix "/");
       description = lib.mdDoc ''
-        Data directory for opensearch.
+        Data directory for OpenSearch. If you change this, you need to
+        manually create the directory. You also need to create the
+        `opensearch` user and group, or change
+        [](#opt-services.opensearch.user) and
+        [](#opt-services.opensearch.group) to existing ones with
+        access to the directory.
+      '';
+    };
+
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "opensearch";
+      description = lib.mdDoc ''
+        The user OpenSearch runs as. Should be left at default unless
+        you have very specific needs.
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "opensearch";
+      description = lib.mdDoc ''
+        The group OpenSearch runs as. Should be left at default unless
+        you have very specific needs.
       '';
     };
 
     extraCmdLineOptions = lib.mkOption {
-      description = lib.mdDoc "Extra command line options for the opensearch launcher.";
+      description = lib.mdDoc "Extra command line options for the OpenSearch launcher.";
       default = [ ];
       type = lib.types.listOf lib.types.str;
     };
@@ -142,69 +169,76 @@ in
         OPENSEARCH_PATH_CONF = configDir;
       };
       serviceConfig = {
+        ExecStartPre =
+          let
+            startPreFullPrivileges = ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+            '' + (optionalString (!config.boot.isContainer) ''
+              # Only set vm.max_map_count if lower than ES required minimum
+              # This avoids conflict if configured via boot.kernel.sysctl
+              if [ $(${pkgs.procps}/bin/sysctl -n vm.max_map_count) -lt 262144 ]; then
+                ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
+              fi
+            '');
+            startPreUnprivileged = ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+
+              # Install plugins
+              ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
+              ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
+
+              # opensearch needs to create the opensearch.keystore in the config directory
+              # so this directory needs to be writable.
+              mkdir -p ${configDir}
+              chmod 0700 ${configDir}
+
+              # Note that we copy config files from the nix store instead of symbolically linking them
+              # because otherwise X-Pack Security will raise the following exception:
+              # java.security.AccessControlException:
+              # access denied ("java.io.FilePermission" "/var/lib/opensearch/config/opensearch.yml" "read")
+
+              cp ${opensearchYml} ${configDir}/opensearch.yml
+
+              # Make sure the logging configuration for old OpenSearch versions is removed:
+              rm -f "${configDir}/logging.yml"
+              cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
+              mkdir -p ${configDir}/scripts
+              cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
+
+              # redirect jvm logs to the data directory
+              mkdir -p ${cfg.dataDir}/logs
+              chmod 0700 ${cfg.dataDir}/logs
+              sed -e '#logs/gc.log#${cfg.dataDir}/logs/gc.log#' -i ${configDir}/jvm.options
+            '';
+          in [
+            "+${pkgs.writeShellScript "opensearch-start-pre-full-privileges" startPreFullPrivileges}"
+            "${pkgs.writeShellScript "opensearch-start-pre-unprivileged" startPreUnprivileged}"
+          ];
+        ExecStartPost = pkgs.writeShellScript "opensearch-start-post" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          # Make sure opensearch is up and running before dependents
+          # are started
+          while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.settings."network.host"}:${toString cfg.settings."http.port"} 2>/dev/null; do
+            sleep 1
+          done
+        '';
         ExecStart = "${cfg.package}/bin/opensearch ${toString cfg.extraCmdLineOptions}";
-        User = "opensearch";
-        Group = "opensearch";
-        StateDirectory = cfg.dataDir;
-        StateDirectoryMode = "0700";
-        PermissionsStartOnly = true;
+        User = cfg.user;
+        Group = cfg.group;
         LimitNOFILE = "1024000";
         Restart = "always";
         TimeoutStartSec = "infinity";
-      };
-      preStart = optionalString (!config.boot.isContainer) ''
-        # Only set vm.max_map_count if lower than ES required minimum
-        # This avoids conflict if configured via boot.kernel.sysctl
-        if [ $(${pkgs.procps}/bin/sysctl -n vm.max_map_count) -lt 262144 ]; then
-          ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
-        fi
-     '' + ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-
-        # Install plugins
-        ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
-        ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
-
-        # opensearch needs to create the opensearch.keystore in the config directory
-        # so this directory needs to be writable.
-        mkdir -m 0700 -p ${configDir}
-
-        # Note that we copy config files from the nix store instead of symbolically linking them
-        # because otherwise X-Pack Security will raise the following exception:
-        # java.security.AccessControlException:
-        # access denied ("java.io.FilePermission" "/var/lib/opensearch/config/opensearch.yml" "read")
-
-        cp ${opensearchYml} ${configDir}/opensearch.yml
-        # Make sure the logging configuration for old opensearch versions is removed:
-        rm -f "${configDir}/logging.yml"
-        cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
-        mkdir -p ${configDir}/scripts
-        cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
-        # redirect jvm logs to the data directory
-        mkdir -m 0700 -p ${cfg.dataDir}/logs
-        sed -e '#logs/gc.log#${cfg.dataDir}/logs/gc.log#' -i ${configDir}/jvm.options \
-
-        if [ "$(id -u)" = 0 ]; then chown -R opensearch:opensearch ${cfg.dataDir}; fi
-      '';
-      postStart = ''
-        # Make sure opensearch is up and running before dependents
-        # are started
-        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.settings."network.host"}:${toString cfg.settings."http.port"} 2>/dev/null; do
-          sleep 1
-        done
-      '';
+        DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
+      } // (optionalAttrs (usingDefaultDataDir) {
+        StateDirectory = "opensearch";
+        StateDirectoryMode = "0700";
+      });
     };
 
     environment.systemPackages = [ cfg.package ];
-
-    users = {
-      groups.opensearch = {};
-      users.opensearch = {
-        description = "OpenSearch daemon user";
-        home = cfg.dataDir;
-        group = "opensearch";
-        isSystemUser = true;
-      };
-    };
   };
 }
