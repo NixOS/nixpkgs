@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchgit, pkg-config, writeText, libX11, conf ? null, patches ? [] }:
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, writeText
+, libX11
+, libXau
+, libXdmcp
+, conf ? null
+, patches ? []
+}:
 
 stdenv.mkDerivation rec {
   pname = "slstatus";
@@ -11,14 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   configFile = lib.optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = lib.optionalString (conf!=null) "cp ${configFile} config.def.h";
+  preBuild = lib.optionalString (conf!=null) "cp ${configFile} config.def.h" + ''
+    makeFlagsArray+=(LDLIBS="-lX11 -lxcb -lXau -lXdmcp" CC=$CC)
+  '';
 
   inherit patches;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 ];
-
-  makeFlags = [ "CC:=$(CC)" ];
+  buildInputs = [ libX11 libXau libXdmcp];
 
   installFlags = [ "PREFIX=$(out)" ];
 
