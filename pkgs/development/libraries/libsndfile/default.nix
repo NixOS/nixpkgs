@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
+, flac, lame, libmpg123, libogg, libopus, libvorbis
 , Carbon, AudioToolbox
 }:
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
-  buildInputs = [ flac libogg libopus libvorbis ]
+  buildInputs = [ flac lame libmpg123 libogg libopus libvorbis ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
