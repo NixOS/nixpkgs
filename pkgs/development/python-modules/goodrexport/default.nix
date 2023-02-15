@@ -1,26 +1,22 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, appdirs
-, more-itertools
-, patchy
 , pytestCheckHook
-, pytz
 , setuptools-scm
-, sqlalchemy
-, sqlite
+, lxml
 }:
 
 buildPythonPackage rec {
-  pname = "cachew";
-  version = "0.11.0";
+  pname = "goodrexport";
+  version = "2021-03-26";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "karlicoss";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-R268+zhf7MnIF5YTW+/zkdzEa6k4ZDk7upxA7yK05cA=";
+    rev = "10d8cc86a121b9c1e99bb0b27a1bdd18c16ce270";
+    hash = "sha256-R2u8ud2r8zCaOlhjK1XQ1KPjnrFHTPZNeUnw2wKLdD0=";
+    fetchSubmodules = true;
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,27 +26,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
-    sqlalchemy
+    lxml
   ];
 
   checkInputs = [
-    more-itertools
-    patchy
     pytestCheckHook
-    pytz
   ];
-
-  doCheck = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${sqlite}/bin
   '';
 
   meta = with lib; {
-    description = "Transparent and persistent cache/serialization powered by type hints";
-    homepage = "https://github.com/karlicoss/cachew";
+    description = "Goodreads data export";
+    homepage = "https://github.com/karlicoss/goodrexport";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ qbit ];
   };

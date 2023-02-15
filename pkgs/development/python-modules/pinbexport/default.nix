@@ -1,26 +1,22 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, appdirs
-, more-itertools
-, patchy
 , pytestCheckHook
-, pytz
 , setuptools-scm
-, sqlalchemy
-, sqlite
+, pytz
 }:
 
 buildPythonPackage rec {
-  pname = "cachew";
-  version = "0.11.0";
+  pname = "pinbexport";
+  version = "2022-05-14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "karlicoss";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-R268+zhf7MnIF5YTW+/zkdzEa6k4ZDk7upxA7yK05cA=";
+    rev = "f161f9fbb51bf8f907252d971435b5085e25ff13";
+    hash = "sha256-TiGjNHpKtykKxfH6/m/B2kxeDLvO+sAphkOiYzoej8c=";
+    fetchSubmodules = true;
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,27 +26,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
-    sqlalchemy
-  ];
-
-  checkInputs = [
-    more-itertools
-    patchy
-    pytestCheckHook
     pytz
   ];
 
-  doCheck = true;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${sqlite}/bin
   '';
 
   meta = with lib; {
-    description = "Transparent and persistent cache/serialization powered by type hints";
-    homepage = "https://github.com/karlicoss/cachew";
+    description = "Export your bookmarks from Pinboard";
+    homepage = "https://github.com/karlicoss/pinbexport";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ qbit ];
   };

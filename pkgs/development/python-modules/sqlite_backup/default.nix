@@ -1,26 +1,25 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, appdirs
-, more-itertools
-, patchy
 , pytestCheckHook
-, pytz
 , setuptools-scm
-, sqlalchemy
-, sqlite
+, click
+, logzero
+, mypy
+, flake8
+, pytest-reraise
 }:
 
 buildPythonPackage rec {
-  pname = "cachew";
-  version = "0.11.0";
+  pname = "sqlite_backup";
+  version = "0.1.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "karlicoss";
+    owner = "seanbreckenridge";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-R268+zhf7MnIF5YTW+/zkdzEa6k4ZDk7upxA7yK05cA=";
+    rev = "2e12f471676bc43dcc8bff68f579f3c25cfed4d9";
+    hash = "sha256-BlH0tCriieR1vwmBA+MFVkf6PmGsPXt6G8aIj7Y1SsU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,27 +29,26 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
-    sqlalchemy
+    logzero
+    click
   ];
 
   checkInputs = [
-    more-itertools
-    patchy
     pytestCheckHook
-    pytz
+    flake8
+    mypy
+    pytest-reraise
   ];
 
   doCheck = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${sqlite}/bin
   '';
 
   meta = with lib; {
-    description = "Transparent and persistent cache/serialization powered by type hints";
-    homepage = "https://github.com/karlicoss/cachew";
+    description = "";
+    homepage = "";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ qbit ];
   };

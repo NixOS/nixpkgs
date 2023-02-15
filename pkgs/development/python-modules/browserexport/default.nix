@@ -1,26 +1,26 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, appdirs
-, more-itertools
-, patchy
 , pytestCheckHook
-, pytz
 , setuptools-scm
-, sqlalchemy
-, sqlite
+, click
+, logzero
+, ipython
+, mypy
+, flake8
+, sqlite-backup
 }:
 
 buildPythonPackage rec {
-  pname = "cachew";
-  version = "0.11.0";
+  pname = "browserexport";
+  version = "0.2.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "karlicoss";
+    owner = "seanbreckenridge";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-R268+zhf7MnIF5YTW+/zkdzEa6k4ZDk7upxA7yK05cA=";
+    rev = "9b8413f239ce0d152bc6766c1bd12a8afc7aea80";
+    hash = "sha256-jzXczP1ZqPYzUXFV11zEyfWuQUildXmuYfDh3C+otSc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,22 +30,22 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
-    sqlalchemy
+    logzero
+    click
+    ipython
+    sqlite-backup
   ];
 
   checkInputs = [
-    more-itertools
-    patchy
     pytestCheckHook
-    pytz
+    flake8
+    mypy
   ];
 
   doCheck = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${sqlite}/bin
   '';
 
   meta = with lib; {

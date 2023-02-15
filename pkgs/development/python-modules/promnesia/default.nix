@@ -4,7 +4,7 @@
 , beautifulsoup4
 , cachew
 , fastapi
-, HPI
+, hpi
 , httptools
 , logzero
 , lxml
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     beautifulsoup4
     cachew
     fastapi
-    HPI
+    hpi
     httptools
     logzero
     lxml
