@@ -4,15 +4,89 @@ import json
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, NamedTuple, Optional, Union
+from typing import Any, cast, Generic, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 from markdown_it.token import Token
 
-from . import options
+from . import md, options
 from .docbook import DocBookRenderer, Heading
 from .md import Converter
+
+class BaseConverter(Converter[md.TR], Generic[md.TR]):
+    _base_paths: list[Path]
+
+    def convert(self, file: Path) -> str:
+        self._base_paths = [ file ]
+        try:
+            with open(file, 'r') as f:
+                return self._render(f.read())
+        except Exception as e:
+            raise RuntimeError(f"failed to render manual {file}") from e
+
+    def _parse(self, src: str) -> list[Token]:
+        tokens = super()._parse(src)
+        for token in tokens:
+            if token.type != "fence" or not token.info.startswith("{=include=} "):
+                continue
+            typ = token.info[12:].strip()
+            if typ == 'options':
+                token.type = 'included_options'
+                self._parse_options(token)
+            elif typ in [ 'sections', 'chapters', 'preface', 'parts', 'appendix' ]:
+                token.type = 'included_' + typ
+                self._parse_included_blocks(token)
+            else:
+                raise RuntimeError(f"unsupported structural include type '{typ}'")
+        return tokens
+
+    def _parse_included_blocks(self, token: Token) -> None:
+        assert token.map
+        included = token.meta['included'] = []
+        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
+            line = line.strip()
+            path = self._base_paths[-1].parent / line
+            if path in self._base_paths:
+                raise RuntimeError(f"circular include found in line {lnum}")
+            try:
+                self._base_paths.append(path)
+                with open(path, 'r') as f:
+                    tokens = self._parse(f.read())
+                    included.append((tokens, path))
+                self._base_paths.pop()
+            except Exception as e:
+                raise RuntimeError(f"processing included file {path} from line {lnum}") from e
+
+    def _parse_options(self, token: Token) -> None:
+        assert token.map
+
+        items = {}
+        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
+            if len(args := line.split(":", 1)) != 2:
+                raise RuntimeError(f"options directive with no argument in line {lnum}")
+            (k, v) = (args[0].strip(), args[1].strip())
+            if k in items:
+                raise RuntimeError(f"duplicate options directive {k} in line {lnum}")
+            items[k] = v
+        try:
+            id_prefix = items.pop('id-prefix')
+            varlist_id = items.pop('list-id')
+            source = items.pop('source')
+        except KeyError as e:
+            raise RuntimeError(f"options directive {e} missing in block at line {token.map[0] + 1}")
+        if items.keys():
+            raise RuntimeError(
+                f"unsupported options directives in block at line {token.map[0] + 1}",
+                " ".join(items.keys()))
+
+        try:
+            with open(self._base_paths[-1].parent / source, 'r') as f:
+                token.meta['id-prefix'] = id_prefix
+                token.meta['list-id'] = varlist_id
+                token.meta['source'] = json.load(f)
+        except Exception as e:
+            raise RuntimeError(f"processing options block in line {token.map[0] + 1}") from e
 
 class ManualDocBookRenderer(DocBookRenderer):
     _toplevel_tag: str
@@ -113,83 +187,10 @@ class ManualDocBookRenderer(DocBookRenderer):
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
-class DocBookConverter(Converter[ManualDocBookRenderer]):
-    _base_paths: list[Path]
-
+class DocBookConverter(BaseConverter[ManualDocBookRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
         super().__init__()
         self._renderer = ManualDocBookRenderer('book', revision, manpage_urls)
-
-    def convert(self, file: Path) -> str:
-        self._base_paths = [ file ]
-        try:
-            with open(file, 'r') as f:
-                return self._render(f.read())
-        except Exception as e:
-            raise RuntimeError(f"failed to render manual {file}") from e
-
-    def _parse(self, src: str) -> list[Token]:
-        tokens = super()._parse(src)
-        for token in tokens:
-            if token.type != "fence" or not token.info.startswith("{=include=} "):
-                continue
-            typ = token.info[12:].strip()
-            if typ == 'options':
-                token.type = 'included_options'
-                self._parse_options(token)
-            elif typ in [ 'sections', 'chapters', 'preface', 'parts', 'appendix' ]:
-                token.type = 'included_' + typ
-                self._parse_included_blocks(token)
-            else:
-                raise RuntimeError(f"unsupported structural include type '{typ}'")
-        return tokens
-
-    def _parse_included_blocks(self, token: Token) -> None:
-        assert token.map
-        included = token.meta['included'] = []
-        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
-            line = line.strip()
-            path = self._base_paths[-1].parent / line
-            if path in self._base_paths:
-                raise RuntimeError(f"circular include found in line {lnum}")
-            try:
-                self._base_paths.append(path)
-                with open(path, 'r') as f:
-                    tokens = self._parse(f.read())
-                    included.append((tokens, path))
-                self._base_paths.pop()
-            except Exception as e:
-                raise RuntimeError(f"processing included file {path} from line {lnum}") from e
-
-    def _parse_options(self, token: Token) -> None:
-        assert token.map
-
-        items = {}
-        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
-            if len(args := line.split(":", 1)) != 2:
-                raise RuntimeError(f"options directive with no argument in line {lnum}")
-            (k, v) = (args[0].strip(), args[1].strip())
-            if k in items:
-                raise RuntimeError(f"duplicate options directive {k} in line {lnum}")
-            items[k] = v
-        try:
-            id_prefix = items.pop('id-prefix')
-            varlist_id = items.pop('list-id')
-            source = items.pop('source')
-        except KeyError as e:
-            raise RuntimeError(f"options directive {e} missing in block at line {token.map[0] + 1}")
-        if items.keys():
-            raise RuntimeError(
-                f"unsupported options directives in block at line {token.map[0] + 1}",
-                " ".join(items.keys()))
-
-        try:
-            with open(self._base_paths[-1].parent / source, 'r') as f:
-                token.meta['id-prefix'] = id_prefix
-                token.meta['list-id'] = varlist_id
-                token.meta['source'] = json.load(f)
-        except Exception as e:
-            raise RuntimeError(f"processing options block in line {token.map[0] + 1}") from e
 
 
 
