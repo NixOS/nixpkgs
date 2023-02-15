@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
+{ buildPythonPackage, lib, fetchPypi, pythonOlder, pythonAtLeast
 , aiohttp
 , maxminddb
 , mocket
@@ -29,6 +29,8 @@ buildPythonPackage rec {
     requests-mock
     pytestCheckHook
   ];
+
+  disabledTests = lib.optional (pythonAtLeast "3.11") "TestAsyncClient";
 
   pythonImportsCheck = [ "geoip2" ];
 
