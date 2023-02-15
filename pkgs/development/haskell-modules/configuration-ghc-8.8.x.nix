@@ -141,11 +141,12 @@ self: super: {
 
   hlint = self.hlint_3_2_8;
 
-  ghc-lib-parser = self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib = doDistribute self.ghc-lib_8_10_7_20220219;
 
   # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24;
+  ghc-lib-parser-ex = doDistribute (addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24);
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
