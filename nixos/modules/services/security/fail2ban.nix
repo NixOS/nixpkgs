@@ -273,26 +273,16 @@ in
       "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
     };
 
+    systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
-      description = "Fail2ban Intrusion Prevention System";
-
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
 
       path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 
-      unitConfig.Documentation = "man:fail2ban(1)";
-
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/fail2ban-server -xf start";
-        ExecStop = "${cfg.package}/bin/fail2ban-server stop";
-        ExecReload = "${cfg.package}/bin/fail2ban-server reload";
-        Type = "simple";
-        Restart = "on-failure";
-        PIDFile = "/run/fail2ban/fail2ban.pid";
         # Capabilities
         CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
         # Security
