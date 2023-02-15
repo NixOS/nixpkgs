@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-bhIXVSKuUnUzs5aaLDHt21RcnqekEpLU414sFtl2Lro=";
+    hash = "sha256-zd0HDUzVYLyFjhIudBJQaKJUtYMjZeQRLALSkyD9tXU=";
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";
+    changelog   = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
