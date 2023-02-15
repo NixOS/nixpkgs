@@ -13,7 +13,7 @@ buildGoModule rec {
     hash = "sha256-SmtM25sijcm5NF0ZrSqrRQDXiLMNp8WGAZX9yKvj1rQ=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~motiejus/undocker";

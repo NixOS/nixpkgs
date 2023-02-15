@@ -40,7 +40,7 @@ buildPythonPackage rec {
     titlecase
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-aiohttp

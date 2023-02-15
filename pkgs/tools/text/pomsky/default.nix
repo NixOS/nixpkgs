@@ -2,16 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pomsky";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "rulex-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bb28f80wxjpy23mp9zamkprl8xbnx99rmmn8nxcaapq360zv9yi";
+    sha256 = "sha256-SR+cXCPcEejX3AauN3mS6zWU46m4nomMs1UVk+si1NY=";
   };
 
-  cargoSha256 = "sha256-Io8Ar7eNgULBIzI0rlitMI+9hLLWzI8pFwmH38hVVYU=";
+  cargoSha256 = "sha256-5ASB2zPL+0DAPWoB/Ez+DUbEjhDvVk00yyN75w6jzYk=";
+
+  # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
+  doCheck = false;
 
   meta = with lib; {
     description = "A portable, modern regular expression language";

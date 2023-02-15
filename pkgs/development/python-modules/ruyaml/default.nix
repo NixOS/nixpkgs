@@ -33,7 +33,7 @@ buildPythonPackage rec {
     distro
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

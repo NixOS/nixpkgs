@@ -22,7 +22,7 @@ buildPythonPackage rec {
     twisted
   ] ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpbin
     twisted
   ];

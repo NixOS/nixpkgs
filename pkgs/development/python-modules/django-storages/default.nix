@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace 'test_modified_time' 'dont_test_modified_time'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     azure-storage-blob
     boto3
     dropbox

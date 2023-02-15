@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    homepage = "http://fillets.sourceforge.net/";
+    homepage = "https://fillets.sourceforge.net/";
   };
 }

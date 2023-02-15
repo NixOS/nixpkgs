@@ -971,6 +971,7 @@ let
         print(machine.succeed("ip link show dev custom_name"))
       '';
     };
+      nodes = { };
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
     link = {

@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , coveralls
 , numpy
-, contextlib2
 , decopatch
 , more-itertools
 , nestedtext
@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "parametrize-from-file";
   version = "0.17.0";
+  format = "flit";
 
   src = fetchPypi {
     inherit version;
@@ -23,20 +24,28 @@ buildPythonPackage rec {
     sha256 = "1c91j869n2vplvhawxc1sv8km8l53bhlxhhms43fyjsqvy351v5j";
   };
 
-  format = "flit";
-  pythonImportsCheck = [ "parametrize_from_file" ];
+  patches = [
+    (fetchpatch {
+      name = "replace contextlib2-with-contextlib.patch";
+      url = "https://github.com/kalekundert/parametrize_from_file/commit/edee706770a713130da7c4b38b0a07de1bd79c1b.patch";
+      hash = "sha256-VkPKGkYYTB5XCavtEEnFJ+EdNUUhITz/euwlYAPC/tQ=";
+    })
+  ];
 
   # patch out coveralls since it doesn't provide us value
   preBuild = ''
     sed -i '/coveralls/d' ./pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace "more_itertools~=8.10" "more_itertools"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];
+
   propagatedBuildInputs = [
-    contextlib2
     decopatch
     more-itertools
     nestedtext
@@ -44,6 +53,8 @@ buildPythonPackage rec {
     tidyexc
     toml
   ];
+
+  pythonImportsCheck = [ "parametrize_from_file" ];
 
   meta = with lib; {
     description = "Read unit test parameters from config files";

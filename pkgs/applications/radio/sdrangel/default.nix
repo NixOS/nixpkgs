@@ -42,13 +42,13 @@
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "7.8.5";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "sha256-m5b51rR2l4EdF2kMogHIi1ojoy3UwuU0Q3pfB1ev300=";
+    sha256 = "sha256-lX49R1GhYH45DhxOnn3r6b4VuG8GAissCscv1Qo2GB0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

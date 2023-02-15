@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pydispatcher
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

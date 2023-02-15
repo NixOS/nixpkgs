@@ -28,6 +28,10 @@ buildDunePackage rec {
         "CHANGES.md"
       ];
     })
+    (fetchpatch {
+      url = "https://github.com/thierry-martinez/pyml/commit/97407473800b3f6215190643c1e6b9bd25d5caeb.patch";
+      hash = "sha256-7CrVuV4JT7fyi/ktWz4nNOG/BbqsQVCoJwCAhE2y4YU=";
+    })
   ];
 
   buildInputs = [
@@ -39,8 +43,8 @@ buildDunePackage rec {
     stdcompat
   ];
 
-  checkInputs = [
-    python3.pkgs.numpy
+  nativeCheckInputs = [
+    python3.pkgs.numpy python3.pkgs.ipython
   ];
 
   strictDeps = true;

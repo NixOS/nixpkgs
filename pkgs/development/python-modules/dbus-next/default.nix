@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     pytest
     pytest-cov

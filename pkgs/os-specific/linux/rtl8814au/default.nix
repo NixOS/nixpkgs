@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
-  version = "${kernel.version}-unstable-2022-08-18";
+  version = "${kernel.version}-unstable-2022-11-09";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8814au";
-    rev = "752d8ea365b2affc5d356e35659600995508849d";
-    hash = "sha256-m79IVoD3xFigmax13qELx5e3v0NfJSwmmC0PatA91HI=";
+    rev = "932df6f7da6c3a384cf91f33eb195097eb0cb6c5";
+    hash = "sha256-nMQiT59IIhzpePWWDiyCQFmYLWM42L/mG0BKsbEwreo=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -21,7 +21,6 @@ stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     oslo-config
     stestr

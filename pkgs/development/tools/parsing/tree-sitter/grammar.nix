@@ -9,10 +9,8 @@
 {
   # language name
   language
-  # version of tree-sitter
 , version
-  # source for the language grammar
-, source
+, src
 , location ? null
 , generate ? false
 , ...
@@ -21,7 +19,7 @@
 stdenv.mkDerivation ({
   pname = "${language}-grammar";
 
-  src = source;
+  inherit src version;
 
   nativeBuildInputs = lib.optionals generate [ nodejs tree-sitter ];
 
@@ -60,4 +58,4 @@ stdenv.mkDerivation ({
     fi
     runHook postInstall
   '';
-} // removeAttrs args [ "language" "source" "location" "generate" ])
+} // removeAttrs args [ "language" "location" "generate" ])

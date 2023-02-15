@@ -12,12 +12,22 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
-  # forks of each other, azan@faissal.bensefia.id is more recent
-  "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
-  "azan@hatem.masmoudi.org" = null;
+  "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
+  "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
+
+  # DEPRECATED: Use "Caffeine" instead
+  "KeepAwake@jepfa.de" = "keep-awake";
+  "awake@vixalien.com" = null;
 
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
+
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
+  # no source repository can be found for this extension
+  "floating-panel@aylur" = "floating-panel";
+  "floating-panel-usedbymyself@wpism" = null;
 
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
@@ -80,6 +90,10 @@
   # See https://github.com/pbxqdown/gnome-shell-extension-transparent-window/issues/12#issuecomment-800765381
   "transparent-window@pbxqdown.github.com" = "transparent-window";
   "transparentwindows.mdirshad07" = null;
+
+  # Forks of each other, azan@faissal.bensefia.id is more recent
+  "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
+  "azan@hatem.masmoudi.org" = null;
 
   # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
   "flypie@schneegans.github.com" = null;

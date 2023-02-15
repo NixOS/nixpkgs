@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   postInstall = ''
      # fix recursive cycle:

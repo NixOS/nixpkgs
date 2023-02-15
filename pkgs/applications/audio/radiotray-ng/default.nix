@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "in_place" ];
 

@@ -47,7 +47,7 @@ with python3Packages; buildPythonApplication rec {
     make js
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
   ];

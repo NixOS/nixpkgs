@@ -54,7 +54,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ nose nose-exclude ];
+  nativeCheckInputs = [ nose nose-exclude ];
 
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''

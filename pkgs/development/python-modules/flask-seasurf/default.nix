@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
     mock
   ];

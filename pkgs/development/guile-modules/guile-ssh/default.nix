@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-ssh";
-  version = "0.16.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "artyom-poptsov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3h4U/h6cVgHTJOyliw1gTYtgzQcatRLX6NrP87JXRc0=";
+    sha256 = "sha256-BDnLm5Q+69v8JbrfAn0+XMuWzRvCeUB/prfrKnvw5eY=";
   };
 
   configureFlags = [ "--with-guilesitedir=\${out}/share/guile/site" ];

@@ -8,6 +8,15 @@
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 , nix-update-script
+
+# for passthru.tests
+, libarchive
+, rocksdb
+, arrow-cpp
+, libzip
+, curl
+, python3Packages
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
     mkdir -p build_ && cd $_
   '';
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
   inherit doCheck;
   checkPhase = ''
     runHook preCheck
@@ -77,11 +86,13 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
-  '' + lib.optionalString buildContrib ''
-    cp contrib/pzstd/pzstd $bin/bin/pzstd
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
-  '';
+  '' + lib.optionalString buildContrib (
+    ''
+      cp contrib/pzstd/pzstd $bin/bin/pzstd
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+    ''
+  );
 
   outputs = [ "bin" "dev" ]
     ++ lib.optional stdenv.hostPlatform.isUnix "man"
@@ -89,6 +100,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit libarchive rocksdb arrow-cpp;
+      libzip = libzip.override { withZstd = true; };
+      curl = curl.override { zstdSupport = true; };
+      python-zstd = python3Packages.zstd;
+      haskell-zstd = haskellPackages.zstd;
+      haskell-hs-zstd = haskellPackages.hs-zstd;
+    };
   };
 
   meta = with lib; {

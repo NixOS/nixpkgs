@@ -9,27 +9,30 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.27.0a1";
+        version = "1.27.0a7";
         pname = "tulir-telethon";
         src = super.fetchPypi {
           inherit pname version;
-          sha256 = "sha256-tABAY4UlTyMK1ZafIFawegjBAtcnq3HMNbE1L6WaT3E=";
+          sha256 = "sha256-w4WILvLvJBKf3Nlj0omTCDDD4z+b0XFlCplQ/IHwIPs=";
         };
         doCheck = false;
       });
     };
   };
-in python.pkgs.buildPythonPackage rec {
+in
+python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.12.2";
+  version = "unstable-2023-01-28";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    rev = "v${version}";
-    sha256 = "sha256-htCk0VLr6GfXbpYWF/2bmpko7gSVlkH6HwDjOMhW8is=";
+    rev = "f12abbe03846fd5897d58572ab24b70a58b337d2";
+    sha256 = "sha256-5ZZ85FOmTO26q2zhAIsF7mTlN4BLNLW2dQF+0culkUM=";
   };
+
+  format = "setuptools";
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
 
@@ -43,19 +46,24 @@ in python.pkgs.buildPythonPackage rec {
     tulir-telethon
     asyncpg
     Mako
-    # optional
+    # speedups
     cryptg
-    cchardet
     aiodns
     brotli
+    # qr_login
     pillow
     qrcode
+    # formattednumbers
     phonenumbers
+    # metrics
     prometheus-client
+    # sqlite
     aiosqlite
   ] ++ lib.optionals withHQthumbnails [
+    # hq_thumbnails
     moviepy
   ] ++ lib.optionals withE2BE [
+    # e2be
     python-olm
     pycryptodome
     unpaddedbase64

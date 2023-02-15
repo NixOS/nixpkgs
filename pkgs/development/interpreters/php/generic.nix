@@ -52,7 +52,7 @@ let
     , cgotoSupport ? false
     , embedSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
@@ -333,6 +333,7 @@ let
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
+            mainProgram = "php";
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];

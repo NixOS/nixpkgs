@@ -43,13 +43,15 @@ let
       (lib.replaceStrings ["."] ["_"] artifactId) "-"
       version
     ];
+  suffix = if isNull classifier then "" else "-${classifier}";
+  filename = "${artifactId}-${version}${suffix}.jar";
   mkJarUrl = repoUrl:
     lib.concatStringsSep "/" [
       (lib.removeSuffix "/" repoUrl)
       (lib.replaceStrings ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
+      filename
     ];
   urls_ =
     if url != "" then [url]
@@ -68,7 +70,7 @@ in
     # packages packages that mention this derivation in their buildInputs.
     installPhase = ''
       mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+      ln -s ${jar} $out/share/java/${filename}
     '';
     # We also add a `jar` attribute that can be used to easily obtain the path
     # to the downloaded jar file.

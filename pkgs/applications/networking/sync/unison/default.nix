@@ -23,9 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-taA8eZ/wOe9uMccXVYfe34/XzWgqYKA3tLZnIOahOrQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ]
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocamlPackages.ocaml ]
     ++ lib.optional enableX11 copyDesktopItems;
-  buildInputs = [ ocamlPackages.ocaml ncurses ];
+  buildInputs = [ ncurses ];
 
   preBuild = lib.optionalString enableX11 ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml

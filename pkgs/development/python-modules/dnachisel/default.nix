@@ -33,7 +33,7 @@ buildPythonPackage rec {
     python-codon-tables
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     primer3
     genome-collector
     matplotlib

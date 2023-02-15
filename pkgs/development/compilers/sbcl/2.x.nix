@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
-                } ${if stdenv.hostPlatform.system == "aarch64-darwin" then "--arch=arm64" else ""}
+                } ${lib.optionalString (stdenv.hostPlatform.system == "aarch64-darwin") "--arch=arm64"}
     (cd doc/manual ; make info)
 
     runHook postBuild

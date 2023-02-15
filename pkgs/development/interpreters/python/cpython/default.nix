@@ -171,11 +171,22 @@ let
       else if isx86_32 then "i386"
       else parsed.cpu.name;
     pythonAbiName =
-      # python's build doesn't differentiate between musl and glibc in its
-      # abi detection, our wrapper should match.
-      if stdenv.hostPlatform.isMusl then
-        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
-        else parsed.abi.name;
+      # python's build doesn't support every gnu<extension>, and doesn't
+      # differentiate between musl and glibc, so we list those supported in
+      # here:
+      # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
+      # Note: this is an approximation, as it doesn't take into account the CPU
+      # family, or the nixpkgs abi naming conventions.
+      if elem parsed.abi.name [
+        "gnux32"
+        "gnueabihf"
+        "gnueabi"
+        "gnuabin32"
+        "gnuabi64"
+        "gnuspe"
+      ]
+      then parsed.abi.name
+      else "gnu";
     multiarch =
       if isDarwin then "darwin"
       else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
@@ -240,27 +251,15 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals isPy37 [
-    # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
-    # See: https://bugs.python.org/issue11122
-    ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
-    # The workaround is for unittests on Win64, which we don't support.
-    # It does break aarch64-darwin, which we do support. See:
-    # * https://bugs.python.org/issue35523
-    # * https://github.com/python/cpython/commit/e6b247c8e524
-    ./3.7/no-win64-workaround.patch
   ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonAtLeast "3.11") [
     ./3.11/darwin-libutil.patch
-  ] ++ optionals (pythonOlder "3.8") [
-    # Backport from CPython 3.8 of a good list of tests to run for PGO.
-    ./3.7/profile-task.patch
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
+  ] ++ optionals (isPy3k && hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
@@ -293,15 +292,17 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-  LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
-    "glibc" = "-lgcc_s";
-    "musl" = "-lgcc_eh";
-  }."${stdenv.hostPlatform.libc}" or "");
-  # Determinism: We fix the hashes of str, bytes and datetime objects.
-  PYTHONHASHSEED=0;
+  env = {
+    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
+    NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
+      "glibc" = "-lgcc_s";
+      "musl" = "-lgcc_eh";
+    }."${stdenv.hostPlatform.libc}" or "");
+    # Determinism: We fix the hashes of str, bytes and datetime objects.
+    PYTHONHASHSEED=0;
+  };
 
   configureFlags = [
     "--without-ensurepip"
@@ -344,6 +345,8 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
+    "--with-build-python=${pythonForBuildInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.

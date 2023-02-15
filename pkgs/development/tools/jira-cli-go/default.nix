@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "jira-cli-go";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
     rev = "v${version}";
-    hash = "sha256-ruFSqD/QLIK69hx9lNulWjyXVJzGACmghAU4fFEgEJo=";
+    hash = "sha256-T7EAlHHjoACJOra47zp5tXrkYWQ8o9Qame6QmiTrIXY=";
   };
 
-  vendorSha256 = "sha256-SpUggA9u8OGV2zF3EQ0CB8M6jpiVQi957UGaN+foEuk=";
+  vendorSha256 = "sha256-b/z2oSWY33XSxpHi+Tit2ThnNrdk5QNI4oZWPMBKmd0=";
 
   ldflags = [
     "-s" "-w"
@@ -20,7 +20,9 @@ buildGoModule rec {
     "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${version}"
   ];
 
-  checkInputs = [ less more ]; # Tests expect a pager in $PATH
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ less more ]; # Tests expect a pager in $PATH
 
   passthru = {
     tests.version = testers.testVersion {

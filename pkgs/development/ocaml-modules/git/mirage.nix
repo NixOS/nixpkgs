@@ -1,4 +1,5 @@
-{ lib, buildDunePackage
+{ lib
+, buildDunePackage
 , git
 , mimic
 , mimic-happy-eyeballs

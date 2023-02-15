@@ -5,7 +5,8 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, SDL2
+, libX11
+, libXi
 , libGL
 , curl
 , openal
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-m7pg9OL2RuCVKgFD3hMtIeY0XdJ1YviXBFVJH8/T5gI=";
+    sha256 = "sha256-anBi9hPwX1AAIc8dXsKyX4u7UbkKqC1P+7f7wdKWAig=";
   };
 
   nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
@@ -46,12 +47,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix hardcoded font paths
     ./font-location.patch
-    # ClassiCube doesn't compile with its X11 backend
-    # because of issues with libXi.
-    ./use-sdl.patch
     # For some reason, the Makefile doesn't link
     # with libcurl and openal when ClassiCube requires them.
-    # Also links with SDL2 instead of libX11 and libXi.
     ./fix-linking.patch
   ];
 
@@ -71,7 +68,7 @@ stdenv.mkDerivation rec {
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
-  buildInputs = [ SDL2 libGL curl openal liberation_ttf ];
+  buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
 
   preBuild = "cd src";
 

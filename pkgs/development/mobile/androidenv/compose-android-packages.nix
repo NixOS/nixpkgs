@@ -2,7 +2,8 @@
 , licenseAccepted ? false
 }:
 
-{ toolsVersion ? "26.1.1"
+{ cmdLineToolsVersion ? "8.0"
+, toolsVersion ? "26.1.1"
 , platformToolsVersion ? "33.0.3"
 , buildToolsVersions ? [ "33.0.1" ]
 , includeEmulator ? false
@@ -132,16 +133,40 @@ rec {
     package = packages.platform-tools.${platformToolsVersion};
   };
 
+  tools = callPackage ./tools.nix {
+    inherit deployAndroidPackage os;
+    package = packages.tools.${toolsVersion};
+
+    postInstall = ''
+      ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
+      ${linkPlugin { name = "patcher"; plugin = patcher; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; }}
+    '';
+  };
+
+  patcher = callPackage ./patcher.nix {
+    inherit deployAndroidPackage os;
+    package = packages.patcher."1";
+  };
+
   build-tools = map (version:
     callPackage ./build-tools.nix {
       inherit deployAndroidPackage os;
       package = packages.build-tools.${version};
+
+      postInstall = ''
+        ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
+      '';
     }
   ) buildToolsVersions;
 
   emulator = callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
     package = packages.emulator.${emulatorVersion};
+
+    postInstall = ''
+      ${linkSystemImages { images = system-images; check = includeSystemImages; }}
+    '';
   };
 
   platforms = map (version:
@@ -161,7 +186,7 @@ rec {
   system-images = lib.flatten (map (apiVersion:
     map (type:
       map (abiVersion:
-        if lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages then
+        lib.optionals (lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages) (
           deployAndroidPackage {
             inherit os;
             package = system-images-packages.${apiVersion}.${type}.${abiVersion};
@@ -172,7 +197,7 @@ rec {
               sed -i '/^Addon.Vendor/d' source.properties
             '';
           }
-        else []
+        )
       ) abiVersions
     ) systemImageTypes
   ) platformVersions);
@@ -192,7 +217,7 @@ rec {
     };
 
   # All NDK bundles.
-  ndk-bundles = if includeNDK then map makeNdkBundle ndkVersions else [];
+  ndk-bundles = lib.optionals includeNDK (map makeNdkBundle ndkVersions);
 
   # The "default" NDK bundle.
   ndk-bundle = if includeNDK then lib.findFirst (x: x != null) null ndk-bundles else null;
@@ -238,8 +263,18 @@ rec {
   # Function that automatically links a plugin for which only one version exists
   linkPlugin = {name, plugin, check ? true}:
     lib.optionalString check ''
-      ln -s ${plugin}/libexec/android-sdk/* ${name}
+      ln -s ${plugin}/libexec/android-sdk/${name} ${name}
     '';
+
+  linkSystemImages = { images, check }: lib.optionalString check ''
+    mkdir -p system-images
+    ${lib.concatMapStrings (system-image: ''
+      apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
+      type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
+      mkdir -p system-images/$apiVersion/$type
+      ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type/* system-images/$apiVersion/$type
+    '') images}
+  '';
 
   # Links all plugins related to a requested platform
   linkPlatformPlugins = {name, plugins, check}:
@@ -260,12 +295,16 @@ rec {
     ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
     by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-  '' else callPackage ./tools.nix {
-    inherit deployAndroidPackage packages toolsVersion os;
+  '' else callPackage ./cmdline-tools.nix {
+    inherit deployAndroidPackage os cmdLineToolsVersion;
+
+    package = packages.cmdline-tools.${cmdLineToolsVersion};
 
     postInstall = ''
       # Symlink all requested plugins
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
+      ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
+      ${linkPlugin { name = "patcher"; plugin = patcher; }}
       ${linkPlugins { name = "build-tools"; plugins = build-tools; }}
       ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
       ${linkPlugins { name = "platforms"; plugins = platforms; }}
@@ -273,17 +312,7 @@ rec {
       ${linkPlugins { name = "cmake"; plugins = cmake; }}
       ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
       ${linkNdkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
-
-      ${lib.optionalString includeSystemImages ''
-        mkdir -p system-images
-        ${lib.concatMapStrings (system-image: ''
-          apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
-          type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
-          mkdir -p system-images/$apiVersion/$type
-          ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type/* system-images/$apiVersion/$type
-        '') system-images}
-      ''}
-
+      ${linkSystemImages { images = system-images; check = includeSystemImages; }}
       ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleAPIs; }}
       ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleTVAddOns; }}
 
@@ -304,26 +333,18 @@ rec {
 
       # Expose common executables in bin/
       mkdir -p $out/bin
-      find $PWD/tools -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
-      do
+
+      for i in ${platform-tools}/bin/*; do
           ln -s $i $out/bin
       done
 
-      find $PWD/tools/bin -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
-      do
+      for i in ${emulator}/bin/*; do
           ln -s $i $out/bin
       done
 
-      for i in ${platform-tools}/bin/*
-      do
+      find $ANDROID_SDK_ROOT/cmdline-tools/${cmdLineToolsVersion}/bin -type f -executable | while read i; do
           ln -s $i $out/bin
       done
-
-      # the emulator auto-linked from platform-tools does not find its local qemu, while this one does
-      ${lib.optionalString includeEmulator ''
-        rm $out/bin/emulator
-        ln -s $out/libexec/android-sdk/emulator/emulator $out/bin
-      ''}
 
       # Write licenses
       mkdir -p licenses

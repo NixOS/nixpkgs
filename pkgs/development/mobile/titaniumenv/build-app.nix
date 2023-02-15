@@ -167,7 +167,7 @@ stdenv.mkDerivation ({
       echo "file binary-dist \"$(ls $out/*.apk)\"" > $out/nix-support/hydra-build-products
     ''
     else if target == "iphone" then
-      if release then ''
+      lib.optionalString release ''
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
@@ -180,7 +180,6 @@ stdenv.mkDerivation ({
           echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
         ''}
       ''
-      else ""
     else throw "Target: ${target} is not supported!"}
   '';
 

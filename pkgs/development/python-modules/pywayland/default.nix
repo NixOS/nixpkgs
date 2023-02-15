@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
     ${python.interpreter} pywayland/ffi_build.py

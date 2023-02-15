@@ -3,6 +3,9 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, macdylibbundler
+, makeWrapper
+, darwin
 , codec2
 , libpulseaudio
 , libsamplerate
@@ -21,23 +24,28 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.6";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-zzzRePBc09fK1ILoDto3EVz7IxJKePi39E18BrQedE0=";
+    hash = "sha256-N9LZCf2YAhVgxnQWgCB9TqGNpUGP1ZqpLmbYIaQsn08=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "if(APPLE)" "if(0)" \
-      --replace "\''${FREEDV_LINK_LIBS})" "\''${FREEDV_LINK_LIBS} \''${FREEDV_LINK_LIBS_OSX})" \
-      --replace "\''${RES_FILES})" "\''${RES_FILES} \''${FREEDV_SOURCES_OSX})"
+      --replace "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
+    sed -i "/hdiutil/d" src/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    macdylibbundler
+    makeWrapper
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = [
     codec2
@@ -66,6 +74,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/FreeDV.app $out/Applications
+    makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
+  '';
 
   meta = with lib; {
     homepage = "https://freedv.org/";

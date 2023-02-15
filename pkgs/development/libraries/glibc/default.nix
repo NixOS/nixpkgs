@@ -14,16 +14,17 @@ let
   ];
 in
 
-callPackage ./common.nix { inherit stdenv; } {
-    pname = "glibc" + lib.optionalString withGd "-gd";
-
-    inherit withLinuxHeaders profilingLibraries withGd withLibcrypt;
+(callPackage ./common.nix { inherit stdenv; } {
+  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  pname = "glibc" + lib.optionalString withGd "-gd";
+}).overrideAttrs(previousAttrs: {
 
     # Note:
     # Things you write here override, and do not add to,
     # the values in `common.nix`.
     # (For example, if you define `patches = [...]` here, it will
-    # override the patches in `common.nix`.)
+    # override the patches in `common.nix` -- so instead you should
+    # write `patches = (previousAttrs.patches or []) ++ [ ... ]`.
 
     NIX_NO_SELF_RPATH = true;
 
@@ -74,12 +75,20 @@ callPackage ./common.nix { inherit stdenv; } {
     # - dejagnu: during linux bootstrap tcl SIGSEGVs
     # - clang-wrapper in cross-compilation
     # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
+    preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
           # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          cp -a ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
+          # wipe out reference to previous libc it was built against
+          chmod +w $out/lib/libgcc_s.so.1
+          # rely on default RUNPATHs of the binary and other libraries
+          # Do no force-pull wrong glibc.
+          patchelf --remove-rpath $out/lib/libgcc_s.so.1
+          # 'patchelf' does not remove the string itself. Wipe out
+          # string reference to avoid possible link to bootstrapTools
+          ${buildPackages.nukeReferences}/bin/nuke-refs $out/lib/libgcc_s.so.1
       fi
     '';
 
@@ -153,5 +162,6 @@ callPackage ./common.nix { inherit stdenv; } {
 
     separateDebugInfo = true;
 
-    meta.description = "The GNU C Library";
-  }
+  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+})
+

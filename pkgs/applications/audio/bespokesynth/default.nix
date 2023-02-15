@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    sed '1i#include <memory>' -i Source/TitleBar.h # gcc12
+  '';
+
   cmakeBuildType = "Release";
 
   cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];

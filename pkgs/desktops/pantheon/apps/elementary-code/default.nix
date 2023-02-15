@@ -28,21 +28,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.2.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
+    sha256 = "sha256-6ZOdlOCIDy5aWQre15+SrTH/vhY9OeTffY/uTSroELc=";
   };
 
   patches = [
-    # Fix drag and drop of accented text and between tabs
-    # https://github.com/elementary/code/pull/1194
+    # Fix global search action disabled at startup
+    # https://github.com/elementary/code/pull/1254
     (fetchpatch {
-      url = "https://github.com/elementary/code/commit/1ed7b590768ea9cb5b4658e27d9dc7ac224442ae.patch";
-      sha256 = "sha256-VrYcEbkzQKi5gFB/Vw/0NITZvSXKXfuEv2R3m0VALVM=";
+      url = "https://github.com/elementary/code/commit/1e75388b07c060cc10ecd612076f235b1833fab8.patch";
+      sha256 = "sha256-8Djh1orMcmICdYwQFENJCaYlXK0E52NhCmuhlHCz7oM=";
     })
   ];
 

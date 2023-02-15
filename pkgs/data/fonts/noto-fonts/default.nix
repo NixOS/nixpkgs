@@ -230,15 +230,22 @@ rec {
       pname = "noto-fonts-emoji-blob-bin";
       version = "14.0.1";
     in
-    fetchurl {
-      name = "${pname}-${version}";
-      url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-      sha256 = "sha256-wSH9kRJ8y2i5ZDqzeT96dJcEJnHDSpU8bOhmxaT+UCg=";
+    stdenvNoCC.mkDerivation {
+      inherit pname version;
 
-      downloadToTemp = true;
-      recursiveHash = true;
-      postFetch = ''
-        install -Dm 444 $downloadedFile $out/share/fonts/blobmoji/Blobmoji.ttf
+      src = fetchurl {
+        url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+        hash = "sha256-w9s7uF6E6nomdDmeKB4ATcGB/5A4sTwDvwHT3YGXz8g=";
+      };
+
+      dontUnpack = true;
+
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm 444 $src $out/share/fonts/blobmoji/Blobmoji.ttf
+
+        runHook postInstall
       '';
 
       meta = with lib; {

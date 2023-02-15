@@ -1,5 +1,6 @@
 { lib, fetchurl, buildDunePackage, ocaml, alcotest
-, uri, xmlm, omd, ezjsonm }:
+, uri, xmlm, omd, ezjsonm
+}:
 
 buildDunePackage rec {
   useDune2 = true;

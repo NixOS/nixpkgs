@@ -18,7 +18,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-rJ1O2OsrJhTIfywK9/MRubwwcCmMbu61T4zyayg+mAU=";
   npmBuildScript = "compile";
 
-  # We remove the prepare and prepack scripts because they run the
+  # We remove/ignore the prepare and prepack scripts because they run the
   # build script, and therefore are redundant.
   #
   # Additionally, the prepack script runs npm ci in addition to the
@@ -30,6 +30,7 @@ buildNpmPackage rec {
     sed -i '/"prepack"/d' package.json
   '';
 
+  npmPackFlags = [ "--ignore-scripts" ];
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

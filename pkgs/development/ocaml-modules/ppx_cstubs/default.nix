@@ -42,8 +42,6 @@ buildDunePackage rec {
     ctypes
   ];
 
-  strictDeps = true;
-
   meta = with lib; {
     homepage = "https://github.com/fdopen/ppx_cstubs";
     changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";

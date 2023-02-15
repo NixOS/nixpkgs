@@ -40,7 +40,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gevent
     pytest-asyncio
     pytest-tornado

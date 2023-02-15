@@ -1,19 +1,21 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "source-han-code-jp";
-  version = "2.012R";
-in fetchzip {
-  name = "${pname}-${version}";
+  version = "2.012";
 
-  url = "https://github.com/adobe-fonts/${pname}/archive/${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/${pname}/archive/${version}R.zip";
+    hash = "sha256-ljO/1/CaE9Yj+AN5xxlIr30/nV/axGQPO0fGACAZGCQ=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 OTF/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "16y5as1k864ghy3vzp8svr3q0sw57rv53za3f48700ksvxz5pwry";
 
   meta = {
     description = "A monospaced Latin font suitable for coding";

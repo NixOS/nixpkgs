@@ -3,8 +3,6 @@
 , enableWideVine, ungoogled
 }:
 
-with lib;
-
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
@@ -76,7 +74,7 @@ mkChromiumDerivation (base: rec {
 
   meta = {
     description = "An open source web browser from Google"
-      + optionalString ungoogled ", with dependencies on Google web services removed";
+      + lib.optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
       safer, faster, and more stable way for all Internet users to experience
@@ -86,15 +84,13 @@ mkChromiumDerivation (base: rec {
     homepage = if ungoogled
       then "https://github.com/Eloston/ungoogled-chromium"
       else "https://www.chromium.org/";
-    maintainers = with maintainers; if ungoogled
+    maintainers = with lib.maintainers; if ungoogled
       then [ squalus primeos michaeladler ]
       else [ primeos thefloweringash ];
-    license = if enableWideVine then licenses.unfree else licenses.bsd3;
-    platforms = platforms.linux;
+    license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "chromium";
-    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
-      then ["aarch64-linux" "x86_64-linux"]
-      else [];
+    hydraPlatforms = lib.optionals (channel == "stable" || channel == "ungoogled-chromium") ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

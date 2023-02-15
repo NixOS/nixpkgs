@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , rustPlatform
 , setuptools-rust
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -30,6 +32,10 @@ buildPythonPackage rec {
     cargoSetupHook
     rust.rustc
     rust.cargo
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   # has no tests

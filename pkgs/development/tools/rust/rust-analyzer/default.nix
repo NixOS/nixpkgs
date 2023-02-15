@@ -12,15 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2023-01-09";
-  cargoSha256 = "sha256-O9Z2nVzVdWl04c1+fChygCfFyHZVQIdVXy/aC1eqHCw=";
+  version = "2023-01-30";
+  cargoSha256 = "sha256-ONziMXbMPDoIb44mOJCg5O1QOo5o13kaGb+b6Qp3Ikk=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-hanikqugN4HgdGxFOgOzT53phb60GfZr3o/ljD96HSM=";
+    sha256 = "sha256-W8abw+8SuxSMMBH4ydfawdC6zwPHQwhHerFEXkB4oU4=";
   };
+
+  auditable = true; # TODO: remove when this is the default
 
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
   cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];

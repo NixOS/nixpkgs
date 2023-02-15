@@ -56,7 +56,7 @@ buildPythonPackage rec {
     trezor-udev-rules
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/test_stellar.py" # requires stellar-sdk

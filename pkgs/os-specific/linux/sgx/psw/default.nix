@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
   # NixOS module which is based on those files without relying on them. Still, it
   # is helpful to have properly patched versions for non-NixOS distributions.
   postFixup = ''
-    header "Fixing aesmd.service"
+    echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
       --replace '@aesm_folder@' \
                 "$out/aesm" \
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
       --replace "/bin/kill" \
                 "${coreutils}/bin/kill"
 
-    header "Fixing remount-dev-exec.service"
+    echo "Fixing remount-dev-exec.service"
     substituteInPlace $out/lib/systemd/system/remount-dev-exec.service \
       --replace '/bin/mount' \
                 "${util-linux}/bin/mount"

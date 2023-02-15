@@ -6,6 +6,7 @@
 , libusb1
 , libGL
 , qmake
+, wrapGAppsHook
 , wrapQtAppsHook
 , mkDerivation
 
@@ -44,6 +45,7 @@ mkDerivation {
     pkg-config
     qmake
     qttools
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -68,6 +70,8 @@ mkDerivation {
     "DEFINES+=DISABLE_APPLICATION_UPDATES"
     "CONFIG+=qtquickcompiler"
   ];
+
+  dontWrapGApps = true;
 
   postPatch = ''
     substituteInPlace qflipper_common.pri \
@@ -98,5 +102,4 @@ mkDerivation {
     maintainers = with maintainers; [ cab404 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
   };
-
 }

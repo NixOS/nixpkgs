@@ -39,7 +39,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-iam
     google-cloud-kms
     google-cloud-testutils

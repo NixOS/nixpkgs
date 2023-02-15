@@ -406,7 +406,7 @@ rec {
       eval "$origPostHook"
     '';
 
-    origPostHook = if attrs ? postHook then attrs.postHook else "";
+    origPostHook = lib.optionalString (attrs ? postHook) attrs.postHook;
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
@@ -527,9 +527,8 @@ rec {
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
+      echo "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
     '';
 
     buildPhase = ''
@@ -559,9 +558,8 @@ rec {
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
+        echo "Generated RPM/SRPM: $i"
         rpm -qip $i
-        stopNest
       done
 
       eval "$postInstall"
@@ -1034,22 +1032,22 @@ rec {
     };
 
     debian11i386 = {
-      name = "debian-11.5-bullseye-i386";
-      fullName = "Debian 11.5 Bullseye (i386)";
+      name = "debian-11.6-bullseye-i386";
+      fullName = "Debian 11.6 Bullseye (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/bullseye/main/binary-i386/Packages.xz";
-        hash = "sha256-tHrWSd4K5TCwIaLTPqK/Rcon0O0r+Jsxb7OcchOo8Vo=";
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-z9eG7RlvelEnZAaeCfIO+XxTZVL3d+zTA7ShU43l/pw=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
     debian11x86_64 = {
-      name = "debian-11.5-bullseye-amd64";
-      fullName = "Debian 11.5 Bullseye (amd64)";
+      name = "debian-11.6-bullseye-amd64";
+      fullName = "Debian 11.6 Bullseye (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/bullseye/main/binary-amd64/Packages.xz";
-        hash = "sha256-whpBERKOPyhrWguVQ2QchrwRHU4tCkGwu42x6khF/2g=";
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-mz0eCWdn6uWt40OxsSPheHzEnMeLE52yR/vpb48/VF0=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;

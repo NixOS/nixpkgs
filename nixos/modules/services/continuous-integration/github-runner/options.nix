@@ -127,10 +127,11 @@ with lib;
   serviceOverrides = mkOption {
     type = types.attrs;
     description = lib.mdDoc ''
-      Overrides for the systemd service. Can be used to adjust the sandboxing options.
+      Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
     '';
     example = {
       ProtectHome = false;
+      RestrictAddressFamilies = [ "AF_PACKET" ];
     };
     default = {};
   };

@@ -15,11 +15,4 @@
   </copyright>
  </info>
  <xi:include href="man-configuration.xml" />
- <xi:include href="man-nixos-build-vms.xml" />
- <xi:include href="man-nixos-generate-config.xml" />
- <xi:include href="man-nixos-install.xml" />
- <xi:include href="man-nixos-enter.xml" />
- <xi:include href="man-nixos-option.xml" />
- <xi:include href="man-nixos-rebuild.xml" />
- <xi:include href="man-nixos-version.xml" />
 </reference>

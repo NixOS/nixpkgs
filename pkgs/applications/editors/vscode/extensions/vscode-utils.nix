@@ -19,13 +19,14 @@ let
     dontPatchELF ? true,
     dontStrip ? true,
     nativeBuildInputs ? [],
+    passthru ? { },
     ...
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
     name = "vscode-extension-${name}";
 
-    passthru = {
+    passthru = passthru // {
       inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
     };
 
@@ -90,7 +91,6 @@ let
    vscodeDefault = vscode;
   };
 
-
   vscodeExts2nix = import ./vscodeExts2nix.nix {
     inherit lib writeShellScriptBin;
     vscodeDefault = vscode;
@@ -100,10 +100,41 @@ let
     inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
     vscodeDefault = vscode;
   };
+
+  toExtensionJsonEntry = ext: rec {
+    identifier = {
+      id = ext.vscodeExtUniqueId;
+      uuid = "";
+    };
+
+    version = ext.version;
+
+    location = {
+      "$mid" = 1;
+      fsPath = ext.outPath + "/share/vscode/extensions/${ext.vscodeExtUniqueId}";
+      path = location.fsPath;
+      scheme = "file";
+    };
+
+    metadata = {
+      id = "";
+      publisherId = "";
+      publisherDisplayName = ext.vscodeExtPublisher;
+      targetPlatform = "undefined";
+      isApplicationScoped = false;
+      updated = false;
+      isPreReleaseVersion = false;
+      installedTimestamp = 0;
+      preRelease = false;
+    };
+  };
+
+  toExtensionJson = extensions: builtins.toJSON (map toExtensionJsonEntry extensions);
 in
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
           extensionsFromVscodeMarketplace
-          vscodeWithConfiguration vscodeExts2nix vscodeEnv;
+          vscodeWithConfiguration vscodeExts2nix vscodeEnv
+          toExtensionJsonEntry toExtensionJson;
 }

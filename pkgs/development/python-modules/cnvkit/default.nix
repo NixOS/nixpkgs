@@ -55,7 +55,7 @@ buildPythonPackage rec {
     rPackages.DNAcopy
   ];
 
-  checkInputs = [ R ];
+  nativeCheckInputs = [ R ];
 
   checkPhase = ''
     pushd test/

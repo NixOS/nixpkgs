@@ -81,7 +81,7 @@ buildPythonPackage rec {
     zstandard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     parver
     pytest-asyncio

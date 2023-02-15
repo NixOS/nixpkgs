@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     pcre2
   ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=free-nonheap-object"
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/mimic \
       --run "export ALSA_PLUGIN_DIR=${alsa-plugins}/lib/alsa-lib"

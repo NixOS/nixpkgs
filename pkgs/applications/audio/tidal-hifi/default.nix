@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tidal-hifi";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi_${version}_amd64.deb";
-    sha256 = "sha256-Q+K8oF1VEsuhmhPH6K3as1+71vCfaKCdzRzCIxtiXvE=";
+    sha256 = "sha256-6KlcxBV/zHN+ZnvIu1PcKNeS0u7LqhDqAjbXawT5Vv8=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -109,13 +109,12 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
-      --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
-      --replace "/usr/share/icons/hicolor/0x0/apps/tidal-hifi.png" "tidal-hifi.png"
+      --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
 
     for size in 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps/
       convert $out/share/icons/hicolor/0x0/apps/tidal-hifi.png \
-        -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/tidal-hifi.png
+        -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/icon.png
     done
   '';
 
@@ -124,7 +123,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ alternateved ];
+    maintainers = with maintainers; [ qbit ];
     platforms = [ "x86_64-linux" ];
   };
 }

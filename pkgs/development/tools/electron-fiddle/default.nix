@@ -1,5 +1,5 @@
 { buildFHSUserEnv
-, electron_20
+, electron_22
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup_yarn_lock
@@ -14,21 +14,21 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.31.0";
-  electron = electron_20;
+  version = "0.32.1";
+  electron = electron_22;
   nodejs = nodejs-16_x;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     rev = "v${version}";
-    hash = "sha256-GueLG+RYFHi3PVVxBTtpTHhfjygcQ6ZCbrp5n5I1gBM=";
+    hash = "sha256-k+cbg03mwvobyazIUqm+TO9OMYVFQICy4CtkUZmvkr8=";
   };
 
   inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-WVH1A0wtQl5nR1hvaL6mzm/7XBvo311FPKmsxB82e4U=";
+    hash = "sha256-3vM+YPIA3zeWBaEFXU5lFl+VaGmAY0Qdg4pSA6mIKl0=";
   };
 
   electronDummyMirror = "https://electron.invalid/";
@@ -89,12 +89,14 @@ in
 buildFHSUserEnv {
   name = "electron-fiddle";
   runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     ln -s "${unwrapped}/share/icons/hicolor/scalable/apps/electron-fiddle.svg" "$out/share/icons/hicolor/scalable/apps/"
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications"/*.desktop "$out/share/applications/"
   '';
+
   targetPkgs = pkgs:
     with pkgs;
     map lib.getLib [

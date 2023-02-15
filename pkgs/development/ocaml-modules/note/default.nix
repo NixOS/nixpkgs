@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    homepage = "http://erratique.ch/software/note";
+    homepage = "https://erratique.ch/software/note";
     description = "An OCaml module for functional reactive programming";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

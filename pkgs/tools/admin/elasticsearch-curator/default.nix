@@ -49,7 +49,7 @@ in python.pkgs.buildPythonApplication rec {
     six
   ];
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     mock
     pytestCheckHook
   ];

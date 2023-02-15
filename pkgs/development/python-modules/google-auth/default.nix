@@ -65,7 +65,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     asynctest
     flask

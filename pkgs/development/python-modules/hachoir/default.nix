@@ -24,7 +24,7 @@ buildPythonPackage rec {
     urwid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , udev
 , runtimeShellPackage
@@ -17,6 +18,15 @@ stdenv.mkDerivation rec {
     url = "mirror://roy/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-gZNXY07+0epc9E7AGyTT0/iFL+yLQkmSXcxWZ8VON2w=";
   };
+
+  patches = [
+    # dhcpcd with privsep SIGSYS's on dhcpcd -U
+    # https://github.com/NetworkConfiguration/dhcpcd/issues/147
+    (fetchpatch {
+      url = "https://github.com/NetworkConfiguration/dhcpcd/commit/38befd4e867583002b96ec39df733585d74c4ff5.patch";
+      hash = "sha256-nS2zmLuQBYhLfoPp0DOwxF803Hh32EE4OUKGBTTukE0=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

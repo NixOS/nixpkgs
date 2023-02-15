@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "betterproto" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-mock

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ldtk";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "https://github.com/deepnight/ldtk/releases/download/v${version}/ubuntu-distribution.zip";
-    sha256 = "sha256-G54PQriKbm1fTqxD3J2O9bD4FBZuwqkfFPV+412nRGA=";
+    sha256 = "sha256-kx4GOENYYbS09HxAiCCvqm/ztc32sdB39W8uv6D+R+A=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems appimage-run ];

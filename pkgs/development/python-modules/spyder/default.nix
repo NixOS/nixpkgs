@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, makeDesktopItem
 , atomicwrites
 , chardet
 , cloudpickle
@@ -105,16 +104,6 @@ buildPythonPackage rec {
   # There is no test for spyder
   doCheck = false;
 
-  desktopItem = makeDesktopItem {
-    name = "Spyder";
-    exec = "spyder";
-    icon = "spyder";
-    comment = "Scientific Python Development Environment";
-    desktopName = "Spyder";
-    genericName = "Python IDE";
-    categories = [ "Development" "IDE" ];
-  };
-
   postPatch = ''
     # Remove dependency on pyqtwebengine
     # This is still part of the pyqt 5.11 version we have in nixpkgs
@@ -128,11 +117,6 @@ buildPythonPackage rec {
     # Add Python libs to env so Spyder subprocesses
     # created to run compute kernels don't fail with ImportErrors
     wrapProgram $out/bin/spyder --prefix PYTHONPATH : "$PYTHONPATH"
-
-    # Create desktop item
-    mkdir -p $out/share/icons
-    cp spyder/images/spyder.svg $out/share/icons
-    cp -r $desktopItem/share/applications/ $out/share
   '';
 
   dontWrapQtApps = true;

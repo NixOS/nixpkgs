@@ -34,7 +34,7 @@ To allow software to use various virtual file systems, `gvfs` package can be als
 
 ### GdkPixbuf loaders {#ssec-gnome-gdk-pixbuf-loaders}
 
-GTK applications typically use [GdkPixbuf](https://developer.gnome.org/gdk-pixbuf/stable/) to load images. But `gdk-pixbuf` package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by `librsvg`.
+GTK applications typically use [GdkPixbuf](https://gitlab.gnome.org/GNOME/gdk-pixbuf/) to load images. But `gdk-pixbuf` package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by `librsvg`.
 
 Unlike other libraries mentioned in this section, GdkPixbuf only supports a single value in its controlling environment variable `GDK_PIXBUF_MODULE_FILE`. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a `lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` file describing the default loaders in `gdk-pixbuf` package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as [not many loaders exist](https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md).
 
@@ -70,7 +70,7 @@ Also make sure that `icon-theme.cache` is installed for each theme provided by t
 
 ### GTK Themes {#ssec-gnome-themes}
 
-Previously, a GTK theme needed to be in `XDG_DATA_DIRS`. This is no longer necessary for most programs since GTK incorporated Adwaita theme. Some programs (for example, those designed for [elementary HIG](https://elementary.io/docs/human-interface-guidelines#human-interface-guidelines)) might require a special theme like `pantheon.elementary-gtk-theme`.
+Previously, a GTK theme needed to be in `XDG_DATA_DIRS`. This is no longer necessary for most programs since GTK incorporated Adwaita theme. Some programs (for example, those designed for [elementary HIG](https://docs.elementary.io/hig)) might require a special theme like `pantheon.elementary-gtk-theme`.
 
 ### GObject introspection typelibs {#ssec-gnome-typelibs}
 

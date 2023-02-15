@@ -950,16 +950,16 @@ in
                 type = types.str;
                 default = "";
                 description = lib.mdDoc ''
-                  Attribute map for `id'.
-                  Defaults to `NameID' of SAML response.
+                  Attribute map for `id`.
+                  Defaults to `NameID` of SAML response.
                 '';
               };
               username = mkOption {
                 type = types.str;
                 default = "";
                 description = lib.mdDoc ''
-                  Attribute map for `username'.
-                  Defaults to `NameID' of SAML response.
+                  Attribute map for `username`.
+                  Defaults to `NameID` of SAML response.
                 '';
               };
               email = mkOption {

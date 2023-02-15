@@ -47,14 +47,14 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
-  version = "unstable-2022-05-28";
+  version = "unstable-2023-01-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "011bcbdcff227e25507e5f2d81a83a2bbe478856";
-    sha256 = "sha256-8velNKSCZJtKO8ATwXDl1nU8RbxZ8TeyGiUQFOXifuI=";
+    rev = "1ef49b92f2d6cb519039edd7ba7f70e8073fbe88";
+    sha256 = "sha256-zieJmI6BKHpYyCPOOUora9qoWn+NXehbHKvoi4h81UA=";
   };
 
   nativeBuildInputs = [

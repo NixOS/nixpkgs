@@ -4,8 +4,6 @@
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "sylpheed";
   version = "3.7.0";
@@ -33,17 +31,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk2 ]
-    ++ optionals gpgSupport [ gpgme ]
-    ++ optionals sslSupport [ openssl ]
-    ++ optionals stdenv.isDarwin [ Foundation ];
+    ++ lib.optionals gpgSupport [ gpgme ]
+    ++ lib.optionals sslSupport [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
-  configureFlags = optional gpgSupport "--enable-gpgme"
-    ++ optional sslSupport "--enable-ssl";
+  configureFlags = lib.optional gpgSupport "--enable-gpgme"
+    ++ lib.optional sslSupport "--enable-ssl";
 
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     maintainers = with maintainers; [ eelco ];

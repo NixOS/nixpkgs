@@ -64,7 +64,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  checkInputs = [ git pytestCheckHook ] ++ (with pythonPackages; [
+  nativeCheckInputs = [ git pytestCheckHook ] ++ (with pythonPackages; [
     pytest-snapshot
     pytest-mock
     pytest-freezegun

@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS = [ "-DLINKALL" ]
+  OPTS = [ "-DLINKALL" "-DGPIO" ]
     ++ optional dsdSupport "-DDSD"
     ++ optional (!faad2Support) "-DNO_FAAD"
     ++ optional ffmpegSupport "-DFFMPEG"

@@ -22,6 +22,7 @@
 , qtbase
 , qtwayland
 , removeReferencesTo
+, speechd
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
@@ -31,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calibre";
-  version = "6.10.0";
+  version = "6.11.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-JE5AnaCMfe9mI+qLe1LdbbHAdC5X5wLo/zFhcJLLAhk=";
+    hash = "sha256-ylOZ5ljA5uBb2bX/qFhsmPQW6dJVEH9jxQaR2u8C4Wc=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
@@ -47,8 +48,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
-      name = "0006-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0006-Hardening-Qt-code.patch";
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0007-Hardening-Qt-code.patch";
       hash = "sha256-CutVTb7K4tjewq1xAjHEGUHFcuuP/Z4FFtj4xQb4zKQ=";
     })
   ]
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
     xdg-utils
   ] ++ (
     with python3Packages; [
-      (apsw.overrideAttrs (oldAttrs: rec {
+      (apsw.overrideAttrs (oldAttrs: {
         setupPyBuildFlags = [ "--enable=load_extension" ];
       }))
       beautifulsoup4
@@ -121,6 +122,7 @@ stdenv.mkDerivation rec {
       regex
       sip
       setuptools
+      speechd
       zeroconf
       jeepney
       pycryptodome

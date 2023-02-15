@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aspectj";
-  version = "1.9.9.1";
+  version = "1.9.19";
   builder = ./builder.sh;
 
   src = let
     versionSnakeCase = builtins.replaceStrings ["."] ["_"] version;
   in fetchurl {
     url = "https://github.com/eclipse/org.aspectj/releases/download/V${versionSnakeCase}/aspectj-${version}.jar";
-    sha256 = "sha256-kiMQuEPXoSpHUiInkfYsrfCAcSc6mX42TRIBbeIQhWs=";
+    sha256 = "sha256-Oujyg05yvtcyfLmqonc++GX9AyFKwfIzITOHDz0px0M=";
   };
 
   inherit jre;
   buildInputs = [jre];
 
   meta = {
-    homepage = "http://www.eclipse.org/aspectj/";
+    homepage = "https://www.eclipse.org/aspectj/";
     description = "A seamless aspect-oriented extension to the Java programming language";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;

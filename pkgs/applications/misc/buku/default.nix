@@ -28,7 +28,7 @@ with python3.pkgs; buildPythonApplication rec {
     sha256 = "sha256-7piJK1hz9h6EWiU/q5MAS1PSvHFxnW7rZBKxq+wda1c=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
     pytest-vcr

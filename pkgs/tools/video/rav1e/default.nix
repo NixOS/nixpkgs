@@ -3,8 +3,11 @@
 , stdenv
 , rustPlatform
 , fetchCrate
-, nasm
+, pkg-config
 , cargo-c
+, libgit2
+, nasm
+, zlib
 , libiconv
 , Security
 }:
@@ -22,7 +25,11 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-iHOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkgCdgw=";
 
-  nativeBuildInputs = [ nasm cargo-c ];
+  auditable = true; # TODO: remove when this is the default
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ cargo-c libgit2 nasm zlib ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv

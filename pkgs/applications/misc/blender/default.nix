@@ -16,7 +16,6 @@
 , embree, gmp, libharu
 }:
 
-with lib;
 let
   python = python310Packages.python;
   optix = fetchzip {
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
-    ++ optionals cudaSupport [ addOpenGLRunpath ];
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
@@ -63,10 +62,10 @@ stdenv.mkDerivation rec {
     else [
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
-    ++ optional jackaudioSupport libjack2
-    ++ optional cudaSupport cudaPackages.cudatoolkit
-    ++ optional colladaSupport opencollada
-    ++ optional spaceNavSupport libspnav;
+    ++ lib.optional jackaudioSupport libjack2
+    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
@@ -88,10 +87,10 @@ stdenv.mkDerivation rec {
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '') +
-    (if hipSupport then ''
+    (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
-    '' else "");
+    '');
 
   cmakeFlags =
     [
@@ -118,16 +117,16 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
-    ++ optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.isDarwin [
       "-DWITH_CYCLES_OSL=OFF" # requires LLVM
       "-DWITH_OPENVDB=OFF" # OpenVDB currently doesn't build on darwin
 
       "-DLIBDIR=/does-not-exist"
     ]
     # Clang doesn't support "-export-dynamic"
-    ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
-    ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optionals cudaSupport [
+    ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
+    ++ lib.optional jackaudioSupport "-DWITH_JACK=ON"
+    ++ lib.optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"
@@ -137,7 +136,7 @@ stdenv.mkDerivation rec {
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
-  NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
+  NIX_LDFLAGS = lib.optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
@@ -154,7 +153,7 @@ stdenv.mkDerivation rec {
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
   # found. See the explanation in libglvnd.
-  postFixup = optionalString cudaSupport ''
+  postFixup = lib.optionalString cudaSupport ''
     for program in $out/bin/blender $out/bin/.blender-wrapped; do
       isELF "$program" || continue
       addOpenGLRunpath "$program"

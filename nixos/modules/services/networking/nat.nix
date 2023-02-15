@@ -124,7 +124,7 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = literalExpression ''[ "55.1.2.3" ]'';
-            description = lib.mdDoc "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
+            description = lib.mdDoc "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort` from the host itself and from other hosts behind NAT";
           };
         };
       });

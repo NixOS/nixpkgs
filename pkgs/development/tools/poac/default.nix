@@ -4,6 +4,7 @@
 , cmake
 , cpm-cmake
 , git
+, git2-cpp
 , cacert
 , boost179
 , fmt_8
@@ -11,38 +12,19 @@
 , libarchive
 , libgit2
 , lz4
+, mitama-cpp-result
 , ninja
 , openssl_3
+, package-project-cmake
 , spdlog
 }:
 
 let
-  git2Cpp = fetchFromGitHub {
-    owner = "ken-matsui";
-    repo = "git2-cpp";
-    rev = "v0.1.0-alpha.1";
-    sha256 = "sha256-Ub0wrBK5oMfWGv+kpq/W1PN3yzpcfg+XWRFF/lV9VCY=";
-  };
-
   glob = fetchFromGitHub {
     owner = "p-ranav";
     repo = "glob";
     rev = "v0.0.1";
     sha256 = "sha256-2y+a7YFBiYX8wbwCCWw1Cm+SFoXGB3ZxLPi/QdZhcdw=";
-  };
-
-  packageProjectCMake = fetchFromGitHub {
-    owner = "TheLartians";
-    repo = "PackageProject.cmake";
-    rev = "v1.3";
-    sha256 = "sha256-ZktftDrPo+JhBt0XKJekv0cyxIagvcgMcXZOBd4RtKs=";
-  };
-
-  mitamaCppResult = fetchFromGitHub {
-    owner = "LoliGothick";
-    repo = "mitama-cpp-result";
-    rev = "v9.3.0";
-    sha256 = "sha256-CWYVPpmPIZZTsqXKh+Ft3SlQ4C9yjUof1mJ8Acn5kmM=";
   };
 
   structopt = fetchFromGitHub {
@@ -61,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "poac";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "poacpm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jXYPeI/rVuTr7OYV5sMgNr+U1OfN0XZtun6mihtlErY=";
+    sha256 = "sha256-JgGa7lomDvZG5HLxGJMALcezjnZprexJDTxyTUjLetg=";
   };
 
   preConfigure = ''
@@ -76,13 +58,13 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCPM_USE_LOCAL_PACKAGES=ON"
+    "-DPOAC_BUILD_TESTING=OFF"
     "-DCPM_SOURCE_CACHE=${placeholder "out"}/share"
     "-DFETCHCONTENT_SOURCE_DIR_FMT=${fmt_8}"
-    "-DFETCHCONTENT_SOURCE_DIR_GIT2-CPP=${git2Cpp}"
+    "-DFETCHCONTENT_SOURCE_DIR_GIT2-CPP=${git2-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GLOB=${glob}"
-    "-DFETCHCONTENT_SOURCE_DIR_PACKAGEPROJECT.CMAKE=${packageProjectCMake}"
-    "-DFETCHCONTENT_SOURCE_DIR_MITAMA-CPP-RESULT=${mitamaCppResult}"
+    "-DFETCHCONTENT_SOURCE_DIR_PACKAGEPROJECT.CMAKE=${package-project-cmake.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_MITAMA-CPP-RESULT=${mitama-cpp-result.src}"
     "-DFETCHCONTENT_SOURCE_DIR_NINJA=${ninja.src}"
     "-DFETCHCONTENT_SOURCE_DIR_STRUCTOPT=${structopt}"
     "-DFETCHCONTENT_SOURCE_DIR_TOML11=${toml11}"
@@ -95,10 +77,10 @@ stdenv.mkDerivation rec {
       enableStatic = !stdenv.isDarwin;
     })
     fmt_8
-    git2Cpp
+    git2-cpp
     glob
-    packageProjectCMake
-    mitamaCppResult
+    package-project-cmake
+    mitama-cpp-result
     ninja
     structopt
     toml11

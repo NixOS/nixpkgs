@@ -22,7 +22,7 @@
 , enableCommandNotFound ? false
 , enableBashCompletion ? false
 , bash-completion ? null
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 

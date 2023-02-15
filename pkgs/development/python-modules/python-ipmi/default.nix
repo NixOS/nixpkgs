@@ -24,7 +24,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     pytestCheckHook

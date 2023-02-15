@@ -30,7 +30,7 @@ buildPythonPackage rec {
     tinycss2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

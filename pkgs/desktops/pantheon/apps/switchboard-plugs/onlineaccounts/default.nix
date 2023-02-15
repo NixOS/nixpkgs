@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # build: support evolution-data-server 3.45
-    # https://github.com/elementary/switchboard-plug-onlineaccounts/pull/244
+    # https://github.com/elementary/switchboard-plug-onlineaccounts/pull/248
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/b60f0458a23a2f76ad14d399f145e150e1ab82d3.patch";
-      sha256 = "sha256-C7woN4shPrVlSWZeW0Fz+xFi5CTQd2K5BsF5YeI9x0Y=";
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/08faf7b4241547b7900596af12a03d816712a808.patch";
+      sha256 = "sha256-QLe+NPHuo3hLM9n1f4hT5IK4nkWtYSe91L1wVSBzw6k=";
     })
   ];
 

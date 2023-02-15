@@ -12,7 +12,6 @@
 , xorg
 , libiconv
 , AppKit
-, Foundation
 , Security
 # darwin.apple_sdk.sdk
 , sdk
@@ -26,16 +25,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.73.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-hxcB5nzhVjsC5XYR4Pt3GN4ZEgWpetQQZr0mj3bAnRc=";
+    sha256 = "sha256-u8/SvuR/RpJaBX4Dr3Onrk0AVpIAeVb+399+NUpgkfI=";
   };
 
-  cargoSha256 = "sha256-pw+pBZeXuKSaP/qC3aiauXAH/BRR1rQZ2jVVmR1JQhU=";
+  cargoSha256 = "sha256-hnSumfZd9ylEx3dkTGW2s4VSv107MHOn21ytOcimhPw=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    Foundation
     (
       # Pull a header that contains a definition of proc_pid_rusage().
       # (We pick just that one because using the other headers from `sdk` is not

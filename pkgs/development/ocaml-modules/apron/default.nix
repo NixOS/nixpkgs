@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpfr ppl camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
 
+  # TODO: Doesn't produce the library correctly if true
   strictDeps = false;
 
   outputs = [ "out" "bin" "dev" ];

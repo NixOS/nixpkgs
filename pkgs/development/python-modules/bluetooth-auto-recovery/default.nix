@@ -35,7 +35,7 @@ buildPythonPackage rec {
     usb-devices
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

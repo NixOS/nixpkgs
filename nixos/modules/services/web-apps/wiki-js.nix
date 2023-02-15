@@ -113,7 +113,13 @@ in {
       documentation = [ "https://docs.requarks.io/" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ coreutils ];
+      path = with pkgs; [
+        # Needed for git storage.
+        git
+        # Needed for git+ssh storage.
+        openssh
+      ];
+
       preStart = ''
         ln -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml
         ln -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}

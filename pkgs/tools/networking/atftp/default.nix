@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     tcp_wrappers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     perl
     ps
   ];

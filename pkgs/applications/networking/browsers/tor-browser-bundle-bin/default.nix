@@ -53,10 +53,8 @@
 , extraPrefs ? ""
 }:
 
-with lib;
-
 let
-  libPath = makeLibraryPath libPkgs;
+  libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
     atk
@@ -78,13 +76,13 @@ let
     stdenv.cc.libc
     zlib
   ]
-  ++ optionals pulseaudioSupport [ libpulseaudio ]
-  ++ optionals mediaSupport [
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals mediaSupport [
     ffmpeg
   ];
 
   # Library search path for the fte transport
-  fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
+  fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
   version = "11.5.8";
@@ -156,7 +154,7 @@ stdenv.mkDerivation rec {
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
 
     # apulse uses a non-standard library path.  For now special-case it.
-    ${optionalString (audioSupport && !pulseaudioSupport) ''
+    ${lib.optionalString (audioSupport && !pulseaudioSupport) ''
       libPath=${apulse}/lib/apulse:$libPath
     ''}
 
@@ -224,7 +222,7 @@ stdenv.mkDerivation rec {
       clearPref("security.sandbox.content.write_path_whitelist");
     ''}
 
-    ${optionalString (extraPrefs != "") ''
+    ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
     ''}
     EOF
@@ -251,14 +249,14 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
-    WRAPPER_LD_PRELOAD=${optionalString useHardenedMalloc
+    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
-    WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
+    WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
       gnome.adwaita-icon-theme
       shared-mime-info
     ]}
-    WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
+    WRAPPER_XDG_DATA_DIRS+=":"${lib.concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
       glib
       gsettings-desktop-schemas
       gtk3
@@ -270,7 +268,7 @@ stdenv.mkDerivation rec {
     #! ${runtimeShell}
     set -o errexit -o nounset
 
-    PATH=${makeBinPath [ coreutils ]}
+    PATH=${lib.makeBinPath [ coreutils ]}
     export LC_ALL=C
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
 
@@ -317,7 +315,7 @@ stdenv.mkDerivation rec {
     : "\''${XDG_RUNTIME_DIR:=/run/user/\$(id -u)}"
     : "\''${XDG_CONFIG_HOME:=\$REAL_HOME/.config}"
 
-    ${optionalString pulseaudioSupport ''
+    ${lib.optionalString pulseaudioSupport ''
       # Figure out some envvars for pulseaudio
       : "\''${PULSE_SERVER:=\$XDG_RUNTIME_DIR/pulse/native}"
       : "\''${PULSE_COOKIE:=\$XDG_CONFIG_HOME/pulse/cookie}"

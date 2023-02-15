@@ -39,7 +39,7 @@ buildPythonPackage rec {
       --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

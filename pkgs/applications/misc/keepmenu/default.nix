@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     pynput
   ];
 
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
   checkPhase = ''
     xvfb-run python setup.py test
   '';

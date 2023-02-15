@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
       --replace "/opt/${dir}/${pname}" $out/bin/${pname}
 
     autoPatchelf --no-recurse -- "$out/lib/${dir}/"
-    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node"
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node"
   '';
 
   # Tests if the application launches and waits for "Link your phone to Signal Desktop":

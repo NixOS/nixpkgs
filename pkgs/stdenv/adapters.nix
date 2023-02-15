@@ -100,6 +100,7 @@ rec {
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
         (pkgs.buildPackages.makeSetupHook {
+          name = "darwin-portable-libSystem-hook";
           substitutions = {
             libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
           };

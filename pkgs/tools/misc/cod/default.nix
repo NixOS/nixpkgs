@@ -15,7 +15,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.GitSha=${src.rev}" ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   preCheck = ''
     pushd test/binaries/

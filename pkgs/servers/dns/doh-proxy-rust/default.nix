@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "doh-proxy-rust";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchCrate {
     inherit version;
     crateName = "doh-proxy";
-    sha256 = "sha256-7eKqCiafzmwk0suH8GviRVBmmvhBd5/R4aF9cSvSyNU=";
+    sha256 = "sha256-rcLI5sLdqelnpfU7/T0s0l3rtpYBd77BBAXc4xSmCCE=";
   };
 
-  cargoHash = "sha256-+IlVjordlMgf8srXtQVLMXRbYs+4htDP+NToVXxPqR4=";
+  cargoHash = "sha256-zkZuyegz82xOBq2t0jkMo6SLLteOHuhrFcROZCQeiyk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 

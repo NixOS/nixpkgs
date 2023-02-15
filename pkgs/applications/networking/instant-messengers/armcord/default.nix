@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -32,6 +33,8 @@
 , systemd
 , xdg-utils
 , xorg
+, wayland
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +56,9 @@ stdenv.mkDerivation rec {
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -94,6 +99,8 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    wayland
+    pipewire
   ];
 
   sourceRoot = ".";
@@ -109,9 +116,11 @@ stdenv.mkDerivation rec {
 
     # Wrap the startup command
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      "''${gappsWrapperArgs[@]}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     # Fix desktop link
     substituteInPlace $out/share/applications/armcord.desktop \

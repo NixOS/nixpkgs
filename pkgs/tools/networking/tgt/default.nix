@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.84";
+  version = "1.0.85";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NlEEakmut4WMI+mpm+SJOgHmWELRcl/dZJspks3VoqY=";
+    sha256 = "sha256-hjP+1uBcUfIFdRd0gbZXR+VsAF+6QrvV3//GrQhOKWc=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "SD_NOTIFY=1"
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
   ];
 
   installFlags = [

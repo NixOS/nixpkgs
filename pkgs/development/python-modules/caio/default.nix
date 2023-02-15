@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-BFlpjbC2yxwGtCAMfn1VM5zmioyN5fFNMJDDWceB+LE=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomisc
     pytestCheckHook
   ];

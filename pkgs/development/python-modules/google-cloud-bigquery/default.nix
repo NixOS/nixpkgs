@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.4.1";
+  version = "3.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iEaJcU2YojZN3px8Nn6CKMcRYQi7rXpjZd/eORY4mFs=";
+    hash = "sha256-3TyoTlvm+p4FcPshZlqQLMVlHL0EWEL7cUFkyZomOcQ=";
   };
 
   propagatedBuildInputs = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     google-cloud-testutils
     mock

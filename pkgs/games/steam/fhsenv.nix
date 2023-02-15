@@ -97,6 +97,7 @@ in buildFHSUserEnv rec {
     libdrm
     libxkbcommon # paradox launcher
     libvorbis # Dead Cells
+    libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess

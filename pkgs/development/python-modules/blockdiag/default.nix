@@ -37,7 +37,7 @@ buildPythonPackage rec {
     docutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephem
     nose
     pytestCheckHook

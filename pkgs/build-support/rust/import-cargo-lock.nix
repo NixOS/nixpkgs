@@ -131,6 +131,7 @@ let
             builtins.fetchGit {
               inherit (gitParts) url;
               rev = gitParts.sha;
+              allRefs = true;
             }
           else
             missingHash;

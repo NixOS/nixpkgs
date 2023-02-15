@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "DoorBirdPy";
     inherit version;
-    hash = "sha256-ZGIIko5Ac0Q4Jhz+z7FREJ4MhPF9ADDWgQFRtcZ+dWY=";
+    hash = "sha256-o6d8xXF5OuiF0B/wwYhDAZr05D84MuxHBY96G2XHILU=";
   };
 
   propagatedBuildInputs = [

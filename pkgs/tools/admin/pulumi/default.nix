@@ -14,21 +14,23 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.49.0";
+  version = "3.55.0";
 
   # Used in pulumi-language packages, which inherit this prop
-  sdkVendorHash = "sha256-gM3VpX6r/BScUyvk/XefAfbx0qYzdzSBGaWZN+89BS8=";
+  sdkVendorHash = "sha256-ZE+df01jRx3nDiPGdlh1JNJn5NqsHW22fiUzeNlkzF8=";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WO+bTkTIAyaXl3nYwsMUTdovsYibivfGsKz6A7wj2zM=";
+    hash = "sha256-x5XebYFpxFi2QgrrK+wdMFOLiJLnRmar4gsply8F718=";
+    # Some tests rely on checkout directory name
+    name = "pulumi";
   };
 
-  vendorSha256 = "sha256-q7ZusTYD8l2RyiwP/Wf6dP6AoosWEwpaylbdhfE5cUA=";
+  vendorSha256 = "sha256-8vchyD3MTi9Fxrd6SiywFK4tadyauvDxjs9RmoJuULA=";
 
-  sourceRoot = "source/pkg";
+  sourceRoot = "${src.name}/pkg";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,7 +53,7 @@ buildGoModule rec {
     "TestPendingDeleteOrder"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 

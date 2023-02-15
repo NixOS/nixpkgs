@@ -27,6 +27,7 @@
 , mariadb
 , mpfr
 , neovim-unwrapped
+, openldap
 , openssl
 , pcre
 , pkg-config
@@ -329,6 +330,12 @@ with prev;
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
 
+  lualdap = prev.luaLib.overrideLuarocks prev.lualdap (drv: {
+    externalDeps = [
+      { name = "LDAP"; dep = openldap; }
+    ];
+  });
+
   luaossl = prev.luaLib.overrideLuarocks prev.luaossl (drv: {
     externalDeps = [
       { name = "CRYPTO"; dep = openssl; }
@@ -491,7 +498,7 @@ with prev;
   sqlite = prev.luaLib.overrideLuarocks prev.sqlite (drv: {
 
     doCheck = true;
-    checkInputs = [ final.plenary-nvim neovim-unwrapped ];
+    nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''

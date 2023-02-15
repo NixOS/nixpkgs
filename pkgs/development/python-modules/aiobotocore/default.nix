@@ -39,7 +39,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     moto
     pytest-asyncio

@@ -30,11 +30,14 @@ stdenv.mkDerivation rec {
     "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE__TRYRUN_OUTPUT="
   ];
 
-  patches = # From debian
-    [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
-      ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
-      ./Install-contribs-lib.patch
-    ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
+  patches = [
+    # From debian
+    ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
+    ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
+    ./Install-contribs-lib.patch
+    # From arch
+    ./fix-missing-include-time.patch
+  ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
 
   # fails with "Unable to find executable:
   # /build/clucene-core-2.3.3.4/build/bin/cl_test"

@@ -1,22 +1,27 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.217";
+  version = "0.0.244";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/nZtq1FSOsB0OX0lVFY3o0F/1ZobM8iW+3zp4muhtfU=";
+    sha256 = "sha256-oQBNVs7hoiXNqz5lYq5YNKHfpQ/c8LZAvNvtFqpTM2E=";
   };
 
-  cargoSha256 = "sha256-mSDr2ywrk2cPp2NrvjaxU//+ZYQZe05XF5Ny8Bkx7uA=";
+  cargoSha256 = "sha256-61kypAXWfUZLfTbSp+b0gCKwuWtxAYVtKIwfVOcJ2o8=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -24,6 +29,13 @@ rustPlatform.buildRustPackage rec {
 
   # building tests fails with `undefined symbols`
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd ruff \
+      --bash <($out/bin/ruff generate-shell-completion bash) \
+      --fish <($out/bin/ruff generate-shell-completion fish) \
+      --zsh <($out/bin/ruff generate-shell-completion zsh)
+  '';
 
   meta = with lib; {
     description = "An extremely fast Python linter";

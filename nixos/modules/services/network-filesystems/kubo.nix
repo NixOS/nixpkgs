@@ -5,6 +5,23 @@ let
 
   settingsFormat = pkgs.formats.json {};
 
+  rawDefaultConfig = lib.importJSON (pkgs.runCommand "kubo-default-config" {
+    nativeBuildInputs = [ cfg.package ];
+  } ''
+    export IPFS_PATH="$TMPDIR"
+    ipfs init --empty-repo --profile=${profile}
+    ipfs --offline config show > "$out"
+  '');
+
+  # Remove the PeerID (an attribute of "Identity") of the temporary Kubo repo.
+  # The "Pinning" section contains the "RemoteServices" section, which would prevent
+  # the daemon from starting as that setting can't be changed via ipfs config replace.
+  defaultConfig = builtins.removeAttrs rawDefaultConfig [ "Identity" "Pinning" ];
+
+  customizedConfig = lib.recursiveUpdate defaultConfig cfg.settings;
+
+  configFile = settingsFormat.generate "kubo-config.json" customizedConfig;
+
   kuboFlags = utils.escapeSystemdExecArgs (
     optional cfg.autoMount "--mount" ++
     optional cfg.enableGC "--enable-gc" ++
@@ -161,9 +178,9 @@ in
           };
         };
         description = lib.mdDoc ''
-          Attrset of daemon configuration to set using {command}`ipfs config`, every time the daemon starts.
+          Attrset of daemon configuration.
           See [https://github.com/ipfs/kubo/blob/master/docs/config.md](https://github.com/ipfs/kubo/blob/master/docs/config.md) for reference.
-          Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
+          You can't set `Identity` or `Pinning`.
         '';
         default = { };
         example = {
@@ -211,6 +228,21 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !builtins.hasAttr "Identity" cfg.settings;
+        message = ''
+          You can't set services.kubo.settings.Identity because the ``config replace`` subcommand used at startup does not support modifying any of the Identity settings.
+        '';
+      }
+      {
+        assertion = !((builtins.hasAttr "Pinning" cfg.settings) && (builtins.hasAttr "RemoteServices" cfg.settings.Pinning));
+        message = ''
+          You can't set services.kubo.settings.Pinning.RemoteServices because the ``config replace`` subcommand used at startup does not work with it.
+        '';
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
     environment.variables.IPFS_PATH = cfg.dataDir;
 
@@ -262,21 +294,26 @@ in
 
       preStart = ''
         if [[ ! -f "$IPFS_PATH/config" ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"} --profile=${profile}
+          ipfs init ${optionalString cfg.emptyRepo "-e"}
         else
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
       '' + optionalString cfg.autoMigrate ''
         ${pkgs.kubo-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
       '' + ''
-          ipfs --offline config profile apply ${profile} >/dev/null
         fi
-      '' + ''
-        ipfs --offline config show \
-          | ${pkgs.jq}/bin/jq '. * $settings' --argjson settings ${
-              escapeShellArg (builtins.toJSON cfg.settings)
-            } \
-          | ipfs --offline config replace -
+        ipfs --offline config show |
+          ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
+
+          # This command automatically injects the private key and other secrets from
+          # the old config file back into the new config file.
+          # Unfortunately, it doesn't keep the original `Identity.PeerID`,
+          # so we need `ipfs config show` and jq above.
+          # See https://github.com/ipfs/kubo/issues/8993 for progress on fixing this problem.
+          # Kubo also wants a specific version of the original "Pinning.RemoteServices"
+          # section (redacted by `ipfs config show`), such that that section doesn't
+          # change when the changes are applied. Whyyyyyy.....
+          ipfs --offline config replace -
       '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${kuboFlags}" ];

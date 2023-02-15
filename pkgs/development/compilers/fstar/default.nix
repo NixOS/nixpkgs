@@ -1,14 +1,14 @@
-{ lib, stdenv, writeScript, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
+{ lib, stdenv, writeScript, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2022.11.19";
+  version = "2023.02.01";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "sha256-IJMzRi335RbK8mEXQaF1UDPC0JVi6zSqcz6RS874m3Q=";
+    hash = "sha256-sLhbIGF7j1tH8zKsPq1qOSwHvYDrVCyfln9UbE3IYv0=";
   };
 
   strictDeps = true;
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
+    removeReferencesTo
   ] ++ (with ocamlPackages; [
     ocaml
     findlib
@@ -55,6 +56,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
   '';
   postInstall = ''
+    # Remove build artifacts
+    find $out -name _build -type d | xargs -I{} rm -rf "{}"
+    remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
+
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish

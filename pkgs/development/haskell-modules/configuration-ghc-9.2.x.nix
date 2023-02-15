@@ -61,6 +61,9 @@ self: super: {
     process = self.process_1_6_16_0;
   });
 
+  # weeder == 2.5.* requires GHC 9.4
+  weeder = doDistribute self.weeder_2_4_1;
+
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
@@ -89,10 +92,6 @@ self: super: {
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
-  # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
-  regex-rure = doDistribute (markUnbroken super.regex-rure);
-  jacinda = doDistribute super.jacinda;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;

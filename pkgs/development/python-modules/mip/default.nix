@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.14.1";
+  version = "1.14.2";
 
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bvpm5vUp15fbv/Sw1Lx70ihA7VHsSUzwFzoFDG+Ow1M=";
+    sha256 = "sha256-wr4gXSh456heG5nsaEi2yo7LMre2Nd6QbTm0dcDCX1k=";
   };
 
-  checkInputs = [ matplotlib networkx numpy pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
   nativeBuildInputs = [ dos2unix ];
   propagatedBuildInputs = [
     cffi
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "http://python-mip.com/";
+    homepage = "https://python-mip.com/";
     description = "A collection of Python tools for the modeling and solution of Mixed-Integer Linear programs (MIPs)";
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";

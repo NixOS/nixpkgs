@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pyicu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-mock

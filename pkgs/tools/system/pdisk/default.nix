@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , libbsd
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   pname = "pdisk";
   version = "0.9";
 
-  src = fetchzip {
-    url = "https://opensource.apple.com/tarballs/pdisk/pdisk-${lib.versions.minor version}.tar.gz";
-    sha256 = "sha256-+gBgnk/1juEHE0nXaz7laUaH7sxrX5SzsLGr0PHsdHs=";
+  src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = pname;
+    rev = "${pname}-${lib.versions.minor version}";
+    hash = "sha256-+gBgnk/1juEHE0nXaz7laUaH7sxrX5SzsLGr0PHsdHs=";
   };
 
   patches = [

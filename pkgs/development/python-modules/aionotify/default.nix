@@ -23,7 +23,7 @@ buildPythonPackage rec {
       --replace "asyncio.wait_for(task, timeout, loop=self.loop)" "asyncio.wait_for(task, timeout)"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
   ];
 

@@ -12,27 +12,22 @@
 
 stdenv.mkDerivation rec {
   pname = "wlcs";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
     rev = "v${version}";
-    hash = "sha256-ep5BHa9PgfB50gxJySaw0YAc1upBbncOiX9PCqHLbpE=";
+    hash = "sha256-QxmWxu+w77/WE5pGXMWXm+NP95QmYo2O8ltZYrgCIWw=";
   };
 
   patches = [
-    # Fixes pkg-config paths
-    # Remove when https://github.com/MirServer/wlcs/pull/258 merged & in a release
+    # Improves pkg-config paths even more
+    # Remove when https://github.com/MirServer/wlcs/pull/260 merged & in a release
     (fetchpatch {
-      name = "0001-wlcs-pkgsconfig-use-FULL-install-vars.patch";
-      url = "https://github.com/MirServer/wlcs/pull/258/commits/9002cb7323d94aba7fc1ce5927f445e9beb30d70.patch";
-      hash = "sha256-+uhFRKhG59w99oES4RA+L5hHyJ5pf4ij97pTokERPys=";
-    })
-    (fetchpatch {
-      name = "0002-wlcs-CMAKE_INSTALL_INCLUDEDIR-for-headers.patch";
-      url = "https://github.com/MirServer/wlcs/pull/258/commits/71263172c9ba57be9c05f1e07dd40d1f378ca6d0.patch";
-      hash = "sha256-nV/72W9DW3AvNGhUZ+tzmQZow3BkxEH3D6QFBZIGjj8=";
+      name = "0001-wlcs-pkgsconfig-Use-better-path-concatenations.patch";
+      url = "https://github.com/MirServer/wlcs/pull/260/commits/20f28d82fa4dfa6a6e27212dbd6b0f2e8a833c69.patch";
+      hash = "sha256-m8zPD27JbX/vN2YQgNhcRsh/O+qLfvoeky5E5ZEeD1I=";
     })
   ];
 
@@ -45,6 +40,11 @@ stdenv.mkDerivation rec {
     boost
     gtest
     wayland
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
   ];
 
   passthru.updateScript = gitUpdater {
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/MirServer/wlcs/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
-    inherit (wayland.meta) platforms;
+    platforms = platforms.linux;
   };
 }

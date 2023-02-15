@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.0.4";
+  version = "13.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pqCg4LAFIr5BEDqRWMaNc3M36bUmou5cZdarQ/0W77Y=";
+    hash = "sha256-Pca+SMuUL3XyQpLAL6SOYPnztc95WF2o0v4+5Nc5Nxg=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

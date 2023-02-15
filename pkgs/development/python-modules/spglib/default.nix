@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytest pyyaml ];
+  nativeCheckInputs = [ pytest pyyaml ];
 
   # pytestCheckHook doesn't work
   # ImportError: cannot import name '_spglib' from partially initialized module 'spglib'

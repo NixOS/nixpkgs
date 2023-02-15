@@ -4,18 +4,18 @@
 , pkg-config
 , wayland
 , libinput
-, libyamlcpp
+, yaml-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "way-displays";
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = "${version}";
-    sha256 = "sha256-/dZDYc0XQ1fZYAsk9bd8vMAh7GMKuY6FX0WK5of+AMk=";
+    sha256 = "sha256-o8fju0EQy2KS5yxe9DP3A8ewYgA2GzJtMY41BGJUZis=";
   };
 
   strictDeps = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    libyamlcpp
+    yaml-cpp
     libinput
   ];
 

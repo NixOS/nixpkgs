@@ -36,8 +36,12 @@
             stdenv
           ];
           providesSetupHook = lib.attrByPath [ "provides" "setupHook"] false;
-          valid = value: !((lib.isDerivation value) && !((pythonPackages.hasPythonModule value) || (providesSetupHook value))) || (lib.elem value exceptions);
-          func = name: value: if (valid value) then value else throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
+          valid = value: pythonPackages.hasPythonModule value || providesSetupHook value || lib.elem value exceptions;
+          func = name: value:
+            if lib.isDerivation value then
+              lib.extendDerivation (valid value || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.") {} value
+            else
+              value;
         in lib.mapAttrs func items;
       in ensurePythonModules (callPackage
         # Function that when called
@@ -59,7 +63,7 @@
           hooks = import ./hooks/default.nix;
           keep = lib.extends hooks pythonPackagesFun;
           extra = _: {};
-          optionalExtensions = cond: as: if cond then as else [];
+          optionalExtensions = cond: as: lib.optionals cond as;
           pythonExtension = import ../../../top-level/python-packages.nix;
           python2Extension = import ../../../top-level/python2-packages.nix;
           extensions = lib.composeManyExtensions ([
@@ -148,19 +152,6 @@ in {
     inherit passthruFun;
   };
 
-  python37 = callPackage ./cpython {
-    self = __splicedPackages.python37;
-    sourceVersion = {
-      major = "3";
-      minor = "7";
-      patch = "16";
-      suffix = "";
-    };
-    sha256 = "sha256-gzjwwiIthH6QTJVTaRVdwb7u7YBujV7wSwDvR4cji/0=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
   python38 = callPackage ./cpython {
     self = __splicedPackages.python38;
     sourceVersion = {
@@ -205,9 +196,9 @@ in {
       major = "3";
       minor = "12";
       patch = "0";
-      suffix = "a3";
+      suffix = "a5";
     };
-    sha256 = "sha256-G2SzB14KkkGXTlgOCbCckRehxOK+aYA5IB7x2Kc0U9E=";
+    sha256 = "sha256-1m73o0L+OjVvnO47uXrcHl+0hA9rbP994P991JX4Mjs=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -321,8 +312,8 @@ in {
     inherit passthruFun;
   };
 
-  rustpython = callPackage ./rustpython/default.nix {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  rustpython = darwin.apple_sdk_11_0.callPackage ./rustpython/default.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
   };
 
 })

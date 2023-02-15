@@ -10,15 +10,15 @@
 }:
 
 let
-  openShiftVersion = "4.11.13";
+  openShiftVersion = "4.12.0";
   okdVersion = "4.11.0-0.okd-2022-11-05-030711";
-  podmanVersion = "4.2.0";
+  podmanVersion = "4.3.1";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
 in
 buildGoModule rec {
-  version = "2.11.0";
+  version = "2.13.1";
   pname = "crc";
-  gitCommit = "a5f90a25abcacd4aa334490f0d204329abeaa691";
+  gitCommit = "b5b864fdd4ed047027f439db96c2658aa194d2bc";
   modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
@@ -63,6 +63,7 @@ buildGoModule rec {
       crc version
     '';
   };
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Manages a local OpenShift 4.x cluster or a Podman VM optimized for testing and development purposes";

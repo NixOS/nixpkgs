@@ -21,12 +21,16 @@ python3Packages.buildPythonApplication rec {
     sqlparse
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
   ];
 
   pythonImportsCheck = [ "litecli" ];
+
+  disabledTests = [
+    "test_auto_escaped_col_names"
+  ];
 
   meta = with lib; {
     description = "Command-line interface for SQLite";

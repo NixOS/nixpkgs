@@ -1,74 +1,34 @@
 { lib
-, pkgs
 , stdenvNoCC
 , fetchFromGitHub
 , pkgsCross
+, stdenv
+, bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs:
   let
-    inherit (stdenvNoCC.hostPlatform.uname) system;
-    # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
-    # needs to be built with a cross-compiler.
-    dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix {
-      inherit (finalAttrs) src version dxvkPatches;
-    };
-    dxvk64 = pkgsCross.mingwW64.callPackage ./dxvk.nix {
-      inherit (finalAttrs) src version dxvkPatches;
-    };
-
-    # Split out by platform to make maintenance easy in case supported versions on Darwin and other
-    # platforms diverge (due to the need for Darwin-specific patches that would fail to apply).
-    # Should that happen, set `darwin` to the last working `rev` and `hash`.
-    srcs = rec {
-      darwin = {
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
-        version = "1.10.3";
-      };
-      default = {
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-mboVLdPgZMzmqyeF0jAloEz6xqfIDiY/X98e7l2KZnw=";
-        version = "2.0";
-      };
-    };
+    dxvk32 = if stdenv.isDarwin then pkgsCross.mingw32.dxvk_1 else pkgsCross.mingw32.dxvk_2;
+    dxvk64 = if stdenv.isDarwin then pkgsCross.mingwW64.dxvk_1 else pkgsCross.mingwW64.dxvk_2;
   in
   {
     name = "dxvk";
-    inherit (srcs."${system}" or srcs.default) version;
-
-    src = fetchFromGitHub {
-      owner = "doitsujin";
-      repo = "dxvk";
-      inherit (srcs."${system}" or srcs.default) rev hash;
-    };
-
-    # Override this to patch DXVK itself (rather than the setup script).
-    dxvkPatches = lib.optionals stdenvNoCC.isDarwin [
-      # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
-      # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
-      ./darwin-dxvk-compat.patch
-      # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
-      # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
-      ./darwin-thread-primitives.patch
-    ];
+    inherit (dxvk64) version;
 
     outputs = [ "out" "bin" "lib" ];
 
-    # Also copy `mcfgthread-12.dll` due to DXVK’s being built in a MinGW cross environment.
-    patches = [ ./mcfgthread.patch ];
-
+    dontUnpack = true;
     dontConfigure = true;
     dontBuild = true;
 
     installPhase = ''
       mkdir -p $out/bin $bin $lib
-      # Replace both basedir forms to support both DXVK 2.0 and older versions.
-      substitute setup_dxvk.sh $out/bin/setup_dxvk.sh \
+      substitute ${./setup_dxvk.sh} $out/bin/setup_dxvk.sh \
+        --subst-var-by bash ${bash} \
+        --subst-var-by dxvk32 ${dxvk32} \
+        --subst-var-by dxvk64 ${dxvk64} \
         --subst-var-by mcfgthreads32 "${pkgsCross.mingw32.windows.mcfgthreads}" \
-        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads}" \
-        --replace 'basedir=$(dirname "$(readlink -f $0)")' "basedir=$bin" \
-        --replace 'basedir="$(dirname "$(readlink -f "$0")")"' "basedir=$bin"
+        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads}"
       chmod a+x $out/bin/setup_dxvk.sh
       declare -A dxvks=( [x32]=${dxvk32} [x64]=${dxvk64} )
       for arch in "''${!dxvks[@]}"; do
@@ -78,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs:
     '';
 
     meta = {
-      description = "A Vulkan-based translation layer for Direct3D 9/10/11";
+      description = "Setup script for DXVK";
       homepage = "https://github.com/doitsujin/dxvk";
       changelog = "https://github.com/doitsujin/dxvk/releases";
       maintainers = [ lib.maintainers.reckenrode ];

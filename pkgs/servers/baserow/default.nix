@@ -103,7 +103,7 @@ with python.pkgs; buildPythonApplication rec {
       --prefix DJANGO_SETTINGS_MODULE : "baserow.config.settings.base"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     baserow_premium
     boto3
     freezegun

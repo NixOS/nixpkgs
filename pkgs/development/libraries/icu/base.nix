@@ -2,6 +2,7 @@
 { stdenv, lib, fetchurl, fixDarwinDylibNames
   # Cross-compiled icu4c requires a build-root of a native compile
 , buildRootOnly ? false, nativeBuildRoot
+, testers
 }:
 
 let
@@ -45,6 +46,11 @@ let
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
       maintainers = with maintainers; [ raskin ];
+      pkgConfigModules = [
+        "icu-i18n"
+        "icu-io"
+        "icu-uc"
+      ];
       platforms = platforms.all;
     };
   };
@@ -97,4 +103,6 @@ let
             then buildRootOnlyAttrs
           else realAttrs;
 in
-stdenv.mkDerivation attrs
+stdenv.mkDerivation (finalAttrs: attrs // {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+})

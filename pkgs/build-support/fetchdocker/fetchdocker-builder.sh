@@ -1,5 +1,6 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source "${stdenv}/setup"
-header "exporting ${repository}/${imageName} (tag: ${tag}) into ${out}"
+echo "exporting ${repository}/${imageName} (tag: ${tag}) into ${out}"
 mkdir -p "${out}"
 
 cat <<EOF > "${out}/compositeImage.sh"
@@ -8,7 +9,7 @@ cat <<EOF > "${out}/compositeImage.sh"
 # Create a tar archive of a docker image's layers, docker image config
 # json, manifest.json, and repositories json; this streams directly to
 # stdout and is intended to be used in concert with docker load, i.e:
-# 
+#
 # ${out}/compositeImage.sh | docker load
 
 # The first character follow the 's' command for sed becomes the
@@ -25,4 +26,3 @@ ${gnutar}/bin/tar \
   -c "${manifest}" "${repositories}" -T "${imageFileStorePaths}"
 EOF
 chmod +x "${out}/compositeImage.sh"
-stopNest

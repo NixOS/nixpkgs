@@ -7,9 +7,7 @@
 
     short = builtins.substring 0 7 rev;
 
-    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
-      then "-${short}"
-      else "";
+    appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
@@ -34,7 +32,7 @@ in
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
-   This is because fetching arbitrary (maybe dangling) commits may be a security risk
+   This is because fetching arbitrary (maybe dangling) commits creates garbage collection risks
    and checking whether a commit belongs to a ref is expensive. This may
    change in the future when some caching is added to git (?)
    Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)

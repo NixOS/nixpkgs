@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots ];
   propagatedBuildInputs = [ cffi pywayland xkbcommon ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
     ${python.interpreter} wlroots/ffi_build.py

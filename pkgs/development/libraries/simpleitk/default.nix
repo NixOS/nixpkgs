@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, swig4, lua, itk_5_2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, swig4, lua, itk }:
 
 stdenv.mkDerivation rec {
   pname = "simpleitk";
-  version = "2.1.1.2";
+  version = "2.2.1";
 
   outputs = [ "out" "dev" ];
 
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     owner = "SimpleITK";
     repo = "SimpleITK";
     rev = "v${version}";
-    sha256 = "sha256-sokJXOz6p+0eTeps5Tt24pjB3u+L1s6mDlaWN7K9m3g=";
+    hash = "sha256-0YxmixUTXpjegZQv7DDCNTWFTH8QEWqQQszee7aQ5EI=";
   };
 
   nativeBuildInputs = [ cmake swig4 ];
-  buildInputs = [ lua itk_5_2 ];
+  buildInputs = [ lua itk ];
 
   # 2.0.0: linker error building examples
   cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" "-DBUILD_SHARED_LIBS=ON" ];

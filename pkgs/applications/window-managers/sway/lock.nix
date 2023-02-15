@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock";
-  version = "1.7";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
-    rev = version;
-    hash = "sha256-xbcVsnE0DecC+g49NOBNpqPl5JTtuxUUc7KinKhi5TE=";
+    rev = "v${version}";
+    hash = "sha256-ZsOLDqmkyhel8QAezdVZ51utruJrBZWqaZ7NzimXWQ4=";
   };
 
   strictDeps = true;

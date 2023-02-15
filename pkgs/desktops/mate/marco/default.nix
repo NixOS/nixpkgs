@@ -9,6 +9,7 @@
 , libgtop
 , libXdamage
 , libXpresent
+, libXres
 , libstartup_notification
 , gnome
 , glib
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "marco";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01avxrg2fc6grfrp6hl8b0im4scy9xf6011swfrhli87ig6hhg7n";
+    sha256 = "tPpVUL+J1Pnv9a5ufWFQ42YaItUw1q3cZ1e86N0qXT0=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     libgtop
     libXdamage
     libXpresent
+    libXres
     libstartup_notification
     gtk3
     gnome.zenity

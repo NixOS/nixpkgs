@@ -31,8 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config help2man ];
-  buildInputs = [ libcddb ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
+  buildInputs = [ libcddb libiconv ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+
+  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
@@ -46,6 +48,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

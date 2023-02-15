@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aioaladdinconnect";
-  version = "0.1.50";
+  version = "0.1.56";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "AIOAladdinConnect";
     inherit version;
-    hash = "sha256-5IeqIEIQzPq5GkuAf/92J0SBI3Lu1ftJ4UOj4oQLQC4=";
+    hash = "sha256-YLAIT33ItaNgokwensOan/OO2lK01GO/u5AZwzvuoPo=";
   };
 
   propagatedBuildInputs = [

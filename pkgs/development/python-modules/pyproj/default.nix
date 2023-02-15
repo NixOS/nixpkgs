@@ -43,7 +43,7 @@ buildPythonPackage rec {
      certifi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     numpy

@@ -159,16 +159,6 @@ let
         ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
       done
     '';
-
-    # since 7b9fd5d1c9802131ca0a01ff08a3ff64379d2df4
-    # autopatchelf misses to add $out/lib to rpath;
-    # we have to call autopatchelf manually as it would
-    # run too late and overwrite our rpath otherwise
-    dontAutoPatchelf = true;
-    postFixup = ''
-      autoPatchelf $out
-      patchelf --add-rpath $out/lib $out/lib/*
-    '';
   };
 
   binPath = lib.makeBinPath ([ acl gnugrep procps ]

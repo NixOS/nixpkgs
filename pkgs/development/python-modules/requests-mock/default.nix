@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [ mock purl testrepository testtools pytest ];
+  nativeCheckInputs = [ mock purl testrepository testtools pytest ];
 
   meta = with lib; {
     description = "Mock out responses from the requests package";

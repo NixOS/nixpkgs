@@ -3,7 +3,7 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz
+, callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
 , libfaketime
 , useFixedHashes ? true
@@ -12,7 +12,7 @@
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    ghostscript = ghostscriptX;
+    ghostscript = ghostscript_headless;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
@@ -25,7 +25,7 @@ let
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
       stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
-    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
+    ghostscript = ghostscript_headless;
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming

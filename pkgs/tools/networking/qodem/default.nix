@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses SDL gpm miniupnpc ];
 
   meta = with lib; {
-    homepage = "http://qodem.sourceforge.net/";
+    homepage = "https://qodem.sourceforge.net/";
     description = "Re-implementation of the DOS-era Qmodem serial communications package";
     longDescription = ''
       Qodem is a from-scratch clone implementation of the Qmodem

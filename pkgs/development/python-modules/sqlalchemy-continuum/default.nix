@@ -50,7 +50,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     psycopg2
     pymysql
     pytestCheckHook

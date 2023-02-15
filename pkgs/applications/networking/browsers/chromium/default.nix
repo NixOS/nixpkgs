@@ -197,6 +197,9 @@ in stdenv.mkDerivation {
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
 
+    # Make generated desktop shortcuts have a valid executable name.
+    export CHROME_WRAPPER='chromium'
+
   '' + lib.optionalString (libPath != "") ''
     # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
     # contain an empty section before or after a colon.

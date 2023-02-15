@@ -28,7 +28,7 @@ buildPythonPackage rec {
     dbus-next
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioconsole
     numpy
     pytestCheckHook

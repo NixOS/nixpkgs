@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = [ "--disable-examples" ];
+
   outputs = [ "out" "dev" "devdoc" ];
   outputDoc = "devdoc";
 

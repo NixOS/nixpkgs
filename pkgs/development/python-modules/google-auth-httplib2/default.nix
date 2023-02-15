@@ -27,7 +27,7 @@ buildPythonPackage rec {
     httplib2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
     mock
     pytestCheckHook

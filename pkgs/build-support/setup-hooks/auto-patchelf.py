@@ -131,7 +131,14 @@ def populate_cache(initial: List[Path], recursive: bool =False) -> None:
             if not path.is_file():
                 continue
 
+            # As an optimisation, resolve the symlinks here, as the target is unique
+            # XXX: (layus, 2022-07-25) is this really an optimisation in all cases ?
+            # It could make the rpath bigger or break the fragile precedence of $out.
             resolved = path.resolve()
+            # Do not use resolved paths when names do not match
+            if resolved.name != path.name:
+                resolved = path
+
             try:
                 with open_elf(path) as elf:
                     osabi = get_osabi(elf)

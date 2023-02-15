@@ -61,6 +61,8 @@ buildDunePackage rec {
     alcotest-lwt
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "HTTP/AF and MirageOS";
     license = lib.licenses.mit;

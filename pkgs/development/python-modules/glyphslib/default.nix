@@ -43,7 +43,7 @@ buildPythonPackage rec {
     skia-pathops
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "glyphsLib" ];
 

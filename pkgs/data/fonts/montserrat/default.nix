@@ -1,25 +1,27 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
+stdenvNoCC.mkDerivation rec {
   pname = "montserrat";
   version = "7.222";
 
-  owner = "JulietaUla";
-  repo = pname;
-  rev = "v${version}";
-  sha256 = "sha256-MeNnc1e5X5f0JyaLY6fX22rytHkvL++eM2ygsdlGMv0=";
+  src = fetchFromGitHub {
+    owner = "JulietaUla";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-eVCRn2OtNI5NuYZBQy06HKnMMXhPPnFxI8m8kguZjg0=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/{otf,ttf,woff,woff2}
 
-    mv $out/fonts/otf/*.otf $out/share/fonts/otf
-    mv $out/fonts/ttf/*.ttf $out/share/fonts/ttf
-    mv $out/fonts/webfonts/*.woff $out/share/fonts/woff
-    mv $out/fonts/webfonts/*.woff2 $out/share/fonts/woff2
+    mv fonts/otf/*.otf $out/share/fonts/otf
+    mv fonts/ttf/*.ttf $out/share/fonts/ttf
+    mv fonts/webfonts/*.woff $out/share/fonts/woff
+    mv fonts/webfonts/*.woff2 $out/share/fonts/woff2
 
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+    runHook postInstall
   '';
 
   meta = with lib; {

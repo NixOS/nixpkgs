@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.26.0";
+  version = "3.27.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d4FJCW0tTVgb+JTL386bYwmSlwEGAGSJAovsNs8kjaI=";
+    hash = "sha256-1/pGE8Ql50B8hY4I/o5AhPIDOuE3EQcro2zMN23zLsc=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytest-asyncio

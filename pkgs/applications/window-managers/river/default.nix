@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "0.2.0";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "riverwm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BrOZch6wkiBB4rk0M7Aoy8sZh8uOTQFOPxd3xLyy/K0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cIcO6owM6eYn+obYVaBOVQpnBx4++KOqQk5Hzo3GcNs=";
     fetchSubmodules = true;
   };
 
@@ -65,10 +65,11 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = ["river"];
 
   meta = with lib; {
+    changelog = "https://github.com/ifreund/river/releases/tag/v${version}";
     homepage = "https://github.com/ifreund/river";
     description = "A dynamic tiling wayland compositor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fortuneteller2k adamcstephens ];
+    maintainers = with maintainers; [ fortuneteller2k adamcstephens rodrgz ];
   };
 }

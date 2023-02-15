@@ -11,7 +11,7 @@ buildFishPlugin rec {
     sha256 = "sha256-XmRGe39O3xXmTvfawwT2mCwLIyXOlQm7f40mH5tzz+s=";
   };
 
-  checkInputs = [ fzf fd util-linux ];
+  nativeCheckInputs = [ fzf fd util-linux ];
   checkPlugins = [ clownfish fishtape_3 ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''

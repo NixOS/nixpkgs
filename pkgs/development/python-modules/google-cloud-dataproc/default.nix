@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.1.0";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0SFlDmAxvgZCJSFIrXXEjpJ4D0GRJQ0nkBv9D9EpC2g=";
+    hash = "sha256-iuhXfFp6cfDNDtk3JS+U8YbQAOII0khY2bmvP75QAP4=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-asyncio

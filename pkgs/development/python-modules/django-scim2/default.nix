@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "django_scim"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
   ];
 

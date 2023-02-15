@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tofi";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "philj56";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KLHZrfoQ6x3EeKWo/TMp30rEIqdq16i8YLr4zFHbnSc=";
+    sha256 = "sha256-HhkXypRGerWWHrR4maR3AtayWSy5qhl/LYwBHWGKboU=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols ];

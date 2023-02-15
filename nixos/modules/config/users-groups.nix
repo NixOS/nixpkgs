@@ -90,7 +90,7 @@ let
           only has an effect if {option}`uid` is
           {option}`null`, in which case it determines whether
           the user's UID is allocated in the range for system users
-          (below 500) or in the range for normal users (starting at
+          (below 1000) or in the range for normal users (starting at
           1000).
           Exactly one of `isNormalUser` and
           `isSystemUser` must be true.
@@ -677,7 +677,7 @@ in {
           {
             assertion = let
               xor = a: b: a && !b || b && !a;
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 500);
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.

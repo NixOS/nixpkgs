@@ -21,7 +21,7 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs .
   '';
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
   propagatedBuildInputs = [

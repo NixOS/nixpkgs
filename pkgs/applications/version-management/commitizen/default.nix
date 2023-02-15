@@ -1,5 +1,6 @@
 { buildPythonApplication
 , colorama
+, commitizen
 , decli
 , fetchFromGitHub
 , git
@@ -7,34 +8,41 @@
 , lib
 , packaging
 , poetry-core
-, pytest-freezegun
+, py
+, pytest-freezer
 , pytest-mock
 , pytest-regressions
 , pytestCheckHook
 , pyyaml
 , questionary
 , termcolor
+, testers
 , tomlkit
 , typing-extensions
 , argcomplete
 , nix-update-script
+, pre-commit
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.37.0";
+  version = "2.42.0";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wo1I6QDWLxByHISmkPdass+BcKh0oxR5hD31UN/5+WQ=";
-    deepClone = true;
+    hash = "sha256-13WEbF6in+zYZXWYqlYA98qJkKxjmcpQY9GuGS+DDtk=";
   };
 
   format = "pyproject";
 
   nativeBuildInputs = [ poetry-core ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"'
+  '';
 
   propagatedBuildInputs = [
     termcolor
@@ -51,9 +59,11 @@ buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pre-commit
+    py
     pytestCheckHook
-    pytest-freezegun
+    pytest-freezer
     pytest-mock
     pytest-regressions
     argcomplete
@@ -79,9 +89,17 @@ buildPythonApplication rec {
     "test_bump_pre_commit_changelog"
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
+    # fatal: not a git repository (or any of the parent directories): .git
+    "test_commitizen_debug_excepthook"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = commitizen;
+      command = "cz version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";

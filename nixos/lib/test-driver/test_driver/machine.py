@@ -1,4 +1,4 @@
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, nullcontext
 from pathlib import Path
 from queue import Queue
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
@@ -406,25 +406,23 @@ class Machine:
         return rootlog.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
-        with self.nested("waiting for monitor prompt"):
-            assert self.monitor is not None
-            answer = ""
-            while True:
-                undecoded_answer = self.monitor.recv(1024)
-                if not undecoded_answer:
-                    break
-                answer += undecoded_answer.decode()
-                if answer.endswith("(qemu) "):
-                    break
-            return answer
+        assert self.monitor is not None
+        answer = ""
+        while True:
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
+            if answer.endswith("(qemu) "):
+                break
+        return answer
 
     def send_monitor_command(self, command: str) -> str:
         self.run_callbacks()
-        with self.nested(f"sending monitor command: {command}"):
-            message = f"{command}\n".encode()
-            assert self.monitor is not None
-            self.monitor.send(message)
-            return self.wait_for_monitor_prompt()
+        message = f"{command}\n".encode()
+        assert self.monitor is not None
+        self.monitor.send(message)
+        return self.wait_for_monitor_prompt()
 
     def wait_for_unit(
         self, unit: str, user: Optional[str] = None, timeout: int = 900
@@ -547,20 +545,29 @@ class Machine:
         self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
-        return (rc, output.decode())
+        return (rc, output.decode(errors="replace"))
 
-    def shell_interact(self) -> None:
-        """Allows you to interact with the guest shell
+    def shell_interact(self, address: Optional[str] = None) -> None:
+        """Allows you to interact with the guest shell for debugging purposes.
 
-        Should only be used during test development, not in the production test."""
+        @address string passed to socat that will be connected to the guest shell.
+        Check the `Running Tests interactivly` chapter of NixOS manual for an example.
+        """
         self.connect()
-        self.log("Terminal is ready (there is no initial prompt):")
+
+        if address is None:
+            address = "READLINE,prompt=$ "
+            self.log("Terminal is ready (there is no initial prompt):")
 
         assert self.shell
-        subprocess.run(
-            ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
-            pass_fds=[self.shell.fileno()],
-        )
+        try:
+            subprocess.run(
+                ["socat", address, f"FD:{self.shell.fileno()}"],
+                pass_fds=[self.shell.fileno()],
+            )
+            # allow users to cancel this command without breaking the test
+        except KeyboardInterrupt:
+            pass
 
     def console_interact(self) -> None:
         """Allows you to interact with QEMU's stdin
@@ -676,9 +683,9 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
-        with self.nested(f"sending keys '{chars}'"):
+        with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
-                self.send_key(char, delay)
+                self.send_key(char, delay, log=False)
 
     def wait_for_file(self, filename: str) -> None:
         """Waits until the file exists in machine's file system."""
@@ -851,11 +858,15 @@ class Machine:
                 if matches is not None:
                     return
 
-    def send_key(self, key: str, delay: Optional[float] = 0.01) -> None:
+    def send_key(
+        self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
+    ) -> None:
         key = CHAR_TO_KEY.get(key, key)
-        self.send_monitor_command(f"sendkey {key}")
-        if delay is not None:
-            time.sleep(delay)
+        context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
+        with context:
+            self.send_monitor_command(f"sendkey {key}")
+            if delay is not None:
+                time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
         assert self.process

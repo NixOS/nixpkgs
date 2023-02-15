@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "lustre-v6";
-  version = "6.107.1";
+  version = "6.107.3";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
-    url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${version}.tgz";
-    hash = "sha256-+OqDwUIiPrtJy1C3DmDNTrtsT8clKKcNWCev4TEMRBc=";
+    url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lustre-v6.v${version}.tgz";
+    hash = "sha256-z3cljDyxtotCGUIdYEzYu7fQd04RC3hhWpROcMh6Zng=";
   };
 
   propagatedBuildInputs = [

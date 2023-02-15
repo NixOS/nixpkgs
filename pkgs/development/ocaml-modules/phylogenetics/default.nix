@@ -26,9 +26,11 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-  checkInputs = [ alcotest bppsuite ];
-  buildInputs = [ menhir ];
+  nativeCheckInputs = [ bppsuite ];
+  checkInputs = [ alcotest ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix
     biocaml

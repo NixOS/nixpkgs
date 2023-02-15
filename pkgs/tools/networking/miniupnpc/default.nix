@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
-
   doCheck = !stdenv.isFreeBSD;
 
   makeFlags = [ "PREFIX=$(out)" ];

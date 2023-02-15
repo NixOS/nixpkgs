@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
-  checkInputs = [ed];
+  nativeCheckInputs = [ed];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

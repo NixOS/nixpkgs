@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Tests are failing because reference files are not updated
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

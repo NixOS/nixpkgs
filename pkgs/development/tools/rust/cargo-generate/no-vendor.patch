@@ -4,8 +4,8 @@
  
  [dependencies]
  clap = { version = "4.0", features = ["derive", "std", "help"], default-features = false }
--git2 = { version = "0.15", features = ["ssh", "https", "vendored-libgit2", "vendored-openssl"], default-features = false }
-+git2 = { version = "0.15", features = ["ssh", "https"], default-features = false }
+-git2 = { version = "0.16", features = ["ssh", "https", "vendored-libgit2", "vendored-openssl"], default-features = false }
++git2 = { version = "0.16", features = ["ssh", "https"], default-features = false }
  console = "0.15"
  dialoguer = "0.10"
  dirs = "4.0"

@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
       algorithms to avoid doing unnecessary work. This means you can stay focused on
       your project rather than on your build system.
     '';
-    homepage = "http://gittup.org/tup/";
+    homepage = "https://gittup.org/tup/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;

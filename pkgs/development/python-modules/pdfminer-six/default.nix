@@ -46,7 +46,7 @@ buildPythonPackage rec {
     "pdfminer.high_level"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

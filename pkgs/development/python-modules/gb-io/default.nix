@@ -32,7 +32,7 @@ buildPythonPackage rec {
     rust.rustc
   ]);
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "gb_io" ];
 

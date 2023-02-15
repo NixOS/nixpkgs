@@ -1,40 +1,15 @@
-{ lib, stdenv, fetchgit, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.4";
+  version = "2.13.8";
 
-  src = fetchgit {
-    url = "https://git.lttng.org/lttng-modules.git";
+  src = fetchFromGitHub {
+    owner = "lttng";
+    repo = "lttng-modules";
     rev = "v${version}";
-    hash = "sha256-J2Tr1vOiCAilmnf3attF3bz8Irn9IQ2QbapdXJ4MUSg=";
+    hash = "sha256-6ohWsGUGFz7QlHkKWyW5edpSsBTE9DFS3v6EsH9wNZo=";
   };
-
-  patches = [
-    # fix: mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked() (v5.19)
-    (fetchpatch {
-      url = "https://git.lttng.org/?p=lttng-modules.git;a=patch;h=6229bbaa423832f6b7c7a658ad11e1d4242752ff";
-      hash = "sha256-pqbKxBzjfN20wfsqSeBLXNQ+/U+3qk9RfTiT32OwSIc=";
-    })
-
-    # fix: fs: Remove flags parameter from aops->write_begin (v5.19)
-    (fetchpatch {
-      url = "https://git.lttng.org/?p=lttng-modules.git;a=patch;h=5e2f832d59d51589ab69479c7db43c7581fb9346";
-      hash = "sha256-auoCbvFEVR76sOCLjIe+q/Q+vunQlR3G3gVcjqAGGPk=";
-    })
-
-    # fix: workqueue: Fix type of cpu in trace event (v5.19)
-    (fetchpatch {
-      url = "https://git.lttng.org/?p=lttng-modules.git;a=patch;h=c6da9604b1666780ea4725b3b3d1bfa1548f9c89";
-      hash = "sha256-qoTwy+P32qg1L+JctqM1+70OkeTbnbL3QJ9LwaBq/bw=";
-    })
-
-    # fix: net: skb: introduce kfree_skb_reason() (v5.15.58..v5.16)
-    (fetchpatch {
-      url = "https://git.lttng.org/?p=lttng-modules.git;a=patch;h=96c477dabaaf6cd1734bebe0972fef877e5a463b";
-      hash = "sha256-b7BhrYZ5SZqeRVGEu0Eo9GfbcZdDPrgEnOl2XU3z+ds=";
-    })
-  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -57,6 +32,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21Only gpl2Only mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) == "5.10";
+    broken = (lib.versions.majorMinor kernel.modDirVersion) == "5.10" || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
 }

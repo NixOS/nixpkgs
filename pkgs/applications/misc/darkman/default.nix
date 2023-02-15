@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "darkman";
-  version = "1.4.0";
+  version = "1.5.4";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
     rev = "v${version}";
-    sha256 = "sha256-Q/pjQmlyREl32C0LiwypEz1qBw2AeBOZbUIwNP392Sc=";
+    sha256 = "sha256-6SNXVe6EfVwcXH9O6BxNw+v4/uhKhCtVS3XE2GTc2Sc=";
   };
 
-  vendorSha256 = "09rjqw6v1jaf0mhmycw9mcay9q0y1fya2azj8216gdgkl48ics08";
+  vendorSha256 = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
 
   nativeBuildInputs = [ scdoc ];
 

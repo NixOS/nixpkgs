@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
+{ stdenv, lib, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
 { name
 , profile ? ""
@@ -237,7 +237,7 @@ in stdenv.mkDerivation {
     cd $out
     ${extraBuildCommands}
     cd $out
-    ${if isMultiBuild then extraBuildCommandsMulti else ""}
+    ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;

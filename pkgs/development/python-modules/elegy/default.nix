@@ -80,7 +80,7 @@ buildPythonPackage rec {
     "elegy"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sh
     tensorflow

@@ -4,13 +4,13 @@ buildDunePackage rec {
   pname = "vorbis";
   version = "0.8.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-vorbis";
     rev = "v${version}";
-    sha256 = "1acy7yvf2y5dggzxw4vmrpdipakr98si3pw5kxw0mh7livn08al8";
+    hash = "sha256-iCoE7I70wAp4n4XfETVKeaob2811E97/e6144bY/nqk=";
   };
 
   buildInputs = [ dune-configurator ];

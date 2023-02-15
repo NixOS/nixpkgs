@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # when running these tests inside build, based on free disk space.
   doCheck = false;
   checkTarget = "test";
-  checkInputs = [ which zstd pbzip2 ];
+  nativeCheckInputs = [ which zstd pbzip2 ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}

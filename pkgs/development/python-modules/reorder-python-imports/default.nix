@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "reorder_python_imports"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

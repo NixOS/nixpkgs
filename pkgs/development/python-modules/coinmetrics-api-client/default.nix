@@ -37,7 +37,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ] ++ passthru.optional-dependencies.pandas;

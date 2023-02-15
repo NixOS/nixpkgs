@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
   ]);
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     unittestCheckHook
     pytz
   ];

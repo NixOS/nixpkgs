@@ -26,12 +26,11 @@
 , openvdb
 , pcre
 , qhull
-, systemd
 , tbb
 , wxGTK31
 , xorg
 , fetchpatch
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 let
   wxGTK-prusa = wxGTK31.overrideAttrs (old: rec {
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ checkInputs;
+  ] ++ nativeCheckInputs;
 
   patches = [
     # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
@@ -103,7 +102,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   separateDebugInfo = true;
 

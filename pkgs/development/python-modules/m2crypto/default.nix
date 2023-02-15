@@ -1,41 +1,43 @@
 { lib
-, fetchpatch
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, fetchpatch
 , swig2
 , openssl
 , typing
+, parameterized
 }:
 
 
 buildPythonPackage rec {
-  version = "0.36.0";
+  version = "0.38.0";
   pname = "M2Crypto";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hadbdckmjzfb8qzbkafypin6sakfx35j2qx0fsivh757s7c2hhm";
+    sha256 = "sha256-mfImCjCQHJSajcbV+CzVMS/7iryS52YzuvIxu7yy3ss=";
   };
 
   patches = [
+    # Use OpenSSL_version_num() instead of unrealiable parsing of .h file.
     (fetchpatch {
-      url = "https://github.com/void-linux/void-packages/raw/7946d12eb3d815e5ecd4578f1a6133d948694370/srcpkgs/python-M2Crypto/patches/libressl.patch";
-      sha256 = "0z5qnkndg6ma5f5qqrid5m95i9kybsr000v3fdy1ab562kf65a27";
+      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-MR271-opensslversion.patch";
+      hash = "sha256-e1/NHgWza+kum76MUFSofq9Ko3pML67PUfqWjcwIl+A=";
+    })
+    # Changed required to pass tests on OpenSSL 3.0
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-0.38-ossl3-tests.patch";
+      hash = "sha256-B6JKoPh76+CIna6zmrvFj50DIp3pzg8aKyzz+Q5hqQ0=";
+    })
+    # Allow EVP tests fail on non-FIPS algorithms
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/m2crypto/raw/42951285c800f72e0f0511cec39a7f49e970a05c/f/m2crypto-0.38-ossl3-tests-evp.patch";
+      hash = "sha256-jMUAphVBQMFaOJSeYUCQMV3WSe9VDQqG6GY5fDQXZnA=";
     })
   ];
-  patchFlags = [ "-p0" ];
 
-  nativeBuildInputs = [ swig2 ];
-  buildInputs = [ swig2 openssl ];
-
-  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
-
-  preConfigure = ''
-    substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${openssl.dev}'"
-  '';
-
-  doCheck = false; # another test that depends on the network.
+  nativeBuildInputs = [ swig2 openssl ];
+  buildInputs = [ openssl parameterized ];
 
   meta = with lib; {
     description = "A Python crypto and SSL toolkit";
@@ -43,5 +45,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };
-
 }

@@ -11,6 +11,7 @@ buildDunePackage rec {
   version = "3.10.1";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
@@ -30,8 +31,11 @@ buildDunePackage rec {
     ke logs lwt ocamlgraph uri rresult result bigstringaf optint mirage-flow
     domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
   ];
+  nativeCheckInputs = [
+    git-binary
+  ];
   checkInputs = [
-    alcotest alcotest-lwt mirage-crypto-rng git-binary crowbar cmdliner
+    alcotest alcotest-lwt mirage-crypto-rng crowbar cmdliner
   ];
   doCheck = !stdenv.isAarch64;
 

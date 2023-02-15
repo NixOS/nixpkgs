@@ -1,0 +1,195 @@
+.Dd January 1, 1980
+.\" nixpkgs groff will use Nixpkgs as the OS in the title by default, taking it from
+.\" doc-default-operating-system. mandoc doesn't have this register set by default,
+.\" so we can use it as a groff/mandoc switch.
+.ie ddoc-default-operating-system .Dt nixos-install \&8 "NixOS System Manager's Manual"
+.el .Dt nixos-install 8
+.Os NixOS
+.Sh NAME
+.Nm nixos-install
+.Nd install bootloader and NixOS
+.
+.
+.
+.Sh SYNOPSIS
+.Nm nixos-install
+.Op Fl -verbose | v
+.Op Fl I Ar path
+.Op Fl -root Ar root
+.Op Fl -system Ar path
+.Op Fl -flake Ar flake-uri
+.Op Fl -impure
+.Op Fl -channel Ar channel
+.Op Fl -no-channel-copy
+.Op Fl -no-root-password | -no-root-passwd
+.Op Fl -no-bootloader
+.Op Fl -max-jobs | j Ar number
+.Op Fl -cores Ar number
+.Op Fl -option Ar name value
+.Op Fl -show-trace
+.Op Fl -keep-going
+.Op Fl -help
+.
+.
+.
+.Sh DESCRIPTION
+This command installs NixOS in the file system mounted on
+.Pa /mnt Ns
+, based on the NixOS configuration specified in
+.Pa /mnt/etc/nixos/configuration.nix Ns
+\&. It performs the following steps:
+.
+.Bl -enum
+.It
+It copies Nix and its dependencies to
+.Pa /mnt/nix/store Ns
+\&.
+.
+.It
+It runs Nix in
+.Pa /mnt
+to build the NixOS configuration specified in
+.Pa /mnt/etc/nixos/configuration.nix Ns
+\&.
+.
+.It
+It installs the current channel
+.Dq nixos
+in the target channel profile (unless
+.Fl -no-channel-copy
+is specified).
+.
+.It
+It installs the GRUB boot loader on the device specified in the option
+.Va boot.loader.grub.device
+(unless
+.Fl -no-bootloader
+is specified), and generates a GRUB configuration file that boots into the NixOS
+configuration just installed.
+.
+.It
+It prompts you for a password for the root account (unless
+.Fl -no-root-password
+is specified).
+.El
+.
+.Pp
+This command is idempotent: if it is interrupted or fails due to a temporary
+problem (e.g. a network issue), you can safely re-run it.
+.
+.
+.
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl -verbose , v
+Increases the level of verbosity of diagnostic messages printed on standard
+error. For each Nix operation, the information printed on standard output is
+well-defined; any diagnostic information is printed on standard error, never on
+standard output.
+.Pp
+Please note that this option may be specified repeatedly.
+.
+.It Fl -root Ar root
+Defaults to
+.Pa /mnt Ns
+\&. If this option is given, treat the directory
+.Ar root
+as the root of the NixOS installation.
+.
+.It Fl -system Ar path
+If this option is provided,
+.Nm
+will install the specified closure rather than attempt to build one from
+.Pa /mnt/etc/nixos/configuration.nix Ns
+\&.
+.Pp
+The closure must be an appropriately configured NixOS system, with boot loader
+and partition configuration that fits the target host. Such a closure is
+typically obtained with a command such as
+.Ic nix-build -I nixos-config=./configuration.nix '<nixpkgs/nixos>' -A system --no-out-link Ns
+\&.
+.
+.It Fl -flake Ar flake-uri Ns # Ns Ar name
+Build the NixOS system from the specified flake. The flake must contain an
+output named
+.Ql nixosConfigurations. Ns Ar name Ns
+\&.
+.
+.It Fl -channel Ar channel
+If this option is provided, do not copy the current
+.Dq nixos
+channel to the target host. Instead, use the specified derivation.
+.
+.It Fl I Ar Path
+Add a path to the Nix expression search path. This option may be given multiple
+times. See the
+.Ev NIX_PATH
+environment variable for information on the semantics of the Nix search path. Paths added through
+.Fl I
+take precedence over
+.Ev NIX_PATH Ns
+\&.
+.
+.It Fl -max-jobs , j Ar number
+Sets the maximum number of build jobs that Nix will perform in parallel to the
+specified number. The default is 1. A higher value is useful on SMP systems or
+to exploit I/O latency.
+.
+.It Fl -cores Ar N
+Sets the value of the
+.Ev NIX_BUILD_CORES
+environment variable in the invocation of builders. Builders can use this
+variable at their discretion to control the maximum amount of parallelism. For
+instance, in Nixpkgs, if the derivation attribute
+.Va enableParallelBuilding
+is set to true, the builder passes the
+.Fl j Ns Va N
+flag to GNU Make. The value 0 means that the builder should use all available CPU cores in the system.
+.
+.It Fl -option Ar name value
+Set the Nix configuration option
+.Ar name
+to
+.Ar value Ns
+\&.
+.
+.It Fl -show-trace
+Causes Nix to print out a stack trace in case of Nix expression evaluation errors.
+.
+.It Fl -keep-going
+Causes Nix to continue building derivations as far as possible in the face of failed builds.
+.
+.It Fl -help
+Synonym for
+.Ic man nixos-install Ns
+\&.
+.El
+.
+.
+.
+.Sh EXAMPLES
+A typical NixOS installation is done by creating and mounting a file system on
+.Pa /mnt Ns
+, generating a NixOS configuration in
+.Pa /mnt/etc/nixos/configuration.nix Ns
+, and running
+.Nm Ns
+\&. For instance, if we want to install NixOS on an ext4 file system created in
+.Pa /dev/sda1 Ns
+:
+.Bd -literal -offset indent
+$ mkfs.ext4 /dev/sda1
+$ mount /dev/sda1 /mnt
+$ nixos-generate-config --root /mnt
+$ # edit /mnt/etc/nixos/configuration.nix
+$ nixos-install
+$ reboot
+.Ed
+.
+.
+.
+.Sh AUTHORS
+.An -nosplit
+.An Eelco Dolstra
+and
+.An the Nixpkgs/NixOS contributors

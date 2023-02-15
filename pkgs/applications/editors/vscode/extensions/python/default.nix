@@ -12,6 +12,7 @@
 , curl
 , coreutils
 , gnused
+, jq
 , nix
 }:
 
@@ -19,8 +20,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2022.19.13351014";
-    sha256 = "1562f4b0v76p1wfbljc5zydq7aq7k5hshxzm2v1whb77cjskiw8s";
+    version = "2023.1.10091012";
+    sha256 = "sha256-JosFv6ngJmw1XRILwTZMVxlGIdWFLFQjj4olfnVwAIM=";
   };
 
   buildInputs = [ icu ];
@@ -29,7 +30,6 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     debugpy
-    isort
     jedi-language-server
   ];
 
@@ -57,14 +57,16 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
       curl
       coreutils
       gnused
+      jq
       nix
     ]}
 
     api=$(curl -s 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
       -H 'accept: application/json;api-version=3.0-preview.1' \
       -H 'content-type: application/json' \
-      --data-raw '{"filters":[{"criteria":[{"filterType":7,"value":"${mktplcRef.publisher}.${mktplcRef.name}"}]}],"flags":512}')
-    version=$(echo $api | sed -n -E 's|^.*"version":"([0-9.]+)".*$|\1|p')
+      --data-raw '{"filters":[{"criteria":[{"filterType":7,"value":"${mktplcRef.publisher}.${mktplcRef.name}"}]}],"flags":16}')
+    # Find the latest version compatible with stable vscode version
+    version=$(echo $api | jq -r '.results[0].extensions[0].versions | map(select(has("properties"))) | map(select(.properties | map(select(.key == "Microsoft.VisualStudio.Code.Engine")) | .[0].value | test("\\^[0-9.]+$"))) | .[0].version')
 
     if [[ $version != ${mktplcRef.version} ]]; then
       tmp=$(mktemp)

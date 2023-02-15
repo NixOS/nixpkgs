@@ -10,7 +10,7 @@
 , fastJson
 , withKrb5 ? true
 , libkrb5
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withJemalloc ? true
 , jemalloc

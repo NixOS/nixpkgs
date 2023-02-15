@@ -29,7 +29,7 @@ buildPythonPackage rec {
     decorator
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     invocations
     invoke
     pytestCheckHook

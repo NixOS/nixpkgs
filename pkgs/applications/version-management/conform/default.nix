@@ -18,7 +18,7 @@ buildGoModule rec {
     "-X github.com/siderolabs/conform/internal/version.Tag=v${version}"
   ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "Policy enforcement for your pipelines";

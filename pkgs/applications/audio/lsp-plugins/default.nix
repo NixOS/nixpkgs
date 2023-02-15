@@ -4,19 +4,21 @@
 , ladspaH, php, libXrandr }:
 
 stdenv.mkDerivation rec {
-        pname = "lsp-plugins";
-        version = "1.2.4";
+  pname = "lsp-plugins";
+  version = "1.2.5";
 
-        src = fetchurl {
-                url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-                sha256 = "sha256-GTrcUy10bN9Xj2I7uuGyP82c6NVpnQbXTI85H231yyo=";
-        };
+  src = fetchurl {
+    url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
+    sha256 = "sha256-YYrt+FbpY7iEui0aw4Ce94BW1SHDk0OH8gFSzkW2fkw=";
+  };
 
-        nativeBuildInputs = [ pkg-config php makeWrapper ];
-        buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH libXrandr ];
+  outputs = [ "out" "dev" "doc" ];
 
-        makeFlags = [
-                "PREFIX=${placeholder "out"}"
+  nativeBuildInputs = [ pkg-config php makeWrapper ];
+  buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH libXrandr ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
   ];
 
   NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";

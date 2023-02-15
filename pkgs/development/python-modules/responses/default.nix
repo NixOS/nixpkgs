@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook

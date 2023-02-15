@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose pytest pytest-xdist ];
+  nativeCheckInputs = [ nose pytest pytest-xdist ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
@@ -66,6 +66,8 @@ buildPythonPackage rec {
     popd
     runHook postCheck
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
 
   passthru = {
     blas = numpy.blas;

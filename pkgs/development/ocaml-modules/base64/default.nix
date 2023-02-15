@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "sha256-WJ3pwAV46/54QZismBjTWGxHSyMWts0+HEbMsfYq46Q=";
   };
 
-  propagatedBuildInputs = [ findlib ];
+  nativeBuildInputs = [ findlib ];
 
   # otherwise fmt breaks evaluation
   doCheck = lib.versionAtLeast ocaml.version "4.08";

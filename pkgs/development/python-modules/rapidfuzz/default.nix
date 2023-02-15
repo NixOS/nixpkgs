@@ -64,7 +64,7 @@ buildPythonPackage rec {
     export RAPIDFUZZ_IMPLEMENTATION=cpp
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pandas
     pytestCheckHook

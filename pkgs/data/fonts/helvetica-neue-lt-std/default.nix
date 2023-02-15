@@ -1,23 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation {
+  name = "helvetica-neue-lt-std";
   version = "2014.08.16"; # date of most recent file in distribution
-in fetchzip {
-  name = "helvetica-neue-lt-std-${version}";
 
-  url = "https://web.archive.org/web/20190823153624/http://ephifonts.com/downloads/helvetica-neue-lt-std.zip";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20190823153624/http://ephifonts.com/downloads/helvetica-neue-lt-std.zip";
+    stripRoot = false;
+    hash = "sha256-ytoTTrnwN1lMw/gTxS4DRAq+tV5WzB2xHP4vVxLZ1ZI=";
+  };
 
-  stripRoot = false;
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    install -Dm644 $out/'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+    install -Dm644 'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "sha256-gM/QXrKI2xrrCBYt4R+Fk5Tj0AIkrnCP/pwgh0A/MyI=";
 
   meta = with lib; {
     homepage = "https://web.archive.org/web/20190926040940/http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";

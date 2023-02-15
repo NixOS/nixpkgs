@@ -46,7 +46,7 @@ in buildPythonPackage rec {
     ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
-  preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+  preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
 
   nativeBuildInputs = [
     cython
@@ -63,7 +63,7 @@ in buildPythonPackage rec {
 
   # tests now require pytest-mpi, which isn't available and difficult to package
   doCheck = false;
-  checkInputs = [ pytestCheckHook openssh ];
+  nativeCheckInputs = [ pytestCheckHook openssh ];
 
   pythonImportsCheck = [ "h5py" ];
 

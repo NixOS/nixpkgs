@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "immutabledict"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

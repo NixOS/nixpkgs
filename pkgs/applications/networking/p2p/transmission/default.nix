@@ -24,7 +24,7 @@
 , enableQt ? false
 , qt5
 , nixosTests
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
 , enableCli ? true
 , installLib ? false

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     ./remove-coverage-tests.patch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

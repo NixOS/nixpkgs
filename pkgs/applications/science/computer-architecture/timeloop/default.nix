@@ -5,7 +5,7 @@
 , libconfig
 , boost
 , libyaml
-, libyamlcpp
+, yaml-cpp
 , ncurses
 , gpm
 , enableAccelergy ? true
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libconfig
     boost
     libyaml
-    libyamlcpp
+    yaml-cpp
     ncurses
     accelergy
    ] ++ lib.optionals stdenv.isLinux [ gpm ];

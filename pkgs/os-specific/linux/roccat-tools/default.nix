@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools to configure ROCCAT devices";
-    homepage = "http://roccat.sourceforge.net/";
+    homepage = "https://roccat.sourceforge.net/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

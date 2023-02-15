@@ -18,8 +18,6 @@
 , withMisc ? false, libeb ? null
 }:
 
-with lib;
-
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
 
@@ -59,18 +57,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses m17n_lib m17n_db expat
   ]
-  ++ optional withAnthy anthy
-  ++ optional withGtk2 gtk2
-  ++ optional withGtk3 gtk3
-  ++ optional withQt4 qt4
-  ++ optionals withQt5 [ qt5.qtbase.bin qt5.qtbase.dev ]
-  ++ optional withLibnotify libnotify
-  ++ optional withSqlite sqlite
-  ++ optionals withNetworking [
+  ++ lib.optional withAnthy anthy
+  ++ lib.optional withGtk2 gtk2
+  ++ lib.optional withGtk3 gtk3
+  ++ lib.optional withQt4 qt4
+  ++ lib.optionals withQt5 [ qt5.qtbase.bin qt5.qtbase.dev ]
+  ++ lib.optional withLibnotify libnotify
+  ++ lib.optional withSqlite sqlite
+  ++ lib.optionals withNetworking [
     curl openssl
   ]
-  ++ optional withFFI libffi
-  ++ optional withMisc libeb;
+  ++ lib.optional withFFI libffi
+  ++ lib.optional withMisc libeb;
 
   prePatch = ''
     patchShebangs *.sh */*.sh */*/*.sh
@@ -113,25 +111,25 @@ stdenv.mkDerivation rec {
     "--with-xft"
     "--with-expat=${expat.dev}"
   ]
-  ++ optional withAnthy "--with-anthy-utf8"
-  ++ optional withGtk2 "--with-gtk2"
-  ++ optional withGtk3 "--with-gtk3"
-  ++ optionals withQt4 [
+  ++ lib.optional withAnthy "--with-anthy-utf8"
+  ++ lib.optional withGtk2 "--with-gtk2"
+  ++ lib.optional withGtk3 "--with-gtk3"
+  ++ lib.optionals withQt4 [
     "--with-qt4"
     "--with-qt4-immodule"
   ]
-  ++ optionals withQt5 [
+  ++ lib.optionals withQt5 [
     "--with-qt5"
     "--with-qt5-immodule"
   ]
-  ++ optional withLibnotify "--enable-notify=libnotify"
-  ++ optional withSqlite "--with-sqlite3"
-  ++ optionals withNetworking [
+  ++ lib.optional withLibnotify "--enable-notify=libnotify"
+  ++ lib.optional withSqlite "--with-sqlite3"
+  ++ lib.optionals withNetworking [
     "--with-curl"
     "--with-openssl-dir=${openssl.dev}"
   ]
-  ++ optional withFFI "--with-ffi"
-  ++ optional withMisc "--with-eb";
+  ++ lib.optional withFFI "--with-ffi"
+  ++ lib.optional withMisc "--with-eb";
 
   # TODO: things in `./configure --help`, but not in nixpkgs
   #--with-canna            Use Canna [default=no]

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.10.0";
+  version = "1.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-93ijizxgVFxXzj8IzxrgzzXTQKl7UH3egvL41HVk5is=";
+    hash = "sha256-nVzFxoEIk01fPnybPQ7elFSff9ofSI9Ik6B+P4o41N8=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

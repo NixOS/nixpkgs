@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [
-    cryptography jinja2 Mako passlib pyyaml requests tomlkit librouteros
+    setuptools cryptography jinja2 Mako passlib pyyaml requests tomlkit librouteros
   ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # only unit tests as integration tests need a OpenSSH client/server setup

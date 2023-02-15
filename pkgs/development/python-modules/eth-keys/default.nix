@@ -31,7 +31,7 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asn1tools
     factory_boy
     hypothesis

@@ -15,6 +15,7 @@
 , pciutils
 , sndio
 , libjack2
+, speechd
 }:
 
 ## configurability of the wrapper itself
@@ -82,6 +83,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
+            ++ lib.optional (cfg.speechSynthesisSupport or false) speechd
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
@@ -96,7 +98,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+      nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       requiresSigning = browser ? MOZ_REQUIRE_SIGNING
                      -> toString browser.MOZ_REQUIRE_SIGNING != "";
@@ -112,7 +114,7 @@ let
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
         a
-      ) (if usesNixExtensions then nixExtensions else []);
+      ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies =
       {

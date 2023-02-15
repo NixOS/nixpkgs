@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # All commands test `localstack` which is a downstream dependency
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -15,7 +15,7 @@
 , pname ? "kicad"
 , stable ? true
 , withOCC ? true
-, withNgspice ? true
+, withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
 , python3
@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
+      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
     in
@@ -181,13 +182,13 @@ stdenv.mkDerivation rec {
 
         # wrap each of the directly usable tools
         (map
-          (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
             + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
         # link in the CLI utils
-        (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
 
         "runHook postInstall"
       ])
@@ -213,7 +214,7 @@ stdenv.mkDerivation rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
     else "Open Source EDA suite, development build")
-    + (if (!with3d) then ", without 3D models" else "");
+    + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
@@ -223,6 +224,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin;
 
     hydraPlatforms = if (with3d) then [ ] else platforms;
     # We can't download the 3d models on Hydra,

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     suds-jurko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     tornado
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     netifaces
     pytest-bdd

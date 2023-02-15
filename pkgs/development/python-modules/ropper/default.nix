@@ -27,7 +27,7 @@ buildPythonPackage rec {
     filebytes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
