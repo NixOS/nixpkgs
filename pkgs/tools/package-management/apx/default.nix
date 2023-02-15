@@ -26,6 +26,9 @@ buildGoModule rec {
     makeWrapper
     installShellFiles
   ];
+  patchPhase = ''
+    sed -i "s#/etc/apx#$out/etc/apx#g" $(find . -name "*.go")
+  '';
 
   postInstall = ''
     mkdir -p $out/etc/apx
@@ -48,6 +51,6 @@ buildGoModule rec {
     description = "The Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya 9glenda ];
   };
 }
