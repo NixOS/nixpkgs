@@ -7243,6 +7243,8 @@ self: super: with self; {
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
+  pyfume = callPackage ../development/python-modules/pyfume { };
+
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
   pygti = callPackage ../development/python-modules/pygti { };
