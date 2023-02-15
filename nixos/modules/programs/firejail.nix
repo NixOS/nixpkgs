@@ -133,7 +133,7 @@ in {
         source = "${lib.getBin pkgs.firejail}/bin/firejail";
       };
 
-    environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ] ++ wrappedPkgs;
+    environment.systemPackages = [ pkgs.firejail wrappedBins ] ++ wrappedPkgs;
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];
