@@ -179,8 +179,7 @@ let
         ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
         ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
-      propagatedBuildInputs = lib.optionals withEmbedded
-        (lib.optional withNuma numactl);
+      propagatedBuildInputs = lib.optional withNuma numactl;
 
       postPatch = ''
         substituteInPlace scripts/galera_new_cluster.sh \
