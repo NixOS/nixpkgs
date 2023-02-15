@@ -49,21 +49,21 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
-  preConfigure = ''
-    export LD=$CC
-  '';
-
   postBuild = lib.optionalString pythonSupport ''
     make -C pjsip-apps/src/swig/python
   '';
 
-  outputs = [ "out" ]
-    ++ lib.optional pythonSupport "py";
+  preConfigure = ''
+    export LD=$CC
+  '';
 
   configureFlags = [ "--enable-shared" ]
     # darwin-ssl is a deprecated SSL library that requires
     # a more recent version of Apple SDK 10 which is not in nixpkgs.
     ++ lib.optional stdenv.isDarwin "--disable-darwin-ssl";
+
+  outputs = [ "out" ]
+    ++ lib.optional pythonSupport "py";
 
   postInstall = ''
     mkdir -p $out/bin
