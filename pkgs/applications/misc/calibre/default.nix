@@ -22,6 +22,7 @@
 , qtbase
 , qtwayland
 , removeReferencesTo
+, speechd
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
@@ -121,6 +122,7 @@ stdenv.mkDerivation rec {
       regex
       sip
       setuptools
+      speechd
       zeroconf
       jeepney
       pycryptodome
