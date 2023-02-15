@@ -2,12 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, pythonAtLeast
 , isPy3k
 , decorator
 , http-parser
 , python-magic
 , urllib3
 , pytestCheckHook
+, pytest-asyncio
 , pytest-mock
 , aiohttp
 , fastapi
@@ -38,6 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-mock
     aiohttp
     fastapi
@@ -54,6 +57,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # Requires a live Redis instance
     "--ignore=tests/main/test_redis.py"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Do not work with newer versions of pytest-asyncio
+    "--ignore=tests/main/test_http_aiohttp.py"
+    "--ignore=tests/tests38/test_http_aiohttp.py"
   ] ++ lib.optionals (pythonOlder "3.8") [
     # Uses IsolatedAsyncioTestCase which is only available >= 3.8
     "--ignore=tests/tests38/test_http_aiohttp.py"
