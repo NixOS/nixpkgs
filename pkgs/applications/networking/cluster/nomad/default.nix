@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, buildGo119Module
 , buildGo120Module
 , fetchFromGitHub
 , nixosTests
@@ -62,10 +61,10 @@ rec {
   };
 
   nomad_1_4 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.4.3";
-    sha256 = "sha256-GQVfrn9VlzfdIj73W3hBpHcevsXZcb6Uj808HUCZUUg=";
-    vendorSha256 = "sha256-JQRpsQhq5r/QcgFwtnptmvnjBEhdCFrXFrTKkJioL3A=";
+    buildGoModule = buildGo120Module;
+    version = "1.4.4";
+    sha256 = "sha256-mAimuWolTJ3lMY/ArnLZFu+GZv9ADdGsriXsTcEgdYc=";
+    vendorSha256 = "sha256-QtP7pzsIBd2S79AUcbOeVG71Mb5qK706rq5DkT41VqM=";
     passthru.tests.nomad = nixosTests.nomad;
   };
 }
