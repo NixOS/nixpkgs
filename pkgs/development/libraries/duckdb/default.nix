@@ -7,7 +7,6 @@
 , openssl
 , openjdk11
 , unixODBC
-, withHttpFs ? true
 , withJdbc ? false
 , withOdbc ? false
 }:
@@ -26,31 +25,38 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9m9+fldOgv2QTuUbw5y0zekBxZe8Dd4+8FqR3t3uFGg=";
   };
 
-  patches = [ ./version.patch ./shell-install.patch ];
+  patches = [ ./version.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
+    substituteInPlace tools/shell/CMakeLists.txt \
+      --replace \
+      'install(TARGETS shell RUNTIME DESTINATION "''${PROJECT_BINARY_DIR}")' \
+      'install(TARGETS shell RUNTIME DESTINATION "''${INSTALL_BIN_DIR}")'
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = lib.optionals withHttpFs [ openssl ]
+  buildInputs = [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DBUILD_EXCEL_EXTENSION=ON"
-    "-DBUILD_FTS_EXTENSION=ON"
-    "-DBUILD_HTTPFS_EXTENSION=${enableFeature withHttpFs}"
     "-DBUILD_ICU_EXTENSION=ON"
-    "-DBUILD_JSON_EXTENSION=ON"
-    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_TPCDS_EXTENSION=ON"
-    "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
+    "-DBUILD_TPCDS_EXTENSION=ON"
+    "-DBUILD_FTS_EXTENSION=ON"
+    "-DBUILD_HTTPFS_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
+    "-DBUILD_JSON_EXTENSION=ON"
+    "-DBUILD_JEMALLOC_EXTENSION=ON"
+    "-DBUILD_EXCEL_EXTENSION=ON"
     "-DBUILD_INET_EXTENSION=ON"
+    "-DBUILD_TPCE=ON"
+    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+    # development settings
+    "-DBUILD_UNITTESTS=ON"
   ];
 
   doInstallCheck = true;
