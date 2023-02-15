@@ -580,30 +580,28 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old:
-    let
-      # We only need its dependencies `node-modules`.
-      nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs (old: {
-        dontNpmInstall = true;
-      });
-    in
-    {
-      patches = [
-        (substituteAll {
-          src = ./markdown-preview-nvim/fix-node-paths.patch;
-          node = "${nodejs}/bin/node";
-        })
-      ];
-      postInstall = ''
-        ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
-      '';
-
-      nativeBuildInputs = [ nodejs ];
-      doInstallCheck = true;
-      installCheckPhase = ''
-        node $out/app/index.js --version
-      '';
+  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
+    # We only need its dependencies `node-modules`.
+    nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs (old: {
+      dontNpmInstall = true;
     });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./markdown-preview-nvim/fix-node-paths.patch;
+        node = "${nodejs}/bin/node";
+      })
+    ];
+    postInstall = ''
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
+    '';
+
+    nativeBuildInputs = [ nodejs ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      node $out/app/index.js --version
+    '';
+  });
 
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs (old: {
     dependencies = with self; [ mason-nvim nvim-lspconfig ];
@@ -664,7 +662,7 @@ self: super: {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   });
 
-  noice-nvim = super.noice-nvim.overrideAttrs (old: {
+  noice-nvim = super.noice-nvim.overrideAttrs(old: {
     dependencies = with self; [ nui-nvim nvim-notify ];
   });
 
@@ -827,14 +825,12 @@ self: super: {
     };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
-    postPatch =
-      let
-        libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
-      in
-      ''
-        substituteInPlace lua/sqlite/defs.lua \
-          --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
-      '';
+    postPatch = let
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in ''
+      substituteInPlace lua/sqlite/defs.lua \
+        --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
+    '';
   });
 
   ssr = super.ssr-nvim.overrideAttrs (old: {
@@ -856,11 +852,11 @@ self: super: {
   };
 
   stylish-nvim = super.stylish-nvim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace xwininfo ${xorg.xwininfo}/bin/xwininfo
-    '';
+      postPatch = ''
+        substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace xdotool ${xdotool}/bin/xdotool
+        substituteInPlace lua/stylish/components/menu.lua --replace xdotool ${xdotool}/bin/xdotool
+        substituteInPlace lua/stylish/components/menu.lua --replace xwininfo ${xorg.xwininfo}/bin/xwininfo
+      '';
   });
 
   sved =
@@ -977,7 +973,7 @@ self: super: {
         cp "${ftdetect}" vim-plugin/ftdetect/tup.vim
         cd vim-plugin
       '';
-      meta.maintainers = with lib.maintainers; [ enderger ];
+      meta.maintainers = with lib.maintainers; [enderger];
     };
 
   unicode-vim =
