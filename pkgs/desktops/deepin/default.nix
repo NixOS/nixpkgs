@@ -38,6 +38,7 @@ let
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
     deepin-picker = callPackage ./apps/deepin-picker { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
+    deepin-reader = callPackage ./apps/deepin-reader { };
 
     #### Go Packages
     go-lib = callPackage ./go-package/go-lib { inherit replaceAll; };
