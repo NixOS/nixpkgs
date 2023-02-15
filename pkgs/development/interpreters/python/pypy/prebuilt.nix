@@ -32,7 +32,7 @@ let
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy3k then "3" else ""}";
+    executable = "pypy${lib.optionalString isPy3k "3"}";
     sitePackages = "lib/${libPrefix}/site-packages";
     hasDistutilsCxxPatch = false;
 

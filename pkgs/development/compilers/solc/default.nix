@@ -96,7 +96,7 @@ let
       for i in ./scripts/*.sh ./scripts/*.py ./test/*.sh ./test/*.py; do
         patchShebangs "$i"
       done
-      TERM=xterm ./scripts/tests.sh ${if z3Support then "--no-smt" else ""}
+      TERM=xterm ./scripts/tests.sh ${lib.optionalString z3Support "--no-smt"}
       popd
     '';
 

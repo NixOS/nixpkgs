@@ -927,8 +927,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "2022.12.604";
-          sha256 = "sha256-yfqGITviASp5ZDEJA+zyVz1LpPWV4FM/4fU4eq52Xng=";
+          version = "2023.2.1204";
+          sha256 = "sha256-FurYfkw+mOjyymR1VCGf0jJ2JCZJ8eGb1J7zD2peBjw=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -3086,6 +3086,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      zhwu95.riscv = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "riscv";
+          publisher = "zhwu95";
+          version = "0.0.8";
+          sha256 = "sha256-PXaHSEXoN0ZboHIoDg37tZ+Gv6xFXP4wGBS3YS/53TY=";
+        };
+        meta = with lib; {
+          description = "Basic RISC-V colorization and snippets support.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=zhwu95.riscv";
+          homepage = "https://github.com/zhuanhao-wu/vscode-riscv-support";
+          license = licenses.mit;
+          maintainers = [ maintainers.CardboardTurkey ];
         };
       };
 

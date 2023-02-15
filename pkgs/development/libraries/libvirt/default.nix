@@ -269,7 +269,7 @@ stdenv.mkDerivation rec {
       (cfg "runstatedir" "/run")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
-      (cfg "qemu_datadir" (if isDarwin then "${qemu}/share/qemu" else ""))
+      (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))
 
       (feat "apparmor" isLinux)
       (feat "attr" isLinux)

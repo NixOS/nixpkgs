@@ -4242,8 +4242,6 @@ self: super: with self; {
 
   handout = callPackage ../development/python-modules/handout { };
 
-  hangups = callPackage ../development/python-modules/hangups { };
-
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
@@ -8314,8 +8312,6 @@ self: super: with self; {
   pylru = callPackage ../development/python-modules/pylru { };
 
   pylsqpack = callPackage ../development/python-modules/pylsqpack { };
-
-  pyls-black = callPackage ../development/python-modules/pyls-black { };
 
   pyls-flake8 = callPackage ../development/python-modules/pyls-flake8 { };
 

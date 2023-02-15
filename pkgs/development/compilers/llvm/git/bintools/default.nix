@@ -1,10 +1,7 @@
 { runCommand, stdenv, llvm, lld, version }:
 
 let
-  prefix =
-    if stdenv.hostPlatform != stdenv.targetPlatform
-    then "${stdenv.targetPlatform.config}-"
-    else "";
+  prefix = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) "${stdenv.targetPlatform.config}-";
 in runCommand "llvm-binutils-${version}" {
   preferLocalBuild = true;
   passthru = {

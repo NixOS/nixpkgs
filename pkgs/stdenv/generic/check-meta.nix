@@ -242,7 +242,7 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 

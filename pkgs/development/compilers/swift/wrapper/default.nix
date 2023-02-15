@@ -16,8 +16,7 @@ stdenv.mkDerivation (swift._wrapperParams // {
     swiftOs swiftArch
     swiftModuleSubdir swiftLibSubdir
     swiftStaticModuleSubdir swiftStaticLibSubdir;
-  swiftDriver = if useSwiftDriver
-    then "${swift-driver}/bin/swift-driver" else "";
+  swiftDriver = lib.optionalString useSwiftDriver "${swift-driver}/bin/swift-driver";
 
   passAsFile = [ "buildCommand" ];
   buildCommand = ''

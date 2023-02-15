@@ -24,7 +24,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
   // removeAttrs args ["vmTools" "lib"] //
 
   {
-    name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
+    name = name + "-" + diskImage.name + (lib.optionalString (src ? version) "-${src.version}");
 
     # !!! cut&paste from rpm-build.nix
     postHook = ''
