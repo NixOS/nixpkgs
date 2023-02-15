@@ -34820,6 +34820,8 @@ with pkgs;
 
   openrct2 = callPackage ../games/openrct2 { };
 
+  opensearch = callPackage ../servers/search/opensearch { };
+
   osu-lazer = callPackage ../games/osu-lazer { };
 
   osu-lazer-bin = callPackage ../games/osu-lazer/bin.nix { };
