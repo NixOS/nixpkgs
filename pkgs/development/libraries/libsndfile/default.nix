@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
 , flac, lame, libmpg123, libogg, libopus, libvorbis
-, Carbon, AudioToolbox
+, alsa-lib, Carbon, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
   buildInputs = [ flac lame libmpg123 libogg libopus libvorbis ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
