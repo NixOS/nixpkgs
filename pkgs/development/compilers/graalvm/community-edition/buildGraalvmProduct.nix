@@ -1,20 +1,42 @@
 { lib
 , stdenv
 , autoPatchelfHook
+, graalvm-ce
 , makeWrapper
 , perl
 , unzip
 , zlib
-}:
-{ product
+  # extra params
+, product
 , javaVersion
-, extraNativeBuildInputs ? [ ]
 , extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, graalvmPhases ? { }
 , meta ? { }
 , passthru ? { }
-, ... } @ args:
+, ...
+} @ args:
 
-stdenv.mkDerivation (args // {
+let
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
+    "autoPatchelfHook"
+    "graalvm-ce"
+    "makeWrapper"
+    "perl"
+    "unzip"
+    "zlib"
+    "product"
+    "javaVersion"
+    "extraBuildInputs"
+    "extraNativeBuildInputs"
+    "graalvmPhases"
+    "meta"
+    "passthru"
+  ];
+in
+stdenv.mkDerivation ({
   pname = "${product}-java${javaVersion}";
 
   nativeBuildInputs = [ perl unzip makeWrapper ]
@@ -55,19 +77,19 @@ stdenv.mkDerivation (args // {
   dontInstall = true;
   dontBuild = true;
   dontStrip = true;
-  # installCheckPhase is going to run in GraalVM main derivation (see buildGraalvm.nix)
-  # to make sure that it has everything it needs to run correctly.
-  # Other hooks like fixupPhase/installPhase are also going to run there for the
-  # same reason.
-  doInstallCheck = false;
 
-  passthru = { inherit product; } // passthru;
+  passthru = {
+    inherit product javaVersion;
+    # build phases that are going to run during GraalVM derivation build,
+    # since they depend in having the fully setup GraalVM environment
+    # e.g.: graalvmPhases.installCheckPhase will run the checks only after
+    # GraalVM+products is build
+    # see buildGraalvm.nix file for the available phases
+    inherit graalvmPhases;
+  } // passthru;
 
   meta = with lib; ({
-    homepage = "https://www.graalvm.org/";
+    inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
-    license = with licenses; [ upl gpl2Classpath bsd3 ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
   } // meta);
-})
+} // extraArgs)
