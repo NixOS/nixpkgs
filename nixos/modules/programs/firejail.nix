@@ -43,8 +43,16 @@ let
       name = "firejail-" + pkg.name;
       paths = [ pkg ];
       postBuild = ''
-        [[ -d "$out/share/applications" ]] && grep -q -R Exec=/ "$out/share/applications" && \
-          >&2 echo -e "\033[1mERROR: ${pkg.name} desktop file cannot be firejailed because it specifies an absolute path to the unwrapped binary. Please use wrappedBinaries or better yet fix the ${pkg.name} desktop file in nixpkgs and/or upstream.\033[0m" && exit 1
+        for desktop in $(find "$out/share/applications/" -type l); do
+          olddesktop="$(realpath "$desktop")"
+          rm "$desktop"
+          cp "$olddesktop" "$desktop"
+          # Attempt to remove absolute path from Exec= of .desktop file because it points at the unwrapped binary.
+          grep -q -R Exec=/ "$desktop" && \
+            substituteInPlace "$desktop" --replace "${pkg}/bin/" ""
+          grep -q -R Exec=/ "$desktop" && \
+            >&2 echo -e "\033[1mERROR: ${pkg.name} desktop file cannot be firejailed because it specifies an absolute path to the unwrapped binary which could not be relativized.\033[0m" && exit 1
+        done
         for bin in $(find "$out/bin" -type l); do
           oldbin="$(realpath "$bin")"
           rm "$bin"
