@@ -15,7 +15,7 @@ buildGoModule rec {
 
   modRoot = "./src/cmd/linuxkit";
 
-  patches = [ ./support-apple-11-sdk.patch ];
+  patches = [ ./darwin-os-version.patch ./support-apple-11-sdk.patch ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Virtualization ];
 
