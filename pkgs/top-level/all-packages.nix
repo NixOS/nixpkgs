@@ -18096,7 +18096,7 @@ with pkgs;
   libwhich = callPackage ../development/tools/misc/libwhich { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
-    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa Virtualization;
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
