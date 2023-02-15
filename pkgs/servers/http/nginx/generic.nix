@@ -31,14 +31,12 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , passthru ? { tests = {}; }
 }:
 
-with lib;
-
 let
 
   moduleNames = map (mod: mod.name or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported."))
     modules;
 
-  mapModules = attrPath: flip concatMap modules
+  mapModules = attrPath: lib.flip lib.concatMap modules
     (mod:
       let supports = mod.supports or (_: true);
       in
@@ -47,8 +45,8 @@ let
 
 in
 
-assert assertMsg (unique moduleNames == moduleNames)
-  "nginx: duplicate modules: ${concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
+assert lib.assertMsg (lib.unique moduleNames == moduleNames)
+  "nginx: duplicate modules: ${lib.concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
 stdenv.mkDerivation {
   inherit pname version nginxVersion;
@@ -94,37 +92,37 @@ stdenv.mkDerivation {
     "--http-fastcgi-temp-path=/tmp/nginx_fastcgi"
     "--http-uwsgi-temp-path=/tmp/nginx_uwsgi"
     "--http-scgi-temp-path=/tmp/nginx_scgi"
-  ] ++ optionals withDebug [
+  ] ++ lib.optionals withDebug [
     "--with-debug"
-  ] ++ optionals withKTLS [
+  ] ++ lib.optionals withKTLS [
     "--with-openssl-opt=enable-ktls"
-  ] ++ optionals withStream [
+  ] ++ lib.optionals withStream [
     "--with-stream"
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
-  ] ++ optionals withMail [
+  ] ++ lib.optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optionals withPerl [
+  ] ++ lib.optionals withPerl [
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
-  ] ++ optional withSlice "--with-http_slice_module"
-    ++ optional (gd != null) "--with-http_image_filter_module"
-    ++ optional (geoip != null) "--with-http_geoip_module"
-    ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
-    ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+  ] ++ lib.optional withSlice "--with-http_slice_module"
+    ++ lib.optional (gd != null) "--with-http_image_filter_module"
+    ++ lib.optional (geoip != null) "--with-http_geoip_module"
+    ++ lib.optional (withStream && geoip != null) "--with-stream_geoip_module"
+    ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
-  ] ++ optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
+  ] ++ lib.optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
 
   configurePlatforms = [];
 
@@ -133,7 +131,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     setOutputFlags=
   '' + preConfigure
-     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+     + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
   patches = map fixPatch ([
     (substituteAll {
@@ -143,7 +141,7 @@ stdenv.mkDerivation {
       '';
     })
     ./nix-skip-check-logs-path.patch
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
@@ -161,7 +159,7 @@ stdenv.mkDerivation {
 
   inherit postPatch;
 
-  hardeningEnable = optional (!stdenv.isDarwin) "pie";
+  hardeningEnable = lib.optional (!stdenv.isDarwin) "pie";
 
   enableParallelBuilding = true;
 
@@ -186,7 +184,7 @@ stdenv.mkDerivation {
     } // passthru.tests;
   };
 
-  meta = if meta != null then meta else {
+  meta = if meta != null then meta else with lib; {
     description = "A reverse proxy and lightweight webserver";
     homepage    = "http://nginx.org";
     license     = licenses.bsd2;
