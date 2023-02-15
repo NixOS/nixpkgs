@@ -14,9 +14,10 @@ verlte() {
     [  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]
 }
 
+readonly hashes_nix="hashes.nix"
 readonly nixpkgs=../../../../..
 
-readonly current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A graalvm-ce.version | tr -d \")"
+readonly current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A graalvm-ce.version --json | jq -r)"
 
 if [[ -z "${1:-}" ]]; then
   readonly gh_version="$(curl \
@@ -39,10 +40,12 @@ fi
 
 declare -r -A products_urls=(
   [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/graalvm-ce-java@platform@-${new_version}.tar.gz"
+  [js-installable-svm]="https://github.com/graalvm/graaljs/releases/download/vm-${new_version}/js-installable-svm-java@platform@-${new_version}.jar"
+  [llvm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/llvm-installable-svm-java@platform@-${new_version}.jar"
   [native-image-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/native-image-installable-svm-java@platform@-${new_version}.jar"
-  # [ruby-installable-svm]="https://github.com/oracle/truffleruby/releases/download/vm-${new_version}/ruby-installable-svm-java@platform@-${new_version}.jar"
-  # [wasm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/wasm-installable-svm-java@platform@-${new_version}.jar"
-  # [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
+  [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
+  [ruby-installable-svm]="https://github.com/oracle/truffleruby/releases/download/vm-${new_version}/ruby-installable-svm-java@platform@-${new_version}.jar"
+  [wasm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/wasm-installable-svm-java@platform@-${new_version}.jar"
 )
 
 readonly platforms=(
@@ -65,11 +68,20 @@ for product in "${!products_urls[@]}"; do
   url="${products_urls["${product}"]}"
 echo_file "  \"$product\" = {"
   for platform in "${platforms[@]}"; do
-    if hash="$(nix-prefetch-url "${url//@platform@/$platform}")"; then
+    # Reuse cache as long the version is the same
+    if [[ "$current_version" == "$new_version" ]]; then
+        previous_hash="$(nix-instantiate --eval "$hashes_nix" -A "$product.$platform.sha256" --json | jq -r || true)"
+    else
+        previous_hash=""
+    fi
+    # Lack of quoting in $previous_hash is proposital
+    if hash="$(nix-prefetch-url "${url//@platform@/$platform}" $previous_hash)"; then
 echo_file "    \"$platform\" = {"
 echo_file "      sha256 = \"$hash\";"
 echo_file "      url = \"${url//@platform@/${platform}}\";"
 echo_file "    };"
+    else
+        info "Error while downloading '$product' for '$platform'. Skipping it..."
     fi
   done
 echo_file "  };"
@@ -81,6 +93,6 @@ info "Updating graalvm-ce version..."
 sed "s|$current_version|$new_version|" -i default.nix
 
 info "Moving the temporary file to hashes.nix"
-mv "$tmpfile" hashes.nix
+mv "$tmpfile" "$hashes_nix"
 
 info "Done!"
