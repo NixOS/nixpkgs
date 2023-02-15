@@ -87,10 +87,10 @@ stdenv.mkDerivation rec {
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '') +
-    (if hipSupport then ''
+    (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
-    '' else "");
+    '');
 
   cmakeFlags =
     [

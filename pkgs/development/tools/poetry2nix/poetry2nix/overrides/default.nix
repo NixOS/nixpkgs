@@ -457,9 +457,9 @@ lib.composeManyExtensions [
 
         preConfigure = lib.concatStringsSep "\n" [
           (old.preConfigure or "")
-          (if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+          (lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
             MACOSX_DEPLOYMENT_TARGET=10.16
-          '' else "")
+          '')
         ];
 
         preBuild = old.preBuild or "" + ''
@@ -720,7 +720,7 @@ lib.composeManyExtensions [
                 (old.propagatedBuildInputs or [ ])
                 ++ lib.optionals mpiSupport [ self.mpi4py self.openssh ]
               ;
-              preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+              preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
               HDF5_DIR = "${pkgs.hdf5}";
               HDF5_MPI = if mpiSupport then "ON" else "OFF";
               # avoid strict pinning of numpy

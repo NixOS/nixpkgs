@@ -70,7 +70,7 @@ let
     ++ lib.optional libvaSupport libva
     ++ [ gtk3 ];
 
-  suffix = if channel != "stable" then "-" + channel else "";
+  suffix = lib.optionalString (channel != "stable") "-${channel}";
 
   crashpadHandlerBinary = if lib.versionAtLeast version "94"
     then "chrome_crashpad_handler"

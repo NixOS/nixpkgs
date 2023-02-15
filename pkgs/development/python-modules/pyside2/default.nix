@@ -1,4 +1,6 @@
 { python
+, pythonAtLeast
+, disabledIf
 , fetchurl
 , lib
 , stdenv
@@ -9,6 +11,10 @@
 , shiboken2
 }:
 
+# Only build when Python<=3.10
+# See https://bugreports.qt.io/browse/PYSIDE-1864
+# "There are no plans to support Python versions > 3.10 in the 5.15 branch."
+disabledIf (pythonAtLeast "3.11") (
 stdenv.mkDerivation rec {
   pname = "pyside2";
   version = "5.15.5";
@@ -49,6 +55,7 @@ stdenv.mkDerivation rec {
     qtcharts
     qtsensors
     qtsvg
+    qt3d
   ]) ++ (with python.pkgs; [
     setuptools
   ]) ++ (lib.optionals (python.pythonOlder "3.9") [
@@ -73,4 +80,4 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
   };
-}
+})

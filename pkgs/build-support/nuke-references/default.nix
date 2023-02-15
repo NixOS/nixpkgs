@@ -36,6 +36,6 @@ stdenvNoCC.mkDerivation {
     inherit perl;
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-    signingUtils = if darwinCodeSign then signingUtils else "";
+    signingUtils = lib.optionalString darwinCodeSign signingUtils;
   };
 }
