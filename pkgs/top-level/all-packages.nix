@@ -37794,6 +37794,8 @@ with pkgs;
 
   cups-brother-hll2375dw = callPackage ../misc/cups/drivers/brother/hll2375dw { };
 
+  brother-hll6400dw = callPackage ../misc/cups/drivers/brother/hll6400dw { };
+
   mfcl8690cdwcupswrapper = callPackage ../misc/cups/drivers/mfcl8690cdwcupswrapper { };
   mfcl8690cdwlpr = callPackage ../misc/cups/drivers/mfcl8690cdwlpr { };
 
