@@ -12,6 +12,9 @@
 , openssl
 , systemdMinimal
 , libxcrypt
+
+# passthru
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -116,6 +119,10 @@ stdenv.mkDerivation rec {
     done
     chmod +x "$out"/lib/*.{so,dylib}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openldap;
+  };
 
   meta = with lib; {
     homepage = "https://www.openldap.org/";
