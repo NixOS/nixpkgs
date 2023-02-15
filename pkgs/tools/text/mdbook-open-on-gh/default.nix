@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-open-on-gh";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = pname;
     rev = version;
-    hash = "sha256-MO+tadm20qG5NtIXaWxDRiX7l+m7t0QRK/9IK7qA0bo=";
+    hash = "sha256-K7SkfUxav/r8icrpdfnpFTSZdYV9qUEvYZ2dGSbaP0w=";
   };
 
-  cargoHash = "sha256-X113sexUgLOsrXXO2p+qNFT2XcEy9AGPvVEf3bxqH8g=";
+  cargoHash = "sha256-Uvg0h0s3xtv/bVjqWLldvM/R5HQ6yoHdnBXvpUp/E3A=";
 
   meta = with lib; {
     description = "mdbook preprocessor to add a open-on-github link on every page";
