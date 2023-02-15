@@ -15013,6 +15013,12 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
+  rust_1_66 = callPackage ../development/compilers/rust/1_66.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_14 = llvmPackages_14.libllvm;
+    # https://github.com/NixOS/nixpkgs/issues/201254
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+  };
   rust = rust_1_64;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -15023,6 +15029,7 @@ with pkgs;
   };
 
   rustPackages_1_64 = rust_1_64.packages.stable;
+  rustPackages_1_66 = rust_1_66.packages.stable;
   rustPackages = rustPackages_1_64;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
