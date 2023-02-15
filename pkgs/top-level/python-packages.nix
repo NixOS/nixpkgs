@@ -10570,6 +10570,8 @@ self: super: with self; {
 
   simber = callPackage ../development/python-modules/simber { };
 
+  simpful = callPackage ../development/python-modules/simpful { };
+
   simpleaudio = callPackage ../development/python-modules/simpleaudio { };
 
   simplebayes = callPackage ../development/python-modules/simplebayes { };
