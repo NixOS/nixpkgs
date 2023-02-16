@@ -37858,6 +37858,8 @@ with pkgs;
 
   neo = callPackage ../applications/misc/neo { };
 
+  networkd-dispatcher = callPackage ../tools/networking/networkd-dispatcher { };
+
   nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
