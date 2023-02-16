@@ -3168,6 +3168,8 @@ self: super: with self; {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  execnb = callPackage ../development/python-modules/execnb { };
+
   execnet = callPackage ../development/python-modules/execnet { };
 
   executing = callPackage ../development/python-modules/executing { };
