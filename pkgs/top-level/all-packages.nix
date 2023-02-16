@@ -39153,4 +39153,6 @@ with pkgs;
   oversteer = callPackage ../applications/misc/oversteer { };
 
   volantes-cursors = callPackage ../data/icons/volantes-cursors { };
+
+  gnss-share = callPackage ../servers/gnss-share { };
 }
