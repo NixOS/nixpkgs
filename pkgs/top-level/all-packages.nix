@@ -18692,7 +18692,8 @@ with pkgs;
   texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
   texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
-  texinfo = texinfo6;
+  texinfo7 = callPackage ../development/tools/misc/texinfo/7.0.nix { };
+  texinfo = texinfo7;
   texinfoInteractive = texinfo.override { interactive = true; };
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
