@@ -34,6 +34,40 @@
       url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java17-darwin-amd64-22.3.1.jar";
     };
   };
+  "nodejs-installable-svm" = {
+    "11-linux-aarch64" = {
+      sha256 = "0slzvbmxwa4a6m9c0hbdp8ryh9crfq7mv6y2j4hik5m457jq98cp";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java11-linux-aarch64-22.3.1.jar";
+    };
+    "17-linux-aarch64" = {
+      sha256 = "1ldivy5hmq2mxmzh40hglzngylahnzyqh9rav73nicl5mz8hk4l2";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java17-linux-aarch64-22.3.1.jar";
+    };
+    "11-linux-amd64" = {
+      sha256 = "1p1y52b4lky2fbkml5vqy7dn9vqzj19jq5f3c90mgsfk4c7xhi66";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java11-linux-amd64-22.3.1.jar";
+    };
+    "17-linux-amd64" = {
+      sha256 = "0j1gkpszklzm069bccm6wgq8iq0k41bcrca0kf8pbl2y11hwywpc";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java17-linux-amd64-22.3.1.jar";
+    };
+    "11-darwin-aarch64" = {
+      sha256 = "1fbqc3a7i91as1sbwg2yr1zx0wz4jsaxcz9pfqy8a0z88m8vivbs";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java11-darwin-aarch64-22.3.1.jar";
+    };
+    "17-darwin-aarch64" = {
+      sha256 = "1swzkp0imcv30fxfwblgad57fvpsvhfpv93s8zj1lwrbarggl2y3";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java17-darwin-aarch64-22.3.1.jar";
+    };
+    "11-darwin-amd64" = {
+      sha256 = "0n3hm8dd0ya86hxbxv07sfp22y02vhhzahkxk2j2162n9hcdmkwk";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java11-darwin-amd64-22.3.1.jar";
+    };
+    "17-darwin-amd64" = {
+      sha256 = "0xkjqcch22bm32mczj6xs8rzsl2n6vy9hmzwfy9a71w1kpkbjn3a";
+      url = "https://github.com/graalvm/graaljs/releases/download/vm-22.3.1/nodejs-installable-svm-java17-darwin-amd64-22.3.1.jar";
+    };
+  };
   "wasm-installable-svm" = {
     "11-linux-aarch64" = {
       sha256 = "1d67jm41psypkhpy77cb2l00smhni3pgkybwx79z7dzcyid7p2l1";

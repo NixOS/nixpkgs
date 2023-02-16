@@ -1,12 +1,11 @@
 { lib
 , stdenv
 , graalvmCEPackages
+, llvm-installable-svm
 , openssl
 , javaVersion
-, musl
 , src
 , version
-, llvm-installable-svm
 }:
 
 graalvmCEPackages.buildGraalvmProduct rec {
