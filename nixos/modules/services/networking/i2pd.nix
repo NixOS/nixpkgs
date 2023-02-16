@@ -74,13 +74,60 @@ let
       };
     };
 
-  commonTunOpts = name: {
-    outbound = i2cpOpts name;
-    inbound = i2cpOpts name;
+  commonTunOpts = name: rec {
+    outbound = (i2cpOpts name) // {
+      # This option is defined here because exploratory tunnels (in main config) do not support it
+      lengthVariance = mkOption {
+        type = types.int;
+        description = lib.mdDoc "Random number of hops to add or subtract to an ${name} tunnel between -3 and 3";
+        default = 0;
+      };
+    };
+    inbound = outbound;
     crypto.tagsToSend = mkOption {
       type = types.int;
       description = lib.mdDoc "Number of ElGamal/AES tags to send.";
       default = 40;
+    };
+    explicitPeers = mkOption {
+      type = with types; nullOr str;
+      description = lib.mdDoc "List of comma-separated b64 addresses of peers to use.";
+      default = null;
+    };
+    signatureType = mkOption {
+      type = with types; nullOr int;
+      description = lib.mdDoc "Signature type for new keys.";
+      default = null;
+    };
+    i2cp.leaseSetType = mkOption {
+      type = with types; nullOr int;
+      description = lib.mdDoc "Type of LeaseSet to be sent. 3 - standard, 5 - encrypted.";
+      default = null;
+    };
+    i2cp.leaseSetEncType = mkOption {
+      type = with types; nullOr str;
+      description = lib.mdDoc "Comma separated encryption types to be used in LeaseSet type 3 or 5.";
+      default = null;
+    };
+    i2cp.leaseSetPrivKey = mkOption {
+      type = with types; nullOr str;
+      description = lib.mdDoc "Decryption key for encrypted LeaseSet in base64. PSK or private DH.";
+      default = null;
+    };
+    i2cp.leaseSetAuthType = mkOption {
+      type = with types; nullOr int;
+      description = lib.mdDoc "Authentication type for encrypted LeaseSet. 0 - no authentication, 1 - DH, 2 - PSK.";
+      default = null;
+    };
+    i2cp.leaseSetClient.dh.nnn = mkOption {
+      type = with types; nullOr str;
+      description = lib.mdDoc "Client name:client's public DH in base64, for authentication type 1.";
+      default = null;
+    };
+    i2cp.leaseSetClient.psk.nnn = mkOption {
+      type = with types; nullOr str;
+      description = lib.mdDoc "Client name:client's PSK in base64, for authentication type 2.";
+      default = null;
     };
     destination = mkOption {
       type = types.str;
@@ -197,16 +244,38 @@ let
             optionalNullString "keys" tun.keys else [])
         ++ (if tun ? address then
             optionalNullString "address" tun.address else [])
+        ++ (if tun ? keepaliveInterval then
+            optionalNullInt "keepaliveinterval" tun.keepaliveInterval else [])
         ++ (if tun ? inbound.length then
             optionalNullInt "inbound.length" tun.inbound.length else [])
         ++ (if tun ? inbound.quantity then
             optionalNullInt "inbound.quantity" tun.inbound.quantity else [])
+        ++ (if tun ? inbound.lengthVariance then
+            optionalNullInt "inbound.lengthVariance" tun.inbound.lengthVariance else [])
         ++ (if tun ? outbound.length then
             optionalNullInt "outbound.length" tun.outbound.length else [])
         ++ (if tun ? outbound.quantity then
             optionalNullInt "outbound.quantity" tun.outbound.quantity else [])
+        ++ (if tun ? outbound.lengthVariance then
+            optionalNullInt "outbound.lengthVariance" tun.outbound.lengthVariance else [])
         ++ (if tun ? crypto.tagsToSend then
-            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
+            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else [])
+        ++ (if tun ? signatureType then
+            optionalNullInt "signaturetype" tun.signatureType else [])
+        ++ (if tun ? explicitPeers then
+            optionalNullString "explicitPeers" tun.explicitPeers else [])
+        ++ (if tun ? i2cp.leaseSetType then
+            optionalNullInt "i2cp.leaseSetType" tun.i2cp.leaseSetType else [])
+        ++ (if tun ? i2cp.leaseSetEncType then
+            optionalNullString "i2cp.leaseSetEncType" tun.i2cp.leaseSetEncType else [])
+        ++ (if tun ? i2cp.leaseSetPrivKey then
+            optionalNullString "i2cp.leaseSetPrivKey" tun.i2cp.leaseSetPrivKey else [])
+        ++ (if tun ? i2cp.leaseSetAuthType then
+            optionalNullInt "i2cp.leaseSetAuthType" tun.i2cp.leaseSetAuthType else [])
+        ++ (if tun ? i2cp.leaseSetClient.dh.nnn then
+            optionalNullString "i2cp.leaseSetClient.dh.nnn" tun.i2cp.leaseSetClient.dh.nnn else [])
+        ++ (if tun ? i2cp.leaseSetClient.psk.nnn then
+            optionalNullString "i2cp.leaseSetClient.psk.nnn" tun.i2cp.leaseSetClient.psk.nnn else []);
         in concatStringsSep "\n" outTunOpts))
     (flip map
       (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
@@ -635,6 +704,11 @@ in
                 type = with types; nullOr int;
                 default = null;
                 description = lib.mdDoc "Connect to particular port at destination.";
+              };
+              keepaliveInterval = mkOption {
+                type = with types; nullOr int;
+                description = lib.mdDoc "Send ping to the destination after this interval in seconds.";
+                default = null;
               };
             } // commonTunOpts name;
             config = {
