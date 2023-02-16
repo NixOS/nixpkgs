@@ -52,6 +52,7 @@
 , withIlbc ? withFullDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.targetPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
@@ -209,6 +210,7 @@
 , libogg
 , libopenmpt
 , libopus
+, libplacebo
 , librsvg
 , libssh
 , libtheora
@@ -288,7 +290,7 @@
  */
 
 let
-  inherit (lib) optional optionals optionalString enableFeature;
+  inherit (lib) optional optionals optionalString enableFeature versionAtLeast;
 in
 
 
@@ -469,6 +471,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMysofa "libmysofa")
     (enableFeature withOpus "libopus")
+    (optionalString (versionAtLeast version "5.0" && withLibplacebo) "--enable-libplacebo")
     (enableFeature withSvg "librsvg")
     (enableFeature withSrt "libsrt")
     (enableFeature withSsh "libssh")
@@ -571,6 +574,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLibplacebo [ libplacebo vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
