@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , pkg-config
 , hidapi
@@ -11,25 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "openocd";
-  version = "0.11.0";
+  version = "0.12.0";
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0z8y7mmv0mhn2l5gs3vz6l7cnwak7agklyc7ml33f7gz99rwx8s3";
+    sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi libftdi1 libusb1 ]
     ++ lib.optional stdenv.isLinux libgpiod;
-
-  patches = [
-    # Patch is upstream, so can be removed when OpenOCD 0.12.0 or later is released.
-    (fetchpatch
-      {
-        url = "https://github.com/openocd-org/openocd/commit/cff0e417da58adef1ceef9a63a99412c2cc87ff3.patch";
-        sha256 = "Xxzf5miWy4S34sbQq8VQdAbY/oqGyhL/AJxiEPRuj3Q=";
-      })
-  ];
 
   configureFlags = [
     "--disable-werror"
