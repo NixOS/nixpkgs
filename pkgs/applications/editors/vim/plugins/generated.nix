@@ -8572,6 +8572,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/timestamp.vim/";
   };
 
+  tint-nvim = buildVimPluginFrom2Nix {
+    pname = "tint.nvim";
+    version = "2022-09-27";
+    src = fetchFromGitHub {
+      owner = "levouh";
+      repo = "tint.nvim";
+      rev = "f6a259861ba8c0d88afc2ef05140ddf345eb0296";
+      sha256 = "0ffbi9nrmr1hrlkvh09xvcdqrxfi66msm9g4xg8ja3zj3gqvi3z0";
+    };
+    meta.homepage = "https://github.com/levouh/tint.nvim/";
+  };
+
   tlib_vim = buildVimPluginFrom2Nix {
     pname = "tlib_vim";
     version = "2022-07-22";
