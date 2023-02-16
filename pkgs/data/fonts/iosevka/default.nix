@@ -55,16 +55,16 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
-  version = "17.1.0";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-xGRymDhkNP9b2JYTEu4M/CrRINmMGY2S5ZuM3Ot1wGg=";
+    hash = "sha256-tw8tzBFl8FBSmTyobTe84W1P26a5/4FbJ0XUN5GD0RI=";
   };
 
-  npmDepsHash = "sha256-Ncf07ggyOnz/2SpgdmaYS2X/8Bad+J2sz8Yyx9Iri3E=";
+  npmDepsHash = "sha256-0Dg/fDq5Uyu6QIkE8F9+i3Wu+Nno9UqqNF3nUAxLSL8=";
 
   nativeBuildInputs = [
     remarshal
