@@ -11658,7 +11658,7 @@ with pkgs;
 
   s3bro = callPackage ../tools/admin/s3bro { };
 
-  s3fs = callPackage ../tools/filesystems/s3fs { };
+  s3fs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/s3fs { };
 
   s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
