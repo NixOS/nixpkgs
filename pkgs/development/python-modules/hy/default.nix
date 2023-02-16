@@ -1,20 +1,18 @@
 { lib
 , astor
 , buildPythonPackage
-, colorama
 , fetchFromGitHub
 , funcparserlib
 , hy
 , pytestCheckHook
 , python
 , pythonOlder
-, rply
 , testers
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.25.0";
+  version = "0.26.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,14 +21,13 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-V+ZtPm17ESxCGpRieGvEeO2bkwHfZQ6k9lsnDWr6pqo=";
+    hash = "sha256-Ow3FAiH97lSaI3oSx702+jgScfNgf+JstuDpgPSB8LM=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
   propagatedBuildInputs = [
-    colorama
     funcparserlib
   ] ++
   lib.optionals (pythonOlder "3.9") [
