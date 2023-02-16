@@ -1,6 +1,6 @@
 { stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
 
-rec {
+{
   firefox = buildMozillaMach rec {
     pname = "firefox";
     version = "110.0.1";
