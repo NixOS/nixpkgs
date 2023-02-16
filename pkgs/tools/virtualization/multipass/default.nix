@@ -25,7 +25,7 @@
 
 let
   pname = "multipass";
-  version = "1.11.0";
+  version = "1.11.1";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2d8piIIecoSI3BfOgAVlXl5P2UYDaNlxUgHXWbnSdkg=";
+    sha256 = "sha256-AIZs+NRAn/r9EjTx9InDZzS4ycni4MZQXmC0A5rpaJk=";
     fetchSubmodules = true;
   };
 
