@@ -788,6 +788,32 @@ in
         KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
         TimeoutStopSec = if cfg.gracefulShutdown then "10m" else "30s";
         SendSIGKILL = true;
+        ## Hardening
+        # Taken from https://github.com/archlinux/svntogit-community/blob/packages/i2pd/trunk/030-i2pd-systemd-service-hardening.patch
+        PrivateTmp = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        NoNewPrivileges = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        SystemCallFilter = "@system-service";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ReadWritePaths = homeDir;
+        RemoveIPC = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
       };
     };
   };
