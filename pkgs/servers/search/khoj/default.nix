@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "khoj";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "debanjum";
     repo = "khoj";
-    rev = version;
-    hash = "sha256-cylZNRyHMFJiBjlEtKMpRjRjwQyb7pgOjMtxFhKFU4k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QcxP+USj7vlLKPno2mV53nFonZM38VzL8D4zY6d8y3k=";
   };
 
   propagatedBuildInputs = with python3Packages; [
