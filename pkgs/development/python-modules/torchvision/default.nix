@@ -15,13 +15,13 @@
 }:
 
 let
-  inherit (torch.cudaPackages) cudatoolkit cudaFlags cudnn;
+  inherit (torch) gpuTargetString;
+  inherit (torch.cudaPackages) cudatoolkit cudnn;
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
-  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" torch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
   version = "0.14.1";
@@ -45,7 +45,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pillow torch scipy ];
 
   preBuild = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${cudaFlags.cudaCapabilitiesSemiColonString}"
+    export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export FORCE_CUDA=1
   '';
 
