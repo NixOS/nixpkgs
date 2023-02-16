@@ -6560,6 +6560,18 @@ final: prev:
     meta.homepage = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
   };
 
+  nvim-ufo = buildVimPluginFrom2Nix {
+    pname = "nvim-ufo";
+    version = "2023-02-03";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "nvim-ufo";
+      rev = "b70c9ef0f8e2673a11387a39185ff249e00df19f";
+      sha256 = "1fx3w2mlc23m55whvvrs1g648yg862i50100wfxxljmfkvnc12yv";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/nvim-ufo/";
+  };
+
   nvim-web-devicons = buildVimPluginFrom2Nix {
     pname = "nvim-web-devicons";
     version = "2023-02-13";
@@ -7028,6 +7040,18 @@ final: prev:
       sha256 = "0s734kpy3hslb7n6y94cv08clvxh5qp6br1ns3178y99ysv36vkx";
     };
     meta.homepage = "https://github.com/ahmedkhalf/project.nvim/";
+  };
+
+  promise-async = buildVimPluginFrom2Nix {
+    pname = "promise-async";
+    version = "2023-02-01";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "promise-async";
+      rev = "7fa127fa80e7d4d447e0e2c78e99af4355f4247b";
+      sha256 = "12d7l5b79fj4lpd3gfjqrmy6ffh06cxsr13vaw29rjif57wf0f53";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/promise-async/";
   };
 
   psc-ide-vim = buildVimPluginFrom2Nix {
