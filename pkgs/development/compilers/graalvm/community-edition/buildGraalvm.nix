@@ -120,8 +120,7 @@ let
     '' + concatProducts "postInstall";
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
-      # Find all executables in any directory that contains '/bin/'
-      for bin in $(find "$out" -executable -type f -wholename '*/bin/*'); do
+      for bin in $(find "$out/bin" -executable -type f); do
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       done
     '' + concatProducts "preFixup";

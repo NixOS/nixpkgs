@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
-  version = "0.7.2";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LnH0RDiRYJAGI7ZT6Idu1AqSz0yBRuBJvhIgY72Z4CA=";
+    hash = "sha256-HD+zYWQvmAqtJqG8I2Yib/UWCvUewGsXxTtd2E4GyJ0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
