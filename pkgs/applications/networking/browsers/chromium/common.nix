@@ -38,6 +38,8 @@
 , libepoxy
 # postPatch:
 , glibc # gconv + locale
+# postFixup:
+, vulkan-loader
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -341,10 +343,10 @@ let
     in lib.concatStringsSep "\n" commands;
 
     postFixup = ''
-      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      # Make sure that libGLESv2 and libvulkan are found by dlopen.
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {
