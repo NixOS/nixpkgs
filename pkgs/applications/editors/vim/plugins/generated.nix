@@ -5613,6 +5613,18 @@ final: prev:
     meta.homepage = "https://github.com/mcchrish/nnn.vim/";
   };
 
+  no-neck-pain-nvim = buildVimPluginFrom2Nix {
+    pname = "no-neck-pain.nvim";
+    version = "2023-02-15";
+    src = fetchFromGitHub {
+      owner = "shortcuts";
+      repo = "no-neck-pain.nvim";
+      rev = "5067cfdd0e3f33c659fa50c710785a2da70ca306";
+      sha256 = "09a52f5dhjzchm6n9xq3jxy2vx3lhpnwdmnp9ryak67rig86iyna";
+    };
+    meta.homepage = "https://github.com/shortcuts/no-neck-pain.nvim/";
+  };
+
   noice-nvim = buildVimPluginFrom2Nix {
     pname = "noice.nvim";
     version = "2023-02-07";
