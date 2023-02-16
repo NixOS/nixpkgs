@@ -27,7 +27,6 @@
 , tqdm
 , typing-extensions
 , whoosh
-, xdg-utils
 }:
 
 buildPythonPackage rec {
@@ -70,19 +69,15 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # Remove when https://github.com/papis/papis/pull/478 lands in upstream
     substituteInPlace setup.py \
-      --replace "isbnlib>=3.9.1,<3.10" "isbnlib>=3.9"
+      --replace "etc/bash_completion.d/" "share/bash-completion/completions/"
     substituteInPlace setup.cfg \
       --replace "--cov=papis" ""
   '';
 
-  # Tests are failing on Python > 3.9
-  doCheck = !stdenv.isDarwin && !(pythonAtLeast "3.10");
-
-  checkInputs = ([
+  checkInputs = [
     pytestCheckHook
-  ]) ++ [
-    xdg-utils
   ];
 
   preCheck = ''
@@ -106,6 +101,8 @@ buildPythonPackage rec {
     "test_get_data"
     "test_validate_arxivid"
     "test_yaml"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_default_opener"
   ];
 
   pythonImportsCheck = [
@@ -115,7 +112,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Powerful command-line document and bibliography manager";
     homepage = "https://papis.readthedocs.io/";
+    changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nico202 teto ];
+    maintainers = with maintainers; [ nico202 teto marsam ];
   };
 }

@@ -51,8 +51,8 @@ in
 {
   imports = [
     ../installer/cd-dvd/channel.nix
-    ../profiles/minimal.nix
     ../profiles/clone-config.nix
+    ../profiles/minimal.nix
   ];
 
   options = {
@@ -123,8 +123,8 @@ in
             architecture = builtins.elemAt (builtins.match "^([a-z0-9_]+).+" (toString pkgs.system)) 0;
             creation_date = 1;
             properties = {
-              description = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
-              os = "nixos";
+              description = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
+              os = "${config.system.nixos.distroId}";
               release = "${config.system.nixos.codeName}";
             };
             templates = templates.properties;
@@ -149,6 +149,12 @@ in
         {
           source = config.system.build.toplevel + "/init";
           target = "/sbin/init";
+        }
+        # Technically this is not required for lxc, but having also make this configuration work with systemd-nspawn.
+        # Nixos will setup the same symlink after start.
+        {
+          source = config.system.build.toplevel + "/etc/os-release";
+          target = "/etc/os-release";
         }
       ];
 
@@ -199,5 +205,11 @@ in
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.enable = mkDefault true;
     services.openssh.startWhenNeeded = mkDefault true;
+
+    # As this is intended as a standalone image, undo some of the minimal profile stuff
+    environment.noXlibs = false;
+    documentation.enable = true;
+    documentation.nixos.enable = true;
+    services.logrotate.enable = true;
   };
 }

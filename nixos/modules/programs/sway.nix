@@ -26,7 +26,7 @@ let
     };
   };
 
-  swayPackage = pkgs.sway.override {
+  defaultSwayPackage = pkgs.sway.override {
     extraSessionCommands = cfg.extraSessionCommands;
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
@@ -41,6 +41,19 @@ in {
       ~/.config/sway/config to modify the default configuration. See
       <https://github.com/swaywm/sway/wiki> and
       "man 5 sway" for more information'');
+
+    package = mkOption {
+      type = with types; nullOr package;
+      default = defaultSwayPackage;
+      defaultText = literalExpression "pkgs.sway";
+      description = lib.mdDoc ''
+        Sway package to use. Will override the options
+        'wrapperFeatures', 'extraSessionCommands', and 'extraOptions'.
+        Set to <code>null</code> to not add any Sway package to your
+        path. This should be done if you want to use the Home Manager Sway
+        module to install Sway.
+      '';
+    };
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
@@ -121,16 +134,17 @@ in {
       }
     ];
     environment = {
-      systemPackages = [ swayPackage ] ++ cfg.extraPackages;
+      systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
       # Needed for the default wallpaper:
-      pathsToLink = [ "/share/backgrounds/sway" ];
+      pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
       etc = {
-        "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
         "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
           # Import the most important environment variables into the D-Bus and systemd
           # user environments (e.g. required for screen sharing and Pinentry prompts):
           exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
         '';
+      } // optionalAttrs (cfg.package != null) {
+        "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
       };
     };
     security.polkit.enable = true;
@@ -139,7 +153,7 @@ in {
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;
     # To make a Sway session available if a display manager like SDDM is enabled:
-    services.xserver.displayManager.sessionPackages = [ swayPackage ];
+    services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
     programs.xwayland.enable = mkDefault true;
     # For screen sharing (this option only has an effect with xdg.portal.enable):
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];

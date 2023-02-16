@@ -1,0 +1,13 @@
+diff --git a/src/sage/interacts/library.py b/src/sage/interacts/library.py
+index 06d680109a..139b00bfd1 100644
+--- a/src/sage/interacts/library.py
++++ b/src/sage/interacts/library.py
+@@ -1434,6 +1434,8 @@ def riemann_sum(
+     creates the mathlet::
+ 
+         sage: interacts.calculus.riemann_sum()
++        ...
++        DeprecationWarning: on_submit is deprecated. Instead, set the .continuous_update attribute to False and observe the value changing with: mywidget.observe(callback, 'value').
+         Manual interactive function <function riemann_sum at ...> with 9 widgets
+           title: HTMLText(value='<h2>Riemann integral with random sampling</h2>')
+           f: EvalText(value='x^2+1', description='$f(x)=$', layout=Layout(max_width='41em'))

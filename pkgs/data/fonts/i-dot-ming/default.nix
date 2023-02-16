@@ -1,17 +1,22 @@
-{ lib, fetchurl, writeScript }:
+{ lib, stdenvNoCC, fetchurl, writeScript }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "i.ming";
   version = "8.00";
-in
-fetchurl {
-  name = "i.ming-${version}";
-  url = "https://raw.githubusercontent.com/ichitenfont/I.Ming/${version}/${version}/I.Ming-${version}.ttf";
-  hash = "sha256-JGu9H0+IdJL6QQtLwvqlFLEaJdq1JVRiqLm5zptwjyE=";
 
-  recursiveHash = true;
-  downloadToTemp = true;
-  postFetch = ''
-    install -DT -m444 $downloadedFile $out/share/fonts/truetype/I.Ming/I.Ming.ttf
+  src = fetchurl {
+    url = "https://raw.githubusercontent.com/ichitenfont/I.Ming/${version}/${version}/I.Ming-${version}.ttf";
+    hash = "sha256-6345629OdKz6lTnD3Vjtp6DzsYy0ojaL0naXGrtdZvw=";
+  };
+
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -DT -m444 $src $out/share/fonts/truetype/I.Ming/I.Ming.ttf
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -1,23 +1,24 @@
-{ lib, fetchurl, unzip }:
+{ lib, stdenvNoCC, fetchurl, unzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "ccsymbols";
   version = "2020-04-19";
-in
 
-fetchurl rec {
-  name = "${pname}-${version}";
+  src = fetchurl {
+    url = "https://www.ctrl.blog/file/${version}_cc-symbols.zip";
+    hash = "sha256-hkARhb8T6VgGAybYkVuPuebjhuk1dwiBJ1bZMwvYpMY=";
+  };
 
-  url = "https://www.ctrl.blog/file/${version}_cc-symbols.zip";
-  sha256 = "sha256-mrNgTS6BAVJrIz9fHOjf8pkSbZtZ55UjyoL9tQ1fiA8=";
-  recursiveHash = true;
+  sourceRoot = ".";
 
   nativeBuildInputs = [ unzip ];
 
-  downloadToTemp = true;
-  postFetch = ''
-    mkdir -p "$out/share/fonts/ccsymbols"
-    unzip -d "$out/share/fonts/ccsymbols" "$downloadedFile"
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 CCSymbols.* -t $out/share/fonts/ccsymbols
+
+    runHook postInstall
   '';
 
   passthru = { inherit pname version; };

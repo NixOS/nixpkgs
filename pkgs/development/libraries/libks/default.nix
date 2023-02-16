@@ -6,17 +6,18 @@
 , pkg-config
 , libuuid
 , openssl
+, libossp_uuid
 }:
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bfp8+jqXu1utlaYuPewm+t3zHxaTWEw+cGZu1nFzkDk=";
+    sha256 = "sha256-TJ3q97K3m3zYGB1D5lLVyrh61L3vtnP5I64lP/DYzW4=";
   };
 
   patches = [
@@ -33,16 +34,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libuuid
-    openssl
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isLinux libuuid
+    ++ lib.optional stdenv.isDarwin libossp_uuid;
 
   meta = with lib; {
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
 }

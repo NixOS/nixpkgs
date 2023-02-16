@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -98,7 +98,7 @@
     "aedes": "0.39.0",
     "mysql": "*",
     "@mysql/xdevapi": "*",
-    "mongodb": "4.9.1",
+    "mongodb": "4.12.1",
     "saslprep": "*",
     "pg": "8.7.1",
     "pgtools": "0.3.2",

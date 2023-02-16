@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet-conservancy";
-  version = "0.7.8";
+  version = "0.7.8.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
     rev = "v${version}";
-    sha256 = "sha256-U61cQzZfEKCrnk/80yEwh8rh+VojXsvrAQV0ckFqM/4=";
+    sha256 = "sha256-+wZiwUy5bmW8+3h4SuvNN8I6mCIPOlOeFmiXlMu12OU=";
   };
 
   propagatedBuildInputs = with python3Packages; [

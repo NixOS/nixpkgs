@@ -2,14 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twspace-dl";
-  version = "2022.6.6.1";
+  version = "2023.1.22.1";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "47622f306f2601185b00d6ef24f821810adcc581b7361c423eec979263725afc";
+    inherit version;
+    pname = "twspace_dl";
+    sha256 = "050e78b4583374351c288114e3b01ab34b0b19ad2d4971d15c5519521cf3f2f4";
   };
+
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [
     requests

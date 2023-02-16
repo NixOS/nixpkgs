@@ -59,8 +59,8 @@ in
     # Allow root logins
     services.openssh = {
       enable = true;
-      permitRootLogin = "prohibit-password";
-      passwordAuthentication = mkDefault false;
+      settings.PermitRootLogin = "prohibit-password";
+      settings.PasswordAuthentication = mkDefault false;
     };
 
     users.users.root.initialPassword = "foobar";

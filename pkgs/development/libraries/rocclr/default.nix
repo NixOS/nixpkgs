@@ -1,19 +1,20 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, writeScript
+, rocmUpdateScript
 , rocm-comgr
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocclr";
-  version = "5.3.3";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-dmL9krI/gHGQdOZ53+bQ7WjKcmJ+fZZP0lzF8ITLT4E=";
+    hash = "sha256-tYFoGafOsJYnRQaOLAaFix6tPD0QPTidOtOicPxP2Vk=";
   };
 
   patches = [
@@ -26,28 +27,28 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace device/comgrctx.cpp \
       --replace "libamd_comgr.so" "${rocm-comgr}/lib/libamd_comgr.so"
   '';
 
-  buildPhase = "";
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    cp -r * $out/
+    cp -a * $out/
 
     runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCm-Developer-Tools/ROCclr/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocclr "$version" --ignore-same-hash
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Source package of the Radeon Open Compute common language runtime";
@@ -58,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     # to be supported yet by the build infrastructure. Recheck in
     # the future.
     platforms = [ "x86_64-linux" ];
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

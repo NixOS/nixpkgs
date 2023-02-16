@@ -1,0 +1,93 @@
+.Dd January 1, 1980
+.\" nixpkgs groff will use Nixpkgs as the OS in the title by default, taking it from
+.\" doc-default-operating-system. mandoc doesn't have this register set by default,
+.\" so we can use it as a groff/mandoc switch.
+.ie ddoc-default-operating-system .Dt nixos-option \&8 "NixOS System Manager's Manual"
+.el .Dt nixos-option 8
+.Os NixOS
+.Sh NAME
+.Nm nixos-option
+.Nd inspect a NixOS configuration
+.
+.
+.
+.Sh SYNOPSIS
+.Nm
+.Op Fl r | -recursive
+.Op Fl I Ar path
+.Ar option.name
+.
+.
+.
+.Sh DESCRIPTION
+This command evaluates the configuration specified in
+.Pa /etc/nixos/configuration.nix
+and returns the properties of the option name given as argument.
+.
+.Pp
+When the option name is not an option, the command prints the list of attributes
+contained in the attribute set.
+.
+.
+.
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl r , -recursive
+Print all the values at or below the specified path recursively.
+.
+.It Fl I Ar path
+This option is passed to the underlying
+.Xr nix-instantiate 1
+invocation.
+.El
+.
+.
+.
+.Sh ENVIRONMENT
+.Bl -tag -width indent
+.It Ev NIXOS_CONFIG
+Path to the main NixOS configuration module. Defaults to
+.Pa /etc/nixos/configuration.nix Ns
+\&.
+.El
+.
+.
+.
+.Sh EXAMPLES
+Investigate option values:
+.Bd -literal -offset indent
+$ nixos-option boot.loader
+This attribute set contains:
+generationsDir
+grub
+initScript
+
+$ nixos-option boot.loader.grub.enable
+Value:
+true
+
+Default:
+true
+
+Description:
+Whether to enable the GNU GRUB boot loader.
+
+Declared by:
+  "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+
+Defined by:
+  "/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs/nixos/modules/system/boot/loader/grub/grub.nix"
+.Ed
+.
+.
+.
+.Sh SEE ALSO
+.Xr configuration.nix 5
+.
+.
+.
+.Sh AUTHORS
+.An -nosplit
+.An Nicolas Pierron
+and
+.An the Nixpkgs/NixOS contributors

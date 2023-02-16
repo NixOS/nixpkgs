@@ -4,6 +4,7 @@
 , buildPythonPackage
 , eventlet
 , fetchFromGitHub
+, fetchpatch
 , iana-etc
 , libredirect
 , mock
@@ -24,11 +25,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "v${version}";
-    sha256 = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
   };
 
-  checkInputs = [
+  patches = [
+    # Address Python 3.11 mocking issue, https://github.com/miguelgrinberg/python-engineio/issues/279
+    (fetchpatch {
+      name = "mocking-issue-py311.patch";
+      url = "https://github.com/miguelgrinberg/python-engineio/commit/ac3911356fbe933afa7c11d56141f0e228c01528.patch";
+      hash = "sha256-LNMhjX8kqOI3y8XugCHxCPEC6lF83NROfIczXWiLuqY=";
+    })
+  ];
+
+  nativeCheckInputs = [
     aiohttp
     eventlet
     mock
@@ -66,6 +76,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
+    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/v${version}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mic92 ];
   };

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bencode";
-  version = "0.5.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "fbdtemme";
     repo = "bencode";
-    rev = "v${version}";
-    hash = "sha256-ePbQ6oTumQ+T5TOb+ReaOYa8Q3lvcMBZ6jTMoquTngg=";
+    rev = version;
+    hash = "sha256-zpxvADZfYTUdlNLMZJSCanPL40EGl9BBCxR7oDhvOTw=";
   };
 
   nativeBuildInputs = [

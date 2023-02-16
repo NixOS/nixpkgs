@@ -1,24 +1,39 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
-, writeText
+, writeShellScriptBin
 , runtimeShell
 , installShellFiles
 , ncurses
 , perl
+, glibcLocales
+, testers
+, fzf
 }:
+
+let
+  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
+  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
+  # warnings on non-nixos machines
+  ourPerl = if !stdenv.isLinux then perl else (
+    writeShellScriptBin "perl" ''
+      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      exec ${perl}/bin/perl "$@"
+    '');
+in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.35.1";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zn//z66apkhUd2RvLZSV8PqmocQdVmPngfyK4jmWsfs=";
+    hash = "sha256-m+tKNz7tUWkm/Vg9DhcfZyaBgZh+Mcf0mRfc5/SW2Os=";
   };
 
-  vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
+  vendorHash = "sha256-MsMwBBualAwJzCrv/WNBJakv6LcKZYsDUqkNmivUMOQ=";
 
   outputs = [ "out" "man" ];
 
@@ -42,7 +57,7 @@ buildGoModule rec {
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
-      --replace " perl -n " " ${perl}/bin/perl -n "
+      --replace " perl -n " " ${ourPerl}/bin/perl -n "
   '';
 
   postInstall = ''
@@ -66,6 +81,10 @@ buildGoModule rec {
     SCRIPT
     chmod +x $out/bin/fzf-share
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = fzf;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf";

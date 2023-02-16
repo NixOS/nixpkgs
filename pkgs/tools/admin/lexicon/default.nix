@@ -39,7 +39,7 @@ buildPythonApplication rec {
     zeep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-xdist

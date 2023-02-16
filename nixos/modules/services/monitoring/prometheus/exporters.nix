@@ -64,10 +64,12 @@ let
     "rspamd"
     "rtl_433"
     "script"
+    "shelly"
     "snmp"
     "smartctl"
     "smokeping"
     "sql"
+    "statsd"
     "surfboard"
     "systemd"
     "tor"
@@ -322,7 +324,7 @@ in
   );
 
   meta = {
-    doc = ./exporters.xml;
+    doc = ./exporters.md;
     maintainers = [ maintainers.willibutz ];
   };
 }

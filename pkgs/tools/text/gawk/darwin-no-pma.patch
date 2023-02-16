@@ -1,0 +1,31 @@
+https://git.savannah.gnu.org/cgit/gawk.git/patch/?id=e0b7737930f8a677d3c509f8ce72b9130965ec0a
+--- a/m4/pma.m4
++++ b/m4/pma.m4
+@@ -23,15 +23,18 @@ then
+ 				[LDFLAGS="${LDFLAGS} -no-pie"
+ 				export LDFLAGS])
+ 			;;
+-		*darwin*)
+-			# 23 October 2022: See README_d/README.macosx for
+-			# the details on what's happening here. See also
+-			# the manual.
+-
+-			# Compile as Intel binary all the time, even on M1.
+-			CFLAGS="${CFLAGS} -arch x86_64"
+-			LDFLAGS="${LDFLAGS} -Xlinker -no_pie"
+-			export CFLAGS LDFLAGS
++ 		*darwin*)
++			# 27 November 2022: PMA only works on Intel.
++			case $host in
++			x86_64-*)
++				LDFLAGS="${LDFLAGS} -Xlinker -no_pie"
++				export LDFLAGS
++				;;
++			*)
++				# disable on all other macOS systems
++				use_persistent_malloc=no
++				;;
++			esac
+ 			;;
+ 		*cygwin* | *CYGWIN* | *solaris2.11* | freebsd13.* | openbsd7.* )
+ 			true	# nothing do, exes on these systems are not PIE

@@ -51,12 +51,10 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

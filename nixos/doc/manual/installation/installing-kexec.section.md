@@ -30,7 +30,7 @@ This will create a `result` directory containing the following:
 These three files are meant to be copied over to the other already running
 Linux Distribution.
 
-Note it's symlinks pointing elsewhere, so `cd` in, and use
+Note its symlinks pointing elsewhere, so `cd` in, and use
 `scp * root@$destination` to copy it over, rather than rsync.
 
 Once you finished copying, execute `kexec-boot` *on the destination*, and after

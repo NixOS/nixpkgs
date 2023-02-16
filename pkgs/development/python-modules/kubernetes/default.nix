@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "kubernetes"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

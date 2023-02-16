@@ -52,7 +52,7 @@ let
   chunkserverCfg = settingsFormat.generate
     "mfschunkserver.cfg" cfg.chunkserver.settings;
 
-  # generic template for all deamons
+  # generic template for all daemons
   systemdService = name: extraConfig: configFile: {
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
@@ -85,7 +85,7 @@ in {
         description = lib.mdDoc "Run daemons as user moosefs instead of root.";
       };
 
-      client.enable = mkEnableOption (lib.mdDoc "Moosefs client.");
+      client.enable = mkEnableOption (lib.mdDoc "Moosefs client");
 
       master = {
         enable = mkOption {
@@ -94,7 +94,7 @@ in {
             Enable Moosefs master daemon.
 
             You need to run `mfsmaster-init` on a freshly installed master server to
-            initialize the `DATA_PATH` direcory.
+            initialize the `DATA_PATH` directory.
           '';
           default = false;
         };
@@ -131,7 +131,7 @@ in {
       };
 
       metalogger = {
-        enable = mkEnableOption (lib.mdDoc "Moosefs metalogger daemon.");
+        enable = mkEnableOption (lib.mdDoc "Moosefs metalogger daemon");
 
         settings = mkOption {
           type = types.submodule {
@@ -149,7 +149,7 @@ in {
       };
 
       chunkserver = {
-        enable = mkEnableOption (lib.mdDoc "Moosefs chunkserver daemon.");
+        enable = mkEnableOption (lib.mdDoc "Moosefs chunkserver daemon");
 
         openFirewall = mkOption {
           type = types.bool;

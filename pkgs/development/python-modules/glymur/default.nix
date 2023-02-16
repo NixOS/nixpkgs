@@ -28,7 +28,7 @@ buildPythonPackage rec {
     numpy
   ] ++ lib.optionals isPy27 [ contextlib2 mock importlib-resources ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     scikitimage
     procps
     pytestCheckHook

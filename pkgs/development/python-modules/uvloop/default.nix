@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     psutil
   ] ++ lib.optionals (pythonOlder "3.11") [

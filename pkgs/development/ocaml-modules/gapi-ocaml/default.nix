@@ -6,8 +6,9 @@
 buildDunePackage rec {
   pname = "gapi-ocaml";
   version = "0.4.3";
+  duneVersion = "3";
 
-  minimalOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "astrada";
@@ -18,7 +19,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  doCheck = true;
   checkInputs = [ ounit2 ];
 
   meta = {

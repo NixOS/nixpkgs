@@ -66,7 +66,7 @@ buildPythonPackage rec {
     ++ lib.optional withXcffib xcffib;
 
   # pytestCheckHook does not work
-  checkInputs = [ numpy pikepdf pytest glibcLocales ];
+  nativeCheckInputs = [ numpy pikepdf pytest glibcLocales ];
 
   checkPhase = ''
     py.test $out/${python.sitePackages}

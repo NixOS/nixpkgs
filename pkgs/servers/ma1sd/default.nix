@@ -1,25 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, jre, git, gradle_6, perl, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, jre
+, git
+, gradle
+, perl
+, makeWrapper
+}:
 
 let
   pname = "ma1sd";
-  version = "2.4.0";
-  rev = version;
+  version = "2.5.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "ma1uta";
     repo = "ma1sd";
-    hash = "sha256-8UnhrGa8KKmMAAkzUXztMkxgYOX8MU1ioXuEStGi4Vc=";
+    rev = version;
+    hash = "sha256-K3kaujAhWsRQuTMW3SZOnE7Rmu8+tDXaxpLrb45OI4A=";
   };
 
+  patches = [
+    # https://github.com/ma1uta/ma1sd/pull/122
+    (fetchpatch {
+      name = "java-16-compatibility.patch";
+      url = "https://github.com/ma1uta/ma1sd/commit/be2e2e97ce21741ca6a2e29a06f5748f45dd414e.patch";
+      hash = "sha256-dvCeK/0InNJtUG9CWrsg7BE0FGWtXuHo3TU0iFFUmIk=";
+    })
+  ];
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit src version;
-    nativeBuildInputs = [ gradle_6 perl git ];
+    inherit src version patches;
+    nativeBuildInputs = [ gradle perl git ];
 
     buildPhase = ''
-      export MA1SD_BUILD_VERSION=${rev}
+      export MA1SD_BUILD_VERSION=${version}
       export GRADLE_USER_HOME=$(mktemp -d);
       gradle --no-daemon build -x test
     '';
@@ -35,21 +51,26 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0x2wmmhjgnb6p72d3kvnv2vg52l0c4151rs4jrazs9rvxjfc88dr";
+    outputHash = "sha256-Px8FLnREBC6pADcEPn/GfhrtGnmZqjXIX7l1xPjiCvQ=";
   };
 
 in
 stdenv.mkDerivation {
-  inherit pname src version;
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+  inherit pname src version patches;
+  nativeBuildInputs = [ gradle perl makeWrapper ];
   buildInputs = [ jre ];
+
+  postPatch = ''
+    substituteInPlace build.gradle \
+      --replace 'gradlePluginPortal()' "" \
+      --replace 'mavenCentral()' "mavenLocal(); maven { url '${deps}' }"
+  '';
 
   buildPhase = ''
     runHook preBuild
-    export MA1SD_BUILD_VERSION=${rev}
+    export MA1SD_BUILD_VERSION=${version}
     export GRADLE_USER_HOME=$(mktemp -d)
 
-    sed -ie "s#jcenter()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
     gradle --offline --no-daemon build -x test
     runHook postBuild
   '';
@@ -64,6 +85,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "a federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
+    changelog = "https://github.com/ma1uta/ma1sd/releases/tag/${version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps

@@ -21,7 +21,7 @@ let incremental = buildPythonPackage rec {
   # escape infinite recursion with twisted
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     twisted
   ];
 

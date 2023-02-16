@@ -101,7 +101,7 @@ let
 
     enableParallelBuilding = true;
 
-    checkInputs = [ python3 ];
+    nativeCheckInputs = [ python3 ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with lib; {

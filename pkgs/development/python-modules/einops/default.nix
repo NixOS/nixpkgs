@@ -2,6 +2,7 @@
 , buildPythonPackage
 , chainer
 , fetchFromGitHub
+, hatchling
 , jupyter
 , keras
   #, mxnet
@@ -16,19 +17,21 @@
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-n4R4lcRimuOncisCTs2zJWPlqZ+W2yPkvkWAnx4R91s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/bnp8IhDxp8EB/PoW5Dz+7rOru0/odOrts84aq4qyJw=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [ hatchling ];
+
+  nativeCheckInputs = [
     chainer
     jupyter
     keras

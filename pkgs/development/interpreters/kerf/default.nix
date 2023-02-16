@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       CoreGraphics CoreVideo
     ]);
 
-  checkInputs = [ expect ];
+  nativeCheckInputs = [ expect ];
   doCheck = true;
 
   makeFlags = [ "kerf" "kerf_test" ];

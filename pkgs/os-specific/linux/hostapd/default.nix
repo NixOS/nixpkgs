@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://hostap.epitest.fi";
+    homepage = "https://w1.fi/hostapd/";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ninjatrappeur hexa ];

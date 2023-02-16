@@ -28,7 +28,7 @@ buildPythonPackage rec {
     tensorflow-probability
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bsuite
     dm-env
     dm-haiku

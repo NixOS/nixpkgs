@@ -10,15 +10,17 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyyaml>=5.1,<6.0" "pyyaml>=5.1"
-
     substituteInPlace bin/nc_flash_window \
       --replace "nc" "${lib.getExe netcat-openbsd}"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
-    pytest-runner
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pyyaml"
+    "xcffib"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "flashfocus" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/fennerm/flashfocus";

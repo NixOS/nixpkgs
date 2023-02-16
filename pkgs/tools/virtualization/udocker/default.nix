@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

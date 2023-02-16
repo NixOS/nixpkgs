@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "starfetch";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "Haruno19";
     repo = "starfetch";
     rev = version;
-    sha256 = "sha256-2npevr3eSFhB58gRB2IuG4nwzPEGr0xcoSa/4VS0DNg=";
+    sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
   };
 
   postPatch = ''

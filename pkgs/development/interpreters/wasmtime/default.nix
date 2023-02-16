@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "3.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DJEX/BoiabAQKRKyXuefCoJouFKZ3sAnCQDsHmNC/t8=";
+    hash = "sha256-tHGzXjOOOWgYBMA0skLRNFkVgXc3hcs3F1XNsHxDRhk=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-L+VozBK1RJGg2F51Aeau8jH1XM5IfR7qkhb7iXmQXE4=";
+  cargoHash = "sha256-92BZdbNz22cZMJkHJwE3lUik6hAhRLCBwYzm2RAvRGo=";
 
   cargoBuildFlags = [
     "--package wasmtime-cli"
@@ -28,14 +28,8 @@ rustPlatform.buildRustPackage rec {
   # false positives of this package being broken due to failed runs on
   # Hydra (e.g. https://hydra.nixos.org/build/187667794/)
   doCheck = (stdenv.system != "x86_64-darwin");
-  checkFlags = [
-    "--skip=cli_tests::run_cwasm"
-    "--skip=commands::compile::test::test_unsupported_flags_compile"
-    "--skip=commands::compile::test::test_aarch64_flags_compile"
-    "--skip=commands::compile::test::test_successful_compile"
-    "--skip=commands::compile::test::test_x64_flags_compile"
-    "--skip=commands::compile::test::test_x64_presets_compile"
-    "--skip=traps::parse_dwarf_info"
+  cargoTestFlags = [
+    "--package wasmtime-runtime"
   ];
 
   postInstall = ''

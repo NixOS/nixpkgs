@@ -7,7 +7,7 @@
 , scdoc
 , xwayland
 , wayland-protocols
-, wlroots
+, wlroots_0_16
 , libxkbcommon
 , pixman
 , udev
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "0.1.3";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "riverwm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-bHfHhyDx/Wzhvhr7mAeVzJf0TBJgMTGb/ClGjWMLlQ8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-noZ2vo4J0cG3PN2k+2LzMc5WMtj0FEmMttE9obFH/tM=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland-protocols
-    wlroots
+    wlroots_0_16
     libxkbcommon
     pixman
     udev
@@ -65,10 +65,11 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = ["river"];
 
   meta = with lib; {
+    changelog = "https://github.com/ifreund/river/releases/tag/v${version}";
     homepage = "https://github.com/ifreund/river";
     description = "A dynamic tiling wayland compositor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ fortuneteller2k adamcstephens rodrgz ];
   };
 }

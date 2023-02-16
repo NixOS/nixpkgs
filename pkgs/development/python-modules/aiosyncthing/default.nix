@@ -26,7 +26,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     expects
     pytestCheckHook

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kirc";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = pname;
     rev = version;
-    hash = "sha256-bLBrkbW/Iv1v9z5NOiMAA/dH5/9FlqusRV5rSqjdlPw=";
+    hash = "sha256-SXPtSFjGPLgORG9OCSCEStzNzdGZFzCx72YOrW288MU=";
   };
 
   dontConfigure = true;

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # Tests try to access the network.
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "chat_downloader" ];
 

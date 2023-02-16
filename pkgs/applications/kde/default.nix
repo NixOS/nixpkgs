@@ -81,6 +81,7 @@ let
       bomber = callPackage ./bomber.nix {};
       bovo = callPackage ./bovo.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
+      colord-kde = callPackage ./colord-kde.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};

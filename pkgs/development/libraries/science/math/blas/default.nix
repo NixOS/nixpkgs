@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, gfortran
-# Wether to build with ILP64 interface
+# Whether to build with ILP64 interface
 , blas64 ? false
 }:
 

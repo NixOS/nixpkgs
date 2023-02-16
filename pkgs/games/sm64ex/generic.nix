@@ -2,7 +2,8 @@
 , version
 , src
 , extraNativeBuildInputs ? [ ]
-, extraMeta ? {}
+, extraBuildInputs ? [ ]
+, extraMeta ? { }
 , compileFlags ? [ ]
 , postInstall ? ""
 , region ? "us"
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     audiofile
     SDL2
-  ];
+  ] ++ extraBuildInputs;
 
   enableParallelBuilding = true;
 

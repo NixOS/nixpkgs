@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, libyamlcpp
+, yaml-cpp
 , nvramtool
 , qtbase
 , qtsvg
@@ -24,13 +24,18 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ inkscape meson ninja pkg-config wrapQtAppsHook ];
-  buildInputs = [ libyamlcpp qtbase qtsvg ];
+  buildInputs = [ yaml-cpp qtbase qtsvg ];
 
   postPatch = ''
     substituteInPlace src/application/*.cpp \
       --replace '/usr/bin/pkexec' 'sudo' \
       --replace '/usr/bin/systemctl' 'systemctl' \
       --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/coreboot-configurator.desktop \
+      --replace '/usr/bin/coreboot-configurator' 'coreboot-configurator'
   '';
 
   meta = with lib; {

@@ -391,8 +391,7 @@ rec {
     } ./neovim-require-check-hook.sh) {};
 
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook
-      toVimPlugin vimCommandCheckHook neovimRequireCheckHook;
+    inherit lib stdenv rtpPath toVimPlugin;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
 

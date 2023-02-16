@@ -10,6 +10,8 @@
 
 # Extra options
 , prefix ? ""
+
+, testers
 }:
 
 with lib;
@@ -25,7 +27,7 @@ let
   optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
   optLibopus = shouldUsePkg libopus;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
   version = "1.9.19";
 
@@ -63,11 +65,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
     homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
+    pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ goibhniu ];
   };
-}
+})

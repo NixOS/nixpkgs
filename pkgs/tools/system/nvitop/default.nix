@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
-  version = "0.10.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-nGdEMLxpw2Ts0dypkoZg3r2NF4IeT1ykbRmrmf9qxrA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GcwPFPE9opGMvdeIUg0Pj6qkk0qPU8MNnFTq9qIxFFs=";
   };
 
   propagatedBuildInputs = with python3Packages; [

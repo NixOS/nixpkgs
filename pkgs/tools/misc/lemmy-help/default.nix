@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lemmy-help";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "numToStr";
     repo = "lemmy-help";
     rev = "v${version}";
-    sha256 = "sha256-gsYVrqPcabLCMYN3Gmr6CXTCKKFAy2rDCxmcRwR1Iic=";
+    sha256 = "sha256-HcIvHuuzQj4HsRJyn1A9nXiGDGAcz1nqTsC7sROt7OI=";
   };
 
   buildFeatures = [ "cli" ];
 
-  cargoSha256 = "sha256-iyMEzxCTxJ/CP3UEnLc4SN5zhIjCLGUl4OOk0u0bCJc=";
+  cargoSha256 = "sha256-BCwpiBPvnLgbpOaXgUK2EDXnT8d4jo7aqgM6uwl80eg=";
 
   meta = with lib; {
     description = "A CLI for generating vim help docs from emmylua comments";

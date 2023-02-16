@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     watchdog
   ] ++ typer.optional-dependencies.all;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ] ++ (with python3.pkgs; [
     pytest-asyncio

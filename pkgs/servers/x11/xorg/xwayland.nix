@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "22.1.5";
+  version = "22.1.8";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4xesHxGfgyFlSSF2FCCQHkq9lVhajHY84mrzsEWsFnI=";
+    sha256 = "sha256-0R7u5zKQuI6o2kKn2TUN7fq6hWzkrkTljARa2eyqL3M=";
   };
 
   depsBuildBuild = [

@@ -1,12 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeScript
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocprim
 , hip
 , gtest
@@ -16,22 +13,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "5.3.3";
+  version = "5.4.2";
 
-  # Comment out these outputs until tests/benchmarks are fixed (upstream?)
-  # outputs = [
-  #   "out"
-  # ] ++ lib.optionals buildTests [
-  #   "test"
-  # ] ++ lib.optionals buildBenchmarks [
-  #   "benchmark"
-  # ];
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildTests [
+    "test"
+  ] ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
+    hash = "sha256-3OcJUL6T1HJz6TQb1//lumsTxqfwbWbQ4lGuZoKmqbY=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hip
   ];
 
-  buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
-  ] ++ lib.optionals buildTests [
+  buildInputs = lib.optionals buildTests [
     gtest
   ];
 
@@ -61,34 +53,32 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_TEST=ON"
   ] ++ lib.optionals buildBenchmarks [
     "-DBUILD_BENCHMARKS=ON"
+  ] ++ lib.optionals (buildTests || buildBenchmarks) [
+    "-DCMAKE_CXX_FLAGS=-Wno-deprecated-builtins" # Too much spam
   ];
 
-  # Comment out these outputs until tests/benchmarks are fixed (upstream?)
-  # postInstall = lib.optionalString buildTests ''
-  #   mkdir -p $test/bin
-  #   mv $out/bin/test_* $test/bin
-  # '' + lib.optionalString buildBenchmarks ''
-  #   mkdir -p $benchmark/bin
-  #   mv $out/bin/benchmark_* $benchmark/bin
-  # '' + lib.optionalString (buildTests || buildBenchmarks) ''
-  #   rmdir $out/bin
-  # '';
-
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocthrust "$version" --ignore-same-hash
+  postInstall = lib.optionalString buildTests ''
+    mkdir -p $test/bin
+    mv $out/bin/{test_*,*.hip} $test/bin
+  '' + lib.optionalString buildBenchmarks ''
+    mkdir -p $benchmark/bin
+    mv $out/bin/benchmark_* $benchmark/bin
+  '' + lib.optionalString (buildTests || buildBenchmarks) ''
+    rm -rf $out/bin
   '';
+
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
-    # Is this an upstream issue? We don't seem to be missing dependencies
-    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

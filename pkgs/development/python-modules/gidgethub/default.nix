@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ]
   ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     aiohttp
     httpx

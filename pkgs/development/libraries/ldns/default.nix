@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
   doCheck = false; # fails. missing some files
 
   postInstall = ''

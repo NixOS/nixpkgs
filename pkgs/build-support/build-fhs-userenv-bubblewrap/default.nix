@@ -1,7 +1,5 @@
 { lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
 
-let buildFHSEnv = callPackage ./env.nix { }; in
-
 args @ {
   name
 , runScript ? "bash"

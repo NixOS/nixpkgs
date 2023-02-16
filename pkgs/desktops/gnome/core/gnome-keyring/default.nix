@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [ dbus python3 ];
+  nativeCheckInputs = [ dbus python3 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories

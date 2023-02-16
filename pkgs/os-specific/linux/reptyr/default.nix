@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
 
-  checkInputs = [ python ];
+  nativeCheckInputs = [ python ];
 
   doCheck = true;
 

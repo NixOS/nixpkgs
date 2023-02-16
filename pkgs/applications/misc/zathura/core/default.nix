@@ -6,8 +6,6 @@
 , gtk-mac-integration
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "zathura";
   version = "0.5.2";
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
     "-Dsynctex=enabled"
     # Make sure tests are enabled for doCheck
     "-Dtests=enabled"
-  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
+  ] ++ lib.optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
     meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
@@ -38,12 +36,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
     texlive.bin.core
-  ] ++ optional stdenv.isLinux libseccomp
-    ++ optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ lib.optional stdenv.isLinux libseccomp
+    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;

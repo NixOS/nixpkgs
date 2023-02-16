@@ -220,7 +220,7 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "103") [
+  patches = lib.optionals (lib.versionOlder version "102.6.0") [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
       name = "rust-cbindgen-0.24.2-compat.patch";
@@ -234,7 +234,7 @@ buildStdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach
+    patchShebangs mach build
   ''
   + extraPostPatch;
 
@@ -471,6 +471,9 @@ buildStdenv.mkDerivation ({
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = if (with stdenv; isAarch64 && isLinux) then [ "-lgcc" ] else null;
+
   # tests were disabled in configureFlags
   doCheck = false;
 
@@ -522,7 +525,7 @@ buildStdenv.mkDerivation ({
             fi
 
             # Extract the debug info.
-            header "separating debug info from $i (build ID $id)"
+            echo "separating debug info from $i (build ID $id)"
             mkdir -p "$dst/''${id:0:2}"
             $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
 

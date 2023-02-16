@@ -1,86 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 48af2a89..43786c31 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,4 +1,4 @@
--cmake_minimum_required(VERSION 2.8)
-+cmake_minimum_required(VERSION 3.6)
- project(Performous CXX C)
+@@ -75,15 +75,7 @@ else()
+ 	message(STATUS "Localization disabled: Gettext tools (msgfmt) missing")
+ endif()
  
- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
---- a/cmake/Modules/FindPango.cmake
-+++ b/cmake/Modules/FindPango.cmake
-@@ -2,31 +2,10 @@
- # Once done, this will define
- #
- #  Pango_FOUND - system has Pango
--#  Pango_INCLUDE_DIRS - the Pango include directories
- #  Pango_LIBRARIES - link these to use Pango
- 
- include(LibFindMacros)
- 
--# Dependencies
--libfind_package(Pango Freetype)
--libfind_package(Pango Glib)
--libfind_package(Pango GObject)
--
--# Use pkg-config to get hints about paths
--libfind_pkg_check_modules(Pango_PKGCONF pango)
--
--# Include dir
--find_path(Pango_INCLUDE_DIR
--  NAMES pango/pango.h
--  HINTS ${Pango_PKGCONF_INCLUDE_DIRS}
--  PATH_SUFFIXES pango-1.0
+-include(FetchContent)
+-FetchContent_Declare(ced-sources
+-  GIT_REPOSITORY https://github.com/performous/compact_enc_det.git
+-  #https://github.com/google/compact_enc_det.git
+-  GIT_TAG        master
+-  SOURCE_DIR ced-src
 -)
 -
--# Finally the library itself
--find_library(Pango_LIBRARY
--  NAMES pango-1.0
--  HINTS ${Pango_PKGCONF_LIBRARY_DIRS}
--)
--
-+libfind_pkg_check_modules(Pango_PKGCONF IMPORTED_TARGET pango)
-+set(Pango_LIBRARY PkgConfig::Pango_PKGCONF)
- libfind_process(Pango)
--
---- a/cmake/Modules/FindPangoCairo.cmake
-+++ b/cmake/Modules/FindPangoCairo.cmake
-@@ -1,35 +1,11 @@
- # - Try to find PangoCairo
- # Once done, this will define
- #
--#  PangoCairo_FOUND - system has Pango
--#  PangoCairo_INCLUDE_DIRS - the Pango include directories
--#  PangoCairo_LIBRARIES - link these to use Pango
-+#  PangoCairo_FOUND - system has PangoCairo
-+#  PangoCairo_LIBRARIES - link these to use PangoCairo
+-FetchContent_MakeAvailable(ced-sources)
++add_subdirectory(ced-src)
  
- include(LibFindMacros)
+ option(USE_SELF_BUILT_AUBIO "Use custom aubio local build instead of using system lib (if available)" FALSE)
  
--# Dependencies
--libfind_package(PangoCairo Pango)
--libfind_package(PangoCairo Cairo)
--
--# Use pkg-config to get hints about paths
--libfind_pkg_check_modules(PangoCairo_PKGCONF pangocairo)
--
--# Include dir
--find_path(PangoCairo_INCLUDE_DIR
--  NAMES pango/pangocairo.h
--  HINTS ${PangoCairo_PKGCONF_INCLUDE_DIRS}
--  PATH_SUFFIXES pango-1.0
--)
--
--# Finally the library itself
--find_library(PangoCairo_LIBRARY
--  NAMES pangocairo-1.0
--  HINTS ${PangoCairo_PKGCONF_LIBRARY_DIRS}
--)
--
--# Set the include dir variables and the libraries and let libfind_process do the rest.
--# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
--set(PangoCairo_PROCESS_INCLUDES PangoCairo_INCLUDE_DIR Pango_INCLUDE_DIR Cairo_INCLUDE_DIR)
--set(PangoCairo_PROCESS_LIBS PangoCairo_LIBRARY Pango_LIBRARY Cairo_LIBRARY)
-+libfind_pkg_check_modules(PangoCairo_PKGCONF IMPORTED_TARGET pangocairo)
-+set(PangoCairo_LIBRARY PkgConfig::PangoCairo_PKGCONF)
- libfind_process(PangoCairo)
--

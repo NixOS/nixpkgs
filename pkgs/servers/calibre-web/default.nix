@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , nixosTests
 , python3
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     APScheduler
     advocate
-    backports_abc
     chardet
     flask-babel
     flask-login
@@ -44,6 +44,12 @@ python3.pkgs.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
+    # Handle version 3.0 of flask-babel
+    (fetchpatch {
+      url = "https://github.com/janeczku/calibre-web/commit/94a6931d48d347ae6c07e2b5f0301e8cf97cf53d.patch";
+      excludes = [ "requirements.txt" ];
+      hash = "sha256-0DQ+LbIOOwjBXQh+b1w8dYQ3s+xZ6nFoH5GvgJdBAFI=";
+    })
   ];
 
   # calibre-web doesn't follow setuptools directory structure. The following is taken from the script
@@ -54,10 +60,13 @@ python3.pkgs.buildPythonApplication rec {
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
 
+    sed -i "/backports_abc/d" setup.cfg
+
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
+      --replace "Flask-Babel>=0.11.1,<2.1.0" "Flask-Babel>=0.11.1" \
       --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional isPy27 futures;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gevent
     mock
     pytestCheckHook

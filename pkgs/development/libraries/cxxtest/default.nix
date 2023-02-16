@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "source/python";
 
-  checkInputs = [ python3Packages.ply ];
+  nativeCheckInputs = [ python3Packages.ply ];
 
   preCheck = ''
     cd ../

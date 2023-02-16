@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     iproute2
   ] ++ (with python3.pkgs; [
     netaddr

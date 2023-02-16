@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "httplib";
-  version = "0.11.1";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${version}";
-    sha256 = "sha256-rsElqtoRz/sOXpAsfSJbMlwIKdaGJkSZfKHzB/wMhY8=";
+    hash = "sha256-RTC2Q8T5tvi27BuZuH++wmKZ3bvIHL09S4F8YeO5Fbg=";
   };
 
   # Header-only library.
@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A C++ header-only HTTP/HTTPS server and client library";
     homepage = "https://github.com/yhirose/cpp-httplib";
+    changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/v${version}";
     maintainers = with maintainers; [ aidalgol ];
     license = licenses.mit;
   };

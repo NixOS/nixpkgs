@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   # Tests depend on pytest but atomicwrites is a dependency of pytest
   doCheck = false;
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "Atomic file writes on POSIX";

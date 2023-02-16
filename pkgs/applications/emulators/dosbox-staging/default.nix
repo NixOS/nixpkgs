@@ -2,38 +2,41 @@
 , stdenv
 , fetchFromGitHub
 , SDL2
+, SDL2_image
 , SDL2_net
 , alsa-lib
 , copyDesktopItems
 , fluidsynth
+, glib
 , gtest
+, irr1
 , libGL
 , libGLU
+, libjack2
+, libmt32emu
 , libogg
 , libpng
+, libpulseaudio
 , libslirp
+, libsndfile
 , makeDesktopItem
 , makeWrapper
 , meson
-, libmt32emu
 , ninja
 , opusfile
 , pkg-config
-, libpulseaudio
-, glib
-, libjack2
-, libsndfile
+, speexdsp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "dosbox-staging";
-  version = "0.78.1";
+  version = "0.80.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gozFZcJorZtbEK0joksig6qWmAMy03hmBHiyJMONfpk=";
+    owner = "dosbox-staging";
+    repo = "dosbox-staging";
+    rev = "v${self.version}";
+    hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
 
   nativeBuildInputs = [
@@ -47,10 +50,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+    SDL2_image
     SDL2_net
     alsa-lib
     fluidsynth
     glib
+    irr1
     libGL
     libGLU
     libjack2
@@ -61,11 +66,13 @@ stdenv.mkDerivation rec {
     libslirp
     libsndfile
     opusfile
+    speexdsp
   ];
 
-   NIX_CFLAGS_COMPILE = [
-     "-I${SDL2_net}/include/SDL2"
-   ];
+  NIX_CFLAGS_COMPILE = [
+    "-I${SDL2_image}/include/SDL2"
+    "-I${SDL2_net}/include/SDL2"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -84,17 +91,17 @@ stdenv.mkDerivation rec {
     # original dosbox. Doing it this way allows us to work with frontends and
     # launchers that expect the binary to be named dosbox, but get out of the
     # way of vanilla dosbox if the user desires to install that as well.
-    mv $out/bin/dosbox $out/bin/${pname}
+    mv $out/bin/dosbox $out/bin/${self.pname}
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
 
     # Create a symlink to dosbox manual instead of merely copying it
     pushd $out/share/man/man1/
-    mv dosbox.1.gz ${pname}.1.gz
-    ln -s ${pname}.1.gz dosbox.1.gz
+    mv dosbox.1.gz ${self.pname}.1.gz
+    ln -s ${self.pname}.1.gz dosbox.1.gz
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dosbox-staging.github.io/";
     description = "A modernized DOS emulator";
     longDescription = ''
@@ -103,10 +110,14 @@ stdenv.mkDerivation rec {
       existing DOSBox codebase while leveraging modern development tools and
       practices.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ joshuafern AndersonTorres ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/dosbox-staging/dosbox-staging/releases/tag/v${self.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [
+      lib.maintainers.joshuafern
+      lib.maintainers.AndersonTorres
+    ];
+    platforms = lib.platforms.unix;
     priority = 101;
   };
-}
-# TODO: report upstream about not finding SDL2_net
+})
+# TODO: report upstream about not finding extra SDL2 libraries

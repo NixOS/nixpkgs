@@ -25,11 +25,11 @@ let
   ;
 in stdenv.mkDerivation rec {
   pname = "libpsl";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchurl {
     url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
-    sha256 = "1a9kp2rj71jb9q030lmp3zhy33rqxscawbfzhp288fxvazapahv4";
+    sha256 = "sha256-qj1wbEUnhtE0XglNriAc022B8Dz4HWNtXPwQ02WQfxc=";
   };
 
   nativeBuildInputs = [

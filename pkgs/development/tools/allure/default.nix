@@ -2,7 +2,7 @@
 
 let
   pname = "allure";
-  version = "2.20.1";
+  version = "2.21.0";
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/allure-framework/allure2/releases/download/${version}/allure-${version}.tgz";
-    sha256 = "sha256-nq7PY4CVSqfuTzN7ZDChTfYalYKb4uBG8ZnIBd7ernI=";
+    sha256 = "sha256-fX/GNDUUxO8LvPoeoT+tf0n3EcgJlm6kc1lx0lfbiq4=";
   };
   dontConfigure = true;
   dontBuild = true;

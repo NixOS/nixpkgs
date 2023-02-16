@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , runCommand
 , rustPlatform
 , openssl
@@ -11,7 +12,6 @@
 , xorg
 , libiconv
 , AppKit
-, Foundation
 , Security
 # darwin.apple_sdk.sdk
 , sdk
@@ -20,20 +20,21 @@
 , withExtraFeatures ? true
 , testers
 , nushell
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.72.1";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-OVJr+usN+47yBHFAy94rIVlU2F+Klo6xdrV2MwUoKUE=";
+    sha256 = "sha256-u8/SvuR/RpJaBX4Dr3Onrk0AVpIAeVb+399+NUpgkfI=";
   };
 
-  cargoSha256 = "sha256-v6mPr+gOT64rKYuog+hS7/AqUZDailoOBXX3Sfeo+sk=";
+  cargoSha256 = "sha256-hnSumfZd9ylEx3dkTGW2s4VSv107MHOn21ytOcimhPw=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
@@ -45,7 +46,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    Foundation
     (
       # Pull a header that contains a definition of proc_pid_rusage().
       # (We pick just that one because using the other headers from `sdk` is not
@@ -66,9 +66,7 @@ rustPlatform.buildRustPackage rec {
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  # doCheck = ! stdenv.isDarwin;
-  # TODO tests are not guaranteed while package is in beta
-  doCheck = false;
+  doCheck = ! stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -90,5 +88,6 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion {
       package = nushell;
     };
+    updateScript = nix-update-script { };
   };
 }

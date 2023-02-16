@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-Fb/suuiC6tmY3ZMAc3I3oU5A39jJc+XH3ntMkgQKAQ8=";
   };
 
-  # Nose is required during build process, so can not use `checkInputs`.
+  # Nose is required during build process, so can not use `nativeCheckInputs`.
   buildInputs = [
     nose
   ];

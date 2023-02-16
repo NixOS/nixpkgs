@@ -5,13 +5,14 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "0.12.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -30,9 +31,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

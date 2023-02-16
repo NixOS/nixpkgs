@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, libyamlcpp, libevdev }:
+{ stdenv, lib, fetchFromGitLab, pkg-config, yaml-cpp, libevdev }:
 
 stdenv.mkDerivation rec {
   pname = "dual-function-keys";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libevdev libyamlcpp ];
+  buildInputs = [ libevdev yaml-cpp ];
 
   prePatch = ''
     substituteInPlace config.mk --replace \

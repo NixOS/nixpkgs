@@ -23,8 +23,6 @@
 , nixosTests
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "1.12.0";
   pname = "tigervnc";
@@ -35,7 +33,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
   };
-
 
   patches = [
     (fetchpatch {
@@ -65,6 +62,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/bin"
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=array-bounds"
   ];
 
   postBuild = lib.optionalString stdenv.isLinux ''

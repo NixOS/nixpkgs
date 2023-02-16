@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "appthreat-depscan";
-  version = "3.2.7";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "AppThreat";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nHKEELQzcMKvxAC+u4lPBglsMwyzRpiQF3O+felHTbk=";
+    hash = "sha256-U8vHwdL1O54X0jPhcjTN/J1U7dKQgFEMfc6lbXe2Ff0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

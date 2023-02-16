@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, dataclasses
 , fetchPypi
 , fetchpatch
 , google-cloud-storage
@@ -13,36 +12,25 @@
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.6.1";
+  version = "0.10.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "838624441f799a06b446a657e4ecc9ebc3fdd05234397e044a7c87e8f6e76b1c";
+    hash = "sha256-TNbnG0zV/4dc+7lJrZ+lUZ2NHb5p1fwdGyOqPLBJYYs=";
   };
 
   propagatedBuildInputs = [
+    google-cloud-storage
     smart-open
     typer
-    google-cloud-storage
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
-  ];
-
-  patches = [
-    # Support for smart-open >= 6.0.0, https://github.com/justindujardin/pathy/pull/71
-    (fetchpatch {
-      name = "support-later-smart-open.patch";
-      url = "https://github.com/justindujardin/pathy/commit/ba1c23df6ee5d1e57bdfe845ff6a9315cba3df6a.patch";
-      sha256 = "sha256-V1i4tx73Xkdqb/wZhQIv4p6FVpF9SEfDhlBkwaaRE3w=";
-    })
   ];
 
   disabledTestPaths = [

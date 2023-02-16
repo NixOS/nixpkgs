@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     emoji
     nose

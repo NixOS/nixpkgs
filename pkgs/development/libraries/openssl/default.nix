@@ -10,6 +10,7 @@
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,12 +20,12 @@
 
 let
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
-   stdenv.mkDerivation rec {
+   stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -204,20 +205,27 @@ let
       fi
     '';
 
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
     meta = with lib; {
       homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
+      pkgConfigModules = [
+        "libcrypto"
+        "libssl"
+        "openssl"
+      ];
       platforms = platforms.all;
     } // extraMeta;
-  };
+  });
 
 in {
 
 
   openssl_1_1 = common {
-    version = "1.1.1s";
-    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
+    version = "1.1.1t";
+    sha256 = "sha256-je6bJL2x3L8MPR6bAvuPa/IhZegH9Fret8lndTaFnTs=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -229,8 +237,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.7";
-    sha256 = "sha256-gwSdBComDmlvYkBqxcCL9wb9hDg/lFzyG9YentlcOW4=";
+    version = "3.0.8";
+    sha256 = "sha256-bBPSvzj98x6sPOKjRwc2c/XWMmM5jx9p0N9KQSU+Sz4=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

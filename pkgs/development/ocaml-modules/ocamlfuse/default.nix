@@ -11,9 +11,6 @@ buildDunePackage rec {
     sha256 = "6nmPXZx38hBGlg+gV9nnlRpPfeSAqDj4zBPcjUNvTRo=";
   };
 
-  # This currently fails with dune
-  strictDeps = false;
-
   nativeBuildInputs = [ camlidl ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ camlidl fuse ];

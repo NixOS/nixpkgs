@@ -7,13 +7,13 @@ NIXPKGS_PATH="$(git rev-parse --show-toplevel)"
 CMCTL_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_PATH {}; cmctl.version or (builtins.parseDrvName cmctl.name).version" | tr -d '"')"
-LATEST_TAG="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/cert-manager/cert-manager/releases" | jq '.[].tag_name' --raw-output | sed '/-/d' | sort --version-sort -r | head -n 1)"
+LATEST_TAG="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/cert-manager/cert-manager/releases" | jq '.[].tag_name' --raw-output | sed '/-/d' | sort --version-sort -r | head -n 1)"
 LATEST_VERSION="${LATEST_TAG:1}"
 
 if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/cert-manager/cert-manager/archive/refs/tags/${LATEST_TAG}.tar.gz)
-    TAG_SHA=$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""}  "https://api.github.com/repos/cert-manager/cert-manager/git/ref/tags/${LATEST_TAG}" | jq -r '.object.sha')
-    TAG_COMMIT_SHA=$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/cert-manager/cert-manager/git/tags/${TAG_SHA}" | jq '.object.sha' --raw-output)
+    TAG_SHA=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"}  "https://api.github.com/repos/cert-manager/cert-manager/git/ref/tags/${LATEST_TAG}" | jq -r '.object.sha')
+    TAG_COMMIT_SHA=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/cert-manager/cert-manager/git/tags/${TAG_SHA}" | jq '.object.sha' --raw-output)
 
     setKV () {
         sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${CMCTL_PATH}/default.nix"

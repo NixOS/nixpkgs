@@ -289,7 +289,9 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
-    multiline ? true
+    multiline ? true,
+    /* Initial indentation level */
+    indent ? ""
   }:
     let
     go = indent: v: with builtins;
@@ -342,10 +344,13 @@ rec {
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+                "${libStr.escapeNixIdentifier name} = ${
+                  builtins.addErrorContext "while evaluating an attribute `${name}`"
+                    (go (indent + "  ") value)
+                };") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
-  in go "";
+  in go indent;
 
   # PLIST handling
   toPlist = {}: v: let

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ws4py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     mock-services
     pytestCheckHook

@@ -4,8 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "minc-widgets";
-  name  = "${pname}-2016-04-20";
-
+  version = "unstable-2016-04-20";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";

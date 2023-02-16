@@ -1,21 +1,21 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "open-fonts";
   version = "0.7.0";
-in
-fetchurl {
-  name = "${pname}-${version}";
 
-  url = "https://github.com/kiwi0fruit/open-fonts/releases/download/${version}/open-fonts.tar.xz";
-  downloadToTemp = true;
-  recursiveHash = true;
-  sha256 = "sha256-bSP9Flotoo3E5vRU3eKOUAPD2fmkWseWYWG4y0S07+4=";
+  src = fetchurl {
+    url = "https://github.com/kiwi0fruit/open-fonts/releases/download/${version}/open-fonts.tar.xz";
+    hash = "sha256-NJKbdrvgZz9G7mjAJYzN7rU/fo2xRFZA2BbQ+A56iPw=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    install open-fonts/*.ttf $out/share/fonts/truetype
+    install *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -1,0 +1,34 @@
+diff --git a/src/systemd/Makefile.am b/src/systemd/Makefile.am
+index f28ea41df..684b82006 100644
+--- a/src/systemd/Makefile.am
++++ b/src/systemd/Makefile.am
+@@ -23,10 +23,10 @@ dist_motd_SCRIPTS = src/systemd/update-motd
+ 
+ # Automake: 'Variables using ... ‘sysconf’ ... are installed by install-exec.'
+ install-exec-hook::
+-	mkdir -p $(DESTDIR)$(sysconfdir)/motd.d
+-	ln -sTfr $(DESTDIR)/run/cockpit/motd $(DESTDIR)$(sysconfdir)/motd.d/cockpit
+-	mkdir -p $(DESTDIR)$(sysconfdir)/issue.d
+-	ln -sTfr $(DESTDIR)/run/cockpit/motd $(DESTDIR)$(sysconfdir)/issue.d/cockpit.issue
++	mkdir -p $(DESTDIR)$(prefix)$(sysconfdir)/motd.d
++	ln -sTfr $(DESTDIR)$(prefix)/run/cockpit/motd $(DESTDIR)$(prefix)$(sysconfdir)/motd.d/cockpit
++	mkdir -p $(DESTDIR)$(prefix)$(sysconfdir)/issue.d
++	ln -sTfr $(DESTDIR)$(prefix)/run/cockpit/motd $(DESTDIR)$(prefix)$(sysconfdir)/issue.d/cockpit.issue
+ 
+ tempconfdir = $(prefix)/lib/tmpfiles.d
+ nodist_tempconf_DATA = src/systemd/cockpit-tempfiles.conf
+diff --git a/src/ws/Makefile-ws.am b/src/ws/Makefile-ws.am
+index ed4e4363e..77a35b0e5 100644
+--- a/src/ws/Makefile-ws.am
++++ b/src/ws/Makefile-ws.am
+@@ -169,8 +169,8 @@ install-tests::
+ 	$(INSTALL_DATA) mock-pam-conv-mod.so $(DESTDIR)$(pamdir)/
+ 
+ install-exec-hook::
+-	mkdir -p $(DESTDIR)$(sysconfdir)/cockpit/ws-certs.d $(DESTDIR)$(sysconfdir)/cockpit/machines.d
+-	chmod 755 $(DESTDIR)$(sysconfdir)/cockpit/ws-certs.d $(DESTDIR)$(sysconfdir)/cockpit/machines.d
++	mkdir -p $(DESTDIR)$(prefix)$(sysconfdir)/cockpit/ws-certs.d $(DESTDIR)$(prefix)$(sysconfdir)/cockpit/machines.d
++	chmod 755 $(DESTDIR)$(prefix)$(sysconfdir)/cockpit/ws-certs.d $(DESTDIR)$(prefix)$(sysconfdir)/cockpit/machines.d
+ 
+ dist_check_DATA += \
+ 	src/ws/mock-combined.crt \

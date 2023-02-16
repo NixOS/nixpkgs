@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   meta = with lib; {
     description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";

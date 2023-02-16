@@ -15,19 +15,23 @@
 , scdoc
 , wayland
 , wayland-protocols
-, wlroots
+, wlroots_0_16
+, xcbutilwm
 , xwayland
 }:
 
-stdenv.mkDerivation rec {
+let
+  wlroots = wlroots_0_16;
+in
+stdenv.mkDerivation (self: {
   pname = "labwc";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "labwc";
-    repo = pname;
-    rev = version;
-    hash = "sha256-YD2bGxa7uss6KRvOGM0kn8dM+277ubaYeOB7ugRZCcY=";
+    repo = "labwc";
+    rev = self.version;
+    hash = "sha256-PfvtNbSAz1vt0+ko4zRPyRRN+lhQoA2kJ2xoJy5o4So=";
   };
 
   nativeBuildInputs = [
@@ -49,16 +53,20 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wlroots
+    xcbutilwm
     xwayland
   ];
 
-  mesonFlags = [ "-Dxwayland=enabled" ];
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" true)
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/labwc/labwc";
     description = "A Wayland stacking compositor, similar to Openbox";
+    changelog = "https://raw.githubusercontent.com/labwc/labwc/${self.version}/NEWS.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
-}
+})

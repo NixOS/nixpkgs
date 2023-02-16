@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.5";
-  srcSha256 = "yaA2PKw4xuqd8vGXh/GhcJJHw4mJ1z97tWJTREE14ow=";
-  yarnSha256 = "1jpb4gblmknl81f6iclqg8ba82ca931q38xpm0kzki8y5ayk9n67";
+  version = "0.15.6";
+  srcSha256 = "sha256-8XXeGEw7+NGULsD5/g1j9+P2h82oRpEuMJT6sMp+z38=";
+  yarnSha256 = "sha256-PY0BIBbjyi2DG+n5x/IPc0AwrFSwII4huMDU+FeZ/Sc=";
 in
 {
   inherit version yarnSha256;

@@ -15,12 +15,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-QdhJp7oUqOY8Z36haIrHgP4hVGaFXlOxNVg1ams7uhg=";
   };
 
+  postInstall = ''
+    # Helper files are not handled by setup.py
+    mkdir -p $out/${python3.sitePackages}/src/txt
+    install -vD src/txt/* $out/${python3.sitePackages}/src/txt/
+  '';
+
   # Project has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "Automated Command Injection Exploitation Tool";
     homepage = "https://github.com/commixproject/commix";
+    changelog = "https://github.com/commixproject/commix/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

@@ -37,7 +37,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       default-config //
       {
         networking.proxy = {
-          # useless because overriden by the next options
+          # useless because overridden by the next options
           default = "http://user:pass@host:port";
           # advanced proxy setup
           httpProxy = "123-http://user:pass@http-host:port";

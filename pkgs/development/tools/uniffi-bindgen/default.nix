@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uniffi-bindgen";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-yVpxyYaFkX1HuFi4xcj45rsMbMIcdTHs9zfGvtcFdH8=";
+    sha256 = "sha256-cUJsfAlzdoGMeFcdXwdPU0JcruneY60pssJPkJtb5gs=";
   };
 
-  cargoSha256 = "sha256-qn27aRVdD+/EWmCSF2t+CdMhtOknDCVnG9uDa2Rwf0A=";
+  cargoSha256 = "sha256-k5uIR5rO4T1Xsu50vdLxCgSsVkNcxXHT4MitnMZkY6g=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,9 +32,7 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.strings.makeBinPath [ ktlint yapf rubocop rustfmt ] }
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";

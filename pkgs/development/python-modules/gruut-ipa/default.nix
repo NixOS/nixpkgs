@@ -30,7 +30,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "gruut_ipa"

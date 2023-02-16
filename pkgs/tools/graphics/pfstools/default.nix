@@ -39,7 +39,7 @@ mkDerivation rec {
   patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
   meta = with lib; {
-    homepage = "http://pfstools.sourceforge.net/";
+    homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;
     license = licenses.lgpl2;

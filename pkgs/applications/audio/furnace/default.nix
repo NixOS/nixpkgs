@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre1.5";
+  version = "0.6pre3";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-2Bl6CFZJkhdNxMZiJ392zjcVMu8BgyK58R8aE4ToskY=";
+    sha256 = "sha256-bHVeTw69k6LLcrfkmGxvjlFfR/hWiCfm/P3utknid1o=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,12 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_ZLIB=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
     "-DWARNINGS_ARE_ERRORS=ON"
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
+    "-Wno-error=mismatched-new-delete"
+    "-Wno-error=use-after-free"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -20,11 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-y9PYlGSPLpZl9Ad2AFuDKIopH0LRETLp35aiZtLcXzM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'crashtest = "^0.3.1"' 'crashtest = "*"'
-  '';
-
   nativeBuildInputs = [
     poetry-core
   ];
@@ -41,7 +36,7 @@ buildPythonPackage rec {
     "cleo.helpers"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

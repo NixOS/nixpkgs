@@ -27,7 +27,7 @@ updateNightly() {
     OLD_NIGHTLY_VERSION="$(getLocalVersion "citra-nightly")"
     OLD_NIGHTLY_HASH="$(getLocalHash "citra-nightly")"
 
-    NEW_NIGHTLY_VERSION="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+    NEW_NIGHTLY_VERSION="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
         "https://api.github.com/repos/citra-emu/citra-nightly/releases?per_page=1" | jq -r '.[0].name' | cut -d"-" -f2 | cut -d" " -f2)"
 
     if [[ "${OLD_NIGHTLY_VERSION}" = "${NEW_NIGHTLY_VERSION}" ]]; then
@@ -42,7 +42,7 @@ updateNightly() {
 
     NEW_NIGHTLY_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "nightly-${NEW_NIGHTLY_VERSION}" "https://github.com/citra-emu/citra-nightly" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_NIGHTLY_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_NIGHTLY_HASH}"
 
     sed -i "s/${OLD_NIGHTLY_VERSION}/${NEW_NIGHTLY_VERSION}/" ./default.nix
     sed -i "s/${OLD_NIGHTLY_HASH}/${NEW_NIGHTLY_HASH}/" ./default.nix
@@ -52,7 +52,7 @@ updateCanary() {
     OLD_CANARY_VERSION="$(getLocalVersion "citra-canary")"
     OLD_CANARY_HASH="$(getLocalHash "citra-canary")"
 
-    NEW_CANARY_VERSION="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+    NEW_CANARY_VERSION="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
         "https://api.github.com/repos/citra-emu/citra-canary/releases?per_page=1" | jq -r '.[0].name' | cut -d"-" -f2 | cut -d" " -f1)"
 
     if [[ "${OLD_CANARY_VERSION}" = "${NEW_CANARY_VERSION}" ]]; then
@@ -67,7 +67,7 @@ updateCanary() {
 
     NEW_CANARY_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "canary-${NEW_CANARY_VERSION}" "https://github.com/citra-emu/citra-canary" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_CANARY_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_CANARY_HASH}"
 
     sed -i "s/${OLD_CANARY_VERSION}/${NEW_CANARY_VERSION}/" ./default.nix
     sed -i "s/${OLD_CANARY_HASH}/${NEW_CANARY_HASH}/" ./default.nix

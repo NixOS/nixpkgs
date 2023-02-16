@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs cpplint_unittest.py
   '';
 
-  checkInputs = with python3Packages; [ pytest pytest-runner ];
+  nativeCheckInputs = with python3Packages; [ pytest pytest-runner ];
   checkPhase = ''
     ./cpplint_unittest.py
   '';

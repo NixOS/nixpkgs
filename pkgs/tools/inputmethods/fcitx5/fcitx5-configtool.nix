@@ -62,5 +62,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
+    mainProgram = "fcitx5-config-qt";
   };
 }

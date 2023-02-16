@@ -18,6 +18,7 @@ dotnetConfigureHook() {
         env dotnet restore ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
+            --runtime "@runtimeId@" \
             --source "@nugetSource@/lib" \
             ${parallelFlag-} \
             ${dotnetRestoreFlags[@]} \

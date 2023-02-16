@@ -2,7 +2,6 @@
 , src
 , jami-meta
 , lib
-, fetchpatch
 , stdenv
 , pkg-config
 , cmake
@@ -10,7 +9,7 @@
 , python3
 , qttools # for translations
 , wrapQtAppsHook
-, ffmpeg-jami
+, ffmpeg_5
 , jami-daemon
 , libnotify
 , qt5compat
@@ -31,14 +30,6 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/client-qt";
 
-  patches = [
-    (fetchpatch {
-      name = "fix-build-without-webengine.patch";
-      url = "https://git.jami.net/savoirfairelinux/jami-client-qt/-/commit/9b2dbb64eaa9256f800dfa69d897545f4b0affd2.patch";
-      hash = "sha256-lgDlSlXIjtdymBa7xSe1PabSK9DnSG5KnJggOLWyn+A=";
-    })
-  ];
-
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
@@ -52,7 +43,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ffmpeg-jami
+    ffmpeg_5
     jami-daemon
     libnotify
     networkmanager

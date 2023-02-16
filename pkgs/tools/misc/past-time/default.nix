@@ -23,7 +23,7 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

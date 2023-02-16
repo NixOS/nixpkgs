@@ -71,13 +71,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.24";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "${pname}-${version}";
-    hash  = "sha256-rso08/b0ukrh6KYFpn4bFn0pP83URfeJGw28iLIjlPw=";
+    hash  = "sha256-hOuuKvT6ZM7G0HTGtVeEHHfJWqwUinD+DxT3r0CQZH0=";
   };
 
   enableParallelBuilding = true;
@@ -127,7 +127,7 @@ in stdenv.mkDerivation rec {
 
   checkTarget = "test";
   doCheck = true;
-  checkInputs = [ verilog ];
+  nativeCheckInputs = [ verilog ];
 
   # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
   # But other tools (like mcy or symbiyosys) can't know how yosys was built, so

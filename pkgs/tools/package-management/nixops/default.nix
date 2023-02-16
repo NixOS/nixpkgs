@@ -9,6 +9,11 @@ let
     overrides = [
       poetry2nix.defaultPoetryOverrides
       (self: super: {
+        certifi = super.certifi.overridePythonAttrs (old: {
+          meta = old.meta // {
+            knownVulnerabilities = [ "CVE-2022-23491" ];
+          };
+        });
         pyjwt = super.pyjwt.overridePythonAttrs (old: {
           meta = old.meta // {
             knownVulnerabilities = lib.optionals (lib.versionOlder old.version "2.4.0") [

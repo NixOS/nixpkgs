@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.8.1";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-UnOIYYmOeBX22jQ4MkDxQKtSlxv+H/KOC83BZ39JA1E=";
+    hash = "sha256-bVuysEr8VVFgA4OZ7N7UlL2FigbyLVyPr1HHwkshSMU=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

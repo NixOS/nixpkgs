@@ -33,7 +33,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

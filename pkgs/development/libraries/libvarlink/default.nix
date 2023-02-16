@@ -36,9 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = finalAttrs.pname;
-    };
+    updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;

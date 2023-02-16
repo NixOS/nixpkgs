@@ -45,4 +45,5 @@ mkDerivation {
     plasma-workspace
   ];
   outputs = [ "bin" "dev" "out" ];
+  meta.mainProgram = "systemsettings5";
 }

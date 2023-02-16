@@ -38,7 +38,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asyncio-dgram
     asynctest
     pytest-aiohttp

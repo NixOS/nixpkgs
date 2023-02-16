@@ -1,12 +1,12 @@
 { lib, bash, autoconf, automake,
   mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "flocq";
   owner = "flocq";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.14" "8.16"; out = "4.1.0"; }
     { case = range "8.7" "8.15"; out = "3.4.3"; }
     { case = range "8.5" "8.8"; out = "2.6.1"; }
@@ -22,7 +22,7 @@ with lib; mkCoqDerivation {
   mlPlugin = true;
   useMelquiondRemake.logpath = "Flocq";
 
-  meta = {
+  meta = with lib; {
     description = "A floating-point formalization for the Coq system";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jwiegley ];

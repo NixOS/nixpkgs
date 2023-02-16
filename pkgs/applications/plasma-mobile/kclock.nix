@@ -8,6 +8,7 @@
 , kcoreaddons
 , kdbusaddons
 , ki18n
+, kirigami-addons
 , kirigami2
 , knotifications
 , plasma-framework
@@ -28,6 +29,7 @@ mkDerivation rec {
     kcoreaddons
     kdbusaddons
     ki18n
+    kirigami-addons
     kirigami2
     knotifications
     plasma-framework

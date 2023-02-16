@@ -17,7 +17,7 @@
 , libjpeg
 , pkg-config
 , wrapGAppsHook
-, wxGTK30 # crash with wxGTK30 with GTK2 compat
+, wxGTK32
 , wxSVG
 , xine-ui
 , xmlto
@@ -33,12 +33,17 @@ let
   inherit (lib) optionals makeBinPath;
 in stdenv.mkDerivation rec {
   pname = "dvdstyler";
-  version = "3.1.2";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/DVDStyler-${version}.tar.bz2";
-    sha256 = "03lsblqficcadlzkbyk8agh5rqcfz6y6dqvy9y866wqng3163zq4";
+    sha256 = "sha256-C7M0hzn0yTCXRUuBTss6WPa6zo8DD0Fhmp/ur7R0dVg=";
   };
+
+  patches = [
+    # https://sourceforge.net/p/dvdstyler/DVDStyler/ci/679fa8dc6ac7657775eda9d7b0ed9da9d069aeec/
+    ./wxgtk32.patch
+  ];
 
   nativeBuildInputs = [
     bison
@@ -62,7 +67,7 @@ in stdenv.mkDerivation rec {
     libexif
     libjpeg
     wxSVG
-    wxGTK30
+    wxGTK32
     xine-ui
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
