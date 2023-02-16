@@ -19721,6 +19721,8 @@ with pkgs;
 
   funambol = callPackage ../development/libraries/funambol { };
 
+  function-runner = callPackage ../development/web/function-runner { };
+
   functionalplus = callPackage ../development/libraries/functionalplus { };
 
   galer = callPackage ../tools/security/galer { };
