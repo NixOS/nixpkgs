@@ -1300,6 +1300,8 @@ self: super: with self; {
 
   black = callPackage ../development/python-modules/black { };
 
+  blackjax = callPackage ../development/python-modules/blackjax { };
+
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
 
   bleach = callPackage ../development/python-modules/bleach { };
@@ -4867,6 +4869,8 @@ self: super: with self; {
   jaxlibWithoutCuda = self.jaxlib-build.override {
     cudaSupport = false;
   };
+
+  jaxopt = callPackage ../development/python-modules/jaxopt { };
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
