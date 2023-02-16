@@ -32,6 +32,7 @@ specialisation=
 buildHost=
 targetHost=
 remoteSudo=
+noAutoSudo=
 verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
@@ -127,6 +128,9 @@ while [ "$#" -gt 0 ]; do
       --use-remote-sudo)
         remoteSudo=1
         ;;
+      --no-auto-sudo)
+        noAutoSudo=1
+        ;;
       --flake)
         flake="$1"
         shift 1
@@ -153,8 +157,10 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+sudoCommand=(sudo --preserve-env="$preservedSudoVars" --)
+
 if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
-    maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
+    maybeSudo=("${sudoCommand[@]}")
 fi
 
 # log the given argument to stderr if verbose mode is on
@@ -182,7 +188,11 @@ buildHostCmd() {
 
 targetHostCmd() {
     if [ -z "$targetHost" ]; then
-        runCmd "${maybeSudo[@]}" "$@"
+        if [ "$(whoami)" = root ] || [ -n "$noAutoSudo" ]; then
+            runCmd "${maybeSudo[@]}" "$@"
+        else
+            runCmd "${sudoCommand[@]}" "$@"
+        fi
     else
         runCmd ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
     fi
