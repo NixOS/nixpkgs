@@ -7154,6 +7154,12 @@
     github = "joepie91";
     githubId = 1663259;
   };
+  joerdav = {
+    email = "joe.davidson.21111@gmail.com";
+    github = "joerdav";
+    name = "Joe Davidson";
+    githubId = 19927761;
+  };
   joesalisbury = {
     email = "salisbury.joseph@gmail.com";
     github = "JosephSalisbury";
