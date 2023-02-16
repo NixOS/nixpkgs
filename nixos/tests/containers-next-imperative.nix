@@ -167,7 +167,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
                 nixpkgs = "${../..}";
                 system-config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
                 network = {};
-                forwardPorts = [ { hostPort = 8080; containerPort = 80; } ];
               }
             ''}"
         )
@@ -178,8 +177,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         onlyimperative.wait_until_succeeds("ping -c4 foonet")
 
         onlyimperative.succeed("curl --fail -i >&2 foonet:80")
-        host_ip = onlyimperative.succeed("ip --json a s ve-foonet | jq '.[].addr_info|.[]|select(.local|startswith(\"192.168\"))|.local' -r | head -n1").strip()
-        onlyimperative.succeed(f"curl --fail -i >&2 {host_ip}:8080")
 
         onlyimperative.succeed("test -e /etc/systemd/network/20-ve-foonet.network")
 

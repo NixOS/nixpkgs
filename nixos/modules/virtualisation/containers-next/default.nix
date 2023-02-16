@@ -187,9 +187,6 @@ let
         (mkIf (config.zone != null) {
           Zone = config.zone;
         })
-        (mkIf (config.forwardPorts != []) {
-          Port = config.forwardPorts;
-        })
       ];
     }
     (mkIf (!config.sharedNix) {
@@ -352,59 +349,6 @@ in {
               <literal>veth</literal>-pair is created. It's possible to configure a dynamically
               managed network with private IPv4 and ULA IPv6 the same way like zones.
               Additionally, it's possible to statically assign addresses to a container here.
-            '';
-          };
-
-          forwardPorts = mkOption {
-            default = [];
-            example = literalExpression
-              ''
-                [
-                  { containerPort = 80; hostPort = 8080; protocol = "tcp"; }
-                ]
-              '';
-
-            type = types.listOf (types.submodule {
-              options = {
-                containerPort = mkOption {
-                  type = types.nullOr types.port;
-                  default = null;
-                  description = ''
-                    Port to forward on the container-side. If <literal>null</literal>, the
-                    <xref linkend="opt-nixos.containers.instances._name_.forwardPorts._.hostPort" />-option
-                    will be used.
-                  '';
-                };
-
-                hostPort = mkOption {
-                  type = types.port;
-                  description = ''
-                    Source port on the host-side.
-                  '';
-                };
-
-                protocol = mkOption {
-                  default = "tcp";
-                  type = types.enum [ "udp" "tcp" ];
-                  description = ''
-                    Protocol specifier for the port-forward between host and container.
-                  '';
-                };
-              };
-            });
-
-            apply = map
-              ({ containerPort ? null, hostPort, protocol }:
-                let
-                  host = toString hostPort;
-                  container = if containerPort == null then host else toString containerPort;
-                in
-                  "${protocol}:${host}:${container}");
-
-            description = ''
-              Define port-forwarding from a container to host. See <literal>--port</literal>-section
-              of <citerefentry><refentrytitle>systemd-nspawn</refentrytitle><manvolnum>1</manvolnum>
-              </citerefentry> for further information.
             '';
           };
 
