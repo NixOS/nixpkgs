@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocrand";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-5kqVLUINYk8WjnRJ+LqUiCPjLIHcbvIL0Z6BRsj9hvY=";
+    hash = "sha256-xK1JRTW+7odlXRQV9WC6ZfXqRKow/TQ9grHCigw+/us=";
     fetchSubmodules = true; # For inline hipRAND
   };
 
