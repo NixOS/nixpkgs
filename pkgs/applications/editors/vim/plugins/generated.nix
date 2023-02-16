@@ -7018,6 +7018,18 @@ final: prev:
     meta.homepage = "https://github.com/ahmedkhalf/project.nvim/";
   };
 
+  promise-async = buildVimPluginFrom2Nix {
+    pname = "promise-async";
+    version = "2023-02-01";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "promise-async";
+      rev = "7fa127fa80e7d4d447e0e2c78e99af4355f4247b";
+      sha256 = "12d7l5b79fj4lpd3gfjqrmy6ffh06cxsr13vaw29rjif57wf0f53";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/promise-async/";
+  };
+
   psc-ide-vim = buildVimPluginFrom2Nix {
     pname = "psc-ide-vim";
     version = "2021-05-31";
