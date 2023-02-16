@@ -119,16 +119,14 @@ in {
     wrappedPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      example = literalExample ''
+      example = literalExpression ''
         [ pkgs.mpv ]
       '';
-      description = ''
-        Put a package into <option>systemPackages</option>,
-        but wrap its binaries with firejail.
-        Compared to <option>wrappedBinaries</option>,
-        this e.g. has the advantage of providing desktop entries and icons.
-        However, you should be careful about using these packages'
-        libraries as they will not be wrapped.
+      description = lib.mdDoc ''
+        Put a package into `systemPackages`, but wrap its binaries with
+        firejail. Compared to `wrappedBinaries`, this e.g. has the advantage of
+        providing desktop entries and icons. However, you should be careful
+        about using these packages' libraries as they will not be wrapped.
       '';
     };
   };
