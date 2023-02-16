@@ -148,6 +148,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
       ];
     };
 
@@ -169,6 +170,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
       ];
     };
 
