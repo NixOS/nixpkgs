@@ -1,0 +1,25 @@
+--- a/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
++++ b/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
+@@ -290,6 +290,20 @@ static QString findClangBuiltInIncludesDir()
+         if (!candidate.isEmpty())
+             return candidate + QStringLiteral("/include");
+     }
++
++    // llvm-config --includedir
++    const QString llvmConfig =
++        QStandardPaths::findExecutable(u"llvm-config"_s);
++    if (!llvmConfig.isEmpty()) {
++        QByteArray stdOut;
++        if (runProcess(llvmConfig, QStringList{u"--includedir"_s}, &stdOut)) {
++            const QString path = QFile::decodeName(stdOut.trimmed());
++            if (QFileInfo::exists(path))
++                return path;
++            qWarning("%s: %s as returned by llvm-config does not exist.", __FUNCTION__, qPrintable(path));
++        }
++    }
++
+     return QString();
+ }
+ 
+-- 
+2.39.0
