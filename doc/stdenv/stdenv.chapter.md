@@ -97,7 +97,7 @@ genericBuild
 
 ### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
 
-To build a `stdenv` package in a `nix-shell`, use
+To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), use
 
 ```bash
 nix-shell '<nixpkgs>' -A some_package
@@ -108,7 +108,7 @@ eval ${configurePhase:-configurePhase}
 eval ${buildPhase:-buildPhase}
 ```
 
-To modify a phase, first print it with
+To modify a [phase](#sec-stdenv-phases), first print it with
 
 ```bash
 type buildPhase
