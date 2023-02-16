@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2023.01.0";
+  version = "2023.02.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qPLfah35E0vX2tQhGw4wTSMyE4nIyWMDIaKlJePVSd4=";
+    hash = "sha256-EiTTck6hmOGSQ7LyZsbhnH1zgkH8GccejLdJaH2m0F8=";
   };
 
   nativeBuildInputs = [

@@ -927,8 +927,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "2023.2.1204";
-          sha256 = "sha256-FurYfkw+mOjyymR1VCGf0jJ2JCZJ8eGb1J7zD2peBjw=";
+          version = "2023.2.1404";
+          sha256 = "sha256-hszwiETLDKqV4yqchPA1o3WuAgvmY2AwslvvbAhkRCE=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.220";
-          sha256 = "06kzb4msfdv11lij4dwbn1vxdxhvnpfcjqw0gvydgkqjy7dridjk";
+          version = "0.0.224";
+          sha256 = "sha256-ObFmzAaOlbtWC31JRYR/1y+JK1h22SVDPPRWWqPzrQs=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1555,8 +1555,8 @@ let
         mktplcRef = {
           name = "svg";
           publisher = "jock";
-          version = "1.4.23";
-          sha256 = "11f1g4a8v8330ki4240bvg5zpydagg1dwqfh1sar9ds7p1795ims";
+          version = "1.5.0";
+          sha256 = "sha256-anIZxqO4pK77FmhUamRnJVN2q8FifH6ffqRE2eFwyWM=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1865,8 +1865,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.22.2";
-          sha256 = "13scns5iazzsjx8rli311ym2z8i8f4nvbcd5w8hqj5z0rzsds6xi";
+          version = "1.23.3";
+          sha256 = "sha256-0qflugzWA1pV0PVWGTzOjdxM/0G8hTLOozoXCAdQnRY=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1929,8 +1929,8 @@ let
         mktplcRef = {
           name = "PowerShell";
           publisher = "ms-vscode";
-          version = "2022.11.0";
-          sha256 = "01pq84rqh2q6rd0ljfql37q6i1kg597qy0mr7fiz5ddi15zcfn19";
+          version = "2023.1.0";
+          sha256 = "sha256-OiVb88BGvzsPTzKU1rGLGSMQSwKV4zI9FthOmutz34U=";
         };
         meta = with lib; {
           description = "A Visual Studio Code extension for PowerShell language support";
@@ -2146,8 +2146,8 @@ let
         mktplcRef = {
           name = "java";
           publisher = "redhat";
-          version = "1.14.2022120303";
-          sha256 = "sha256-tlWb2rkDcEWgdpuidkBGN5Nxr3pmkYxnPJN/UdbQfEw=";
+          version = "1.15.2023021403";
+          sha256 = "sha256-g56+nproGC8zHidyf1Tqz0kbJrmrkgOsDA5jqaZULas=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -2226,8 +2226,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.22.0";
-          sha256 = "0irrivfidgjqfd205gh27r2ccj2anvqgvq7lfaaf92wrrc2zvlsk";
+          version = "4.24.0";
+          sha256 = "sha256-hJy+ymnlF9a2vvN/HhJ5N75lIc2afzkq+S0Cv/KnD3M=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2737,8 +2737,8 @@ let
         mktplcRef = {
           name = "pdf";
           publisher = "tomoki1207";
-          version = "1.2.0";
-          sha256 = "1bcj546bp0w4yndd0qxwr8grhiwjd1jvf33jgmpm0j96y34vcszz";
+          version = "1.2.2";
+          sha256 = "sha256-i3Rlizbw4RtPkiEsodRJEB3AUzoqI95ohyqZ0ksROps=";
         };
         meta = {
           description = "Show PDF preview in VSCode";
