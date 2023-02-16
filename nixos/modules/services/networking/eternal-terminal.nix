@@ -28,6 +28,14 @@ in
         '';
       };
 
+      bindIP = mkOption {
+        default = "0.0.0.0";
+        type = types.str;
+        description = lib.mdDoc ''
+          The address the server should listen on.
+        '';
+      };
+
       verbosity = mkOption {
         default = 0;
         type = types.enum (lib.range 0 9);
@@ -76,6 +84,7 @@ in
 
             [Networking]
             port = ${toString cfg.port}
+            bind_ip = ${cfg.bindIP}
 
             [Debug]
             verbose = ${toString cfg.verbosity}
