@@ -58,7 +58,10 @@ in buildNpmPackage' {
     runHook postInstall
   '';
 
-  passthru.tests = nixosTests.vaultwarden;
+  passthru = {
+    inherit bw_web_builds;
+    tests = nixosTests.vaultwarden;
+  };
 
   meta = with lib; {
     description = "Integrates the web vault into vaultwarden";
