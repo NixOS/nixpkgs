@@ -142,6 +142,7 @@ in {
   consul = handleTest ./consul.nix {};
   containers-next = handleTest ./containers-next.nix {};
   containers-next-imperative = handleTest ./containers-next-imperative.nix {};
+  containers-next-macvlan = handleTest ./containers-next-macvlan.nix {};
   containers-migration = handleTest ./containers-migration.nix {};
   containers-config-activation = handleTest ./containers-config-activation.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
