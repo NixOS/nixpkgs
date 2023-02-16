@@ -326,7 +326,7 @@ in {
 
                 <literal>dynamic</literal> checks whether the <filename>.nspawn</filename>-unit
                 has changed (apart from the init-script) and if that's the case, it will be
-                rebooted, otherwise a restart will happen.
+                restarted, otherwise a reload will happen.
               '';
             };
 
