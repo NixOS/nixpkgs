@@ -751,6 +751,10 @@ in
         If true, i2pd will be wait for closing transit connections.
         Enabling this option may delay system shutdown/reboot up to 10 minutes!
       '');
+
+      autoRestart = mkEnableOption (lib.mdDoc ''
+        If true, i2pd will be restarted on failure (does not affect clean exit).
+      '');
     };
   };
 
@@ -777,8 +781,9 @@ in
       {
         User = "i2pd";
         WorkingDirectory = homeDir;
-        Restart = "on-abort";
         ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
+        ## Auto restart
+        Restart = if cfg.autoRestart then "on-failure" else "no";
         ## Graceful shutdown
         KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
         TimeoutStopSec = if cfg.gracefulShutdown then "10m" else "30s";
