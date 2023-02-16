@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "The official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
