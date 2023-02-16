@@ -7,7 +7,7 @@ let
   fetchMaven = callPackage ../development/java-modules/m2install.nix { };
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
-  openjfx11_webkit = callPackage ../development/compilers/openjdk/openjfx/11.nix { enableWebkit = true; };
+  openjfx11_webkit = callPackage ../development/compilers/openjdk/openjfx/11.nix { withWebKit = true; };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
