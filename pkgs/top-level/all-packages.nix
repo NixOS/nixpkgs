@@ -33989,6 +33989,8 @@ with pkgs;
 
   wofi-emoji = callPackage ../applications/misc/wofi-emoji { };
 
+  wofi-wifi-menu = callPackage ../applications/misc/wofi-wifi-menu { };
+
   cl-wordle = callPackage ../games/cl-wordle { };
 
   wordbook = callPackage ../applications/misc/wordbook { };

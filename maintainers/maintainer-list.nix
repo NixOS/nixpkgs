@@ -2334,6 +2334,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  calwe = {
+    email = "spikywebb@gmail.com";
+    github = "calwe";
+    githubId = 47675688;
+    name = "Callum Webb";
+  };
   cameronfyfe = {
     email = "cameron.j.fyfe@gmail.com";
     github = "cameronfyfe";
