@@ -6,17 +6,20 @@
 , mock
 , sqlalchemy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "flask-sqlalchemy";
-  version = "3.0.2";
+  version = "3.0.3";
   format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "Flask-SQLAlchemy";
     inherit version;
-    hash = "sha256-FhmfWz3ftp4N8vUq5Mdq7b/sgjRiNJ2rshobLgorZek=";
+    hash = "sha256-J2QzXzydfr3J7WBEr6+Yqun6UNegdM71Xd4wfslZA+w=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
-    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob${version}/CHANGES.rst";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };
