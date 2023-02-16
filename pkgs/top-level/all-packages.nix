@@ -386,6 +386,8 @@ with pkgs;
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
+  catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
+
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
   btdu = callPackage ../tools/misc/btdu { };
