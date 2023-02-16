@@ -95,6 +95,27 @@ installPhase() {
 genericBuild
 ```
 
+### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
+
+To build a `stdenv` package in a `nix-shell`, use
+
+```bash
+nix-shell '<nixpkgs>' -A some_package
+eval ${unpackPhase:-unpackPhase}
+cd $sourceRoot
+eval ${patchPhase:-patchPhase}
+eval ${configurePhase:-configurePhase}
+eval ${buildPhase:-buildPhase}
+```
+
+To modify a phase, first print it with
+
+```bash
+type buildPhase
+```
+
+then change it in a text editor, and paste it back to the terminal.
+
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
 
 The standard environment provides the following packages:
