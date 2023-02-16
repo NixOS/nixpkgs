@@ -700,6 +700,10 @@ self: super: {
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
 
+  nvim-ufo = super.nvim-ufo.overrideAttrs (old: {
+    dependencies = with self; [ promise-async ];
+  });
+
   octo-nvim = super.octo-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   });

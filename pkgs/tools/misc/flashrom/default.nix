@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flashrom";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    hash = "sha256-iaf/W+sIyJuHlbvSU6UblFNUeoZMMXkzAilrVrvFbWU=";
+    hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
-    substituteInPlace util/z60_flashrom.rules \
+    substituteInPlace util/flashrom_udev.rules \
       --replace "plugdev" "flashrom"
   '';
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
 
   postInstall = ''
-    install -Dm644 util/z60_flashrom.rules $out/lib/udev/rules.d/flashrom.rules
+    install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
   meta = with lib; {

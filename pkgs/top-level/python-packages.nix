@@ -8319,8 +8319,6 @@ self: super: with self; {
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
-  pyls-mypy = callPackage ../development/python-modules/pyls-mypy { };
-
   pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
