@@ -746,6 +746,11 @@ in
           Serve something on I2P network at port and delegate requests to address inPort.
         '';
       };
+
+      gracefulShutdown = mkEnableOption (lib.mdDoc ''
+        If true, i2pd will be wait for closing transit connections.
+        Enabling this option may delay system shutdown/reboot up to 10 minutes!
+      '');
     };
   };
 
@@ -774,6 +779,10 @@ in
         WorkingDirectory = homeDir;
         Restart = "on-abort";
         ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
+        ## Graceful shutdown
+        KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
+        TimeoutStopSec = if cfg.gracefulShutdown then "10m" else "30s";
+        SendSIGKILL = true;
       };
     };
   };
