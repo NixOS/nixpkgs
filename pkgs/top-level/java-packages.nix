@@ -7,6 +7,7 @@ let
   fetchMaven = callPackage ../development/java-modules/m2install.nix { };
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
+  openjfx11_webkit = callPackage ../development/compilers/openjdk/openjfx/11.nix { enableWebkit = true; };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
@@ -15,6 +16,7 @@ let
 
 in {
   inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17 openjfx19;
+  inherit openjfx11_webkit;
 
   compiler = let
 
@@ -153,6 +155,11 @@ in {
       ../development/compilers/openjdk/11.nix
       ../development/compilers/openjdk/darwin/11.nix
       { openjfx = openjfx11; };
+
+    openjdk11_webkit = mkOpenjdk
+      ../development/compilers/openjdk/11.nix
+      ../development/compilers/openjdk/darwin/11.nix
+      { openjfx = openjfx11_webkit; };
 
     openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
         /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */

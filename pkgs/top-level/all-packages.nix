@@ -14973,8 +14973,10 @@ with pkgs;
   openjdk11-bootstrap = javaPackages.compiler.openjdk11-bootstrap;
   openjdk11 = javaPackages.compiler.openjdk11;
   openjdk11_headless = javaPackages.compiler.openjdk11.headless;
+  openjdk11_webkit = javaPackages.compiler.openjdk11_webkit;
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
+  jdk11_webkit = openjdk11_webkit;
 
   openjdk17-bootstrap = javaPackages.compiler.openjdk17-bootstrap;
   openjdk17 = javaPackages.compiler.openjdk17;
