@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = with python3Packages; [
+    anyio
     (toPythonModule chia)
     pytest # required at runtime by the "test" command
     pytest-asyncio
