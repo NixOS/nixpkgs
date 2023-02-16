@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , graalvmCEPackages
+, graalvm-ce
 , javaVersion
 , src
 , version
@@ -8,10 +9,13 @@
 
 graalvmCEPackages.buildGraalvmProduct rec {
   inherit src javaVersion version;
-  product = "js-installable-svm";
+  product = "nodejs-installable-svm";
 
+  extraNativeBuildInputs = [ graalvm-ce ];
+
+  # TODO: improve test
   graalvmPhases.installCheckPhase = ''
-    echo "Testing GraalJS"
-    echo '1 + 1' | $out/bin/js
+    echo "Testing NodeJS"
+    $out/bin/npx --help
   '';
 }
