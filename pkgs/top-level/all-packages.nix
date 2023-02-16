@@ -26228,8 +26228,8 @@ with pkgs;
   nsh = callPackage ../shells/nsh { };
 
   nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
+    inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
-    inherit (darwin.apple_sdk) sdk;
   };
 
   nettools = if stdenv.isLinux
