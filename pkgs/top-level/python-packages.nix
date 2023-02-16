@@ -6272,6 +6272,8 @@ self: super: with self; {
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
+  nbdev = callPackage ../development/python-modules/nbdev { };
+
   nbdime = callPackage ../development/python-modules/nbdime { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
