@@ -9,6 +9,10 @@
 , Security
 , libiconv
 , openssl
+, notmuch
+, withImapBackend ? true
+, withNotmuchBackend ? false
+, withSmtpSender ? true
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,28 +29,28 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-FXfh6T8dNsnD/V/wYSMDWs+ll0d1jg1Dc3cQT39b0ws=";
 
   nativeBuildInputs = [ ]
-    ++ lib.optionals (installManPages || installShellCompletions) [ installShellFiles ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) pkg-config;
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then [
-      Security
-      libiconv
-    ] else [
-      openssl
-    ];
+  buildInputs = [ ]
+    ++ (if stdenv.hostPlatform.isDarwin then [ Security libiconv ] else [ openssl ])
+    ++ lib.optional withNotmuchBackend notmuch;
 
-  # TODO: remove this flag once this issue is fixed:
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ ]
+    ++ lib.optional withImapBackend "imap-backend"
+    ++ lib.optional withNotmuchBackend "notmuch-backend"
+    ++ lib.optional withSmtpSender "smtp-sender";
+
+  # TODO: remove me once this issue is fixed:
   # https://todo.sr.ht/~soywod/pimalaya/36
   cargoTestFlags = [ "--lib" ];
 
   postInstall = lib.optionalString installManPages ''
-    # Install man pages
     mkdir -p $out/man
     $out/bin/himalaya man $out/man
     installManPage $out/man/*
   '' + lib.optionalString installShellCompletions ''
-    # Install shell completions
     installShellCompletion --cmd himalaya \
       --bash <($out/bin/himalaya completion bash) \
       --fish <($out/bin/himalaya completion fish) \
