@@ -15017,9 +15017,7 @@ with pkgs;
   openjdk_headless = jdk_headless;
 
   graalvmCEPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
-      inherit (darwin.apple_sdk.frameworks) Foundation;
-    });
+    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
   graalvm-ce = graalvm11-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
@@ -18097,6 +18095,10 @@ with pkgs;
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
     inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+  };
+
+  listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   lit = callPackage ../development/tools/misc/lit { };
@@ -34816,6 +34818,8 @@ with pkgs;
   opendune = callPackage ../games/opendune { };
 
   openrct2 = callPackage ../games/openrct2 { };
+
+  opensearch = callPackage ../servers/search/opensearch { };
 
   osu-lazer = callPackage ../games/osu-lazer { };
 

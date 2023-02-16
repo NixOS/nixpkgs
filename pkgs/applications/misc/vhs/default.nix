@@ -1,4 +1,4 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, makeWrapper }:
+{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, chromium, makeWrapper }:
 
 buildGoModule rec {
   pname = "vhs";
@@ -14,12 +14,11 @@ buildGoModule rec {
   vendorHash = "sha256-9nkRr5Jh1nbI+XXbPj9KB0ZbLybv5JUVovpB311fO38=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ttyd ffmpeg ];
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath [ ffmpeg ttyd ]}
+    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath [ chromium ffmpeg ttyd ]}
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \

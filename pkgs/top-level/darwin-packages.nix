@@ -41,7 +41,7 @@ makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spl
   useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
 
   selectAttrs = attrs: names:
-    lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [(lib.nameValuePair n attrs."${n}")] else []) names);
+    lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);
 
   chooseLibs = (
     # There are differences in which libraries are exported. Avoid evaluation

@@ -25,8 +25,7 @@
 }:
 let
   mutableExtensionsFilePath = toString mutableExtensionsFile;
-  mutableExtensions = if builtins.pathExists mutableExtensionsFile
-                      then import mutableExtensionsFilePath else [];
+  mutableExtensions = lib.optionals builtins.pathExists mutableExtensionsFile (import mutableExtensionsFilePath);
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
     inherit lib writeShellScriptBin extensionsFromVscodeMarketplace;
     vscodeDefault = vscode;

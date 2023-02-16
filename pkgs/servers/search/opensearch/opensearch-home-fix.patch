@@ -1,0 +1,26 @@
+diff -Naur a/bin/opensearch-env b/bin/opensearch-env
+--- a/bin/opensearch-env	2017-12-12 13:31:51.000000000 +0100
++++ b/bin/opensearch-env	2017-12-18 19:51:12.282809695 +0100
+@@ -19,18 +19,10 @@
+   fi
+ done
+ 
+-# determine OpenSearch home; to do this, we strip from the path until we find
+-# bin, and then strip bin (there is an assumption here that there is no nested
+-# directory under bin also named bin)
+-OPENSEARCH_HOME=`dirname "$SCRIPT"`
+-
+-# now make OPENSEARCH_HOME absolute
+-OPENSEARCH_HOME=`cd "$OPENSEARCH_HOME"; pwd`
+-
+-while [ "`basename "$OPENSEARCH_HOME"`" != "bin" ]; do
+-  OPENSEARCH_HOME=`dirname "$OPENSEARCH_HOME"`
+-done
+-OPENSEARCH_HOME=`dirname "$OPENSEARCH_HOME"`
++if [ -z "$OPENSEARCH_HOME" ]; then
++    echo "You must set the OPENSEARCH_HOME var" >&2
++    exit 1
++fi
+ 
+ # now set the classpath
+ OPENSEARCH_CLASSPATH="$OPENSEARCH_HOME/lib/*"

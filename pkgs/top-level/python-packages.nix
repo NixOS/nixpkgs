@@ -4065,6 +4065,8 @@ self: super: with self; {
 
   gql = callPackage ../development/python-modules/gql { };
 
+  grad-cam = callPackage ../development/python-modules/grad-cam { };
+
   gradient = callPackage ../development/python-modules/gradient { };
 
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };

@@ -6,7 +6,7 @@ Nixpkgs provides a couple of facilities for working with this tool.
 
 ## Writing packages providing pkg-config modules
 
-Packages should set `meta.pkgConfigProvides` with the list of package config modules they provide.
+Packages should set `meta.pkgConfigModules` with the list of package config modules they provide.
 They should also use `testers.testMetaPkgConfig` to check that the final built package matches that list.
 Additionally, the [`validatePkgConfig` setup hook](https://nixos.org/manual/nixpkgs/stable/#validatepkgconfig), will do extra checks on to-be-installed pkg-config modules.
 

@@ -62,19 +62,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     # use pkg-config at all systems
     ./always-check-for-pkg-config.patch
     ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
-
-    # Patches required by GJS
-    # https://discourse.gnome.org/t/gnome-43-to-depend-on-spidermonkey-102/10658
-    # Install ProfilingCategoryList.h
-    (fetchpatch {
-      url = "https://hg.mozilla.org/releases/mozilla-esr102/raw-rev/33147b91e42b79f4c6dd3ec11cce96746018407a";
-      sha256 = "sha256-xJFJZMYJ6P11HQDZbr48GFgybpAeVcu3oLIFEyyMjBI=";
-    })
-    # Fix embeder build
-    (fetchpatch {
-      url = "https://hg.mozilla.org/releases/mozilla-esr102/raw-rev/1fa20fb474f5d149cc32d98df169dee5e6e6861b";
-      sha256 = "sha256-eCisKjNxy9SLr9KoEE2UB26BflUknnR7PIvnpezsZeA=";
-    })
   ] ++ lib.optionals (lib.versionAtLeast version "91" && stdenv.hostPlatform.system == "i686-linux") [
     # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
     ./fix-float-i686.patch
