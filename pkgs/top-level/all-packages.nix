@@ -33295,6 +33295,8 @@ with pkgs;
 
   tofi = callPackage ../applications/misc/tofi { };
 
+  tokyo-night-gtk = callPackage ../data/themes/tokyo-night-gtk { };
+
   topydo = callPackage ../applications/misc/topydo {};
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
