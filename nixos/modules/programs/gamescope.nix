@@ -6,6 +6,7 @@
 with lib; let
   cfg = config.programs.gamescope;
 
+  # wrapper that adds the default env, the default args.
   gamescope =
     let
       wrapperArgs =
@@ -17,6 +18,13 @@ with lib; let
       mkdir -p $out/bin
       makeWrapper ${cfg.package}/bin/gamescope $out/bin/gamescope --inherit-argv0 \
         ${toString wrapperArgs}
+    '';
+
+  # package with only the vulkan implicit layer
+  gamescope-vulkan-layers =
+    pkgs.runCommand "gamescope-vulkan-layers" { } ''
+      mkdir -p $out
+      ln -s ${cfg.package}/share $out/share
     '';
 in
 {
@@ -77,7 +85,8 @@ in
       };
     };
 
-    environment.systemPackages = mkIf (!cfg.capSysNice) [ gamescope ];
+    environment.systemPackages = [ gamescope-vulkan-layers ]
+      ++ lib.lists.optional (!cfg.capSysNice) gamescope;
   };
 
   meta.maintainers = with maintainers; [ nrdxp ];
