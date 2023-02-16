@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyhocon";
-  version = "0.3.59";
+  version = "0.3.60";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chimpler";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0BuDYheURFhtnWIh7Qw4LzZbk5tSqiNejo+08eglIvs=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-H460j/DjY1lltapva3l87oyOJVjzUE9Q/oKti3SsUyU=";
   };
 
   propagatedBuildInputs = [
