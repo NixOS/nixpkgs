@@ -30314,7 +30314,7 @@ with pkgs;
   waybar = callPackage ../applications/misc/waybar {};
 
   waylock = callPackage ../applications/misc/waylock {
-    zig = zig_0_9;
+    zig = zig_0_10;
   };
 
   wayshot = callPackage ../tools/misc/wayshot { };
