@@ -12893,6 +12893,12 @@
     githubId = 12877905;
     name = "Roman Volosatovs";
   };
+  rxiao = {
+    email = "ben.xiao@me.com";
+    github = "benxiao";
+    githubId = 10908495;
+    name = "Ran Xiao";
+  };
   ryanartecona = {
     email = "ryanartecona@gmail.com";
     github = "ryanartecona";
