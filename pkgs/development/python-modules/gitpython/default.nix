@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-lpx/vptFhz4WOkybJpqq1teMGgX6RQo/f2OTNEm5XJU=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
+    changelog = "https://github.com/gitpython-developers/GitPython/blob/${version}/doc/source/changes.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
