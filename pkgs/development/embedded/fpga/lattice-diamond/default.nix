@@ -1,5 +1,5 @@
 { lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib,
-    freetype, fontconfig, xorg, libusb-compat-0_1 }:
+    freetype, fontconfig, xorg, libusb-compat-0_1, coreutils }:
 
 stdenv.mkDerivation {
   pname = "diamond";
@@ -84,6 +84,9 @@ stdenv.mkDerivation {
                 $f
         done
     done
+
+    # Patch absolute /usr/bin/id path in script
+    sed -i -e "s#/usr/bin/id#${coreutils}/bin/id#" $out/$prefix/synpbase/bin/config/platform_set
 
     # Remove 32-bit libz.
     rm $out/$prefix/bin/lin64/libz.{so,so.1}
