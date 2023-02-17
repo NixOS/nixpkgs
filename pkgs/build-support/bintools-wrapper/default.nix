@@ -183,7 +183,9 @@ stdenv.mkDerivation {
       done
 
     '' + (if !useMacosReexportHack then ''
-      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
+        wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      fi
     '' else ''
       ldInner="${targetPrefix}ld-reexport-delegate"
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
@@ -191,10 +193,9 @@ stdenv.mkDerivation {
       unset ldInner
     '') + ''
 
-      for variant in ld.gold ld.bfd ld.lld; do
-        local underlying=$ldPath/${targetPrefix}$variant
-        [[ -e "$underlying" ]] || continue
-        wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
+      for variant in $ldPath/${targetPrefix}ld.*; do
+        basename=$(basename "$variant")
+        wrap $basename ${./ld-wrapper.sh} $variant
       done
     '';
 
