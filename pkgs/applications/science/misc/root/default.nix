@@ -261,6 +261,14 @@ stdenv.mkDerivation rec {
     ]}"
   '';
 
+  # To use the debug information on the fly (without installation)
+  # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
+  # and make sure that gdb from Nixpkgs can be found in PATH.
+  #
+  # Building with debug info and separating them is not supported on all systems
+  # e.g. Darwin fails to support it (#203380)
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
