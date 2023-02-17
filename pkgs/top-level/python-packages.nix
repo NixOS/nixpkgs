@@ -10237,6 +10237,8 @@ self: super: with self; {
 
   ruff = callPackage ../development/python-modules/ruff { };
 
+  ruff-lsp = callPackage ../development/python-modules/ruff-lsp { };
+
   ruffus = callPackage ../development/python-modules/ruffus { };
 
   runway-python = callPackage ../development/python-modules/runway-python { };

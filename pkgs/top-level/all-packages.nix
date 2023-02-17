@@ -38049,6 +38049,8 @@ with pkgs;
 
   ruff = callPackage ../development/tools/ruff { };
 
+  ruff-lsp = with python3Packages; toPythonApplication ruff-lsp;
+
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
