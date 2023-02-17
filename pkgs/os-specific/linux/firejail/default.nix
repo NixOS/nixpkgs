@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
     substituteInPlace src/include/common.h \
       --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
+
+    # Workaround for regression introduced in 0.9.72 preventing usage of
+    # end-of-options indicator "--"
+    # See https://github.com/netblue30/firejail/issues/5659
+    substituteInPlace src/firejail/sandbox.c \
+      --replace " && !arg_doubledash" ""
   '';
 
   preConfigure = ''
