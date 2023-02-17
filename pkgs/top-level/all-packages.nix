@@ -11582,6 +11582,8 @@ with pkgs;
 
   pamtester = callPackage ../tools/security/pamtester { };
 
+  paperjam = callPackage ../applications/misc/paperjam { };
+
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
   paperoni = callPackage ../tools/text/paperoni { };
