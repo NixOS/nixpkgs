@@ -10657,6 +10657,8 @@ with pkgs;
 
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
 
+  paging-calculator  = callPackage ../development/tools/paging-calculator { };
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
