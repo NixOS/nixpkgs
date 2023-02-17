@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fake-useragent";
     repo = "fake-useragent";
     rev = "refs/tags/${version}";
-    hash = "sha256-MKVJM8bduvA03xzL954huoCge7enG2BJtxZEAvo6HIY=";
+    hash = "sha256-Rz+oEpgfvSRdly+H1bYxYjNCfo1STkLcogPgZs+b8DY=";
   };
 
   postPatch = ''

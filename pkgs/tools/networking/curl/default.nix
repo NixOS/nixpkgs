@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+    ./7.88.0-http2-breakage.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
