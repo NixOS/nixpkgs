@@ -63,6 +63,6 @@ stdenv.mkDerivation rec
     homepage = "http://alembic.io/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    maintainers = with maintainers; [ guibou tmarkus ];
   };
 }
