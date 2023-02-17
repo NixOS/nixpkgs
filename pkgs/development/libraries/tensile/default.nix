@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , buildPythonPackage
 , pyyaml
 , msgpack
@@ -9,14 +10,13 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  rocmVersion = "5.3.1";
-  version = "4.34.0-${rocmVersion}";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "Tensile";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-QWt/zzBrZKM8h3MTnbLX4vN3p6cCQvo67U1C2yqAQxw=";
+    rev = "rocm-${version}";
+    hash = "sha256-W6yr6mptfsiJSSzPCImgqI1EmsUv+l99SjqkoZsOjag=";
   };
 
   buildInputs = [
@@ -25,10 +25,18 @@ buildPythonPackage rec {
     pandas
   ];
 
+  passthru.updateScript = rocmUpdateScript {
+    name = pname;
+    owner = src.owner;
+    repo = src.repo;
+  };
+
   meta = with lib; {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor version != versions.minor stdenv.cc.version;
   };
 }

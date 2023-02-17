@@ -43,12 +43,8 @@ let
 
     pname = "tsc-dyn";
 
-    nativeBuildInputs = [ clang ];
+    nativeBuildInputs = [ rustPlatform.bindgenHook ];
     sourceRoot = "source/core";
-
-    configurePhase = ''
-      export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
-    '';
 
     postInstall = ''
       LIB=($out/lib/libtsc_dyn.*)

@@ -74,7 +74,7 @@ let
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
           description = lib.mdDoc ''
-            This directory is used for uploads of attachements and cache.
+            This directory is used for uploads of attachments and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
           '';
@@ -327,7 +327,7 @@ in
     )) eachSite;
 
     systemd.services =
-      (mapAttrs' (hostName: cfg: (
+      mapAttrs' (hostName: cfg: (
         nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
           serviceConfig = {
             Type = "oneshot";
@@ -335,7 +335,7 @@ in
             ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
           };
         })
-    )) eachSite);
+    )) eachSite;
 
   }
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unzip ];
+  nativeCheckInputs = [ unzip ];
 
   # We cannot run the pkgtests, as Nix does not allow network
   # connections.

@@ -17,7 +17,7 @@ in {
       };
       port = mkOption {
         description = mdDoc "Port to listen on, falls back to 8080";
-        type = with types; nullOr int;
+        type = with types; nullOr port;
         default = null;
       };
       authfile = mkOption {

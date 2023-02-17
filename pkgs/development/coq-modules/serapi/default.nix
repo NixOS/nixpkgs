@@ -17,7 +17,7 @@ in
   inherit version release;
 
   defaultVersion =  with versions;
-    switch coq.version [
+    lib.switch coq.version [
       { case = isEq "8.16"; out = "8.16.0+0.16.0"; }
       { case = isEq "8.15"; out = "8.15.0+0.15.0"; }
       { case = isEq "8.14"; out = "8.14.0+0.14.0"; }

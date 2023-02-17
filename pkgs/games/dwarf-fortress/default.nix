@@ -69,7 +69,7 @@ let
 
           dfhack = callPackage ./dfhack {
             inherit (perlPackages) XMLLibXML XMLLibXSLT;
-            inherit dfVersion twbt;
+            inherit dfVersion;
             stdenv = gccStdenv;
           };
 

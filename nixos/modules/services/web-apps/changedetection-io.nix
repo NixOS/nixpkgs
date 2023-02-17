@@ -138,7 +138,8 @@ in
           StateDirectory = mkIf defaultStateDir "changedetection-io";
           StateDirectoryMode = mkIf defaultStateDir "0750";
           WorkingDirectory = cfg.datastorePath;
-          Environment = lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
+          Environment = [ "HIDE_REFERER=true" ]
+            ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
             ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
             ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
             ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
@@ -213,7 +214,7 @@ in
           };
         })
       ];
-      podman.defaultNetwork.dnsname.enable = true;
+      podman.defaultNetwork.settings.dns_enabled = true;
     };
   };
 }

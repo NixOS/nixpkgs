@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "debuglater";
-  version = "1.4.3";
+  version = "1.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = pname;
-    rev = version;
-    hash = "sha256-0fnWXmrlZjlLFGbiLC7HuDgMEM6OJVn8ajjNRqFg3Lc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o9IAk3EN8ghEft7Y7Xx+sEjWMNgoyiZ0eiBqnCyXkm8=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pandas
     pytestCheckHook
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for post-mortem debugging of Python programs";
     homepage = "https://github.com/ploomber/debuglater";
+    changelog = "https://github.com/ploomber/debuglater/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     soupsieve
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

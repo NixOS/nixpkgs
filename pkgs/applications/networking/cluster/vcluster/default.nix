@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PkayQ1sLjnA+1Xatgs0EvZTCTfWV5uoYYtnKX8OAwYQ=";
+    sha256 = "sha256-7yyOpF/eIeJinTe0sHPWLLBUbKYDhphmW8qkOdYOdXM=";
   };
 
   vendorSha256 = null;

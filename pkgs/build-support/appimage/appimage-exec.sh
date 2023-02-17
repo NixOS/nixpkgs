@@ -7,6 +7,9 @@ fi
 
 PATH="@path@:$PATH"
 apprun_opt=true
+OWD=$(readlink -f .)
+# can be read by appimages: https://docs.appimage.org/packaging-guide/environment-variables.html
+export OWD
 
 # src : AppImage
 # dest : let's unpack() create the directory

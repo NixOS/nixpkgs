@@ -1,95 +1,98 @@
-{ lib, fetchFromGitHub, gitUpdater
-, meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
-, python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gtksourceview4, gnome
-, steam, xdg-utils, pciutils, cabextract
-, freetype, p7zip, gamemode, mangohud
-, wine
-, bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
-, bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
+{ lib
+, fetchFromGitHub
+, fetchFromGitLab
+, gitUpdater
+, python3Packages
+, blueprint-compiler
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, appstream-glib
+, desktop-file-utils
+, librsvg
+, gtk4
+, gtksourceview5
+, libadwaita
+, cabextract
+, p7zip
+, xdpyinfo
+, imagemagick
+, lsb-release
+, pciutils
+, procps
+, gamescope
+, mangohud
+, vkbasalt-cli
+, vmtouch
 }:
 
-let
-  steam-run = (steam.override {
-    # required by wine runner `caffe`
-    extraLibraries = pkgs: with pkgs; [ libunwind libusb1 gnutls ]
-      ++ bottlesExtraLibraries pkgs;
-    extraPkgs = pkgs: [ ]
-      ++ bottlesExtraPkgs pkgs;
-  }).run;
-in
 python3Packages.buildPythonApplication rec {
-  pname = "bottles";
-  version = "2022.5.28-trento-3";
+  pname = "bottles-unwrapped";
+  version = "50.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
-    repo = pname;
+    repo = "bottles";
     rev = version;
-    sha256 = "sha256-KIDLRqDLFTsVAczRpTchnUtKJfVHqbYzf8MhIR5UdYY=";
+    sha256 = "sha256-+r/r3vExnvYQIicKAEmwZ+eRSep6kWte5k7gu9jC67w=";
   };
 
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
+  patches = [ ./vulkan_icd.patch ];
 
-    substituteInPlace src/backend/wine/winecommand.py \
-      --replace \
-        'self.__get_runner()' \
-        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
-  '';
-
+  # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
-    wrapGAppsHook
-    gettext
+    wrapGAppsHook4
+    gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
   ];
 
   buildInputs = [
-    gdk-pixbuf
-    glib
-    gobject-introspection
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    gtksourceview4
-    libhandy
-    libnotify
-    webkitgtk
-    gnome.adwaita-icon-theme
+    librsvg
+    gtk4
+    gtksourceview5
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pycurl
     pyyaml
-    pytoml
     requests
-    pycairo
     pygobject3
-    lxml
-    dbus-python
-    gst-python
-    liblarch
     patool
     markdown
+    fvs
+    pefile
+    urllib3
+    chardet
+    certifi
+    idna
+    pillow
+    orjson
+    icoextract
   ] ++ [
-    steam-run
-    xdg-utils
-    pciutils
     cabextract
-    wine
-    freetype
     p7zip
-    gamemode # programs.gamemode.enable
+    xdpyinfo
+    imagemagick
+    vkbasalt-cli
+
+    gamescope
     mangohud
+    vmtouch
+
+    # Undocumented (subprocess.Popen())
+    lsb-release
+    pciutils
+    procps
   ];
 
   format = "other";
-  strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''

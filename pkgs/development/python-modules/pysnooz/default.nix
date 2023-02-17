@@ -48,7 +48,7 @@ buildPythonPackage rec {
     transitions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-asyncio
     pytest-mock

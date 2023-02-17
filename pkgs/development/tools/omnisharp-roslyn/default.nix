@@ -13,13 +13,13 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.1";
+  version = "1.39.4";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "Fd9fS5iSEynZfRwZexDlVndE/zSZdUdugR0VgXXAdmI=";
+    sha256 = "rX0FeURw6WMbcJOomqHFcZ9tpKO1td60/HbbVClV324=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -30,7 +30,7 @@ let finalPackage = buildDotnetModule rec {
   ];
 
   dotnetInstallFlags = [ "--framework net6.0" ];
-  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
   dotnetFlags = [
     # These flags are set by the cake build.
     "-property:PackageVersion=${version}"
@@ -44,7 +44,7 @@ let finalPackage = buildDotnetModule rec {
   postPatch = ''
     # Relax the version requirement
     substituteInPlace global.json \
-      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+      --replace '7.0.100-rc.1.22431.12' '${sdk_6_0.version}'
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
@@ -68,10 +68,6 @@ let finalPackage = buildDotnetModule rec {
     makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
       --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
       --set-default DOTNET_ROOT ${sdk_6_0}
-
-    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
-    rm $out/lib/omnisharp-roslyn/NuGet.*.dll
-    rm $out/lib/omnisharp-roslyn/System.Configuration.ConfigurationManager.dll
   '';
 
   passthru.tests = {

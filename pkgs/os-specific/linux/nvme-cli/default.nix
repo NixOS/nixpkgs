@@ -4,7 +4,7 @@
 , libnvme
 , json_c
 , zlib
-, python3
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3.pkgs.nose2
+    python3Packages.nose2
   ];
   buildInputs = [
     libnvme

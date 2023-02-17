@@ -24,7 +24,7 @@ buildPythonPackage rec {
     coverage
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     mock
     pytestCheckHook

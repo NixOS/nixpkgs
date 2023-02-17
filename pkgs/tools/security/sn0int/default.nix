@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sn0int";
-  version = "0.24.2";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WcCNNLNvOtYiSWVvXA8mnlXOV2T/yIXFzZky5y3tYJ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+LplLeczLS+9EG0tZsiEs162/65zMCZfDDEq0iYQrGY=";
   };
 
-  cargoSha256 = "sha256-5pVxOkm9OLSX5Lxe3DSM0mVSMhlHfFBCiMMR37WrZbI=";
+  cargoHash = "sha256-FpoRO2g+R+Fo146kM0W8b1LHTEBHbGXURoX5jJk7lqY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,8 +37,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
+    changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ fab xrelkd ];
     platforms = platforms.linux;
   };
 }

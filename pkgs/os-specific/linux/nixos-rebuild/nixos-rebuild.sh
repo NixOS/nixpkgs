@@ -28,7 +28,8 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=localhost
+specialisation=
+buildHost=
 targetHost=
 remoteSudo=
 verboseScript=
@@ -107,6 +108,14 @@ while [ "$#" -gt 0 ]; do
         fi
         shift 1
         ;;
+      --specialisation|-c)
+        if [ -z "$1" ]; then
+            log "$0: ‘--specialisation’ requires an argument"
+            exit 1
+        fi
+        specialisation="$1"
+        shift 1
+        ;;
       --build-host|h)
         buildHost="$1"
         shift 1
@@ -146,16 +155,6 @@ done
 
 if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
-fi
-
-if [[ -z "$buildHost" && -n "$targetHost" ]]; then
-    buildHost="$targetHost"
-fi
-if [ "$targetHost" = localhost ]; then
-    targetHost=
-fi
-if [ "$buildHost" = localhost ]; then
-    buildHost=
 fi
 
 # log the given argument to stderr if verbose mode is on
@@ -371,6 +370,10 @@ if [[ -n $flake ]]; then
     fi
 fi
 
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -565,7 +568,18 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
+    if [[ -z "$specialisation" ]]; then
+        cmd="$pathToConfig/bin/switch-to-configuration"
+    else
+        cmd="$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration"
+
+        if [[ ! -f "$cmd" ]]; then
+            log "error: specialisation not found: $specialisation"
+            exit 1
+        fi
+    fi
+
+    if ! targetHostCmd "$cmd" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

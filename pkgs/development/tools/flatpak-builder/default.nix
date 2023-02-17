@@ -46,13 +46,13 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.2.2";
+  version = "1.2.3";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-if2mjlN8Hp3gI1JpC9icMhenKRZFWNNfNbCPea2E4D4=";
+    sha256 = "sha256-4leCWkf3o+ceMPsPgPLZrG5IAfdG9VLfrw5WTj7jUcg=";
   };
 
   patches = [
@@ -80,7 +80,9 @@ in stdenv.mkDerivation rec {
     # this on our patch for Flatpak 0.99.
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit glibcLocales python2;
+      inherit glibcLocales;
+      # FIXME use python3 for tests that rely on python2
+      # inherit python2;
     })
   ];
 
@@ -137,7 +139,7 @@ in stdenv.mkDerivation rec {
     installedTestsDependencies = [
       gnupg
       ostree
-      python2
+      # FIXME python2
       gnumake
     ];
 

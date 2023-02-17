@@ -142,10 +142,20 @@ in {
       '';
     };
 
-    package = (mkPackageOption pkgs "systemd" {
+    package = (mkPackageOptionMD pkgs "systemd" {
       default = "systemdStage1";
     }) // {
       visible = false;
+    };
+
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = lib.mdDoc ''
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
+      '';
     };
 
     contents = mkOption {
@@ -333,9 +343,11 @@ in {
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
-      "autofs4"           # systemd needs this for some features
-      "tpm-tis" "tpm-crb" # systemd-cryptenroll
-    ];
+      # systemd needs this for some features
+      "autofs4"
+      # systemd-cryptenroll
+      "tpm-tis"
+    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -352,6 +364,7 @@ in {
         "/etc/systemd/system.conf".text = ''
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
+          ${cfg.extraConfig}
         '';
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
@@ -482,7 +495,7 @@ in {
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
-          if ! [ -x "/sysroot$closure/prepare-root" ]; then
+          if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
             echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
             echo "$closure does not look like a NixOS installation - not activating"
             exit 0

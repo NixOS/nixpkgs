@@ -4,17 +4,20 @@
 , cython
 , dill
 , fastavro
+, fasteners
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , grpcio
 , grpcio-tools
 , hdfs
 , httplib2
+, hypothesis
 , lib
 , mock
 , mypy-protobuf
 , numpy
-, oauth2client
+, objsize
 , orjson
 , pandas
 , parameterized
@@ -25,43 +28,59 @@
 , pydot
 , pyhamcrest
 , pymongo
+, pytest-xdist
 , pytestCheckHook
 , python
 , python-dateutil
-, pythonAtLeast
 , pythonRelaxDepsHook
 , pytz
 , pyyaml
+, regex
 , requests
 , requests-mock
 , scikit-learn
-, setuptools
 , sqlalchemy
 , tenacity
 , testcontainers
 , typing-extensions
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.40.0";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    rev = "v${version}";
-    sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5fnZxv2ZkFlv8vGDIt/6EL41v9P1iKa1tEd1nezq+PU=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/apache/beam/pull/24143
+      name = "fix-for-dill-0.3.6.patch";
+      url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
+      hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
+      stripLen = 2;
+    })
+  ];
 
   pythonRelaxDeps = [
     # See https://github.com/NixOS/nixpkgs/issues/156957
     "dill"
     "numpy"
-    "pyarrow"
     "pymongo"
 
     # See https://github.com/NixOS/nixpkgs/issues/193613
     "protobuf"
+
+    # As of apache-beam v2.44.0, the requirement is httplib2>=0.8,<0.21.0, but
+    # the current (2023-02-08) nixpkgs's httplib2 version is 0.21.0. This can be
+    # removed once beam is upgraded since the current requirement on master is
+    # for httplib2>=0.8,<0.22.0.
+    "httplib2"
   ];
 
   sourceRoot = "source/sdks/python";
@@ -76,14 +95,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cloudpickle
     crcmod
-    cython
     dill
     fastavro
+    fasteners
     grpcio
     hdfs
     httplib2
     numpy
-    oauth2client
+    objsize
     orjson
     proto-plus
     protobuf
@@ -92,9 +111,10 @@ buildPythonPackage rec {
     pymongo
     python-dateutil
     pytz
+    regex
     requests
-    setuptools
     typing-extensions
+    zstandard
   ];
 
   enableParallelBuilding = true;
@@ -105,12 +125,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
+    hypothesis
     mock
     pandas
     parameterized
     psycopg2
     pyhamcrest
     pytestCheckHook
+    pytest-xdist
     pyyaml
     requests-mock
     scikit-learn
@@ -138,6 +160,17 @@ buildPythonPackage rec {
     "apache_beam/runners/portability/flink_runner_test.py"
     "apache_beam/runners/portability/samza_runner_test.py"
     "apache_beam/runners/portability/spark_runner_test.py"
+
+    # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
+    # https://github.com/uqfoundation/dill/issues/482#issuecomment-1139017499.
+    "apache_beam/transforms/window_test.py"
+
+    # See https://github.com/apache/beam/issues/25390.
+    "apache_beam/coders/slow_coders_test.py"
+    "apache_beam/dataframe/pandas_doctests_test.py"
+    "apache_beam/typehints/typed_pipeline_test.py"
+    "apache_beam/coders/fast_coders_test.py"
+    "apache_beam/dataframe/schemas_test.py"
   ];
 
   disabledTests = [

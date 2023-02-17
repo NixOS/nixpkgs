@@ -11,4 +11,6 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
 
   outputs = [ "out" "dev" ];
+
+  meta.homepage = "https://invent.kde.org/frameworks/kguiaddons";
 }

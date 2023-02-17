@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
+, unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
+, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
 # Populate passthru.tests
 , tests
@@ -66,13 +66,14 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland ];
 
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
         nodePackages.asar
-        (wrapGAppsHook.override { inherit makeWrapper; })
+        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+        (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];
 
     dontBuild = true;
@@ -134,6 +135,9 @@ let
 
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+
+      # see https://github.com/gentoo/gentoo/commit/4da5959
+      chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
     '';
 
     inherit meta;
@@ -162,12 +166,17 @@ let
       icu
       libunwind
       libuuid
+      lttng-ust
       openssl
       zlib
 
       # mono
       krb5
     ]) ++ additionalPkgs pkgs;
+
+    extraBwrapArgs = [
+      "--bind-try /etc/nixos/ /etc/nixos/"
+    ];
 
     # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''

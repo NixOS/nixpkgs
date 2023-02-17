@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
+{ lib, stdenv, fetchurl, libXext, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "gv";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libXext
     Xaw3d
     ghostscriptX
     perl

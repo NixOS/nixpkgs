@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GUI configuration tool for openbox";
     homepage = "http://openbox.org/wiki/ObConf";
+    changelog = "http://openbox.org/wiki/ObConf:Changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sfrijters ];
     platforms = lib.platforms.linux;

@@ -16,10 +16,6 @@ in
         enable = true;
         listenPort = port;
       };
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ["unrar"];
-      # Workaround for https://github.com/morpheus65535/bazarr/issues/1983
-      # ("Crash when running without timezone info").
-      time.timeZone = "UTC";
     };
 
   testScript = ''

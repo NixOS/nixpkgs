@@ -16,7 +16,6 @@
 , cron-descriptor
 , croniter
 , cryptography
-, dataclasses
 , deprecated
 , dill
 , flask
@@ -25,7 +24,7 @@
 , flask-caching
 , flask-session
 , flask-wtf
-, GitPython
+, gitpython
 , graphviz
 , gunicorn
 , httpx
@@ -78,15 +77,16 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.4.1";
+  version = "2.5.0";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = "refs/tags/${version}";
-    # Required because the GitHub archive tarballs don't appear to include tests
-    leaveDotGit = true;
-    sha256 = "sha256-HpPL/ocV7hRhYXsjfXMYvlP83Vh15kXyjBgubsaqaE8=";
+    # Download using the git protocol rather than using tarballs, because the
+    # GitHub archive tarballs don't appear to include tests
+    forceFetchGit = true;
+    hash = "sha256-QWUXSG+RSHkF5kP1ZYtx+tHjO0n7hfya9CFA3lBhJHk=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -136,7 +136,7 @@ buildPythonPackage rec {
   inherit version;
   src = airflow-src;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     alembic
@@ -160,7 +160,7 @@ buildPythonPackage rec {
     flask-session
     flask-wtf
     flask-login
-    GitPython
+    gitpython
     graphviz
     gunicorn
     httpx
@@ -202,8 +202,6 @@ buildPythonPackage rec {
     typing-extensions
     unicodecsv
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-metadata
   ] ++ providerDependencies;
@@ -212,7 +210,7 @@ buildPythonPackage rec {
     airflow-frontend
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];
@@ -225,7 +223,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-login>=0.6.2" "flask-login" \
+      --replace "flask-appbuilder==4.1.4" "flask-appbuilder>=4.1.3" \
       --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
@@ -283,11 +281,9 @@ buildPythonPackage rec {
     cd ./pkgs/development/python-modules/apache-airflow
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
-    # Note: for 2.3.4 a manual change was needed to get a fully resolved URL for
-    # caniuse-lite@1.0.30001312 (with the sha after the #). The error from yarn
-    # was 'Can't make a request in offline mode' from yarn. Corrected install by
-    # manually running yarn add caniuse-lite@1.0.30001312 and copying the
-    # requisite section from the generated yarn.lock.
+    # Revert this commit which seems to break with our version of yarn
+    # https://github.com/apache/airflow/commit/b9e133e40c2848b0d555051a99bf8d2816fd28a7
+    patch -p3 < 0001-Revert-fix-yarn-warning-from-d3-color-27139.patch
     yarn2nix > yarn.nix
 
     # update provider dependencies
@@ -298,8 +294,8 @@ buildPythonPackage rec {
   # You can (manually) test the web UI as follows:
   #
   #   nix shell .#python3Packages.apache-airflow
+  #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
   #   airflow db init
-  #   airflow reset -y # WARNING: this will wipe any existing db state you might have!
   #   airflow standalone
   #
   # Then navigate to the localhost URL using the credentials printed, try

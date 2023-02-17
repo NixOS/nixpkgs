@@ -45,7 +45,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "15.0.1";
+  version = "15.0.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gucharmap";
     rev = version;
-    sha256 = "sha256-uVXWgnNpPcky9N3FXkDu5oaqaEALECooFnf43Ed+zTY=";
+    sha256 = "sha256-QoHLMq3U/BvpCFKttxLo0qs2xmZ/pCqPjsgq/MMWNbo=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,9 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    patchShebangs data/meson_desktopfile.py gucharmap/gen-guch-unicode-tables.pl gucharmap/meson_compileschemas.py
+    patchShebangs \
+      data/meson_desktopfile.py \
+      gucharmap/gen-guch-unicode-tables.pl
   '';
 
   passthru = {

@@ -16,6 +16,10 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-fno-pic" "-Qunused-arguments" ];
 
+  # Set explicitly to use Python 3 from nixpkgs. Otherwise, the build system will detect and try to
+  # use `/usr/bin/python3` on Darwin when sandboxing is disabled.
+  PYTHON_COMMAND = "${lib.getBin python3}/bin/python3";
+
   # We only have a .efi file in $out which shouldn't be patched or stripped
   dontPatchELF = true;
   dontStrip = true;

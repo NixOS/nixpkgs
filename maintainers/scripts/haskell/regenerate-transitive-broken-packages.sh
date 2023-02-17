@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils nix gnused -I nixpkgs=.
+#! nix-shell -i bash -p coreutils jq nix -I nixpkgs=.
 
 config_file=pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml
 
@@ -12,4 +12,4 @@ dont-distribute-packages:
 EOF
 
 echo "Regenerating list of transitive broken packages ..."
-echo -e $(nix-instantiate --eval --strict maintainers/scripts/haskell/transitive-broken-packages.nix) | sed 's/\"//' | LC_ALL=C.UTF-8 sort -i >> $config_file
+nix-instantiate --eval --option restrict-eval true -I . --strict --json maintainers/scripts/haskell/transitive-broken-packages.nix | jq -r . | LC_ALL=C.UTF-8 sort -i >> $config_file

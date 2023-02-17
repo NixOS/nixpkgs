@@ -5,7 +5,7 @@
 , pkg-config
 , which
 , fltk
-, mbedtls
+, mbedtls_2
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fltk
-    mbedtls
+    mbedtls_2
   ];
 
   # The start_page and home settings refer to /usr.

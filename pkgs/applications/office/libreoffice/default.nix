@@ -32,12 +32,12 @@
 , which
 , icu
 , boost
-, jdk
+, jdk17
 , ant
 , cups
 , xorg
 , fontforge
-, jre_minimal
+, jre17_minimal
 , openssl
 , gperf
 , cppunit
@@ -96,7 +96,7 @@
 , gpgme
 , libwebp
 , abseil-cpp
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 , mkDerivation ? null
@@ -110,6 +110,7 @@
 , wrapQtAppsHook ? null
 , variant ? "fresh"
 , symlinkJoin
+, postgresql
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
@@ -119,9 +120,9 @@ let
     flatten flip
     concatMapStrings concatStringsSep
     getDev getLib
-    optional optionals optionalString;
+    optionals optionalString;
 
-  jre' = jre_minimal.override {
+  jre' = jre17_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
@@ -195,7 +196,7 @@ in
     tar -xf ${srcs.translations}
   '';
 
-  patches = optional (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
+  patches = optionals (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
   ;
 
   ### QT/KDE
@@ -404,6 +405,7 @@ in
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
+    "--with-system-postgresql"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -418,7 +420,6 @@ in
     # I imagine this helps. Copied from go-oo.
     # Modified on every upgrade, though
     "--disable-odk"
-    "--disable-postgresql-sdbc"
     "--disable-firebird-sdbc"
     "--without-fonts"
     "--without-doxygen"
@@ -460,7 +461,7 @@ in
     bison
     fontforge
     gdb
-    jdk
+    jdk17
     libtool
     pkg-config
   ]
@@ -546,6 +547,7 @@ in
     pam
     perl
     poppler
+    postgresql
     python3
     sane-backends
     unixODBC

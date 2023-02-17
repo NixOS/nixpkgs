@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cmocka
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
   ];
 

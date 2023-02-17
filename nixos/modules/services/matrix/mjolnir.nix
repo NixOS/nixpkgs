@@ -236,7 +236,7 @@ in
   };
 
   meta = {
-    doc = ./mjolnir.xml;
+    doc = ./mjolnir.md;
     maintainers = with maintainers; [ jojosch ];
   };
 }

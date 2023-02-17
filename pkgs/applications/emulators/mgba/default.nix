@@ -3,30 +3,36 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, ffmpeg
+, ffmpeg_4
 , imagemagick
 , libedit
 , libelf
 , libepoxy
 , libzip
-, lua
+, lua5_4
 , minizip
 , pkg-config
-, qtbase
-, qtmultimedia
-, qttools
-, wrapQtAppsHook
+, libsForQt5
 }:
 
+let
+    ffmpeg = ffmpeg_4;
+    lua = lua5_4;
+    inherit (libsForQt5)
+      qtbase
+      qtmultimedia
+      qttools
+      wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-2thc2v3aD8t1PrREZIjzRuYfP7b3BA7uFb6R95zxsZI=";
+    hash = "sha256-oWrgYrN7s5tdGJ/GhA2ZaKDVqZq9411fHSoYnLKWDl8=";
   };
 
   nativeBuildInputs = [

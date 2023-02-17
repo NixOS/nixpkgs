@@ -80,7 +80,8 @@ def get_cargo_sha256(drv_path: str):
 if __name__ == "__main__":
     cwd = sys.argv[1]
 
-    nixpkgs = abspath(join(cwd, "../../../../../.."))
+    # This should point to the root default.nix of Nixpkgs tree
+    nixpkgs = abspath(join(cwd, "../../../../../../.."))
 
     tag_name = requests.get(
         "https://api.github.com/repos/emacs-tree-sitter/elisp-tree-sitter/releases/latest"

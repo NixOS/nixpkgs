@@ -3,7 +3,7 @@
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
-, sparseCheckout ? ""
+, sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
 , ... # For hash agility
@@ -24,7 +24,7 @@ let
   };
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != "");
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || !(sparseCheckout == "" || sparseCheckout == []);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   fetcher = if useFetchGit then fetchgit else fetchzip;
@@ -59,4 +59,4 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit rev; }
+fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo; }

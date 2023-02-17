@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
   };
 
-  buildInputs = [ ocaml perl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml perl ];
 
   prefixKey = "-prefix ";
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sysstat";
-  version = "12.6.0";
+  version = "12.6.1";
 
   src = fetchurl {
     url = "http://pagesperso-orange.fr/sebastien.godard/sysstat-${version}.tar.xz";
-    sha256 = "sha256-aZ/ZSINtd/mtBUH9Xc91zSUF+dpOwU32aShq0EfCPZc=";
+    hash = "sha256-GP9aThSeJWjkM4Vjf3JDf+a6/MEyKpPRPRmB6UZKA0I=";
   };
 
   buildInputs = [ gettext ];

@@ -3,7 +3,7 @@
 ver: deps:
   let cmds = lib.mapAttrsToList (name: info: let
                pkg = stdenv.mkDerivation {
-                 name = lib.replaceChars ["/"] ["-"] name + "-${info.version}";
+                 name = lib.replaceStrings ["/"] ["-"] name + "-${info.version}";
 
                  src = fetchurl {
                    url = "https://github.com/${name}/archive/${info.version}.tar.gz";

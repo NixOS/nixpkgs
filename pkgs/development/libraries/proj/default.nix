@@ -1,39 +1,38 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , buildPackages
+, callPackage
 , sqlite
 , libtiff
 , curl
 , gtest
 , nlohmann_json
+, python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "9.0.0";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
+    hash = "sha256-yw7eSm64qFFt9egJWKVyVo0e7xQRSmfUY7pk6Cwvwdk=";
   };
 
-  # https://github.com/OSGeo/PROJ/issues/3206
-  postPatch = ''
-    # NB will not apply once https://github.com/OSGeo/PROJ/pull/3150 is released
-    substituteInPlace cmake/ProjUtilities.cmake \
-      --replace '$\{exec_prefix\}/$'{PROJ_LIB_SUBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '$\{prefix\}/$'{PROJ_INCLUDE_SUBDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
-      --replace '$\{prefix\}/$'{CMAKE_INSTALL_DATAROOTDIR} '$'{CMAKE_INSTALL_FULL_DATAROOTDIR}
-    substituteInPlace cmake/project-config.cmake.in \
-      --replace '$'{_ROOT}/@INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-      --replace '$'{_ROOT}/@LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{_ROOT}/@BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
-  '';
+  patches = [
+    # https://github.com/OSGeo/PROJ/pull/3252
+    (fetchpatch {
+      name = "only-add-find_dependencyCURL-for-static-builds.patch";
+      url = "https://github.com/OSGeo/PROJ/commit/11f4597bbb7069bd5d4391597808703bd96df849.patch";
+      hash = "sha256-4w5Cu2m5VJZr6E2dUVRyWJdED2TyS8cI8G20EwfQ4u0=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -62,6 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
+  };
+
   meta = with lib; {
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
@@ -69,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

@@ -3,8 +3,9 @@
 , aioresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytest-aiohttp
-, poetry
+, poetry-core
 , pytest-asyncio
 , pytest-cov
 , pytestCheckHook
@@ -22,11 +23,19 @@ buildPythonPackage rec {
     sha256 = "1hkpfl8rdwyzqrr1drqlmcw3xpv3pi1jf19h1divspbzwarqxs1c";
   };
 
-  nativeBuildInputs = [ poetry ];
+  patches = [
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/asymworks/pyairnow/commit/f7a01733a41c648563fc2fe4b559f61ef08b9153.patch";
+      hash = "sha256-lcHnFP3bwkPTi9Zq1dZtShLKyXcxO0XoDF+PgjbWOqs=";
+    })
+  ];
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-aiohttp

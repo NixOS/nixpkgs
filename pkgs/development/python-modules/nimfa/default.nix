@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy ];
-  checkInputs = [ matplotlib pytest ];
+  nativeCheckInputs = [ matplotlib pytest ];
   doCheck = !isPy3k;  # https://github.com/marinkaz/nimfa/issues/42
 
   meta = with lib; {

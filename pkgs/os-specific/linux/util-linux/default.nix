@@ -6,7 +6,7 @@
 , ncurses
 , pamSupport ? true
 , pam
-, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , nlsSupport ? true
 , translateManpages ? true

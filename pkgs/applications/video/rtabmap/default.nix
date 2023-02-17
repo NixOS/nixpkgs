@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, opencv, pcl, libusb1, eigen
 , wrapQtAppsHook, qtbase, g2o, ceres-solver, libpointmatcher, octomap, freenect
-, libdc1394, librealsense, libGL, libGLU, vtkWithQt5, wrapGAppsHook, liblapack
+, libdc1394, librealsense, libGL, libGLU, vtk_8_withQt5, wrapGAppsHook, liblapack
 , xorg }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     qtbase
     libGL
     libGLU
-    vtkWithQt5
+    vtk_8_withQt5
   ];
 
   # Disable warnings that are irrelevant to us as packagers

@@ -6,10 +6,10 @@ let
 in
 {
   # See here for a reference of all the options:
-  #   https://github.com/outline/outline/blob/v0.65.2/.env.sample
-  #   https://github.com/outline/outline/blob/v0.65.2/app.json
-  #   https://github.com/outline/outline/blob/v0.65.2/server/env.ts
-  #   https://github.com/outline/outline/blob/v0.65.2/shared/types.ts
+  #   https://github.com/outline/outline/blob/v0.67.0/.env.sample
+  #   https://github.com/outline/outline/blob/v0.67.0/app.json
+  #   https://github.com/outline/outline/blob/v0.67.0/server/env.ts
+  #   https://github.com/outline/outline/blob/v0.67.0/shared/types.ts
   # The order is kept the same here to make updating easier.
   options.services.outline = {
     enable = lib.mkEnableOption (lib.mdDoc "outline");
@@ -123,7 +123,7 @@ in
       description = lib.mdDoc ''
         To support uploading of images for avatars and document attachments an
         s3-compatible storage must be provided. AWS S3 is recommended for
-        redundency however if you want to keep all file storage local an
+        redundancy however if you want to keep all file storage local an
         alternative such as [minio](https://github.com/minio/minio)
         can be used.
 
@@ -435,6 +435,16 @@ in
       '';
     };
 
+    sentryTunnel = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = lib.mdDoc ''
+        Optionally add a
+        [Sentry proxy tunnel](https://docs.sentry.io/platforms/javascript/troubleshooting/#using-the-tunnel-option)
+        for bypassing ad blockers in the UI.
+      '';
+    };
+
     logo = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -455,7 +465,7 @@ in
         options = {
           host = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "Host name or IP adress of the SMTP server.";
+            description = lib.mdDoc "Host name or IP address of the SMTP server.";
           };
           port = lib.mkOption {
             type = lib.types.port;
@@ -621,6 +631,7 @@ in
           DEBUG = cfg.debugOutput;
           GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
           SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
+          SENTRY_TUNNEL = lib.optionalString (cfg.sentryTunnel != null) cfg.sentryTunnel;
           TEAM_LOGO = lib.optionalString (cfg.logo != null) cfg.logo;
           DEFAULT_LANGUAGE = cfg.defaultLanguage;
 

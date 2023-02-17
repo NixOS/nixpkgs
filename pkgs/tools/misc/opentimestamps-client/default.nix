@@ -1,26 +1,40 @@
-{ lib, buildPythonApplication, fetchFromGitHub, isPy3k
-, opentimestamps, appdirs, GitPython, pysocks, fetchpatch, git
+{ lib
+, fetchFromGitHub
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "opentimestamps-client";
   version = "0.7.1";
-  disabled = (!isPy3k);
+  format = "setuptools";
 
-  # We can't use the pypi source because it doesn't include README.md which is
-  # needed in setup.py
   src = fetchFromGitHub {
     owner = "opentimestamps";
     repo = "opentimestamps-client";
     rev = "refs/tags/opentimestamps-client-v${version}";
-    sha256 = "sha256-0dWaXetRlF1MveBdJ0sAdqJ5HCdn08gkbX+nen/ygsQ=";
+    hash = "sha256-0dWaXetRlF1MveBdJ0sAdqJ5HCdn08gkbX+nen/ygsQ=";
   };
 
-  propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];
+  propagatedBuildInputs = with python3.pkgs; [
+    appdirs
+    gitpython
+    opentimestamps
+    pysocks
+  ];
 
-  meta = {
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "otsclient"
+  ];
+
+  meta = with lib; {
     description = "Command-line tool to create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/opentimestamps-client";
-    license = lib.licenses.lgpl3;
+    changelog = "https://github.com/opentimestamps/opentimestamps-client/releases/tag/opentimestamps-client-v${version}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

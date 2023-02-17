@@ -25,7 +25,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
-    homepage = "http://qtpfsgui.sourceforge.net/";
+    homepage = "https://qtpfsgui.sourceforge.net/";
     description = "A complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;

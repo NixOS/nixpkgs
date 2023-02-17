@@ -26,13 +26,17 @@ buildPythonPackage rec {
       url = "https://github.com/alpernebbi/git-annex-adapter/commit/b78a8f445f1fb5cf34b28512fc61898ef166b5a1.patch";
       hash = "sha256-BSVoOPWsgY1btvn68bco4yb90FAC7ay2kYZ+q9qDHHw=";
     })
+    (fetchpatch {
+      url = "https://github.com/alpernebbi/git-annex-adapter/commit/d0d8905965a3659ce95cbd8f8b1e8598f0faf76b.patch";
+      hash = "sha256-UcRTKzD3sbXGIuxj4JzZDnvjTYyWVkfeWgKiZ1rAlus=";
+    })
     (substituteAll {
       src = ./git-annex-path.patch;
       gitAnnex = "${git-annex}/bin/git-annex";
     })
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gitMinimal
     util-linux # `rev` is needed in tests/test_process.py
   ];

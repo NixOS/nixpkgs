@@ -102,6 +102,7 @@ let
       url = "https://github.com/cffi/cffi/archive/3f842b92ef808900bf20dae92c2d74232c2f6d3a.tar.gz";
       sha256 = "1jilvmbbfrmb23j07lwmkbffc6r35wnvas5s4zjc84i856ccclm2";
     };
+    patches = [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
   });
 
   cl-unicode = build-with-compile-into-pwd {
@@ -421,6 +422,13 @@ let
     inherit (ql.qtools) pname version src nativeLibs;
     lispLibs = [ qt ] ++ remove ql.qt_plus_libs ql.qtools.lispLibs ++ [ qt-libs ];
     patches = [ ./patches/qtools-use-nix-libs.patch ];
+  };
+
+  magicl = build-with-compile-into-pwd {
+    inherit (ql.magicl) pname version src lispLibs;
+    nativeBuildInputs = [ pkgs.gfortran ];
+    nativeLibs = [ pkgs.openblas ];
+    patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
   };
 
   };

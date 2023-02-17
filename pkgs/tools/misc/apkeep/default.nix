@@ -1,28 +1,42 @@
-{ lib, stdenv, fetchCrate, rustPlatform, openssl, pkg-config, Security }:
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, openssl
+, pkg-config
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "apkeep";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-wFrpzemqBdhEO8cahSV9Qjw4HxCk+TgAVpGaa/IaO0Q=";
+    hash = "sha256-PikUb9D9duMATo9hJgjuZUK3WXUKfnCDWJBE/bJI92c=";
   };
 
-  cargoSha256 = "sha256-6DAzNiNHmzOwg7RlRCorUCW33FTYdfLf6PnTygcL1ok=";
+  cargoHash = "sha256-R58CzeI1Xho6kzjb9ktO7sr6TgM3Hf2VU0pK4hmb1v4=";
 
   prePatch = ''
     rm .cargo/config.toml
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   meta = with lib; {
     description = "A command-line tool for downloading APK files from various sources";
     homepage = "https://github.com/EFForg/apkeep";
+    changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyooru ];
+    maintainers = with maintainers; [ joelkoen ];
   };
 }

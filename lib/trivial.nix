@@ -179,7 +179,7 @@ rec {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2205;
+    2211;
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */
@@ -195,7 +195,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Raccoon";
+  codeName = "Stoat";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =

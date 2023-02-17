@@ -9,10 +9,10 @@ python3Packages.buildPythonApplication rec {
     owner = "ryanoasis";
     repo = "nerd-fonts";
     rev = "v${version}";
-    sparseCheckout = ''
-      font-patcher
-      /src/glyphs
-    '';
+    sparseCheckout = [
+      "font-patcher"
+      "/src/glyphs"
+    ];
     sha256 = "sha256-boZUd1PM8puc9BTgOwCJpkfk6VMdXLsIyp+fQmW/ZqI=";
   };
 

@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-tools";
-    rev = "v${version}";
-    sha256 = "sha256-5AMqBXxJZOtI0/2NrEjrUfNXWKc7sn6kZX26766LBUM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-tNojduSNjJc8yOkDbuFLKoASqIV4P3mGuNbiIcf6Nac=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     "ripe.atlas.tools"
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ openjdk ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   checkPhase = "PATH=$PATH:$out/bin nosetests";
 
   meta = with lib; {

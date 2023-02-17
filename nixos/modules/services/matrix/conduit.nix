@@ -23,8 +23,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-conduit;
-        defaultText = "pkgs.matrix-conduit";
-        example = "pkgs.matrix-conduit";
+        defaultText = lib.literalExpression "pkgs.matrix-conduit";
         description = lib.mdDoc ''
           Package of the conduit matrix server to use.
         '';

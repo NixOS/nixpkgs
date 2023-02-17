@@ -15,8 +15,6 @@ buildDunePackage rec {
     sha256 = "sha256-XstKs0tMwliCyXnP0Vzi5WC27HKJGnATUYtbbQmH1TE=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libev ocplib-endian ];

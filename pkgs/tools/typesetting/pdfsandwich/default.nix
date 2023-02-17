@@ -10,8 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1420c33divch087xrr61lvyf975bapqkgjqaighl581i69nlzsm6";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml perl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml perl ];
   installPhase = ''
     mkdir -p $out/bin
     cp -p pdfsandwich $out/bin

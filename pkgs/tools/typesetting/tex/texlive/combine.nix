@@ -50,34 +50,32 @@ in (buildEnv {
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
 
-  nativeBuildInputs = [ makeWrapper libfaketime ];
+  nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
   buildInputs = pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
   passthru.packages = pkgList.all;
 
   postBuild = ''
-    cd "$out"
-    mkdir -p ./bin
+    mkdir -p "$out"/bin
   '' +
     lib.concatMapStrings
       (path: ''
         for f in '${path}'/bin/*; do
           if [[ -L "$f" ]]; then
-            cp -d "$f" ./bin/
+            cp -d "$f" "$out"/bin/
           else
-            ln -s "$f" ./bin/
+            ln -s "$f" "$out"/bin/
           fi
         done
       '')
       pkgList.bin
     +
   ''
-    export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
+    export PATH="$out/bin:$out/share/texmf/scripts/texlive:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
-    export TEXMFDIST="$out/share/texmf"
-    export TEXMFSYSCONFIG="$out/share/texmf-config"
-    export TEXMFSYSVAR="$out/share/texmf-var"
+    TEXMFSYSCONFIG="$out/share/texmf-config"
+    TEXMFSYSVAR="$out/share/texmf-var"
     export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
     # patch texmf-dist  -> $out/share/texmf
@@ -85,41 +83,28 @@ in (buildEnv {
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
-    patchCnfLua() {
-      local cnfLua="$1"
-
-      if [ -e "$cnfLua" ]; then
-        local cnfLuaOrig="$(realpath "$cnfLua")"
-        rm ./texmfcnf.lua
-        sed \
-          -e 's,texmf-dist,texmf,g' \
-          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
-          -e "s,\$SELFAUTOLOC,$out,g" \
-          -e "s,selfautodir:/,$out/share/,g" \
-          -e "s,selfautodir:,$out/share/,g" \
-          -e "s,selfautoparent:/,$out/share/,g" \
-          -e "s,selfautoparent:,$out/share/,g" \
-          "$cnfLuaOrig" > "$cnfLua"
-      fi
-    }
-
-    (
-      cd ./share/texmf/web2c/
-      local cnfOrig="$(realpath ./texmf.cnf)"
-      rm ./texmf.cnf
+    if [ -e "$TEXMFCNF/texmfcnf.lua" ]; then
       sed \
         -e 's,texmf-dist,texmf,g' \
+        -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
         -e "s,\$SELFAUTOLOC,$out,g" \
-        -e "s,\$SELFAUTODIR,$out/share,g" \
-        -e "s,\$SELFAUTOPARENT,$out/share,g" \
-        -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
-        -e "/^mpost,/d" `# CVE-2016-10243` \
-        "$cnfOrig" > ./texmf.cnf
+        -e "s,selfautodir:/,$out/share/,g" \
+        -e "s,selfautodir:,$out/share/,g" \
+        -e "s,selfautoparent:/,$out/share/,g" \
+        -e "s,selfautoparent:,$out/share/,g" \
+        -i "$TEXMFCNF/texmfcnf.lua"
+    fi
 
-      patchCnfLua "./texmfcnf.lua"
+    sed \
+      -e 's,texmf-dist,texmf,g' \
+      -e "s,\$SELFAUTOLOC,$out,g" \
+      -e "s,\$SELFAUTODIR,$out/share,g" \
+      -e "s,\$SELFAUTOPARENT,$out/share,g" \
+      -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
+      -e "/^mpost,/d" `# CVE-2016-10243` \
+      -i "$TEXMFCNF/texmf.cnf"
 
-      mkdir $out/share/texmf-local
-    )
+    mkdir "$out/share/texmf-local"
   '' +
     # now filter hyphenation patterns and formats
   (let
@@ -154,23 +139,17 @@ in (buildEnv {
         + lib.concatMapStrings (pname: section "^# from ${pname}:$" "^# from") formatPNames
       );
   in ''
-    (
-      cd ./share/texmf/tex/generic/config/
-      for fname in language.{dat,def}; do
-        [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
-      done
-      [[ -e language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i language.dat.lua
-    )
-    (
-      cd ./share/texmf/web2c/
-      [[ -e fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i fmtutil.cnf
-    )
+    for fname in "$out"/share/texmf/tex/generic/config/language.{dat,def}; do
+      [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
+    done
+    [[ -e "$out"/share/texmf/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i "$out"/share/texmf/tex/generic/config/language.dat.lua
+    [[ -e "$TEXMFCNF"/fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i "$TEXMFCNF"/fmtutil.cnf
   '') +
 
   # function to wrap created executables with required env vars
   ''
     wrapBin() {
-    for link in ./bin/*; do
+    for link in "$out"/bin/*; do
       [ -L "$link" -a -x "$link" ] || continue # if not link, assume OK
       local target=$(readlink "$link")
 
@@ -212,9 +191,7 @@ in (buildEnv {
   '' +
   # texlive post-install actions
   ''
-    for tool in updmap; do
-      ln -sf "$out/share/texmf/scripts/texlive/$tool."* "$out/bin/$tool"
-    done
+    ln -sf "$out"/share/texmf/scripts/texlive/updmap.pl "$out"/bin/updmap
   '' +
     # now hack to preserve "$0" for mktexfmt
   ''
@@ -223,56 +200,49 @@ in (buildEnv {
     sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl `type -P mktexlsr.pl` --sort ./share/texmf
-    ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
-    FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
-    #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
+    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf
+    texlinks "$out/bin" && wrapBin
+    FORCE_SOURCE_DATE=1 fmtutil --sys --all | grep '^fmtutil' # too verbose
+    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    if [[ -d share/texmf-var/web2c/tex ]]
+    if [[ -f "$TEXMFSYSVAR"/web2c/tex/tex.fmt ]]
     then
-      cd share/texmf-var/web2c/tex
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -ini -jobname=tex -progname=tex tex.ini
-      cd -
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$TEXMFSYSVAR"/web2c/tex -ini -jobname=tex -progname=tex tex.ini
     fi
-    if [[ -f share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
+    if [[ -f "$TEXMFSYSVAR"/web2c/luahbtex/lualatex.fmt ]]
     then
-      cd share/texmf-var/web2c/luahbtex
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
-      cd -
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="$TEXMFSYSVAR"/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
     fi
 
     # Disable unavailable map files
-    echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    echo y | updmap --sys --syncwithtrees --force
     # Regenerate the map files (this is optional)
-    perl `type -P updmap.pl` --sys --force
+    updmap --sys --force
 
     # sort entries to improve reproducibility
     [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
-    perl `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
+    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
-    (
-      cd "$out/share/texmf/scripts"
-      source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
-      for s in $texmf_scripts; do
-        [[ -x "./$s" ]] || continue
-        tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
-        [[ ! -e "$out/bin/$tName" ]] || continue
-        ln -sv "$(realpath $s)" "$out/bin/$tName" # wrapped below
-      done
-    )
+    source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
+    for s in $texmf_scripts; do
+      [[ -x "$out/share/texmf/scripts/$s" ]] || continue
+      tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
+      [[ ! -e "$out/bin/$tName" ]] || continue
+      ln -sv "$(realpath $out/share/texmf/scripts/$s)" "$out/bin/$tName" # wrapped below
+    done
   '' +
     # A hacky way to provide repstopdf
     #  * Copy is done to have a correct "$0" so that epstopdf enables the restricted mode
     #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
   ''
-    if [[ -e ./bin/epstopdf ]]; then
-      cp $(realpath ./bin/epstopdf) ./share/texmf/scripts/repstopdf
-      ln -s "$out"/share/texmf/scripts/repstopdf ./bin/repstopdf
+    if [[ -e "$out"/bin/epstopdf ]]; then
+      cp "$out"/bin/epstopdf "$out"/share/texmf/scripts/repstopdf
+      ln -s "$out"/share/texmf/scripts/repstopdf "$out"/bin/repstopdf
     fi
   '' +
     # finish up the wrappers
@@ -283,7 +253,7 @@ in (buildEnv {
     # Perform a small test to verify that the restricted mode get enabled when
     # needed (detected by checking if it disallows --gscmd)
   ''
-    if [[ -e ./bin/epstopdf ]]; then
+    if [[ -e "$out"/bin/epstopdf ]]; then
       echo "Testing restricted mode for {,r}epstopdf"
       ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
       (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
@@ -297,24 +267,16 @@ in (buildEnv {
     #   note: it's possible we might need deepen the work-around to man/*.
   ''
     for d in {man,info}; do
-      [[ -e "./share/texmf/doc/$d" ]] || continue;
-      (
-        mkdir -p "./share/$d" && cd "./share/$d"
-        ln -s -t . ../texmf/doc/"$d"/*
-      )
+      [[ -e "$out/share/texmf/doc/$d" ]] || continue;
+      mkdir -p "$out/share/$d"
+      ln -s -t "$out/share/$d" "$out/share/texmf/doc/$d"/*
     done
   '' +
   # MkIV uses its own lookup mechanism and we need to initialize
-  # caches for it. Unsetting TEXMFCNF is needed to let mtxrun
-  # determine it from kpathsea so that the config path is given with
-  # "selfautodir:" as it will be in runtime. This is important because
-  # the cache is identified by a hash of this path.
+  # caches for it.
   ''
     if [[ -e "$out/bin/mtxrun" ]]; then
-      (
-        unset TEXMFCNF
-        mtxrun --generate
-      )
+      mtxrun --generate
     fi
   ''
     + bin.cleanBrokenLinks +

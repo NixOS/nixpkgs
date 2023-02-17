@@ -42,6 +42,11 @@ let
       python3
     ];
 
+    NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+      "-Wno-error=maybe-uninitialized"
+    ];
+
     meta = with lib; {
       homepage = "https://github.com/ClusterLabs/resource-agents";
       description = "Combined repository of OCF agents from the RHCS and Linux-HA projects";

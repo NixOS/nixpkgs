@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  checkInputs = [ git gnupg pytestCheckHook ];
+  nativeCheckInputs = [ git gnupg pytestCheckHook ];
 
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";

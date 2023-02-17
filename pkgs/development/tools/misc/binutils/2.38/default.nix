@@ -171,7 +171,7 @@ stdenv.mkDerivation {
 
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
 
     # force target prefix. Some versions of binutils will make it empty if

@@ -6,14 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-3V40SG8aSD/3vnMAzBa01rJGkJh4d8MnjXl1NNZzjwI=";
+    sha256 = "sha256-hTbAMdvgeNNC8SH6iBqezSBctaeOY5AFrVcAEb2588Y=";
   };
 
   patches = [
+    # Fix build on ELFv2 powerpc64
+    # https://bugs.kde.org/show_bug.cgi?id=398883
+    (fetchurl {
+      url = "https://github.com/void-linux/void-packages/raw/3e16b4606235885463fc9ab45b4c120f1a51aa28/srcpkgs/valgrind/patches/elfv2-ppc64-be.patch";
+      sha256 = "NV/F+5aqFZz7+OF5oN5MUTpThv4H5PEY9sBgnnWohQY=";
+    })
     # Fix checks on Musl.
     # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
@@ -50,7 +56,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isDarwin (
+  preConfigure = lib.optionalString stdenv.isFreeBSD ''
+    substituteInPlace configure --replace '`uname -r`' \
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+  '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -75,7 +84,7 @@ stdenv.mkDerivation rec {
     '');
 
   configureFlags =
-    lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    lib.optional stdenv.hostPlatform.isx86_64 "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = true;
@@ -119,13 +128,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
-      "sparc-linux" "sparc64-linux"
-      "riscv32-linux" "riscv64-linux"
-      "alpha-linux"
-    ];
+    platforms = with lib.platforms; lib.intersectLists
+      (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
+      (darwin ++ freebsd ++ illumos ++ linux);
     broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildPythonPackage
-, dataclasses
 , fetchFromGitHub
 , libX11
 , libXinerama
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "0.8.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rr-";
@@ -29,10 +28,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
-
   postPatch = ''
     substituteInPlace screeninfo/enumerators/xinerama.py \
       --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
@@ -42,7 +37,7 @@ buildPythonPackage rec {
       --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libXrandr}/lib/libXrandr.so")'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

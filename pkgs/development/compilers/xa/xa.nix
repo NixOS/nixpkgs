@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-qUd68VC2yKkc09QeHPjJ31UtODMmSVV2gwJxykRnvYY=";
   };
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   dontConfigure = true;
 

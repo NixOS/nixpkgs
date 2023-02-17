@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.14.0";
+  version = "3.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-lCqiBlyf0cUqsmSlCmt+jXTBGsXyCioZ232zd5rVqiA=";
+    hash = "sha256-zl5+22r0KMqdBKIlBe+8xxgh6h9am34USc1dLy+VGyY=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mypy
     pytestCheckHook
     responses
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage =  "https://github.com/globus/globus-sdk-python";
+    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

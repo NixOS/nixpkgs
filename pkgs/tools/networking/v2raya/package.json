@@ -1,0 +1,52 @@
+{
+  "name": "v2raya",
+  "version": "0.1.0",
+  "private": true,
+  "license": "GPL-3.0",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@mdi/font": "^5.8.55",
+    "@nuintun/qrcode": "^3.3.0",
+    "@vue/babel-preset-app": "^4.2.2",
+    "axios": "^0.21.1",
+    "buefy": "0.9.3",
+    "clipboard": "^2.0.4",
+    "dayjs": "^1.10.6",
+    "js-base64": "^2.5.1",
+    "nanoid": "^3.1.23",
+    "normalize.css": "^8.0.1",
+    "pace-js": "^1.2.4",
+    "qrcode": "^1.4.2",
+    "register-service-worker": "^1.6.2",
+    "uglifyjs-webpack-plugin": "^1.1.1",
+    "vue": "^2.6.10",
+    "vue-i18n": "^8.15.3",
+    "vue-router": "^3.0.6",
+    "vue-virtual-scroller": "^1.0.10",
+    "vuex": "^3.0.1",
+    "webpack-iconfont-plugin-nodejs": "^1.0.16"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.2.2",
+    "@vue/cli-plugin-eslint": "^4.0.5",
+    "@vue/cli-plugin-router": "^4.0.0",
+    "@vue/cli-plugin-vuex": "^4.0.0",
+    "@vue/cli-service": "^4.0.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "babel-eslint": "^10.0.3",
+    "css-loader": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^5.0.0",
+    "highlight.js": "^11.4.0",
+    "prettier": "^1.18.2",
+    "sass": "^1.19.0",
+    "sass-loader": "^8.0.0",
+    "urijs": "^1.19.11",
+    "vue-template-compiler": "^2.6.10"
+  }
+}

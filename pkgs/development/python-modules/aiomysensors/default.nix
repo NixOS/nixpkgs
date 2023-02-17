@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.2";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XPvnZOshA+PdFOzOlJXMfRTRYSue0uHsNwQsCwv3WOU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jVqOOQLu/vL0L5WWtfU2rL4gNhPX+9HvchBp29aw+qA=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

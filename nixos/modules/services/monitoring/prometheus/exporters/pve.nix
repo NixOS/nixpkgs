@@ -10,7 +10,7 @@ let
     text = "default:";
   };
 
-  computedConfigFile = "${if cfg.configFile == null then emptyConfigFile else cfg.configFile}";
+  computedConfigFile = if cfg.configFile == null then emptyConfigFile else cfg.configFile;
 in
 {
   port = 9221;
@@ -100,6 +100,8 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = cfg.environmentFile == null;
+      LoadCredential = "configFile:${computedConfigFile}";
       ExecStart = ''
         ${cfg.package}/bin/pve_exporter \
           --${if cfg.collectors.status == true then "" else "no-"}collector.status \
@@ -108,11 +110,11 @@ in
           --${if cfg.collectors.cluster == true then "" else "no-"}collector.cluster \
           --${if cfg.collectors.resources == true then "" else "no-"}collector.resources \
           --${if cfg.collectors.config == true then "" else "no-"}collector.config \
-          ${computedConfigFile} \
+          %d/configFile \
           ${toString cfg.port} ${cfg.listenAddress}
       '';
     } // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = cfg.environmentFile;
+      EnvironmentFile = cfg.environmentFile;
     };
   };
 }

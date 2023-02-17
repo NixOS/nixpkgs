@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
         repo = pname;
         rev = "v${version}";
         hash = "sha256-DZBmf8fe0zw5uiQjNKXw8g/vU2hjNDa87z/7XuhyXog=";
-        inherit sparseCheckout;
+        sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
@@ -93,7 +93,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/itchio/itch";
     license = licenses.mit;
     platforms = platforms.linux;
-    sourceProvenance = lib.sourceTypes.binaryBytecode;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with maintainers; [ pasqui23 ];
   };
 }

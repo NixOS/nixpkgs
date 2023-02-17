@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake } :
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "catimg";
   version = "2.7.0";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/posva/catimg";
     description = "Insanely fast image printing in your terminal";

@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "go-graft";
-  version = "0.2.14";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "mzz2017";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "sha256-XymtLguAHCtOrRADRcWsPYq9cZo+FVUPOceIj7SmH8k=";
+    sha256 = "sha256-UhRsgUz9au7e47cS6yrIJXc/8ZxVDpMHWBjoAcw+oCM=";
   };
 
   CGO_ENABLED = 0;
 
   ldflags = [ "-X github.com/mzz2017/gg/cmd.Version=${version}" "-s" "-w" "-buildid=" ];
-  vendorSha256 = "sha256-MJMOCUIosLT9XhRsahQMx4Kq6j/aqCjhPq0ZvJc/Soc=";
+  vendorHash = "sha256-EiBt2SxUQY05Wr7KJbK+fs3U3iSmqECJ0glS8B2Ox9Q=";
   subPackages = [ "." ];
 
   meta = with lib; {

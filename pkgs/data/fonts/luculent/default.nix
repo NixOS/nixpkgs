@@ -1,17 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let version = "2.0.0"; in
-fetchzip {
-  name = "luculent-${version}";
-  url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
+stdenvNoCC.mkDerivation rec {
+  pname = "luculent";
+  version = "2.0.0";
 
-  postFetch = ''
-    tar -xJf $downloadedFile --strip-components=1
+  src = fetchurl {
+    url = "http://www.eastfarthing.com/${pname}/${pname}.tar.xz";
+    hash = "sha256-6NxLnTBnvHmTUTFa2wW0AuKPEbCqzaWQyiFVnF0sBqU=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
-  '';
 
-  sha256 = "1m3g64galwna1xjxb1fczmfplm6c1fn3ra1ln7f0vkm0ah5m4lbv";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "luculent font";

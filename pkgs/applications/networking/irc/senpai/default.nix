@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "unstable-2022-11-04";
+  version = "unstable-2023-02-13";
 
   src = fetchFromSourcehut {
     owner = "~taiite";
     repo = "senpai";
-    rev = "3be87831281af1c91a6e406986f317936a0b98bc";
-    sha256 = "sha256-v8r2q2H4I9FnsIOGv1zkC4xJ5E9cQavfILZ6mnbFbr8=";
+    rev = "1318e784bd2bba3765aee97811a3f0053d3a6723";
+    sha256 = "sha256-q167og8S8YbLcREZ7DVbJhjMzx4iO0WgIFkOV2IpieM=";
   };
 
-  vendorSha256 = "sha256-FBpk9TpAD5i3+brsVNWHNHJtZsHmShmWlldQrMs/VGU=";
+  vendorSha256 = "sha256-PkoEHQEGKCiNbJsm7ieL65MtEult/wubLreJKA1gGpg=";
 
   subPackages = [
     "cmd/senpai"
@@ -32,6 +32,6 @@ buildGoModule rec {
     description = "Your everyday IRC student";
     homepage = "https://ellidri.org/senpai";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

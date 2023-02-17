@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyqt ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
      pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
   '';

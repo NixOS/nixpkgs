@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 

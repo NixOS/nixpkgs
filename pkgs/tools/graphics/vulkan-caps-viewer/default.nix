@@ -10,16 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "3.25";
+  version = "3.28";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
-    rev = if version == "3.25" then "${version}_fixed" else version;
-    hash = "sha256-JQMnR9WNR8OtcgVfE5iZebdvZ/JmZNDchET5cK/Bruc=";
+    rev = version;
+    hash = "sha256-gy0gFbPZAwQJHqJvk7WrbZ5y2I+9BGv9VaCoOW1QPek=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
-    # To help they put in a git-submodule.
-    # It works with older vulkan-loaders.
+    # To help us, they've put it in a git-submodule.
+    # The result will work with any vulkan-loader version.
     fetchSubmodules = true;
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   qmakeFlags = [
     "DEFINES+=wayland"
     "CONFIG+=release"
-  ]  ++ lib.lists.optionals withX11 [ "DEFINES+=X11" ];
+  ] ++ lib.lists.optionals withX11 [ "DEFINES+=X11" ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
@@ -51,9 +51,12 @@ stdenv.mkDerivation rec {
       Client application to display hardware implementation details for GPUs supporting the Vulkan API by Khronos.
       The hardware reports can be submitted to a public online database that allows comparing different devices, browsing available features, extensions, formats, etc.
     '';
-    homepage    = "https://vulkan.gpuinfo.org/";
-    platforms   = platforms.unix;
-    license     = licenses.gpl2Only;
+    homepage = "https://vulkan.gpuinfo.org/";
+    platforms = platforms.unix;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ pedrohlc ];
+    changelog = "https://github.com/SaschaWillems/VulkanCapsViewer/releases/tag/${version}";
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

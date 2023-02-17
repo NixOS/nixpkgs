@@ -1,21 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, appstream-glib, desktop-file-utils, gdk-pixbuf
-, gettext, gjs, glib, gobject-introspection, gsettings-desktop-schemas, gtk3
-, hicolor-icon-theme, meson, ninja, pkg-config, python3, webkitgtk, wrapGAppsHook
+{ stdenv
+, lib
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, gdk-pixbuf
+, gettext
+, gjs
+, glib
+, glib-networking
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk4
+, libadwaita
+, gst_all_1
+, hicolor-icon-theme
+, meson
+, ninja
+, pkg-config
+, python3
+, webkitgtk_5_0
+, blueprint-compiler
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "tangram";
-  version = "1.3.2";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
     rev = "v${version}";
-    sha256 = "sha256-WI0H3bforQ6Jc/+TWFT1zUs4KRtWwvXY2/va+Fnd+iU=";
+    hash = "sha256-ocHE8IztiNm9A1hbzzHXstWpPaOau/IrQ44ccxbsGb0=";
     fetchSubmodules = true;
   };
-
-  buildInputs = [ gdk-pixbuf gjs glib gsettings-desktop-schemas gtk3 webkitgtk ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -27,23 +45,39 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    blueprint-compiler
     wrapGAppsHook
   ];
 
-  dontWrapGApps = true;
+  buildInputs = [
+    gdk-pixbuf
+    gjs
+    glib
+    glib-networking
+    gsettings-desktop-schemas
+    gtk4
+    libadwaita
+    webkitgtk_5_0
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]);
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/31168
+  dontPatchShebangs = true;
+
   postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace src/meson.build --replace "/app/bin/blueprint-compiler" "blueprint-compiler"
+    substituteInPlace {src/,}re.sonny.Tangram troll/gjspack/bin/gjspack \
+      --replace "#!/usr/bin/env -S gjs -m" "#!${gjs}/bin/gjs -m"
   '';
 
-  postFixup = ''
-    for file in $out/bin/re.sonny.Tangram; do
-      sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
-         -i $file
-      wrapGApp "$file"
-     done
+  # https://github.com/NixOS/nixpkgs/issues/31168#issuecomment-341793501
+  preFixup = ''
+    sed -e '2iimports.package._findEffectiveEntryPointName = () => "re.sonny.Tangram"' \
+      -i $out/bin/re.sonny.Tangram
   '';
 
   meta = with lib; {
@@ -51,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [ austinbutler chuangzhu ];
   };
 }

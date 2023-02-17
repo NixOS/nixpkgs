@@ -81,6 +81,7 @@ let
       bomber = callPackage ./bomber.nix {};
       bovo = callPackage ./bovo.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
+      colord-kde = callPackage ./colord-kde.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};
@@ -93,6 +94,7 @@ let
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
@@ -222,6 +224,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      palapeli = callPackage ./palapeli.nix {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

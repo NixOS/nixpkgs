@@ -234,12 +234,12 @@ let
 
   headerChecks = concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
 
-  aliases = let seperator = if cfg.aliasMapType == "hash" then ":" else ""; in
+  aliases = let separator = if cfg.aliasMapType == "hash" then ":" else ""; in
     optionalString (cfg.postmasterAlias != "") ''
-      postmaster${seperator} ${cfg.postmasterAlias}
+      postmaster${separator} ${cfg.postmasterAlias}
     ''
     + optionalString (cfg.rootAlias != "") ''
-      root${seperator} ${cfg.rootAlias}
+      root${separator} ${cfg.rootAlias}
     ''
     + cfg.extraAliases
   ;

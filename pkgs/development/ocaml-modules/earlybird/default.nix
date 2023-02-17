@@ -11,9 +11,9 @@ buildDunePackage rec {
   pname = "earlybird";
   version = "1.1.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.11";
+  minimalOCamlVersion = "4.11";
 
   src = fetchFromGitHub {
     owner = "hackwaly";
@@ -22,7 +22,9 @@ buildDunePackage rec {
     hash = "sha256-8JHZWsgpz2pzpDxST3bkMSmPHtj7MDzD5G3ujqMW+MU=";
   };
 
-  buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhir menhirLib path_glob ppx_deriving_yojson ];
+  nativeBuildInputs = [ menhir ];
+
+  buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhirLib path_glob ppx_deriving_yojson ];
 
   passthru.updateScript = gitUpdater { };
 

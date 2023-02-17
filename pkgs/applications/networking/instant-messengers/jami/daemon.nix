@@ -9,7 +9,7 @@
 , asio
 , dbus
 , dbus_cplusplus
-, ffmpeg-jami
+, ffmpeg_5
 , fmt
 , gmp
 , gnutls
@@ -21,7 +21,7 @@
 , libnatpmp
 , libpulseaudio
 , libupnp
-, libyamlcpp
+, yaml-cpp
 , msgpack
 , opendht-jami
 , openssl
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     dbus
     dbus_cplusplus
     fmt
-    ffmpeg-jami
+    ffmpeg_5
     gmp
     gnutls
     http-parser
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     libnatpmp
     libpulseaudio
     libupnp
-    libyamlcpp
+    yaml-cpp
     msgpack
     opendht-jami
     openssl

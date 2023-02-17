@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-fcommon";
 
   meta = {
-    homepage = "http://tinyfugue.sourceforge.net/";
+    homepage = "https://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

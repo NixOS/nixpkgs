@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "hanwen";
     repo = "go-mtpfs";
     rev = "v${version}";
-    sha256 = "sha256-HVfB8/MImgZZLx4tcrlYOfQjpAdHMHshEaSsd+n758w=";
+    hash = "sha256-HVfB8/MImgZZLx4tcrlYOfQjpAdHMHshEaSsd+n758w=";
   };
 
-  vendorSha256 = "sha256-OrAEvD2rF0Y0bvCD9TUv/E429lASsvC3uK3qNvbg734=";
+  vendorHash = "sha256-OrAEvD2rF0Y0bvCD9TUv/E429lASsvC3uK3qNvbg734=";
 
   ldflags = [ "-s" "-w" ];
 

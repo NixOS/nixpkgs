@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg.out freetype glew.dev libGLU libGL fribidi zlib
+    SDL2 SDL2.dev libpng ffmpeg.lib freetype glew.dev libGLU libGL fribidi zlib
   ]);
 
   enableParallelBuilding = true;

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haste-server";
-  version = "787d839086faee0b55c76ce5944fa207d22e85b4";
+  version = "ccc5049b07e9f90ec19fc2a88e5056367c53e202";
 
   src = fetchFromGitHub {
     owner = "toptal";
     repo = "haste-server";
     rev = version;
-    hash = "sha256-68IFY9YmXi4acTs9oXw6f5w7gg1lh+iakwYJciTPkQE=";
+    hash = "sha256-ODFHB2QwfLPxfjFsHrblSeiqLc9nPo7EOPGQ3AoqzSQ=";
   };
 
   nativeBuildInputs = [

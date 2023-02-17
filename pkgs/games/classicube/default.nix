@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , dos2unix
 , makeWrapper
-, SDL2
+, makeDesktopItem
+, copyDesktopItems
+, libX11
+, libXi
 , libGL
 , curl
 , openal
@@ -12,16 +15,28 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-m7pg9OL2RuCVKgFD3hMtIeY0XdJ1YviXBFVJH8/T5gI=";
+    sha256 = "sha256-anBi9hPwX1AAIc8dXsKyX4u7UbkKqC1P+7f7wdKWAig=";
   };
 
-  nativeBuildInputs = [ dos2unix makeWrapper ];
+  nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      genericName = "Sandbox Block Game";
+      exec = "ClassiCube";
+      icon = "CCicon";
+      comment = "Minecraft Classic inspired sandbox game";
+      categories = [ "Game" ];
+    })
+  ];
 
   prePatch = ''
     # The ClassiCube sources have DOS-style newlines
@@ -32,12 +47,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix hardcoded font paths
     ./font-location.patch
-    # ClassiCube doesn't compile with its X11 backend
-    # because of issues with libXi.
-    ./use-sdl.patch
     # For some reason, the Makefile doesn't link
     # with libcurl and openal when ClassiCube requires them.
-    # Also links with SDL2 instead of libX11 and libXi.
     ./fix-linking.patch
   ];
 
@@ -57,13 +68,15 @@ stdenv.mkDerivation rec {
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
-  buildInputs = [ SDL2 libGL curl openal liberation_ttf ];
+  buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
 
   preBuild = "cd src";
 
   postBuild = "cd -";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp 'src/ClassiCube' "$out/bin"
     # ClassiCube puts downloaded resources
@@ -75,6 +88,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ClassiCube" \
       --run 'mkdir -p "$HOME/.local/share/ClassiCube"' \
       --run 'cd       "$HOME/.local/share/ClassiCube"'
+
+    mkdir -p "$out/share/icons/hicolor/256x256/apps"
+    cp misc/CCicon.png "$out/share/icons/hicolor/256x256/apps"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

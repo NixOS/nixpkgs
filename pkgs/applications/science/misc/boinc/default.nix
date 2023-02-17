@@ -1,29 +1,60 @@
-{ fetchFromGitHub, lib, stdenv, autoconf, automake, pkg-config, m4, curl,
-libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
-sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
-
-let
-  majorVersion = "7.20";
-  minorVersion = "2";
-in
+{ fetchFromGitHub
+, lib
+, stdenv
+, autoconf
+, automake
+, pkg-config
+, m4
+, curl
+, libGLU
+, libGL
+, libXmu
+, libXi
+, freeglut
+, libjpeg
+, libtool
+, wxGTK32
+, xcbutil
+, sqlite
+, gtk3
+, patchelf
+, libXScrnSaver
+, libnotify
+, libX11
+, libxcb
+}:
 
 stdenv.mkDerivation rec {
-  version = "${majorVersion}.${minorVersion}";
   pname = "boinc";
+  version = "7.22.0";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
-    rev = "client_release/${majorVersion}/${version}";
-    sha256 = "sha256-vMb5Vq/6I6lniG396wd7+FfslsByedMRPIpiItp1d1s=";
+    rev = "client_release/${lib.versions.majorMinor version}/${version}";
+    hash = "sha256-AVWgFsxeuHADEat83XQLLeQkzw3kaUdPL0rp8b6Rxyk=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
 
   buildInputs = [
-    curl libGLU libGL libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
-    libnotify patchelf libX11 libxcb xcbutil
+    curl
+    libGLU
+    libGL
+    libXmu
+    libXi
+    freeglut
+    libjpeg
+    wxGTK32
+    sqlite
+    gtk3
+    libXScrnSaver
+    libnotify
+    patchelf
+    libX11
+    libxcb
+    xcbutil
   ];
 
   NIX_LDFLAGS = "-lX11";
@@ -45,11 +76,7 @@ stdenv.mkDerivation rec {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;  # arbitrary choice
-    # checking for gcc options needed to detect all undeclared functions... cannot detect
-    # configure: error: in `/build/boinc-7.18.1-src':
-    # configure: error: cannot make gcc report undeclared builtins
-    broken = stdenv.isAarch64;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];
   };
 }

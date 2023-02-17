@@ -17,7 +17,7 @@ services.kubernetes = {
 };
 ```
 
-Another way is to assign cluster roles (\"master\" and/or \"node\") to
+Another way is to assign cluster roles ("master" and/or "node") to
 the host. This enables apiserver, controllerManager, scheduler,
 addonManager, kube-proxy and etcd:
 

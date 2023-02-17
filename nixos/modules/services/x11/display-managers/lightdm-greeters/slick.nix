@@ -11,6 +11,7 @@ let
   theme = cfg.theme.package;
   icons = cfg.iconTheme.package;
   font = cfg.font.package;
+  cursors = cfg.cursorTheme.package;
 
   slickGreeterConf = writeText "slick-greeter.conf" ''
     [Greeter]
@@ -18,6 +19,8 @@ let
     theme-name=${cfg.theme.name}
     icon-theme-name=${cfg.iconTheme.name}
     font-name=${cfg.font.name}
+    cursor-theme-name=${cfg.cursorTheme.name}
+    cursor-theme-size=${toString cfg.cursorTheme.size}
     draw-user-backgrounds=${boolToString cfg.draw-user-backgrounds}
     ${cfg.extraConfig}
   '';
@@ -84,6 +87,33 @@ in
         };
       };
 
+      cursorTheme = {
+        package = mkOption {
+          type = types.package;
+          default = pkgs.gnome.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
+          description = lib.mdDoc ''
+            The package path that contains the cursor theme given in the name option.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "Adwaita";
+          description = lib.mdDoc ''
+            Name of the cursor theme to use for the lightdm-slick-greeter.
+          '';
+        };
+
+        size = mkOption {
+          type = types.int;
+          default = 24;
+          description = lib.mdDoc ''
+            Size of the cursor theme to use for the lightdm-slick-greeter.
+          '';
+        };
+      };
+
       draw-user-backgrounds = mkEnableOption (lib.mdDoc "draw user backgrounds");
 
       extraConfig = mkOption {
@@ -107,6 +137,7 @@ in
     };
 
     environment.systemPackages = [
+      cursors
       icons
       theme
     ];

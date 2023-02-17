@@ -1,14 +1,14 @@
-{ buildPecl, curl, fetchFromGitHub, lib, pcre2 }:
+{ buildPecl, curl, fetchFromGitHub, lib, pcre2, php }:
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.70.0";
+  version = "0.82.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    rev = "${version}";
-    sha256 = "sha256-AYRBzE0Detg/IHXYutZUfPRMtfthxdkSjqD0M+VcTpY=";
+    rev = version;
+    sha256 = "sha256-QTqZRHh57mRkg0HT9qQS13emGobB0IRqM+mdImAPgtE=";
   };
 
   buildInputs = [ curl pcre2 ];

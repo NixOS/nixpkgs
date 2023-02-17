@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   disabledTests = [
     # these tests are failing due to the following error:
     # TypeError: expected str, bytes or os.PathLike object, not int

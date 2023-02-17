@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ks1zr0ksma285sm2dyy0nsbrkpssdk4mdzc3srr4mcyd6v927jd";
   };
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

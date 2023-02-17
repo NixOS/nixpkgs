@@ -22,7 +22,10 @@ stdenv.mkDerivation {
     sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild yojson menhir menhirLib ulex pprint fix functory ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ yojson menhir menhirLib ulex pprint fix functory ];
 
   # Sets warning 3 as non-fatal
   prePatch = lib.optionalString (check-ocaml-version "4.02") ''

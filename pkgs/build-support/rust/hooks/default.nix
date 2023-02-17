@@ -1,8 +1,8 @@
 { buildPackages
 , callPackage
 , cargo
+, cargo-nextest
 , clang
-, diffutils
 , lib
 , makeSetupHook
 , maturin
@@ -56,6 +56,15 @@ in {
       };
     } ./cargo-install-hook.sh) {};
 
+  cargoNextestHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-nextest-hook.sh";
+      deps = [ cargo cargo-nextest ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-nextest-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
@@ -65,8 +74,7 @@ in {
 
         # Specify the stdenv's `diff` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong `diff`.
-        # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
-        diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
+        diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
 
         # We want to specify the correct crt-static flag for both
         # the build and host platforms. This is important when the wanted
@@ -100,6 +108,9 @@ in {
           host-config = true
           target-applies-to-host = true
         '';
+
+        # https://github.com/NixOS/nixpkgs/issues/201254
+        aarch64LinuxGccWorkaround = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
       };
     } ./cargo-setup-hook.sh) {};
 

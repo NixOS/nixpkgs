@@ -27,7 +27,7 @@ let
 
     propagatedBuildInputs = [ pyparsing ];
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
       pretend
     ];

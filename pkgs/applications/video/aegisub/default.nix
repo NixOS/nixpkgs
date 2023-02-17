@@ -25,15 +25,9 @@
 , pcre
 , pkg-config
 , which
+, wrapGAppsHook
 , wxGTK
 , zlib
-
-, CoreText
-, CoreFoundation
-, AppKit
-, Carbon
-, IOKit
-, Cocoa
 
 , spellcheckSupport ? true
 , hunspell ? null
@@ -51,6 +45,7 @@
 , portaudio ? null
 
 , useBundledLuaJIT ? false
+, darwin
 }:
 
 assert spellcheckSupport -> (hunspell != null);
@@ -62,6 +57,7 @@ assert portaudioSupport -> (portaudio != null);
 let
   luajit52 = luajit.override { enable52Compat = true; };
   inherit (lib) optional;
+  inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
 in
 stdenv.mkDerivation rec {
   pname = "aegisub";
@@ -80,6 +76,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -187,11 +187,24 @@ let
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
+
+          # Allow to override compiler. This is important for cross compiling as
+          # we need to set a compiler that is different from the build one.
+          awk -i inplace -F' = ' \
+            ' # operate on the line starting with
+              /^  CONFIG\["CC"\]/ {
+                # replace the right hand side
+                sub($2, "ENV[\"CC\"] || \"1\"")
+              }; { print }' "$rbConfig"
+          # test that the line isn't mangled in case upstream made the above unnecessary
+          grep -qx '  CONFIG\["CC"\] = ENV\["CC"\] || "1"' "$rbConfig"
+
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
+          find "$out/${passthru.gemPath}" -name gem_make.out -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -247,7 +260,7 @@ let
             inherit lib stdenv makeWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
-          }) withPackages gems;
+          }) withPackages buildGems gems;
 
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
@@ -260,13 +273,13 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "6" "";
-    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+    version = rubyVersion "2" "7" "7" "";
+    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "4" "";
-    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    version = rubyVersion "3" "0" "5" "";
+    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
   };
 
   ruby_3_1 = generic {

@@ -41,6 +41,8 @@ findInstalledTclPkgs() {
 
 # Wrap any freshly-installed binaries and set up their TCLLIBPATH
 wrapTclBins() {
+    if [ "$dontWrapTclBinaries" ]; then return; fi
+
     if [[ -z "${TCLLIBPATH-}" ]]; then
         echo "skipping automatic Tcl binary wrapping (nothing to do)"
         return

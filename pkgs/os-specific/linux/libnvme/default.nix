@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
+    python3
   ];
 
   buildInputs = [
     json_c
     openssl
-    python3
     systemd
   ];
 

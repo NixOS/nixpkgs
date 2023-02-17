@@ -26,7 +26,7 @@ buildPythonPackage rec {
     quantities
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

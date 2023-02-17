@@ -27,7 +27,8 @@
 , mariadb
 , mpfr
 , neovim-unwrapped
-, openssl_1_1
+, openldap
+, openssl
 , pcre
 , pkg-config
 , postgresql
@@ -73,8 +74,8 @@ with prev;
 
   cqueues = (prev.luaLib.overrideLuarocks prev.cqueues (drv: {
     externalDeps = [
-      { name = "CRYPTO"; dep = openssl_1_1; }
-      { name = "OPENSSL"; dep = openssl_1_1; }
+      { name = "CRYPTO"; dep = openssl; }
+      { name = "OPENSSL"; dep = openssl; }
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   })).overrideAttrs (oa: rec {
@@ -329,11 +330,16 @@ with prev;
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
 
+  lualdap = prev.luaLib.overrideLuarocks prev.lualdap (drv: {
+    externalDeps = [
+      { name = "LDAP"; dep = openldap; }
+    ];
+  });
+
   luaossl = prev.luaLib.overrideLuarocks prev.luaossl (drv: {
     externalDeps = [
-      # https://github.com/wahern/luaossl/pull/199
-      { name = "CRYPTO"; dep = openssl_1_1; }
-      { name = "OPENSSL"; dep = openssl_1_1; }
+      { name = "CRYPTO"; dep = openssl; }
+      { name = "OPENSSL"; dep = openssl; }
     ];
   });
 
@@ -345,7 +351,7 @@ with prev;
 
   luasec = prev.luaLib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
-      { name = "OPENSSL"; dep = openssl_1_1; }
+      { name = "OPENSSL"; dep = openssl; }
     ];
   });
 
@@ -377,7 +383,7 @@ with prev;
     ];
   });
 
-  lush-nvim = prev.luaLib.overrideLuarocks prev.lush-nvim (drv: rec {
+  lush-nvim = prev.luaLib.overrideLuarocks prev.lush-nvim (drv: {
     doCheck = false;
   });
 
@@ -399,10 +405,9 @@ with prev;
     patches = [
       ./luuid.patch
     ];
-    postConfigure = let inherit (prev.luuid) version pname; in
-      ''
-        sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
-      '';
+    postConfigure =  ''
+      sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
+    '';
   });
 
 
@@ -493,11 +498,11 @@ with prev;
   sqlite = prev.luaLib.overrideLuarocks prev.sqlite (drv: {
 
     doCheck = true;
-    checkInputs = [ final.plenary-nvim neovim-unwrapped ];
+    nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''
-      export LIBSQLITE="${sqlite.out}/lib/libsqlite3.so"
+      export LIBSQLITE="${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"
       export HOME="$TMPDIR";
 
       nvim --headless -i NONE \

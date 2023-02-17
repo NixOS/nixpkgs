@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "0.12.1";
+  version = "0.13.1";
   format = "wheel";
 
   src =
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

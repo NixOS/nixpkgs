@@ -4,16 +4,12 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
-  format = pkgs.formats.yaml {};
-  configFile = format.generate "smartctl-exporter.yml" {
-    smartctl_exporter = {
-      bind_to = "${cfg.listenAddress}:${toString cfg.port}";
-      url_path = "/metrics";
-      smartctl_location = "${pkgs.smartmontools}/bin/smartctl";
-      collect_not_more_than_period = cfg.maxInterval;
-      devices = cfg.devices;
-    };
-  };
+  args = concatStrings [
+    "--web.listen-address=\"${cfg.listenAddress}:${toString cfg.port}\" "
+    "--smartctl.path=\"${pkgs.smartmontools}/bin/smartctl\" "
+    "--smartctl.interval=\"${cfg.maxInterval}\" "
+    "${concatMapStringsSep " " (device: "--smartctl.device=${device}") cfg.devices}"
+  ];
 in {
   port = 9633;
 
@@ -50,17 +46,13 @@ in {
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkOverride 50 (
-        if cfg.devices != [] then
-          cfg.devices
-        else [
-          "block-blkext rw"
-          "block-sd rw"
-          "char-nvme rw"
-        ]
-      );
+      DeviceAllow = lib.mkOverride 50 [
+        "block-blkext rw"
+        "block-sd rw"
+        "char-nvme rw"
+      ];
       ExecStart = ''
-        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter -config ${configFile}
+        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter ${args}
       '';
       PrivateDevices = lib.mkForce false;
       ProtectProc = "invisible";

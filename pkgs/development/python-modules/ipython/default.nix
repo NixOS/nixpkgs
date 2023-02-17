@@ -79,7 +79,7 @@ buildPythonPackage rec {
       --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     testpath
   ];

@@ -15,11 +15,11 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "7.2.1";
+    version = "7.3.0";
 
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-V9s7UVz2BcuEObcsT6X2FulBlkz1BX2JM/bs/7vyZvI=";
+      sha256 = "sha256-PBea6VYJkjBf19AQ702OtLsHJ230Sc3e3K9HAccL0BM=";
     };
 
     preferLocalBuild = true;
@@ -144,7 +144,7 @@ let
       homepage = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       license = licenses.agpl3;
       platforms = [ "x86_64-linux" ];
-      sourceProvenance = sourceTypes.binaryNativeCode;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };

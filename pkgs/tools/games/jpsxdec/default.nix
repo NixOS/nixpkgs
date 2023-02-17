@@ -14,7 +14,7 @@
 }:
 let
   pname = "jpsxdec";
-  version = "1.05";
+  version = "1.06";
 
   description = "Cross-platform PlayStation 1 audio and video converter";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "m35";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wnfvvcyldf699b08lzlc0gshl7rn09a6q4i7jmr41izlcdszdbz";
+    sha256 = "sha256-6PLEvK4NP0/ipdygyDFFcWTIfch5y0Hren40+8iqYJs=";
   };
 
   nativeBuildInputs = [ ant jdk unoconv makeWrapper ];

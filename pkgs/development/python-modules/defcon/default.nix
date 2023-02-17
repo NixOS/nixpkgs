@@ -32,7 +32,7 @@ buildPythonPackage rec {
     fonttools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fontpens
     fs
     lxml

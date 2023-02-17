@@ -68,12 +68,47 @@ final: prev: let
         supportedCudaVersions = [ "10.2" ];
       }
     ];
+    "8.0.5" = [
+      rec {
+        fileVersion = "10.1";
+        fullVersion = "8.0.5.39";
+        hash = "sha256-kJCElSmIlrM6qVBjo0cfk8NmJ9esAcF9w211xl7qSgA=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-805/support-matrix/index.html
+        supportedCudaVersions = [ "10.1" ];
+      }
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.0.5.39";
+        hash = "sha256-IfhMBcZ78eyFnnfDjM1b8VSWT6HDCPRJlZvkw1bjgvM=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-805/support-matrix/index.html
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.0";
+        fullVersion = "8.0.5.39";
+        hash = "sha256-ThbueJXetKixwZS4ErpJWG730mkCBRQB03F1EYmKm3M=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-805/support-matrix/index.html
+        supportedCudaVersions = [ "11.0" ];
+      }
+      rec {
+        fileVersion = "11.1";
+        fullVersion = "8.0.5.39";
+        hash = "sha256-HQRr+nk5navMb2yxUHkYdUQ5RC6gyp4Pvs3URvmwDM4=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-805/support-matrix/index.html
+        supportedCudaVersions = [ "11.1" ];
+      }
+    ];
     "8.1.1" = [
       rec {
         fileVersion = "10.2";
         fullVersion = "8.1.1.33";
         hash = "sha256-Kkp7mabpv6aQ6xm7QeSVU/KnpJGls6v8rpAOFmxbbr0=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-811/support-matrix/index.html#cudnn-versions-810-811
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
@@ -81,38 +116,61 @@ final: prev: let
         fullVersion = "8.1.1.33";
         hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "11.2" ];
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-811/support-matrix/index.html#cudnn-versions-810-811
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" ];
       }
     ];
-    "8.3.2" = [
+    "8.2.4" = [
       rec {
         fileVersion = "10.2";
-        fullVersion = "8.3.2.44";
-        hash = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
+        fullVersion = "8.2.4.15";
+        hash = "sha256-0jyUoxFaHHcRamwSfZF1+/WfcjNkN08mo0aZB18yIvE=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-824/support-matrix/index.html
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.4";
+        fullVersion = "8.2.4.15";
+        hash = "sha256-Dl0t+JC5ln76ZhnaQhMQ2XMjVlp58FoajLm3Fluq0Nc=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-824/support-matrix/index.html
+        supportedCudaVersions = [  "11.0" "11.1" "11.2" "11.3" "11.4" ];
+      }
+    ];
+    "8.3.3" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.3.3.40";
+        hash = "sha256-2FVPKzLmKV1fyPOsJeaPlAWLAYyAHaucFD42gS+JJqs=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-833/support-matrix/index.html
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
         fileVersion = "11.5";
-        fullVersion = "8.3.2.44";
-        hash = "sha256-VQCVPAjF5dHd3P2iNPnvvdzb5DpTsm3AqCxyP6FwxFc=";
+        fullVersion = "8.3.3.40";
+        hash = "sha256-6r6Wx1zwPqT1N5iU2RTx+K4UzqsSGYnoSwg22Sf7dzE=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-833/support-matrix/index.html
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" ];
       }
     ];
-    "8.4.0" = [
+    "8.4.1" = [
       rec {
         fileVersion = "10.2";
-        fullVersion = "8.4.0.27";
-        hash = "sha256-FMXjykJYJxmW0f2VnELRfFgs5Nmv9FH4RSRGnnhP0VQ=";
+        fullVersion = "8.4.1.50";
+        hash = "sha256-I88qMmU6lIiLVmaPuX7TTbisgTav839mssxUo3lQNjg=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-841/support-matrix/index.html
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
         fileVersion = "11.6";
-        fullVersion = "8.4.0.27";
-        hash = "sha256-0Zva/ZgAx50p5vb/+p+eLBDREy1sL/ELFZPgV+dN0FA=";
+        fullVersion = "8.4.1.50";
+        hash = "sha256-7JbSN22B/KQr3T1MPXBambKaBlurV/kgVhx2PinGfQE=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-841/support-matrix/index.html
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
     ];
@@ -122,6 +180,7 @@ final: prev: let
         fullVersion = "8.5.0.96";
         hash = "sha256-1mzhbbzR40WKkHnQLtJHhg0vYgf7G8a0OBcCwIOkJjM=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-850/support-matrix/index.html
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
@@ -129,6 +188,7 @@ final: prev: let
         fullVersion = "8.5.0.96";
         hash = "sha256-VFSm/ZTwCHKMqumtrZk8ToXvNjAuJrzkO+p9RYpee20=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-850/support-matrix/index.html
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
     ];
@@ -138,6 +198,7 @@ final: prev: let
         fullVersion = "8.6.0.163";
         hash = "sha256-t4sr/GrFqqdxu2VhaJQk5K1Xm/0lU4chXG8hVL09R9k=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-860/support-matrix/index.html
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
@@ -145,6 +206,25 @@ final: prev: let
         fullVersion = "8.6.0.163";
         hash = "sha256-u8OW30cpTGV+3AnGAGdNYIyxv8gLgtz0VHBgwhcRFZ4=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-860/support-matrix/index.html
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+      }
+    ];
+    "8.7.0" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.7.0.84";
+        hash = "sha256-bZhaqc8+GbPV2FQvvbbufd8VnEJgvfkICc2N3/gitRg=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-870/support-matrix/index.html
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.8";
+        fullVersion = "8.7.0.84";
+        hash = "sha256-l2xMunIzyXrnQAavq1Fyl2MAukD1slCiH4z3H1nJ920=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-870/support-matrix/index.html
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
       }
     ];
@@ -153,17 +233,17 @@ final: prev: let
   # Default attributes
   cuDnnDefaultVersion = {
     "10.0" = "7.4.2";
-    "10.1" = "7.6.5";
-    "10.2" = "8.6.0";
-    "11.0" = "8.6.0";
-    "11.1" = "8.6.0";
-    "11.2" = "8.6.0";
-    "11.3" = "8.6.0";
-    "11.4" = "8.6.0";
-    "11.5" = "8.6.0";
-    "11.6" = "8.6.0";
-    "11.7" = "8.6.0";
-    "11.8" = "8.6.0";
-  }.${cudaVersion} or "8.6.0";
+    "10.1" = "8.0.5";
+    "10.2" = "8.7.0";
+    "11.0" = "8.7.0";
+    "11.1" = "8.7.0";
+    "11.2" = "8.7.0";
+    "11.3" = "8.7.0";
+    "11.4" = "8.7.0";
+    "11.5" = "8.7.0";
+    "11.6" = "8.7.0";
+    "11.7" = "8.7.0";
+    "11.8" = "8.7.0";
+  }.${cudaVersion} or "8.7.0";
 
 in cuDnnPackages

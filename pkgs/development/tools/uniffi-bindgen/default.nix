@@ -6,18 +6,19 @@
 , yapf
 , rubocop
 , rustfmt
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uniffi-bindgen";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-E0OMMg9GuZCwPuJKzMpN0PNxZicGW1blD322Jl01qQE=";
+    sha256 = "sha256-cUJsfAlzdoGMeFcdXwdPU0JcruneY60pssJPkJtb5gs=";
   };
 
-  cargoSha256 = "sha256-REY88irDm45JOBwdb79JVrIyfuOB6HcAgIzYO65O0uE=";
+  cargoSha256 = "sha256-k5uIR5rO4T1Xsu50vdLxCgSsVkNcxXHT4MitnMZkY6g=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/uniffi-bindgen" \
       --suffix PATH : ${lib.strings.makeBinPath [ ktlint yapf rubocop rustfmt ] }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";

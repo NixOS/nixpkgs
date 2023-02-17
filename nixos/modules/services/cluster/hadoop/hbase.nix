@@ -141,9 +141,9 @@ in
 
       services.hadoop.hbaseSiteInternal."hbase.rootdir" = cfg.hbase.rootdir;
 
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hbase.master.openFirewall [
+      networking.firewall.allowedTCPPorts = mkIf cfg.hbase.master.openFirewall [
         16000 16010
-      ]);
+      ];
 
     })
 
@@ -168,9 +168,9 @@ in
       services.hadoop.hbaseSiteInternal."hbase.rootdir" = cfg.hbase.rootdir;
 
       networking = {
-        firewall.allowedTCPPorts = (mkIf cfg.hbase.regionServer.openFirewall [
+        firewall.allowedTCPPorts = mkIf cfg.hbase.regionServer.openFirewall [
           16020 16030
-        ]);
+        ];
         hosts = mkIf cfg.hbase.regionServer.overrideHosts {
           "127.0.0.2" = mkForce [ ];
           "::1" = mkForce [ ];

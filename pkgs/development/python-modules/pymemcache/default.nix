@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , zstd
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     faker
     mock
     pytestCheckHook
@@ -41,6 +42,11 @@ buildPythonPackage rec {
   disabledTests = [
     # python-memcached is not available (last release in 2017)
     "TestClientSocketConnect"
+  ] ++ lib.optionals stdenv.is32bit [
+    # test_compressed_complex is broken on 32-bit platforms
+    # this can be removed on the next version bump
+    # see also https://github.com/pinterest/pymemcache/pull/480
+    "test_compressed_complex"
   ];
 
   pythonImportsCheck = [

@@ -53,7 +53,7 @@ let
   extraArgs = removeAttrs args ([ "name" "scheme" "xcodeFlags" "release" "certificateFile" "certificatePassword" "provisioningProfile" "signMethod" "generateIPA" "generateXCArchive" "enableWirelessDistribution" "installURL" "bundleId" "version" ] ++ builtins.attrNames xcodewrapperFormalArgs);
 in
 stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
+  name = lib.replaceStrings [" "] [""] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
   buildPhase = ''
     # Be sure that the Xcode wrapper has priority over everything else.
     # When using buildInputs this does not seem to be the case.
@@ -91,7 +91,7 @@ stdenv.mkDerivation ({
     # Do the building
     export LD=/usr/bin/clang # To avoid problem with -isysroot parameter that is unrecognized by the stock ld. Comparison with an impure build shows that it uses clang instead. Ugly, but it works
 
-    xcodebuild -target ${_target} -configuration ${_configuration} ${lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateIPA || generateXCArchive then "-archivePath \"${name}.xcarchive\" archive" else ""} ${if release then '' PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"'' else ""} ${xcodeFlags}
+    xcodebuild -target ${_target} -configuration ${_configuration} ${lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${lib.optionalString (generateIPA || generateXCArchive) "-archivePath \"${name}.xcarchive\" archive"} ${lib.optionalString release '' PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"''} ${xcodeFlags}
 
     ${lib.optionalString release ''
       ${lib.optionalString generateIPA ''

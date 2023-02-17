@@ -38,7 +38,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     gevent
     pytestCheckHook

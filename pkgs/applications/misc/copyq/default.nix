@@ -1,42 +1,45 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 , extra-cmake-modules
 , qtbase
-, qtscript
+, qtsvg
+, qttools
+, qtdeclarative
 , libXfixes
 , libXtst
-, qtx11extras
-, knotifications
 , qtwayland
 , wayland
-, fetchpatch
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "6.3.2";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-Ge/TD9Llq4YTAqaL9LBEsgNI9qrf2jLDt7q2ZTI9rmE=";
+    hash = "sha256-HpWzIABzg0oJqzIehIGpeATLs3ZlmLgtRKaiMIUNAFI=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
-    qtscript
+    qtsvg
+    qttools
+    qtdeclarative
     libXfixes
     libXtst
-    qtx11extras
-    knotifications
     qtwayland
     wayland
   ];
@@ -46,13 +49,14 @@ mkDerivation rec {
       --replace copyq "$out/bin/copyq"
   '';
 
+  cmakeFlags = [ "-DWITH_QT6=ON" ];
+
   meta = with lib; {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    # OSX build requires QT5.
     platforms = platforms.linux;
   };
 }

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0aa28wc55x3rxa7clwfv5v5500ffyaq0vkxaa3v01y1r93dxkdvp";
   };
 
-  checkInputs = [ nose minimock ];
+  nativeCheckInputs = [ nose minimock ];
 
   checkPhase = ''
     nosetests

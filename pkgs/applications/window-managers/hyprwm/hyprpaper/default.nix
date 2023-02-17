@@ -59,7 +59,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot ];
     inherit (wayland.meta) platforms;
-    # ofborg failure: g++ does not recognize '-std=c++23'
-    broken = stdenv.isAarch64;
   };
 })

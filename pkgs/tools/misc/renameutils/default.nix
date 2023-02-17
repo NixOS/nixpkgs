@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, readline}:
+{lib, stdenv, fetchurl, readline, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "renameutils";
@@ -11,7 +11,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install-exec.patch ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/apply.c \
+      --replace "command = \"mv\"" "command = \"${coreutils}/bin/mv\"" \
+      --replace "command = \"cp\"" "command = \"${coreutils}/bin/cp\""
+    substituteInPlace src/icmd.c \
+      --replace "#define MV_COMMAND \"mv\"" "#define MV_COMMAND \"${coreutils}/bin/mv\"" \
+      --replace "#define CP_COMMAND \"cp\"" "#define CP_COMMAND \"${coreutils}/bin/cp\""
+    substituteInPlace src/qcmd.c \
+      --replace "ls_program = xstrdup(\"ls\")" "ls_program = xstrdup(\"${coreutils}/bin/ls\")"
+  '';
+
   nativeBuildInputs = [ readline ];
+
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export ac_cv_func_lstat64=no
+  '';
 
   meta = {
     homepage = "https://www.nongnu.org/renameutils/";

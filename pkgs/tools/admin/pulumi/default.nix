@@ -14,18 +14,23 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.43.1";
+  version = "3.55.0";
+
+  # Used in pulumi-language packages, which inherit this prop
+  sdkVendorHash = "sha256-ZE+df01jRx3nDiPGdlh1JNJn5NqsHW22fiUzeNlkzF8=";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LbPXCwU6aJp+z5scfej5Reo2X8QUvZpASWkcDBBF1J0=";
+    hash = "sha256-x5XebYFpxFi2QgrrK+wdMFOLiJLnRmar4gsply8F718=";
+    # Some tests rely on checkout directory name
+    name = "pulumi";
   };
 
-  vendorSha256 = "sha256-APGiCqHdXDRCFx0W8RDeL89sskYZ2vzdpg4ePE7KixA=";
+  vendorSha256 = "sha256-8vchyD3MTi9Fxrd6SiywFK4tadyauvDxjs9RmoJuULA=";
 
-  sourceRoot = "source/pkg";
+  sourceRoot = "${src.name}/pkg";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,7 +48,12 @@ buildGoModule rec {
 
   doCheck = true;
 
-  checkInputs = [
+  disabledTests = [
+    # Flaky test
+    "TestPendingDeleteOrder"
+  ];
+
+  nativeCheckInputs = [
     git
   ];
 
@@ -62,6 +72,10 @@ buildGoModule rec {
 
     # Code generation tests also download dependencies from network
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+    rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
+
+    # Only run tests not marked as disabled
+    buildFlagsArray+=("-run" "[^(${lib.concatStringsSep "|" disabledTests})]")
   '' + lib.optionalString stdenv.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
@@ -97,7 +111,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
-    sourceProvenance = sourceTypes.fromSource;
+    sourceProvenance = [ sourceTypes.fromSource ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [

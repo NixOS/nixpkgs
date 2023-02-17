@@ -41,6 +41,7 @@ pythonPackages.callPackage
         in
         builtins.filter (f: matchesVersion f.file && hasSupportedExtension f.file && isCompatibleEgg f.file) files;
       toPath = s: pwd + "/${s}";
+      isLocked = lib.length fileCandidates > 0;
       isSource = source != null;
       isGit = isSource && source.type == "git";
       isUrl = isSource && source.type == "url";
@@ -107,7 +108,7 @@ pythonPackages.callPackage
       nativeBuildInputs = [
         hooks.poetry2nixFixupHook
       ]
-      ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
+      ++ lib.optional (isLocked && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
       ++ lib.optionals (format == "wheel") [
         hooks.wheelUnpackHook
         pythonPackages.pipInstallHook
@@ -120,7 +121,7 @@ pythonPackages.callPackage
       ];
 
       buildInputs = (
-        lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+        lib.optional (isLocked) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isDirectory buildSystemPkgs
         ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
       );
@@ -164,6 +165,7 @@ pythonPackages.callPackage
           (
             builtins.fetchGit ({
               inherit (source) url;
+              submodules = true;
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (

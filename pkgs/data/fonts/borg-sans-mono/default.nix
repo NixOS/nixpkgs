@@ -1,19 +1,21 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "borg-sans-mono";
   version = "0.2.0";
-in
-fetchzip {
-  name = "${pname}-${version}";
 
-  # https://github.com/marnen/borg-sans-mono/issues/19
-  url = "https://github.com/marnen/borg-sans-mono/files/107663/BorgSansMono.ttf.zip";
-  sha256 = "1gz4ab0smw76ih5cs2l3n92c77nv7ld5zghq42avjsfhxrc2n5ri";
+  src = fetchzip {
+    # https://github.com/marnen/borg-sans-mono/issues/19
+    url = "https://github.com/marnen/borg-sans-mono/files/107663/BorgSansMono.ttf.zip";
+    hash = "sha256-nn7TGeVm45t7QI8+eEREBTFg9aShYYKtdEYEwQwO2fQ=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

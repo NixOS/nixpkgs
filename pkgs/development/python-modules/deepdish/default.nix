@@ -25,7 +25,7 @@ buildPythonPackage rec {
     "deepdish"
   ];
 
-  # checkInputs = [
+  # nativeCheckInputs = [
   #   pandas
   # ];
 

@@ -49,15 +49,11 @@ stdenv.mkDerivation rec {
     printf %s 'https://AnotherFoxGuy.com/CMakeCM::modules/JoinPaths.cmake.1' > JoinPaths.cmake.whence
   )'';
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/Makefile \
-        --replace -Wl,-soname, -Wl,-install_name,$out/lib/
-  '';
-
   meta = with lib; {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
     homepage = "https://github.com/RigsOfRods/socketw";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

@@ -53,8 +53,6 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     mainProgram = "protoc";
     platforms = lib.platforms.unix;
   };
-
-  passthru.version = version;
 };
 in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
                         then (mkProtobufDerivation null buildPackages.stdenv)

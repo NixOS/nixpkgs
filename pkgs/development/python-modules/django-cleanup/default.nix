@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a";
   };
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   meta = with lib; {
     description = "Automatically deletes old file for FileField and ImageField. It also deletes files on models instance deletion";

@@ -7,7 +7,7 @@ if ! command -v composer2nix &> /dev/null; then
   exit 1
 fi
 
-CURRENT_VERSION=$(nix eval --raw '(with import ../../../.. {}; bookstack.version)')
+CURRENT_VERSION=$(nix eval -f ../../../.. --raw bookstack.version)
 TARGET_VERSION_REMOTE=$(curl https://api.github.com/repos/bookstackapp/bookstack/releases/latest | jq -r ".tag_name")
 TARGET_VERSION=${TARGET_VERSION_REMOTE:1}
 BOOKSTACK=https://github.com/bookstackapp/bookstack/raw/$TARGET_VERSION_REMOTE

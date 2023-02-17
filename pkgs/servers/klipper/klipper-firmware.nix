@@ -5,8 +5,7 @@
 , bintools-unwrapped
 , libffi
 , libusb1
-, wxGTK30-gtk3
-, python2
+, wxGTK30
 , python3
 , gcc-arm-embedded
 , klipper
@@ -20,7 +19,6 @@
   src = klipper.src;
 
   nativeBuildInputs = [
-    python2
     python3
     pkgsCross.avr.stdenv.cc
     gcc-arm-embedded
@@ -30,7 +28,7 @@
     avrdude
     stm32flash
     pkg-config
-    wxGTK30-gtk3 # Required for bossac
+    wxGTK30 # Required for bossac
   ];
 
   preBuild = "cp ${firmwareConfig} ./.config";

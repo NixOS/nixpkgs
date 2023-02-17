@@ -71,3 +71,13 @@ version = "11.8.0"
 url = "https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run"
 sha256 = "sha256-kiPErzrr5Ke77Zq9mxY7A6GzS4VfvCtKDRtwasCaWhY="
 gcc = "gcc11"
+
+["12.0"]
+version = "12.0.0"
+url = "https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda_12.0.0_525.60.13_linux.run"
+sha256 = "sha256-kF6blRaQCDn7dgZHGdt1JDnzi4y3MLSTNdi9U93605I="
+# CUDA 12 is compatible with gcc12, but nixpkgs default gcc is still on gcc11 as
+# of 2023-01-08. See https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements.
+# This should be upgraded to gcc12 once nixpkgs default gcc is upgraded. Other
+# CUDA versions should likely have their gcc versions upgraded as well.
+gcc = "gcc11"

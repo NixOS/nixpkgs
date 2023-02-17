@@ -2,21 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "urbica";
-    repo = pname;
+    owner = "maplibre";
+    repo = "martin";
     rev = "v${version}";
-    hash = "sha256-kygqwbaByse81oc007piXHM6aK6Yi2JB0qTFN2WFP8U=";
+    hash = "sha256-+XD4w6W6dyKuTItLQS0P/waksIVsPXVswcrCQ7jpw90=";
   };
 
-  cargoPatches = [
-    # Remove after a new release, tracked by https://github.com/maplibre/martin/issues/410.
-    ./update-socket2-for-rust-1.64.patch
-  ];
-
-  cargoHash = "sha256-oevyr1P0uzHbpWCYQ1raqA42HI2KLl2IYcm1D2PeKOo=";
+  cargoHash = "sha256-U3oNyMS4S44ybAtt1/b0AXDLiag41XWt9DT5mKLQzm8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -24,9 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
-    homepage = "https://martin.urbica.co/";
-    license = licenses.mit;
+    homepage = "https://martin.maplibre.org/";
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ sikmir ];
-    platforms = with platforms; linux ++ darwin;
   };
 }

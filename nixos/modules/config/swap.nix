@@ -66,7 +66,7 @@ let
 
       device = mkOption {
         example = "/dev/sda3";
-        type = types.str;
+        type = types.nonEmptyStr;
         description = lib.mdDoc "Path of the device or swap file.";
       };
 
@@ -160,7 +160,7 @@ let
     config = rec {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
-      deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
+      deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
     };
 
@@ -197,6 +197,21 @@ in
   };
 
   config = mkIf ((length config.swapDevices) != 0) {
+    assertions = map (sw: {
+      assertion = sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
+      message = ''
+        You cannot use swap device "${sw.device}" with randomEncryption enabled.
+        The UUIDs and labels will get erased on every boot when the partition is encrypted.
+        Use /dev/disk/by-partuuid/… instead.
+      '';
+    }) config.swapDevices;
+
+    warnings =
+      concatMap (sw:
+        if sw.size != null && hasPrefix "/dev/" sw.device
+        then [ "Setting the swap size of block device ${sw.device} has no effect" ]
+        else [ ])
+      config.swapDevices;
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SWAP")
@@ -205,24 +220,27 @@ in
     # Create missing swapfiles.
     systemd.services =
       let
-
         createSwapDevice = sw:
-          assert sw.device != "";
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-label" sw.device);
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+            path = [ pkgs.util-linux pkgs.e2fsprogs ]
+              ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+
+            environment.DEVICE = sw.device;
 
             script =
               ''
                 ${optionalString (sw.size != null) ''
-                  currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
-                  if [ "${toString sw.size}" != "$currentSize" ]; then
-                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                  currentSize=$(( $(stat -c "%s" "$DEVICE" 2>/dev/null || echo 0) / 1024 / 1024 ))
+                  if [[ ! -b "$DEVICE" && "${toString sw.size}" != "$currentSize" ]]; then
+                    # Disable CoW for CoW based filesystems like BTRFS.
+                    truncate --size 0 "$DEVICE"
+                    chattr +C "$DEVICE" 2>/dev/null || true
+
+                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size}
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi

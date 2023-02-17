@@ -2,22 +2,18 @@
 
 buildGoModule rec {
   pname = "todoist";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "sha256-cfhwbL7RaeD5LWxlfqnHfPPPkC5AA3Z034p+hlFBWtg=";
+    sha256 = "sha256-46wNacsK2kGHaq2MgcW4ELI2TIY+4leraGQwU4V7sVo=";
   };
 
   vendorSha256 = "sha256-ly+OcRo8tGeNX4FnqNVaqjPx/A1FALOnScxs04lIOiU=";
 
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace main.go --replace '0.15.0' '${version}'
-  '';
 
   meta = {
     homepage = "https://github.com/sachaos/todoist";

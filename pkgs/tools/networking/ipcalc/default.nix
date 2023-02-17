@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-UQq5TqK83I44ANU0yXD8YUTQWvBFLiAxmLSRtKUJ5WE=";
   };
 
+  patches = [
+    # disable tests which fail in NixOS sandbox (trying to access the network)
+    ./sandbox_tests.patch
+  ];
+
   # technically not needed as we do not support the paid maxmind databases, but
   # keep it around if someone wants to add support and /usr/share/GeoIP is
   # broken anyway

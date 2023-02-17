@@ -19,9 +19,9 @@ let
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = (cfg.enableACME
+  tlsEnabled = cfg.enableACME
                 || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null);
+                || cfg.sslCertificateKey != null;
 in
 {
   options = {
@@ -820,10 +820,10 @@ in
 
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.brotli ];
 
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
@@ -1080,6 +1080,6 @@ in
     ];
   };
 
-  meta.doc = ./discourse.xml;
+  meta.doc = ./discourse.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  NIX_CFLAGS_COMPILE = if isMobile then "-DSTYLUS_BASED" else "";
+  NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";
 
   buildInputs = [ gtk3 libX11 ];
 

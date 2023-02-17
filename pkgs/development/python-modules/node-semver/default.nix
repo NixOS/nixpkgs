@@ -4,7 +4,7 @@ buildPythonPackage rec {
   version = "0.8.1";
   pname = "node-semver";
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;

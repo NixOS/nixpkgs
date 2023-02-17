@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "0.6.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZWDvFSx+zH/P0ZfdqxAe+c4jFUH8mfY1vpUXlIxw1sI=";
+    sha256 = "sha256-djnDHRD/vHfsem03896qcEb6uzgW3OCMBLqMDHca9vY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +20,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-LLvaaOZzp9b99eYOsfvbPRwZqSNfoinVUfYDmPiw5Mk=";
+  vendorSha256 = "sha256-X+M/E1kWhgS408PHwMg5jnDn2ad1NW6xvlLucuOLAeg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,14 +29,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sigstore/fulcio/pkg/server.gitVersion=v${version}"
-    "-X github.com/sigstore/fulcio/pkg/server.gitTreeState=clean"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
-    ldflags+=" -X github.com/sigstore/fulcio/pkg/server.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/sigstore/fulcio/pkg/server.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''
@@ -59,7 +59,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/fulcio --help
-    $out/bin/fulcio version | grep "v${version}"
+    $out/bin/fulcio version 2>&1 | grep "v${version}"
     runHook postInstallCheck
   '';
 

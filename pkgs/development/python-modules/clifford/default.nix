@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sparse
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ipython
   ];

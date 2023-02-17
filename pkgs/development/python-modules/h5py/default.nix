@@ -1,6 +1,17 @@
-{ lib, fetchPypi, isPy27, buildPythonPackage, pythonOlder
-, numpy, hdf5, cython, six, pkgconfig, unittest2
-, mpi4py ? null, openssh, pytestCheckHook, cached-property }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, numpy
+, hdf5
+, cython
+, pkgconfig
+, mpi4py ? null
+, openssh
+, pytestCheckHook
+, cached-property
+}:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
 
@@ -10,7 +21,9 @@ let
 in buildPythonPackage rec {
   version = "3.7.0";
   pname = "h5py";
-  disabled = isPy27;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,17 +46,24 @@ in buildPythonPackage rec {
     ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
-  preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+  preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
+
+  nativeBuildInputs = [
+    cython
+    pkgconfig
+    setuptools
+  ];
+
+  buildInputs = [ hdf5 ]
+    ++ lib.optional mpiSupport mpi;
+
+  propagatedBuildInputs = [ numpy ]
+    ++ lib.optionals mpiSupport [ mpi4py openssh ]
+    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   # tests now require pytest-mpi, which isn't available and difficult to package
   doCheck = false;
-  checkInputs = lib.optional isPy27 unittest2 ++ [ pytestCheckHook openssh ];
-  nativeBuildInputs = [ pkgconfig cython ];
-  buildInputs = [ hdf5 ]
-    ++ lib.optional mpiSupport mpi;
-  propagatedBuildInputs = [ numpy six]
-    ++ lib.optionals mpiSupport [ mpi4py openssh ]
-    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  nativeCheckInputs = [ pytestCheckHook openssh ];
 
   pythonImportsCheck = [ "h5py" ];
 

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U7lD2iVy2gS5Ktop4PVKg+cUbIg4MJt+m6tH5aOb1Y4=";
+    hash = "sha256-rJtZqq7tZ/VFk4fMpDZYyTQRa1Pokmn2aw6LA+FBGXw=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

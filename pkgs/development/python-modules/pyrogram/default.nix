@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyrogram";
-  version = "2.0.59";
+  version = "2.0.99";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pyrogram";
     repo = "pyrogram";
     rev = "v${version}";
-    hash = "sha256-vGgtVXvi/zvbU8f+LBQJN8GSxyVqdv/fBYfsBR4BKf4=";
+    hash = "sha256-QQFRDLB+gf5jzCf8imHwkSgOkAyLWJF3UDStnpq6+04=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pysocks
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

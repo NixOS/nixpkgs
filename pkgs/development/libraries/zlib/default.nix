@@ -8,6 +8,7 @@
 # the `.pc` file lists only the main output's lib dir.
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
+, testers
 }:
 
 # Without either the build will actually still succeed because the build
@@ -21,11 +22,13 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
   version = "1.2.13";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     urls = [
       # This URL works for 1.2.13 only; hopefully also for future releases.
       "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
@@ -125,10 +128,13 @@ stdenv.mkDerivation rec {
     "SHARED_MODE=1"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    pkgConfigModules = [ "zlib" ];
   };
-}
+})

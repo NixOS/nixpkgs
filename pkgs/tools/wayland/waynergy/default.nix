@@ -15,18 +15,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";
-  version = "0.0.13";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
     rev = "v${version}";
-    hash = "sha256-eTY7tktUmoTZO3w9uP1P8cIz0mmFiWm5YFGVAS6JwwE=";
+    hash = "sha256-pk1U3svy9r7O9ivFjBNXsaOmgc+nv2QTuwwHejB7B4Q=";
   };
 
   depsBuildBuild = [ pkg-config ];
-  buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon cmake libressl ];
   nativeBuildInputs = [ meson ninja ];
+  buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
 
   postPatch = ''
     substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"

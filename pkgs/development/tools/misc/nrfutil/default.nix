@@ -32,7 +32,7 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     behave
     nose
   ];

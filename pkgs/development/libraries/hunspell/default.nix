@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.1";
+  version = "1.7.2";
   pname = "hunspell";
 
   src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${version}";
-    sha256 = "sha256-YSJztik0QTZFNR8k8Xu1hakyE16NziDavYVkEUCbtGM=";
+    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];

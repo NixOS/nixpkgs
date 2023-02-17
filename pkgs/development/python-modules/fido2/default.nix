@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six cryptography ];
 
-  checkInputs = [ unittestCheckHook mock pyfakefs ];
+  nativeCheckInputs = [ unittestCheckHook mock pyfakefs ];
 
   unittestFlagsArray = [ "-v" ];
 

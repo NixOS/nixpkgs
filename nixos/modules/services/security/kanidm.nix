@@ -55,7 +55,7 @@ in
   options.services.kanidm = {
     enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
     enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
-    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration.");
+    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {
@@ -98,6 +98,14 @@ in
             description = lib.mdDoc "Path to Kanidm database.";
             default = "/var/lib/kanidm/kanidm.db";
             readOnly = true;
+            type = lib.types.path;
+          };
+          tls_chain = lib.mkOption {
+            description = lib.mdDoc "TLS chain in pem format.";
+            type = lib.types.path;
+          };
+          tls_key = lib.mkOption {
+            description = lib.mdDoc "TLS key in pem format.";
             type = lib.types.path;
           };
           log_level = lib.mkOption {

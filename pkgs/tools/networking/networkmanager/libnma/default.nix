@@ -19,21 +19,23 @@
 , withGtk4 ? false
 , gtk4
 , withGnome ? true
-, gcr
+, gcr_4
 , glib
 , substituteAll
 , lib
+, _experimental-update-script-combinators
+, makeHardcodeGsettingsPatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.10.2";
+  version = "1.10.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "T8PZxAS3sTMD2TlPlpYcUpjXGvqfH6evXk8PboQqCUA=";
+    sha256 = "U6b7KxkK03xZhsrtPpi+3nw8YCOZ7k+TyPwFQwPXbas=";
   };
 
   patches = [
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
@@ -83,10 +85,24 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
+        "org.gnome.nm-applet.eap" = "NM_APPLET_GSETTINGS";
+      };
+      inherit src;
     };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "libnma";
+          versionPolicy = "odd-unstable";
+        };
+        updateGsettingsPatch = _experimental-update-script-combinators.copyAttrOutputToFile "libnma.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateGsettingsPatch
+      ];
   };
 
   meta = with lib; {

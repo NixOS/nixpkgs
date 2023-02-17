@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , audit
 , libapparmor
@@ -108,7 +108,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
-    daemon = dbus.out;
   };
 
   meta = with lib; {

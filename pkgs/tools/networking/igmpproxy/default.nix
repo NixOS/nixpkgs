@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igmpproxy";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "pali";
     repo = "igmpproxy";
     rev = version;
-    sha256 = "sha256-B7mq+5pKWMO4dJeFPB7tiyjDQjj90g/kmYB2ApBE3Ic=";
+    sha256 = "sha256-kv8XtZ/z8zPHYSZ4k4arn2Y+L2xegr2DwhvlguJV820=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

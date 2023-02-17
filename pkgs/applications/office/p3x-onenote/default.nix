@@ -1,23 +1,19 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "2020.10.111";
+  version = "2022.10.117";
   name = "p3x-onenote-${version}";
 
   plat = {
     aarch64-linux = "-arm64";
     armv7l-linux = "-armv7l";
-    i386-linux = "-i386";
-    i686-linux = "-i386";
     x86_64-linux = "";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    aarch64-linux = "0a3c0w1312l6k2jvn7cn8priibnh8wg0184zjcli29f9ds1afl5s";
-    armv7l-linux = "172m2d94zzm8q61pvnjy01cl5fg11ad9hfh1han0gycnv3difniy";
-    i386-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    i686-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    x86_64-linux = "0bn48r55l5dh8zcf8ijh3z6hlyp3s6fvfyqc1csvnslm63dfkzcq";
+    aarch64-linux = "0plpwymm1bgzbzwk2689lw1fadxdwxzzn5dmayk1ayxz1k3pj9wi";
+    armv7l-linux = "1pvr8f1ccl4nyfmshn3v3jfaa5x519rsy57g4pdapffj10vpbkb8";
+    x86_64-linux = "12j2py8yb81ngahbkbi7269izpc5aydd432cbv0sw45ighhyqhmr";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {

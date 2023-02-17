@@ -27,13 +27,13 @@ buildPythonPackage rec {
     jsonrpc-base
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
     "tests.py"
   ];
 

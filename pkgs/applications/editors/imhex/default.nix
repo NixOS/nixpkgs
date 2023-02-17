@@ -17,19 +17,18 @@
 , curl
 , fmt_8
 , nlohmann_json
-, xlibsWrapper
 , yara
 }:
 
 let
   # when bumping the version, check if imhex has gotten support for the capstone version in nixpkgs
-  version = "1.19.3";
+  version = "1.26.2";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${version}";
-    hash = "sha256-mukGPN2TugJZLLuZ5FTvZ4DxUsMGfVNhBFAPnBRC0qs=";
+    hash = "sha256-2+7bJzgwHfXcINM5oxwi3vEbUtq9gGJc/uxFOwT4RnM=";
   };
 
 in
@@ -42,10 +41,10 @@ gcc12Stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SFv5ulyjm5Yf+3Gpx+A74so2YClCJx1sx0LE5fh5eG4=";
+    hash = "sha256-H2bnRByCUAltngmVWgPW4vW8k5AWecOAzwtBKsjbpTw=";
   };
 
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config xlibsWrapper ];
+  nativeBuildInputs = [ cmake llvm python3 perl pkg-config ];
 
   buildInputs = [
     capstone
@@ -73,10 +72,8 @@ gcc12Stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_YARA=ON"
   ];
 
-  # for reasons unknown, the built-in plugin isn't found unless made available under $out/bin
   postInstall = ''
-    ln -s $out/share/imhex/plugins $out/bin/
-
+    mkdir -p $out/share/imhex
     for d in ${patterns_src}/{constants,encodings,includes,magic,patterns}; do
       cp -r $d $out/share/imhex/
     done

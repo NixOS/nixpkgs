@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-o9VPOX50QTp3gVNv2MEizrm4WxW6mOBi8eiuyoe2XZQ=";
+    sha256 = "sha256-e+blEdO2KA/noW9pq56qZ0/vvtqQwiDbBJoQR0cQeds=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unittest-cpp ];
+  nativeCheckInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 
@@ -60,9 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

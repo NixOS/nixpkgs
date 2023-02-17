@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "life360";
-  version = "5.3.0";
+  version = "5.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pnbruckner";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-GacesPWPTuIIZel4OARWW13OYflYFNf4Jxh9I8ms7s0=";
+    hash = "sha256-F/j3qIdz63pEQ+nj1poP3lBFWSpSq4nLseYg+N2tykU=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
+    changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

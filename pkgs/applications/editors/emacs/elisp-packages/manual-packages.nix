@@ -50,8 +50,6 @@ self: with self; {
     _map = self.map;
   };
 
-  nano-theme = callPackage ./manual-packages/nano-theme { };
-
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };

@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1n4il3l59m2a6ca54vfaivzg25abf8s4w5kpd5q51p13624iz0kb";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
@@ -23,8 +21,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
 
-    clang
-    llvmPackages.libclang
+    rustPlatform.bindgenHook
 
     rustfmt
     protobuf

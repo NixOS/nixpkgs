@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [ gnome-desktop gtk3 libxml2 ];
-  checkInputs = [ dbus xvfb-run hicolor-icon-theme ];
+  nativeCheckInputs = [ dbus xvfb-run hicolor-icon-theme ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
     "-Dintrospection=enabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

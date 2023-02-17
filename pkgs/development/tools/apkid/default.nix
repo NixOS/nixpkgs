@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     yara-python
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

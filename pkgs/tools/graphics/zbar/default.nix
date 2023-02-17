@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , imagemagickBig
 , pkg-config
+, withXorg ? true
 , libX11
 , libv4l
 , qtbase
@@ -21,6 +22,8 @@
   # see https://github.com/mchehab/zbar/issues/104
 , enableDbus ? false
 , libintl
+, libiconv
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -41,16 +44,21 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
-    wrapQtAppsHook
+  ] ++ lib.optionals enableVideo [
     wrapGAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     imagemagickBig
-    libX11
     libintl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Foundation
   ] ++ lib.optionals enableDbus [
     dbus
+  ] ++ lib.optionals withXorg [
+    libX11
   ] ++ lib.optionals enableVideo [
     libv4l
     gtk3
