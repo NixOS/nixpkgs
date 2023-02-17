@@ -37723,6 +37723,8 @@ with pkgs;
 
   wxmacmolplt = callPackage ../applications/science/chemistry/wxmacmolplt { };
 
+  xcrysden = callPackage ../applications/science/chemistry/xcrysden { };
+
   ### SCIENCE/GEOMETRY
 
   antiprism = callPackage ../applications/science/geometry/antiprism { };
