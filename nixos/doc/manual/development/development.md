@@ -10,5 +10,6 @@ bootspec.chapter.md
 what-happens-during-a-system-switch.chapter.md
 writing-documentation.chapter.md
 nixos-tests.chapter.md
+developing-the-test-driver.chapter.md
 testing-installer.chapter.md
 ```
