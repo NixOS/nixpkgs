@@ -920,6 +920,12 @@
     githubId = 1079173;
     name = "Andrew Dunham";
   };
+  andrewb = {
+    email = "me@andrewbruce.net";
+    github = "camelpunch";
+    githubId = 141733;
+    name = "Andrew Bruce";
+  };
   andrewchambers = {
     email = "ac@acha.ninja";
     github = "andrewchambers";
