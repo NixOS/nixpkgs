@@ -4,8 +4,7 @@ import argparse
 import json
 
 from abc import abstractmethod
-from collections.abc import Mapping, MutableMapping, Sequence
-from markdown_it.utils import OptionsDict
+from collections.abc import Mapping, Sequence
 from markdown_it.token import Token
 from typing import Any, Generic, Optional
 from urllib.parse import quote
@@ -174,29 +173,23 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
     def finalize(self) -> str: raise NotImplementedError()
 
 class OptionDocsRestrictions:
-    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
 
 class OptionsDocBookRenderer(OptionDocsRestrictions, DocBookRenderer):
     # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
-    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         token.meta['compact'] = False
-        return super().ordered_list_open(token, tokens, i, options, env)
-    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+        return super().ordered_list_open(token, tokens, i)
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         token.meta['compact'] = False
-        return super().bullet_list_open(token, tokens, i, options, env)
+        return super().bullet_list_open(token, tokens, i)
 
 class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
     __option_block_separator__ = ""

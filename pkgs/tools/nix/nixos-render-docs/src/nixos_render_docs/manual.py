@@ -2,14 +2,13 @@ import argparse
 import json
 
 from abc import abstractmethod
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any, cast, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 from markdown_it.token import Token
-from markdown_it.utils import OptionsDict
 
 from . import options
 from .docbook import DocBookRenderer, Heading
@@ -30,8 +29,7 @@ class ManualDocBookRenderer(DocBookRenderer):
             'included_options': self.included_options,
         }
 
-    def render(self, tokens: Sequence[Token], options: OptionsDict,
-               env: MutableMapping[str, Any]) -> str:
+    def render(self, tokens: Sequence[Token]) -> str:
         wanted = { 'h1': 'title' }
         wanted |= { 'h2': 'subtitle' } if self._toplevel_tag == 'book' else {}
         for (i, (tag, kind)) in enumerate(wanted.items()):
@@ -62,16 +60,15 @@ class ManualDocBookRenderer(DocBookRenderer):
             return (f'<book xmlns="http://docbook.org/ns/docbook"'
                     f'      xmlns:xlink="http://www.w3.org/1999/xlink"'
                     f'      {maybe_id} version="5.0">'
-                    f'  <title>{self.renderInline(tokens[1].children, options, env)}</title>'
-                    f'  <subtitle>{self.renderInline(tokens[4].children, options, env)}</subtitle>'
-                    f'  {super().render(tokens[6:], options, env)}'
+                    f'  <title>{self.renderInline(tokens[1].children)}</title>'
+                    f'  <subtitle>{self.renderInline(tokens[4].children)}</subtitle>'
+                    f'  {super().render(tokens[6:])}'
                     f'</book>')
 
-        return super().render(tokens, options, env)
+        return super().render(tokens)
 
-    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
-        (tag, attrs) = super()._heading_tag(token, tokens, i, options, env)
+    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int) -> tuple[str, dict[str, str]]:
+        (tag, attrs) = super()._heading_tag(token, tokens, i)
         # render() has already verified that we don't have supernumerary headings and since the
         # book tag is handled specially we can leave the check this simple
         if token.tag != 'h1':
@@ -81,8 +78,7 @@ class ManualDocBookRenderer(DocBookRenderer):
             'xmlns:xlink': "http://www.w3.org/1999/xlink",
         })
 
-    def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int,
-                        options: OptionsDict, env: MutableMapping[str, Any]) -> str:
+    def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         result = []
         # close existing partintro. the generic render doesn't really need this because
         # it doesn't have a concept of structure in the way the manual does.
@@ -94,26 +90,21 @@ class ManualDocBookRenderer(DocBookRenderer):
         r = ManualDocBookRenderer(tag, self._manpage_urls)
         for (included, path) in token.meta['included']:
             try:
-                result.append(r.render(included, options, env))
+                result.append(r.render(included))
             except Exception as e:
                 raise RuntimeError(f"rendering {path}") from e
         return "".join(result)
-    def included_options(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+    def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return cast(str, token.meta['rendered-options'])
 
     # TODO minimize docbook diffs with existing conversions. remove soon.
-    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
-        return super().paragraph_open(token, tokens, i, options, env) + "\n "
-    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
-        return "\n" + super().paragraph_close(token, tokens, i, options, env)
-    def code_block(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return super().paragraph_open(token, tokens, i) + "\n "
+    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "\n" + super().paragraph_close(token, tokens, i)
+    def code_block(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return f"<programlisting>\n{escape(token.content)}</programlisting>"
-    def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-              env: MutableMapping[str, Any]) -> str:
+    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
@@ -134,8 +125,8 @@ class DocBookConverter(Converter[ManualDocBookRenderer]):
         except Exception as e:
             raise RuntimeError(f"failed to render manual {file}") from e
 
-    def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
-        tokens = super()._parse(src, env)
+    def _parse(self, src: str) -> list[Token]:
+        tokens = super()._parse(src)
         for token in tokens:
             if token.type != "fence" or not token.info.startswith("{=include=} "):
                 continue
@@ -145,12 +136,12 @@ class DocBookConverter(Converter[ManualDocBookRenderer]):
                 self._parse_options(token)
             elif typ in [ 'sections', 'chapters', 'preface', 'parts', 'appendix' ]:
                 token.type = 'included_' + typ
-                self._parse_included_blocks(token, env)
+                self._parse_included_blocks(token)
             else:
                 raise RuntimeError(f"unsupported structural include type '{typ}'")
         return tokens
 
-    def _parse_included_blocks(self, token: Token, env: Optional[MutableMapping[str, Any]]) -> None:
+    def _parse_included_blocks(self, token: Token) -> None:
         assert token.map
         included = token.meta['included'] = []
         for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
@@ -161,7 +152,7 @@ class DocBookConverter(Converter[ManualDocBookRenderer]):
             try:
                 self._base_paths.append(path)
                 with open(path, 'r') as f:
-                    tokens = self._parse(f.read(), env)
+                    tokens = self._parse(f.read())
                     included.append((tokens, path))
                 self._base_paths.pop()
             except Exception as e:
