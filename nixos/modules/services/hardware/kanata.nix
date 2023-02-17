@@ -34,8 +34,10 @@ let
             cap (tap-hold 100 100 caps lctl))
         '';
         description = mdDoc ''
-          Configuration other than `defcfg`. See [example config
-          files](https://github.com/jtroo/kanata) for more information.
+          Configuration other than `defcfg`.
+
+          See [example config files](https://github.com/jtroo/kanata)
+          for more information.
         '';
       };
       extraDefCfg = mkOption {
@@ -61,8 +63,7 @@ let
         default = null;
         example = 6666;
         description = mdDoc ''
-          Port to run the notification server on. `null` will not run the
-          server.
+          Port to run the TCP server on. `null` will not run the server.
         '';
       };
     };
@@ -86,7 +87,7 @@ let
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = ''
-        ${cfg.package}/bin/kanata \
+        ${getExe cfg.package} \
           --cfg ${mkConfig name keyboard} \
           --symlink-path ''${RUNTIME_DIRECTORY}/${name} \
           ${optionalString (keyboard.port != null) "--port ${toString keyboard.port}"} \
@@ -138,7 +139,7 @@ let
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption (lib.mdDoc "kanata");
+    enable = mkEnableOption (mdDoc "kanata");
     package = mkOption {
       type = types.package;
       default = pkgs.kanata;
