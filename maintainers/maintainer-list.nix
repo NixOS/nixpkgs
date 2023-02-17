@@ -3762,12 +3762,6 @@
     githubId = 14034137;
     name = "Mostly Void";
   };
-  dizfer = {
-    email = "david@izquierdofernandez.com";
-    github = "DIzFer";
-    githubId = 8852888;
-    name = "David Izquierdo";
-  };
   djacu = {
     email = "daniel.n.baker@gmail.com";
     github = "djacu";
