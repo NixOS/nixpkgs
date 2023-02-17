@@ -1,0 +1,38 @@
+{
+  "context.properties": {},
+  "context.modules": [
+    {
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
+    {
+      "name": "libpipewire-module-protocol-native"
+    },
+    {
+      "name": "libpipewire-module-client-node"
+    },
+    {
+      "name": "libpipewire-module-adapter"
+    },
+    {
+      "name": "libpipewire-module-rtp-source",
+      "args": {
+        "sap.ip": "239.255.255.255",
+        "sap.port": 9875,
+        "sess.latency.msec": 10,
+        "local.ifname": "eth0",
+        "stream.props": {
+          "media.class": "Audio/Source",
+          "node.virtual": false,
+          "device.api": "aes67"
+        }
+      }
+    }
+  ]
+}
