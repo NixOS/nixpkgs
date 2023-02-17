@@ -270,7 +270,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
-            ExecStartPre = onlyoffice-prestart;
+            ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
