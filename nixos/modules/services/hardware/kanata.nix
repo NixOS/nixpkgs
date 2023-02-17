@@ -8,8 +8,7 @@ let
   keyboard = {
     options = {
       devices = mkOption {
-        type = types.addCheck (types.listOf types.str)
-          (devices: (length devices) > 0);
+        type = types.listOf types.str;
         example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
         description = mdDoc "Paths to keyboard devices.";
       };
@@ -71,12 +70,13 @@ let
 
   mkName = name: "kanata-${name}";
 
-  mkDevices = devices: concatStringsSep ":" devices;
+  mkDevices = devices:
+    optionalString ((length devices) > 0) "linux-dev ${concatStringsSep ":" devices}";
 
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
       ${keyboard.extraDefCfg}
-      linux-dev ${mkDevices keyboard.devices}
+      ${mkDevices keyboard.devices}
       linux-continue-if-no-devs-found yes)
 
     ${keyboard.config}
