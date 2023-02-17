@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     done
 
     # Patch executable ELFs.
-    for path in bin/lin64 ispfpga/bin/lin64; do
+    for path in bin/lin64 ispfpga/bin/lin64 synpbase/linux_a_64 synpbase/linux_a_64/mbin; do
         cd $out/$prefix/$path
         for f in *; do
             if ! file $f | grep -q "ELF 64-bit LSB executable" ; then
