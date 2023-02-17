@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ../make-test-python.nix ({ pkgs, lib, ... }: let
   hostIP = "192.168.1.1";
   containerIP = "192.168.1.5";
   clientIP = "192.168.1.23";

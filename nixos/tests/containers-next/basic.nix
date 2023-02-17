@@ -1,5 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
-  inherit (import ./ssh-keys.nix pkgs)
+import ../make-test-python.nix ({ pkgs, lib, ... }: let
+  inherit (import ../ssh-keys.nix pkgs)
     snakeOilPrivateKey snakeOilPublicKey;
 in {
   name = "container-tests";
@@ -111,7 +111,7 @@ in {
       };
       container1 = {
         sharedNix = false;
-        nixpkgs = ../..;
+        nixpkgs = ../../..;
         zone = "foo";
         network.v6.addrPool = lib.mkForce [];
         network.v4.addrPool = lib.mkForce [];

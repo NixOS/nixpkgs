@@ -140,11 +140,11 @@ in {
   collectd = handleTest ./collectd.nix {};
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
-  containers-next = handleTest ./containers-next.nix {};
-  containers-next-imperative = handleTest ./containers-next-imperative.nix {};
-  containers-next-macvlan = handleTest ./containers-next-macvlan.nix {};
-  containers-migration = handleTest ./containers-migration.nix {};
-  containers-config-activation = handleTest ./containers-config-activation.nix {};
+  containers-next = handleTest ./containers-next/basic.nix {};
+  containers-next-imperative = handleTest ./containers-next/imperative.nix {};
+  containers-next-macvlan = handleTest ./containers-next/macvlan.nix {};
+  containers-next-migration = handleTest ./containers-next/migration.nix {};
+  containers-next-config-activation = handleTest ./containers-next/config-activation.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};

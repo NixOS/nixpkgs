@@ -11,8 +11,8 @@ in
 {
   container-tests = {
     general = release.tests.containers-next;
-    migration = release.tests.containers-migration;
-    activation = release.tests.containers-config-activation;
+    migration = release.tests.containers-next-migration;
+    activation = release.tests.containers-next-config-activation;
     imperative = release.tests.containers-next-imperative;
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ../make-test-python.nix ({ pkgs, lib, ... }: let
   instances.dynamic = {
     activation.strategy = "dynamic";
     network.v4.static.containerPool = [ "10.231.136.2/24" ];

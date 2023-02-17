@@ -16,7 +16,7 @@
 # use systemd-nspawn itself for containers (and consider NixOS just a thin abstraction layer),
 # this isn't a big deal IMHO.
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-next-macvlan";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
