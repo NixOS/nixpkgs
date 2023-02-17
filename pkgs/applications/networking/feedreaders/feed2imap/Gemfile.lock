@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    feed2imap (1.3.3)
+      rmail (>= 1.1.4)
+      ruby-feedparser (>= 0.9)
+    ffi (1.15.5)
+    magic (0.2.9)
+      ffi (>= 0.6.3)
+    rmail (1.1.4)
+    ruby-feedparser (0.11.0)
+      magic
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  feed2imap
+
+BUNDLED WITH
+   2.3.24
