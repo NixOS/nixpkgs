@@ -43,6 +43,10 @@ buildPythonPackage rec {
     '';
   };
 
+  patches = [
+    ./writeable-output.diff
+  ];
+
   buildInputs = [
     glibcLocales
     pandoc

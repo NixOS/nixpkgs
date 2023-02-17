@@ -1,0 +1,38 @@
+diff --git a/pelican/utils.py b/pelican/utils.py
+index f3a01217..300ec204 100644
+--- a/pelican/utils.py
++++ b/pelican/utils.py
+@@ -300,7 +300,7 @@ def walk_error(err):
+             logger.info('Creating directory %s', dst_dir)
+             os.makedirs(dst_dir)
+         logger.info('Copying %s to %s', source_, destination_)
+-        copy_file_metadata(source_, destination_)
++        copy_file(source_, destination_)
+ 
+     elif os.path.isdir(source_):
+         if not os.path.exists(destination_):
+@@ -330,20 +330,17 @@ def walk_error(err):
+                 dst_path = os.path.join(dst_dir, o)
+                 if os.path.isfile(src_path):
+                     logger.info('Copying %s to %s', src_path, dst_path)
+-                    copy_file_metadata(src_path, dst_path)
++                    copy_file(src_path, dst_path)
+                 else:
+                     logger.warning('Skipped copy %s (not a file or '
+                                    'directory) to %s',
+                                    src_path, dst_path)
+ 
+ 
+-def copy_file_metadata(source, destination):
+-    '''Copy a file and its metadata (perm bits, access times, ...)'''
+-
+-    # This function is a workaround for Android python copystat
+-    # bug ([issue28141]) https://bugs.python.org/issue28141
++def copy_file(source, destination):
++    '''Copy a file'''
+     try:
+-        shutil.copy2(source, destination)
++        shutil.copyfile(source, destination)
+     except OSError as e:
+         logger.warning("A problem occurred copying file %s to %s; %s",
+                        source, destination, e)
