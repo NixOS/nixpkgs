@@ -21,8 +21,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     services.xserver.desktopManager.budgie.enable = true;
-
-users.users.alice.extraGroups = ["wheel"];
   };
 
   testScript = { nodes, ... }:
