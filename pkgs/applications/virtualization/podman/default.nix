@@ -14,20 +14,27 @@
 , go-md2man
 , nixosTests
 , python3
+, testers
+, podman
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-wp3Dd5bhLd/eq926C+MpzMWoxieJRAslt1beZU/WbeU=";
+    hash = "sha256-Uha5ueOGNmG2f+1I89uFQKA3pSSp1d02FGy86Fc2eWE=";
   };
 
-  vendorSha256 = null;
+  patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ];
+
+  vendorHash = null;
 
   doCheck = false;
 
@@ -63,7 +70,6 @@ buildGoModule rec {
     ${if stdenv.isDarwin then ''
       mv bin/{darwin/podman,podman}
     '' else ''
-      install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
       install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
       for s in contrib/systemd/**/*.in; do
         substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
@@ -83,11 +89,15 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
+    };
+  } // lib.optionalAttrs stdenv.isLinux {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)
       podman-tls-ghostunnel
-      podman-dnsname
       ;
     oci-containers-podman = nixosTests.oci-containers.podman;
   };
