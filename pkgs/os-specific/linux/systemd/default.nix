@@ -133,13 +133,13 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.5";
+  version = "253";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1667246393";
+  releaseTimestamp = "1676488940";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-cNZRTuYFMR1z6KpELeQoJahMhRl4fKuRuc3xXH3KzlM=";
+    hash = "sha256-K1h4nnDYB25URcJrS5HF4gYVDzEUCABpTxlEt7JKKa4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -165,19 +165,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./0004-Look-for-fsck-in-the-right-place.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-add-rootprefix-to-lookup-dir-paths.patch
-    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0016-pkg-config-derive-prefix-from-prefix.patch
-    ./0017-inherit-systemd-environment-when-calling-generators.patch
-    ./0018-core-don-t-taint-on-unmerged-usr.patch
-    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+    ./0007-Fix-hwdb-paths.patch
+    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0011-add-rootprefix-to-lookup-dir-paths.patch
+    ./0012-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0013-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0014-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0015-pkg-config-derive-prefix-from-prefix.patch
+    ./0016-inherit-systemd-environment-when-calling-generators.patch
+    ./0017-core-don-t-taint-on-unmerged-usr.patch
+    ./0018-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -295,6 +294,9 @@ stdenv.mkDerivation (finalAttrs: {
           # inspect-elf support
           { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
           { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
+
+          # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
+          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
         ];
 
       patchDlOpen = dl:
@@ -402,7 +404,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
