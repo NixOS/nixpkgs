@@ -32,14 +32,13 @@ class Heading(NamedTuple):
     partintro_closed: bool = False
 
 class DocBookRenderer(Renderer):
-    __output__ = "docbook"
     _link_tags: list[str]
     _deflists: list[Deflist]
     _headings: list[Heading]
     _attrspans: list[str]
 
-    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, manpage_urls: Mapping[str, str]):
+        super().__init__(manpage_urls)
         self._link_tags = []
         self._deflists = []
         self._headings = []

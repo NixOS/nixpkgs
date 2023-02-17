@@ -1,6 +1,6 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
+from typing import Any, Callable, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
 
 import dataclasses
 import re
@@ -44,11 +44,11 @@ AttrBlockKind = Literal['admonition', 'example']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
-class Renderer(markdown_it.renderer.RendererProtocol):
+class Renderer:
     _admonitions: dict[AdmonitionKind, tuple[RenderFn, RenderFn]]
     _admonition_stack: list[AdmonitionKind]
 
-    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
+    def __init__(self, manpage_urls: Mapping[str, str]):
         self._manpage_urls = manpage_urls
         self.rules = {
             'text': self.text,
@@ -466,12 +466,26 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("block_attr", block_attr)
 
-class Converter(ABC):
-    __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
+TR = TypeVar('TR', bound='Renderer')
 
-    def __init__(self, manpage_urls: Mapping[str, str]):
-        self._manpage_urls = manpage_urls
+class Converter(ABC, Generic[TR]):
+    # we explicitly disable markdown-it rendering support and use our own entirely.
+    # rendering is well separated from parsing and our renderers carry much more state than
+    # markdown-it easily acknowledges as 'good' (unless we used the untyped env args to
+    # shuttle that state around, which is very fragile)
+    class ForbiddenRenderer(markdown_it.renderer.RendererProtocol):
+        __output__ = "none"
 
+        def __init__(self, parser: Optional[markdown_it.MarkdownIt]):
+            pass
+
+        def render(self, tokens: Sequence[Token], options: OptionsDict,
+                   env: MutableMapping[str, Any]) -> str:
+            raise NotImplementedError("do not use Converter._md.renderer. 'tis a silly place")
+
+    _renderer: TR
+
+    def __init__(self) -> None:
         self._md = markdown_it.MarkdownIt(
             "commonmark",
             {
@@ -479,7 +493,7 @@ class Converter(ABC):
                 'html': False,       # not useful since we target many formats
                 'typographer': True, # required for smartquotes
             },
-            renderer_cls=lambda parser: self.__renderer__(self._manpage_urls, parser)
+            renderer_cls=self.ForbiddenRenderer
         )
         self._md.use(
             container_plugin,
@@ -502,4 +516,4 @@ class Converter(ABC):
     def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
         env = {} if env is None else env
         tokens = self._parse(src, env)
-        return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]
+        return self._renderer.render(tokens, self._md.options, env)

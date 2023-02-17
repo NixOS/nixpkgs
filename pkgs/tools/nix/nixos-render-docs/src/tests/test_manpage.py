@@ -1,4 +1,4 @@
-import nixos_render_docs
+import nixos_render_docs as nrd
 
 from sample_md import sample1
 
@@ -6,15 +6,10 @@ from typing import Mapping, Optional
 
 import markdown_it
 
-class Converter(nixos_render_docs.md.Converter):
-    def __renderer__(self, manpage_urls: Mapping[str, str],
-                     parser: Optional[markdown_it.MarkdownIt] = None
-                     ) -> nixos_render_docs.manpage.ManpageRenderer:
-        return nixos_render_docs.manpage.ManpageRenderer(manpage_urls, self.options_by_id, parser)
-
+class Converter(nrd.md.Converter[nrd.manpage.ManpageRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str], options_by_id: dict[str, str] = {}):
-        self.options_by_id = options_by_id
-        super().__init__(manpage_urls)
+        super().__init__()
+        self._renderer = nrd.manpage.ManpageRenderer(manpage_urls, options_by_id)
 
 def test_inline_code() -> None:
     c = Converter({})
@@ -32,17 +27,15 @@ def test_expand_link_targets() -> None:
 
 def test_collect_links() -> None:
     c = Converter({}, { '#foo': "bar" })
-    assert isinstance(c._md.renderer, nixos_render_docs.manpage.ManpageRenderer)
-    c._md.renderer.link_footnotes = []
+    c._renderer.link_footnotes = []
     assert c._render("[a](link1) [b](link2)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[2]\\fR"
-    assert c._md.renderer.link_footnotes == ['link1', 'link2']
+    assert c._renderer.link_footnotes == ['link1', 'link2']
 
 def test_dedup_links() -> None:
     c = Converter({}, { '#foo': "bar" })
-    assert isinstance(c._md.renderer, nixos_render_docs.manpage.ManpageRenderer)
-    c._md.renderer.link_footnotes = []
+    c._renderer.link_footnotes = []
     assert c._render("[a](link) [b](link)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[1]\\fR"
-    assert c._md.renderer.link_footnotes == ['link']
+    assert c._renderer.link_footnotes == ['link']
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })

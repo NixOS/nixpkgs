@@ -75,8 +75,6 @@ class List:
 # horizontal motion in a line) we do attempt to copy the style of mdoc(7) semantic requests
 # as appropriate for each markup element.
 class ManpageRenderer(Renderer):
-    __output__ = "man"
-
     # whether to emit mdoc .Ql equivalents for inline code or just the contents. this is
     # mainly used by the options manpage converter to not emit extra quotes in defaults
     # and examples where it's already clear from context that the following text is code.
@@ -90,9 +88,8 @@ class ManpageRenderer(Renderer):
     _list_stack: list[List]
     _font_stack: list[str]
 
-    def __init__(self, manpage_urls: Mapping[str, str], href_targets: dict[str, str],
-                 parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, manpage_urls: Mapping[str, str], href_targets: dict[str, str]):
+        super().__init__(manpage_urls)
         self._href_targets = href_targets
         self._link_stack = []
         self._do_parbreak_stack = []

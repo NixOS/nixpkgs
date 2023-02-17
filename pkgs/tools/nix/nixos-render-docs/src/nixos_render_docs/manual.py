@@ -18,9 +18,8 @@ from .md import Converter
 class ManualDocBookRenderer(DocBookRenderer):
     _toplevel_tag: str
 
-    def __init__(self, toplevel_tag: str, manpage_urls: Mapping[str, str],
-                 parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, toplevel_tag: str, manpage_urls: Mapping[str, str]):
+        super().__init__(manpage_urls)
         self._toplevel_tag = toplevel_tag
         self.rules |= {
             'included_sections': lambda *args: self._included_thing("section", *args),
@@ -92,7 +91,7 @@ class ManualDocBookRenderer(DocBookRenderer):
             self._headings[-1] = self._headings[-1]._replace(partintro_closed=True)
         # must nest properly for structural includes. this requires saving at least
         # the headings stack, but creating new renderers is cheap and much easier.
-        r = ManualDocBookRenderer(tag, self._manpage_urls, None)
+        r = ManualDocBookRenderer(tag, self._manpage_urls)
         for (included, path) in token.meta['included']:
             try:
                 result.append(r.render(included, options, env))
@@ -118,16 +117,13 @@ class ManualDocBookRenderer(DocBookRenderer):
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
-class DocBookConverter(Converter):
-    def __renderer__(self, manpage_urls: Mapping[str, str],
-                     parser: Optional[markdown_it.MarkdownIt]) -> ManualDocBookRenderer:
-        return ManualDocBookRenderer('book', manpage_urls, parser)
-
+class DocBookConverter(Converter[ManualDocBookRenderer]):
     _base_paths: list[Path]
     _revision: str
 
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
-        super().__init__(manpage_urls)
+        super().__init__()
+        self._renderer = ManualDocBookRenderer('book', manpage_urls)
         self._revision = revision
 
     def convert(self, file: Path) -> str:
@@ -195,7 +191,7 @@ class DocBookConverter(Converter):
 
         try:
             conv = options.DocBookConverter(
-                self._manpage_urls, self._revision, False, 'fragment', varlist_id, id_prefix)
+                self._renderer._manpage_urls, self._revision, False, 'fragment', varlist_id, id_prefix)
             with open(self._base_paths[-1].parent / source, 'r') as f:
                 conv.add_options(json.load(f))
             token.meta['rendered-options'] = conv.finalize(fragment=True)

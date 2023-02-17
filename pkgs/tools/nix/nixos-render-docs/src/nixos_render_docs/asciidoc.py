@@ -5,7 +5,6 @@ from urllib.parse import quote
 
 from .md import Renderer
 
-import markdown_it
 from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 
@@ -59,8 +58,8 @@ class AsciiDocRenderer(Renderer):
     _list_stack: list[List]
     _attrspans: list[str]
 
-    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, manpage_urls: Mapping[str, str]):
+        super().__init__(manpage_urls)
         self._parstack = [ Par("\n\n", "====") ]
         self._list_stack = []
         self._attrspans = []

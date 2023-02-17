@@ -4,7 +4,6 @@ from typing import Any, cast, Optional
 
 from .md import md_escape, md_make_code, Renderer
 
-import markdown_it
 from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 
@@ -26,8 +25,8 @@ class CommonMarkRenderer(Renderer):
     _link_stack: list[str]
     _list_stack: list[List]
 
-    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
-        super().__init__(manpage_urls, parser)
+    def __init__(self, manpage_urls: Mapping[str, str]):
+        super().__init__(manpage_urls)
         self._parstack = [ Par("") ]
         self._link_stack = []
         self._list_stack = []

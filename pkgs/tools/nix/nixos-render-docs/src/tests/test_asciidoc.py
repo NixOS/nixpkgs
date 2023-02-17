@@ -1,9 +1,11 @@
-import nixos_render_docs
+import nixos_render_docs as nrd
 
 from sample_md import sample1
 
-class Converter(nixos_render_docs.md.Converter):
-    __renderer__ = nixos_render_docs.asciidoc.AsciiDocRenderer
+class Converter(nrd.md.Converter[nrd.asciidoc.AsciiDocRenderer]):
+    def __init__(self, manpage_urls: dict[str, str]):
+        super().__init__()
+        self._renderer = nrd.asciidoc.AsciiDocRenderer(manpage_urls)
 
 def test_lists() -> None:
     c = Converter({})
