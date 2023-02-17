@@ -1421,6 +1421,8 @@ self: super: with self; {
 
   brelpy = callPackage ../development/python-modules/brelpy { };
 
+  brian2 = callPackage ../development/python-modules/brian2 { };
+
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
@@ -6301,6 +6303,8 @@ self: super: with self; {
   neo4j = callPackage ../development/python-modules/neo4j { };
 
   nessclient = callPackage ../development/python-modules/nessclient { };
+
+  nest = toPythonModule(pkgs.nest-mpi.override { withPython = true; python3 = python; });
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 

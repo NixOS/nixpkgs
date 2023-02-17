@@ -602,11 +602,11 @@ With a partitioned disk.
 
 ## Additional installation notes {#sec-installation-additional-notes}
 
-```{=docbook}
-<xi:include href="installing-usb.section.xml" />
-<xi:include href="installing-pxe.section.xml" />
-<xi:include href="installing-kexec.section.xml" />
-<xi:include href="installing-virtualbox-guest.section.xml" />
-<xi:include href="installing-from-other-distro.section.xml" />
-<xi:include href="installing-behind-a-proxy.section.xml" />
+```{=include=} sections
+installing-usb.section.md
+installing-pxe.section.md
+installing-kexec.section.md
+installing-virtualbox-guest.section.md
+installing-from-other-distro.section.md
+installing-behind-a-proxy.section.md
 ```
