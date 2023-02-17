@@ -25,10 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ hwdata ];
 
-  prePatch = ''
-    substituteInPlace meson.build \
-        --replace "find_program('tool/gen-search-table.py')" "find_program('python3')" \
-        --replace "gen_search_table," "gen_search_table, '$src/tool/gen-search-table.py',"
+  postPatch = ''
+    patchShebangs tool/gen-search-table.py
   '';
 
   meta = with lib; {
