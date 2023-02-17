@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "helm-diff";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-evFdMM2AilKQPdSCUzKo6RuC4OC4zfjj+JzFvtkSrdk=";
+    sha256 = "sha256-JeQP2KXoLxkyRZVFcd6Rrz5xyJd+F3plzznAVP3Um8g=";
   };
 
-  vendorSha256 = "sha256-9i4ryBpaK7mMbsOpIaaZWBRjewD1MtTpf4zJ0yU0KMg=";
+  vendorSha256 = "sha256-d5NSqCJrk9QhV5gVOKUG/uJxuvt8X8hiQd8yJEoXPL0=";
+
+  ldflags = [ "-s" "-w" "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}" ];
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
