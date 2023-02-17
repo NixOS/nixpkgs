@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
   # https://github.com/NixOS/nixpkgs/issues/25585
   preFixup = ''rm -rf "$(pwd)" '';
+  # https://github.com/mongodb/mongo-c-driver/pull/1157
+  # related:
+  # https://github.com/NixOS/nixpkgs/issues/144170
+  # mongoc's cmake incorrectly injects a prefix to library paths, breaking Nix. This removes the prefix from paths.
   postPatch = ''
     substituteInPlace src/libmongoc/CMakeLists.txt \
       --replace "\\\''${prefix}/" ""
