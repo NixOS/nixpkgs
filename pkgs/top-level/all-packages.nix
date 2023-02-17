@@ -36246,6 +36246,8 @@ with pkgs;
 
   libtriton = callPackage ../development/libraries/libtriton { };
 
+  dynamorio = callPackage ../tools/security/dynamorio { };
+
   root = callPackage ../applications/science/misc/root {
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
