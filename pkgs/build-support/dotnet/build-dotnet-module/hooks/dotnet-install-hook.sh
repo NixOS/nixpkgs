@@ -17,11 +17,13 @@ dotnetInstallHook() {
     fi
 
     dotnetPublish() {
+        # TODO: Replace "-p:PublishDir" with "--output" when
+        # upgrading dotnet-sdk_7 to a version > 7.0.200
         local -r project="${1-}"
         env dotnet publish ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            --output "$out/lib/${pname}" \
+            -p:PublishDir="$out/lib/${pname}" \
             --configuration "@buildType@" \
             --no-build \
             ${dotnetInstallFlags[@]}  \
@@ -30,10 +32,12 @@ dotnetInstallHook() {
 
     dotnetPack() {
         local -r project="${1-}"
+        # TODO: Replace "-p:PackageOutputPath" with "--output" when
+        # upgrading dotnet-sdk_7 to a version > 7.0.200
          env dotnet pack ${project-} \
              -p:ContinuousIntegrationBuild=true \
              -p:Deterministic=true \
-             --output "$out/share" \
+             -p:PackageOutputPath="$out/share" \
              --configuration "@buildType@" \
              --no-build \
              ${dotnetPackFlags[@]}  \
