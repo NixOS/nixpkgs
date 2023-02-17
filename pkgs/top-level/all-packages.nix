@@ -4010,6 +4010,8 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
+  clash-for-windows = callPackage ../applications/networking/clash-for-windows { };
+
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   clevis = callPackage ../tools/security/clevis {
