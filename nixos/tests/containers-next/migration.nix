@@ -160,8 +160,6 @@ in {
     };
   };
 
-  skipLint = true;
-
   testScript = { nodes, ... }: let
      new = nodes.new.config.system.build.toplevel;
   in ''

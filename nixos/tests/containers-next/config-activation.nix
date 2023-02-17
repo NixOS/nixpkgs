@@ -94,7 +94,6 @@ in {
       };
     };
   };
-  skipLint = true;
 
   testScript = { nodes, ... }: let
     change = nodes.configchange.config.system.build.toplevel;
