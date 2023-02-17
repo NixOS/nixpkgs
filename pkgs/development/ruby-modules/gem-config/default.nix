@@ -203,7 +203,12 @@ in
   };
 
   eventmachine = attrs: {
+    dontBuild = false;
     buildInputs = [ openssl ];
+    postPatch = ''
+      substituteInPlace ext/em.cpp \
+        --replace 'if (bind (' 'if (::bind ('
+    '';
   };
 
   exif = attrs: {
