@@ -113,7 +113,7 @@ in
       group = "polkituser";
     };
 
-    users.groups.polkituser = {};
+    users.groups.polkituser.gid = config.ids.gids.polkituser;
   };
 
 }

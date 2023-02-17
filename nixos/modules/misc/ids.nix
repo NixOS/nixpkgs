@@ -392,7 +392,7 @@ in
       tape = 25;
       video = 26;
       dialout = 27;
-      #polkituser = 28; # currently unused, polkitd doesn't need a group
+      polkituser = 28;
       utmp = 29;
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
