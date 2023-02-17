@@ -306,6 +306,8 @@ with pkgs;
 
   asn1c = callPackage ../development/compilers/asn1c { };
 
+  assemblyscript = callPackage ../development/compilers/assemblyscript { };
+
   authy = callPackage ../applications/misc/authy { };
 
   authz0 = callPackage ../tools/security/authz0 { };
