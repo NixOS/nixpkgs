@@ -79,7 +79,7 @@ let
   cppFlags = map (pkg: "-isystem ${lib.getOutput "dev" pkg}/include") appStaticBuildDeps;
   linkerFlags = map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") appRuntimeDeps;
 in
-runCommandLocal "flutter"
+(callPackage ./sdk-symlink.nix { }) (runCommandLocal "flutter-wrapped"
 {
   buildInputs = [ makeWrapper ];
 
@@ -90,10 +90,6 @@ runCommandLocal "flutter"
   inherit (flutter) meta;
 } ''
   mkdir -p $out/bin
-
-  mkdir -p $out/bin/cache/
-  ln -sf ${flutter.dart} $out/bin/cache/dart-sdk
-
   makeWrapper '${immutableFlutter}' $out/bin/flutter \
     --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
     --prefix PATH : '${lib.makeBinPath buildTools}' \
@@ -101,4 +97,4 @@ runCommandLocal "flutter"
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
     --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}' \
     --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath appPrebuiltDeps}'
-''
+'')

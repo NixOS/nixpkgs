@@ -7,73 +7,77 @@
 , supportsAndroidEmulator ? stdenv.isLinux
 }:
 
-let
-  # Wrap flutter inside an fhs user env to allow execution of binary,
-  # like adb from $ANDROID_HOME or java from android-studio.
-  self = buildFHSUserEnv {
-    name = flutter.name;
 
-    multiPkgs = pkgs: with pkgs; ([
-      # Flutter only use these certificates
-      (runCommandLocal "fedoracert" { } ''
-        mkdir -p $out/etc/pki/tls/
-        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-      '')
-      zlib
-    ]);
+# Wrap flutter inside an fhs user env to allow execution of binary,
+# like adb from $ANDROID_HOME or java from android-studio.
+(callPackage ./sdk-symlink.nix { }) (buildFHSUserEnv rec {
+  name = "${flutter.name}-fhs";
 
-    targetPkgs = pkgs: with pkgs; ([
-      flutter
+  multiPkgs = pkgs: with pkgs; ([
+    # Flutter only use these certificates
+    (runCommandLocal "fedoracert" { } ''
+      mkdir -p $out/etc/pki/tls/
+      ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+    '')
+    zlib
+  ]);
 
-      # General ecosystem dependencies
-      bash
-      curl
-      git
-      unzip
-      which
-      xz
+  targetPkgs = pkgs: with pkgs; ([
+    flutter
 
-      # flutter test requires this lib
-      libGLU
-    ] ++ lib.optional supportsAndroidEmulator [
-      # for android emulator
-      alsa-lib
-      dbus
-      expat
-      libpulseaudio
-      libuuid
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
-      libGL
-      nspr
-      nss
-      systemd
-    ]);
+    # General ecosystem dependencies
+    bash
+    curl
+    git
+    unzip
+    which
+    xz
 
-    runScript = "flutter";
+    # flutter test requires this lib
+    libGLU
+  ] ++ lib.optional supportsAndroidEmulator [
+    # for android emulator
+    alsa-lib
+    dbus
+    expat
+    libpulseaudio
+    libuuid
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    libGL
+    nspr
+    nss
+    systemd
+  ]);
 
-    passthru = flutter.passthru // {
-      wrapped = flutter;
-      mkFlutterApp = callPackage ../../../build-support/flutter {
-        flutter = callPackage ./fhs.nix { supportsAndroidEmulator = false; };
-      };
-      fakeSdk = callPackage ./fake-sdk.nix { flutter = self; };
-    };
+  runScript = "flutter";
 
-    meta = flutter.meta // {
-      longDescription = ''
-        ${flutter.meta.longDescription}
-        Wrapped in a FHS environment to improve compatibility with internal tools and tools in the ecosystem.
-      '';
+  extraInstallCommands = ''
+    # By default, the derivation name is used as the binary name.
+    # This is not the desired behaviour in this case.
+    # https://github.com/NixOS/nixpkgs/blob/cb4536bf3606a7b6b54b69afe22ccd82e2906d92/pkgs/build-support/build-fhs-userenv/default.nix#L43
+    mv $out/bin/${name} $out/bin/flutter
+  '';
+
+  passthru = flutter.passthru // {
+    nonFHS = flutter;
+    mkFlutterApp = callPackage ../../../build-support/flutter {
+      flutter = callPackage ./fhs.nix { supportsAndroidEmulator = false; };
     };
   };
-in
-self
+
+  meta = flutter.meta // {
+    longDescription = ''
+      ${flutter.meta.longDescription}
+      Wrapped in a FHS environment to improve compatibility with internal tools and tools in the ecosystem.
+    '';
+  };
+})
