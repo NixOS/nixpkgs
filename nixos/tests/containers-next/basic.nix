@@ -11,8 +11,6 @@ in {
   # of containers hosted on a different server.
   nodes.client = { pkgs, ... }: {
     virtualisation.vlans = [ 1 ];
-    boot.consoleLogLevel = 7;
-    environment.systemPackages = [ pkgs.tcpdump pkgs.tmux ];
     networking.firewall.extraCommands = ''
       ip46tables -A INPUT -i eth1 -j ACCEPT
     '';
@@ -37,8 +35,6 @@ in {
   # Demo server which hosts nspawn machines.
   nodes.server = { pkgs, lib, ... }: {
     virtualisation.vlans = [ 1 ];
-    systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-    boot.consoleLogLevel = 7;
 
     # Local authoritative DNS server. Used to confirm how DNS is handled by nspawn by default.
     services.bind = {
@@ -92,7 +88,6 @@ in {
           }
         ];
         system-config = { pkgs, ... }: {
-          environment.systemPackages = [ pkgs.tcpdump pkgs.tmux pkgs.dnsutils ];
           networking.firewall.allowedTCPPorts = [ 80 ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
           services.openssh.enable = true;
@@ -159,7 +154,6 @@ in {
       ];
     };
 
-    # FIXME probably provide a nicer API here
     systemd.network.networks."20-ve-container0".routes = [
       { routeConfig.Destination = "fd24::2"; }
     ];
@@ -179,7 +173,6 @@ in {
     };
 
     programs.mtr.enable = true;
-    environment.systemPackages = [ pkgs.tcpdump pkgs.tmux pkgs.dnsutils ];
 
     # Needed to make sure that the DHCPServer of `systemd-networkd' properly works and
     # can assign IPv4 addresses to containers.
