@@ -2,67 +2,106 @@ import argparse
 import json
 
 from abc import abstractmethod
-from collections.abc import MutableMapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
 from typing import Any, cast, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
+
+import markdown_it
 from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 
-from .docbook import DocBookRenderer
+from . import options
+from .docbook import DocBookRenderer, Heading
 from .md import Converter
 
-class RenderedSection:
-    id: Optional[str]
-    chapters: list[str]
-
-    def __init__(self, id: Optional[str]) -> None:
-        self.id = id
-        self.chapters = []
-
-class BaseConverter(Converter):
-    _sections: list[RenderedSection]
-
-    def __init__(self, manpage_urls: dict[str, str]):
-        super().__init__(manpage_urls)
-        self._sections = []
-
-    def add_section(self, id: Optional[str], chapters: list[Path]) -> None:
-        self._sections.append(RenderedSection(id))
-        for chpath in chapters:
-            try:
-                with open(chpath, 'r') as f:
-                    self._md.renderer._title_seen = False # type: ignore[attr-defined]
-                    self._sections[-1].chapters.append(self._render(f.read()))
-            except Exception as e:
-                raise RuntimeError(f"failed to render manual chapter {chpath}") from e
-
-    @abstractmethod
-    def finalize(self) -> str: raise NotImplementedError()
-
 class ManualDocBookRenderer(DocBookRenderer):
-    # needed to check correctness of chapters.
-    # we may want to use front matter instead of this kind of heuristic.
-    _title_seen = False
+    _toplevel_tag: str
+
+    def __init__(self, toplevel_tag: str, manpage_urls: Mapping[str, str],
+                 parser: Optional[markdown_it.MarkdownIt] = None):
+        super().__init__(manpage_urls, parser)
+        self._toplevel_tag = toplevel_tag
+        self.rules |= {
+            'included_sections': lambda *args: self._included_thing("section", *args),
+            'included_chapters': lambda *args: self._included_thing("chapter", *args),
+            'included_preface': lambda *args: self._included_thing("preface", *args),
+            'included_parts': lambda *args: self._included_thing("part", *args),
+            'included_appendix': lambda *args: self._included_thing("appendix", *args),
+            'included_options': self.included_options,
+        }
+
+    def render(self, tokens: Sequence[Token], options: OptionsDict,
+               env: MutableMapping[str, Any]) -> str:
+        wanted = { 'h1': 'title' }
+        wanted |= { 'h2': 'subtitle' } if self._toplevel_tag == 'book' else {}
+        for (i, (tag, kind)) in enumerate(wanted.items()):
+            if len(tokens) < 3 * (i + 1):
+                raise RuntimeError(f"missing {kind} ({tag}) heading")
+            token = tokens[3 * i]
+            if token.type != 'heading_open' or token.tag != tag:
+                assert token.map
+                raise RuntimeError(f"expected {kind} ({tag}) heading in line {token.map[0] + 1}", token)
+        for t in tokens[3 * len(wanted):]:
+            if t.type != 'heading_open' or (info := wanted.get(t.tag)) is None:
+                continue
+            assert t.map
+            raise RuntimeError(
+                f"only one {info[0]} heading ({t.markup} [text...]) allowed per "
+                f"{self._toplevel_tag}, but found a second in lines [{t.map[0] + 1}..{t.map[1]}]. "
+                "please remove all such headings except the first or demote the subsequent headings.",
+                t)
+
+        # books get special handling because they have *two* title tags. doing this with
+        # generic code is more complicated than it's worth. the checks above have verified
+        # that both titles actually exist.
+        if self._toplevel_tag == 'book':
+            assert tokens[1].children
+            assert tokens[4].children
+            if (maybe_id := cast(str, tokens[0].attrs.get('id', ""))):
+                maybe_id = "xml:id=" + quoteattr(maybe_id)
+            return (f'<book xmlns="http://docbook.org/ns/docbook"'
+                    f'      xmlns:xlink="http://www.w3.org/1999/xlink"'
+                    f'      {maybe_id} version="5.0">'
+                    f'  <title>{self.renderInline(tokens[1].children, options, env)}</title>'
+                    f'  <subtitle>{self.renderInline(tokens[4].children, options, env)}</subtitle>'
+                    f'  {super().render(tokens[6:], options, env)}'
+                    f'</book>')
+
+        return super().render(tokens, options, env)
 
     def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                      env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
         (tag, attrs) = super()._heading_tag(token, tokens, i, options, env)
-        if self._title_seen:
-            if token.tag == 'h1':
-                assert token.map is not None
-                raise RuntimeError(
-                    "only one title heading (# [text...]) allowed per manual chapter "
-                    f"but found a second in lines [{token.map[0]}..{token.map[1]}]. "
-                    "please remove all such headings except the first, split your "
-                    "chapters, or demote the subsequent headings to (##) or lower.",
-                    token)
+        # render() has already verified that we don't have supernumerary headings and since the
+        # book tag is handled specially we can leave the check this simple
+        if token.tag != 'h1':
             return (tag, attrs)
-        self._title_seen = True
-        return ("chapter", attrs | {
+        return (self._toplevel_tag, attrs | {
             'xmlns': "http://docbook.org/ns/docbook",
             'xmlns:xlink': "http://www.w3.org/1999/xlink",
         })
+
+    def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int,
+                        options: OptionsDict, env: MutableMapping[str, Any]) -> str:
+        result = []
+        # close existing partintro. the generic render doesn't really need this because
+        # it doesn't have a concept of structure in the way the manual does.
+        if self._headings and self._headings[-1] == Heading('part', 1):
+            result.append("</partintro>")
+            self._headings[-1] = self._headings[-1]._replace(partintro_closed=True)
+        # must nest properly for structural includes. this requires saving at least
+        # the headings stack, but creating new renderers is cheap and much easier.
+        r = ManualDocBookRenderer(tag, self._manpage_urls, None)
+        for (included, path) in token.meta['included']:
+            try:
+                result.append(r.render(included, options, env))
+            except Exception as e:
+                raise RuntimeError(f"rendering {path}") from e
+        return "".join(result)
+    def included_options(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                         env: MutableMapping[str, Any]) -> str:
+        return cast(str, token.meta['rendered-options'])
 
     # TODO minimize docbook diffs with existing conversions. remove soon.
     def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
@@ -76,127 +115,113 @@ class ManualDocBookRenderer(DocBookRenderer):
         return f"<programlisting>\n{escape(token.content)}</programlisting>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
               env: MutableMapping[str, Any]) -> str:
-        # HACK for temporarily being able to replace md-to-db.sh. pandoc used this syntax to
-        # allow md files to inject arbitrary docbook, and manual chapters use it.
-        if token.info == '{=docbook}':
-            return token.content
         info = f" language={quoteattr(token.info)}" if token.info != "" else ""
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
-class DocBookSectionConverter(BaseConverter):
-    __renderer__ = ManualDocBookRenderer
+class DocBookConverter(Converter):
+    def __renderer__(self, manpage_urls: Mapping[str, str],
+                     parser: Optional[markdown_it.MarkdownIt]) -> ManualDocBookRenderer:
+        return ManualDocBookRenderer('book', manpage_urls, parser)
 
-    def finalize(self) -> str:
-        result = []
+    _base_paths: list[Path]
+    _revision: str
 
-        for section in self._sections:
-            id = "id=" + quoteattr(section.id) if section.id is not None else ""
-            result.append(f'<section {id}>')
-            result += section.chapters
-            result.append(f'</section>')
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str):
+        super().__init__(manpage_urls)
+        self._revision = revision
 
-        return "\n".join(result)
-
-class ManualFragmentDocBookRenderer(ManualDocBookRenderer):
-    _tag: str = "chapter"
-
-    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> tuple[str, dict[str, str]]:
-        (tag, attrs) = super()._heading_tag(token, tokens, i, options, env)
-        if token.tag == 'h1':
-            return (self._tag, attrs | { 'xmlns:xi': "http://www.w3.org/2001/XInclude" })
-        return (tag, attrs)
-
-class DocBookFragmentConverter(Converter):
-    __renderer__ = ManualFragmentDocBookRenderer
-
-    def convert(self, file: Path, tag: str) -> str:
-        assert isinstance(self._md.renderer, ManualFragmentDocBookRenderer)
+    def convert(self, file: Path) -> str:
+        self._base_paths = [ file ]
         try:
             with open(file, 'r') as f:
-                self._md.renderer._title_seen = False
-                self._md.renderer._tag = tag
                 return self._render(f.read())
         except Exception as e:
-            raise RuntimeError(f"failed to render manual {tag} {file}") from e
+            raise RuntimeError(f"failed to render manual {file}") from e
+
+    def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
+        tokens = super()._parse(src, env)
+        for token in tokens:
+            if token.type != "fence" or not token.info.startswith("{=include=} "):
+                continue
+            typ = token.info[12:].strip()
+            if typ == 'options':
+                token.type = 'included_options'
+                self._parse_options(token)
+            elif typ in [ 'sections', 'chapters', 'preface', 'parts', 'appendix' ]:
+                token.type = 'included_' + typ
+                self._parse_included_blocks(token, env)
+            else:
+                raise RuntimeError(f"unsupported structural include type '{typ}'")
+        return tokens
+
+    def _parse_included_blocks(self, token: Token, env: Optional[MutableMapping[str, Any]]) -> None:
+        assert token.map
+        included = token.meta['included'] = []
+        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
+            line = line.strip()
+            path = self._base_paths[-1].parent / line
+            if path in self._base_paths:
+                raise RuntimeError(f"circular include found in line {lnum}")
+            try:
+                self._base_paths.append(path)
+                with open(path, 'r') as f:
+                    tokens = self._parse(f.read(), env)
+                    included.append((tokens, path))
+                self._base_paths.pop()
+            except Exception as e:
+                raise RuntimeError(f"processing included file {path} from line {lnum}") from e
+
+    def _parse_options(self, token: Token) -> None:
+        assert token.map
+
+        items = {}
+        for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
+            if len(args := line.split(":", 1)) != 2:
+                raise RuntimeError(f"options directive with no argument in line {lnum}")
+            (k, v) = (args[0].strip(), args[1].strip())
+            if k in items:
+                raise RuntimeError(f"duplicate options directive {k} in line {lnum}")
+            items[k] = v
+        try:
+            id_prefix = items.pop('id-prefix')
+            varlist_id = items.pop('list-id')
+            source = items.pop('source')
+        except KeyError as e:
+            raise RuntimeError(f"options directive {e} missing in block at line {token.map[0] + 1}")
+        if items.keys():
+            raise RuntimeError(
+                f"unsupported options directives in block at line {token.map[0] + 1}",
+                " ".join(items.keys()))
+
+        try:
+            conv = options.DocBookConverter(
+                self._manpage_urls, self._revision, False, 'fragment', varlist_id, id_prefix)
+            with open(self._base_paths[-1].parent / source, 'r') as f:
+                conv.add_options(json.load(f))
+            token.meta['rendered-options'] = conv.finalize(fragment=True)
+        except Exception as e:
+            raise RuntimeError(f"processing options block in line {token.map[0] + 1}") from e
 
 
 
-class Section:
-    id: Optional[str] = None
-    chapters: list[str]
-
-    def __init__(self) -> None:
-        self.chapters = []
-
-class SectionAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, ns: argparse.Namespace,
-                 values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
-        sections = getattr(ns, self.dest)
-        if sections is None: sections = []
-        sections.append(Section())
-        setattr(ns, self.dest, sections)
-
-class SectionIDAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, ns: argparse.Namespace,
-                 values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
-        sections = getattr(ns, self.dest)
-        if sections is None: raise argparse.ArgumentError(self, "no active section")
-        sections[-1].id = cast(str, values)
-
-class ChaptersAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, ns: argparse.Namespace,
-                 values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
-        sections = getattr(ns, self.dest)
-        if sections is None: raise argparse.ArgumentError(self, "no active section")
-        sections[-1].chapters.extend(map(Path, cast(Sequence[str], values)))
-
-class SingleFileAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, ns: argparse.Namespace,
-                 values: Union[str, Sequence[Any], None], opt_str: Optional[str] = None) -> None:
-        assert isinstance(values, Sequence)
-        chapters = getattr(ns, self.dest) or []
-        chapters.append((Path(values[0]), Path(values[1])))
-        setattr(ns, self.dest, chapters)
-
-def _build_cli_db_section(p: argparse.ArgumentParser) -> None:
+def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
-    p.add_argument("outfile")
-    p.add_argument("--section", dest="contents", action=SectionAction, nargs=0)
-    p.add_argument("--section-id", dest="contents", action=SectionIDAction)
-    p.add_argument("--chapters", dest="contents", action=ChaptersAction, nargs='+')
+    p.add_argument('--revision', required=True)
+    p.add_argument('infile', type=Path)
+    p.add_argument('outfile', type=Path)
 
-def _build_cli_db_fragment(p: argparse.ArgumentParser) -> None:
-    p.add_argument('--manpage-urls', required=True)
-    p.add_argument("--chapter", action=SingleFileAction, required=True, nargs=2)
-    p.add_argument("--section", action=SingleFileAction, required=True, nargs=2)
-
-def _run_cli_db_section(args: argparse.Namespace) -> None:
+def _run_cli_db(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookSectionConverter(json.load(manpage_urls))
-        for section in args.contents:
-            md.add_section(section.id, section.chapters)
-        with open(args.outfile, 'w') as f:
-            f.write(md.finalize())
-
-def _run_cli_db_fragment(args: argparse.Namespace) -> None:
-    with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookFragmentConverter(json.load(manpage_urls))
-        for kind in [ 'chapter', 'section' ]:
-            for (target, file) in getattr(args, kind):
-                converted = md.convert(file, kind)
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(converted)
+        md = DocBookConverter(json.load(manpage_urls), args.revision)
+        converted = md.convert(args.infile)
+        args.outfile.write_text(converted)
 
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
-    _build_cli_db_section(formats.add_parser('docbook-section'))
-    _build_cli_db_fragment(formats.add_parser('docbook-fragment'))
+    _build_cli_db(formats.add_parser('docbook'))
 
 def run_cli(args: argparse.Namespace) -> None:
-    if args.format == 'docbook-section':
-        _run_cli_db_section(args)
-    elif args.format == 'docbook-fragment':
-        _run_cli_db_fragment(args)
+    if args.format == 'docbook':
+        _run_cli_db(args)
     else:
         raise RuntimeError('format not hooked up', args)

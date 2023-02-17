@@ -29,9 +29,9 @@ def pretty_print_exc(e: BaseException, *, _desc_text: str = "error") -> None:
             print(textwrap.indent(extra_info, "\t"), file=sys.stderr, end="")
     else:
         print(e)
-    if e.__context__ is not None:
+    if e.__cause__ is not None:
         print("", file=sys.stderr)
-        pretty_print_exc(e.__context__, _desc_text="caused by")
+        pretty_print_exc(e.__cause__, _desc_text="caused by")
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='render nixos manual bits')
