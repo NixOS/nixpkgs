@@ -26,7 +26,6 @@
 
 # build time
 , autoconf
-, cargo
 , dump_syms
 , makeWrapper
 , nodejs
@@ -35,9 +34,9 @@
 , pkgsCross # wasm32 rlbox
 , python3
 , runCommand
-, rustc
 , rust-cbindgen
-, rustPlatform
+, rustPackages_1_64
+, rustPackages_1_66
 , unzip
 , which
 , wrapGAppsHook
@@ -144,9 +143,12 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
+  inherit (if lib.versionAtLeast version "110" then rustPackages_1_66 else rustPackages_1_64)
+    cargo rustPlatform rustc;
+
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.${if lib.versionAtLeast version "110" then "rustPackages_1_66" else "rustPackages_1_64"}.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -473,6 +475,8 @@ buildStdenv.mkDerivation ({
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
+
+  NIX_LDFLAGS = if (with stdenv; isAarch64 && isLinux) then [ "-lgcc" ] else null;
 
   # tests were disabled in configureFlags
   doCheck = false;
