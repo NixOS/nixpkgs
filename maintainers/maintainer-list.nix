@@ -9183,6 +9183,12 @@
     githubId = 952712;
     name = "Matt Christ";
   };
+  matthew-levan = {
+    email = "matthew@coeli.network";
+    github = "matthew-levan";
+    githubId = 91502660;
+    name = "Matthew LeVan";
+  };
   matthewcroughan = {
     email = "matt@croughan.sh";
     github = "MatthewCroughan";
