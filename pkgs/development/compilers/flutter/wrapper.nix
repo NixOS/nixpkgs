@@ -22,6 +22,26 @@
 , clang
 }:
 
+let
+  linuxDesktopRuntimeDeps = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    harfbuzz
+    libepoxy
+    pango
+    libX11
+    (callPackage ./packages/libdeflate { })
+  ];
+
+  linuxDesktopBuildDeps = let
+    # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
+    deps = pkg: builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
+    collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
+  in builtins.concatMap collect linuxDesktopRuntimeDeps;
+in
 runCommandLocal "flutter"
 {
   flutterWithCorrectedCache = writeShellScript "flutter_corrected_cache" ''
@@ -44,45 +64,20 @@ runCommandLocal "flutter"
 
   makeWrapper "$flutterWithCorrectedCache" $out/bin/flutter \
       --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-      --prefix PATH : ${lib.makeBinPath (lib.optionals supportsLinuxDesktop [
+      --prefix PATH : '${lib.makeBinPath (lib.optionals supportsLinuxDesktop [
           pkg-config
           cmake
           ninja
           clang
-        ])} \
-      --prefix PKG_CONFIG_PATH : "${
+        ])}' \
+      --prefix PKG_CONFIG_PATH : '${
         let
-          # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
-          deps = pkg: builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
-          collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
-          libraries = builtins.concatMap (pkg: collect (lib.getOutput "dev" pkg)) (lib.optionals supportsLinuxDesktop[
-            atk
-            cairo
-            gdk-pixbuf
-            glib
-            gtk3
-            harfbuzz
-            libepoxy
-            pango
-            libX11
-            (callPackage ./packages/libdeflate { })
-            xorgproto
-          ]);
-          pkgconfigLib = builtins.filter (library: builtins.pathExists "${library}/lib/pkgconfig") libraries;
-          pkgconfigShare = builtins.filter (library: builtins.pathExists "${library}/share/pkgconfig") libraries;
-        in "${lib.makeSearchPathOutput "dev" "lib/pkgconfig" pkgconfigLib}:${lib.makeSearchPathOutput "dev" "share/pkgconfig" pkgconfigShare}"}" \
+          makePkgConfigSearchPath = pkgs: builtins.concatStringsSep ":" (builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) pkgs));
+        in makePkgConfigSearchPath linuxDesktopBuildDeps}' \
       --prefix CXXFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-isystem ${libX11.dev}/include -isystem ${xorgproto}/include"}' \
-      --prefix LDFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-rpath ${lib.makeLibraryPath [
-          atk
-          cairo
-          gdk-pixbuf
-          glib
-          gtk3
-          harfbuzz
-          libepoxy
-          pango
-          libX11
-        ]}"}' \
+      ${let linkerFlags = map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") (lib.optionals supportsLinuxDesktop linuxDesktopRuntimeDeps); in ''
+        --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}' \
+      ''} \
       --suffix LD_LIBRARY_PATH : '${lib.optionalString supportsLinuxDesktop (lib.makeLibraryPath [
           # The prebuilt flutter_linux_gtk library shipped in the Flutter SDK does not have an appropriate RUNPATH.
           # Its dependencies must be added here.
