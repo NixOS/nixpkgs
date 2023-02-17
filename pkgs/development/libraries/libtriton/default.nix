@@ -26,17 +26,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DLLVM_INTERFACE=ON"
+    "-DPYTHON_BINDINGS=OFF"
   ];
 
-  installPhase = ''
-    mkdir $out/
-    cp src/libtriton/libtriton.so $out
-
-    mkdir -p $py/${python3.sitePackages}
-    cp src/libtriton/triton.so $py/${python3.sitePackages}
+  preConfigure = ''
+    cmakeFlagsArray=(
+      $cmakeFlagsArray
+      "-DCMAKE_INSTALL_PREFIX=$out"
+    )
   '';
 
-  outputs = [ "out" "py" ];
+  outputs = [ "out" ];
 
   meta = with lib; {
     description = "Triton is a dynamic binary analysis library. Build your own program analysis tools, automate your reverse engineering, perform software verification or just emulate code.";

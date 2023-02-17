@@ -12210,10 +12210,6 @@ self: super: with self; {
     inherit python;
   })).python;
 
-  libtriton = (toPythonModule (pkgs.libtriton.override {
-    python3 = python;
-  })).py;
-
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
   zake = callPackage ../development/python-modules/zake { };
