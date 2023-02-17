@@ -30245,6 +30245,8 @@ with pkgs;
 
   pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
 
+  protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
+
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   popura = callPackage ../tools/networking/popura {};
