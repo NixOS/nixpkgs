@@ -11297,7 +11297,9 @@ with pkgs;
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
-  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
+  qownnotes = darwin.apple_sdk_11_0.callPackage ../applications/office/qownnotes {
+    inherit (libsForQt5) qmake qtbase qtdeclarative qtsvg qttools qtwayland qtwebsockets qtx11extras qtxmlpatterns wrapQtAppsHook;
+  };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
