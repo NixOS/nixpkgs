@@ -13107,6 +13107,8 @@ with pkgs;
 
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
+  wambo = callPackage ../development/tools/wambo { };
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
