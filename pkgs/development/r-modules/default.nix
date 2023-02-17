@@ -1019,7 +1019,7 @@ let
     quarto = old.quarto.overrideDerivation (attrs: {
       postPatch = ''
         substituteInPlace "R/quarto.R" \
-          --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${pkgs.quarto}/bin/quarto')"
+          --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
     });
 
