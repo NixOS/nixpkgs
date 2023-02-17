@@ -42,10 +42,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withNotmuchBackend "notmuch-backend"
     ++ lib.optional withSmtpSender "smtp-sender";
 
-  # TODO: remove me once this issue is fixed:
-  # https://todo.sr.ht/~soywod/pimalaya/36
-  cargoTestFlags = [ "--lib" ];
-
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
     $out/bin/himalaya man $out/man
