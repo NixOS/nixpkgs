@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Dynamic Instrumentation Tool Platform";
     homepage = "https://dynamorio.org/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ oposs ];
   };
 }
