@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "canonicaljson";
-  version = "1.6.4";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAmyEZUR8w6xEmz82XOhCCTiDxz9JQOc3j0SGN2cjY8=";
+    hash = "sha256-aN/BV7AR4H2Uv3S11MzAGVhYTtlC2d/V/dcGYJ6BzUs=";
   };
 
   nativeBuildInputs = [
