@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [ rustc rustc.llvm ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ rustc.llvm ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;
