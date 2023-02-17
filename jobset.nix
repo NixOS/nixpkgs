@@ -14,5 +14,6 @@ in
     migration = release.tests.containers-next-migration;
     activation = release.tests.containers-next-config-activation;
     imperative = release.tests.containers-next-imperative;
+    wireguard = release.tests.containers-next-wireguard;
   };
 }
