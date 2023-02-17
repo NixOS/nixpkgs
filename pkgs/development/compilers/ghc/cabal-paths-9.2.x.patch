@@ -1,7 +1,7 @@
 diff --git a/Cabal/src/Distribution/Simple/Build/PathsModule.hs b/Cabal/src/Distribution/Simple/Build/PathsModule.hs
 index b2be7e1a8..bf218dbc1 100644
---- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
-+++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
+--- a/Cabal/src/Distribution/Simple/Build/PathsModule.hs
++++ b/Cabal/src/Distribution/Simple/Build/PathsModule.hs
 @@ -25,16 +25,21 @@ import Distribution.Package
  import Distribution.PackageDescription
  import Distribution.Simple.Compiler
@@ -68,21 +68,23 @@ index b2be7e1a8..bf218dbc1 100644
      supports_rebindable_syntax   = ghc_newer_than (mkVersion [7,0,1])
      supports_language_pragma     = ghc_newer_than (mkVersion [6,6,1])
 diff --git a/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs b/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
-index 6488ea061..9d4218b28 100644
---- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
-+++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
-@@ -19,6 +19,10 @@ data Z
+index 6488ea061..b2b2c0e19 100644
+--- a/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
++++ b/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
+@@ -19,7 +19,11 @@ data Z
           zLibexecdir :: FilePath,
           zSysconfdir :: FilePath,
           zNot :: (Bool -> Bool),
+-         zManglePkgName :: (PackageName -> String)}
++         zManglePkgName :: (PackageName -> String),
++         zShouldEmitDataDir :: Bool,
 +         zAbsBody :: String,
 +         zWarnPragma :: String,
-+         zImportList :: String,
-+         zShouldEmitDataDir :: Bool,
-          zManglePkgName :: (PackageName -> String)}
++         zImportList :: String}
      deriving Generic
  render :: Z -> String
-@@ -45,10 +49,18 @@ render z_root = execWriter $ do
+ render z_root = execWriter $ do
+@@ -45,10 +49,23 @@ render z_root = execWriter $ do
    tell "{-# OPTIONS_GHC -w #-}\n"
    tell "module Paths_"
    tell (zManglePkgName z_root (zPackageName z_root))
@@ -93,18 +95,23 @@ index 6488ea061..9d4218b28 100644
 -  tell "    getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir,\n"
 -  tell "    getDataFileName, getSysconfDir\n"
 +  tell "    version, getBinDir,\n"
++  tell "    "
 +  if (zShouldEmitDataDir z_root)
 +  then do
-+    tell "    getDataFileName, \n"
++    tell "\n"
++    tell "    getDataFileName,\n"
++    tell "    "
 +    return ()
 +  else do
-+    tell "\n"
 +    return ()
++  tell "\n"
++  tell "    "
 +  tell (zImportList z_root)
++  tell "\n"
    tell "  ) where\n"
    tell "\n"
    if (zNot z_root (zAbsolute z_root))
-@@ -97,13 +97,16 @@ render z_root = execWriter $ do
+@@ -97,12 +114,15 @@ render z_root = execWriter $ do
    tell (zVersionDigits z_root)
    tell " []\n"
    tell "\n"
@@ -114,7 +121,6 @@ index 6488ea061..9d4218b28 100644
 -  tell "  return (dir `joinFileName` name)\n"
 -  tell "\n"
 -  tell "getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath\n"
--  tell "\n"
 +  if (zShouldEmitDataDir z_root)
 +  then do
 +    tell "getDataFileName :: FilePath -> IO FilePath\n"
@@ -124,11 +130,10 @@ index 6488ea061..9d4218b28 100644
 +    return ()
 +  else do
 +    return ()
-+    tell "\n"
+   tell "\n"
    let
      z_var0_function_defs = do
-       tell "minusFileName :: FilePath -> String -> FilePath\n"
-@@ -130,6 +133,8 @@ render z_root = execWriter $ do
+@@ -130,6 +150,8 @@ render z_root = execWriter $ do
    tell "\n"
    if (zRelocatable z_root)
    then do
@@ -137,7 +142,7 @@ index 6488ea061..9d4218b28 100644
      tell "\n"
      tell "getPrefixDirReloc :: FilePath -> IO FilePath\n"
      tell "getPrefixDirReloc dirRel = do\n"
-@@ -177,44 +182,16 @@ render z_root = execWriter $ do
+@@ -177,44 +199,17 @@ render z_root = execWriter $ do
      if (zAbsolute z_root)
      then do
        tell "\n"
@@ -182,6 +187,92 @@ index 6488ea061..9d4218b28 100644
 -      tell (zManglePkgName z_root (zPackageName z_root))
 -      tell "_sysconfdir\") (\\_ -> return sysconfdir)\n"
 +      tell (zAbsBody z_root)
++      tell "\n"
        tell "\n"
        return ()
      else do
+diff --git a/cabal-dev-scripts/src/GenPathsModule.hs b/cabal-dev-scripts/src/GenPathsModule.hs
+index e4b930635..b69a73191 100644
+--- a/cabal-dev-scripts/src/GenPathsModule.hs
++++ b/cabal-dev-scripts/src/GenPathsModule.hs
+@@ -43,6 +43,11 @@ $(capture "decls" [d|
+ 
+         , zNot                        :: Bool -> Bool
+         , zManglePkgName              :: PackageName -> String
++
++        , zShouldEmitDataDir    :: Bool
++        , zAbsBody              :: String
++        , zWarnPragma           :: String
++        , zImportList           :: String
+         }
+       deriving (Generic)
+     |])
+diff --git a/templates/Paths_pkg.template.hs b/templates/Paths_pkg.template.hs
+index 6bc6b7875..f5489bea8 100644
+--- a/templates/Paths_pkg.template.hs
++++ b/templates/Paths_pkg.template.hs
+@@ -9,10 +9,12 @@
+ {% endif %}
+ {-# OPTIONS_GHC -fno-warn-missing-import-lists #-}
+ {-# OPTIONS_GHC -w #-}
+-module Paths_{{ manglePkgName packageName }} (
+-    version,
+-    getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir,
+-    getDataFileName, getSysconfDir
++module Paths_{{ manglePkgName packageName }} {{ warnPragma }} (
++    version, getBinDir,
++    {% if shouldEmitDataDir %}
++    getDataFileName,
++    {% endif %}
++    {{ importList }}
+   ) where
+ 
+ {% if not absolute %}
+@@ -51,12 +53,12 @@ catchIO = Exception.catch
+ version :: Version
+ version = Version {{ versionDigits }} []
+ 
++{% if shouldEmitDataDir %}
+ getDataFileName :: FilePath -> IO FilePath
+ getDataFileName name = do
+   dir <- getDataDir
+   return (dir `joinFileName` name)
+-
+-getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
++{% endif %}
+ 
+ {% defblock function_defs %}
+ minusFileName :: FilePath -> String -> FilePath
+@@ -85,6 +87,8 @@ splitFileName p = (reverse (path2++drive), reverse fname)
+ 
+ {% if relocatable %}
+ 
++getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
++
+ getPrefixDirReloc :: FilePath -> IO FilePath
+ getPrefixDirReloc dirRel = do
+   exePath <- getExecutablePath
+@@ -102,20 +106,12 @@ getSysconfDir = catchIO (getEnv "{{ manglePkgName packageName }}_sysconfdir") (\
+ 
+ {% elif absolute %}
+ 
+-bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
++bindir :: FilePath
+ bindir     = {{ bindir }}
+-libdir     = {{ libdir }}
+-dynlibdir  = {{ dynlibdir }}
+-datadir    = {{ datadir }}
+-libexecdir = {{ libexecdir }}
+-sysconfdir = {{ sysconfdir }}
+ 
++getBinDir :: IO FilePath
+ getBinDir     = catchIO (getEnv "{{ manglePkgName packageName }}_bindir")     (\_ -> return bindir)
+-getLibDir     = catchIO (getEnv "{{ manglePkgName packageName }}_libdir")     (\_ -> return libdir)
+-getDynLibDir  = catchIO (getEnv "{{ manglePkgName packageName }}_dynlibdir")  (\_ -> return dynlibdir)
+-getDataDir    = catchIO (getEnv "{{ manglePkgName packageName }}_datadir")    (\_ -> return datadir)
+-getLibexecDir = catchIO (getEnv "{{ manglePkgName packageName }}_libexecdir") (\_ -> return libexecdir)
+-getSysconfDir = catchIO (getEnv "{{ manglePkgName packageName }}_sysconfdir") (\_ -> return sysconfdir)
++{{ absBody }}
+ 
+ {% elif isWindows %}
+ 

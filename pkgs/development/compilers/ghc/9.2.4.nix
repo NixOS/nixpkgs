@@ -71,7 +71,7 @@ assert !enableNativeBignum -> gmp != null;
 assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
-  inherit (stdenv) hostPlatform targetPlatform;
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
 
