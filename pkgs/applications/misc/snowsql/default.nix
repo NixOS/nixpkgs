@@ -4,7 +4,7 @@
 , rpmextract
 , patchelf
 , makeWrapper
-, openssl
+, openssl_1_1
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
-  libPath = lib.makeLibraryPath [ openssl ];
+  libPath = lib.makeLibraryPath [ openssl_1_1 ];
 
   buildCommand = ''
     mkdir -p $out/bin/
