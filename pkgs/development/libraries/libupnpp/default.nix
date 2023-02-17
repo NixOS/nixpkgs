@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnpp";
-  version = "0.21.0";
+  version = "0.22.4";
 
   src = fetchgit {
     url = "https://framagit.org/medoc92/libupnpp.git";
     rev = "libupnpp-v${version}";
-    sha256 = "sha256-nGKkqOUNOi8IYGX3MwSqnmcBQMKgPb/6n5CdBjI34R8=";
+    sha256 = "sha256-Iha8jbTAH0MFP63DUo+HPuvFUgZWyYdZGYbyNsZcJV0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config libnpupnp curl expat ];
