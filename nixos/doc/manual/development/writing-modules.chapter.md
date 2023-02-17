@@ -189,14 +189,14 @@ in {
 ```
 :::
 
-```{=docbook}
-<xi:include href="option-declarations.section.xml" />
-<xi:include href="option-types.section.xml" />
-<xi:include href="option-def.section.xml" />
-<xi:include href="assertions.section.xml" />
-<xi:include href="meta-attributes.section.xml" />
-<xi:include href="importing-modules.section.xml" />
-<xi:include href="replace-modules.section.xml" />
-<xi:include href="freeform-modules.section.xml" />
-<xi:include href="settings-options.section.xml" />
+```{=include=} sections
+option-declarations.section.md
+option-types.section.md
+option-def.section.md
+assertions.section.md
+meta-attributes.section.md
+importing-modules.section.md
+replace-modules.section.md
+freeform-modules.section.md
+settings-options.section.md
 ```

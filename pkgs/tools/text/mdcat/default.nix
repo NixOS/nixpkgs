@@ -42,10 +42,14 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    installShellCompletion \
-      --bash $releaseDir/build/mdcat-*/out/completions/mdcat.bash \
-      --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish \
-      --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
+    ln -sr $out/bin/{mdcat,mdless}
+
+    for bin in mdcat mdless; do
+      installShellCompletion \
+        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
+        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
+        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+    done
   '';
 
   meta = with lib; {
