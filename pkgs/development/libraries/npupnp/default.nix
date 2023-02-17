@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libnpupnp";
-  version = "4.1.5";
+  version = "4.2.1";
 
   src = fetchgit {
     url = "https://framagit.org/medoc92/npupnp.git";
     rev = "libnpupnp-v${version}";
-    sha256 = "sha256-eMQ5auMLdZwk6UorXQaWE9JKBHytTApnetAB4gn76RQ=";
+    sha256 = "sha256-4qMtWOkLANisjzQ3cWjLNC8qQrdny1Adc093Zc+F1fE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config curl expat libmicrohttpd ];
