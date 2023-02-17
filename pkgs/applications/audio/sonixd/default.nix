@@ -19,9 +19,9 @@ appimageTools.wrapType2 rec {
     mv $out/bin/${pname}-${version} $out/bin/${pname}
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-
-    install -m 444 -D ${appimageContents}/${pname}.png \
-      $out/share/icons/hicolor/1024x1024/apps/${pname}.png
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+    cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
   meta = with lib; {

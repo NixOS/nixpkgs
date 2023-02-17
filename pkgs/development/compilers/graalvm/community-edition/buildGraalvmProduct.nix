@@ -74,6 +74,17 @@ stdenv.mkDerivation ({
     runHook postUnpack
   '';
 
+  # Allow autoPatchelf to automatically fix lib references between products
+  fixupPhase = ''
+    runHook preFixup
+
+    mkdir -p $out/lib
+    shopt -s globstar
+    ln -s $out/languages/**/lib/*.so $out/lib
+
+    runHook postFixup
+  '';
+
   dontInstall = true;
   dontBuild = true;
   dontStrip = true;

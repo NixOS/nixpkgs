@@ -700,6 +700,10 @@ self: super: {
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
 
+  nvim-ufo = super.nvim-ufo.overrideAttrs (old: {
+    dependencies = with self; [ promise-async ];
+  });
+
   octo-nvim = super.octo-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   });
@@ -1092,7 +1096,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-JQwT7IFYC/K+t3YO34hoalxdt1TEsmEcBXtDKFVdles=";
+          cargoSha256 = "sha256-MR9n2+B2TUNnWxZhBbXZCBereLxYntBxLfx9g14vDUw=";
         };
       in
       ''

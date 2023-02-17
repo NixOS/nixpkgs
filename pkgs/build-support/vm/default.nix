@@ -35,10 +35,12 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.cc.libc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* $out/lib
+      cp -p \
+        ${pkgs.stdenv.cc.libc}/lib/ld-*.so.? \
+        ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -49,7 +51,7 @@ rec {
       for i in $out/bin/*; do
           if [ -f "$i" -a ! -L "$i" ]; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
       done
     ''; # */

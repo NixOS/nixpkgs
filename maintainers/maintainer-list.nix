@@ -5188,6 +5188,12 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
+  garaiza-93 = {
+    email = "araizagustavo93@gmail.com";
+    github = "garaiza-93";
+    githubId = 57430880;
+    name = "Gustavo Araiza";
+  };
   Gabriel439 = {
     email = "Gabriel439@gmail.com";
     github = "Gabriella439";
@@ -8567,6 +8573,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  luizirber = {
+    email = "nixpkgs@luizirber.org";
+    github = "luizirber";
+    githubId = 6642;
+    name = "Luiz Irber";
+  };
   luizribeiro = {
     email = "nixpkgs@l9o.dev";
     matrix = "@luizribeiro:matrix.org";
@@ -10523,6 +10535,12 @@
     github = "nikstur";
     githubId = 61635709;
   };
+  nintron = {
+    email = "nintron@sent.com";
+    github = "Nintron27";
+    githubId = 47835714;
+    name = "Nintron";
+  };
   ngerstle = {
     name = "Nicholas Gerstle";
     email = "ngerstle@gmail.com";
@@ -11304,6 +11322,12 @@
     github = "patternspandemic";
     githubId = 15645854;
     name = "Brad Christensen";
+  };
+  paveloom = {
+    email = "paveloom@riseup.net";
+    github = "paveloom";
+    githubId = 49961859;
+    name = "Pavel Sobolev";
   };
   payas = {
     email = "relekarpayas@gmail.com";

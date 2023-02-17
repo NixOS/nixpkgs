@@ -24,7 +24,6 @@
 , sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
-, withPCM ? true # Plugin and Content Manager
 , srcs ? { }
 }:
 
@@ -118,7 +117,7 @@ stdenv.mkDerivation rec {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
-    inherit withOCC withNgspice withScripting withI18n withPCM;
+    inherit withOCC withNgspice withScripting withI18n;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -150,15 +149,15 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD7_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
   ++ optionals (with3d)
   [
-    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
@@ -172,7 +171,7 @@ stdenv.mkDerivation rec {
     let
       bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
-      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
     (concatStringsSep "\n"
       (flatten [
