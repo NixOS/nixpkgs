@@ -131,6 +131,7 @@ let
     pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
+    ${cfg.prependConfig}
 
     ${cfg.config}
 
@@ -591,6 +592,19 @@ in
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
+        '';
+      };
+
+      prependConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = lib.mdDoc ''
+          Configuration lines prepended to the generated Nginx configuration
+          file. Allows insertion of configuration that must appear before
+          other directives.
+        '';
+        example = ''
+          load_module /path/to/dynamic/module.so
         '';
       };
 
