@@ -7,7 +7,6 @@
 , rocm-cmake
 , hip
 , clang-tools-extra
-, cppcheck
 , openmp
 , rocblas
 , rocmlir
@@ -70,7 +69,6 @@ in stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     hip
     clang-tools-extra
-    cppcheck
     python3Packages.python
   ] ++ lib.optionals buildDocs [
     latex
