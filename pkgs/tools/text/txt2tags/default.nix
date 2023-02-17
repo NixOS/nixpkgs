@@ -6,15 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "txt2tags";
-  version = "unstable-2022-10-17";
+  version = "3.8";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "txt2tags";
     repo = "txt2tags";
-    rev = "114ab24ea9111060df136bfc1c8b1a35a59fe0f2";
-    hash = "sha256-h2OtlUMzEHKyJ9AIO1Uo9Lx7jMYZNMtC6U+usBu7gNU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-urLsA2oeQM0WcKNDgaxKJOgBPGohJT6Zq6y6bEYMTxk=";
   };
 
   postPatch = ''
