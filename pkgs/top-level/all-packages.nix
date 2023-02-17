@@ -11397,6 +11397,8 @@ with pkgs;
 
   redpanda = callPackage ../servers/redpanda { };
 
+  redpanda-server = redpanda.server;
+
   redsocks = callPackage ../tools/networking/redsocks { };
 
   renpy = callPackage ../development/interpreters/renpy { };
