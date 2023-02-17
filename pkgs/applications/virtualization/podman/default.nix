@@ -14,52 +14,10 @@
 , go-md2man
 , nixosTests
 , python3
-, makeWrapper
-, symlinkJoin
-, extraPackages ? [ ]
-, runc
-, crun
-, conmon
-, slirp4netns
-, fuse-overlayfs
-, util-linux
-, iptables
-, iproute2
-, catatonit
-, gvproxy
-, aardvark-dns
-, netavark
 , testers
 , podman
 }:
-let
-  # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
-  binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
-    runc
-    crun
-    conmon
-    slirp4netns
-    fuse-overlayfs
-    util-linux
-    iptables
-    iproute2
-  ] ++ extraPackages);
-
-  helpersBin = symlinkJoin {
-    name = "podman-helper-binary-wrapper";
-
-    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
-    paths = [
-      gvproxy
-    ] ++ lib.optionals stdenv.isLinux [
-      aardvark-dns
-      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-      netavark
-    ];
-  };
-in
 buildGoModule rec {
   pname = "podman";
   version = "4.4.1";
@@ -80,9 +38,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper python3 ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
@@ -94,16 +52,13 @@ buildGoModule rec {
     systemd
   ];
 
-  HELPER_BINARIES_DIR = "${helpersBin}/bin";
-  PREFIX = "${placeholder "out"}";
-
   buildPhase = ''
     runHook preBuild
     patchShebangs .
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''
-      make bin/podman bin/rootlessport bin/quadlet
+      make bin/podman bin/rootlessport
     ''}
     make docs
     runHook postBuild
@@ -111,20 +66,26 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
     ${if stdenv.isDarwin then ''
-      install bin/darwin/podman -Dt $out/bin
+      mv bin/{darwin/podman,podman}
     '' else ''
-      make install.bin install.systemd
+      install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+      for s in contrib/systemd/**/*.in; do
+        substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
+      done
+      PREFIX=$out make install.systemd
+      install -Dm555 bin/rootlessport -t $rootlessport/bin
     ''}
-    make install.completions install.man
-    wrapProgram $out/bin/podman \
-      --prefix PATH : ${lib.escapeShellArg binPath}
+    install -Dm555 bin/podman -t $out/bin
+    PREFIX=$out make install.completions
+    MANDIR=$man/share/man make install.man
     runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    RPATH=$(patchelf --print-rpath $out/bin/podman)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
   '';
 
   passthru.tests = {
