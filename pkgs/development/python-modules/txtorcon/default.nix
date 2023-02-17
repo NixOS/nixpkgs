@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "22.0.0";
+  version = "23.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iaG2XjKks2nWfmwWY4f7xGjMXQUidEjSOaXn6XGKoFM=";
+    sha256 = "sha256-AiX/rWdokTeEmtmtNK21abDYj5rwRQMABnpfkB6ZQyU=";
   };
 
   propagatedBuildInputs = [
