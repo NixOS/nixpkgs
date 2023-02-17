@@ -145,6 +145,9 @@ in buildFHSUserEnv rec {
     xorg.libXxf86vm
     libelf
 
+    # pressure-vessel (required for mangohud and possibly more)
+    elfutils.out
+
     # Required
     glib
     gtk2
