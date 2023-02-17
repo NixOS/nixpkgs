@@ -17,16 +17,6 @@ makeSetupHook {
   propagatedBuildInputs = [
     # We use the wrapProgram function.
     makeWrapper
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # It is highly probable that a program will use GSettings,
-    # at minimum through GTK file chooser dialogue.
-    # Let’s add a GIO module for “dconf” GSettings backend
-    # to avoid falling back to “memory” backend. This is
-    # required for GSettings-based settings to be persisted.
-    # Unfortunately, it also requires the user to have dconf
-    # D-Bus service enabled globally (e.g. through a NixOS module).
-    dconf.lib
-
   ] ++ lib.optionals isGraphical [
     # TODO: remove this, packages should depend on GTK explicitly.
     gtk3
@@ -42,6 +32,15 @@ makeSetupHook {
     # graphics in GTK (e.g. cross for closing window in window title bar)
     # so it is pretty much required for applications using GTK.
     librsvg
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # It is highly probable that a program will use GSettings,
+    # at minimum through GTK file chooser dialogue.
+    # Let’s add a GIO module for “dconf” GSettings backend
+    # to avoid falling back to “memory” backend. This is
+    # required for GSettings-based settings to be persisted.
+    # Unfortunately, it also requires the user to have dconf
+    # D-Bus service enabled globally (e.g. through a NixOS module).
+    dconf.lib
   ];
   passthru = {
     tests = let
