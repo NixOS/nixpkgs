@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  version = "0.9.12";
+  version = "0.9.13";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "danthedeckie";
     repo = pname;
-    rev = version;
-    sha256 = "0khgl729q5133fgc00d550f4r77707rkkn7r56az4v8bvx0q8xp4";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-I1GILYPE6OyotgRe0Ek/iHHv6q9/b/MlcTxMAtfZD80=";
   };
 
   nativeBuildInputs = [
