@@ -12800,6 +12800,11 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  ruby0b = {
+    github = "ruby0b";
+    githubId = 106119328;
+    name = "ruby0b";
+  };
   rumpelsepp = {
     name = "Stefan Tatschner";
     email = "stefan@rumpelsepp.org";
