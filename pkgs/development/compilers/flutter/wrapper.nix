@@ -23,7 +23,15 @@
 }:
 
 let
-  linuxDesktopRuntimeDeps = [
+  # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
+  # Wrap it to ensure that it does not do that, preferring home directories instead.
+  immutableFlutter = writeShellScript "flutter_immutable" ''
+    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
+    ${flutter}/bin/flutter --no-version-check "$@"
+  '';
+
+  # Libraries that Flutter apps depend on at runtime.
+  appRuntimeDeps = lib.optionals supportsLinuxDesktop [
     atk
     cairo
     gdk-pixbuf
@@ -36,19 +44,43 @@ let
     (callPackage ./packages/libdeflate { })
   ];
 
-  linuxDesktopBuildDeps = let
-    # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
-    deps = pkg: builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
-    collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
-  in builtins.concatMap collect linuxDesktopRuntimeDeps;
+  # Development packages required for compilation.
+  appBuildDeps =
+    let
+      # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
+      deps = pkg: builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
+      collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
+    in
+    builtins.concatMap collect appRuntimeDeps;
+
+  # Some header files are not properly located by the Flutter SDK.
+  # They must be manually included.
+  appStaticBuildDeps = lib.optionals supportsLinuxDesktop [ libX11 xorgproto ];
+
+  # Some runtime components are prebuilt, and do not know where to find their dependencies.
+  # Ideally, these prebuilt components would be patched by the SDK derivation, but this
+  # is tricky as they are tyically downloaded from Google on-demand.
+  # Building the Engine manually should solve this issue: https://github.com/NixOS/nixpkgs/issues/201574
+  appPrebuiltDeps = lib.optionals supportsLinuxDesktop [
+    # flutter_linux_gtk.so
+    libepoxy
+  ];
+
+  # Tools used by the Flutter SDK to compile applications.
+  buildTools = lib.optionals supportsLinuxDesktop [
+    pkg-config
+    cmake
+    ninja
+    clang
+  ];
+
+  # Nix-specific compiler configuration.
+  pkgConfigDirectories = builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) appBuildDeps);
+  cppFlags = map (pkg: "-isystem ${lib.getOutput "dev" pkg}/include") appStaticBuildDeps;
+  linkerFlags = map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") appRuntimeDeps;
 in
 runCommandLocal "flutter"
 {
-  flutterWithCorrectedCache = writeShellScript "flutter_corrected_cache" ''
-    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    ${flutter}/bin/flutter "$@"
-  '';
-
   buildInputs = [ makeWrapper ];
 
   passthru = flutter.passthru // {
@@ -62,26 +94,11 @@ runCommandLocal "flutter"
   mkdir -p $out/bin/cache/
   ln -sf ${flutter.dart} $out/bin/cache/dart-sdk
 
-  makeWrapper "$flutterWithCorrectedCache" $out/bin/flutter \
-      --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-      --prefix PATH : '${lib.makeBinPath (lib.optionals supportsLinuxDesktop [
-          pkg-config
-          cmake
-          ninja
-          clang
-        ])}' \
-      --prefix PKG_CONFIG_PATH : '${
-        let
-          makePkgConfigSearchPath = pkgs: builtins.concatStringsSep ":" (builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) pkgs));
-        in makePkgConfigSearchPath linuxDesktopBuildDeps}' \
-      --prefix CXXFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-isystem ${libX11.dev}/include -isystem ${xorgproto}/include"}' \
-      ${let linkerFlags = map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") (lib.optionals supportsLinuxDesktop linuxDesktopRuntimeDeps); in ''
-        --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}' \
-      ''} \
-      --suffix LD_LIBRARY_PATH : '${lib.optionalString supportsLinuxDesktop (lib.makeLibraryPath [
-          # The prebuilt flutter_linux_gtk library shipped in the Flutter SDK does not have an appropriate RUNPATH.
-          # Its dependencies must be added here.
-          libepoxy
-        ])}' \
-      --add-flags --no-version-check
+  makeWrapper '${immutableFlutter}' $out/bin/flutter \
+    --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
+    --prefix PATH : '${lib.makeBinPath buildTools}' \
+    --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
+    --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
+    --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}' \
+    --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath appPrebuiltDeps}'
 ''
