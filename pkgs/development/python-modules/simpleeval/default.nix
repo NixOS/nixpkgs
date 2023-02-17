@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "danthedeckie";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-I1GILYPE6OyotgRe0Ek/iHHv6q9/b/MlcTxMAtfZD80=";
+    hash = "sha256-I1GILYPE6OyotgRe0Ek/iHHv6q9/b/MlcTxMAtfZD80=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple, safe single expression evaluator library";
     homepage = "https://github.com/danthedeckie/simpleeval";
+    changelog = "https://github.com/danthedeckie/simpleeval/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ johbo ];
   };
