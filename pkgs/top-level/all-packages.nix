@@ -1530,6 +1530,8 @@ with pkgs;
 
   mprocs = callPackage ../tools/misc/mprocs { };
 
+  mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
@@ -7586,6 +7588,8 @@ with pkgs;
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gdtoolkit = callPackage ../development/tools/gdtoolkit { };
+
   gef = callPackage ../development/tools/misc/gef { };
 
   gelasio = callPackage ../data/fonts/gelasio { };
@@ -11008,7 +11012,8 @@ with pkgs;
 
   pocketbase = callPackage ../servers/pocketbase { };
 
-  podman = callPackage ../applications/virtualization/podman { };
+  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -11045,6 +11050,8 @@ with pkgs;
   pantum-driver = callPackage ../misc/drivers/pantum-driver {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
   };
+
+  posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor {};
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
@@ -11396,6 +11403,8 @@ with pkgs;
   redmine = callPackage ../applications/version-management/redmine { };
 
   redpanda = callPackage ../servers/redpanda { };
+
+  redpanda-server = redpanda.server;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -27531,6 +27540,8 @@ with pkgs;
   nanum = callPackage ../data/fonts/nanum {  };
 
   nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
+
+  nasin-nanpa = callPackage ../data/fonts/nasin-nanpa {};
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
