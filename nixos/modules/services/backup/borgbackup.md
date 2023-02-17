@@ -128,7 +128,7 @@ To backup your home directory to borgbase you have to:
   - Initialize the repository on the server. Eg.
 
         sudo borg init --encryption=repokey-blake2  \
-            -rsh "ssh -i /run/keys/id_ed25519_borgbase" \
+            --rsh "ssh -i /run/keys/id_ed25519_borgbase" \
             zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo
 
   - Add it to your NixOS configuration, e.g.
