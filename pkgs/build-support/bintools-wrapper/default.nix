@@ -184,7 +184,9 @@ stdenv.mkDerivation {
       done
 
     '' + (if !useMacosReexportHack then ''
-      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
+        wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      fi
     '' else ''
       ldInner="${targetPrefix}ld-reexport-delegate"
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
