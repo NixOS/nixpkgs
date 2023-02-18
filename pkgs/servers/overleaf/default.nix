@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     find . -type f -not -path '*/\.*' -exec sed -E -i "s|SHARELATEX_|OVERLEAF_|g" {} +
     (
       cd server-ce/config
+      sed -E -i "s!'dockerhost',!undefined,\n      path: process.env.OVERLEAF_REDIS_PATH || undefined,!" ./settings.js
+      sed -E -i "s!'6379'!undefined!" ./settings.js
       sed -E -i "s|httpAuthUser = 'sharelatex'|httpAuthUser = process.env.WEB_API_USER|" ./settings.js
       sed -E -i "s|'/var/lib/sharelatex(.*)'|\`\''${process.env.DATA_DIR}\1\`|" ./settings.js
       sed -E -i "s!'http://localhost:3000'!\`http://\''${process.env.WEB_API_HOST || process.env.WEB_HOST || 'localhost'}:\''${process.env.WEB_API_PORT || process.env.WEB_PORT || 3000}\`!" ./settings.js
