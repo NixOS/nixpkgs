@@ -24485,6 +24485,8 @@ with pkgs;
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
 
+  grafana-dash-n-grab = callPackage ../servers/monitoring/grafana-dash-n-grab { };
+
   gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween { };
