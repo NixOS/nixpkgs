@@ -32,8 +32,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   dontWrapGApps = true;
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

@@ -13,6 +13,7 @@
 , gettext
 , libwnck
 , adwaita-icon-theme
+, librsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     at-spi2-core
     gtk3
     libwnck
+    librsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -51,10 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     xlib
   ];
-
-  # Strict deps breaks accerciser
-  # and https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {
