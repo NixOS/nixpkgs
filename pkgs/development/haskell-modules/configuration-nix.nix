@@ -941,6 +941,9 @@ self: super: builtins.intersectAttrs super {
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
 
+  # Test suite requires network access
+  minicurl = dontCheck super.minicurl;
+
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
   # mechanism is broken), so we can't run the test suite on machines with a
