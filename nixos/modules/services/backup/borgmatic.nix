@@ -15,7 +15,7 @@ in {
       type = types.str;
       description = lib.mdDoc ''
         Frequency at which borgmatic should be run. See
-        https://man7.org/linux/man-pages/man7/systemd.time.7.html for
+        {manpage}`systemd.time(7)` for
         options.
       '';
     };
