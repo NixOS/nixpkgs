@@ -59,7 +59,15 @@ mkDerivation rec {
 
   meta = with lib;
     {
-      description = "Shuriken is an open source beat slicer which harnesses the power of aubio's onset detection algorithms and Rubber Band's time stretching capabilities. A simple Qt interface makes it easy to slice up drum loops, assign individual drum hits to MIDI keys, and change the tempo of loops in real-time. The JUCE library takes care of handling audio and MIDI behind the scenes.";
+      description = "Shuriken Beat Slicer";
+      longDescription = ''
+        Shuriken is an open source beat slicer which harnesses the power of
+        aubio's onset detection algorithms and Rubber Band's time stretching
+        capabilities. A simple Qt interface makes it easy to slice up drum
+        loops, assign individual drum hits to MIDI keys, and change the tempo
+        of loops in real-time. The JUCE library takes care of handling audio
+        and MIDI behind the scenes.
+      '';
       homepage = "https://github.com/rock-hopper/shuriken";
       license = licenses.gpl2;
       platforms = platforms.linux;
