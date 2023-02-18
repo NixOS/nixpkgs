@@ -81,8 +81,15 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  # GDB have to be built out of tree.
   preConfigure = ''
+    # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
+    rm gdb/doc/*.info*
+    rm gdb/doc/*.5
+    rm gdb/doc/*.1
+    # fix doc build https://sourceware.org/bugzilla/show_bug.cgi?id=27808
+    rm gdb/doc/GDBvn.texi
+
+    # GDB have to be built out of tree.
     mkdir _build
     cd _build
   '';
@@ -102,6 +109,9 @@ stdenv.mkDerivation rec {
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
+
+    "--with-system-gdbinit=/etc/gdb/gdbinit"
+    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
