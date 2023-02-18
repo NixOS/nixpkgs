@@ -10,12 +10,12 @@
 , runCommand
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ploticus";
   version = "2.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    url = "mirror://sourceforge/ploticus/ploticus/${finalAttrs.version}/ploticus${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_src.tar.gz";
     sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru.tests = {
-    prefab = runCommand "${pname}-prefab-test" {
+    prefab = runCommand "ploticus-prefab-test" {
       buildInputs = [ finalAttrs.finalPackage ];
     } ''
       # trivial test to see if the prefab path munging works
