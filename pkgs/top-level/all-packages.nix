@@ -14367,6 +14367,8 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isLinux) then 9
+        # Cross is broken with GCC 12 on aarch64-darwin: https://github.com/iains/gcc-12-branch/issues/18
+        else if (with stdenv; buildPlatform != targetPlatform && buildPlatform.isAarch64 && buildPlatform.isDarwin) then 11
         else 12;
       numS = toString num;
     in {
