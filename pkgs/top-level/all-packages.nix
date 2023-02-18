@@ -1536,6 +1536,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  paperview = callPackage ../tools/X11/paperview { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout {};
@@ -12803,6 +12805,8 @@ with pkgs;
   };
 
   tuptime = callPackage ../tools/system/tuptime { };
+
+  turbo = callPackage ../tools/misc/turbo { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
