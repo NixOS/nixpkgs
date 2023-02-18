@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ zig ];
 
+  dontConfigure = true;
+
   preBuild = ''
     export HOME=$TMPDIR
   '';
