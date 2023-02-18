@@ -1,6 +1,5 @@
 { lib
 , fetchzip
-, libXxf86vm
 , libGL
 , makeWrapper
 , openal
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
     cp -r ./* $out/share/starsector
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
-    ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
+    ln -s $out/share/starsector/graphics/ui/s_icon64.png \
+      $out/share/icons/hicolor/64x64/apps/starsector.png
 
     wrapProgram $out/share/starsector/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk xorg.xrandr ]} \
@@ -71,14 +71,6 @@ stdenv.mkDerivation rec {
       --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
   '';
 
-  meta = with lib; {
-    description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
-    homepage = "https://fractalsoftworks.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras rafaelrc ];
-  };
-
   passthru.updateScript = writeScript "starsector-update-script" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
@@ -86,4 +78,12 @@ stdenv.mkDerivation rec {
     version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
     update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
   '';
+
+  meta = with lib; {
+    description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
+    homepage = "https://fractalsoftworks.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ bbigras rafaelrc ];
+  };
 }
