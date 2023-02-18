@@ -26,7 +26,8 @@ buildGoModule rec {
     makeWrapper
     installShellFiles
   ];
-  patchPhase = ''
+
+  postPatch = ''
     sed -i "s#/etc/apx#$out/etc/apx#g" $(find . -name "*.go")
   '';
 
