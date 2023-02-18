@@ -97,6 +97,13 @@ let
           }).${ver.majMinTiny}
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
+          ++ ops (ver.majMin == "3.0") [
+            # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
+            (fetchpatch {
+              url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
+              sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
+            })
+          ]
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
             # ruby 2.7 installer. Backport the upstream fix.
