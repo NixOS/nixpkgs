@@ -193,6 +193,7 @@ package-maintainers:
   dalpd:
     - espial
     - ghc-vis
+    - patat
     - svgcairo
   domenkozar:
     - cachix
