@@ -8,10 +8,9 @@
 , gd
 , freetype
 , runCommand
-, ploticus
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "ploticus";
   version = "2.42";
 
@@ -64,10 +63,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-prefab-test" {
+      buildInputs = [ finalAttrs.finalPackage ];
+    } ''
       # trivial test to see if the prefab path munging works
       mkdir $out/
-      ${ploticus}/bin/pl pl -prefab scat inlinedata="A 1 2" x=2 y=3 -png -o $out/out.png
+      pl -prefab scat inlinedata="A 1 2" x=2 y=3 -png -o $out/out.png
     '';
   };
 
@@ -86,4 +87,4 @@ stdenv.mkDerivation rec {
     homepage = "http://ploticus.sourceforge.net/";
     platforms = with platforms; linux ++ darwin;
   };
-}
+})
