@@ -874,6 +874,10 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
+  # Wants running postgresql database accessible over ip, so postgresqlTestHook
+  # won't work (or would need to patch test suite).
+  domaindriven-core = dontCheck super.domaindriven-core;
+
   cachix = super.cachix.override {
     nix = self.hercules-ci-cnix-store.passthru.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
