@@ -34,7 +34,7 @@ let
     text = if (cfg.configFile != null) then ''
       cp ${cfg.configFile} ${configPath}
       # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
+      chown -R --reference="$HOME" "$(dirname ${configPath})"
     '' else ''
       export CONFIG_FILE=${configPath}
 
