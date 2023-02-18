@@ -156,9 +156,11 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
-  ] ++ lib.optionals (!raspiCameraSupport) [
+  ] ++ (if raspiCameraSupport then [
+    "-Drpi-lib-dir=${libraspberrypi}/lib"
+  ] else [
     "-Drpicamsrc=disabled"
-  ];
+  ]);
 
   postPatch = ''
     patchShebangs \
