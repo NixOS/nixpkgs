@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sasutils";
-  version = "0.3.13";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "stanford-rc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cPCmmJkhr4+STVHa7e3LZGZFd8KPkECMAVurhuG8H1s=";
+    sha256 = "sha256-9JRw+UoxU0I5RHuimzYrM/3j8UWHuicVpoOdRRrj2Wc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
