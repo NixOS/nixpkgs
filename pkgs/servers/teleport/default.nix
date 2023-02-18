@@ -27,13 +27,13 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    hash = "sha256-jJfOgcwKkNFO/5XHxMoapZxM8Tb0kEgKVA7SrMU7uW4=";
+    hash = "sha256-9RD4ETQEXnj3d5YID3f3BghwitdqfcDgNhsk8ixWTW4=";
   };
-  version = "11.3.4";
+  version = "12.0.2";
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    cargoHash = "sha256-TSIwLCY01ygCWT73LR/Ch7NwPQA3a3r0PyL3hUzBNr4=";
+    cargoHash = "sha256-1ScU5ywq8vz1sWHW2idBsWcB1Xs+aylukBm96dKrwL4=";
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -56,7 +56,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-MAGeWzA366yzpjdCY0+X6RV5MKcsHa/xD5CJu6ce1FU=";
+    hash = "sha256-ItRi5EkYrwNB1MIf9l3yyK1BX6vNpL2+H1BlN3Evibg=";
   };
 
   webassets = stdenv.mkDerivation {
@@ -95,7 +95,7 @@ buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorHash = "sha256-NkiFLEHBNjxUOSuAlVugAV14yCCo3z6yhX7LZQFKhvA=";
+  vendorHash = "sha256-2sOELuMyg7w/rhnWvnwDiUOsjUfb56JdAbrTGKvGnjs=";
   proxyVendor = true;
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
