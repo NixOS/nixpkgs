@@ -1,10 +1,13 @@
 { lib
-, stdenv
+, gcc11Stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 }:
 
+let
+  stdenv = gcc11Stdenv;
+in
 stdenv.mkDerivation rec {
   inherit (import ./common.nix { inherit lib; })
     pname enableParallelBuilding meta;
