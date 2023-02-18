@@ -25,7 +25,7 @@ let
       default = defaultProviders.${pkgConfigModule} or null;
     in
     if count == 1 then
-      assert default == null || throw "yank ${pkgConfigModule}";
+      lib.warnIf (default != null) "Unnecessary entry for ${pkgConfigModule} in ${dataPath}"
       builtins.head alternatives
     else
       if default == null then
