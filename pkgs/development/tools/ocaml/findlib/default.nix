@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
       if [[ -n "$conflict" ]]; then
         echo "Conflicting ocaml packages detected";
         echo "$conflict"
+        echo "Set dontDetectOcamlConflicts to false to disable this check."
         exit 1
       fi
     }
