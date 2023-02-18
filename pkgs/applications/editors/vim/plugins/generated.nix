@@ -6309,6 +6309,18 @@ final: prev:
     meta.homepage = "https://github.com/rcarriga/nvim-notify/";
   };
 
+  nvim-nu = buildVimPluginFrom2Nix {
+    pname = "nvim-nu";
+    version = "2023-01-03";
+    src = fetchFromGitHub {
+      owner = "LhKipp";
+      repo = "nvim-nu";
+      rev = "1aad12e866f6d53dd5ec31ada79767199334a4ca";
+      sha256 = "022gmlrncbs46fqkbcnc4y8jyfasqac5nd09qq1qxdjgkw4924kj";
+    };
+    meta.homepage = "https://github.com/LhKipp/nvim-nu/";
+  };
+
   nvim-osc52 = buildVimPluginFrom2Nix {
     pname = "nvim-osc52";
     version = "2023-02-16";
