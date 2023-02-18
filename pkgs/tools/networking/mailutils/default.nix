@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.14";
+  version = "3.15";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-wMWzj+qLRaSvzUNkh/Knb9VSUJLQN4gTputVQsIScTk=";
+    hash = "sha256-t9DChsNS/MfaeXjP1hfMZnNrIfqJGqT4iFX1FjVPLds=";
   };
 
   separateDebugInfo = true;
@@ -154,6 +154,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej vrthra ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
+    changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
     platforms = platforms.gnu ++ platforms.unix;
