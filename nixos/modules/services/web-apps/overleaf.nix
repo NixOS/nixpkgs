@@ -61,10 +61,14 @@ with lib;
   options.services.overleaf = {
     enable = mkEnableOption (mdDoc ''Overleaf'');
 
-    enableRedis = mkEnableOption (mdDoc ''Redis'');
+    enableRedis = mkOption {
+      type = types.bool;
+      default = true;
+      description = mdDoc ''Redis'';
+    };
 
     mongoDB = mkOption {
-      type = types.string;
+      type = types.str;
       default = "mongodb";
       example = "ferretdb";
       description = mdDoc ''The type of MongoDB to enable. One of "mongodb", "ferretdb" or "none"'';
@@ -117,9 +121,10 @@ with lib;
             User = "ferretdb";
           };
         };
-
-        postgresql.environment.LC_ALL = mkIf (cfg.mongoDB == "ferretdb") "en_US.UTF-8";
-      }]);
+      }
+      (mkIf (cfg.mongoDB == "ferretdb") {
+        postgresql.environment.LC_ALL = "en_US.UTF-8";
+      })]);
 
     users.users.overleaf = {
       isSystemUser = true;
@@ -129,6 +134,8 @@ with lib;
     };
 
     users.groups.overleaf = { };
+
+    #services.redis.servers."".enable = true;
 
     services.redis.servers.overleaf = mkIf cfg.enableRedis {
       enable = true;

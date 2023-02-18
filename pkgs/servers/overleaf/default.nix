@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp ${./yarn.lock} yarn.lock
     chmod +rw yarn.lock
     cp ${./package.json} package.json
-    
+
     # Replace hard-coded values in settings by environment variables
     find . -type f -not -path '*/\.*' -exec sed -E -i "s|SHARELATEX_|OVERLEAF_|g" {} +
     (
