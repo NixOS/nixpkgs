@@ -32,14 +32,14 @@
 
 buildGoModule rec {
   pname = "lxd";
-  version = "5.10";
+  version = "5.11";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    hash = "sha256-sYJkPr/tE22xJEjKX7fMjOLQ9zBDm52UjqbVLrm39zU=";
+    hash = "sha256-6z6C1nWmnHLdLtLf7l1f4riGhuP2J2mt8mVWZIiege0=";
   };
 
   vendorSha256 = null;

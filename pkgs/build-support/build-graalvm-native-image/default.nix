@@ -1,7 +1,9 @@
-{ lib, stdenv, graalvm-ce, glibcLocales }:
-
-{ name ? "${args.pname}-${args.version}"
-  # Final executable name
+{ lib
+, stdenv
+, glibcLocales
+  # The GraalVM derivation to use
+, graalvmDrv
+, name ? "${args.pname}-${args.version}"
 , executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
@@ -9,7 +11,6 @@
   # Default native-image arguments. You probably don't want to set this,
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
-    "-jar" jar
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
     "-H:Name=${executable}"
     "--verbose"
@@ -18,16 +19,25 @@
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
-  # The GraalVM derivation to use
-, graalvmDrv ? graalvm-ce
   # Locale to be used by GraalVM compiler
 , LC_ALL ? "en_US.UTF-8"
 , meta ? { }
 , ...
 } @ args:
 
-stdenv.mkDerivation (args // {
-  inherit dontUnpack LC_ALL;
+let
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
+    "glibcLocales"
+    "jar"
+    "dontUnpack"
+    "LC_ALL"
+    "meta"
+  ];
+in
+stdenv.mkDerivation ({
+  inherit dontUnpack LC_ALL jar;
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation (args // {
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
-    native-image ''${nativeImageBuildArgs[@]}
+    native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
 
     runHook postBuild
   '';
@@ -61,4 +71,4 @@ stdenv.mkDerivation (args // {
     # need to have native-image-installable-svm available
     broken = !(builtins.any (p: (p.product or "") == "native-image-installable-svm") graalvmDrv.products);
   } // meta;
-})
+} // extraArgs)

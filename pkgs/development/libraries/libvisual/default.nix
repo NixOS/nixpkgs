@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL glib ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
     # Remove once "sdl-cross-prereq.patch" patch above is removed.
     "--disable-lv-tool"
   ];
