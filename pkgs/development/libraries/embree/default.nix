@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
+    "-DTBB_ROOT=${tbb}"
+    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
   ];
 
 
