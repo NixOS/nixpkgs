@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
   configureFlags = [
