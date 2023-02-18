@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -r . $out/share 
+    cp -r . $out/share
   '';
 
   postFixup = ''
