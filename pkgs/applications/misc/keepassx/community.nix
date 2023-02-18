@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , qttools
-, darwin
 
 , asciidoctor
 , botan2
@@ -24,6 +23,8 @@
 , wrapGAppsHook
 , wrapQtAppsHook
 , zlib
+
+, LocalAuthentication
 
 , withKeePassBrowser ? true
 , withKeePassFDOSecrets ? true
@@ -110,7 +111,7 @@ stdenv.mkDerivation rec {
     readline
     zlib
   ]
-  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication
+  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) LocalAuthentication
   ++ lib.optional stdenv.isDarwin qtmacextras
   ++ lib.optional stdenv.isLinux libusb1
   ++ lib.optional withKeePassX11 qtx11extras;
