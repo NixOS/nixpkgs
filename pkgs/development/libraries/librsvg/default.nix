@@ -20,7 +20,8 @@
 , python3Packages
 , gnome
 , vala
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
 , _experimental-update-script-combinators
 , common-updater-scripts
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
+    vala # for share/vala/Makefile.vapigen
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Foundation
@@ -92,6 +94,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
+
+  preConfigure = ''
+    PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
+    export PKG_CONFIG_VAPIGEN_VAPIGEN
+  '';
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
