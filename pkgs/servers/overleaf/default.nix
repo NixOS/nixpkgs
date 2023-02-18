@@ -24,13 +24,23 @@ stdenv.mkDerivation rec {
   patches = [ ./versions.patch ];
 
   postPatch = ''
+    # Add the custom yarn.lock
     rm package-lock.json
     cp ${./yarn.lock} yarn.lock
     chmod +rw yarn.lock
     cp ${./package.json} package.json
+    
+    # Replace hard-coded values in settings by environment variables
+    find . -type f -not -path '*/\.*' -exec sed -E -i "s|SHARELATEX_|OVERLEAF_|g" {} +
+    (
+      cd server-ce/config
+      sed -E -i "s|httpAuthUser = 'sharelatex'|httpAuthUser = process.env.WEB_API_USER|" ./settings.js
+      sed -E -i "s|'/var/lib/sharelatex(.*)'|\`\''${process.env.DATA_DIR}\1\`|" ./settings.js
+      sed -E -i "s!'http://localhost:3000'!\`http://\''${process.env.WEB_API_HOST || process.env.WEB_HOST || 'localhost'}:\''${process.env.WEB_API_PORT || process.env.WEB_PORT || 3000}\`!" ./settings.js
+    )
   '';
 
-  buildInputs = [ python3 fixup_yarn_lock nodejs-16_x nodejs-16_x.pkgs.node-pre-gyp nodejs-16_x.pkgs.node-gyp yarn makeWrapper ];
+  buildInputs = [ pkgs.jq python3 fixup_yarn_lock nodejs-16_x nodejs-16_x.pkgs.node-pre-gyp nodejs-16_x.pkgs.node-gyp yarn makeWrapper ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
