@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils
 , withCryptodev ? false, cryptodev
+, withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
@@ -75,7 +76,8 @@ let
     buildInputs = lib.optional withCryptodev cryptodev
       # perl is included to allow the interpreter path fixup hook to set the
       # correct interpreter in c_rehash.
-      ++ lib.optional withPerl perl;
+      ++ lib.optional withPerl perl
+      ++ lib.optional withZlib zlib;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
@@ -142,6 +144,7 @@ let
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
+      ++ lib.optional withZlib "zlib"
       ;
 
     makeFlags = [
