@@ -1356,11 +1356,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86vm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     pname = "libXxf86vm";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2";
-      sha256 = "0mydhlyn72i7brjwypsqrpkls3nm6vxw0li8b2nw0caz7kwjgvmg";
+      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz";
+      sha256 = "1rw8z01vgfc4wvf0q75sgnj6n04dkrw1w7z455qydrz0nd4fyzr4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
