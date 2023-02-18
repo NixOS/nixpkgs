@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-O3"
-    # Needed with GCC 12
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12, but causes errors with Clang
     "-Wno-dangling-pointer"
   ];
 
