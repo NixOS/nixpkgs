@@ -7,14 +7,15 @@
 , libjpeg
 , gd
 , freetype
+, runCommand
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ploticus";
   version = "2.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    url = "mirror://sourceforge/ploticus/ploticus/${finalAttrs.version}/ploticus${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_src.tar.gz";
     sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
@@ -42,6 +43,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    substituteInPlace src/pl.h --subst-var out
+  '';
+
   preBuild = ''
     cd src
   '';
@@ -62,6 +67,16 @@ stdenv.mkDerivation rec {
     ln -s "pl" "$out/bin/ploticus"
   '';
 
+  passthru.tests = {
+    prefab = runCommand "ploticus-prefab-test" {
+      buildInputs = [ finalAttrs.finalPackage ];
+    } ''
+      # trivial test to see if the prefab path munging works
+      mkdir $out/
+      pl -prefab scat inlinedata="A 1 2" x=2 y=3 -png -o $out/out.png
+    '';
+  };
+
   meta = with lib; {
     description = "A non-interactive software package for producing plots and charts";
     longDescription = ''
@@ -77,4 +92,4 @@ stdenv.mkDerivation rec {
     homepage = "https://ploticus.sourceforge.net/";
     platforms = with platforms; linux ++ darwin;
   };
-}
+})
