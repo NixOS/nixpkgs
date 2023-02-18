@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp ${./package.json} package.json
   '';
 
-  buildInputs = [ python3 fixup_yarn_lock nodejs-16_x nodejs-16_x.pkgs.node-pre-gyp yarn makeWrapper ];
+  buildInputs = [ python3 fixup_yarn_lock nodejs-16_x nodejs-16_x.pkgs.node-pre-gyp nodejs-16_x.pkgs.node-gyp yarn makeWrapper ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
       cd node_modules/bcrypt
       export CPPFLAGS="-I${nodejs-16_x}/include/node"
       node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs-16_x}/include/node
+    )
+    (
+      cd node_modules/diskusage
+      export CPPFLAGS="-I${nodejs-16_x}/include/node"
+      node-gyp configure --nodedir=${nodejs-16_x}/include/node
+      node-gyp build --nodedir=${nodejs-16_x}/include/node
     )
     patchShebangs node_modules
     (
