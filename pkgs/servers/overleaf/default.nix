@@ -63,56 +63,56 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-chat \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-chat \
+      --add-flags app.js \
       --chdir $out/share/services/chat
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-clsi \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-clsi \
+      --add-flags app.js \
       --chdir $out/share/services/clsi
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-contacts \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-contacts \
+      --add-flags app.js \
       --chdir $out/share/services/contacts
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-docstore \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-docstore \
+      --add-flags app.js \
       --chdir $out/share/services/docstore
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-document-updater \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-document-updater \
+      --add-flags app.js \
       --chdir $out/share/services/document-updater
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-filestore \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-filestore \
+      --add-flags app.js \
       --chdir $out/share/services/filestore
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-history-v1 \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-history-v1 \
+      --add-flags app.js \
       --chdir $out/share/services/history-v1
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-notifications \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-notifications \
+      --add-flags app.js \
       --chdir $out/share/services/notifications
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/project-history \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-project-history \
+      --add-flags app.js \
       --chdir $out/share/services/project-history
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-real-time \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-real-time \
+      --add-flags app.js \
       --chdir $out/share/services/real-time
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-spelling \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-spelling \
+      --add-flags app.js \
       --chdir $out/share/services/spelling
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-track-changes \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-track-changes \
+      --add-flags app.js \
       --chdir $out/share/services/track-changes
 
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-web \
-      --add-flags start \
+    makeWrapper ${nodejs-16_x}/bin/node $out/bin/overleaf-web \
+      --add-flags app.js \
       --chdir $out/share/services/web
   '';
 
