@@ -158,7 +158,7 @@ let
           '@NIXOS_TEST_OPTIONS_JSON@' \
           ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
 
-      nixos-render-docs manual docbook \
+      nixos-render-docs -j $NIX_BUILD_CORES manual docbook \
         --manpage-urls ${manpageUrls} \
         --revision ${lib.escapeShellArg revision} \
         ./manual.md \
@@ -285,7 +285,7 @@ in rec {
         ''
         else ''
           mkdir -p $out/share/man/man5
-          nixos-render-docs options manpage \
+          nixos-render-docs -j $NIX_BUILD_CORES options manpage \
             --revision ${lib.escapeShellArg revision} \
             ${optionsJSON}/share/doc/nixos/options.json \
             $out/share/man/man5/configuration.nix.5

@@ -179,8 +179,6 @@ stdenv.mkDerivation rec {
     export XDG_RUNTIME_DIR=/tmp
   '';
 
-  checkTarget = "ptest";
-
   outputs = [ "out" "dev" "doc" ];
 
   passthru = {

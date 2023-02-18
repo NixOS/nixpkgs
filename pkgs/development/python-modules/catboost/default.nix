@@ -5,15 +5,15 @@
 
 buildPythonPackage rec {
   pname = "catboost";
-  version = "1.1.1";
+  version = "1.0.5";
 
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
+    rev = "v${version}";
+    sha256 = "ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk=";
   };
 
   nativeBuildInputs = [ clang_12 ];

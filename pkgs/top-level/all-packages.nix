@@ -2267,6 +2267,8 @@ with pkgs;
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
+  xemu = callPackage ../applications/emulators/xemu { };
+
   yapesdl = callPackage ../applications/emulators/yapesdl { };
 
   zesarux = callPackage ../applications/emulators/zesarux { };
@@ -3092,6 +3094,8 @@ with pkgs;
   writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
 
   cuelsp = callPackage ../development/tools/cuelsp {};
+
+  cyclondds = callPackage ../development/libraries/cyclondds { };
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
@@ -4959,6 +4963,8 @@ with pkgs;
   interlock = callPackage ../servers/interlock {};
 
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
+
+  iotas = callPackage ../applications/office/iotas { };
 
   iotools = callPackage ../tools/misc/iotools { };
 
@@ -8865,6 +8871,8 @@ with pkgs;
 
   kubepug = callPackage ../development/tools/kubepug { };
 
+  kubeshark = callPackage ../applications/networking/cluster/kubeshark { };
+
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
   kubo = callPackage ../applications/networking/kubo { };
@@ -10359,7 +10367,11 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
-  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix { };
+  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
+    # Build currently fails on Go > 1.18
+    # See https://github.com/evilsocket/opensnitch/issues/851
+    buildGoModule = buildGo118Module;
+  };
 
   opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
 
@@ -10475,6 +10487,15 @@ with pkgs;
   openresolv = callPackage ../tools/networking/openresolv { };
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
+
+  openrgb-with-all-plugins = openrgb.withPlugins [
+    openrgb-plugin-effects
+    openrgb-plugin-hardwaresync
+  ];
+
+  openrgb-plugin-effects = libsForQt5.callPackage ../applications/misc/openrgb-plugins/effects { };
+
+  openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
   openrussian-cli = callPackage ../misc/openrussian-cli {
     lua = lua5_3;
@@ -12253,7 +12274,9 @@ with pkgs;
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
-  sslscan = callPackage ../tools/security/sslscan { };
+  sslscan = callPackage ../tools/security/sslscan {
+    openssl = openssl.override { withZlib = true; };
+  };
 
   sslmate = callPackage ../development/tools/sslmate { };
 
@@ -15039,7 +15062,9 @@ with pkgs;
   graalvm-ce = graalvm11-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
-  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
+  buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
+    graalvmDrv = graalvm-ce;
+  }).override;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 

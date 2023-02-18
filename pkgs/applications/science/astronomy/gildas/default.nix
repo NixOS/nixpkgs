@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "oct22b";
-  version = "20221001_b";
+  srcVersion = "feb23a";
+  version = "20230201_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "sha256-MGfU2gzBbJ8ITpU7OiwCaHbi8s9Y6gvcAvSUuEZjfqk=";
+    sha256 = "sha256-A6jtcC8QMtJ7YcNaPiOjwNPDGPAjmRA3jZLEt5iBONE=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
 
-  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ./python-ldflags.patch ];
+  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 

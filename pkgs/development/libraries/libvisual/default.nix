@@ -4,6 +4,8 @@
 , SDL
 , glib
 , pkg-config
+  # sdl-config is not available when crossing
+, withExamples ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL glib ];
+  buildInputs = lib.optional withExamples SDL ++ [ glib ];
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  configureFlags = lib.optional (!withExamples) "--disable-examples";
 
   meta = {
     description = "An abstraction library for audio visualisations";
