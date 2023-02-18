@@ -7,6 +7,8 @@
 , libjpeg
 , gd
 , freetype
+, runCommand
+, ploticus
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +23,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Replace hardcoded FHS path with $out.
     ./ploticus-install.patch
-
-    # Set the location of the PREFABS directory.
-    ./set-prefabs-dir.patch
 
     # Use gd from Nixpkgs instead of the vendored one.
     # This is required for non-ASCII fonts to work:
@@ -44,6 +43,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd src
+    # Set the location of the PREFABS directory.
+    sed -i -e 's,PREFABS_DIR "",PREFABS_DIR "'$out'/share/ploticus/prefabs",' pl.h
   '';
   makeFlags = [ "CC=cc" ];
 
@@ -61,6 +62,14 @@ stdenv.mkDerivation rec {
     # Add aliases for backwards compatibility.
     ln -s "pl" "$out/bin/ploticus"
   '';
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      # trivial test to see if the prefab path munging works
+      mkdir $out/
+      ${ploticus}/bin/pl pl -prefab scat inlinedata="A 1 2" x=2 y=3 -png -o $out/out.png
+    '';
+  };
 
   meta = with lib; {
     description = "A non-interactive software package for producing plots and charts";
