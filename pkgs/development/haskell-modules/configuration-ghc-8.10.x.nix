@@ -73,6 +73,9 @@ self: super: {
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;

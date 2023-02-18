@@ -87,6 +87,9 @@ self: super: {
   # For -fghc-lib see cabal.project in haskell-language-server.
   stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
 
+  # Needs to match ghc version
+  ghc-tags = doDistribute self.ghc-tags_1_5;
+
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
 
