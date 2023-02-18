@@ -11747,6 +11747,8 @@ with pkgs;
 
   overcommit = callPackage ../development/tools/overcommit { };
 
+  overleaf = callPackage ../servers/overleaf { };
+
   overmind = callPackage ../applications/misc/overmind { };
 
   oxker = callPackage ../applications/misc/oxker { };

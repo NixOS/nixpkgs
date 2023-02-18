@@ -1,0 +1,122 @@
+diff --git a/libraries/ranges-tracker/package.json b/libraries/ranges-tracker/package.json
+index a882562b8..cd2c70ab1 100644
+--- a/libraries/ranges-tracker/package.json
++++ b/libraries/ranges-tracker/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/ranges-tracker",
++  "version": "0.0.1",
+   "description": "Shared logic for syncing comments and tracked changes with operational transforms",
+   "main": "index.cjs",
+   "files": [
+diff --git a/services/clsi/package.json b/services/clsi/package.json
+index 9fc393b34..10c08920d 100644
+--- a/services/clsi/package.json
++++ b/services/clsi/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/clsi",
++  "version": "0.0.1",
+   "description": "A Node.js implementation of the CLSI LaTeX web-API",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/contacts/package.json b/services/contacts/package.json
+index 2dc678409..f673e16bb 100644
+--- a/services/contacts/package.json
++++ b/services/contacts/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/contacts",
++  "version": "0.0.1",
+   "description": "An API for tracking contacts of a user",
+   "private": true,
+   "type": "module",
+diff --git a/services/docstore/package.json b/services/docstore/package.json
+index 3140b8594..1af870589 100644
+--- a/services/docstore/package.json
++++ b/services/docstore/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/docstore",
++  "version": "0.0.1",
+   "description": "A CRUD API for handling text documents in projects",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/document-updater/package.json b/services/document-updater/package.json
+index 05ac7428b..3cdc6095b 100644
+--- a/services/document-updater/package.json
++++ b/services/document-updater/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/document-updater",
++  "version": "0.0.1",
+   "description": "An API for applying incoming updates to documents in real-time",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/filestore/package.json b/services/filestore/package.json
+index 8e805ae3b..5ec90b24a 100644
+--- a/services/filestore/package.json
++++ b/services/filestore/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/filestore",
++  "version": "0.0.1",
+   "description": "An API for CRUD operations on binary files stored in S3",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/notifications/package.json b/services/notifications/package.json
+index 55084a1ed..813444932 100644
+--- a/services/notifications/package.json
++++ b/services/notifications/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/notifications",
++  "version": "0.0.1",
+   "description": "An API to handle user notifications",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/project-history/package.json b/services/project-history/package.json
+index 9f02ae59c..352862e6e 100644
+--- a/services/project-history/package.json
++++ b/services/project-history/package.json
+@@ -1,5 +1,6 @@
+ {
+-  "name": "@overleaf/project-history",
++  "name": "@overleaf/project-history", 
++  "version": "0.0.1",
+   "description": "An API for saving and compressing individual document updates into a browseable history",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/real-time/package.json b/services/real-time/package.json
+index 7521fae4c..e63f870de 100644
+--- a/services/real-time/package.json
++++ b/services/real-time/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/real-time",
++  "version": "0.0.1",
+   "description": "The socket.io layer of Overleaf for real-time editor interactions",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/track-changes/package.json b/services/track-changes/package.json
+index 802c331de..7f6fb136c 100644
+--- a/services/track-changes/package.json
++++ b/services/track-changes/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/track-changes",
++  "version": "0.0.1",
+   "description": "An API for saving and compressing individual document updates into a browsable history",
+   "private": true,
+   "main": "app.js",
+diff --git a/services/web/package.json b/services/web/package.json
+index 83b751eea..2603257a9 100644
+--- a/services/web/package.json
++++ b/services/web/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "@overleaf/web",
++  "version": "0.0.1",
+   "description": "The HTTP front end for Overleaf",
+   "private": true,
+   "main": "app.js",
