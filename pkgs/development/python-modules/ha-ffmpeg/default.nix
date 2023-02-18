@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Home Assistant to handle ffmpeg";
     homepage = "https://github.com/home-assistant-libs/ha-ffmpeg/";
-    changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/3.1.0";
+    changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = teams.home-assistant.members;
   };
