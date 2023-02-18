@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ci68170df9o3fJuw8AH/qdJR8NZ2o9OeAg8gfjycHd0=";
   };
 
-
   buildPhase = ''
     runHook preBuild
     export HOME=$PWD
@@ -57,8 +56,6 @@ stdenv.mkDerivation rec {
     )
     runHook postBuild
   '';
-
-  distPhase = "true";
 
   installPhase = ''
     mkdir -p $out/share
@@ -89,10 +86,6 @@ stdenv.mkDerivation rec {
     makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-filestore \
       --add-flags start \
       --chdir $out/share/services/filestore
-
-    makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-git-bridge \
-      --add-flags start \
-      --chdir $out/share/services/git-bridge
 
     makeWrapper ${nodejs-16_x}/bin/npm $out/bin/overleaf-history-v1 \
       --add-flags start \
@@ -128,7 +121,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/overleaf/overleaf";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ camillemndn julienmalka ];
+    platforms = platforms.all;
   };
-
 }
 
