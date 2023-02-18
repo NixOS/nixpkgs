@@ -27,14 +27,14 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
     _base_paths: list[Path]
     _current_type: list[TocEntryType]
 
-    def convert(self, file: Path) -> str:
-        self._base_paths = [ file ]
+    def convert(self, infile: Path, outfile: Path) -> None:
+        self._base_paths = [ infile ]
         self._current_type = ['book']
         try:
-            with open(file, 'r') as f:
-                return self._render(f.read())
+            converted = self._render(infile.read_text())
+            outfile.write_text(converted)
         except Exception as e:
-            raise RuntimeError(f"failed to render manual {file}") from e
+            raise RuntimeError(f"failed to render manual {infile}") from e
 
     def _parse(self, src: str) -> list[Token]:
         tokens = super()._parse(src)
@@ -215,8 +215,7 @@ def _build_cli_db(p: argparse.ArgumentParser) -> None:
 def _run_cli_db(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
         md = DocBookConverter(json.load(manpage_urls), args.revision)
-        converted = md.convert(args.infile)
-        args.outfile.write_text(converted)
+        md.convert(args.infile, args.outfile)
 
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
