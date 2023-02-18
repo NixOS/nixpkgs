@@ -32,10 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-gd-package.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/pl.h --subst-var out
-  '';
-
   buildInputs = [
     zlib
     libX11
@@ -46,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   hardeningDisable = [ "format" ];
+
+  postPatch = ''
+    substituteInPlace src/pl.h --subst-var out
+  '';
 
   preBuild = ''
     cd src
