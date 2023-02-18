@@ -1,0 +1,24 @@
+diff --git a/src/common_video/h265/h265_pps_parser.h b/src/common_video/h265/h265_pps_parser.h
+index 28c95ea9..c180b1b9 100644
+--- a/src/common_video/h265/h265_pps_parser.h
++++ b/src/common_video/h265/h265_pps_parser.h
+@@ -12,6 +12,7 @@
+ #define COMMON_VIDEO_H265_PPS_PARSER_H_
+ 
+ #include "absl/types/optional.h"
++#include <cstdint>
+ 
+ namespace rtc {
+ class BitBuffer;
+diff --git a/src/modules/include/module_common_types_public.h b/src/modules/include/module_common_types_public.h
+index 345e45ce..c8cd452f 100644
+--- a/src/modules/include/module_common_types_public.h
++++ b/src/modules/include/module_common_types_public.h
+@@ -14,6 +14,7 @@
+ #include <limits>
+ 
+ #include "absl/types/optional.h"
++#include <cstdint>
+ 
+ namespace webrtc {
+ 
