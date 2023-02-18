@@ -46,7 +46,11 @@ let
           inherit (builtins.tryEval x) value success;
         in
           if !success then [ ]
-          else if lib.isDerivation value && value ? meta.pkgConfigModules then
+          else if lib.isDerivation value
+                  # All alias infrastructure should call dontDistribute on the
+                  # aliased packages which should allow us to detect them.
+                  && !(value.meta.hydraPlatforms or null == [ ])
+                  && value ? meta.pkgConfigModules then
             builtins.map
               (pkgConfigModule: { ${pkgConfigModule} = { inherit attrPath; }; })
               value.meta.pkgConfigModules

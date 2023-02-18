@@ -266,11 +266,6 @@
       "liblapack"
     ]
   },
-  "libR": {
-    "attrPath": [
-      "R"
-    ]
-  },
   "libavutil": {
     "attrPath": [
       "ffmpeg"
@@ -777,11 +772,6 @@
   "yaml-0.1": {
     "attrPath": [
       "libyaml"
-    ]
-  },
-  "zlib": {
-    "attrPath": [
-      "zlib"
     ]
   }
 }
