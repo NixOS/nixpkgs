@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "jaconv";
-  version = "0.3.1";
+  version = "0.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ikegami-yukino";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uzGHvklFHVoNloZauczgITeHQIgYQAfI9cjLWgG/vyI=";
+    hash = "sha256-9ruhOLaYNESeKOwJs3IN6ct66fSq7My9DOyA7/cH3d0=";
   };
 
   nativeCheckInputs = [
