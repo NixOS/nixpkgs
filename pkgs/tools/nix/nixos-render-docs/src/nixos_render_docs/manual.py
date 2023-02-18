@@ -4,7 +4,7 @@ import json
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, Generic, NamedTuple, Optional, Union
+from typing import Any, cast, Generic, get_args, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
@@ -12,13 +12,16 @@ from markdown_it.token import Token
 
 from . import md, options
 from .docbook import DocBookRenderer, Heading
+from .manual_structure import check_titles, FragmentType, TocEntryType
 from .md import Converter
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     _base_paths: list[Path]
+    _current_type: list[TocEntryType]
 
     def convert(self, file: Path) -> str:
         self._base_paths = [ file ]
+        self._current_type = ['book']
         try:
             with open(file, 'r') as f:
                 return self._render(f.read())
@@ -27,6 +30,7 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
 
     def _parse(self, src: str) -> list[Token]:
         tokens = super()._parse(src)
+        check_titles(self._current_type[-1], tokens)
         for token in tokens:
             if token.type != "fence" or not token.info.startswith("{=include=} "):
                 continue
@@ -34,11 +38,14 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             if typ == 'options':
                 token.type = 'included_options'
                 self._parse_options(token)
-            elif typ in [ 'sections', 'chapters', 'preface', 'parts', 'appendix' ]:
+            else:
+                fragment_type = typ.removesuffix('s')
+                if fragment_type not in get_args(FragmentType):
+                    raise RuntimeError(f"unsupported structural include type '{typ}'")
+                self._current_type.append(cast(FragmentType, fragment_type))
                 token.type = 'included_' + typ
                 self._parse_included_blocks(token)
-            else:
-                raise RuntimeError(f"unsupported structural include type '{typ}'")
+                self._current_type.pop()
         return tokens
 
     def _parse_included_blocks(self, token: Token) -> None:
@@ -106,25 +113,6 @@ class ManualDocBookRenderer(DocBookRenderer):
         }
 
     def render(self, tokens: Sequence[Token]) -> str:
-        wanted = { 'h1': 'title' }
-        wanted |= { 'h2': 'subtitle' } if self._toplevel_tag == 'book' else {}
-        for (i, (tag, kind)) in enumerate(wanted.items()):
-            if len(tokens) < 3 * (i + 1):
-                raise RuntimeError(f"missing {kind} ({tag}) heading")
-            token = tokens[3 * i]
-            if token.type != 'heading_open' or token.tag != tag:
-                assert token.map
-                raise RuntimeError(f"expected {kind} ({tag}) heading in line {token.map[0] + 1}", token)
-        for t in tokens[3 * len(wanted):]:
-            if t.type != 'heading_open' or (info := wanted.get(t.tag)) is None:
-                continue
-            assert t.map
-            raise RuntimeError(
-                f"only one {info[0]} heading ({t.markup} [text...]) allowed per "
-                f"{self._toplevel_tag}, but found a second in lines [{t.map[0] + 1}..{t.map[1]}]. "
-                "please remove all such headings except the first or demote the subsequent headings.",
-                t)
-
         # books get special handling because they have *two* title tags. doing this with
         # generic code is more complicated than it's worth. the checks above have verified
         # that both titles actually exist.
