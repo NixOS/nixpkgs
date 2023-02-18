@@ -24602,6 +24602,8 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
+  lightgbm = callPackage ../development/libraries/lightgbm { };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   listmonk = callPackage ../servers/mail/listmonk { };
