@@ -126,7 +126,7 @@ assert nativePrefix == bintools.nativePrefix;
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
-  version = if cc == null then null else ccVersion;
+  version = if cc == null then "" else ccVersion;
 
   preferLocalBuild = true;
 
