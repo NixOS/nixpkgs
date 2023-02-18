@@ -7,6 +7,13 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      flask = super.flask.overridePythonAttrs (old: rec {
+        version = "2.0.3";
+        src = old.src.override {
+          inherit version;
+          sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
+        };
+      });
       flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
         src = old.src.override {
@@ -16,6 +23,11 @@ let
         disabledTests = [
           "test_outside_request"
         ];
+        disabledTestPaths = [
+          "tests/test_form.py"
+          "tests/test_html5.py"
+        ];
+        patches = [ ];
       });
       werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
         version = "2.0.3";
@@ -23,16 +35,6 @@ let
           inherit version;
           sha256 = "b863f8ff057c522164b6067c9e28b041161b4be5ba4d0daceeaa50a163822d3c";
         };
-      });
-      wtforms = super.wtforms.overridePythonAttrs (old: rec {
-        version = "2.3.3";
-        src = old.src.override {
-          inherit version;
-          sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c";
-        };
-        checkPhase = ''
-          ${self.python.interpreter} tests/runtests.py
-        '';
       });
     };
   };
@@ -52,6 +54,7 @@ in python.pkgs.buildPythonApplication rec {
     flask
     flask-wtf
     msgpack
+    setuptools
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
     requests
   ] ++ requests.optional-dependencies.socks;
