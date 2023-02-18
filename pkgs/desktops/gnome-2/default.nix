@@ -1,5 +1,11 @@
 { config, stdenv, pkgs, lib }:
 
+let
+  mapAliases = lib.mapAttrs (_: alias:
+    if lib.isDerivation alias then lib.dontDistribute alias else alias
+  );
+in
+
 lib.makeScope pkgs.newScope (self: with self; {
 
 #### PLATFORM
@@ -41,7 +47,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
-} // lib.optionalAttrs config.allowAliases {
+} // lib.optionalAttrs config.allowAliases (mapAliases {
   inherit (pkgs)
     # GTK Libs
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
@@ -74,4 +80,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgnomeprintui = throw "gnome2.libgnomeprintui has been removed"; # 2023-01-15
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
-})
+}))
