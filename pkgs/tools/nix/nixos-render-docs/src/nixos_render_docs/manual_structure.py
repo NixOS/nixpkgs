@@ -27,3 +27,14 @@ def check_titles(kind: TocEntryType, tokens: Sequence[Token]) -> None:
             f"{kind}, but found a second in line {t.map[0] + 1}. "
             "please remove all such headings except the first or demote the subsequent headings.",
             t)
+
+    last_heading_level = 0
+    for token in tokens:
+        if token.type != 'heading_open':
+            continue
+        level = int(token.tag[1:]) # because tag = h1..h6
+        if level > last_heading_level + 1:
+            assert token.map
+            raise RuntimeError(f"heading in line {token.map[0] + 1} skips one or more heading levels, "
+                               "which is currently not allowed")
+        last_heading_level = level
