@@ -123,6 +123,18 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd("podman stop sleeping"))
           rootless.succeed(su_cmd("podman rm sleeping"))
 
+      with subtest("rootlessport"):
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
+              su_cmd(
+                  "podman run -d -p 9000:8888 --name=rootlessport -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8888"
+              )
+          )
+          rootless.succeed(su_cmd("podman ps | grep rootlessport"))
+          rootless.wait_until_succeeds(su_cmd("${pkgs.curl}/bin/curl localhost:9000 | grep Testing"))
+          rootless.succeed(su_cmd("podman stop rootlessport"))
+          rootless.succeed(su_cmd("podman rm rootlessport"))
+
       with subtest("Run container with init"):
           rootful.succeed(
               "tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - busybox"
