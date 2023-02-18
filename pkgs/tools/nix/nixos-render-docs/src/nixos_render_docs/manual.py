@@ -12,7 +12,7 @@ from markdown_it.token import Token
 
 from . import md, options
 from .docbook import DocBookRenderer, Heading
-from .manual_structure import check_titles, FragmentType, TocEntryType
+from .manual_structure import check_structure, FragmentType, is_include, TocEntryType
 from .md import Converter
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
@@ -30,9 +30,9 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
 
     def _parse(self, src: str) -> list[Token]:
         tokens = super()._parse(src)
-        check_titles(self._current_type[-1], tokens)
+        check_structure(self._current_type[-1], tokens)
         for token in tokens:
-            if token.type != "fence" or not token.info.startswith("{=include=} "):
+            if not is_include(token):
                 continue
             typ = token.info[12:].strip()
             if typ == 'options':
