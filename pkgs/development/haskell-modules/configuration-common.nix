@@ -2269,7 +2269,7 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_3);
+    brick = doJailbreak (dontCheck super.brick_1_6);
   });
 
   # Too strict upper bound on bytestring
