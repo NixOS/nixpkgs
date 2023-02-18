@@ -32,6 +32,14 @@ def check_titles(kind: TocEntryType, tokens: Sequence[Token]) -> None:
     for token in tokens:
         if token.type != 'heading_open':
             continue
+
+        # book subtitle headings do not need an id, only book title headings do.
+        # every other headings needs one too. we need this to build a TOC and to
+        # provide stable links if the manual changes shape.
+        if 'id' not in token.attrs and (kind != 'book' or token.tag != 'h2'):
+            assert token.map
+            raise RuntimeError(f"heading in line {token.map[0] + 1} does not have an id")
+
         level = int(token.tag[1:]) # because tag = h1..h6
         if level > last_heading_level + 1:
             assert token.map
