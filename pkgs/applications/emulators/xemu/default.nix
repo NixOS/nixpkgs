@@ -125,10 +125,17 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xemu.app/";
     description = "Original Xbox emulator";
-    maintainers = with maintainers; [ ];
-    license = licenses.gpl2Plus;
+    longDescription = ''
+      A free and open-source application that emulates the original Microsoft
+      Xbox game console, enabling people to play their original Xbox games on
+      Windows, macOS, and Linux systems.
+    '';
+    changelog = "https://github.com/xemu-project/xemu/releases/tag/v${self.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
+    platforms = with lib.platforms; linux;
   };
 })
