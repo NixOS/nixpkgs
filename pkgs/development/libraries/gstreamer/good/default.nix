@@ -45,7 +45,7 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
+assert raspiCameraSupport -> (stdenv.isLinux && (stdenv.isAarch32 || stdenv.isAarch64));
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
