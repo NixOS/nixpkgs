@@ -4,7 +4,7 @@ import json
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, Generic, get_args, NamedTuple, Optional, Union
+from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple, Optional, Union
 from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
@@ -16,6 +16,14 @@ from .manual_structure import check_structure, FragmentType, is_include, TocEntr
 from .md import Converter
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
+    # per-converter configuration for ns:arg=value arguments to include blocks, following
+    # the include type. html converters need something like this to support chunking, or
+    # another external method like the chunktocs docbook uses (but block options seem like
+    # a much nicer of doing this).
+    INCLUDE_ARGS_NS: ClassVar[str]
+    INCLUDE_FRAGMENT_ALLOWED_ARGS: ClassVar[set[str]] = set()
+    INCLUDE_OPTIONS_ALLOWED_ARGS: ClassVar[set[str]] = set()
+
     _base_paths: list[Path]
     _current_type: list[TocEntryType]
 
@@ -34,21 +42,35 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
         for token in tokens:
             if not is_include(token):
                 continue
-            typ = token.info[12:].strip()
+            directive = token.info[12:].split()
+            if not directive:
+                continue
+            args = { k: v for k, _sep, v in map(lambda s: s.partition('='), directive[1:]) }
+            typ = directive[0]
             if typ == 'options':
                 token.type = 'included_options'
-                self._parse_options(token)
+                self._process_include_args(token, args, self.INCLUDE_OPTIONS_ALLOWED_ARGS)
+                self._parse_options(token, args)
             else:
                 fragment_type = typ.removesuffix('s')
                 if fragment_type not in get_args(FragmentType):
                     raise RuntimeError(f"unsupported structural include type '{typ}'")
                 self._current_type.append(cast(FragmentType, fragment_type))
                 token.type = 'included_' + typ
-                self._parse_included_blocks(token)
+                self._process_include_args(token, args, self.INCLUDE_FRAGMENT_ALLOWED_ARGS)
+                self._parse_included_blocks(token, args)
                 self._current_type.pop()
         return tokens
 
-    def _parse_included_blocks(self, token: Token) -> None:
+    def _process_include_args(self, token: Token, args: dict[str, str], allowed: set[str]) -> None:
+        ns = self.INCLUDE_ARGS_NS + ":"
+        args = { k[len(ns):]: v for k, v in args.items() if k.startswith(ns) }
+        if unknown := set(args.keys()) - allowed:
+            assert token.map
+            raise RuntimeError(f"unrecognized include argument in line {token.map[0] + 1}", unknown)
+        token.meta['include-args'] = args
+
+    def _parse_included_blocks(self, token: Token, block_args: dict[str, str]) -> None:
         assert token.map
         included = token.meta['included'] = []
         for (lnum, line) in enumerate(token.content.splitlines(), token.map[0] + 2):
@@ -65,7 +87,7 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             except Exception as e:
                 raise RuntimeError(f"processing included file {path} from line {lnum}") from e
 
-    def _parse_options(self, token: Token) -> None:
+    def _parse_options(self, token: Token, block_args: dict[str, str]) -> None:
         assert token.map
 
         items = {}
@@ -176,6 +198,8 @@ class ManualDocBookRenderer(DocBookRenderer):
         return f"<programlisting{info}>\n{escape(token.content)}</programlisting>"
 
 class DocBookConverter(BaseConverter[ManualDocBookRenderer]):
+    INCLUDE_ARGS_NS = "docbook"
+
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
         super().__init__()
         self._renderer = ManualDocBookRenderer('book', revision, manpage_urls)
