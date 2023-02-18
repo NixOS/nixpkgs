@@ -20,7 +20,11 @@ let
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
       unwrapped = Agda;
-      tests = { inherit (nixosTests) agda; };
+      inherit withPackages;
+      tests = {
+        inherit (nixosTests) agda;
+        allPackages = withPackages (lib.filter self.lib.isUnbrokenAgdaPackage (lib.attrValues self));
+      };
     };
     inherit (Agda) meta;
   } ''
