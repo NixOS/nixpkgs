@@ -290,7 +290,7 @@ stdenv.mkDerivation rec {
       (feat "libpcap" true)
       (feat "libssh2" true)
       (feat "login_shell" isLinux)
-      (feat "nss" isLinux)
+      (feat "nss" (isLinux && !stdenv.hostPlatform.isMusl))
       (feat "numactl" isLinux)
       (feat "numad" isLinux)
       (feat "pciaccess" isLinux)
