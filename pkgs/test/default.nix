@@ -63,8 +63,6 @@ with pkgs;
 
   overriding = callPackage ./overriding.nix { };
 
-  patch-shebangs = callPackage ./patch-shebangs {};
-
   texlive = callPackage ./texlive {};
 
   cuda = callPackage ./cuda { };
