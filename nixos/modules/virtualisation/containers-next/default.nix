@@ -69,9 +69,9 @@ let
             if v == 4 then ''[ "10.151.1.1/24" ]''
             else ''[ "fd23::/64" ]''
           );
-          description = ''
+          description = lib.mdDoc ''
             Address of the container on the host-side, i.e. the
-            subnet and address assigned to <literal>ve-&lt;name&gt;</literal>.
+            subnet and address assigned to `ve-<name>`.
           '';
         };
         containerPool = mkOption {
@@ -82,9 +82,9 @@ let
             else ''[ "fd23::2/64" ]''
           );
 
-          description = ''
+          description = lib.mdDoc ''
             Addresses to be assigned to the container, i.e. the
-            subnet and address assigned to the <literal>host0</literal>-interface.
+            subnet and address assigned to the `host0`-interface.
           '';
         };
       };
@@ -99,26 +99,25 @@ let
             then [ "0.0.0.0/${toString (if type == "zone" then 24 else 28)}" ]
             else [ "::/64" ];
 
-          description = ''
+          description = lib.mdDoc ''
             Address pool to assign to a network. If
-            <literal>::/64</literal> or <literal>0.0.0.0/24</literal> is specified,
-            <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum>
-            </citerefentry> will assign an ULA IPv6 or private IPv4 address from
+            `::/64` or `0.0.0.0/24` is specified,
+            {manpage}`systemd.network(5)` will assign an ULA IPv6 or private IPv4 address from
             the address-pool of the given size to the interface.
 
-            Please note that NATv6 is currently not supported since <literal>IPMasquerade</literal>
+            Please note that NATv6 is currently not supported since `IPMasquerade`
             doesn't support IPv6. If this is still needed, it's recommended to do it like this:
 
-            <screen>
-            <prompt># </prompt>ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-            </screen>
+            ```ShellSession
+            # ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+            ```
           '';
         };
       } // (optionalAttrs (v == 4) {
         nat = mkOption {
           default = true;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Whether to set-up a basic NAT to enable internet access for the nspawn containers.
           '';
         };
@@ -131,9 +130,9 @@ let
         hostAddresses = mkOption {
           default = [];
           type = types.listOf types.str;
-          description = ''
+          description = lib.mdDoc ''
             Address of the container on the host-side, i.e. the
-            subnet and address assigned to <literal>vz-&lt;name&gt;</literal>.
+            subnet and address assigned to `vz-<name>`.
           '';
         };
       };
@@ -214,17 +213,17 @@ in {
         options = mkNetworkingOpts "zone";
       });
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Networking zones for nspawn containers. In this mode, the host-side
         of the virtual ethernet of a machine is managed by an interface named
-        <literal>vz-&lt;name&gt;</literal>.
+        `vz-<name>`.
       '';
     };
 
     rendered = mkOption {
       type = types.attrsOf (types.attrsOf types.unspecified);
       readOnly = true;
-      description = ''
+      description = lib.mdDoc ''
         Fully rendered configuration of each container. Helpful to introspect the config
         from outside.
       '';
@@ -237,28 +236,27 @@ in {
           sharedNix = mkOption {
             default = true;
             type = types.bool;
-            description = ''
-              <warning>
-                <para>Experimental setting! Expect things to break!</para>
-              </warning>
+            description = lib.mdDoc ''
+              ::: {.warning}
+                Experimental setting! Expect things to break!
+              :::
 
-              With this option <emphasis>disabled</emphasis>, only the needed store-paths will
+              With this option **disabled**, only the needed store-paths will
               be mounted into the container rather than the entire store.
             '';
           };
 
           ephemeral = mkEnableOption "ephemeral container" // {
-            description = ''
-              <literal>ephemeral</literal> means that the container's rootfs will be wiped
-              before every startup. See <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-              <manvolnum>5</manvolnum></citerefentry> for further context.
+            description = lib.mdDoc ''
+              `ephemeral` means that the container's rootfs will be wiped
+              before every startup. See {manpage}`systemd.nspawn(5)` for further context.
             '';
           };
 
           nixpkgs = mkOption {
             default = ../../../..;
             type = types.path;
-            description = ''
+            description = lib.mdDoc ''
               Path to the `nixpkgs`-checkout or channel to use for the container.
             '';
           };
@@ -266,9 +264,8 @@ in {
           zone = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = ''
-              Name of the networking zone defined by <citerefentry>
-              <refentrytitle>systemd.nspawn</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+            description = lib.mdDoc ''
+              Name of the networking zone defined by {manpage}`systemd.nspawn(5)`.
             '';
           };
 
@@ -277,14 +274,14 @@ in {
               options = {
                 id = mkOption {
                   type = types.str;
-                  description = ''
+                  description = lib.mdDoc ''
                     ID of the credential under which the credential can be referenced by services
                     inside the container.
                   '';
                 };
                 path = mkOption {
                   type = types.str;
-                  description = ''
+                  description = lib.mdDoc ''
                     Path or ID of the credential passed to the container.
                   '';
                 };
@@ -292,24 +289,20 @@ in {
             });
             apply = concatMapStringsSep " " ({ id, path }: "--load-credential=${id}:${path}");
             default = [];
-            description = ''
-              Credentials using the <literal>LoadCredential=</literal>-feature from
-              <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-              </citerefentry>. These will be passed to the container's service-manager
+            description = lib.mdDoc ''
+              Credentials using the `LoadCredential=`-feature from
+              {manpage}`systemd.exec(5)`. These will be passed to the container's service-manager
               and can be used in a service inside a container like
 
-              <programlisting>
+              ```nix
               {
-                <xref linkend="opt-systemd.services._name_.serviceConfig" />.LoadCredential = "foo:foo";
+                systemd.services."service-name".serviceConfig.LoadCredential = "foo:foo";
               }
-              </programlisting>
+              ```
 
-              where <literal>foo</literal> is the
-              <xref linkend="opt-nixos.containers.instances._name_.credentials._.id" /> of the
-              credential passed to the container.
+              where `foo` is the `id` of the credential passed to the container.
 
-              See also <citerefentry><refentrytitle>systemd-nspawn</refentrytitle>
-              <manvolnum>1</manvolnum></citerefentry>.
+              See also {manpage}`systemd-nspawn(1)`.
             '';
           };
 
@@ -317,11 +310,11 @@ in {
             strategy = mkOption {
               type = types.enum [ "none" "reload" "restart" "dynamic" ];
               default = "dynamic";
-              description = ''
-                Decide whether to <emphasis>restart</emphasis> or <emphasis>reload</emphasis>
+              description = lib.mdDoc ''
+                Decide whether to **restart** or **reload**
                 the container during activation.
 
-                <literal>dynamic</literal> checks whether the <filename>.nspawn</filename>-unit
+                **dynamic** checks whether the `.nspawn`-unit
                 has changed (apart from the init-script) and if that's the case, it will be
                 restarted, otherwise a reload will happen.
               '';
@@ -330,7 +323,7 @@ in {
             reloadScript = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = ''
+              description = lib.mdDoc ''
                 Script to run when a container is supposed to be reloaded.
               '';
             };
@@ -344,19 +337,17 @@ in {
                 (mkStaticNetOpts 6);
             });
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Networking options for a single container. With this option used, a
-              <literal>veth</literal>-pair is created. It's possible to configure a dynamically
+              `veth`-pair is created. It's possible to configure a dynamically
               managed network with private IPv4 and ULA IPv6 the same way like zones.
               Additionally, it's possible to statically assign addresses to a container here.
             '';
           };
 
           system-config = mkOption {
-            description = ''
-              NixOS configuration for the container. See <citerefentry>
-              <refentrytitle>configuration.nix</refentrytitle><manvolnum>5</manvolnum>
-              </citerefentry> for available options.
+            description = lib.mdDoc ''
+              NixOS configuration for the container. See {manpage}`configuration.nix(5)` for available options.
             '';
             default = {};
             type = mkOptionType {
@@ -367,21 +358,19 @@ in {
         };
       });
 
-      description = ''
-        Attribute set to define <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>-managed containers. With this attribute-set,
+      description = lib.mdDoc ''
+        Attribute set to define {manpage}`systemd.nspawn(5)`-managed containers. With this attribute-set,
         a network, a shared store and a NixOS configuration can be declared for each running
         container.
 
-        The container's state is managed in <filename>/var/lib/machines/&lt;name&gt;</filename>.
+        The container's state is managed in `/var/lib/machines/<name>`.
         A machine can be started with the
-        <filename>systemd-nspawn@&lt;name&gt;.service</filename>-unit, during runtime it can
-        be accessed with <citerefentry><refentrytitle>machinectl</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        `systemd-nspawn@<name>.service`-unit, during runtime it can
+        be accessed with {manpage}`machinectl(1)`.
 
-        Please note that if both <xref linkend="opt-nixos.containers.instances._name_.network" />
-        &amp; <xref linkend="opt-nixos.containers.instances._name_.zone" /> are
-        <literal>null</literal>, the container will use the host's network.
+        Please note that if both [](#opt-nixos.containers.instances._name_.network)
+        & [](#opt-nixos.containers.instances._name_.zone) are
+        `null`, the container will use the host's network.
       '';
     };
   };
@@ -389,12 +378,12 @@ in {
   config = mkIf (cfg != {}) {
     assertions = [
       { assertion = !config.boot.isContainer;
-        description = ''
+        message = ''
           Cannot start containers inside a container!
         '';
       }
       { assertion = config.networking.useNetworkd;
-        description = "Only networkd is supported!";
+        message = "Only networkd is supported!";
       }
     ] ++ (flip concatMap (attrNames config.nixos.containers.instances) (n: let inst = cfg.${n}; in [
       { assertion = inst.zone != null -> (config.nixos.containers.zones != null && config.nixos.containers.zones ? ${inst.zone});

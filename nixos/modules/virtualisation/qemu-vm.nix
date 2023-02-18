@@ -726,12 +726,12 @@ in
       mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          If enabled, changes written to <filename>/boot</filename> will be
-          synced back to <filename>$TMPDIR/disk.img</filename>.
+        description = mdDoc ''
+          If enabled, changes written to `/boot` will be
+          synced back to `$TMPDIR/disk.img`.
 
-          This is only needed if e.g. a VM test needs to change <filename>/boot</filename>,
-          e.g. to test <command>nixos-rebuild boot</command> and a subsequent
+          This is only needed if e.g. a VM test needs to change `/boot`,
+          e.g. to test `nixos-rebuild boot` and a subsequent
           reboot.
         '';
       };
