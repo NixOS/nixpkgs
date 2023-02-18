@@ -2272,6 +2272,10 @@ self: super: {
     brick = doJailbreak (dontCheck super.brick_1_3);
   });
 
+  # Too strict upper bound on bytestring
+  # https://github.com/TravisWhitaker/rdf/issues/8
+  rdf = doJailbreak super.rdf;
+
   # random <1.2
   unfoldable = doJailbreak super.unfoldable;
 
