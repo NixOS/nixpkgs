@@ -4,6 +4,7 @@
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
+, withGameSpecificLibraries ? true # exclude game specific libraries
 }:
 
 let
@@ -77,52 +78,8 @@ in buildFHSUserEnv rec {
     libthai
     pango
 
-    # Not formally in runtime but needed by some games
-    at-spi2-atk
-    at-spi2-core   # CrossCode
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-plugins-base
-    json-glib # paradox launcher (Stellaris)
-    libdrm
-    libxkbcommon # paradox launcher
-    libvorbis # Dead Cells
-    libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
-    mono
-    xorg.xkeyboardconfig
-    xorg.libpciaccess
-    xorg.libXScrnSaver # Dead Cells
-    udev # shadow of the tomb raider
-    icu # dotnet runtime, e.g. stardew valley
-
-    # screeps dependencies
-    gtk3
-    dbus
-    zlib
-    atk
-    cairo
-    freetype
-    gdk-pixbuf
-    fontconfig
-
-    # friends options won't display "Launch Game" without it
-    lsof
-
-    # called by steam's setup.sh
-    file
-
-    # Prison Architect
-    libGLU
-    libuuid
-    libbsd
-    alsa-lib
-
-    # Loop Hero
-    libidn2
-    libpsl
-    nghttp2.lib
-    openssl_1_1
-    rtmpdump
+    lsof # friends options won't display "Launch Game" without it
+    file # called by steam's setup.sh
 
     # dependencies for mesa drivers, needed inside pressure-vessel
     mesa.llvmPackages.llvm.lib
@@ -134,14 +91,7 @@ in buildFHSUserEnv rec {
     xorg.libxshmfence
     xorg.libXxf86vm
     libelf
-
-    # pressure-vessel (required for mangohud and possibly more)
-    elfutils.out
-
-    # Required
-    glib
-    gtk2
-    bzip2
+    (lib.getLib elfutils)
 
     # Without these it silently fails
     xorg.libXinerama
@@ -161,10 +111,11 @@ in buildFHSUserEnv rec {
     libusb1
     dbus-glib
     ffmpeg
-    # Only libraries are needed from those two
     libudev0-shim
 
     # Verified games requirements
+    fontconfig
+    freetype
     xorg.libXt
     xorg.libXmu
     libogg
@@ -172,10 +123,15 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
+    libdrm
     libidn
     tbb
+    zlib
 
     # Other things from runtime
+    glib
+    gtk2
+    bzip2
     flac
     freeglut
     libjpeg
@@ -202,8 +158,48 @@ in buildFHSUserEnv rec {
     librsvg
     xorg.libXft
     libvdpau
-  ]
-  ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  ] ++ lib.optionals withGameSpecificLibraries [
+    # Not formally in runtime but needed by some games
+    at-spi2-atk
+    at-spi2-core   # CrossCode
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-plugins-base
+    json-glib # paradox launcher (Stellaris)
+    libdrm
+    libxkbcommon # paradox launcher
+    libvorbis # Dead Cells
+    libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
+    mono
+    xorg.xkeyboardconfig
+    xorg.libpciaccess
+    xorg.libXScrnSaver # Dead Cells
+    udev # Shadow of the Tomb Raider
+    icu # dotnet runtime, e.g. Stardew Valley
+
+    # screeps dependencies
+    gtk3
+    dbus
+    zlib
+    atk
+    cairo
+    freetype
+    gdk-pixbuf
+    fontconfig
+
+    # Prison Architect
+    libGLU
+    libuuid
+    libbsd
+    alsa-lib
+
+    # Loop Hero
+    libidn2
+    libpsl
+    nghttp2.lib
+    openssl_1_1
+    rtmpdump
+  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
   extraInstallCommands = ''
@@ -256,7 +252,9 @@ in buildFHSUserEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  inherit (steam) meta;
+  meta = steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
+    description = steam.meta.description + " (without game specific libraries)";
+  };
 
   # allows for some gui applications to share IPC
   # this fixes certain issues where they don't render correctly
