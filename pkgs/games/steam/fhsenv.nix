@@ -7,31 +7,30 @@
 }:
 
 let
-  commonTargetPkgs = pkgs: with pkgs;
-    [
-      # Needed for operating system detection until
-      # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
-      lsb-release
-      # Errors in output without those
-      pciutils
-      # Games' dependencies
-      xorg.xrandr
-      which
-      # Needed by gdialog, including in the steam-runtime
-      perl
-      # Open URLs
-      xdg-utils
-      iana-etc
-      # Steam Play / Proton
-      python3
-      # Steam VR
-      procps
-      usbutils
+  commonTargetPkgs = pkgs: with pkgs; [
+    # Needed for operating system detection until
+    # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
+    lsb-release
+    # Errors in output without those
+    pciutils
+    # Games' dependencies
+    xorg.xrandr
+    which
+    # Needed by gdialog, including in the steam-runtime
+    perl
+    # Open URLs
+    xdg-utils
+    iana-etc
+    # Steam Play / Proton
+    python3
+    # Steam VR
+    procps
+    usbutils
 
-      # electron based launchers need newer versions of these libraries than what runtime provides
-      mesa
-      sqlite
-    ] ++ extraPkgs pkgs;
+    # electron based launchers need newer versions of these libraries than what runtime provides
+    mesa
+    sqlite
+  ] ++ extraPkgs pkgs;
 
   ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
@@ -273,7 +272,6 @@ in buildFHSUserEnv rec {
 
     targetPkgs = commonTargetPkgs;
     inherit multiPkgs profile extraInstallCommands;
-
     inherit unshareIpc unsharePid;
 
     runScript = writeScript "steam-run" ''
