@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     zig build -Drelease-safe -Dcpu=baseline --prefix $out install
+    runHook postInstall
   '';
 
   meta = with lib; {
