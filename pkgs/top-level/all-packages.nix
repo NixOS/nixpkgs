@@ -17054,7 +17054,7 @@ with pkgs;
   verible = callPackage ../development/tools/language-servers/verible { };
 
   zls = callPackage ../development/tools/language-servers/zls {
-    zig = zig_0_9;
+    zig = zig_0_10;
   };
 
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
