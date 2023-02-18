@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-prefab-test" {
+    prefab = runCommand "${pname}-prefab-test" {
       buildInputs = [ finalAttrs.finalPackage ];
     } ''
       # trivial test to see if the prefab path munging works
