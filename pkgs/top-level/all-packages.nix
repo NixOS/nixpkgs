@@ -117,6 +117,8 @@ with pkgs;
     dontRecurseIntoAttrs (
       import ./pkg-config/defaultPkgConfigPackages.nix pkgs
     );
+  defaultPkgConfigPackagesDataJson =
+    import ./pkg-config/defaultPkgConfigPackagesDataJson.nix pkgs;
 
   ### Nixpkgs maintainer tools
 

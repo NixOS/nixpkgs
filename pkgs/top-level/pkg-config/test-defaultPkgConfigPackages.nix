@@ -1,10 +1,14 @@
 # cd nixpkgs
 # nix-build -A tests.pkg-config.defaultPkgConfigPackages
-{ lib, pkg-config, defaultPkgConfigPackages, runCommand, testers }:
+{ lib, pkg-config, defaultPkgConfigPackages, defaultPkgConfigPackagesDataJson, runCommand, testers }:
 let
   inherit (lib.strings) escapeNixIdentifier;
 
-  allTests = lib.mapAttrs (k: v: if v == null then null else makePkgConfigTestMaybe k v) defaultPkgConfigPackages;
+  allTests =
+    lib.mapAttrs (k: v: if v == null then null else makePkgConfigTestMaybe k v) defaultPkgConfigPackages // {
+      # This will test if the data JSON file is still up to date
+      inherit (defaultPkgConfigPackagesDataJson.tests) cachedData;
+    };
 
   # nix-build rejects attribute names with periods
   # This will build those regardless.

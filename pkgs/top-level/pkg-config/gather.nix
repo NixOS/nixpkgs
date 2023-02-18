@@ -64,11 +64,5 @@ let
         pickDefaultProvider
         (go [ ] pkgs);
 in
-{
-  version = {
-    major = 0;
-    minor = 1;
-  };
 
-  modules = pkgConfigModuleAttrPaths pkgs;
-}
+pkgConfigModuleAttrPaths pkgs

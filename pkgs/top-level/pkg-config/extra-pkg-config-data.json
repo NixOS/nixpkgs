@@ -1,0 +1,42 @@
+{
+  "egl": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "hidapi": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": true
+    }
+  },
+  "hidapi-hidraw": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "hidapi-libusb": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "libpulse-mainloop-glib": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "wayland-client": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "wayland-cursor": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  },
+  "wayland-server": {
+    "supportedWhenPlatformAttrsEqual": {
+      "isDarwin": false
+    }
+  }
+}
