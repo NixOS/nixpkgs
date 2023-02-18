@@ -20,6 +20,31 @@ with haskellLib;
 
 self: super: {
 
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax,
+  # so we need to put some extra work for non-latest GHCs
+  inherit (
+    let
+      # !!! Use cself/csuper inside for the actual overrides
+      cabalInstallOverlay = cself: csuper:
+        lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
+          Cabal = cself.Cabal_3_8_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_8_1_0;
+          process = cself.process_1_6_16_0;
+        } // lib.optionalAttrs (lib.versions.majorMinor self.ghc.version == "8.10") {
+          # Prevent dependency on doctest which causes an inconsistent dependency
+          # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
+          vector = dontCheck csuper.vector;
+        };
+    in
+    {
+      cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
+      cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
+    }
+  ) cabal-install
+    cabal-install-solver
+  ;
+
+
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
