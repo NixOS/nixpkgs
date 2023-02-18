@@ -23,6 +23,9 @@
 , sasl
 , system-sendmail
 , libxcrypt
+
+, pythonSupport ? true
+, guileSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -56,16 +59,16 @@ stdenv.mkDerivation rec {
     gdbm
     gnutls
     gss
-    guile
     libmysqlclient
     mailcap
     ncurses
     pam
-    python3
     readline
     sasl
     libxcrypt
-  ] ++ lib.optionals stdenv.isLinux [ nettools ];
+  ] ++ lib.optionals stdenv.isLinux [ nettools ]
+  ++ lib.optionals pythonSupport [ python3 ]
+  ++ lib.optionals guileSupport [ guile ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -88,7 +91,8 @@ stdenv.mkDerivation rec {
     "--with-path-sendmail=${system-sendmail}/bin/sendmail"
     "--with-mail-rc=/etc/mail.rc"
     "DEFAULT_CUPS_CONFDIR=${mailcap}/etc" # provides mime.types to mimeview
-  ];
+  ] ++ lib.optional (!pythonSupport) "--without-python"
+    ++ lib.optional (!guileSupport) "--without-guile";
 
   readmsg-tests = let
     p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
