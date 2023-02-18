@@ -104,7 +104,7 @@ buildPythonPackage rec {
   # Set BOKEH_CDN_VERSION to stop bokeh throwing an exception in tests
   preCheck = ''
     export HOME=$(mktemp -d)
-    export BOKEH_CDN_VERSION=3.0.3
+    export BOKEH_CDN_VERSION=${bokeh.version}
   '';
 
   pythonRelaxDeps = [ "protobuf" ];

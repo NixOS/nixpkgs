@@ -28,6 +28,6 @@ appimageTools.wrapType2 rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ michaelBelsanti ];
   };
 }
