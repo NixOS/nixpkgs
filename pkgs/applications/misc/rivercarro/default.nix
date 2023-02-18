@@ -22,10 +22,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    river
-    wayland
     wayland-protocols
     zig
+  ];
+
+  buildInputs = [
+    river
+    wayland
   ];
 
   dontConfigure = true;
@@ -48,4 +51,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kraem ];
   };
 }
-
