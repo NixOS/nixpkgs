@@ -3095,6 +3095,8 @@ with pkgs;
 
   cuelsp = callPackage ../development/tools/cuelsp {};
 
+  cyclondds = callPackage ../development/libraries/cyclondds { };
+
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
   cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
