@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.11.4";
+  version = "5.12.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1x0rhQOr6pPFuHtbYSCR10tXeDTGwf47ek49wBmJP+I=";
+    sha256 = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
   };
 
   nativeBuildInputs = [
