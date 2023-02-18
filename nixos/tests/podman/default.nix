@@ -6,7 +6,10 @@ import ../make-test-python.nix (
     };
 
     nodes = {
-      podman = { pkgs, ... }: {
+      rootful = { pkgs, ... }: {
+        virtualisation.podman.enable = true;
+      };
+      rootless = { pkgs, ... }: {
         virtualisation.podman.enable = true;
 
         users.users.alice = {
@@ -49,83 +52,84 @@ import ../make-test-python.nix (
           return f"su {user} -l -c {cmd}"
 
 
-      podman.wait_for_unit("sockets.target")
+      rootful.wait_for_unit("sockets.target")
+      rootless.wait_for_unit("sockets.target")
       dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       with subtest("Run container as root with crun"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       with subtest("Run container as root with the default backend"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       # start systemd session for rootless
-      podman.succeed("loginctl enable-linger alice")
-      podman.succeed(su_cmd("whoami"))
-      podman.sleep(1)
+      rootless.succeed("loginctl enable-linger alice")
+      rootless.succeed(su_cmd("whoami"))
+      rootless.sleep(1)
 
       with subtest("Run container rootless with runc"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with crun"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with the default backend"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container with init"):
-          podman.succeed(
+          rootful.succeed(
               "tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - busybox"
           )
-          pid = podman.succeed("podman run --rm busybox readlink /proc/self").strip()
+          pid = rootful.succeed("podman run --rm busybox readlink /proc/self").strip()
           assert pid == "1"
-          pid = podman.succeed("podman run --rm --init busybox readlink /proc/self").strip()
+          pid = rootful.succeed("podman run --rm --init busybox readlink /proc/self").strip()
           assert pid == "2"
 
       with subtest("aardvark-dns"):
