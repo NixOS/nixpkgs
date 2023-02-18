@@ -1,36 +1,36 @@
-{ python3Packages, lib, nrfutil  }:
+{ python3Packages, lib, nrfutil }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.31";
+  version = "0.4.34";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nqw5wUzQxKCBzYBRhqB6v7WWrF1Ojf8z6Kf1YUA9+wU=";
+    hash = "sha256-lMXoDkNiAmGb6e4u/vZMcmXUclwW402YUGihLjWIr+U=";
   };
 
   propagatedBuildInputs = [
+    certifi
+    cffi
     click
     cryptography
     ecdsa
+    frozendict
     fido2
     intelhex
+    nkdfu
     nrfutil
-    pyserial
+    python-dateutil
     pyusb
     requests
-    pygments
-    python-dateutil
     spsdk
+    tqdm
     urllib3
-    cffi
-    cbor
-    nkdfu
-    fido2
     tlv8
+    typing-extensions
   ];
 
   nativeBuildInputs = [
@@ -39,7 +39,9 @@ buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "cryptography"
+    "python-dateutil"
     "spsdk"
+    "typing_extensions"
   ];
 
   # no tests
