@@ -9,6 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         hostname = "server";
         primaryDomain = "server";
         openFirewall = true;
+        ensureAccounts = [ "postmaster@server" ];
       };
     };
 
@@ -50,7 +51,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     server.wait_for_open_port(587)
 
     server.succeed("maddyctl creds create --password test postmaster@server")
-    server.succeed("maddyctl imap-acct create postmaster@server")
 
     client.succeed("send-testmail")
     client.succeed("test-imap")

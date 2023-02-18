@@ -1,6 +1,6 @@
 { lib
 , buildGoModule
-, buildGo119Module
+, buildGo120Module
 , fetchFromGitHub
 , nixosTests
 }:
@@ -47,24 +47,24 @@ rec {
   nomad = nomad_1_4;
 
   nomad_1_2 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.2.15";
-    sha256 = "sha256-p9yRjSapQAhuHv+slUmYI25bUb1N1A7LBiJOdk1++iI=";
-    vendorSha256 = "sha256-6d3tE337zVAIkzQzAnV2Ya5xwwhuzmKgtPUJcJ9HRto=";
+    buildGoModule = buildGo120Module;
+    version = "1.2.16";
+    sha256 = "sha256-fhfUpcG91EgIzJ4mCS7geyIJyTSHS2e8t4yYiI3PqpQ=";
+    vendorSha256 = "sha256-kwCDsGFw+25Mimgt/cTK/Z2H7Qh5n4rjr3kIBvjcPL8=";
   };
 
   nomad_1_3 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.3.8";
-    sha256 = "sha256-hUmDWgGV8HAXew8SpcbhaiaF9VfBN5mk1W7t5lhnZ9I=";
-    vendorSha256 = "sha256-IfYobyDFriOldJnNfRK0QVKBfttoZZ1iOkt4cBQxd00=";
+    buildGoModule = buildGo120Module;
+    version = "1.3.9";
+    sha256 = "sha256-xfoIzLDG/OfqAPQqeLvQZ11uESWFNyOyLP6Imi+S96w=";
+    vendorSha256 = "sha256-kW0goicoM1lM1NEHPTfozg2EKR1daf33UxT/mVabyfY=";
   };
 
   nomad_1_4 = generic {
-    buildGoModule = buildGo119Module;
-    version = "1.4.3";
-    sha256 = "sha256-GQVfrn9VlzfdIj73W3hBpHcevsXZcb6Uj808HUCZUUg=";
-    vendorSha256 = "sha256-JQRpsQhq5r/QcgFwtnptmvnjBEhdCFrXFrTKkJioL3A=";
+    buildGoModule = buildGo120Module;
+    version = "1.4.4";
+    sha256 = "sha256-mAimuWolTJ3lMY/ArnLZFu+GZv9ADdGsriXsTcEgdYc=";
+    vendorSha256 = "sha256-QtP7pzsIBd2S79AUcbOeVG71Mb5qK706rq5DkT41VqM=";
     passthru.tests.nomad = nixosTests.nomad;
   };
 }

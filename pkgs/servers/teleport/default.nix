@@ -2,17 +2,21 @@
 , buildGoModule
 , rustPlatform
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , symlinkJoin
 , CoreFoundation
 , AppKit
 , libfido2
+, nodejs
 , openssl
 , pkg-config
 , protobuf
 , Security
 , stdenv
 , xdg-utils
+, yarn
+, yarn2nix-moretea
 , nixosTests
 
 , withRdpClient ? true
@@ -23,13 +27,13 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    hash = "sha256-dr+tmWVO7yXRLTvJZoFZzayRWETa8wC/aZ7S/vh8qyk=";
+    hash = "sha256-jJfOgcwKkNFO/5XHxMoapZxM8Tb0kEgKVA7SrMU7uW4=";
   };
-  version = "11.2.3";
+  version = "11.3.4";
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    cargoHash = "sha256-8NTzX9HeGg9U3bmiZHXHTcKnbJk55YfY2bkjilEyg0g=";
+    cargoHash = "sha256-TSIwLCY01ygCWT73LR/Ch7NwPQA3a3r0PyL3hUzBNr4=";
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -50,19 +54,49 @@ let
     '';
   };
 
-  webassets = fetchFromGitHub {
-    owner = "gravitational";
-    repo = "webassets";
-    # Submodule rev from https://github.com/gravitational/teleport/tree/v11.2.3
-    rev = "cbddcfda9d5ccba11f02ee61bd305c1f600ee6b0";
-    hash = "sha256-XPcQaMyf6kEj5RDRKjNO5b+n1zj/TpBHcDnGhYVUbts=";
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-MAGeWzA366yzpjdCY0+X6RV5MKcsHa/xD5CJu6ce1FU=";
+  };
+
+  webassets = stdenv.mkDerivation {
+    pname = "teleport-webassets";
+    inherit src version;
+
+    nativeBuildInputs = [
+      nodejs
+      yarn
+      yarn2nix-moretea.fixup_yarn_lock
+    ];
+
+    configurePhase = ''
+      export HOME=$(mktemp -d)
+    '';
+
+    buildPhase = ''
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      fixup_yarn_lock yarn.lock
+
+      yarn install --offline \
+        --frozen-lockfile \
+        --ignore-engines --ignore-scripts
+      patchShebangs .
+
+      yarn build-ui-oss
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -R webassets/. $out
+    '';
   };
 in
 buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorHash = "sha256-rWdRVOaPPK2oXK6fXka4FtuxEkaQf4igm7xlg0wauMs=";
+  vendorHash = "sha256-NkiFLEHBNjxUOSuAlVugAV14yCCo3z6yhX7LZQFKhvA=";
+  proxyVendor = true;
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
   tags = [ "libfido2" "webassets_embed" ]
@@ -85,10 +119,7 @@ buildGoModule rec {
   outputs = [ "out" "client" ];
 
   preBuild = ''
-    mkdir -p build
-    echo "making webassets"
-    cp -r ${webassets}/* webassets/
-    make -j$NIX_BUILD_CORES lib/web/build/webassets
+    cp -r ${webassets} webassets
   '' + lib.optionalString withRdpClient ''
     ln -s ${rdpClient}/lib/* lib/
     ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/

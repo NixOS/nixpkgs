@@ -52,9 +52,6 @@ let
       };
     };
 
-    boot.initrd.systemd.enable = true;
-    boot.initrd.systemd.repart.enable = true;
-
     # systemd-repart operates on disks with a partition table. The qemu module,
     # however, creates separate filesystem images without a partition table, so
     # we have to create a disk image manually.
@@ -88,7 +85,10 @@ in
     nodes.machine = { config, pkgs, ... }: {
       imports = [ common ];
 
-      boot.initrd.systemd.repart.partitions = {
+      boot.initrd.systemd.enable = true;
+
+      boot.initrd.systemd.repart.enable = true;
+      systemd.repart.partitions = {
         "10-root" = {
           Type = "linux-generic";
         };
@@ -102,6 +102,32 @@ in
       machine.wait_for_unit("multi-user.target")
 
       systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
+      assert "Growing existing partition 1." in systemd_repart_logs
+    '';
+  };
+
+  after-initrd = makeTest {
+    name = "systemd-repart-after-initrd";
+    meta.maintainers = with maintainers; [ nikstur ];
+
+    nodes.machine = { config, pkgs, ... }: {
+      imports = [ common ];
+
+      systemd.repart.enable = true;
+      systemd.repart.partitions = {
+        "10-root" = {
+          Type = "linux-generic";
+        };
+      };
+    };
+
+    testScript = { nodes, ... }: ''
+      ${useDiskImage nodes.machine}
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      systemd_repart_logs = machine.succeed("journalctl --unit systemd-repart.service")
       assert "Growing existing partition 1." in systemd_repart_logs
     '';
   };

@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , aiohttp
 , blinker
 , buildPythonPackage
@@ -30,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.14.0";
+  version = "6.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T1TWILlJZffTISVt8YSi8ZYSXOHieh6SV55j8W333LQ=";
+    hash = "sha256-Uoybe6Mx7ZLs2GaOnl278Xj6KlTEgrOuNxMRmPpSq8k=";
   };
 
   propagatedBuildInputs = [
@@ -54,22 +53,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    asynctest
     ecs-logging
+    httpx
     jinja2
     jsonschema
     Logbook
     mock
-    httpx
     pytest-asyncio
     pytest-bdd
-    pytest-mock
     pytest-localserver
+    pytest-mock
     pytest-random-order
+    pytestCheckHook
     sanic-testing
     structlog
     webob

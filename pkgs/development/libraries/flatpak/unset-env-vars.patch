@@ -1,11 +1,11 @@
 diff --git a/common/flatpak-run.c b/common/flatpak-run.c
-index 146c4f87..bcdad2bc 100644
+index d35b4652..b4bb4a44 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -1710,6 +1710,7 @@ static const ExportData default_exports[] = {
-   {"GST_PTP_HELPER", NULL},
-   {"GST_PTP_HELPER_1_0", NULL},
-   {"GST_INSTALL_PLUGINS_HELPER", NULL},
+@@ -1899,6 +1899,7 @@ static const ExportData default_exports[] = {
+   {"KRB5CCNAME", NULL},
+   {"XKB_CONFIG_ROOT", NULL},
+   {"GIO_EXTRA_MODULES", NULL},
 +  {"GDK_PIXBUF_MODULE_FILE", NULL},
  };
  

@@ -13,7 +13,7 @@ updateHash()
 
     hashKey="${arch}-${os}_hash"
 
-    url="https://github.com/Prowlarr/Prowlarr/releases/download/v$version/Prowlarr.master.$version.$os-core-$arch.tar.gz"
+    url="https://github.com/Prowlarr/Prowlarr/releases/download/v$version/Prowlarr.develop.$version.$os-core-$arch.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
     sriHash="$(nix hash to-sri --type sha256 $hash)"
 
