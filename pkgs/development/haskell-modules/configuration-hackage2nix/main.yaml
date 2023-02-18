@@ -191,6 +191,7 @@ package-maintainers:
   centromere:
     - nfc
   dalpd:
+    - espial
     - ghc-vis
     - svgcairo
   domenkozar:
