@@ -23,11 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace hardcoded FHS path with $out.
     ./ploticus-install.patch
 
+    # Set the location of the PREFABS directory.
+    ./set-prefabs-dir.patch
+
     # Use gd from Nixpkgs instead of the vendored one.
     # This is required for non-ASCII fonts to work:
     # https://ploticus.sourceforge.net/doc/fonts.html
     ./use-gd-package.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/pl.h --subst-var out
+  '';
 
   buildInputs = [
     zlib
@@ -42,8 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     cd src
-    # Set the location of the PREFABS directory.
-    sed -i -e 's,PREFABS_DIR "",PREFABS_DIR "'$out'/share/ploticus/prefabs",' pl.h
   '';
   makeFlags = [ "CC=cc" ];
 
