@@ -29583,6 +29583,8 @@ with pkgs;
 
   sherlock = callPackage ../tools/security/sherlock { };
 
+  shuriken = callPackage ../applications/audio/shuriken { };
+
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
