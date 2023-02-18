@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "librtlsdr";
     repo = "librtlsdr";
     rev = "v${version}";
-    sha256 = "1fgxlkgmdchbrf0nn98ivjr6css5hak3608nr4xrf2qzf7xy2kdk";
+    hash = "sha256-s03h+3EfC5c7yRYBM6aCRWtmstwRJWuBywuyVt+k/bk=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ libusb1 ];
+  propagatedBuildInputs = [ libusb1 ];
 
   cmakeFlags = lib.optionals stdenv.isLinux [
     "-DINSTALL_UDEV_RULES=ON"
