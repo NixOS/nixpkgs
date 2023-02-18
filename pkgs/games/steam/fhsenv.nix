@@ -1,16 +1,9 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ lib, stdenv, writeScript, buildFHSUserEnv, steam, glxinfo-i686, runtimeShell
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
-, runtimeOnly ? false
-, runtimeShell
-, stdenv
-
-# DEPRECATED
-, withJava ? config.steam.java or false
-, withPrimus ? config.steam.primus or false
 }:
 
 let
@@ -38,9 +31,7 @@ let
       # electron based launchers need newer versions of these libraries than what runtime provides
       mesa
       sqlite
-    ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
-      ++ lib.optional withPrimus primus
-      ++ extraPkgs pkgs;
+    ] ++ extraPkgs pkgs;
 
   ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
