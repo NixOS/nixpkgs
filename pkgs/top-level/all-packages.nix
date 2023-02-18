@@ -4962,6 +4962,8 @@ with pkgs;
 
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
+  iotas = callPackage ../applications/office/iotas { };
+
   iotools = callPackage ../tools/misc/iotools { };
 
   irpf = callPackage ../applications/finance/irpf { };
