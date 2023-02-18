@@ -115,12 +115,12 @@
   };
   c_sharp = buildGrammar {
     language = "c_sharp";
-    version = "18e4343";
+    version = "5b6c4d0";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-c-sharp";
-      rev = "18e434383a4582b4fd183a30e55022c2923764e1";
-      hash = "sha256-ggvCj2yGDINuGr8Jb+aOoRxlKa5LaXCoiQC/Y5Hrcn0=";
+      rev = "5b6c4d0d19d79b05c69ad752e11829910e3b4610";
+      hash = "sha256-Ax9AuxqQK9gSlkxM2k6E32CskudUmduWm0luC031P5U=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-c-sharp";
   };
@@ -426,12 +426,12 @@
   };
   fortran = buildGrammar {
     language = "fortran";
-    version = "069bd7c";
+    version = "0f6ad1a";
     src = fetchFromGitHub {
       owner = "stadelmanma";
       repo = "tree-sitter-fortran";
-      rev = "069bd7c864fe2dee1115140cc2621d140b16a643";
-      hash = "sha256-edvAcXKoVHIpOpVPROA9l97B4tFfuJYbjcSy9oE/dzw=";
+      rev = "0f6ad1a0ec8bbd263b5b9af17ba31e3cb75369e8";
+      hash = "sha256-Zo+1bSj1LDl4XFIelssZtYTft1BfTydMMzC/5COOUe0=";
     };
     meta.homepage = "https://github.com/stadelmanma/tree-sitter-fortran";
   };
@@ -1445,12 +1445,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "7be06f4";
+    version = "13d375d";
     src = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "7be06f4d5eabace883dd45959c13dc740f1f1b98";
-      hash = "sha256-Hi/4/Aou85MYCMMFqf5xqAyKECTzfeiaksJxdv9MVCU=";
+      rev = "13d375dea377bae5f235176fae97a50ba584db54";
+      hash = "sha256-+r/rmWD3/0ASsIX7xOieM8eFcOIRJXGCYBq1Tucf9+Y=";
     };
     generate = true;
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
