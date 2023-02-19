@@ -3815,8 +3815,6 @@ with pkgs;
 
   bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
 
-  bpytop = callPackage ../tools/system/bpytop { };
-
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
@@ -17090,6 +17088,10 @@ with pkgs;
 
   verible = callPackage ../development/tools/language-servers/verible { };
 
+  zls = callPackage ../development/tools/language-servers/zls {
+    zig = zig_0_10;
+  };
+
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
@@ -18911,10 +18913,6 @@ with pkgs;
   yq-go = callPackage ../development/tools/yq-go { };
 
   ytt = callPackage ../development/tools/ytt {};
-
-  zls = callPackage ../development/tools/zls {
-    zig = zig_0_9;
-  };
 
   zydis = callPackage ../development/libraries/zydis { };
 
@@ -37859,6 +37857,8 @@ with pkgs;
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
   neo = callPackage ../applications/misc/neo { };
+
+  networkd-dispatcher = callPackage ../tools/networking/networkd-dispatcher { };
 
   nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix {
     storeDir = config.nix.storeDir or "/nix/store";
