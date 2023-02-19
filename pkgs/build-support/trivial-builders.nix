@@ -886,4 +886,37 @@ rec {
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
   } "mkdir $out";
+
+
+  # A derivation that always builds successfully and whose runtime
+  # dependencies are the original derivations build time dependencies
+  # This allows easy building and distributing of all derivations
+  # needed to enter a nix-shell with
+  #   nix-build shell.nix -A inputDerivation
+  inputDerivation = pkg: pkg.overrideAttrs (derivationArg: {
+    # Add a name in case the original drv didn't have one
+    name = derivationArg.name or (if derivationArg?pname then derivationArg.pname + (if derivationArg?version then "-${derivationArg.version}" else "") else "inputDerivation");
+    # This always only has one output
+    outputs = [ "out" ];
+
+    # Propagate the original builder and arguments, since we override
+    # them and they might contain references to build inputs
+    # NOTE: keep in sync with mkDerivation
+    _derivation_original_builder = derivationArg.realBuilder or stdenv.shell;
+    _derivation_original_args = derivationArg.args or ["-e" (derivationArg.builder or ../stdenv/generic/default-builder.sh)];
+
+    builder = stdenv.shell;
+    # The bash builtin `export` dumps all current environment variables,
+    # which is where all build input references end up (e.g. $PATH for
+    # binaries). By writing this to $out, Nix can find and register
+    # them as runtime dependencies (since Nix greps for store paths
+    # through $out to find them)
+    args = [ "-c" "export > $out" ];
+
+    # inputDerivation produces the inputs; not the outputs, so any
+    # restrictions on what used to be the outputs don't serve a purpose
+    # anymore.
+    disallowedReferences = [ ];
+    disallowedRequisites = [ ];
+  });
 }
