@@ -3601,6 +3601,13 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  dennajort = {
+    email = "gosselinjb@gmail.com";
+    matrix = "@dennajort:matrix.org";
+    github = "dennajort";
+    githubId = 1536838;
+    name = "Jean-Baptiste Gosselin";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
