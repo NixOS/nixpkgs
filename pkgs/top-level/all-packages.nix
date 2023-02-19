@@ -7147,7 +7147,7 @@ with pkgs;
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  Fabric = with python3Packages; toPythonApplication Fabric;
+  Fabric = with python3Packages; toPythonApplication fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
