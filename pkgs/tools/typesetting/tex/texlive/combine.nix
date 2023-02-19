@@ -15,7 +15,7 @@ let
     ];
   };
   pkgList = rec {
-    all = lib.filter pkgFilter (combinePkgs pkgSet);
+    all = lib.filter pkgFilter (combinePkgs (lib.attrValues pkgSet));
     splitBin = builtins.partition (p: p.tlType == "bin") all;
     bin = mkUniqueOutPaths splitBin.right
       ++ lib.optional

@@ -1,5 +1,5 @@
 # wrap whole file into an attrset
-1itl: { # no indentation
+1i{ # no indentation
 $a}
 
 # form an attrmap per package
@@ -28,16 +28,16 @@ $a}
 
   # extract deps
   /^depend [^.]+$/{
-    s/^depend (.+)$/  deps."\1" = tl."\1";/
+    s/^depend (.+)$/  deps = [\n    "\1"/
 
     # loop through following depend lines
     :next
       h ; N     # save & read next line
       s/\ndepend (.+)\.(.+)$//
-      s/\ndepend (.+)$/\n  deps."\1" = tl."\1";/
+      s/\ndepend (.+)$/\n    "\1"/
       t next    # loop if the previous lines matched
 
-    x; p; x     # print saved deps
+    x; s/$/\n  ];/p ; x     # print saved deps
     s/^.*\n//   # remove deps, resume processing
   }
 
