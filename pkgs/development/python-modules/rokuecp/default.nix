@@ -73,6 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
+    changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
