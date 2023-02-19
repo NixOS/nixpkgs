@@ -345,12 +345,23 @@ let
             };
           };
 
-      pkgsCross.ghcjs.haskellPackages = {
-        inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-          ghc
-          hello
-        ;
-      };
+      # TODO(@sternenseemann): when GHC 9.6 comes out we need separate jobs for
+      # default GHC and ghcHEAD.
+      pkgsCross.ghcjs.haskellPackages =
+        removePlatforms
+          [
+            # Still unexplained build failure: https://github.com/NixOS/nixpkgs/issues/217127
+            "x86_64-darwin"
+
+            # Hydra output size of 3GB is exceeded
+            "aarch64-linux"
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+              ghc
+              hello
+            ;
+          };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
