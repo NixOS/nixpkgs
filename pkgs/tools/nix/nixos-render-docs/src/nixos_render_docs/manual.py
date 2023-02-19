@@ -97,7 +97,10 @@ class ManualDocBookRenderer(DocBookRenderer):
                 raise RuntimeError(f"rendering {path}") from e
         return "".join(result)
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return cast(str, token.meta['rendered-options'])
+        conv = options.DocBookConverter(self._manpage_urls, self._revision, False, 'fragment',
+                                        token.meta['list-id'], token.meta['id-prefix'])
+        conv.add_options(token.meta['source'])
+        return conv.finalize(fragment=True)
 
     # TODO minimize docbook diffs with existing conversions. remove soon.
     def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -181,11 +184,10 @@ class DocBookConverter(Converter[ManualDocBookRenderer]):
                 " ".join(items.keys()))
 
         try:
-            conv = options.DocBookConverter(
-                self._renderer._manpage_urls, self._renderer._revision, False, 'fragment', varlist_id, id_prefix)
             with open(self._base_paths[-1].parent / source, 'r') as f:
-                conv.add_options(json.load(f))
-            token.meta['rendered-options'] = conv.finalize(fragment=True)
+                token.meta['id-prefix'] = id_prefix
+                token.meta['list-id'] = varlist_id
+                token.meta['source'] = json.load(f)
         except Exception as e:
             raise RuntimeError(f"processing options block in line {token.map[0] + 1}") from e
 
