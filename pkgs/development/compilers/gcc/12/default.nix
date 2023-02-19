@@ -167,6 +167,7 @@ let majorVersion = "12";
         lib
         libcCross
         libmpc
+        libucontext
         libxcrypt
         mpfr
         name
