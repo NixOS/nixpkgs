@@ -62,7 +62,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
 
 , # Whether to build terminfo.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
@@ -91,7 +91,7 @@
       transformers =
         lib.optionals useLLVM [ "llvm" ]
         ++ lib.optionals (!enableShared) [
-          "fully_static"
+          "no_dynamic_libs"
           "no_dynamic_ghc"
         ]
         ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
