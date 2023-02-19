@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "1rcdl6ryrr8fss5z5qlpl4prrw8xpbcdgajg2hpp0i7fpk21ymcc";
   };
 
-  # Fixes a build failure on aarch64-darwin. Define for all Darwin targets for when x86_64-darwin
-  # upgrades to a newer SDK.
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
-
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"

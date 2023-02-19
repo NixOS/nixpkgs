@@ -7878,6 +7878,10 @@ with pkgs;
 
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
+  gptcommit = callPackage ../development/tools/gptcommit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gptman = callPackage ../tools/system/gptman { };
 
   ldmtool = callPackage ../tools/misc/ldmtool { };
@@ -11994,6 +11998,8 @@ with pkgs;
   skydns = callPackage ../servers/skydns { };
 
   sing-box = callPackage ../tools/networking/sing-box { };
+
+  sing-geosite = callPackage ../data/misc/sing-geosite { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -20936,7 +20942,7 @@ with pkgs;
 
   libde265 = callPackage ../development/libraries/libde265 {};
 
-  libdeflate = callPackage ../development/libraries/libdeflate { };
+  libdeflate = darwin.apple_sdk_11_0.callPackage ../development/libraries/libdeflate { };
 
   libdeltachat = callPackage ../development/libraries/libdeltachat {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -32586,7 +32592,7 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quisk = python38Packages.callPackage ../applications/radio/quisk { };
+  quisk = python39Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 

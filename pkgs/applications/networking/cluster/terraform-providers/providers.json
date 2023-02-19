@@ -9,14 +9,14 @@
     "vendorHash": null
   },
   "acme": {
-    "hash": "sha256-fK34A45plTqtOYGbq8CAtFnyMYOvdOKFycY7X5ZlRRY=",
+    "hash": "sha256-iAUbGLxeN2Ntsq0mOWEKuvorIy7u+0kffzIqg+wF9gM=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "proxyVendor": true,
     "repo": "terraform-provider-acme",
-    "rev": "v2.12.0",
+    "rev": "v2.13.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-L8d2Y4gSmqqmg24lULWrdKSI+194rRTVZyxJAEL+gqM="
+    "vendorHash": "sha256-5gh3e5wPCBA87fHPXTT+hnrXIPVW5meKmT4pFP1ryOc="
   },
   "age": {
     "hash": "sha256-bJrzjvkrCX93bNqCA+FdRibHnAw6cb61StqtwUY5ok4=",
@@ -164,13 +164,13 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-4uwMg2DXd7T4WqdfwcZHtsPMTTCqrwSngh01DYW5yko=",
+    "hash": "sha256-7+xLUvm69SbK8baX3imuhLwf5yfQIxYlmoHvl3yXcUk=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.30.0",
+    "rev": "v2.30.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-foMmZbNPLww1MN4UZwuynBDgt2w40aMqVINRw//Q0d0="
+    "vendorHash": "sha256-C3OR++DrbVFCReoqtLmRJ37YKxA8oTdPUO9Q80T4vJI="
   },
   "brightbox": {
     "hash": "sha256-YmgzzDLNJg7zm8smboI0gE2kOgjb2RwPf5v1CbzgvGA=",
