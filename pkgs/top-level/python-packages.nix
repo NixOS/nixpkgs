@@ -4934,7 +4934,7 @@ self: super: with self; {
 
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
 
-  JPype1 = callPackage ../development/python-modules/JPype1 { };
+  jpype1 = callPackage ../development/python-modules/jpype1 { };
 
   jq = callPackage ../development/python-modules/jq {
     inherit (pkgs) jq;

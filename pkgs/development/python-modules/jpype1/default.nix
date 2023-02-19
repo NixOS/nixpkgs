@@ -9,12 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "JPype1";
+  pname = "jpype1";
   version = "1.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "JPype1";
+    inherit version;
     sha256 = "sha256-3I7oVAc0dK15rhaNkML2iThU9Yk2z6GPNYfK2uDTaW0=";
   };
 

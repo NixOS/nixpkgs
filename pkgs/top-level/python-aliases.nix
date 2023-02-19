@@ -123,6 +123,7 @@ mapAliases ({
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-1017
   jinja2_time = jinja2-time; # added 2022-11-07
+  JPype1 = jpype1; # added 2023-02-19
   jupyter_client = jupyter-client; # added 2021-10-15
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05

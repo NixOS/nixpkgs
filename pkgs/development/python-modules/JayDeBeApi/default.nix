@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, JPype1
+, jpype1
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    JPype1
+    jpype1
   ];
 
   meta = with lib; {
