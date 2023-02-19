@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-xtcNcykfgcWvifso0xaeMT31+G5x4HCp+tLAIEEq4cw=";
   };
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A GitHub activity digest tool";
     homepage = "https://github.com/nedbat/dinghy";
+    changelog = "https://github.com/nedbat/dinghy/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ trundle veehaitch ];
   };
