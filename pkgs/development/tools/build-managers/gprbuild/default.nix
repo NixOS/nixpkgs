@@ -6,6 +6,7 @@
 , which
 , gnat
 , xmlada
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation {
@@ -32,17 +33,17 @@ stdenv.mkDerivation {
   ];
 
   makeFlags = [
-    "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
+    "ENABLE_SHARED=${if enableShared then "yes" else "no"}"
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals enableShared [
     "LIBRARY_TYPE=relocatable"
   ];
 
   # Fixes gprbuild being linked statically always
-  patches = lib.optional (!stdenv.hostPlatform.isStatic) (fetchpatch {
+  patches = lib.optional enableShared (fetchpatch {
     name = "gprbuild-relocatable-build.patch";
     url = "https://aur.archlinux.org/cgit/aur.git/plain/relocatable-build.patch?h=gprbuild&id=1d4e8a5cb982e79135a0aaa3ef87654bed1fe4f0";
     sha256 = "1r3xsp1pk9h666mm8mdravkybmd5gv2f751x2ffb1kxnwq1rwiyn";
