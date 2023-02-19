@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
+with lib;
 let
   cfg = config.services.overleaf;
-  ferret = pkgs.ferretdb.overrideAttrs ( final: prev: {
-	patches = [./fields.patch];
+  ferret = pkgs.ferretdb.overrideAttrs (final: prev: {
+    patches = [ ./fields.patch ];
   });
 in
-with lib;
 
 {
   meta.maintainers = with maintainers; [ julienmalka camillemndn ];
@@ -15,7 +15,8 @@ with lib;
     enable = mkEnableOption (mdDoc ''Overleaf'');
 
     hostname = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "overleaf.org";
       description = mdDoc ''This enable a default nginx reverse proxy configuration.'';
     };
@@ -36,10 +37,13 @@ with lib;
     texlivePackage = mkOption {
       type = types.package;
       default = pkgs.texlive.combined.scheme-basic;
-      example = pkgs.texlive.combined.scheme-full;
-      description = mdDoc ''The package for TeX Live. See
-      <https://search.nixos.org/packages?query=texlive.combined>
-      for available options.'';
+      defaultText = literalExpression "pkgs.textlive.combined.scheme-basic";
+      example = literalExpression "pkgs.texlive.combined.scheme-full";
+      description = mdDoc ''
+        The package for TeX Live. See
+        <https://search.nixos.org/packages?query=texlive.combined>
+        for available options.
+      '';
     };
 
     settings = mkOption {
@@ -56,16 +60,16 @@ with lib;
         OVERLEAF_SITE_LANGUAGE = "fr";
         OVERLEAF_APP_NAME = "Verso, powered by SaumonNetwork";
         OVERLEAF_EMAIL_FROM_ADDRESS = "postmaster@overleaf.nix";
-        OVERLEAF_EMAIL_SMTP_HOST = "";
+        OVERLEAF_EMAIL_SMTP_HOST = "mail.overleaf.nix";
         OVERLEAF_EMAIL_SMTP_PORT = "587";
         OVERLEAF_EMAIL_SMTP_SECURE = "true";
-        OVERLEAF_EMAIL_SMTP_USER = "";
+        OVERLEAF_EMAIL_SMTP_USER = "postmaster";
         ADMIN_PRIVILEGE_AVAILABLE = "true";
       };
       description = mdDoc ''
         Additional configuration for Overleaf, see
         <https://github.com/overleaf/overleaf/blob/main/server-ce/config/settings.js>
-	for supported values.
+        for supported values.
       '';
     };
 
@@ -82,133 +86,123 @@ with lib;
       description = mdDoc ''
         Secrets for Overleaf, see
         <https://github.com/overleaf/overleaf/blob/main/server-ce/config/settings.js>
-	for supported values.
+        for supported values.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    services.overleaf.settings = {
-      NODE_ENV = "production";
-      OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
-      DATA_DIR = mkDefault "/var/lib/overleaf";
-      #OVERLEAF_MONGO_URL = mkDefault "mongodb://overleaf@%2Ftmp%2Fmongodb-27017.sock/overleaf";
-      OVERLEAF_MONGO_URL = mkDefault "mongodb://localhost:27017/overleaf";
-      OVERLEAF_REDIS_PATH = mkDefault "/run/redis-overleaf/redis.sock";
-      #WEB_HOST = mkDefault "localhost";
-      WEB_PORT = mkDefault "3032";
-      WEB_API_USER = mkDefault "overleaf";
-      GRACEFUL_SHUTDOWN_DELAY = mkDefault "0";
-      OVERLEAF_FPH_DISPLAY_NEW_PROJECTS = mkDefault "true";
-    };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      services.overleaf.settings = {
+        NODE_ENV = "production";
+        OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
+        DATA_DIR = mkDefault "/var/lib/overleaf";
+        # OVERLEAF_MONGO_URL = mkDefault "mongodb://overleaf@%2Ftmp%2Fmongodb-27017.sock/overleaf";
+        OVERLEAF_MONGO_URL = mkDefault "mongodb://localhost:27017/overleaf";
+        OVERLEAF_REDIS_PATH = mkDefault "/run/redis-overleaf/redis.sock";
+        WEB_PORT = mkDefault "3032";
+        WEB_API_USER = mkDefault "overleaf";
+        GRACEFUL_SHUTDOWN_DELAY = mkDefault "0";
+        OVERLEAF_FPH_DISPLAY_NEW_PROJECTS = mkDefault "true";
+      };
 
-    systemd.services =
-      let activateServices = service: {
-        "overleaf-${service}" = {
-          description = "Overleaf ${service}";
-          wantedBy = [ "multi-user.target" ];
-          environment = cfg.settings;
-          path = [ cfg.texlivePackage ];
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${pkgs.overleaf}/bin/overleaf-${service}";
-            StateDirectory = "overleaf";
-            WorkingDirectory = "/var/lib/overleaf";
-            User = "overleaf";
-	    LoadCredentials = mapAttrsToList (key: value: "${key}:${value}") cfg.secrets;
+      systemd.services =
+        let activateServices = service: {
+          "overleaf-${service}" = {
+            description = "Overleaf ${service}";
+            wantedBy = [ "multi-user.target" ];
+            environment = cfg.settings;
+            path = [ cfg.texlivePackage ];
+            serviceConfig = {
+              Type = "simple";
+              ExecStart = "${pkgs.overleaf}/bin/overleaf-${service}";
+              StateDirectory = "overleaf";
+              WorkingDirectory = "/var/lib/overleaf";
+              User = "overleaf";
+              LoadCredentials = mapAttrsToList (key: value: "${key}:${value}") cfg.secrets;
+            };
+          };
+        };
+        in
+        mkMerge (map activateServices [
+          "chat"
+          "clsi"
+          "contacts"
+          "docstore"
+          "document-updater"
+          "filestore"
+          "notifications"
+          "project-history"
+          "real-time"
+          "spelling"
+          "track-changes"
+          "web"
+        ]);
+
+      services.nginx = mkIf (isString cfg.hostname) {
+        enable = true;
+        recommendedOptimisation = mkDefault true;
+        recommendedGzipSettings = mkDefault true;
+
+        virtualHosts."${cfg.hostname}" = {
+          locations."/" = {
+            proxyPass = "http://localhost:${cfg.settings.WEB_PORT}";
+            proxyWebsockets = true;
+          };
+          locations."/socket.io" = {
+            proxyPass = "http://localhost:3026";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_read_timeout 10m;
+              proxy_send_timeout 10m;
+            '';
           };
         };
       };
-      in
-      mkMerge ((map activateServices [
-        "chat"
-        "clsi"
-        "contacts"
-        "docstore"
-        "document-updater"
-        "filestore"
-        "notifications"
-        "project-history"
-        "real-time"
-        "spelling"
-        "track-changes"
-        "web"
-      ]) ++
-      [{
-        ferretdb = mkIf (cfg.mongodbType == "ferretdb") {
-          description = "FerretDB";
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
-            Type = "simple";
-            ExecStart = "${ferret}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
-            StateDirectory = "ferretdb";
-            WorkingDirectory = "/var/lib/ferretdb";
-            User = "ferretdb";
-          };
+
+      services.redis.servers.overleaf = mkIf cfg.enableRedis {
+        enable = true;
+        user = "overleaf";
+        port = 0;
+      };
+
+      services.mongodb = mkIf (cfg.mongodbType == "mongodb") {
+        enable = true;
+        package = pkgs.mongodb-4_2;
+        user = "overleaf";
+      };
+    }
+    (mkIf (cfg.mongodbType == "ferretdb") {
+      systemd.services.ferretdb = {
+        description = "FerretDB";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${ferret}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
+          StateDirectory = "ferretdb";
+          WorkingDirectory = "/var/lib/ferretdb";
+          User = "ferretdb";
         };
-      }
-        (mkIf (cfg.mongodbType == "ferretdb") {
-          postgresql.environment.LC_ALL = "en_US.UTF-8";
-        })]);
+      };
+      systemd.services.postgresql.environment.LC_ALL = "en_US.UTF-8";
 
-    users.users.overleaf = {
-      isSystemUser = true;
-      group = "overleaf";
-      home = "/var/lib/overleaf";
-      createHome = true;
-    };
+      users.users.ferretdb = {
+        isSystemUser = true;
+        group = "ferretdb";
+        home = "/var/lib/ferretdb";
+        createHome = true;
+      };
 
-    users.groups.overleaf = { };
+      users.groups.ferretdb = { };
 
-    services.redis.servers.overleaf = mkIf cfg.enableRedis {
-      enable = true;
-      user = "overleaf";
-      port = 0;
-    };
-
-    services.nginx = mkIf (isString cfg.hostname) {
-      enable = true;
-      recommendedOptimisation = mkDefault true;
-      recommendedGzipSettings = mkDefault true;
-    
-    virtualHosts."${cfg.hostname}" = {
-  locations."/" = {
-    proxyPass = "http://localhost:${cfg.settings.WEB_PORT}";
-    proxyWebsockets = true;
-   };
-  locations."/socket.io" = {
-	proxyPass = "http://localhost:3026";
-	proxyWebsockets = true;
-	extraConfig = ''
-	  proxy_read_timeout 10m;
-	  proxy_send_timeout 10m;
-	  '';
-  };
-  };
-    };
-
-    services.mongodb = mkIf (cfg.mongodbType == "mongodb") {
-      enable = true;
-      package = pkgs.mongodb-4_2;
-      user = "overleaf";
-    };
-
-    users.users.ferretdb = mkIf (cfg.mongodbType == "ferretdb") {
-      isSystemUser = true;
-      group = "ferretdb";
-      home = "/var/lib/ferretdb";
-      createHome = true;
-    };
-
-    users.groups.ferretdb = mkIf (cfg.mongodbType == "ferretDB") { };
-
-    services.postgresql = mkIf (cfg.mongodbType == "ferretdb") {
-      enable = true;
-      ensureDatabases = [ "ferretdb" ];
-      ensureUsers = [{
-        name = "ferretdb";
-        ensurePermissions."DATABASE ferretdb" = "ALL PRIVILEGES";
-      }];
-    };
-  };
+      services.postgresql = {
+        enable = true;
+        ensureDatabases = [ "ferretdb" ];
+        ensureUsers = [{
+          name = "ferretdb";
+          ensurePermissions."DATABASE ferretdb" = "ALL PRIVILEGES";
+        }];
+      };
+    })
+  ]);
 }
