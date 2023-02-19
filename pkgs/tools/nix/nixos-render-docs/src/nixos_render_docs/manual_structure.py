@@ -1,6 +1,14 @@
-from typing import Literal, Sequence
+from __future__ import annotations
+
+import dataclasses as dc
+import html
+import itertools
+
+from typing import cast, get_args, Iterable, Literal, Sequence
 
 from markdown_it.token import Token
+
+from .utils import Freezeable
 
 # FragmentType is used to restrict structural include blocks.
 FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
@@ -21,8 +29,9 @@ def _check_book_structure(tokens: Sequence[Token]) -> None:
                                "expected structural include")
 
 # much like books, parts may not contain headings other than their title heading.
-# this is a limitation of the current renderers that do not handle this case well
-# even though it is supported in docbook (and probably supportable anywhere else).
+# this is a limitation of the current renderers and TOC generators that do not handle
+# this case well even though it is supported in docbook (and probably supportable
+# anywhere else).
 def _check_part_structure(tokens: Sequence[Token]) -> None:
     _check_fragment_structure(tokens)
     for token in tokens[3:]:
@@ -87,3 +96,91 @@ def check_structure(kind: TocEntryType, tokens: Sequence[Token]) -> None:
         _check_part_structure(tokens)
     else:
         _check_fragment_structure(tokens)
+
+@dc.dataclass(frozen=True)
+class XrefTarget:
+    id: str
+    """link label for `[](#local-references)`"""
+    title_html: str
+    """toc label"""
+    toc_html: str | None
+    """text for `<title>` tags and `title="..."` attributes"""
+    title: str | None
+    """path to file that contains the anchor"""
+    path: str
+    """whether to drop the `#anchor` from links when expanding xrefs"""
+    drop_fragment: bool = False
+
+    def href(self) -> str:
+        path = html.escape(self.path, True)
+        return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
+
+@dc.dataclass
+class TocEntry(Freezeable):
+    kind: TocEntryType
+    target: XrefTarget
+    parent: TocEntry | None = None
+    prev: TocEntry | None = None
+    next: TocEntry | None = None
+    children: list[TocEntry] = dc.field(default_factory=list)
+    starts_new_chunk: bool = False
+
+    @property
+    def root(self) -> TocEntry:
+        return self.parent.root if self.parent else self
+
+    @classmethod
+    def of(cls, token: Token) -> TocEntry:
+        entry = token.meta.get('TocEntry')
+        if not isinstance(entry, TocEntry):
+            raise RuntimeError('requested toc entry, none found', token)
+        return entry
+
+    @classmethod
+    def collect_and_link(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token]) -> TocEntry:
+        result = cls._collect_entries(xrefs, tokens, 'book')
+
+        def flatten_with_parent(this: TocEntry, parent: TocEntry | None) -> Iterable[TocEntry]:
+            this.parent = parent
+            return itertools.chain([this], *[ flatten_with_parent(c, this) for c in this.children ])
+
+        flat = list(flatten_with_parent(result, None))
+        prev = flat[0]
+        prev.starts_new_chunk = True
+        paths_seen = set([prev.target.path])
+        for c in flat[1:]:
+            if prev.target.path != c.target.path and c.target.path not in paths_seen:
+                c.starts_new_chunk = True
+                c.prev, prev.next = prev, c
+                prev = c
+            paths_seen.add(c.target.path)
+
+        for c in flat:
+            c.freeze()
+
+        return result
+
+    @classmethod
+    def _collect_entries(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token],
+                         kind: TocEntryType) -> TocEntry:
+        # we assume that check_structure has been run recursively over the entire input.
+        # list contains (tag, entry) pairs that will collapse to a single entry for
+        # the full sequence.
+        entries: list[tuple[str, TocEntry]] = []
+        for token in tokens:
+            if token.type.startswith('included_') and (included := token.meta.get('included')):
+                fragment_type_str = token.type[9:].removesuffix('s')
+                assert fragment_type_str in get_args(TocEntryType)
+                fragment_type = cast(TocEntryType, fragment_type_str)
+                for fragment, _path in included:
+                    entries[-1][1].children.append(cls._collect_entries(xrefs, fragment, fragment_type))
+            elif token.type == 'heading_open' and (id := cast(str, token.attrs.get('id', ''))):
+                while len(entries) > 1 and entries[-1][0] >= token.tag:
+                    entries[-2][1].children.append(entries.pop()[1])
+                entries.append((token.tag,
+                                TocEntry(kind if token.tag == 'h1' else 'section', xrefs[id])))
+                token.meta['TocEntry'] = entries[-1][1]
+
+        while len(entries) > 1:
+            entries[-2][1].children.append(entries.pop()[1])
+        return entries[0][1]
