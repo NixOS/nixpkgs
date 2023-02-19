@@ -26828,6 +26828,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
   };
 
+  nu_scripts = callPackage ../shells/nushell/nu_scripts { };
+
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
     else unixtools.nettools;
