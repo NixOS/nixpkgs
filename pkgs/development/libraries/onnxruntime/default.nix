@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchFromGitLab
 , fetchpatch
 , fetchurl
 , pkg-config
@@ -8,17 +9,16 @@
 , python3Packages
 , libpng
 , zlib
-, eigen
 , protobuf
-, howard-hinnant-date
+, Foundation
 , nlohmann_json
 , boost
 , oneDNN
-, abseil-cpp_202111
-, gtest
+, abseil-cpp_202206
 , pythonSupport ? false
 , nsync
-, flatbuffers
+, re2
+, gtest
 }:
 
 # Python Support
@@ -26,17 +26,15 @@
 # When enabling Python support a wheel is made and stored in a `dist` output.
 # This wheel is then installed in a separate derivation.
 
-assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
-
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "sha256-paaeq6QeiOzwiibbz0GkYZxEI/V80lvYNYTm6AuyAXQ=";
+    sha256 = "sha256-Lm0AfUdr6EclNL/R3rPiA1o9qfsWH+f1Y0CX3JCFovo=";
     fetchSubmodules = true;
   };
 
@@ -49,11 +47,64 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  howard-hinnant-date = fetchFromGitHub {
+    owner = "HowardHinnant";
+    repo = "date";
+    rev = "v2.4.1";
+    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
+  };
+
+  mp11 = fetchFromGitHub {
+    owner = "boostorg";
+    repo = "mp11";
+    rev = "boost-1.79.0";
+    sha256 = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+  };
+
+  safeint = fetchFromGitHub {
+    owner = "dcleblanc";
+    repo = "safeint";
+    rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
+    sha256 = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+  };
+
+  pytorch_cpuinfo = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "cpuinfo";
+    rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
+    sha256 = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+  };
+  wil = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "wil";
+    rev = "5f4caba4e7a9017816e47becdd918fcc872039ba";
+    sha256 = "sha256-nbiDtBZsni7hp9fROBB1D4j7ssBZOgG5goeb6/lSS20=";
+  };
+  gsl = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "GSL";
+    rev = "v4.0.0";
+    sha256 = "sha256-cXDFqt2KgMFGfdh6NGE+JmP4R0Wm9LNHM0eIblYe6zU=";
+  };
+
+  flatbuffers = fetchFromGitHub {
+    owner = "google";
+    repo = "flatbuffers";
+    rev = "v1.12.0";
+    sha256 = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+  };
+
+  eigen = fetchFromGitLab {
+    owner = "libeigen";
+    repo = "eigen";
+    rev = "d10b27fe37736d2944630ecd7557cefa95cf87c9";
+    sha256 = "sha256-Lmco0s9gIm9sIw7lCr5Iewye3RmrHEE4HLfyzRkQCm0=";
+  };
+  
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
-    gtest
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     setuptools
     wheel
@@ -62,6 +113,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
+    Foundation
     libpng
     zlib
     howard-hinnant-date
@@ -69,12 +121,18 @@ stdenv.mkDerivation rec {
     boost
     oneDNN
     protobuf
-  ] ++ lib.optionals pythonSupport [
     nsync
+  ] ++ lib.optionals pythonSupport [
     python3Packages.numpy
     python3Packages.pybind11
     python3Packages.packaging
   ];
+
+  checkInputs = [] ++ lib.optionals pythonSupport (with python3Packages; [
+    pytest
+    sympy
+    onnx
+  ]);
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -85,15 +143,30 @@ stdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-Donnxruntime_PREFER_SYSTEM_LIB=ON"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
     "-Donnxruntime_ENABLE_LTO=ON"
+    # Unit tests take considerable amount of build time
     "-Donnxruntime_BUILD_UNIT_TESTS=ON"
-    "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
     "-Donnxruntime_USE_MPI=ON"
-    "-Deigen_SOURCE_PATH=${eigen.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202111.src}"
-    "-Donnxruntime_USE_DNNL=YES"
+    # DNNL/oneDNN is still a submodule
+    "-Donnxruntime_USE_DNNL=OFF"
+
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202206.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    "-DFETCHCONTENT_SOURCE_DIR_EIGEN=${eigen}"
+    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_GSL=${gsl}"
+    "-DFETCHCONTENT_SOURCE_DIR_MICROSOFT_WIL=${wil}"
+    "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
+    "-DFETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON=${nlohmann_json.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${python3Packages.onnx.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_PROTOBUF=${protobuf.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_PYBIND11_PROJECT=${python3Packages.pybind11.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=${pytorch_cpuinfo}"
+    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
