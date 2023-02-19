@@ -159,12 +159,12 @@ in {
 
         base.wait_until_succeeds("ping -c3 10.231.138.2 >&2")
         base.succeed(
-            f"systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
+            "systemd-run -M restart --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
         # A reload is forced for this machine, but a reload doesn't refresh bind mounts.
         base.fail(
-            f"systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
+            "systemd-run -M reload --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
     with subtest("More changes"):
@@ -172,10 +172,10 @@ in {
             "${change2}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
         )
 
-        base.wait_until_succeeds(f"ping -c3 10.231.136.2 >&2")
+        base.wait_until_succeeds("ping -c3 10.231.136.2 >&2")
 
         base.succeed(
-            f"systemd-run -M dynamic --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
+            "systemd-run -M dynamic --pty --quiet -- /bin/sh --login -c 'test -e /foo/systemd'"
         )
 
         base.wait_until_succeeds("ping -c3 10.231.150.2 >&2")
