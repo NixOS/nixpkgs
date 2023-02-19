@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-6aLvNw5/I5UvTRFzUK93YruKarM8S+gHIYd4hyTp/Qs=";
   };
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snitun" ];
 
   meta = with lib; {
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
     homepage = "https://github.com/nabucasa/snitun";
     description = "SNI proxy with TCP multiplexer";
     license = licenses.gpl3Only;
