@@ -31,7 +31,7 @@ self: super: {
           Cabal-syntax = cself.Cabal-syntax_3_8_1_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
           # GHC 9.2.5 starts shipping 1.6.16.0
-          process = cself.process_1_6_16_0;
+          process = cself.process_1_6_17_0;
         } // lib.optionalAttrs (lib.versions.majorMinor self.ghc.version == "8.10") {
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
