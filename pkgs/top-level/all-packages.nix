@@ -32584,7 +32584,7 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quisk = python38Packages.callPackage ../applications/radio/quisk { };
+  quisk = python39Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
