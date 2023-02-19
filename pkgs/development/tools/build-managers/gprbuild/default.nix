@@ -6,10 +6,11 @@
 , which
 , gnat
 , xmlada
+, fixDarwinDylibNames
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   pname = "gprbuild";
 
   # See ./boot.nix for an explanation of the gprbuild setupHook,
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
     gnat
     gprbuild-boot
     which
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   propagatedBuildInputs = [
     xmlada
@@ -63,4 +64,6 @@ stdenv.mkDerivation {
   postInstall = ''
     rm $out/doinstall
   '';
-}
+} // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  NIX_LDFLAGS = "-rpath $out/lib";
+})
