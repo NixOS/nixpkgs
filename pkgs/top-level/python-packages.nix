@@ -7865,7 +7865,7 @@ self: super: with self; {
 
   pychm = callPackage ../development/python-modules/pychm { };
 
-  PyChromecast = callPackage ../development/python-modules/pychromecast { };
+  pychromecast = callPackage ../development/python-modules/pychromecast { };
 
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 

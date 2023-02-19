@@ -534,7 +534,7 @@
       plexapi
       plexauth
       plexwebsocket
-      PyChromecast
+      pychromecast
       sqlalchemy
       zeroconf
     ];
