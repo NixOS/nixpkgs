@@ -3869,9 +3869,6 @@ dont-distribute-packages:
  - tbox
  - tcache-AWS
  - tccli
- - tdlib
- - tdlib-gen
- - tdlib-types
  - techlab
  - telegram-bot
  - telegram-raw-api

@@ -372,6 +372,19 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
+
+  # Group of libraries by same upstream maintainer for interacting with
+  # Telegram messenger. Bit-rotted a bit since 2020.
+  tdlib = appendPatch (fetchpatch {
+    # https://github.com/poscat0x04/tdlib/pull/3
+    url = "https://github.com/poscat0x04/tdlib/commit/8eb9ecbc98c65a715469fdb8b67793ab375eda31.patch";
+    hash = "sha256-vEI7fTsiafNGBBl4VUXVCClW6xKLi+iK53fjcubgkpc=";
+  }) (doJailbreak super.tdlib) ;
+  tdlib-types = doJailbreak super.tdlib-types;
+  tdlib-gen = doJailbreak super.tdlib-gen;
+  # https://github.com/poscat0x04/language-tl/pull/1
+  language-tl = doJailbreak super.language-tl;
+
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
