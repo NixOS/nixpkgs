@@ -1,18 +1,15 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, decorator
-, requests
-, typing ? null
-, configparser
 , click
+, fetchPypi
 , freezegun
+, hatchling
 , mock
-, pytestCheckHook
 , pytest-vcr
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
+, requests
 , vcrpy
 }:
 
@@ -21,22 +18,20 @@ buildPythonPackage rec {
   version = "0.44.0";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-BxFw8MfvIlEdv3+b12xL5QDuLT1SBykApch7VJXSxzM=";
   };
 
-  postPatch = ''
-    find . -name '*.pyc' -exec rm {} \;
-  '';
-
   nativeBuildInputs = [
     hatchling
   ];
 
-  propagatedBuildInputs = [ decorator requests ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (pythonOlder "3.0") configparser;
+  propagatedBuildInputs = [
+    requests
+  ];
 
   nativeCheckInputs = [
     click
@@ -56,7 +51,9 @@ buildPythonPackage rec {
     "test_default_settings_set"
   ];
 
-  pythonImportsCheck = [ "datadog" ];
+  pythonImportsCheck = [
+    "datadog"
+  ];
 
   meta = with lib; {
     description = "The Datadog Python library";
