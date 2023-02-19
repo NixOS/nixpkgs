@@ -17,8 +17,6 @@ buildPythonPackage rec {
 
   format = "other";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "syndication-domination";
