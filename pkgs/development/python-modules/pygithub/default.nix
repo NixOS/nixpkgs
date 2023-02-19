@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyGithub";
+  pname = "pygithub";
   version = "1.57";
   format = "setuptools";
   disabled = pythonOlder "3.6";

@@ -137,7 +137,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     mock
     paramiko
     pydocumentdb
-    PyGithub
+    pygithub
     pygments
     pynacl
     pyopenssl

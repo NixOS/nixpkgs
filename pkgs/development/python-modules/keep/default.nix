@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, PyGithub
+, pygithub
 , terminaltables
 , click
 , requests
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     click
     requests
     terminaltables
-    PyGithub
+    pygithub
   ];
 
   # no tests

@@ -129,7 +129,7 @@
     imports = [ "airflow.providers.ftp.hooks.ftp" ];
   };
   github = {
-    deps = [ "PyGithub" ];
+    deps = [ "pygithub" ];
     imports = [ "airflow.providers.github.hooks.github" "airflow.providers.github.operators.github" ];
   };
   google = {
