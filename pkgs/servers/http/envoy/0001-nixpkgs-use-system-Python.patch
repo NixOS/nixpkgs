@@ -1,5 +1,15 @@
+From 329ad7cb56e66464e5570bbb51dea0fd56c4d9ae Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sun, 19 Feb 2023 17:40:50 +0000
+Subject: [PATCH 1/2] nixpkgs: use system Python
+
+---
+ bazel/python_dependencies.bzl |  4 ----
+ bazel/repositories_extra.bzl  | 13 +------------
+ 2 files changed, 1 insertion(+), 16 deletions(-)
+
 diff --git a/bazel/python_dependencies.bzl b/bazel/python_dependencies.bzl
-index d9dfb14a9b..b8e92452a7 100644
+index a5c3283d0a..1c2c31ebf2 100644
 --- a/bazel/python_dependencies.bzl
 +++ b/bazel/python_dependencies.bzl
 @@ -1,10 +1,8 @@
@@ -14,7 +24,7 @@ index d9dfb14a9b..b8e92452a7 100644
          extra_pip_args = ["--require-hashes"],
      )
 @@ -12,14 +10,12 @@ def envoy_python_dependencies():
-     # These need to use `pip_install`
+     # TODO(phlax): switch to `pip_parse`
      pip_install(
          # Note: dev requirements do *not* check hashes
 -        python_interpreter_target = interpreter,
@@ -22,17 +32,17 @@ index d9dfb14a9b..b8e92452a7 100644
          requirements = "@envoy//tools/dev:requirements.txt",
      )
  
-     pip_install(
+     pip_parse(
          name = "fuzzing_pip3",
 -        python_interpreter_target = interpreter,
-         requirements = "@rules_fuzzing//fuzzing:requirements.txt",
+         requirements_lock = "@rules_fuzzing//fuzzing:requirements.txt",
          extra_pip_args = ["--require-hashes"],
      )
 diff --git a/bazel/repositories_extra.bzl b/bazel/repositories_extra.bzl
-index 885b41dec6..ac5605eb30 100644
+index 9d1b31c5d6..ac5605eb30 100644
 --- a/bazel/repositories_extra.bzl
 +++ b/bazel/repositories_extra.bzl
-@@ -1,22 +1,12 @@
+@@ -1,23 +1,12 @@
  load("@emsdk//:deps.bzl", emsdk_deps = "deps")
 -load("@rules_python//python:repositories.bzl", "python_register_toolchains")
  load("@proxy_wasm_cpp_host//bazel/cargo/wasmtime:crates.bzl", "wasmtime_fetch_remote_crates")
@@ -53,6 +63,10 @@ index 885b41dec6..ac5605eb30 100644
 -    python_register_toolchains(
 -        name = "python%s" % ("_".join(python_version.split(".")[:-1])),
 -        python_version = python_version,
+-        ignore_root_user_error = True,
 -    )
 -
      aspect_bazel_lib_dependencies()
+-- 
+2.39.1
+
