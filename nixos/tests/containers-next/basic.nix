@@ -33,7 +33,7 @@ in {
   };
 
   # Demo server which hosts nspawn machines.
-  nodes.server = { pkgs, lib, ... }: {
+  nodes.server = { pkgs, lib, config, ... }: {
     virtualisation.vlans = [ 1 ];
 
     # Local authoritative DNS server. Used to confirm how DNS is handled by nspawn by default.
@@ -130,6 +130,9 @@ in {
         network = {};
       };
     };
+
+    environment.etc."container-exposed-nginx-hosts".text = with lib;
+      concatStringsSep " " (attrNames config.nixos.containers.instances.container0.system-config.config.services.nginx.virtualHosts);
 
     systemd.nspawn.container2.execConfig.ResolvConf = "bind-host";
 
@@ -292,6 +295,11 @@ in {
     with subtest("Proper sudo"):
         server.succeed(
             "systemd-run -M container0 --pty --quiet /bin/sh --login -c 'sudo -u root /run/current-system/sw/bin/ls'"
+        )
+
+    with subtest("Declarative container config is introspectable"):
+        server.succeed(
+            "test localhost = $(cat /etc/container-exposed-nginx-hosts)"
         )
 
     server.succeed("machinectl poweroff container0")

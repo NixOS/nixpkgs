@@ -137,25 +137,7 @@ let
         };
       };
 
-  mkImage = name: config:
-    { container = import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
-        system = pkgs.stdenv.hostPlatform.system;
-        modules = [
-          ./container-profile.nix
-          ({ pkgs, ... }: {
-            networking.hostName = name;
-            systemd.network.networks."20-host0" = {
-              address = mkIf (cfg.${name}.network != null) (
-                cfg.${name}.network.v4.static.containerPool
-                ++ cfg.${name}.network.v6.static.containerPool
-              );
-            };
-          })
-        ] ++ (config.system-config);
-        prefix = [ "nixos" "containers" "instances" name "config" ];
-      };
-      inherit config;
-    };
+  mkImage = name: config: { container = config.system-config; inherit config; };
 
   mkContainer = cfg: let inherit (cfg) container config; in mkMerge [
     {
@@ -220,18 +202,9 @@ in {
       '';
     };
 
-    rendered = mkOption {
-      type = types.attrsOf (types.attrsOf types.unspecified);
-      readOnly = true;
-      description = lib.mdDoc ''
-        Fully rendered configuration of each container. Helpful to introspect the config
-        from outside.
-      '';
-    };
-
     instances = mkOption {
       default = {};
-      type = types.attrsOf (types.submodule {
+      type = types.attrsOf (types.submodule ({ config, name, ... }: {
         options = {
           sharedNix = mkOption {
             default = true;
@@ -354,9 +327,23 @@ in {
               name = "NixOS configuration";
               merge = const (map (x: rec { imports = [ x.value ]; key = _file; _file = x.file; }));
             };
+            apply = x: import "${config.nixpkgs}/nixos/lib/eval-config.nix" {
+              system = pkgs.stdenv.hostPlatform.system;
+              modules = [
+                ./container-profile.nix
+                ({ pkgs, ... }: {
+                  networking.hostName = name;
+                  systemd.network.networks."20-host0" = {
+                    address = mkIf (config.network != null)
+                      (with config.network; v4.static.containerPool ++ v6.static.containerPool);
+                  };
+                })
+              ] ++ x;
+              prefix = [ "nixos" "containers" "instances" name "system-config" ];
+            };
           };
         };
-      });
+      }));
 
       description = lib.mdDoc ''
         Attribute set to define {manpage}`systemd.nspawn(5)`-managed containers. With this attribute-set,
@@ -410,8 +397,6 @@ in {
     services.radvd = {
       inherit (radvd) config enable;
     };
-
-    nixos.containers.rendered = mapAttrs (const (x: x.container)) images;
 
     systemd = {
       network.networks = mkMerge
