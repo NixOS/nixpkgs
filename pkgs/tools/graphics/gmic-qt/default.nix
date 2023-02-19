@@ -25,6 +25,7 @@
 , gnused
 , coreutils
 , jq
+, nix-update-script
 }:
 
 let
@@ -96,6 +97,10 @@ mkDerivation rec {
     echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
     wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = variants.${variant}.description;
