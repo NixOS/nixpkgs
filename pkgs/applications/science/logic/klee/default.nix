@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
     patchShebangs .

@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
     ++ lib.optionals stdenv.isLinux [ gtk3 tbb dbus ];
 
-  NIX_CFLAGS_COMPILE = [ ]
+  NIX_CFLAGS_COMPILE = toString [ ]
     # Apple's compiler finds a format string security error on
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"

@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ elfutils ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${toString elfutils.dev}/include" ];
+  NIX_CFLAGS_COMPILE = toString [ "-I${toString elfutils.dev}/include" ];
 
   makeFlags =
     lib.optional (vendorCertFile != null) "VENDOR_CERT_FILE=${vendorCertFile}"

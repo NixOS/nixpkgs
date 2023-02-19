@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
     "-Wno-error=deprecated-declarations"
   ] ++ lib.optionals stdenv.isAarch64 [

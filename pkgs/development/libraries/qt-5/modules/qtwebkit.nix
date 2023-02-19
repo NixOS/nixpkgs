@@ -35,7 +35,7 @@ qtModule {
       "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
     ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     # with gcc7 this warning blows the log over Hydra's limit
     "-Wno-expansion-to-defined"
   ]

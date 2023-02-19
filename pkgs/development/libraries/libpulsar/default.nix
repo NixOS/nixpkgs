@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ++ defaultOptionals;
 
   # Needed for GCC on Linux
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=return-type" ];
+  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=return-type" ];
 
   cmakeFlags = [
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"

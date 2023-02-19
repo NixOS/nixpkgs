@@ -31,7 +31,7 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    NIX_CFLAGS_COMPILE = [
+    NIX_CFLAGS_COMPILE = toString [
       #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
       "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
 

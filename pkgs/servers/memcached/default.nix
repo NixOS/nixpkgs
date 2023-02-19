@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
+  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]
     ++ lib.optional stdenv.isDarwin "-Wno-error";
 
   meta = with lib; {

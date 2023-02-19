@@ -550,7 +550,7 @@ in makeScopeWithSplicing
     path = "usr.bin/config";
     version = "9.2";
     sha256 = "1yz3n4hncdkk6kp595fh2q5lg150vpqg8iw2dccydkyw4y3hgsjj";
-    NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
+    NIX_CFLAGS_COMPILE = toString [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal install mandoc byacc flex rsync
@@ -636,7 +636,7 @@ in makeScopeWithSplicing
     makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
     hardeningDisable = [ "pic" ];
     MKKMOD = "no";
-    NIX_CFLAGS_COMPILE = [ "-Wa,--no-warn" ];
+    NIX_CFLAGS_COMPILE = toString [ "-Wa,--no-warn" ];
 
     postBuild = ''
       make -C arch/$MACHINE/compile/$CONFIG $makeFlags
@@ -715,7 +715,7 @@ in makeScopeWithSplicing
         --replace "#define HAVE_STRUCT_DIRENT_D_NAMLEN 1" ""
       substituteInPlace $COMPONENT_PATH/readline/Makefile --replace /usr/include "$out/include"
     '';
-    NIX_CFLAGS_COMPILE = [
+    NIX_CFLAGS_COMPILE = toString [
       "-D__noinline="
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
@@ -753,7 +753,7 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
-    NIX_CFLAGS_COMPILE = [
+    NIX_CFLAGS_COMPILE = toString [
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
@@ -821,7 +821,7 @@ in makeScopeWithSplicing
     path = "lib/libpci";
     version = "9.2";
     sha256 = "+IOEO1Bw3/H3iCp3uk3bwsFZbvCqN5Ciz70irnPl8E8=";
-    NIX_CFLAGS_COMPILE = [ "-I." ];
+    NIX_CFLAGS_COMPILE = toString [ "-I." ];
     meta.platforms = lib.platforms.netbsd;
     extraPaths = with self; [ sys.src ];
   };

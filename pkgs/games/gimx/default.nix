@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "build-core" ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=address"
     "-Wno-error=deprecated-declarations"

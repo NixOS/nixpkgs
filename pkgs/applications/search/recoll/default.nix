@@ -57,7 +57,7 @@ mkDerivation rec {
     "--without-inotify"
   ]);
 
-  NIX_CFLAGS_COMPILE = [ "-DNIXPKGS" ];
+  NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
 
   patches = [
     # fix "No/bad main configuration file" error
