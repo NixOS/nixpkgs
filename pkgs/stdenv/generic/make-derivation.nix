@@ -588,25 +588,17 @@ lib.extendDerivation
     let
       drvAttrs = derivationArg // lib.optionalAttrs envIsExportable checkedEnv;
       strict = builtins.derivationStrict drvAttrs;
-
-      commonAttrs = drvAttrs // (builtins.listToAttrs outputsList) //
-        { all = map (x: x.value) outputsList;
-          inherit drvAttrs;
-        };
-
-      outputToAttrListElement = outputName:
-        { name = outputName;
-          value = commonAttrs // {
-            outPath = builtins.getAttr outputName strict;
-            drvPath = strict.drvPath;
-            type = "derivation";
-            inherit outputName;
-          };
-        };
-
-      outputsList = map outputToAttrListElement outputs;
-
-    in (builtins.head outputsList).value
+      outputs = drvAttrs.outputs or ["out"];
+      outputName = lib.head outputs;
+    in
+      drvAttrs
+      // lib.genAttrs outputs (o: strict.${o})
+      // {
+        type = "derivation";
+        inherit drvAttrs outputName;
+        inherit (strict) drvPath;
+        outPath = strict.${outputName};
+      }
   );
 
 in
