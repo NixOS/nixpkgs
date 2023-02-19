@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.2.0";
+  version = "3.2.1";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "dtschump";
     repo = "gmic";
     rev = "v.${version}";
-    hash = "sha256-lrIlzxXWqv046G5uRkBQnjvysaIcv+iDKxjuUEJWqcs=";
+    hash = "sha256-oEH4GlSV+642TGSJJhV4yzydh1hAQZfzwaiPAZFNQtI=";
   };
 
   # TODO: build this from source
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    hash = "sha256-kWHzA1Dk7F4IROq/gk+RJllry3BABMbssJxhkQ6Cp2M=";
+    hash = "sha256-f8d9jTVnHwSoyMuiM+Qv86e/BYX9SSx9cl3borihxnc=";
   };
 
   nativeBuildInputs = [
