@@ -7876,6 +7876,10 @@ with pkgs;
 
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
+  gptcommit = callPackage ../development/tools/gptcommit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gptman = callPackage ../tools/system/gptman { };
 
   ldmtool = callPackage ../tools/misc/ldmtool { };
