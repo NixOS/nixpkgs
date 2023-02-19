@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "v2ray-geoip";
-  version = "202302081046";
+  version = "202302160443";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "geoip";
-    rev = "d85771a99440dd75294bfd9d00011307b7596d0d";
-    sha256 = "sha256-gVL7koUG3BgY8HAYWa2fTwTJIE3svGUgauwI1jlA2/M=";
+    rev = "f8fbab498f52848317db703f57f0c839e81cd587";
+    sha256 = "sha256-9LZxVNhigy2cO41d8nZtFrfDoCjJTdzrGUZpmjcpje8=";
   };
 
   installPhase = ''
