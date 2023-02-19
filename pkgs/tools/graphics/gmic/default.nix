@@ -21,6 +21,7 @@
 , gnused
 , coreutils
 , jq
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
@@ -81,6 +82,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      # Needs to update in lockstep.
+      inherit gmic-qt;
+    };
+
     updateScript = writeShellScript "${pname}-update-script" ''
       set -o errexit
       PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
