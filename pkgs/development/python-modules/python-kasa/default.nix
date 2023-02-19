@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-9zCUYB+TYgDMoTHpR0u42Usq2EKp8vtzlTgU82eXxl8=";
+    sha256 = "sha256-vp2r842f9A2lEFLhUcHyGZavAWT4Ke9mH+FAlGucdqo=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
     homepage = "https://python-kasa.readthedocs.io/";
+    changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
