@@ -26,7 +26,7 @@
 , pygal
 , pygments
 , pyphen
-, PyRSS2Gen
+, pyrss2gen
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     pygal
     pygments
     pyphen
-    PyRSS2Gen
+    pyrss2gen
     requests
     ruamel-yaml
     toml
