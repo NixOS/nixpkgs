@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An audio resampling library";
-    homepage = "http://soxr.sourceforge.net";
+    homepage = "https://soxr.sourceforge.net";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

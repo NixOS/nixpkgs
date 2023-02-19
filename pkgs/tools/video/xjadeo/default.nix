@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       soundtrack composition, video monitoring or any task that requires to
       synchronizing movie frames with external events.
     '';
-    homepage = "http://xjadeo.sourceforge.net";
+    homepage = "https://xjadeo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mitchmindtree ];

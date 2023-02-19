@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C++ library of designs, containing flexible implementations of common design patterns and idioms";
-    homepage = "http://loki-lib.sourceforge.net";
+    homepage = "https://loki-lib.sourceforge.net";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];

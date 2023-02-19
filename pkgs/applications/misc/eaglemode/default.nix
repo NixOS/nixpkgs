@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://eaglemode.sourceforge.net";
+    homepage = "https://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";
     changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
     license = licenses.gpl3;

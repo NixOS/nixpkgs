@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://pgfplots.sourceforge.net";
+    homepage = "https://pgfplots.sourceforge.net";
     description = "TeX package to draw plots directly in TeX in two and three dimensions";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];

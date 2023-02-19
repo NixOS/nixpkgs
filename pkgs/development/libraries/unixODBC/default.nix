@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz"
-      "http://www.unixodbc.org/${pname}-${version}.tar.gz"
+      "https://www.unixodbc.org/${pname}-${version}.tar.gz"
     ];
     sha256 = "sha256-2eVcjnEYNH48ZshzOIVtrRUWtJD7fHVsFWKiwmfHO1w=";
   };
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ODBC driver manager for Unix";
-    homepage = "http://www.unixodbc.org/";
+    homepage = "https://www.unixodbc.org/";
     license = licenses.lgpl2;
     platforms = platforms.unix;
   };

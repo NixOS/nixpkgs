@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IBM JFS utilities";
-    homepage = "http://jfs.sourceforge.net";
+    homepage = "https://jfs.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };
