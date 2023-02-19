@@ -19618,7 +19618,11 @@ with pkgs;
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
-  fftwQuad = fftw.override { precision = "quad-precision"; };
+  # Need gcc >= 4.6.0 to build with FFTW with quad precision, but Darwin defaults to Clang
+  fftwQuad = fftw.override {
+    precision = "quad-precision";
+    stdenv = gccStdenv;
+  };
   fftwMpi = fftw.override { enableMpi = true; };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
