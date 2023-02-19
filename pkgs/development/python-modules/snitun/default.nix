@@ -7,11 +7,15 @@
 , fetchFromGitHub
 , pytest-aiohttp
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "snitun";
   version = "0.33.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
