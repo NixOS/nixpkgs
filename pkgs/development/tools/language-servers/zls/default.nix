@@ -2,24 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "zls";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MVo21qNCZop/HXBqrPcosGbRY+W69KNCc1DfnH47GsI=";
+    sha256 = "sha256-M0GG4KIMcHN+bEprUv6ISZkWNvWN12S9vqSKP+DRU9M=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ zig ];
+
+  dontConfigure = true;
 
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
   installPhase = ''
+    runHook preInstall
     zig build -Drelease-safe -Dcpu=baseline --prefix $out install
+    runHook postInstall
   '';
 
   meta = with lib; {
