@@ -43,6 +43,9 @@ buildGoModule {
     substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
     substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
 
+    $out/bin/caddy manpage --directory manpages
+    installManPage manpages/*
+
     installShellCompletion --cmd metal \
       --bash <($out/bin/caddy completion bash) \
       --zsh <($out/bin/caddy completion zsh)
