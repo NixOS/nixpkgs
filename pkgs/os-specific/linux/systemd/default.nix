@@ -97,6 +97,7 @@
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+, withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -278,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
           # Systemd does this decision during configure time and uses ifdef's to
           # enable specific branches. We can safely ignore (nuke) the libidn "v1"
           # libraries.
-          { name = "libidn2.so.0"; pkg = libidn2; }
+          { name = "libidn2.so.0"; pkg = opt withLibidn2 libidn2; }
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
@@ -381,7 +382,6 @@ stdenv.mkDerivation (finalAttrs: {
       kmod
       libxcrypt
       libcap
-      libidn2
       libuuid
       linuxHeaders
       pam
@@ -397,6 +397,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
+    ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
@@ -461,7 +462,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsplit-usr=false"
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
-    "-Dlibidn2=true"
+    "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
