@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
+import xml.sax.saxutils as xml
 
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from markdown_it.token import Token
 from typing import Any, Generic, Optional
 from urllib.parse import quote
-from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 
@@ -17,7 +18,9 @@ from . import parallel
 from .asciidoc import AsciiDocRenderer, asciidoc_escape
 from .commonmark import CommonMarkRenderer
 from .docbook import DocBookRenderer, make_xml_id
+from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
+from .manual_structure import XrefTarget
 from .md import Converter, md_escape, md_make_code
 from .types import OptionLoc, Option, RenderedOption
 
@@ -240,10 +243,10 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
 
     def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
         if href is not None:
-            href = " xlink:href=" + quoteattr(href)
+            href = " xlink:href=" + xml.quoteattr(href)
         return [
             f"<member><filename{href}>",
-            escape(name),
+            xml.escape(name),
             "</filename></member>"
         ]
 
@@ -273,8 +276,8 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
             result += [
                 "<varlistentry>",
                 # NOTE adding extra spaces here introduces spaces into xref link expansions
-                (f"<term xlink:href={quoteattr('#' + id)} xml:id={quoteattr(id)}>" +
-                 f"<option>{escape(name)}</option></term>"),
+                (f"<term xlink:href={xml.quoteattr('#' + id)} xml:id={xml.quoteattr(id)}>" +
+                 f"<option>{xml.escape(name)}</option></term>"),
                 "<listitem>"
             ]
             result += opt.lines
@@ -521,6 +524,109 @@ class AsciiDocConverter(BaseConverter[OptionsAsciiDocRenderer]):
             result.append(f"== {asciidoc_escape(name)}\n")
             result += opt.lines
             result.append("\n\n")
+
+        return "\n".join(result)
+
+class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
+    # TODO docbook compat. must be removed together with the matching docbook handlers.
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        token.meta['compact'] = False
+        return super().ordered_list_open(token, tokens, i)
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        token.meta['compact'] = False
+        return super().bullet_list_open(token, tokens, i)
+    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # TODO use token.info. docbook doesn't so we can't yet.
+        return f'<pre class="programlisting">{html.escape(token.content)}</pre>'
+
+class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
+    __option_block_separator__ = ""
+
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool,
+                 varlist_id: str, id_prefix: str, xref_targets: Mapping[str, XrefTarget]):
+        super().__init__(revision, markdown_by_default)
+        self._xref_targets = xref_targets
+        self._varlist_id = varlist_id
+        self._id_prefix = id_prefix
+        self._renderer = OptionsHTMLRenderer(manpage_urls, self._xref_targets)
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default,
+                self._varlist_id, self._id_prefix, self._xref_targets)
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> HTMLConverter:
+        return cls(*a)
+
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_description(desc)
+
+    def _related_packages_header(self) -> list[str]:
+        return [
+            '<p><span class="emphasis"><em>Related packages:</em></span></p>',
+        ]
+
+    def _decl_def_header(self, header: str) -> list[str]:
+        return [
+            f'<p><span class="emphasis"><em>{header}:</em></span></p>',
+            '<table border="0" summary="Simple list" class="simplelist">'
+        ]
+
+    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
+        if href is not None:
+            href = f' href="{html.escape(href, True)}"'
+        return [
+            "<tr><td>",
+            f'<code class="filename"><a class="filename" {href} target="_top">',
+            f'{html.escape(name)}',
+            '</a></code>',
+            "</td></tr>"
+        ]
+
+    def _decl_def_footer(self) -> list[str]:
+        return [ "</table>" ]
+
+    def finalize(self) -> str:
+        result = []
+
+        result += [
+            '<div class="variablelist">',
+            f'<a id="{html.escape(self._varlist_id, True)}"></a>',
+            ' <dl class="variablelist">',
+        ]
+
+        for (name, opt) in self._sorted_options():
+            id = make_xml_id(self._id_prefix + name)
+            target = self._xref_targets[id]
+            result += [
+                '<dt>',
+                ' <span class="term">',
+                # docbook compat, these could be one tag
+                f' <a id="{html.escape(id, True)}"></a><a class="term" href="{target.href()}">'
+                # no spaces here (and string merging) for docbook output compat
+                f'<code class="option">{html.escape(name)}</code>',
+                '  </a>',
+                ' </span>',
+                '</dt>',
+                '<dd>',
+            ]
+            result += opt.lines
+            result += [
+                "</dd>",
+            ]
+
+        result += [
+            " </dl>",
+            "</div>"
+        ]
 
         return "\n".join(result)
 
