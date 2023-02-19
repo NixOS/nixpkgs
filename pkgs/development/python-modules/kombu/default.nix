@@ -6,7 +6,7 @@
 , case
 , fetchPypi
 , importlib-metadata
-, Pyro4
+, pyro4
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     azure-servicebus
     case
-    Pyro4
+    pyro4
     pytestCheckHook
     pytz
   ];

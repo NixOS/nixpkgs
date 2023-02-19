@@ -8733,7 +8733,7 @@ self: super: with self; {
 
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
-  Pyro4 = callPackage ../development/python-modules/pyro4 { };
+  pyro4 = callPackage ../development/python-modules/pyro4 { };
 
   Pyro5 = callPackage ../development/python-modules/pyro5 { };
 
