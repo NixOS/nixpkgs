@@ -514,6 +514,7 @@ in
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
+                  inherit (config) specialArgs;
                 }).config;
               };
             };
@@ -552,6 +553,16 @@ in
                 Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
                 by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
+              '';
+            };
+
+            specialArgs = mkOption {
+              type = types.attrsOf types.unspecified;
+              default = {};
+              description = lib.mdDoc ''
+                A set of special arguments to be passed to NixOS modules.
+                This will be merged into the `specialArgs` used to evaluate
+                the NixOS configurations.
               '';
             };
 
