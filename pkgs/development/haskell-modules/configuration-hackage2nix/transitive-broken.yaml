@@ -676,10 +676,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
- - ascii-superset_1_2_5_0
+ - ascii-superset_1_2_7_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_5_2_0
+ - ascii_1_5_4_0
  - asic
  - asil
  - assert4hs-hspec
@@ -1287,6 +1287,7 @@ dont-distribute-packages:
  - dobutokO3
  - dobutokO4
  - doc-review
+ - domaindriven
  - dormouse-client
  - dovetail
  - dovetail-aeson
@@ -1594,6 +1595,7 @@ dont-distribute-packages:
  - ghc-instances
  - ghc-mod
  - ghc-session
+ - ghc-tags-pipes
  - ghc-tags-plugin
  - ghci-pretty
  - ghcjs-dom-hello
@@ -1868,6 +1870,7 @@ dont-distribute-packages:
  - gridbounds
  - gridland
  - grisette
+ - grisette-monad-coroutine
  - groot
  - gross
  - groundhog-converters
@@ -2299,6 +2302,9 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-aws-sqs-conduit
+ - hw-json
+ - hw-json-simple-cursor
+ - hw-json-standard-cursor
  - hw-uri
  - hworker-ses
  - hwormhole

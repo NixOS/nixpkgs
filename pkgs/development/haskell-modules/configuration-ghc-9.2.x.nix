@@ -49,18 +49,6 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs most recent versions of Cabal and Cabal-syntax
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-
   # weeder == 2.5.* requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
 
@@ -87,6 +75,9 @@ self: super: {
   # For -fghc-lib see cabal.project in haskell-language-server.
   stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
 
+  # Needs to match ghc version
+  ghc-tags = doDistribute self.ghc-tags_1_5;
+
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
 
@@ -95,6 +86,10 @@ self: super: {
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
+
+  # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
+  # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
+  protolude = doJailbreak super.protolude;
 
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =
