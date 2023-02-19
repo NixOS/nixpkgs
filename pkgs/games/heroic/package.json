@@ -1,6 +1,6 @@
 {
   "name": "heroic",
-  "version": "2.5.2",
+  "version": "2.6.2",
   "private": true,
   "main": "build/electron/main.js",
   "homepage": "./",
@@ -39,7 +39,7 @@
       }
     ],
     "win": {
-      "artifactName": "${productName}-${version}-Setup.${ext}",
+      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}",
       "icon": "build/win_icon.ico",
       "asarUnpack": [
         "build/bin/win32/legendary.exe",
@@ -50,9 +50,10 @@
       ]
     },
     "portable": {
-      "artifactName": "${productName}-${version}-Portable.${ext}"
+      "artifactName": "${productName}-${version}-Portable-${arch}.${ext}"
     },
     "mac": {
+      "artifactName": "${productName}-${version}-macOS-${arch}.${ext}",
       "target": "dmg",
       "category": "public.app-category.games",
       "icon": "build/icon.icns",
@@ -145,7 +146,6 @@
     "fs-extra": "^10.1.0",
     "fuse.js": "^6.6.2",
     "graceful-fs": "^4.2.10",
-    "heroic-wine-downloader": "^1.2.3",
     "howlongtobeat": "^1.7.0",
     "i18next": "^21.6.16",
     "i18next-fs-backend": "^1.1.4",
@@ -164,28 +164,32 @@
     "source-map-support": "^0.5.21",
     "steam-shortcut-editor": "^3.1.1",
     "systeminformation": "^5.15.0",
+    "ts-prune": "^0.10.3",
     "tslib": "^2.4.0"
   },
   "scripts": {
     "start": "vite",
     "codecheck": "tsc --noEmit",
+    "find-deadcode": "ts-prune --error",
     "test": "jest",
     "test-watch": "jest --watch --maxWorkers=25%",
     "test:ci": "jest --runInBand --silent",
     "release:linux": "vite build && electron-builder -p always --linux deb AppImage rpm pacman tar.xz",
-    "release:mac": "vite build && electron-builder -p always --mac",
-    "release:win": "vite build && electron-builder -p always --win nsis portable",
+    "release:mac": "vite build && electron-builder -p always --mac --x64 --arm64",
+    "release:win": "vite build && electron-builder -p never --win nsis portable --x64 --arm64",
     "dist:linux": "vite build && electron-builder --linux",
     "dist:mac": "vite build && electron-builder --mac",
     "dist:win": "vite build && electron-builder --win",
+    "dist:flatpak": "yarn dist:linux appimage && yarn flatpak:prepare && yarn flatpak:build",
     "lint": "eslint --cache -c .eslintrc --ext .tsx,ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .tsx,ts ./src",
-    "dist-flatpak": "cd flatpak && flatpak-builder build local.heroic.yml --install --force-clean --user",
-    "flatpak-test": "yarn dist:linux appimage && cd flatpak && flatpak-builder build local.heroic.yml --install --force-clean --user",
+    "flatpak:build": "cd flatpak-build && flatpak-builder build com.heroicgameslauncher.hgl.yml --install --force-clean --user",
+    "flatpak:prepare": "node ./flatpak/prepareFlatpak.js",
+    "flatpak:prepare-release": "node ./flatpak/prepareFlatpak.js release",
     "i18n": "i18next",
     "prepare": "husky install",
-    "prettier": "prettier --check .",
-    "prettier-fix": "prettier --write ."
+    "prettier": "prettier --check . '!flatpak-build'",
+    "prettier-fix": "prettier --write . '!flatpak-build'"
   },
   "eslintConfig": {
     "extends": [
@@ -211,8 +215,8 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "@vitejs/plugin-react": "^2.2.0",
-    "electron": "^21.2.1",
-    "electron-builder": "^23.1.0",
+    "electron": "^22.2.0",
+    "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
@@ -226,6 +230,7 @@
     "sass": "^1.55.0",
     "tmp": "^0.2.1",
     "ts-jest": "^28.0.7",
+    "type-fest": "^3.2.0",
     "typescript": "^4.8.4",
     "vite": "^3.2.2",
     "vite-plugin-electron": "^0.10.2",

@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, glib
+, pkg-config
+  # sdl-config is not available when crossing
+, withExamples ? stdenv.buildPlatform == stdenv.hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   pname = "libvisual";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/libvisual/${pname}-${version}.tar.gz";
-    sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
+    hash = "sha256-qhKHdBf3bTZC2fTHIzAjgNgzF1Y51jpVZB0Bkopd230=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ];
+  buildInputs = lib.optional withExamples SDL ++ [ glib ];
 
-  hardeningDisable = [ "format" ];
-
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  configureFlags = lib.optional (!withExamples) "--disable-examples";
 
   meta = {
     description = "An abstraction library for audio visualisations";

@@ -2,7 +2,7 @@
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
-, boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
+, boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, libjxl
 , openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
@@ -26,7 +26,7 @@ mkDerivation rec {
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
-    boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
+    boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib libjxl
     openjpeg opencolorio_1 poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5

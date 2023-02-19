@@ -25,7 +25,6 @@
 , langJit
 }:
 
-assert cloog != null -> lib.versionOlder version "5";
 assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
@@ -188,7 +187,7 @@ let
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
-    ++ lib.optionals (cloog != null) [
+    ++ lib.optionals (lib.versionOlder version "5" && cloog != null) [
       "--with-cloog=${cloog}"
       "--disable-cloog-version-check"
       "--enable-cloog-backend=isl"

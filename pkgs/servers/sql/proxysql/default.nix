@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.4.5";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    hash = "sha256-JWrll6VF0Ss1DlPNrh+xd3sGMclMeb6dlVgHd/UaNs0=";
+    hash = "sha256-psQzKycavS9xr24wGiRkr255IXW79AoG9fUEBkvPMZk=";
   };
 
   patches = [
@@ -67,10 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  # otherwise, it looks for …-1.15
-  ACLOCAL = "aclocal";
-  AUTOMAKE = "automake";
 
   GIT_VERSION = version;
 
@@ -139,6 +135,18 @@ stdenv.mkDerivation rec {
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
+
+    pushd libmicrohttpd/libmicrohttpd
+    autoreconf
+    popd
+
+    pushd libconfig/libconfig
+    autoreconf
+    popd
+
+    pushd libdaemon/libdaemon
+    autoreconf
+    popd
 
     popd
     patchShebangs .

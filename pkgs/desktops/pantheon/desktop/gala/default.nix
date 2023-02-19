@@ -17,8 +17,8 @@
 , bamf
 , libcanberra-gtk3
 , gnome-desktop
+, mesa
 , mutter
-, clutter
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
@@ -119,7 +119,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
-    clutter
     gnome-settings-daemon
     gexiv2
     gnome-desktop
@@ -127,6 +126,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     libgee
+    mesa # for libEGL
     mutter
   ];
 

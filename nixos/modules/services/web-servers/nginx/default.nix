@@ -203,7 +203,8 @@ let
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
-        # don't let clients close the keep-alive connection to upstream
+        # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
+        # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
         proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}

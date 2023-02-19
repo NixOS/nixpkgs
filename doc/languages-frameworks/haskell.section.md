@@ -137,7 +137,12 @@ set the default version to a version older than the newest on Hackage. We do
 this to get them or their reverse dependencies to compile in our package set.
 4. For all packages, for which the newest Hackage version is not the default
 version, there will also be a `haskellPackages.foo_x_y_z` package with the
-newest version.
+newest version. The `x_y_z` part encodes the version with dots replaced by
+underscores. When the newest version changes by a new release to Hackage the
+old package will disappear under that name and be replaced by a newer one under
+the name with the new version. The package name including the version will
+also disappear when the default version e.g. from Stackage catches up with the
+newest version from Hackage.
 5. For some packages, we also manually add other `haskellPackages.foo_x_y_z`
 versions, if they are required for a certain build.
 
@@ -161,12 +166,14 @@ given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
 It will simply take as input packages with names off the desired dependencies
-and just check whether they fulfill the version bounds and (by default, see
-`jailbreak`) fail if they don’t.
+and just check whether they fulfill the version bounds and fail if they don’t
+(by default, see `jailbreak` to circumvent this).
 
-The package resolution is done by the `haskellPackages.callPackage` function
-which will, e.g., use `haskellPackages.aeson` for a package input of name
-`aeson`.
+The `haskellPackages.callPackage` function does the package resolution.
+It will, e.g., use `haskellPackages.aeson`which has the default version as
+described above for a package input of name `aeson`. (More general:
+`<packages>.callPackage f` will call `f` with named inputs provided from the
+package set `<packages>`.)
 While this is the default behavior, it is possible to override the dependencies
 for a specific package, see
 [`override` and `overrideScope`](#haskell-overriding-haskell-packages).
@@ -195,7 +202,7 @@ maintenance work for `haskellPackages` is required. Besides that, it is not
 possible to get the dependencies of a legacy project from nixpkgs or to use a
 specific stack solver for compiling a project.
 
-Even though we couldn‘t use them directly in nixpkgs, it would be desirable
+Even though we couldn’t use them directly in nixpkgs, it would be desirable
 to have tooling to generate working Nix package sets from build plans generated
 by `cabal-install` or a specific Stackage snapshot via import-from-derivation.
 Sadly we currently don’t have tooling for this. For this you might be
@@ -538,7 +545,7 @@ via [`shellFor`](#haskell-shellFor).
 When using `cabal-install` for dependency resolution you need to be a bit
 careful to achieve build purity. `cabal-install` will find and use all
 dependencies installed from the packages `env` via Nix, but it will also
-consult Hackage to potentially download and compile dependencies if it can‘t
+consult Hackage to potentially download and compile dependencies if it can’t
 find a valid build plan locally. To prevent this you can either never run
 `cabal update`, remove the cabal database from your `~/.cabal` folder or run
 `cabal` with `--offline`. Note though, that for some usecases `cabal2nix` needs

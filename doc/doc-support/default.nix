@@ -75,7 +75,7 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${epub-xsl} ./epub.xsl
     ln -s ${xhtml-xsl} ./xhtml.xsl
 
-    ln -s ${../../nixos/doc/xmlformat.conf} ./xmlformat.conf
+    ln -s ${./xmlformat.conf} ./xmlformat.conf
     ln -s ${pkgs.documentation-highlighter} ./highlightjs
 
     echo -n "${version}" > ./version

@@ -1,6 +1,6 @@
 { lib
 , mkDerivation
-, gcc11Stdenv
+, gcc12Stdenv
 , srcs
 
 , cmake
@@ -12,6 +12,7 @@
 , kcontacts
 , ki18n
 , kio
+, kirigami-addons
 , kirigami2
 , knotifications
 , kpeople
@@ -23,8 +24,8 @@
 , qtquickcontrols2
 }:
 
-# Workaround for AArch64 not using GCC11 yet.
-gcc11Stdenv.mkDerivation rec {
+# Workaround for AArch64 still using GCC9.
+gcc12Stdenv.mkDerivation rec {
   pname = "spacebar";
   inherit (srcs.spacebar) version src;
 
@@ -40,6 +41,7 @@ gcc11Stdenv.mkDerivation rec {
     kcontacts
     ki18n
     kio
+    kirigami-addons
     kirigami2
     knotifications
     kpeople

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
-, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 , makeWrapper
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator wayland ];
+  runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
 
   installPhase = ''
     runHook preInstall

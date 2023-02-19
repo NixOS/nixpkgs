@@ -223,6 +223,7 @@
   ./programs/seahorse.nix
   ./programs/sedutil.nix
   ./programs/shadow.nix
+  ./programs/sharing.nix
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
@@ -697,6 +698,7 @@
   ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
+  ./services/monitoring/cockpit.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
@@ -858,6 +860,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
+  ./services/networking/imaginary.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
@@ -1045,6 +1048,7 @@
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
+  ./services/search/opensearch.nix
   ./services/search/solr.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix
@@ -1305,6 +1309,7 @@
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
   ./system/boot/systemd/oomd.nix
+  ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
@@ -1365,6 +1370,7 @@
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
+  ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
   ./virtualisation/openstack-options.nix

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -8,7 +9,9 @@
 , snappy
 , zlib
 , zstd
-, enableJemalloc ? false, jemalloc
+, windows
+, enableJemalloc ? false
+, jemalloc
 , enableLite ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
@@ -29,15 +32,24 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
-  buildInputs = lib.optional enableJemalloc jemalloc;
+  buildInputs = lib.optional enableJemalloc jemalloc
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
 
   outputs = [
     "out"
     "tools"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
-    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field -faligned-allocation";
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=deprecated-copy"
+    "-Wno-error=pessimizing-move"
+    # Needed with GCC 12
+    "-Wno-error=format-truncation"
+    "-Wno-error=maybe-uninitialized"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=unused-private-field"
+    "-faligned-allocation"
+  ];
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -65,7 +77,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $tools/bin
-    cp tools/{ldb,sst_dump} $tools/bin/
+    cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''

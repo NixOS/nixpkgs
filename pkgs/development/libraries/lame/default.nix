@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature frontendSupport "dynamic-frontends")
     #(enableFeature mp3xSupport "mp3x")
     (lib.enableFeature mp3rtpSupport "mp3rtp")
-    (if debugSupport then "--enable-debug=alot" else "")
+    (lib.optionalString debugSupport "--enable-debug=alot")
   ];
 
   preConfigure = ''

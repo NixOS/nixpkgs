@@ -229,6 +229,9 @@ in
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
 
+            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
+            chmod g+x /var/lib/onlyoffice/documentserver
+
             cp /run/onlyoffice/config/default.json{,.orig}
 
             # for a mapping of environment variables from the docker container to json options see
@@ -267,7 +270,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
-            ExecStartPre = onlyoffice-prestart;
+            ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
@@ -284,6 +287,8 @@ in
         group = "onlyoffice";
         isSystemUser = true;
       };
+
+      nginx.extraGroups = [ "onlyoffice" ];
     };
 
     users.groups.onlyoffice = { };

@@ -43,7 +43,7 @@
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
 , enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-, enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
+, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
 }:
 
 assert lib.asserts.assertMsg
@@ -52,17 +52,19 @@ assert lib.asserts.assertMsg
 
 let
   arrow-testing = fetchFromGitHub {
+    name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
-    hash = "sha256-Pxx8ohUpXb5u1995IvXmxQMqWiDJ+7LAll/AjQP7ph8=";
+    rev = "ecab1162cbec872e17d949ecc86181670aee045c";
+    hash = "sha256-w6rEuxfLTEO8DyXV44G6JOMeTfYtskFCOj9rHXNmj2Y=";
   };
 
   parquet-testing = fetchFromGitHub {
+    name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "aafd3fc9df431c2625a514fb46626e5614f1d199";
-    hash = "sha256-cO5t/mgsbBhbSefx8EMGTyxmgTjhZ8mFujkFQ3p/JS0=";
+    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
+    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
   };
 
   aws-sdk-cpp-arrow = aws-sdk-cpp.override {
@@ -79,11 +81,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "9.0.0";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-qaAz8KNJAomZj0WGgNGVec8HkRcXumWv3my4AHD3qbU=";
+    hash = "sha256-Ldjw6ghIpYeFYo7jpXZ1VI1QnhchOi9dcrDZALQ/VDA=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -108,15 +110,15 @@ stdenv.mkDerivation rec {
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "8.1.0";
-    hash = "sha256-Aqs6XJkGjAjGAp0PprabSM4m+32M/UXpSHppCHdzaZk=";
+    rev = "9.0.1";
+    hash = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.6.0";
-    hash = "sha256-hxCBomL4Qg9cHLRg9ZiO9k+JVOZXn6f4ikPtK+V9tno=";
+    rev = "v0.20.0";
+    hash = "sha256-71hAwJ0cGvpwK/ibeeQt82e9uqxcu9sM1rPtPENMPfs=";
   };
 
   patches = [
@@ -148,18 +150,17 @@ stdenv.mkDerivation rec {
     utf8proc
     zlib
     zstd
-  ] ++ lib.optionals enableShared [
-    python3.pkgs.python
-    python3.pkgs.numpy
   ] ++ lib.optionals enableFlight [
     grpc
     openssl
     protobuf
+    sqlite
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp-arrow openssl ]
   ++ lib.optionals enableGcs [
     crc32c
     curl
-    google-cloud-cpp grpc
+    google-cloud-cpp
+    grpc
     nlohmann_json
   ];
 
@@ -183,16 +184,12 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
-    "-DARROW_ENGINE=ON"
     "-DARROW_FILESYSTEM=ON"
     "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_HDFS=ON"
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
-    "-DARROW_PLASMA=ON"
-    # Disable Python for static mode because openblas is currently broken there.
-    "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
     "-DARROW_USE_GLOG=ON"
     "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
@@ -203,21 +200,21 @@ stdenv.mkDerivation rec {
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
     "-DARROW_MIMALLOC=ON"
-    # Parquet options:
-    "-DARROW_PARQUET=ON"
     "-DARROW_SUBSTRAIT=ON"
-    "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    # Parquet options:
+    "-DARROW_PARQUET=ON"
+    "-DPARQUET_BUILD_EXECUTABLES=ON"
+    "-DPARQUET_REQUIRE_ENCRYPTION=ON"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
-  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
-  ++ lib.optionals enableGcs [ "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}" ];
+  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
@@ -239,31 +236,33 @@ stdenv.mkDerivation rec {
         "TestS3FSGeneric.*"
       ];
     in
-    lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
+    lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
+
   __darwinAllowLocalNetworking = true;
-  nativeInstallCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
-  installCheckPhase =
-    let
-      excludedTests = lib.optionals stdenv.isDarwin [
-        # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-        # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-        "plasma-external-store-tests"
-        "plasma-client-tests"
-      ] ++ [ "arrow-gcsfs-test" ];
-    in
-    ''
-      runHook preInstallCheck
 
-      ctest -L unittest \
-        --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+  nativeInstallCheckInputs = [ perl which sqlite ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
-      runHook postInstallCheck
-    '';
+  disabledTests = [
+    # requires networking
+    "arrow-gcsfs-test"
+    "arrow-flight-integration-test"
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
+    broken = stdenv.isLinux && stdenv.isAarch64; # waiting on gtest changes in staging
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };

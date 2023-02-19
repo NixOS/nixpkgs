@@ -114,6 +114,16 @@ in mkLicense lset) ({
     fullName = "Bitstream Vera Font License";
   };
 
+  bitTorrent10 = {
+     spdxId = "BitTorrent-1.0";
+     fullName = " BitTorrent Open Source License v1.0";
+  };
+
+  bitTorrent11 = {
+    spdxId = "BitTorrent-1.1";
+    fullName = " BitTorrent Open Source License v1.1";
+  };
+
   bola11 = {
     url = "https://blitiri.com.ar/p/bola/";
     fullName = "Buena Onda License Agreement 1.1";
@@ -331,6 +341,13 @@ in mkLicense lset) ({
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
     free = false;
+  };
+
+  ecl20 = {
+    fullName = "Educational Community License, Version 2.0";
+    url = "https://opensource.org/licenses/ECL-2.0";
+    shortName = "ECL 2.0";
+    spdxId = "ECL-2.0";
   };
 
   efl10 = {

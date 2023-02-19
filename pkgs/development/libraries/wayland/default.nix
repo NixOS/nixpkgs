@@ -8,7 +8,7 @@
 , wayland-scanner
 , expat
 , libxml2
-, withLibraries ? true
+, withLibraries ? stdenv.isLinux
 , libffi
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox

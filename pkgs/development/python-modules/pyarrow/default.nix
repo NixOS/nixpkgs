@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , python
+, pythonAtLeast
 , pythonOlder
 , arrow-cpp
 , cffi
@@ -17,18 +18,15 @@
 , pkg-config
 , scipy
 , setuptools-scm
-, six
 }:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
-
-  _arrow-cpp = arrow-cpp.override { python3 = python; };
 in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  inherit (_arrow-cpp) version src;
+  inherit (arrow-cpp) version src;
 
   disabled = pythonOlder "3.7";
 
@@ -41,13 +39,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  buildInputs = [ arrow-cpp ];
+
   propagatedBuildInputs = [
     cffi
     cloudpickle
     fsspec
     numpy
     scipy
-    six
   ];
 
   nativeCheckInputs = [
@@ -60,20 +59,24 @@ buildPythonPackage rec {
   PYARROW_BUILD_TYPE = "release";
 
   PYARROW_WITH_DATASET = zero_or_one true;
-  PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
+  PYARROW_WITH_FLIGHT = zero_or_one arrow-cpp.enableFlight;
   PYARROW_WITH_HDFS = zero_or_one true;
   PYARROW_WITH_PARQUET = zero_or_one true;
-  PYARROW_WITH_PLASMA = zero_or_one (!stdenv.isDarwin);
-  PYARROW_WITH_S3 = zero_or_one _arrow-cpp.enableS3;
+  PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
+  # Plasma is deprecated since arrow 10.0.0
+  PYARROW_WITH_PLASMA = zero_or_one false;
+  PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
+  PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
+  PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
   ];
 
-  ARROW_HOME = _arrow-cpp;
-  PARQUET_HOME = _arrow-cpp;
+  ARROW_HOME = arrow-cpp;
+  PARQUET_HOME = arrow-cpp;
 
-  ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
+  ARROW_TEST_DATA = lib.optionalString doCheck arrow-cpp.ARROW_TEST_DATA;
 
   doCheck = true;
 
@@ -83,6 +86,13 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
+  '';
+
+  postInstall = ''
+    # copy the pyarrow C++ header files to the appropriate location
+    pyarrow_include="$out/${python.sitePackages}/pyarrow/include"
+    mkdir -p "$pyarrow_include/arrow/python"
+    find "$PWD/pyarrow/src/arrow" -type f -name '*.h' -exec cp {} "$pyarrow_include/arrow/python" \;
   '';
 
   pytestFlagsArray = [
@@ -102,6 +112,8 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
     # Flaky test, works locally but not on Hydra
     "--deselect=pyarrow/tests/test_csv.py::TestThreadedCSVTableRead::test_cancellation"
+    # expects arrow-cpp headers to be bundled
+    "--deselect=pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
@@ -109,7 +121,17 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
     "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
     "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
+    # fails to compile
+    "--deselect=pyarrow/tests/test_cython.py::test_cython_api"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Repr output is printing number instead of enum name so these tests fail
+    "--deselect=pyarrow/tests/test_fs.py::test_get_file_info"
+  ] ++ lib.optionals stdenv.isLinux [
+    # this test requires local networking
+    "--deselect=pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
   ];
+
+  disabledTests = [ "GcsFileSystem" ];
 
   dontUseSetuptoolsCheck = true;
 
@@ -125,7 +147,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pyarrow"
-  ] ++ map (module: "pyarrow.${module}") ([
+  ] ++ map (module: "pyarrow.${module}") [
     "compute"
     "csv"
     "dataset"
@@ -135,9 +157,7 @@ buildPythonPackage rec {
     "hdfs"
     "json"
     "parquet"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "plasma"
-  ]);
+  ];
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

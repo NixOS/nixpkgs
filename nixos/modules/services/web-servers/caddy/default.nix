@@ -35,7 +35,8 @@ let
 
       Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
         mkdir -p $out
-        ${cfg.package}/bin/caddy fmt ${Caddyfile}/Caddyfile > $out/Caddyfile
+        cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+        caddy fmt --overwrite $out/Caddyfile
       '';
     in
       "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";

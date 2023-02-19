@@ -78,7 +78,7 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          - [`${lib.optionalString (title != null) "${title} aka "}pkgs.${name}`](
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
               https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
             )${
               lib.optionalString (args ? comment) "\n\n  ${args.comment}"
@@ -152,7 +152,7 @@ in rec {
       pkgs.nixos-render-docs
     ];
   } ''
-    nixos-render-docs options docbook \
+    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
       --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
       --revision ${lib.escapeShellArg revision} \
       --document-type ${lib.escapeShellArg documentType} \

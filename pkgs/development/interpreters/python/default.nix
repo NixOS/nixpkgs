@@ -63,7 +63,7 @@
           hooks = import ./hooks/default.nix;
           keep = lib.extends hooks pythonPackagesFun;
           extra = _: {};
-          optionalExtensions = cond: as: if cond then as else [];
+          optionalExtensions = cond: as: lib.optionals cond as;
           pythonExtension = import ../../../top-level/python-packages.nix;
           python2Extension = import ../../../top-level/python2-packages.nix;
           extensions = lib.composeManyExtensions ([
@@ -196,9 +196,9 @@ in {
       major = "3";
       minor = "12";
       patch = "0";
-      suffix = "a3";
+      suffix = "a5";
     };
-    sha256 = "sha256-G2SzB14KkkGXTlgOCbCckRehxOK+aYA5IB7x2Kc0U9E=";
+    sha256 = "sha256-1m73o0L+OjVvnO47uXrcHl+0hA9rbP994P991JX4Mjs=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

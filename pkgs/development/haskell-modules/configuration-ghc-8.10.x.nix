@@ -69,7 +69,7 @@ self: super: {
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
@@ -77,7 +77,7 @@ self: super: {
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
 
-  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
   monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.

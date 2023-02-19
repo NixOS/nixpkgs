@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , pkgsi686Linux
+, fetchpatch
 , dbus
 , meson
 , ninja
@@ -103,6 +104,14 @@ in multiStdenv.mkDerivation rec {
 
     # Patch the chainloader to search for libyabridge through NIX_PROFILES
     ./libyabridge-from-nix-profiles.patch
+
+    # Remove with next yabridge update
+   (fetchpatch {
+      name = "fix-for-wine-8.0.patch";
+      url = "https://github.com/robbert-vdh/yabridge/commit/29acd40a9add635e2cb40ecc54c88d65604a7a2a.patch";
+      sha256 = "sha256-hVxa/FqH7d938Z/VjHdhmYLCLPZoa9C4xKSKRKiVPSU=";
+      includes = [ "meson.build" ];
+    })
   ];
 
   postPatch = ''

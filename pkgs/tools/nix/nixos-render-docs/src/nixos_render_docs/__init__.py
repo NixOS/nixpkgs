@@ -10,6 +10,7 @@ from typing import Any, Dict
 from .md import Converter
 from . import manual
 from . import options
+from . import parallel
 
 def pretty_print_exc(e: BaseException, *, _desc_text: str = "error") -> None:
     print(f"\x1b[1;31m{_desc_text}:\x1b[0m", file=sys.stderr)
@@ -29,12 +30,13 @@ def pretty_print_exc(e: BaseException, *, _desc_text: str = "error") -> None:
             print(textwrap.indent(extra_info, "\t"), file=sys.stderr, end="")
     else:
         print(e)
-    if e.__context__ is not None:
+    if e.__cause__ is not None:
         print("", file=sys.stderr)
-        pretty_print_exc(e.__context__, _desc_text="caused by")
+        pretty_print_exc(e.__cause__, _desc_text="caused by")
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='render nixos manual bits')
+    parser.add_argument('-j', '--jobs', type=int, default=None)
 
     commands = parser.add_subparsers(dest='command', required=True)
 
@@ -43,6 +45,7 @@ def main() -> None:
 
     args = parser.parse_args()
     try:
+        parallel.pool_processes = args.jobs
         if args.command == 'options':
             options.run_cli(args)
         elif args.command == 'manual':

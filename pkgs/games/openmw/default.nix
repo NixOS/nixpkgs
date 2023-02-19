@@ -63,6 +63,10 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
+  '';
+
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [

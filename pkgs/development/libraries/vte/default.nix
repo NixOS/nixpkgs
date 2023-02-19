@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.2";
+  version = "0.70.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TRW0OA3j9WTVfqvQBjicQHxwXfWwxwAw/cwklxozTYA=";
+    sha256 = "sha256-lFcTSgLzFX/KBPfg05vbDzCZvgo86CtxOdDJioB0jyM=";
   };
 
   patches = [
@@ -47,13 +47,6 @@ stdenv.mkDerivation rec {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
-    })
-
-    # Fix copying text with GTK 4.
-    # https://gitlab.gnome.org/GNOME/vte/-/issues/2584
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/ddb2c8ae0baf3b73d77d1f6ce6142e92faa632af.patch";
-      hash = "sha256-5Eu0EH0MBJqJUZ6d5bVe5+hl4Z/Gd3Yltz0VAQK7ogY=";
     })
   ];
 

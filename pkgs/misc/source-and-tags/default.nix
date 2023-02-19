@@ -59,7 +59,7 @@
                     # without this creating tag files for lifted-base fails
                     export LC_ALL=en_US.UTF-8
                     export LANG=en_US.UTF-8
-                    ${if stdenv.isLinux then "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;" else ""}
+                    ${lib.optionalString stdenv.isLinux "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;"}
 
                     ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
                     mv tags \$TAG_FILE

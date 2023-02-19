@@ -28,18 +28,23 @@ class Deflist:
 class Heading(NamedTuple):
     container_tag: str
     level: int
+    # special handling for <part> titles: whether partinfo was already closed from elsewhere
+    # or still needs closing.
+    partintro_closed: bool = False
 
 class DocBookRenderer(Renderer):
     __output__ = "docbook"
     _link_tags: list[str]
     _deflists: list[Deflist]
     _headings: list[Heading]
+    _attrspans: list[str]
 
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         super().__init__(manpage_urls, parser)
         self._link_tags = []
         self._deflists = []
         self._headings = []
+        self._attrspans = []
 
     def render(self, tokens: Sequence[Token], options: OptionsDict,
                env: MutableMapping[str, Any]) -> str:
@@ -103,7 +108,7 @@ class DocBookRenderer(Renderer):
     # HACK open and close para for docbook change size. remove soon.
     def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                          env: MutableMapping[str, Any]) -> str:
-        spacing = ' spacing="compact"' if token.attrs.get('compact', False) else ''
+        spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<para><itemizedlist{spacing}>\n"
     def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
@@ -212,13 +217,29 @@ class DocBookRenderer(Renderer):
             else:
                 return ref
         raise NotImplementedError("md node not supported yet", token)
-    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
-        return f'<anchor xml:id={quoteattr(cast(str, token.attrs["id"]))} />'
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        # we currently support *only* inline anchors and the special .keycap class to produce
+        # <keycap> docbook elements.
+        (id_part, class_part) = ("", "")
+        if s := token.attrs.get('id'):
+            id_part = f'<anchor xml:id={quoteattr(cast(str, s))} />'
+        if s := token.attrs.get('class'):
+            if s == 'keycap':
+                class_part = "<keycap>"
+                self._attrspans.append("</keycap>")
+            else:
+                return super().attr_span_begin(token, tokens, i, options, env)
+        else:
+            self._attrspans.append("")
+        return id_part + class_part
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        return self._attrspans.pop()
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                           env: MutableMapping[str, Any]) -> str:
         start = f' startingnumber="{token.attrs["start"]}"' if 'start' in token.attrs else ""
-        spacing = ' spacing="compact"' if token.attrs.get('compact', False) else ''
+        spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<orderedlist{start}{spacing}>"
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                            env: MutableMapping[str, Any]) -> str:
@@ -233,15 +254,35 @@ class DocBookRenderer(Renderer):
         return result + f'<{tag}{attrs_str}>\n<title>'
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
-        return '</title>'
+        heading = self._headings[-1]
+        result = '</title>'
+        if heading.container_tag == 'part':
+            # generate the same ids as were previously assigned manually. if this collides we
+            # rely on outside schema validation to catch it!
+            maybe_id = ""
+            assert tokens[i - 2].type == 'heading_open'
+            if id := cast(str, tokens[i - 2].attrs.get('id', "")):
+                maybe_id = " xml:id=" + quoteattr(id + "-intro")
+            result += f"<partintro{maybe_id}>"
+        return result
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        if id := token.attrs.get('id'):
+            return f"<anchor xml:id={quoteattr(cast(str, id))} />"
+        return ""
+    def example_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        return ""
 
     def _close_headings(self, level: Optional[int], env: MutableMapping[str, Any]) -> str:
         # we rely on markdown-it producing h{1..6} tags in token.tag for this to work
         result = []
         while len(self._headings):
             if level is None or self._headings[-1].level >= level:
-                result.append(f"</{self._headings[-1].container_tag}>")
-                self._headings.pop()
+                heading = self._headings.pop()
+                if heading.container_tag == 'part' and not heading.partintro_closed:
+                    result.append("</partintro>")
+                result.append(f"</{heading.container_tag}>")
             else:
                 break
         return "\n".join(result)

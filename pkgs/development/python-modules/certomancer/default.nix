@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.8.2";
+  version = "0.9.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certomancer";
     rev = version;
-    sha256 = "sha256-H43NlFNTwZtedHsB7c62MocwQVOi5JjVJxRcZY+Wn7Y=";
+    sha256 = "4v2e46ZrzhKXpMULj0vmDRoLOypi030eaADAYjLMg5M=";
   };
 
   propagatedBuildInputs = [
@@ -43,9 +43,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-runner'" "" \
-      --replace "pyhanko-certvalidator==0.19.2" "pyhanko-certvalidator==0.19.5"
+    substituteInPlace setup.py --replace ", 'pytest-runner'" ""
   '';
 
   nativeCheckInputs = [

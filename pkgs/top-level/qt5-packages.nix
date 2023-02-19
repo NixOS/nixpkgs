@@ -116,6 +116,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+  kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
+
   kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
   ldutils = callPackage ../development/libraries/ldutils { };

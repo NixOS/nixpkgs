@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
     sha256 = "zd6A0VpJ2rmmFO+Y+ATIzm5M/hM5o8JAw08/tFQ2uF0=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "libraw.patch";
+      url = "https://src.fedoraproject.org/cgit/rpms/gegl04.git/plain/"
+          + "libraw.patch?id=5efd0c16a7b0e73abcaecc48af544ef027f4531b";
+      hash = "sha256-ZgVigN1T7JmeBMwSdBsMsmXx0h7UW4Ft9HlSqeB0se8=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext

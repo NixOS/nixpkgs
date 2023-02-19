@@ -29,11 +29,14 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = [
     "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-overflow"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs and probably clang
+    "-Wno-error=use-after-free"
   ];
 
   propagatedBuildInputs = [ libantlr3c mbedtls_2 bctoolbox belr ];

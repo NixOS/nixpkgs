@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
@@ -71,7 +71,7 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";

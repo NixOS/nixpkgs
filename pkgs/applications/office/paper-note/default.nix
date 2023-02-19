@@ -49,13 +49,10 @@ stdenv.mkDerivation rec {
       --replace "1.2.0" "${libadwaita.version}"
   '';
 
-  postInstall = ''
-    ln -s $out/bin/io.posidon.Paper $out/bin/paper
-  '';
-
   meta = with lib; {
-    description = "Take notes in Markdown";
-    homepage = "https://posidon.io/paper/";
+    description = "A pretty note-taking app for GNOME";
+    homepage = "https://gitlab.com/posidon_software/paper";
+    mainProgram = "io.posidon.Paper";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ j0lol ];

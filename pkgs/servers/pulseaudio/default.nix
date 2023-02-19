@@ -36,7 +36,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "${if libOnly then "lib" else ""}pulseaudio";
+  pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "16.1";
 
   src = fetchurl {

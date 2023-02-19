@@ -1,6 +1,6 @@
 { lib
 , vscode-utils
-, sumneko-lua-language-server
+, lua-language-server
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -14,7 +14,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   patches = [ ./remove-chmod.patch ];
 
   postInstall = ''
-    ln -sf ${sumneko-lua-language-server}/bin/lua-language-server \
+    ln -sf ${lua-language-server}/bin/lua-language-server \
       $out/$installPrefix/server/bin/lua-language-server
   '';
 

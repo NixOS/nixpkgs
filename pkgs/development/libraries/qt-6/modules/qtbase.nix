@@ -222,8 +222,8 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    # build as a set of dynamic libraries
-    "-DFEATURE_framework=OFF"
+    # error: 'path' is unavailable: introduced in macOS 10.15
+    "-DQT_FEATURE_cxx17_filesystem=OFF"
   ];
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [

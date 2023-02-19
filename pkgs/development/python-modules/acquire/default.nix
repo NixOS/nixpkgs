@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.3";
+  version = "3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = version;
-    hash = "sha256-S7EZZxNcoLcZyyRNGlZj6nGoCAlqCxNdh3azIVKvOTM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VkO+XLIC/UQzvfLsgbKcx9i8OxTC6J32nkxPHWWn7m8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
+    changelog = "https://github.com/fox-it/acquire/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,10 +1,11 @@
 { lib, buildDunePackage
-, index, ppx_irmin, irmin, optint, fmt, logs, lwt, mtime, cmdliner
+, index, ppx_irmin, irmin, optint, fmt, logs, lwt, mtime, cmdliner, checkseum, rusage
 , alcotest, alcotest-lwt, astring, irmin-test
 }:
 
 buildDunePackage rec {
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.10";
+  duneVersion = "3";
 
   pname = "irmin-pack";
 
@@ -12,7 +13,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ ppx_irmin ];
 
-  propagatedBuildInputs = [ index irmin optint fmt logs lwt mtime cmdliner ];
+  propagatedBuildInputs = [ index irmin optint fmt logs lwt mtime cmdliner checkseum rusage ];
 
   checkInputs = [ astring alcotest alcotest-lwt irmin-test ];
 

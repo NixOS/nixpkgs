@@ -80,6 +80,11 @@ stdenv.mkDerivation rec {
   # guile warning
   GUILE_AUTO_COMPILE="0";
 
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+    "-Wno-error=use-after-free"
+  ];
+
   # `make check` target does not define its prerequisites but expects them to
   # have already been built.  The list of targets below was built through trial
   # and error based on failing tests.

@@ -99,6 +99,6 @@ mkDerivation {
   # the same directory, while it is actually located in a completely different
   # store path
   preFixup = ''
-    ln -sf ${lib.getExe systemsettings} $out/bin/kinfocenter
+    ln -sf ${systemsettings}/bin/systemsettings $out/bin/kinfocenter
   '';
 }

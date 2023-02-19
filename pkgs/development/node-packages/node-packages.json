@@ -39,6 +39,7 @@
 , "awesome-lint"
 , "balanceofsatoshis"
 , "bash-language-server"
+, "bibtex-tidy"
 , "bower"
 , "bower2nix"
 , "browserify"

@@ -1,8 +1,9 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
 from frozendict import frozendict # type: ignore[attr-defined]
-from typing import Any, Callable, Optional
+from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
 
+import dataclasses
 import re
 
 from .types import RenderFn
@@ -27,9 +28,13 @@ _md_escape_table = {
 def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
 
+AttrBlockKind = Literal['admonition', 'example']
+
+AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
+
 class Renderer(markdown_it.renderer.RendererProtocol):
-    _admonitions: dict[str, tuple[RenderFn, RenderFn]]
-    _admonition_stack: list[str]
+    _admonitions: dict[AdmonitionKind, tuple[RenderFn, RenderFn]]
+    _admonition_stack: list[AdmonitionKind]
 
     def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
         self._manpage_urls = manpage_urls
@@ -61,27 +66,35 @@ class Renderer(markdown_it.renderer.RendererProtocol):
             'dd_open': self.dd_open,
             'dd_close': self.dd_close,
             'myst_role': self.myst_role,
-            "container_admonition_open": self.admonition_open,
-            "container_admonition_close": self.admonition_close,
-            "inline_anchor": self.inline_anchor,
+            "admonition_open": self.admonition_open,
+            "admonition_close": self.admonition_close,
+            "attr_span_begin": self.attr_span_begin,
+            "attr_span_end": self.attr_span_end,
             "heading_open": self.heading_open,
             "heading_close": self.heading_close,
             "ordered_list_open": self.ordered_list_open,
             "ordered_list_close": self.ordered_list_close,
+            "example_open": self.example_open,
+            "example_close": self.example_close,
         }
 
         self._admonitions = {
-            "{.note}": (self.note_open, self.note_close),
-            "{.caution}": (self.caution_open,self.caution_close),
-            "{.tip}": (self.tip_open, self.tip_close),
-            "{.important}": (self.important_open, self.important_close),
-            "{.warning}": (self.warning_open, self.warning_close),
+            "note": (self.note_open, self.note_close),
+            "caution": (self.caution_open,self.caution_close),
+            "tip": (self.tip_open, self.tip_close),
+            "important": (self.important_open, self.important_close),
+            "warning": (self.warning_open, self.warning_close),
         }
         self._admonition_stack = []
 
+    def _join_block(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+    def _join_inline(self, ls: Iterable[str]) -> str:
+        return "".join(ls)
+
     def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                         env: MutableMapping[str, Any]) -> str:
-        tag = token.info.strip()
+        tag = token.meta['kind']
         self._admonition_stack.append(tag)
         return self._admonitions[tag][0](token, tokens, i, options, env)
     def admonition_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
@@ -98,7 +111,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_block(map(lambda arg: do_one(*arg), enumerate(tokens)))
     def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
                      env: MutableMapping[str, Any]) -> str:
         def do_one(i: int, token: Token) -> str:
@@ -106,7 +119,7 @@ class Renderer(markdown_it.renderer.RendererProtocol):
                 return self.rules[token.type](tokens[i], tokens, i, options, env)
             else:
                 raise NotImplementedError("md token not supported yet", token)
-        return "".join(map(lambda arg: do_one(*arg), enumerate(tokens)))
+        return self._join_inline(map(lambda arg: do_one(*arg), enumerate(tokens)))
 
     def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
              env: MutableMapping[str, Any]) -> str:
@@ -219,7 +232,10 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                   env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
-    def inline_anchor(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                        env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                       env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
@@ -234,6 +250,12 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
                            env: MutableMapping[str, Any]) -> str:
         raise RuntimeError("md token not supported", token)
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                     env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
+    def example_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
+                      env: MutableMapping[str, Any]) -> str:
+        raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -242,10 +264,44 @@ def _is_escaped(src: str, pos: int) -> bool:
         pos -= 1
     return found % 2 == 1
 
-_INLINE_ANCHOR_PATTERN = re.compile(r"\{\s*#([\w-]+)\s*\}")
+# the contents won't be split apart in the regex because spacing rules get messy here
+_ATTR_SPAN_PATTERN = re.compile(r"\{([^}]*)\}")
+# this one is for blocks with attrs. we want to use it with fullmatch() to deconstruct an info.
+_ATTR_BLOCK_PATTERN = re.compile(r"\s*\{([^}]*)\}\s*")
 
-def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
-    def inline_anchor(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
+def _parse_attrs(s: str) -> Optional[tuple[Optional[str], list[str]]]:
+    (id, classes) = (None, [])
+    for part in s.split():
+        if part.startswith('#'):
+            if id is not None:
+                return None # just bail on multiple ids instead of trying to recover
+            id = part[1:]
+        elif part.startswith('.'):
+            classes.append(part[1:])
+        else:
+            return None # no support for key=value attrs like in pandoc
+
+    return (id, classes)
+
+def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str], list[str]]]:
+    if (m := _ATTR_BLOCK_PATTERN.fullmatch(info)) is None:
+        return None
+    if (parsed_attrs := _parse_attrs(m[1])) is None:
+        return None
+    id, classes = parsed_attrs
+    # check that we actually support this kind of block, and that is adheres to
+    # whetever restrictions we want to enforce for that kind of block.
+    if len(classes) == 1 and classes[0] in get_args(AdmonitionKind):
+        # don't want to support ids for admonitions just yet
+        if id is not None:
+            return None
+        return ('admonition', id, classes)
+    if classes == ['example']:
+        return ('example', id, classes)
+    return None
+
+def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
+    def attr_span(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
         if state.src[state.pos] != '[':
             return False
         if _is_escaped(state.src, state.pos - 1):
@@ -258,24 +314,33 @@ def _inline_anchor_plugin(md: markdown_it.MarkdownIt) -> None:
         if label_end < 0:
             return False
 
-        # match id
-        match = _INLINE_ANCHOR_PATTERN.match(state.src[label_end + 1 : ])
+        # match id and classes in any combination
+        match = _ATTR_SPAN_PATTERN.match(state.src[label_end + 1 : ])
         if not match:
             return False
 
         if not silent:
-            token = state.push("inline_anchor", "", 0) # type: ignore[no-untyped-call]
-            token.attrs['id'] = match[1]
+            if (parsed_attrs := _parse_attrs(match[1])) is None:
+                return False
+            id, classes = parsed_attrs
+
+            token = state.push("attr_span_begin", "span", 1) # type: ignore[no-untyped-call]
+            if id:
+                token.attrs['id'] = id
+            if classes:
+                token.attrs['class'] = " ".join(classes)
 
             state.pos = label_begin
             state.posMax = label_end
             state.md.inline.tokenize(state)
 
+            state.push("attr_span_end", "span", -1) # type: ignore[no-untyped-call]
+
         state.pos = label_end + match.end() + 1
         state.posMax = input_end
         return True
 
-    md.inline.ruler.before("link", "inline_anchor", inline_anchor)
+    md.inline.ruler.before("link", "attr_span", attr_span)
 
 def _inline_comment_plugin(md: markdown_it.MarkdownIt) -> None:
     def inline_comment(state: markdown_it.rules_inline.StateInline, silent: bool) -> bool:
@@ -316,7 +381,78 @@ def _block_comment_plugin(md: markdown_it.MarkdownIt) -> None:
 
     md.block.ruler.after("code", "block_comment", block_comment)
 
-_HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w-]+)\s*\}\s*$")
+_HEADER_ID_RE = re.compile(r"\s*\{\s*\#([\w.-]+)\s*\}\s*$")
+
+def _heading_ids(md: markdown_it.MarkdownIt) -> None:
+    def heading_ids(state: markdown_it.rules_core.StateCore) -> None:
+        tokens = state.tokens
+        # this is purposely simple and doesn't support classes or other kinds of attributes.
+        for (i, token) in enumerate(tokens):
+            if token.type == 'heading_open':
+                children = tokens[i + 1].children
+                assert children is not None
+                if len(children) == 0 or children[-1].type != 'text':
+                    continue
+                if m := _HEADER_ID_RE.search(children[-1].content):
+                    tokens[i].attrs['id'] = m[1]
+                    children[-1].content = children[-1].content[:-len(m[0])].rstrip()
+
+    md.core.ruler.before("replacements", "heading_ids", heading_ids)
+
+def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
+    @dataclasses.dataclass
+    class Entry:
+        head: Token
+        end: int
+        compact: bool = True
+
+    def compact_list_attr(state: markdown_it.rules_core.StateCore) -> None:
+        # markdown-it signifies wide lists by setting the wrapper paragraphs
+        # of each item to hidden. this is not useful for our stylesheets, which
+        # signify this with a special css class on list elements instead.
+        stack = []
+        for token in state.tokens:
+            if token.type in [ 'bullet_list_open', 'ordered_list_open' ]:
+                stack.append(Entry(token, cast(int, token.attrs.get('start', 1))))
+            elif token.type in [ 'bullet_list_close', 'ordered_list_close' ]:
+                lst = stack.pop()
+                lst.head.meta['compact'] = lst.compact
+                if token.type == 'ordered_list_close':
+                    lst.head.meta['end'] = lst.end - 1
+            elif len(stack) > 0 and token.type == 'paragraph_open' and not token.hidden:
+                stack[-1].compact = False
+            elif token.type == 'list_item_open':
+                stack[-1].end += 1
+
+    md.core.ruler.push("compact_list_attr", compact_list_attr)
+
+def _block_attr(md: markdown_it.MarkdownIt) -> None:
+    def assert_never(value: NoReturn) -> NoReturn:
+        assert False
+
+    def block_attr(state: markdown_it.rules_core.StateCore) -> None:
+        stack = []
+        for token in state.tokens:
+            if token.type == 'container_blockattr_open':
+                if (parsed_attrs := _parse_blockattrs(token.info)) is None:
+                    # if we get here we've missed a possible case in the plugin validate function
+                    raise RuntimeError("this should be unreachable")
+                kind, id, classes = parsed_attrs
+                if kind == 'admonition':
+                    token.type = 'admonition_open'
+                    token.meta['kind'] = classes[0]
+                    stack.append('admonition_close')
+                elif kind == 'example':
+                    token.type = 'example_open'
+                    if id is not None:
+                        token.attrs['id'] = id
+                    stack.append('example_close')
+                else:
+                    assert_never(kind)
+            elif token.type == 'container_blockattr_close':
+                token.type = stack.pop()
+
+    md.core.ruler.push("block_attr", block_attr)
 
 class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
@@ -335,51 +471,23 @@ class Converter(ABC):
         )
         self._md.use(
             container_plugin,
-            name="admonition",
-            validate=lambda name, *args: (
-                name.strip() in self._md.renderer._admonitions # type: ignore[attr-defined]
-            )
+            name="blockattr",
+            validate=lambda name, *args: _parse_blockattrs(name),
         )
         self._md.use(deflist_plugin)
         self._md.use(myst_role_plugin)
-        self._md.use(_inline_anchor_plugin)
+        self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
+        self._md.use(_heading_ids)
+        self._md.use(_compact_list_attr)
+        self._md.use(_block_attr)
         self._md.enable(["smartquotes", "replacements"])
 
-    def _post_parse(self, tokens: list[Token]) -> list[Token]:
-        for i in range(0, len(tokens)):
-            # parse header IDs. this is purposely simple and doesn't support
-            # classes or other inds of attributes.
-            if tokens[i].type == 'heading_open':
-                children = tokens[i + 1].children
-                assert children is not None
-                if len(children) == 0 or children[-1].type != 'text':
-                    continue
-                if m := _HEADER_ID_RE.search(children[-1].content):
-                    tokens[i].attrs['id'] = m[1]
-                    children[-1].content = children[-1].content[:-len(m[0])].rstrip()
-
-        # markdown-it signifies wide lists by setting the wrapper paragraphs
-        # of each item to hidden. this is not useful for our stylesheets, which
-        # signify this with a special css class on list elements instead.
-        wide_stack = []
-        for i in range(0, len(tokens)):
-            if tokens[i].type in [ 'bullet_list_open', 'ordered_list_open' ]:
-                wide_stack.append([i, True])
-            elif tokens[i].type in [ 'bullet_list_close', 'ordered_list_close' ]:
-                (idx, compact) = wide_stack.pop()
-                tokens[idx].attrs['compact'] = compact
-            elif len(wide_stack) > 0 and tokens[i].type == 'paragraph_open' and not tokens[i].hidden:
-                wide_stack[-1][1] = False
-
-        return tokens
-
     def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
-        tokens = self._md.parse(src, env if env is not None else {})
-        return self._post_parse(tokens)
+        return self._md.parse(src, env if env is not None else {})
 
-    def _render(self, src: str) -> str:
-        env: dict[str, Any] = {}
+    def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
+        env = {} if env is None else env
         tokens = self._parse(src, env)
         return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]

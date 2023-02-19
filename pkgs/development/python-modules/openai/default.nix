@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.26.4";
+  version = "0.26.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.1";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    hash = "sha256-WcUH6zbb5kIH0qk67M+lUx9CbMEbYDXQm6IVzzuQo9w=";
+    hash = "sha256-eKU+WRFf7f1yH63vcoQ9dVeqhJXBqMJGpk/9AoEgR0M=";
   };
 
   propagatedBuildInputs = [

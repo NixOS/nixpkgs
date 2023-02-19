@@ -25,6 +25,7 @@ in stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     dpdk_19_11
     libconfig
@@ -36,6 +37,12 @@ in stdenv.mkDerivation rec {
     libelf
     jansson
     libbpf
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=uninitialized"
   ];
 
   # binaries will segfault otherwise

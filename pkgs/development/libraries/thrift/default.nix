@@ -36,11 +36,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
+  ] ++ lib.optionals (!static) [
+    (python3.withPackages (ps: [ps.twisted]))
+  ];
+
+  propagatedBuildInputs = [
     libevent
     openssl
     zlib
-  ] ++ lib.optionals (!static) [
-    (python3.withPackages (ps: [ps.twisted]))
   ];
 
   postPatch = ''
@@ -65,6 +68,11 @@ stdenv.mkDerivation rec {
       name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
       url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
       hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
+    })
+    (fetchpatch {
+      name = "thrift-install-FindLibevent.patch"; # https://github.com/apache/thrift/pull/2726
+      url = "https://github.com/apache/thrift/commit/2ab850824f75d448f2ba14a468fb77d2594998df.diff";
+      hash = "sha256-ejMKFG/cJgoPlAFzVDPI4vIIL7URqaG06/IWdQ2NkhY=";
     })
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config, cmake, ninja, yasm
 , libjpeg, openssl_1_1, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
 , openh264, usrsctp, libevent, libvpx
@@ -29,6 +29,14 @@ stdenv.mkDerivation {
     libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
     glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
     mesa libepoxy libglvnd
+  ];
+
+  patches = [
+    # GCC 12 Fix
+    (fetchpatch {
+      url = "https://github.com/desktop-app/tg_owt/pull/101/commits/86d2bcd7afb8706663d29e30f65863de5a626142.patch";
+      hash = "sha256-iWS0mB8R0vqPU/0qf6Ax54UCAKYDVCPac2mi/VHbFm0=";
+    })
   ];
 
   cmakeFlags = [

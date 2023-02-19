@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
+{ lib, buildPythonPackage, fetchFromGitHub, fetchurl, pytestCheckHook, p7zip,
   cabextract, zip, lzip, zpaq, gnutar, gnugrep, diffutils, file,
   gzip, bzip2, xz}:
 
@@ -6,6 +6,17 @@
 # it will still use unrar if present in the path
 
 let
+  # FIXME: backport a patch in `file` that seemingly only affects this package
+  # Revert when fix to main package makes it through staging.
+  file' = file.overrideAttrs(old: {
+    patches = (old.patches or []) ++ [
+      (fetchurl {
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/file/files/file-5.44-decompress-empty.patch?h=dfc57da515a2aaf085bea68267cc727f1bfaa691";
+        hash = "sha256-fUzRQAlLWczBmR5iA1Gk66mHjP40MJcMdgCtm2+u1SQ=";
+      })
+    ];
+  });
+
   compression-utilities = [
     p7zip
     gnutar
@@ -17,7 +28,7 @@ let
     gnugrep
     diffutils
     bzip2
-    file
+    file'
     xz
   ];
 in

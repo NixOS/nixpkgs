@@ -13,6 +13,7 @@
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , withAlias ? false # Provides bin/youtube-dl for backcompat
+, update-python-libraries
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,11 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2023.1.6";
+  version = "2023.2.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ong6NnUc7RY2j0CzuoZas5swaJ7YBW8e4jRqo4OaCw8=";
+    sha256 = "sha256-mvkt5e/8GTvbUSFtnr8oh02WGA0gL651Kw2fKmM4Dzo=";
   };
 
   propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
@@ -52,6 +53,8 @@ buildPythonPackage rec {
   postInstall = lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
+
+  passthru.updateScript = [ update-python-libraries (toString ./.) ];
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";

@@ -1,6 +1,5 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
-  lib = pkgs.lib;
   doc-support = import ./doc-support { inherit pkgs nixpkgs; };
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
@@ -15,7 +14,7 @@ in pkgs.stdenv.mkDerivation {
     xmlformat
   ];
 
-  src = lib.cleanSource ./.;
+  src = pkgs.nix-gitignore.gitignoreSource [] ./.;
 
   postPatch = ''
     ln -s ${doc-support} ./doc-support/result

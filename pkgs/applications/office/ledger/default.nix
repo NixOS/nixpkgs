@@ -1,30 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, fetchpatch, installShellFiles, texinfo, gnused, usePython ? true }:
+{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3, gpgme
+, installShellFiles, texinfo, gnused, usePython ? false, gpgmeSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
     rev    = "v${version}";
-    sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
+    hash   = "sha256-0hN6Hpmgwb3naV2K1fxX0OyH0IyCQAh1nZ9TMNAutic=";
   };
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals usePython [ "py" ];
 
   buildInputs = [
-    (boost.override { enablePython = usePython; python = python3; })
     gmp mpfr libedit gnused
-  ] ++ lib.optional usePython python3;
+  ] ++ lib.optionals gpgmeSupport [
+    gpgme
+  ] ++ (if usePython
+        then [ python3 (boost.override { enablePython = true; python = python3; }) ]
+        else [ boost ]);
 
   nativeBuildInputs = [ cmake texinfo installShellFiles ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DBUILD_DOCS:BOOL=ON"
-    (lib.optionalString usePython "-DUSE_PYTHON=true")
+    "-DUSE_PYTHON:BOOL=${if usePython then "ON" else "OFF"}"
+    "-DUSE_GPGME:BOOL=${if gpgmeSupport then "ON" else "OFF"}"
   ];
 
   # by default, it will query the python interpreter for it's sitepackages location
@@ -34,22 +38,6 @@ stdenv.mkDerivation rec {
       --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
 
-  patches = [
-    # Add support for $XDG_CONFIG_HOME. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/ledger/ledger/commit/c79674649dee7577d6061e3d0776922257520fd0.patch";
-      sha256 = "sha256-vwVQnY9EUCXPzhDJ4PSOmQStb9eF6H0yAOiEmL6sAlk=";
-      excludes = [ "doc/NEWS.md" ];
-    })
-
-    # Fix included bug with boost >= 1.76. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/ledger/ledger/commit/1cb9b84fdecc5604bd1172cdd781859ff3871a52.patch";
-      sha256 = "sha256-ipVkRcTmnEvpfyPgMzLVJ9Sz8QxHeCURQI5dX8xh758=";
-      excludes = [ "test/regress/*" ];
-    })
-  ];
-
   installTargets = [ "doc" "install" ];
 
   postInstall = ''
@@ -57,17 +45,16 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
+    homepage = "https://www.ledger-cli.org/";
+    changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";
     license = licenses.bsd3;
-
     longDescription = ''
       Ledger is a powerful, double-entry accounting system that is accessed
       from the UNIX command-line. This may put off some users, as there is
       no flashy UI, but for those who want unparalleled reporting access to
       their data, there really is no alternative.
     '';
-
     platforms = platforms.all;
     maintainers = with maintainers; [ jwiegley marsam ];
   };

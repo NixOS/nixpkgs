@@ -19,15 +19,18 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "4.8.4";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
   };
@@ -101,11 +104,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Source code editing widget for GTK";
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    pkgConfigModules = [ "gtksourceview-4" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

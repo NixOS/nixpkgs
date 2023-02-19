@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "solc-select";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zrpWHQdoCVDGaDGDf9fWhnRsTe1GVwqk1qls1PyvlLw=";
+    sha256 = "sha256-850IA1NVvQ4KiH5KEIjqEKFd1k5ECMx/zXLZE7Rvx5k=";
   };
 
   propagatedBuildInputs = [

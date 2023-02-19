@@ -68,12 +68,27 @@ in
               description = lib.mdDoc "Whether this node is a lighthouse.";
             };
 
+            isRelay = mkOption {
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc "Whether this node is a relay.";
+            };
+
             lighthouses = mkOption {
               type = types.listOf types.str;
               default = [];
               description = lib.mdDoc ''
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
                 nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
+              '';
+              example = [ "192.168.100.1" ];
+            };
+
+            relays = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = lib.mdDoc ''
+                List of IPs of relays that this node should allow traffic from.
               '';
               example = [ "192.168.100.1" ];
             };
@@ -157,6 +172,11 @@ in
             am_lighthouse = netCfg.isLighthouse;
             hosts = netCfg.lighthouses;
           };
+          relay = {
+            am_relay = netCfg.isRelay;
+            relays = netCfg.relays;
+            use_relays = true;
+          };
           listen = {
             host = netCfg.listen.host;
             port = netCfg.listen.port;
@@ -173,25 +193,41 @@ in
         configFile = format.generate "nebula-config-${netName}.yml" settings;
         in
         {
-          # Create systemd service for Nebula.
+          # Create the systemd service for Nebula.
           "nebula@${netName}" = {
             description = "Nebula VPN service for ${netName}";
             wants = [ "basic.target" ];
             after = [ "basic.target" "network.target" ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
-            serviceConfig = mkMerge [
-              {
-                Type = "simple";
-                Restart = "always";
-                ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
-              }
-              # The service needs to launch as root to access the tun device, if it's enabled.
-              (mkIf netCfg.tun.disable {
-                User = networkId;
-                Group = networkId;
-              })
-            ];
+            serviceConfig = {
+              Type = "simple";
+              Restart = "always";
+              ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+              UMask = "0027";
+              CapabilityBoundingSet = "CAP_NET_ADMIN";
+              AmbientCapabilities = "CAP_NET_ADMIN";
+              LockPersonality = true;
+              NoNewPrivileges = true;
+              PrivateDevices = false; # needs access to /dev/net/tun (below)
+              DeviceAllow = "/dev/net/tun rw";
+              DevicePolicy = "closed";
+              PrivateTmp = true;
+              PrivateUsers = false; # CapabilityBoundingSet needs to apply to the host namespace
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = "strict";
+              RestrictNamespaces = true;
+              RestrictSUIDSGID = true;
+              User = networkId;
+              Group = networkId;
+            };
             unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
           };
         }) enabledNetworks);
@@ -202,7 +238,7 @@ in
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
+      {
         ${nameToId netName} = {
           group = nameToId netName;
           description = "Nebula service user for network ${netName}";
@@ -210,9 +246,8 @@ in
         };
       }) enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
-        ${nameToId netName} = {};
-      }) enabledNetworks);
+    users.groups = mkMerge (mapAttrsToList (netName: netCfg: {
+      ${nameToId netName} = {};
+    }) enabledNetworks);
   };
 }

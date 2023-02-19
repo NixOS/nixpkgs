@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.2.41";
+  version = "0.2.42";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nfMLw3fjEex1XV+Vhi84xR+ghBLrmKDtuFIIeNhP/yQ=";
+    hash = "sha256-+1ciEHBMl78aFDu/NzIAdsGtAZJOfHZRDDZCR1+YuEM=";
   };
 
   vendorHash = "sha256-qXjDeR0VZyyhASpt6zv6OyltEZDoguILhhD1ejpd0F4=";

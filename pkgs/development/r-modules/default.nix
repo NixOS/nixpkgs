@@ -325,7 +325,6 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
-    classInt = lib.optional stdenv.isDarwin [ pkgs.libiconv ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
@@ -344,7 +343,7 @@ let
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
-    haven = with pkgs; [ libiconv zlib.dev ];
+    haven = with pkgs; [ zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
@@ -362,8 +361,9 @@ let
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib netcdf ];
+    nanonext = with pkgs; [ mbedtls nng ];
     ncdf4 = [ pkgs.netcdf ];
-    nloptr = with pkgs; [ nlopt pkg-config libiconv ];
+    nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
     pander = with pkgs; [ pandoc which ];
@@ -379,7 +379,6 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
-    readxl = [ pkgs.libiconv ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl ];
@@ -499,15 +498,6 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
-    deldir = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    interp = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    RcppArmadillo = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    SparseM = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    hexbin = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -516,7 +506,6 @@ let
     clustermq = [  pkgs.pkg-config ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
-    RcppEigen = [ pkgs.libiconv ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
     rgl = with pkgs; [ libGLU libGLU.dev libGL xorg.libX11.dev freetype.dev libpng.dev ];
@@ -555,25 +544,6 @@ let
     tikzDevice = with pkgs; [ which texlive.combined.scheme-medium ];
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [ which xorg.xdpyinfo ];
-    cluster = [ pkgs.libiconv ];
-    KernSmooth = [ pkgs.libiconv ];
-    nlme = [ pkgs.libiconv ];
-    Matrix = [ pkgs.libiconv ];
-    mgcv = [ pkgs.libiconv ];
-    minqa = [ pkgs.libiconv ];
-    igraph = [ pkgs.libiconv ];
-    ape = [ pkgs.libiconv ];
-    expm = [ pkgs.libiconv ];
-    mnormt = [ pkgs.libiconv ];
-    pan = [ pkgs.libiconv ];
-    phangorn = [ pkgs.libiconv ];
-    quadprog = [ pkgs.libiconv ];
-    randomForest = [ pkgs.libiconv ];
-    sundialr = [ pkgs.libiconv ];
-    ucminf = [ pkgs.libiconv ];
-    glmnet = [ pkgs.libiconv ];
-    mvtnorm = [ pkgs.libiconv ];
-    statmod = [ pkgs.libiconv ];
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
     s2 = [ pkgs.openssl.dev ];
@@ -1043,6 +1013,13 @@ let
         for file in R/*.{r,r.in}; do
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
+      '';
+    });
+
+    quarto = old.quarto.overrideDerivation (attrs: {
+      postPatch = ''
+        substituteInPlace "R/quarto.R" \
+          --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
     });
 

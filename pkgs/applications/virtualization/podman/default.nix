@@ -14,17 +14,19 @@
 , go-md2man
 , nixosTests
 , python3
+, testers
+, podman
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.3.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-UOAQtGDoZe+Av4+9RQCJiV3//B/pdF0pEsca4FonGxY=";
+    hash = "sha256-Uha5ueOGNmG2f+1I89uFQKA3pSSp1d02FGy86Fc2eWE=";
   };
 
   patches = [
@@ -32,7 +34,7 @@ buildGoModule rec {
     ./rm-podman-mac-helper-msg.patch
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -87,6 +89,11 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
+    };
+  } // lib.optionalAttrs stdenv.isLinux {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)

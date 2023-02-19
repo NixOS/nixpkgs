@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "vazir-fonts";
-  version = "32.0.0";
+  version = "33.003";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "vazir-font";
     rev = "v${version}";
-    hash = "sha256-lkjlSW3Sfr1bJ9/IOsZl9yOVh9mYKhoV5XcLkqcQ71g=";
+    hash = "sha256-C1UtfrRFzz0uv/hj8e7huXe4sNd5h7ozVhirWEAyXGg=";
   };
 
   dontBuild = true;

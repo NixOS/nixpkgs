@@ -39,7 +39,7 @@ let
   }));
 
   # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../../../build-support/build-setupcfg self;
+  buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;

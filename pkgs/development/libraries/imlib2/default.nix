@@ -21,17 +21,18 @@
 , fluxbox
 , enlightenment
 , xorg
+, testers
 }:
 
 let
   inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
   version = "1.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-SiJAOL//vl1NJQxE4F9O5a4k3P74OVsWd8cVxY92TUM=";
   };
 
@@ -69,6 +70,8 @@ stdenv.mkDerivation rec {
       enlightenment;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Image manipulation library";
 
@@ -83,7 +86,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
     license = licenses.imlib2;
+    pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };
-}
+})

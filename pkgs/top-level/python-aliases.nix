@@ -41,6 +41,7 @@ mapAliases ({
   asyncio-nats-client = nats-py; # added 2022-02-08
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   Babel = babel; # added 2022-05-06
+  bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bsblan = python-bsblan; # added 2022-11-04
@@ -90,6 +91,7 @@ mapAliases ({
   functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute"; # added 2023-02-15
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   GitPython = gitpython; # added 2022-10-28
@@ -101,6 +103,7 @@ mapAliases ({
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
+  hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
@@ -155,6 +158,7 @@ mapAliases ({
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pychef = throw "pychef has been removed because it's been archived upstream and abandoned since 2017."; # added 2022-11-14
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
+  pyflunearyou = pyoutbreaksnearme; # added 2023-02-11
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pyialarmxr-homeassistant = throw "The package was removed together with the component support in home-assistant 2022.7.0"; # added 2022-07-07
   PyICU = pyicu; # Added 2022-12-22

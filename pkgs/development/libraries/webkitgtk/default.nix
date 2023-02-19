@@ -64,11 +64,12 @@
 , enableGeoLocation ? true
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.38.3";
+  version = "2.38.5";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QfAB0e1EjGk2s5Sp8g5GQO6/g6fwgmLfKFBPdBBgSlo=";
+    hash = "sha256-QMIMQwIidN9Yk/IrEFT6iUw+6gVzibsIruCMWwuwwac=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -232,10 +233,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
+    pkgConfigModules = [
+      "javascriptcoregtk-4.0"
+      "webkit2gtk-4.0"
+      "webkit2gtk-web-extension-4.0"
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;

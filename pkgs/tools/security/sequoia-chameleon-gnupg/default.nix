@@ -1,25 +1,37 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitLab
 , pkg-config
 , nettle
+, openssl
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-chameleon-gnupg";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-liQNz833/3hi3eMi+/iEZ8fT9FFi+MrDIYbQD+dQ/p0=";
+    hash = "sha256-8aKT39gq6o7dnbhKbDxewd4R2e2IsbYU8vaDwYemes8=";
   };
 
-  cargoHash = "sha256-bnScLSI94obYQH5YzoHY4DtGScKc4m24+SIg1d2kAKw=";
+  cargoHash = "sha256-Z6cXCHLrK+BcIeVCKH2l8n9SivZsZPhXGhaMObn6rjo=";
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
-  buildInputs = [ nettle ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    nettle
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # gpgconf: error creating socket directory
   doCheck = false;

@@ -21,6 +21,8 @@ let
     withManOptDedupPatch = true;
   };
 
+  manpageUrls = pkgs.path + "/doc/manpage-urls.json";
+
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
   # or else the build will fail.
@@ -48,7 +50,7 @@ let
       };
     in buildPackages.nixosOptionsDoc {
       inherit (eval) options;
-      inherit (revision);
+      inherit revision;
       transformOptions = opt: opt // {
         # Clean up declaration sites to not refer to the NixOS source tree.
         declarations =
@@ -65,34 +67,6 @@ let
       variablelistId = "test-options-list";
       optionIdPrefix = "test-opt-";
     };
-
-  sources = lib.sourceFilesBySuffices ./. [".xml"];
-
-  modulesDoc = runCommand "modules.xml" {
-    nativeBuildInputs = [ pkgs.nixos-render-docs ];
-  } ''
-    nixos-render-docs manual docbook \
-      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
-      "$out" \
-      --section \
-        --section-id modules \
-        --chapters ${lib.concatMapStrings (p: "${p.value} ") config.meta.doc}
-  '';
-
-  generatedSources = runCommand "generated-docbook" {} ''
-    mkdir $out
-    ln -s ${modulesDoc} $out/modules.xml
-    ln -s ${optionsDoc.optionsDocBook} $out/options-db.xml
-    ln -s ${testOptionsDoc.optionsDocBook} $out/test-options-db.xml
-    printf "%s" "${version}" > $out/version
-  '';
-
-  copySources =
-    ''
-      cp -prd $sources/* . # */
-      ln -s ${generatedSources} ./generated
-      chmod -R u+w .
-    '';
 
   toc = builtins.toFile "toc.xml"
     ''
@@ -124,70 +98,102 @@ let
     "--stringparam chunk.toc ${toc}"
   ];
 
+  linterFunctions = ''
+    # outputs the context of an xmllint error output
+    # LEN lines around the failing line are printed
+    function context {
+      # length of context
+      local LEN=6
+      # lines to print before error line
+      local BEFORE=4
+
+      # xmllint output lines are:
+      # file.xml:1234: there was an error on line 1234
+      while IFS=':' read -r file line rest; do
+        echo
+        if [[ -n "$rest" ]]; then
+          echo "$file:$line:$rest"
+          local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
+          # number lines & filter context
+          nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
+        else
+          if [[ -n "$line" ]]; then
+            echo "$file:$line"
+          else
+            echo "$file"
+          fi
+        fi
+      done
+    }
+
+    function lintrng {
+      xmllint --debug --noout --nonet \
+        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
+        "$1" \
+        2>&1 | context 1>&2
+        # ^ redirect assumes xmllint doesn’t print to stdout
+    }
+  '';
+
   manual-combined = runCommand "nixos-manual-combined"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    { inputs = lib.sourceFilesBySuffices ./. [ ".xml" ".md" ];
+      nativeBuildInputs = [ pkgs.nixos-render-docs pkgs.libxml2.bin pkgs.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
-      ${copySources}
+      cp -r --no-preserve=all $inputs/* .
 
-      xmllint --xinclude --output ./manual-combined.xml ./manual.xml
-      xmllint --xinclude --noxincludenode \
-         --output ./man-pages-combined.xml ./man-pages.xml
+      substituteInPlace ./manual.md \
+        --replace '@NIXOS_VERSION@' "${version}"
+      substituteInPlace ./configuration/configuration.md \
+        --replace \
+            '@MODULE_CHAPTERS@' \
+            ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+      substituteInPlace ./nixos-options.md \
+        --replace \
+          '@NIXOS_OPTIONS_JSON@' \
+          ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
+      substituteInPlace ./development/writing-nixos-tests.section.md \
+        --replace \
+          '@NIXOS_TEST_OPTIONS_JSON@' \
+          ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
 
-      # outputs the context of an xmllint error output
-      # LEN lines around the failing line are printed
-      function context {
-        # length of context
-        local LEN=6
-        # lines to print before error line
-        local BEFORE=4
+      nixos-render-docs -j $NIX_BUILD_CORES manual docbook \
+        --manpage-urls ${manpageUrls} \
+        --revision ${lib.escapeShellArg revision} \
+        ./manual.md \
+        ./manual-combined.xml
 
-        # xmllint output lines are:
-        # file.xml:1234: there was an error on line 1234
-        while IFS=':' read -r file line rest; do
-          echo
-          if [[ -n "$rest" ]]; then
-            echo "$file:$line:$rest"
-            local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
-            # number lines & filter context
-            nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
-          else
-            if [[ -n "$line" ]]; then
-              echo "$file:$line"
-            else
-              echo "$file"
-            fi
-          fi
-        done
-      }
-
-      function lintrng {
-        xmllint --debug --noout --nonet \
-          --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-          "$1" \
-          2>&1 | context 1>&2
-          # ^ redirect assumes xmllint doesn’t print to stdout
-      }
+      ${linterFunctions}
 
       mkdir $out
       cp manual-combined.xml $out/
-      cp man-pages-combined.xml $out/
 
       lintrng $out/manual-combined.xml
-      lintrng $out/man-pages-combined.xml
+    '';
+
+  manpages-combined = runCommand "nixos-manpages-combined.xml"
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+      meta.description = "The NixOS manpages as plain docbook XML";
+    }
+    ''
+      mkdir generated
+      cp -prd ${./man-pages.xml} man-pages.xml
+      ln -s ${optionsDoc.optionsDocBook} generated/options-db.xml
+
+      xmllint --xinclude --noxincludenode --output $out ./man-pages.xml
+
+      ${linterFunctions}
+
+      lintrng $out
     '';
 
 in rec {
-  inherit generatedSources;
-
   inherit (optionsDoc) optionsJSON optionsNix optionsDocBook optionsUsedDocbook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -224,8 +230,7 @@ in rec {
   manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
+    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
     }
     ''
       # Generate the epub manual.
@@ -253,11 +258,13 @@ in rec {
 
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
-    { inherit sources;
-      nativeBuildInputs = [
+    { nativeBuildInputs = [
+        buildPackages.installShellFiles
+      ] ++ lib.optionals allowDocBook [
         buildPackages.libxml2.bin
         buildPackages.libxslt.bin
-        buildPackages.installShellFiles
+      ] ++ lib.optionals (! allowDocBook) [
+        buildPackages.nixos-render-docs
       ];
       allowedReferences = ["out"];
     }
@@ -265,14 +272,24 @@ in rec {
       # Generate manpages.
       mkdir -p $out/share/man/man8
       installManPage ${./manpages}/*
-      xsltproc --nonet \
-        --maxdepth 6000 \
-        --param man.output.in.separate.dir 1 \
-        --param man.output.base.dir "'$out/share/man/'" \
-        --param man.endnotes.are.numbered 0 \
-        --param man.break.after.slash 1 \
-        ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
-        ${manual-combined}/man-pages-combined.xml
+      ${if allowDocBook
+        then ''
+          xsltproc --nonet \
+            --maxdepth 6000 \
+            --param man.output.in.separate.dir 1 \
+            --param man.output.base.dir "'$out/share/man/'" \
+            --param man.endnotes.are.numbered 0 \
+            --param man.break.after.slash 1 \
+            ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
+            ${manpages-combined}
+        ''
+        else ''
+          mkdir -p $out/share/man/man5
+          nixos-render-docs -j $NIX_BUILD_CORES options manpage \
+            --revision ${lib.escapeShellArg revision} \
+            ${optionsJSON}/share/doc/nixos/options.json \
+            $out/share/man/man5/configuration.nix.5
+        ''}
     '';
 
 }

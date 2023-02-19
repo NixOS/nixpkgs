@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "redhat-official";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "RedHatOfficial";
     repo = "RedHatFont";
     rev = version;
-    hash = "sha256-p5RS/57CDApwnRDwMi0gIEJYTDAtibIyyU2w/pnbHJI=";
+    hash = "sha256-r43KtMIedNitb5Arg8fTGB3hrRZoA8oUHVEL24k4LeQ=";
   };
 
   installPhase = ''

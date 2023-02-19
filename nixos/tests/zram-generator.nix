@@ -1,18 +1,24 @@
 import ./make-test-python.nix {
   name = "zram-generator";
 
-  nodes.machine = { pkgs, ... }: {
-    environment.etc."systemd/zram-generator.conf".text = ''
-      [zram0]
-      zram-size = ram / 2
-    '';
-    systemd.packages = [ pkgs.zram-generator ];
-    systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap
+  nodes.machine = { ... }: {
+    zramSwap = {
+      enable = true;
+      priority = 10;
+      algorithm = "lz4";
+      swapDevices = 2;
+      memoryPercent = 30;
+      memoryMax = 10 * 1024 * 1024;
+    };
   };
 
   testScript = ''
     machine.wait_for_unit("systemd-zram-setup@zram0.service")
-    assert "zram0" in machine.succeed("zramctl -n")
-    assert "zram0" in machine.succeed("swapon --show --noheadings")
+    machine.wait_for_unit("systemd-zram-setup@zram1.service")
+    zram = machine.succeed("zramctl --noheadings --raw")
+    swap = machine.succeed("swapon --show --noheadings")
+    for i in range(2):
+        assert f"/dev/zram{i} lz4 10M" in zram
+        assert f"/dev/zram{i} partition  10M" in swap
   '';
 }

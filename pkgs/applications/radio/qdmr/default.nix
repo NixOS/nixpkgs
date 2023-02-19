@@ -9,11 +9,11 @@
   docbook_xsl_ns,
   wrapQtAppsHook,
   libusb1,
-  libyamlcpp,
   qtlocation,
   qtserialport,
   qttools,
   qtbase,
+  yaml-cpp,
 }:
 
 let
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libyamlcpp
     libusb1
     qtlocation
     qtserialport
     qttools
     qtbase
+    yaml-cpp
   ];
 
   postPatch = lib.optionalString isLinux ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A codeplug programming tool for DMR radios";
+    description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ janik _0x4A6F ];
