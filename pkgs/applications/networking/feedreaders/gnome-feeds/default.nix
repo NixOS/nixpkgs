@@ -1,5 +1,4 @@
 { lib
-, callPackage
 
 , fetchFromGitLab
 
@@ -14,9 +13,7 @@
 , glib
 , glib-networking
 , gtk4
-, libhandy
 , libadwaita
-, webkitgtk
 , webkitgtk_5_0
 , python3
 }:
@@ -36,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    # appstream
-    glib # for glib-compile-schemas
+    appstream
     blueprint-compiler
+    glib # for glib-compile-schemas
     gobject-introspection
     meson
     ninja
@@ -47,17 +44,17 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk4
-    libadwaita
     glib
     glib-networking
+    gtk4
+    libadwaita
     webkitgtk_5_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    python-dateutil
     humanize
+    python-dateutil
     python-magic
     pillow
     pygments
