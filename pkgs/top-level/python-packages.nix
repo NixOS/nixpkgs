@@ -12404,7 +12404,7 @@ self: super: with self; {
 
   wsgitools = callPackage ../development/python-modules/wsgitools { };
 
-  WSME = callPackage ../development/python-modules/WSME { };
+  wsme = callPackage ../development/python-modules/wsme { };
 
   wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
 
