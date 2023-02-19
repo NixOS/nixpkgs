@@ -8,6 +8,7 @@ from pprint import pprint
 from typing import Any, Dict
 
 from .md import Converter
+from . import html
 from . import manual
 from . import options
 from . import parallel
