@@ -45,7 +45,9 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-assert raspiCameraSupport -> (stdenv.isLinux && (stdenv.isAarch32 || stdenv.isAarch64));
+# MMAL is not support on aarch64, see:
+# https://github.com/raspberrypi/userland/issues/688
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
