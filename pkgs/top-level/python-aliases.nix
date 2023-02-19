@@ -186,6 +186,7 @@ mapAliases ({
   PyLD = pyld; # added 2022-06-22
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
+  PyMVGLive = pymvglive; # added 2023-02-19
   pyreadability = readability-lxml; # added 2022-05-24
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
