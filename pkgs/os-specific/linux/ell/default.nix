@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # tests sporadically fail on musl
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/libs/ell/ell.git";

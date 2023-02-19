@@ -9070,6 +9070,8 @@ with pkgs;
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot {};
+
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
   mautrix-googlechat = callPackage ../servers/mautrix-googlechat { };

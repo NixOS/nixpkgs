@@ -52,6 +52,9 @@ in
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
 , enableSeccomp ? true
   # Whether the configure script treat SUID support as default
+  # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
+  # It can be set to `null` to always pass either --with-suid or --without-suided
+  # Type: null or boolean
 , defaultToSuid ? true
   # Whether to compile with SUID support
 , enableSuid ? false
@@ -131,8 +134,7 @@ buildGoModule {
     "--runstatedir=/var/run"
   ]
   ++ lib.optional (!enableSeccomp) "--without-seccomp"
-  ++ lib.optional (defaultToSuid && !enableSuid) "--without-suid"
-  ++ lib.optional (!defaultToSuid && enableSuid) "--with-suid"
+  ++ lib.optional (enableSuid != defaultToSuid) (if enableSuid then "--with-suid" else "--without-suid")
   ++ extraConfigureFlags
   ;
 

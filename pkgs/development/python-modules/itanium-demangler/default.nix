@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "python-itanium_demangler";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-I6NUfckt2cocQt5dZSFadpshTCuA/6bVNauNXypWh+A=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    " itanium_demangler "
+    "itanium_demangler"
   ];
 
   meta = with lib; {
