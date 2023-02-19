@@ -435,7 +435,7 @@ in {
           preStart = mkBefore ''
             if [ ! -d /var/lib/machines/${container} ]; then
               mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
-              touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
+              touch /var/lib/machines/${container}/etc/{os-release,machine-id}
             fi
           '';
 
