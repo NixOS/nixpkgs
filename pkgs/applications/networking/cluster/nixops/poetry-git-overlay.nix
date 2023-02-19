@@ -75,8 +75,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/lukebfox/nixops-hetznercloud.git";
-        rev = "c00533400506d40940f7c1f67bf3973db37d9dd9";
-        sha256 = "1xfwhiyay7x1r3q6rxn2f3h0llgwf73vl8fxp0ww13rgny2w0dgj";
+        rev = "e14f340f7ffe9e2aa7ffbaac0b8a2e3b4cc116b3";
+        sha256 = "0vhapgzhqfk3y8a26ck09g0ilydsbjlx5g77f8bscdqz818lki12";
       };
     }
   );
