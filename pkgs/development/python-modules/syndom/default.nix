@@ -1,10 +1,7 @@
 { lib
-, stdenv
-, fetchurl
 , fetchFromGitLab
 , buildPythonPackage
 , pkg-config
-, glib
 , meson
 , ninja
 , isPy3k
@@ -12,7 +9,6 @@
 , fmt
 , html-tidy
 , pybind11
-, python
 }:
 
 buildPythonPackage rec {
@@ -49,4 +45,10 @@ buildPythonPackage rec {
     html-tidy
     pybind11
   ];
+
+  meta = with lib; {
+    homepage = "https://gitlab.com/gabmus/syndication-domination";
+    description = "An RSS/Atom parser";
+    license = licenses.gpl3Plus;
+  };
 }
