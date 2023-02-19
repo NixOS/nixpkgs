@@ -20935,7 +20935,7 @@ with pkgs;
 
   libde265 = callPackage ../development/libraries/libde265 {};
 
-  libdeflate = callPackage ../development/libraries/libdeflate { };
+  libdeflate = darwin.apple_sdk_11_0.callPackage ../development/libraries/libdeflate { };
 
   libdeltachat = callPackage ../development/libraries/libdeltachat {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
