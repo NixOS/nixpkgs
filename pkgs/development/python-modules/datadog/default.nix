@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BxFw8MfvIlEdv3+b12xL5QDuLT1SBykApch7VJXSxzM=";
+    hash = "sha256-BxFw8MfvIlEdv3+b12xL5QDuLT1SBykApch7VJXSxzM=";
   };
 
   postPatch = ''
@@ -60,7 +60,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The Datadog Python library";
-    license = licenses.bsd3;
     homepage = "https://github.com/DataDog/datadogpy";
+    changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
