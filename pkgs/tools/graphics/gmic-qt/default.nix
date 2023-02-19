@@ -108,6 +108,8 @@ mkDerivation rec {
   };
 
   meta = with lib; {
+    # Broken since 3.2.0 update, cannot handle system gmic and cimg.
+    broken = true;
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
