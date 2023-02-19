@@ -24,18 +24,15 @@ let
   };
 
   makeDeps = pkgs: small:
-    [ pkgs.frozendict ]
-    ++ (
-      if small
-      then [
-        markdown-it-py-no-tests
-        mdit-py-plugins-no-tests
-      ]
-      else [
-        pkgs.markdown-it-py
-        pkgs.mdit-py-plugins
-      ]
-    );
+    if small
+    then [
+      markdown-it-py-no-tests
+      mdit-py-plugins-no-tests
+    ]
+    else [
+      pkgs.markdown-it-py
+      pkgs.mdit-py-plugins
+    ];
 in
 
 python.pkgs.buildPythonApplication rec {
