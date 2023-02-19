@@ -939,6 +939,8 @@ with pkgs;
 
   fetchPypi = callPackage ../build-support/fetchpypi { };
 
+  fetchTorrent = callPackage ../build-support/fetchtorrent { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
