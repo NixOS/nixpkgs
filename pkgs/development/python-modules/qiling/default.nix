@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Qiling Advanced Binary Emulation Framework";
     homepage = "https://qiling.io/";
+    changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = teams.determinatesystems.members;
   };
