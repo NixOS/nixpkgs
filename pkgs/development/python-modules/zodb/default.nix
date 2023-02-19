@@ -10,7 +10,7 @@
 , zconfig
 , persistent
 , zc_lockfile
-, BTrees
+, btrees
 , manuel
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     zconfig
     persistent
     zc_lockfile
-    BTrees
+    btrees
   ];
 
   nativeCheckInputs = [
