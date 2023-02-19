@@ -100,6 +100,7 @@ mapAliases ({
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute"; # added 2023-02-15
+  GeoIP = geoip; # added 2023-02-19
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   GitPython = gitpython; # added 2022-10-28
