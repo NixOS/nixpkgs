@@ -16997,6 +16997,8 @@ with pkgs;
 
   gImageReader = callPackage ../applications/misc/gImageReader { };
 
+  gimme-aws-creds = callPackage ../tools/admin/gimme-aws-creds { };
+
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
   # Needed for autogen
