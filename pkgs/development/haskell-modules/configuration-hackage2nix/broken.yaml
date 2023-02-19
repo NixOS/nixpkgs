@@ -512,7 +512,6 @@ broken-packages:
   - byline
   - by-other-names
   - bytearray-parsing
-  - bytepatch
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
@@ -2423,7 +2422,6 @@ broken-packages:
   - hquantlib-time
   - hquery
   - hR
-  - h-raylib
   - hreq-core
   - hRESP
   - h-reversi
