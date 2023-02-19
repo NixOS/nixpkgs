@@ -147,7 +147,9 @@ package-maintainers:
   centromere:
     - nfc
   dalpd:
+    - espial
     - ghc-vis
+    - patat
     - svgcairo
   domenkozar:
     - cachix
