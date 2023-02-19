@@ -547,7 +547,8 @@ in
 
 lib.extendDerivation
   validity.handled
-  ({
+  (
+    lib.optionalAttrs (! attrs.__cleanAttrs or false) {
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -578,10 +579,11 @@ lib.extendDerivation
        disallowedReferences = [ ];
        disallowedRequisites = [ ];
      });
-
+     inherit passthru;
+   }
+   // {
      inherit meta overrideAttrs;
    }
-   // lib.optionalAttrs (! attrs.__cleanAttrs or false) { inherit passthru; }
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
@@ -593,11 +595,11 @@ lib.extendDerivation
       outputs = drvAttrs.outputs or ["out"];
       outputName = lib.head outputs;
     in
-      lib.optionalAttrs (! attrs.__cleanAttrs or false) drvAttrs
+      lib.optionalAttrs (! attrs.__cleanAttrs or false) (drvAttrs // { inherit drvAttrs; })
       // lib.genAttrs outputs (o: strict.${o})
       // {
         type = "derivation";
-        inherit drvAttrs outputName;
+        inherit outputName;
         inherit (strict) drvPath;
         inherit (drvAttrs) name;
         outPath = strict.${outputName};
