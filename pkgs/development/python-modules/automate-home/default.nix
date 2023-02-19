@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
-, APScheduler
+, apscheduler
 , hiredis
 , aioredis
 , ephem
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    APScheduler
+    apscheduler
     hiredis
     aioredis
     ephem

@@ -548,7 +548,7 @@ self: super: with self; {
 
   aprslib = callPackage ../development/python-modules/aprslib { };
 
-  APScheduler = callPackage ../development/python-modules/APScheduler { };
+  apscheduler = callPackage ../development/python-modules/apscheduler { };
 
   apsw = callPackage ../development/python-modules/apsw { };
 

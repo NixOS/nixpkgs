@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, APScheduler
+, apscheduler
 , bitstring
 , cffi
 , ecdsa
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    APScheduler
+    apscheduler
     bitstring
     cffi
     ecdsa
