@@ -36,7 +36,7 @@
 , typogrify
 , unidecode
 , watchdog
-, Yapsy
+, yapsy
 }:
 
 buildPythonPackage rec {
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     typogrify
     unidecode
     watchdog
-    Yapsy
+    yapsy
   ];
 
   nativeCheckInputs = [
