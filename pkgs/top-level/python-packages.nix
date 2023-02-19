@@ -9646,7 +9646,7 @@ self: super: with self; {
 
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
-  PyVirtualDisplay = callPackage ../development/python-modules/PyVirtualDisplay { };
+  pyvirtualdisplay = callPackage ../development/python-modules/pyvirtualdisplay { };
 
   pyvis = callPackage ../development/python-modules/pyvis { };
 

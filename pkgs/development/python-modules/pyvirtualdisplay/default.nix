@@ -1,13 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, EasyProcess }:
 
 buildPythonPackage rec {
-  pname = "PyVirtualDisplay";
+  pname = "pyvirtualdisplay";
   version = "3.0";
 
   propagatedBuildInputs = [ EasyProcess ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyVirtualDisplay";
+    inherit version;
     sha256 = "sha256-CXVbw86263JfsH7KVCX0PyNY078I4A0qm3kqGu3RYVk=";
   };
 
