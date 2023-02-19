@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=deprecated-declarations";
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)

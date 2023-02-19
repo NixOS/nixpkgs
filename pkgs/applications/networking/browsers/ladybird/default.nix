@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error"
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
     # error: use of undeclared identifier 'aligned_alloc'

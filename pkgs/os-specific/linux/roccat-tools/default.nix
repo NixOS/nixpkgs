@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${harfbuzz.dev}/include/harfbuzz"
 
     # Workaround build failure on -fno-common toolchains:

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       --replace windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-Wno-deprecated-copy-dtor"
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-Wno-conversion"

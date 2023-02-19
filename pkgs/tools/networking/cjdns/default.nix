@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     libuv
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-O2"
     "-Wno-error=array-bounds"
     "-Wno-error=stringop-overflow"

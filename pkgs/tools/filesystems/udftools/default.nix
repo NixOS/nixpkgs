@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = "-std=gnu90";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu90";
 
   preConfigure = ''
     sed -e '1i#include <limits.h>' -i cdrwtool/cdrwtool.c -i pktsetup/pktsetup.c

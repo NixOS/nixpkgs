@@ -12,7 +12,7 @@ let param =
       rev = version;
       sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
     };
-    NIX_CFLAGS_COMPILE = null;
+    env.NIX_CFLAGS_COMPILE = null;
     buildInputs = [ camlp-streams ];
   } else if check "3.12" then {
     version = "2.18.5";
@@ -24,7 +24,7 @@ let param =
     # gcc-10. Otherwise build fails as:
     #   ld: ml_gtktree.o:(.bss+0x0): multiple definition of
     #     `ml_table_extension_events'; ml_gdkpixbuf.o:(.bss+0x0): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
   } else throw "lablgtk is not available for OCaml ${ocaml.version}";
 in
 

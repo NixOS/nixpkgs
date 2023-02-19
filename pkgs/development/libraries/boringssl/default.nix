@@ -30,7 +30,7 @@ buildGoModule {
     export GOARCH=$(go env GOHOSTARCH)
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # Needed with GCC 12 but breaks on darwin (with clang)
     "-Wno-error=stringop-overflow"
   ];

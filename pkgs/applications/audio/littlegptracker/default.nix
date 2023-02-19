@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
     ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
-  NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ] ++
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ] ++
     lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
   NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";

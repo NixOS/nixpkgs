@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
 
     echo ""
-    echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
+    echo "env.NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
     echo ""
   '';
 

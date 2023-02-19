@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   # fix build on gcc7+ and gcc11+
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c++11" # c++17+ has errors
     "-Wno-error=builtin-declaration-mismatch"
     "-Wno-error=deprecated-copy"

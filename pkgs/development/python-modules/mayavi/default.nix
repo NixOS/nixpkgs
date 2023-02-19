@@ -48,7 +48,7 @@ buildPythonPackage rec {
     vtk
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Needs X server
   doCheck = false;

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost librevenge zlib ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
   meta = with lib; {
     homepage = "https://libwps.sourceforge.net/";

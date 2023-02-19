@@ -50,7 +50,7 @@ in
     # invocation does not work.
     hardeningDisable = [ "fortify" "pie" "stackprotector" ];
 
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
+    env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
       (builtins.concatLists [
         (lib.optionals withGd gdCflags)
         # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:

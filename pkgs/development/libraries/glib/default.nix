@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain

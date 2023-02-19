@@ -102,7 +102,7 @@ qtModule {
       --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [

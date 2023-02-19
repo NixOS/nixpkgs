@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   mesonFlags = [
     "-Dgtk_doc=true"

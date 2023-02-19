@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error"
     "-DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\""
   ] ++ lib.optionals stdenv.hostPlatform.is64bit [

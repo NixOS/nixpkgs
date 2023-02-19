@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ liblockfile ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=format-overflow"
   ];

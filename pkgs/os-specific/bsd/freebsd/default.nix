@@ -717,7 +717,7 @@ in makeScopeWithSplicing
       flex byacc gencat rpcgen
     ];
     buildInputs = with self; [ include csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
+    env.NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
 
     makeFlags = [
       "STRIP=-s" # flag to install, not command

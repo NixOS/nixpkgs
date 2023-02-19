@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=maybe-uninitialized"
   ];

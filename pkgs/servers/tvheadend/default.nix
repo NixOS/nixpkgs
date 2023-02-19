@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
