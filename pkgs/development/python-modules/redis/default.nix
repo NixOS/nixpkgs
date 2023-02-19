@@ -24,11 +24,11 @@ buildPythonPackage rec {
   version = "4.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Huw3Qc2kCNOl+Et40InIuNiV8hs7BQmINR6SX68gKGQ=";
+    hash = "sha256-Huw3Qc2kCNOl+Et40InIuNiV8hs7BQmINR6SX68gKGQ=";
   };
 
   propagatedBuildInputs = [
@@ -61,12 +61,13 @@ buildPythonPackage rec {
     "redis.utils"
   ];
 
-  # tests require a running redis
+  # Tests require a running redis
   doCheck = false;
 
   meta = with lib; {
     description = "Python client for Redis key-value store";
-    homepage = "https://pypi.python.org/pypi/redis/";
+    homepage = "https://github.com/redis/redis-py";
+    changelog = "https://github.com/redis/redis-py/releases/tag/v${version}";
     license = with licenses; [ mit ];
   };
 }
