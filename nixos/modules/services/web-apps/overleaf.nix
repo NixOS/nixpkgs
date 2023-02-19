@@ -55,15 +55,15 @@ in
         WEB_HOST = "localhost";
         WEB_PORT = "3032";
         GRACEFUL_SHUTDOWN_DELAY = "0";
-        OVERLEAF_SITE_URL = "https://verso.saumon.network";
-        OVERLEAF_ADMIN_EMAIL = "postmaster@mondon.me";
+        OVERLEAF_SITE_URL = "https://overleaf.example.org";
+        OVERLEAF_ADMIN_EMAIL = "overleaf@example.org";
         OVERLEAF_SITE_LANGUAGE = "fr";
-        OVERLEAF_APP_NAME = "Verso, powered by SaumonNetwork";
-        OVERLEAF_EMAIL_FROM_ADDRESS = "postmaster@overleaf.nix";
-        OVERLEAF_EMAIL_SMTP_HOST = "mail.overleaf.nix";
+        OVERLEAF_APP_NAME = "My self-hosted Overleaf instance";
+        OVERLEAF_EMAIL_FROM_ADDRESS = "overleaf@example.org";
+        OVERLEAF_EMAIL_SMTP_HOST = "overleaf@example.org";
         OVERLEAF_EMAIL_SMTP_PORT = "587";
         OVERLEAF_EMAIL_SMTP_SECURE = "true";
-        OVERLEAF_EMAIL_SMTP_USER = "postmaster";
+        OVERLEAF_EMAIL_SMTP_USER = "overleaf";
         ADMIN_PRIVILEGE_AVAILABLE = "true";
       };
       description = mdDoc ''
@@ -77,16 +77,25 @@ in
       type = types.submodule { freeformType = with types; attrsOf str; };
       default = { };
       example = {
-        WEB_API_PASSWORD = "";
-        OVERLEAF_REDIS_PASS = "";
+        WEB_API_PASSWORD = "/etc/secrets/web_api_pass";
+        OVERLEAF_REDIS_PASS = "/run/secrets/overleaf_redis";
         OVERLEAF_SESSION_SECRET = "/run/secrets/overleaf_session";
-        STAGING_PASSWORD_FILE = "";
-        OVERLEAF_EMAIL_SMTP_PASS = "";
+        STAGING_PASSWORD_FILE = "/run/secrets/overleaf_staging";
+        OVERLEAF_EMAIL_SMTP_PASS = "/run/secrets/mail/overleaf.example.org";
       };
       description = mdDoc ''
         Secrets for Overleaf, see
         <https://github.com/overleaf/overleaf/blob/main/server-ce/config/settings.js>
         for supported values.
+      '';
+    };
+
+    path = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = literalExpression "with pkgs; [ R (python3.pkgs.withPackages (py: py.pygments)) ]";
+      description = lib.mdDoc ''
+        Additional packages to place in the path of the Overleaf services.
       '';
     };
   };
@@ -106,20 +115,28 @@ in
         OVERLEAF_FPH_DISPLAY_NEW_PROJECTS = mkDefault "true";
       };
 
+      systemd.targets.overleaf = { };
+
       systemd.services =
         let activateServices = service: {
           "overleaf-${service}" = {
             description = "Overleaf ${service}";
-            wantedBy = [ "multi-user.target" ];
+            wantedBy = [ "overleaf.target" "multi-user.target" ];
             environment = cfg.settings;
-            path = [ cfg.texlivePackage ];
+            path = with pkgs; [ cfg.texlivePackage (aspellWithDicts (ps: [ ps.en ps.fr ])) ] ++ cfg.path;
             serviceConfig = {
               Type = "simple";
-              ExecStart = "${pkgs.overleaf}/bin/overleaf-${service}";
+              ExecStart = pkgs.writeShellScript "overleaf-${service}" ''
+                for secret in $(ls $CREDENTIALS_DIRECTORY)
+                do
+                  export $secret=$(cat $CREDENTIALS_DIRECTORY/$secret)
+                done
+                exec ${pkgs.overleaf}/bin/overleaf-${service}
+              '';
               StateDirectory = "overleaf";
               WorkingDirectory = "/var/lib/overleaf";
               User = "overleaf";
-              LoadCredentials = mapAttrsToList (key: value: "${key}:${value}") cfg.secrets;
+              LoadCredential = mapAttrsToList (name: path: "${name}:${path}") cfg.secrets;
             };
           };
         };
@@ -138,6 +155,15 @@ in
           "track-changes"
           "web"
         ]);
+
+      users.users.overleaf = {
+        isSystemUser = true;
+        group = "overleaf";
+        home = "/var/lib/overleaf";
+        createHome = true;
+      };
+
+      users.groups.overleaf = { };
 
       services.nginx = mkIf (isString cfg.hostname) {
         enable = true;
@@ -169,7 +195,6 @@ in
       services.mongodb = mkIf (cfg.mongodbType == "mongodb") {
         enable = true;
         package = pkgs.mongodb-4_2;
-        user = "overleaf";
       };
     }
     (mkIf (cfg.mongodbType == "ferretdb") {
