@@ -16,6 +16,10 @@
 , Security
 , callPackage
 , linkFarm
+, writeTextFile
+, writeShellApplication
+, tree-sitter
+, gcc
 
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -41,39 +45,38 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = callPackage ./update.nix {};
+  update-all-grammars = callPackage ./update.nix { };
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
-  grammars =
-    runCommand "grammars" { } (''
-      mkdir $out
-    '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars { inherit lib; }))));
+  grammars' = (import ./grammars { inherit lib; } // extraGrammars);
+
+  # Override the location of some grammars since they often are located in a sub-directory
+  grammarsWithOverrides = grammars' //
+    { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
+    { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+    { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
+    { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
+    { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+    { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+    { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+
+  # Fetch their respective sources
+  grammarSources = builtins.mapAttrs (name: grammar: if grammar ? src then grammar.src else fetchGrammar grammar) grammarsWithOverrides;
+  grammars = linkFarm "grammars" grammarSources;
 
   buildGrammar = callPackage ./grammar.nix { };
-
   builtGrammars =
     let
       build = name: grammar:
         buildGrammar {
           language = grammar.language or name;
           inherit version;
-          src = grammar.src or (fetchGrammar grammar);
+          src = grammarSources.${name};
           location = grammar.location or null;
         };
-      grammars' = import ./grammars { inherit lib; } // extraGrammars;
-      grammars = grammars' //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
-        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
-        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build (grammarsWithOverrides);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -105,6 +108,48 @@ let
 
   allGrammars = builtins.attrValues builtGrammars;
 
+
+  configWithGrammarSources = grammarFn:
+    let
+      # Since names aren't readable from the imported object, map each
+      # object to { "tree-sitter-xyz": "tree-sitter-xyz" }
+      selectedNames = grammarFn (builtins.mapAttrs (k: v: k) grammarSources);
+      selectedGrammars = builtins.listToAttrs (builtins.map (x: { name = x; value = grammarSources.${x}; }) selectedNames);
+    in
+    writeTextFile {
+      name = "tree-sitter-config";
+      text = ''
+        {
+          "parser-directories": [
+            "${linkFarm "grammars" selectedGrammars}"
+          ]
+        }
+      '';
+      destination = "/config.json";
+    };
+
+
+  # The tree-sitter command-line tool allows running queries on source code, and
+  # generating ctags-compatible files. In order to do that it needs grammar sources
+  # By default, the derivation doesn't have the required links to allow the binary to
+  # find its configuration.
+  #
+  # With this wrapper one can directly run the command line tool as such:
+  # $ nix run nixpkgs#tree-sitter.withAllGrammarSources -- tags /path/to/file
+  #
+  # If needed, one can select the individual sources using:
+  # pkgs.tree-sitter.withGrammarSources(p: [ p.tree-sitter-c p.tree-sitter-java ... ])
+  withGrammarSources = grammarFn: writeShellApplication {
+    name = "tree-sitter";
+    runtimeInputs = [ tree-sitter gcc ];
+    text = ''
+      export TREE_SITTER_DIR=${configWithGrammarSources grammarFn};
+      ${tree-sitter}/bin/tree-sitter "$@"
+    '';
+  };
+
+  allGrammarSources = builtins.attrNames grammarSources;
+  withAllGrammarSources = withGrammarSources (_: allGrammarSources);
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -145,7 +190,7 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+    inherit grammars buildGrammar builtGrammars withPlugins allGrammars grammarSources withGrammarSources withAllGrammarSources;
 
     tests = {
       # make sure all grammars build
@@ -166,6 +211,10 @@ rustPlatform.buildRustPackage {
       * Fast enough to parse on every keystroke in a text editor
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
+
+      In order to use the command-line tool, import pkgs.tree-sitter.withAllGrammarSources, or pick individual languages with
+      pkgs.tree-sitter.withGrammarSources(p: [ p.tree-sitter-c p.tree-sitter-java ... ]). A valid configuration will be generated and
+      used automatically.
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ Profpatsch oxalica ];
