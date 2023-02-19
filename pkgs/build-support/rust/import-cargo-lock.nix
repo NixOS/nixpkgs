@@ -1,4 +1,4 @@
-{ fetchgit, fetchurl, lib, runCommand, cargo, jq }:
+{ fetchgit, fetchurl, lib, writers, python3Packages, runCommand, cargo, jq }:
 
 {
   # Cargo lock file
@@ -93,6 +93,11 @@ let
       sha256 = checksum;
     };
 
+  # Replaces values inherited by workspace members.
+  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
+    { libraries = with python3Packages; [ tomli tomli-w ]; flakeIgnore = [ "E501" ]; }
+    (builtins.readFile ./replace-workspace-values.py);
+
   # Fetch and unpack a crate.
   mkCrate = pkg:
     let
@@ -170,6 +175,11 @@ let
 
         cp -prvd "$tree/" $out
         chmod u+w $out
+
+        if grep -q workspace "$out/Cargo.toml"; then
+          chmod u+w "$out/Cargo.toml"
+          ${replaceWorkspaceValues} "$out/Cargo.toml" "${tree}/Cargo.toml"
+        fi
 
         # Cargo is happy with empty metadata.
         printf '{"files":{},"package":null}' > "$out/.cargo-checksum.json"
