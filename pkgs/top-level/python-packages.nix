@@ -11476,6 +11476,10 @@ self: super: with self; {
 
   syncer = callPackage ../development/python-modules/syncer { };
 
+  syndom = callPackage ../development/python-modules/syndom {
+    inherit (pkgs.buildPackages) meson;
+  };
+
   synergy = callPackage ../development/python-modules/synergy { };
 
   synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };

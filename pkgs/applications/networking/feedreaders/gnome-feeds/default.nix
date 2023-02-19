@@ -4,6 +4,7 @@
 , fetchFromGitLab
 
 , appstream
+, blueprint-compiler
 , gobject-introspection
 , meson
 , ninja
@@ -12,30 +13,32 @@
 
 , glib
 , glib-networking
-, gtk3
+, gtk4
 , libhandy
-, listparser ? callPackage ./listparser.nix { }
+, libadwaita
 , webkitgtk
+, webkitgtk_5_0
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
-  version = "0.16.2";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
     rev = version;
-    sha256 = "sha256-66dwVR9owg050aHCHJek7jYnT+/yyCKo4AaUE0hCqBA=";
+    sha256 = "sha256-qKSgqYt9aIg62VVD7WeW/Pid/7M4fKlCyZIo1cijCi8=";
   };
 
   format = "other";
 
   nativeBuildInputs = [
-    appstream
+    # appstream
     glib # for glib-compile-schemas
+    blueprint-compiler
     gobject-introspection
     meson
     ninja
@@ -44,24 +47,23 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    gtk4
+    libadwaita
     glib
     glib-networking
-    gtk3
-    libhandy
-    webkitgtk
+    webkitgtk_5_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     python-dateutil
-    feedparser
-    html5lib
-    listparser
-    lxml
+    humanize
+    python-magic
     pillow
     pygments
     pygobject3
     readability-lxml
+    syndom
     pytz
     requests
   ];
@@ -71,10 +73,6 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    inherit listparser;
-  };
 
   meta = with lib; {
     description = "An RSS/Atom feed reader for GNOME";
