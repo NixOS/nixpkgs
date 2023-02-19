@@ -1,12 +1,13 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, boltons
 , attrs
+, boltons
+, buildPythonPackage
 , face
+, fetchPypi
 , pytestCheckHook
-, pyyaml
+, pythonAtLeast
 , pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Test is outdated (was made for PyYAML 3.x)
     "test_main_yaml_target"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "test_regular_error_stack"
+    "test_long_target_repr"
   ];
 
   pythonImportsCheck = [
