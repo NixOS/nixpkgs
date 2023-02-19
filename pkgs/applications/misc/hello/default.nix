@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __cleanAttrs = true;
+
   passthru.tests = {
     version = testers.testVersion { package = hello; };
 

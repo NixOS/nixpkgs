@@ -288,6 +288,7 @@ else let
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
+       "__cleanAttrs"
        "sandboxProfile" "propagatedSandboxProfile"]
        ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
@@ -591,12 +592,13 @@ lib.extendDerivation
       outputs = drvAttrs.outputs or ["out"];
       outputName = lib.head outputs;
     in
-      drvAttrs
+      lib.optionalAttrs (! attrs.__cleanAttrs or false) drvAttrs
       // lib.genAttrs outputs (o: strict.${o})
       // {
         type = "derivation";
         inherit drvAttrs outputName;
         inherit (strict) drvPath;
+        inherit (drvAttrs) name;
         outPath = strict.${outputName};
       }
   );
