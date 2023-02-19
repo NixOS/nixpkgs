@@ -26,6 +26,7 @@
 , coreutils
 , jq
 , nix-update-script
+, gimpPlugins
 }:
 
 let
@@ -99,6 +100,10 @@ mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      gimp-plugin = gimpPlugins.gmic;
+    };
+
     updateScript = nix-update-script { };
   };
 
