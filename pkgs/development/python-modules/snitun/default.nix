@@ -43,6 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snitun" ];
 
   meta = with lib; {
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
     homepage = "https://github.com/nabucasa/snitun";
     description = "SNI proxy with TCP multiplexer";
     license = licenses.gpl3Only;
