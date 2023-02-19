@@ -426,6 +426,7 @@ broken-packages:
   - bitx-bitcoin
   - bizzlelude-js
   - bkr
+  - blagda
   - blakesum
   - blas
   - blaze-html-hexpat
@@ -471,6 +472,7 @@ broken-packages:
   - brick-dropdownmenu
   - brick-filetree
   - bricks-internal
+  - brick-tabular-list
   - brillig
   - brittany
   - broadcast-chan-tests
@@ -510,6 +512,7 @@ broken-packages:
   - byline
   - by-other-names
   - bytearray-parsing
+  - bytepatch
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
@@ -2420,6 +2423,7 @@ broken-packages:
   - hquantlib-time
   - hquery
   - hR
+  - h-raylib
   - hreq-core
   - hRESP
   - h-reversi
@@ -2618,6 +2622,7 @@ broken-packages:
   - hwhile
   - hw-json-demo
   - hw-json-lens
+  - hw-json-simd
   - hworker
   - hw-playground-linear
   - hw-prim-bits
@@ -3006,6 +3011,7 @@ broken-packages:
   - LATS
   - launchdarkly-server-sdk
   - launchpad-control
+  - lawful-classes-hedgehog
   - lawless-concurrent-machines
   - layers
   - layout
@@ -3357,8 +3363,10 @@ broken-packages:
   - ml-w
   - mm2
   - mmsyn2
+  - mmsyn4
   - mmsyn7l
   - mmsyn7ukr-array
+  - mmsyn7ukr-common
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
@@ -3432,6 +3440,7 @@ broken-packages:
   - monoid-owns
   - monoidplus
   - monoids
+  - monoid-statistics
   - monopati
   - monus
   - monzo
@@ -3877,9 +3886,9 @@ broken-packages:
   - PasswordGenerator
   - passwords
   - pasta
+  - pasta-curves
   - pastis
   - pasty
-  - patat
   - patches-vector
   - Pathfinder
   - pathfindingcore
@@ -4183,6 +4192,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - process-sequential
   - procrastinating-variable
   - procstat
   - product-isomorphic
@@ -4283,6 +4293,7 @@ broken-packages:
   - QuickAnnotate
   - quickbooks
   - quickcheck-arbitrary-template
+  - quickcheck-groups
   - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
@@ -4370,6 +4381,7 @@ broken-packages:
   - records
   - records-sop
   - record-wrangler
+  - recover-rtti
   - recursors
   - red-black-record
   - redis-glob
@@ -5991,6 +6003,7 @@ broken-packages:
   - yoda
   - Yogurt
   - youtube
+  - yst
   - yu-auth
   - yu-core
   - yuiGrid

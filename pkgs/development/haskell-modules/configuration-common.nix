@@ -20,6 +20,49 @@ with haskellLib;
 
 self: super: {
 
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax,
+  # so we need to put some extra work for non-latest GHCs
+  inherit (
+    let
+      # !!! Use cself/csuper inside for the actual overrides
+      cabalInstallOverlay = cself: csuper:
+        lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
+          Cabal = cself.Cabal_3_8_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_8_1_0;
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+          # GHC 9.2.5 starts shipping 1.6.16.0
+          process = cself.process_1_6_16_0;
+        } // lib.optionalAttrs (lib.versions.majorMinor self.ghc.version == "8.10") {
+          # Prevent dependency on doctest which causes an inconsistent dependency
+          # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
+          vector = dontCheck csuper.vector;
+        };
+    in
+    {
+      cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
+      cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
+
+      guardian = lib.pipe
+        # Needs cabal-install >= 3.8 /as well as/ matching Cabal
+        (super.guardian.overrideScope (self: super:
+          cabalInstallOverlay self super // {
+            # Needs at least path-io 1.8.0 due to canonicalizePath changes
+            path-io = self.path-io_1_8_0;
+          }
+        ))
+        [
+          # Tests need internet access (run stack)
+          dontCheck
+          # May as well…
+          (self.generateOptparseApplicativeCompletions [ "guardian" ])
+        ];
+    }
+  ) cabal-install
+    cabal-install-solver
+    guardian
+  ;
+
+
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
@@ -59,6 +102,15 @@ self: super: {
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
+
+  # patat main branch has an unreleased commit that fixes the build by
+  # relaxing restrictive upper boundaries. This can be removed once there's a
+  # new release following version 0.8.8.0.
+  patat = appendPatch (fetchpatch {
+    url = "https://github.com/jaspervdj/patat/commit/be9e0fe5642ba6aa7b25705ba17950923e9951fa.patch";
+    sha256 = "sha256-Vxxi46qrkIyzYQZ+fe1vNTPldcQEI2rX2H40GvFJR2M=";
+    excludes = ["stack.yaml" "stack.yaml.lock"];
+  }) super.patat;
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -203,7 +255,8 @@ self: super: {
   wai-cors = dontCheck super.wai-cors;
 
   # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
-  streamly-bytestring = dontCheck super.streamly-bytestring;
+  # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
+  streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
 
   # base bound
   digit = doJailbreak super.digit;
@@ -759,9 +812,13 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
     hspec = self.hspec_2_10_9;
-    hspec-wai = super.hspec-wai.override {
+    hspec-wai = self.hspec-wai.override {
       hspec = self.hspec_2_10_9;
     };
+    hspec-contrib = self.hspec-contrib.override {
+      hspec-core = self.hspec-core_2_10_9;
+    };
+    fsnotify = self.fsnotify_0_4_1_0;
   });
 
   # Depends on broken fluid.
@@ -934,6 +991,10 @@ self: super: {
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
   hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
+
+  # Missing files required by the test suite.
+  # https://github.com/deemp/flakes/issues/4
+  lima = dontCheck super.lima;
 
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
@@ -1123,6 +1184,7 @@ self: super: {
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
   persistent-postgresql =
+    # TODO: move this override to configuration-nix.nix
     overrideCabal
       (drv: {
         postPatch = drv.postPath or "" + ''
@@ -1131,8 +1193,14 @@ self: super: {
           sed -i test/PgInit.hs \
             -e s^'host=" <> host <> "'^^
         '';
-        # https://github.com/NixOS/nixpkgs/issues/198495
-        doCheck = pkgs.postgresql.doCheck;
+        doCheck =
+          # https://github.com/commercialhaskell/stackage/issues/6884
+          # persistent-postgresql-2.13.5.1 needs persistent-test >= 2.13.1.3 which
+          # is incompatible with the stackage version of persistent, so the tests
+          # are disabled temporarily.
+          false
+          # https://github.com/NixOS/nixpkgs/issues/198495
+          && pkgs.postgresql.doCheck;
         preCheck = drv.preCheck or "" + ''
           PGDATABASE=test
           PGUSER=test
@@ -1143,6 +1211,10 @@ self: super: {
         ];
       })
       super.persistent-postgresql;
+
+  # Test suite requires a later version of persistent-test which depends on persistent 2.14
+  # https://github.com/commercialhaskell/stackage/issues/6884
+  persistent-sqlite = dontCheck super.persistent-sqlite;
 
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
@@ -1778,7 +1850,12 @@ self: super: {
       relative = "llvm-hs-pure";
       excludes = [ "**/Triple.hs" ]; # doesn't exist in 9.0.0
     })
-  ] super.llvm-hs-pure;
+  ] (overrideCabal {
+    # Hackage Revision prevents patch from applying. Revision 1 does not allow
+    # bytestring-0.11.4 which is bundled with 9.2.6.
+    editedCabalFile = null;
+    revision = null;
+  } super.llvm-hs-pure);
 
   # * Fix build failure by picking patch from 8.5, we need
   #   this version of sbv for petrinizer
@@ -2235,8 +2312,12 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_3);
+    brick = doJailbreak (dontCheck super.brick_1_6);
   });
+
+  # Too strict upper bound on bytestring
+  # https://github.com/TravisWhitaker/rdf/issues/8
+  rdf = doJailbreak super.rdf;
 
   # random <1.2
   unfoldable = doJailbreak super.unfoldable;
