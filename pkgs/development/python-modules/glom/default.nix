@@ -47,12 +47,13 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''
       glom helps pull together objects from other objects in a
       declarative, dynamic, and downright simple way.
     '';
+    homepage = "https://github.com/mahmoud/glom";
+    changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
   };
