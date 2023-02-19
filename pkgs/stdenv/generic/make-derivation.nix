@@ -597,11 +597,12 @@ lib.extendDerivation
     in
       lib.optionalAttrs (! attrs.__cleanAttrs or false) (drvAttrs // { inherit drvAttrs; })
       // lib.genAttrs outputs (o: strict.${o})
+      // builtins.intersectAttrs { version = null; } drvAttrs
       // {
         type = "derivation";
         inherit outputName;
         inherit (strict) drvPath;
-        inherit (drvAttrs) name;
+        name = drvAttrs.pname or drvAttrs.name;
         outPath = strict.${outputName};
       }
   );
