@@ -1,11 +1,12 @@
 { lib , buildPythonPackage , fetchPypi, tkinter }:
 
 buildPythonPackage rec {
-  pname = "Pmw";
+  pname = "pmw";
   version = "2.1.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Pmw";
+    inherit version;
     sha256 = "sha256-lIQSRXz8zwx3XdCOCRP7APkIlqM8eXN9VxxzEq6vVcY=";
   };
 

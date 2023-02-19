@@ -7445,7 +7445,7 @@ self: super: with self; {
 
   plyvel = callPackage ../development/python-modules/plyvel { };
 
-  Pmw = callPackage ../development/python-modules/Pmw { };
+  pmw = callPackage ../development/python-modules/pmw { };
 
   pocket = callPackage ../development/python-modules/pocket { };
 
