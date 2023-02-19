@@ -51,13 +51,13 @@ assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps 
 
 mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256 = "sha256-I5XC7zbDyBPFj4zul9rshoyeVV0hRQQ3aZQzEvYrgdc=";
+    sha256 = "sha256-z+GtYLBcHVufXwdeSd8WKmPmU1+/EKMv26kNaEgyt5w=";
   };
 
   nativeBuildInputs = [
