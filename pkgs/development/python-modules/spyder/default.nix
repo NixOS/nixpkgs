@@ -35,7 +35,7 @@
 , qtconsole
 , qtpy
 , rope
-, Rtree
+, rtree
 , scipy
 , spyder-kernels
 , textdistance
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     qtconsole
     qtpy
     rope
-    Rtree
+    rtree
     scipy
     spyder-kernels
     textdistance
