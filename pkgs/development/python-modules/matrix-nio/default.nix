@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, Logbook
+, logbook
 , aiofiles
 , aiohttp
 , aiohttp-socks
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Logbook
+    logbook
     aiofiles
     aiohttp
     aiohttp-socks

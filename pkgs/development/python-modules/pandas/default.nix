@@ -20,7 +20,7 @@
 , pytestCheckHook
 , pytest-xdist
 , pytest-asyncio
-, XlsxWriter
+, xlsxwriter
 # Darwin inputs
 , runtimeShell
 , libcxx
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-    XlsxWriter
+    xlsxwriter
   ];
 
   # Doesn't work with -Werror,-Wunused-command-line-argument

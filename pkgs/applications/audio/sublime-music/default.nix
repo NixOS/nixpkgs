@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     requests
     semver
   ]
-  ++ lib.optional chromecastSupport PyChromecast
+  ++ lib.optional chromecastSupport pychromecast
   ++ lib.optional keyringSupport keyring
   ++ lib.optional serverSupport bottle
   ;

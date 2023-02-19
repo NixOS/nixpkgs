@@ -106,7 +106,7 @@ let
       # Now requires `lingua` as check input that requires a newer `click`,
       # however `click-7` is needed by the older flask we need here. Since it's just
       # for the test-suite apparently, let's skip it for now.
-      Mako = super.Mako.overridePythonAttrs (lib.const {
+      mako = super.mako.overridePythonAttrs (lib.const {
         nativeCheckInputs = [];
         doCheck = false;
       });

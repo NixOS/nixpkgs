@@ -4,7 +4,7 @@
 , sphinx
 , pytest-cov
 , pytest
-, Mako
+, mako
 , numpy
 , funcsigs
 , withCuda ? false, pycuda
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ sphinx pytest-cov pytest ];
 
-  propagatedBuildInputs = [ Mako numpy funcsigs ]
+  propagatedBuildInputs = [ mako numpy funcsigs ]
     ++ lib.optional withCuda pycuda
     ++ lib.optional withOpenCL pyopencl;
 

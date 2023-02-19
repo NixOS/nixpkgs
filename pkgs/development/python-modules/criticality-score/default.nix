@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, PyGithub, python-gitlab }:
+{ lib, buildPythonPackage, fetchPypi, pygithub, python-gitlab }:
 
 buildPythonPackage rec {
   pname = "criticality_score";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0i811a27i87z3j1rw0dwrnw8v0ckbd918ms6shjawhs4cnb1c6x8";
   };
 
-  propagatedBuildInputs = [ PyGithub python-gitlab ];
+  propagatedBuildInputs = [ pygithub python-gitlab ];
 
   doCheck = false;
 

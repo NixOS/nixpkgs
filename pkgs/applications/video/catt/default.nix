@@ -25,7 +25,7 @@ let
         };
       });
 
-      PyChromecast = super.PyChromecast.overridePythonAttrs (oldAttrs: rec {
+      pychromecast = super.pychromecast.overridePythonAttrs (oldAttrs: rec {
         version = "9.2.0";
         src = oldAttrs.src.override {
           inherit version;
@@ -49,7 +49,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     click
     ifaddr
-    PyChromecast
+    pychromecast
     protobuf
     requests
     yt-dlp

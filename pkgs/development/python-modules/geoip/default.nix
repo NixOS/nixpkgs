@@ -1,17 +1,18 @@
 {lib, buildPythonPackage, fetchPypi
-, geoip, nose}:
+, libgeoip, nose}:
 
 buildPythonPackage rec {
-  pname = "GeoIP";
+  pname = "geoip";
   version = "1.3.2";
 
   nativeCheckInputs = [ nose ];
   propagatedBuildInputs = [
-    geoip
+    libgeoip
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "GeoIP";
+    inherit version;
     sha256 = "1rphxf3vrn8wywjgr397f49s0s22m83lpwcq45lm0h2p45mdm458";
   };
 

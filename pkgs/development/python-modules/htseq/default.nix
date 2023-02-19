@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, cython, numpy, pysam, matplotlib, python, isPy27, isPy3k }:
 buildPythonPackage rec {
   version = "0.12.4";
-  pname = "HTSeq";
+  pname = "htseq";
 
   src = fetchFromGitHub {
     owner = "htseq";

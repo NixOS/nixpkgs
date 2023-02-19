@@ -79,7 +79,7 @@ in mkDerivation {
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah
       else
-        python.pkgs.Mako
+        python.pkgs.mako
       )
       python
     ]

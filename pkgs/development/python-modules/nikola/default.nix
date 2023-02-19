@@ -14,7 +14,7 @@
 , ipykernel
 , jinja2
 , lxml
-, Mako
+, mako
 , markdown
 , micawber
 , mock
@@ -26,7 +26,7 @@
 , pygal
 , pygments
 , pyphen
-, PyRSS2Gen
+, pyrss2gen
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -36,11 +36,11 @@
 , typogrify
 , unidecode
 , watchdog
-, Yapsy
+, yapsy
 }:
 
 buildPythonPackage rec {
-  pname = "Nikola";
+  pname = "nikola";
   version = "8.2.3";
   disabled = pythonOlder "3.7";
 
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     ipykernel
     jinja2
     lxml
-    Mako
+    mako
     markdown
     micawber
     natsort
@@ -73,14 +73,14 @@ buildPythonPackage rec {
     pygal
     pygments
     pyphen
-    PyRSS2Gen
+    pyrss2gen
     requests
     ruamel-yaml
     toml
     typogrify
     unidecode
     watchdog
-    Yapsy
+    yapsy
   ];
 
   nativeCheckInputs = [

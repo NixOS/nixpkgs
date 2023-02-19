@@ -5,7 +5,7 @@
 , appdirs
 , cffi
 , decorator
-, Mako
+, mako
 , mesa_drivers
 , numpy
 , ocl-icd
@@ -31,7 +31,7 @@ in buildPythonPackage rec {
     appdirs
     cffi
     decorator
-    Mako
+    mako
     numpy
     platformdirs
     pytools

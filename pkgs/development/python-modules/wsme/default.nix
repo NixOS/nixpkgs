@@ -21,13 +21,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "WSME";
+  pname = "wsme";
   version = "0.11.0";
 
   disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "WSME";
+    inherit version;
     sha256 = "bd2dfc715bedcc8f4649611bc0c8a238f483dc01cff7102bc1efa6bea207b64b";
   };
 

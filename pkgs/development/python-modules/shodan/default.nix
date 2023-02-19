@@ -6,7 +6,7 @@
 , requests
 , setuptools
 , pythonOlder
-, XlsxWriter
+, xlsxwriter
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     colorama
     requests
     setuptools
-    XlsxWriter
+    xlsxwriter
   ];
 
   # The tests require a shodan api key, so skip them.

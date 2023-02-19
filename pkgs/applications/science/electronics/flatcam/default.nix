@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     packaging
     pyqt4
-    Rtree
+    rtree
     scipy
     setuptools
     shapely

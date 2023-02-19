@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "EasyProcess";
+  pname = "easyprocess";
   version = "1.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "EasyProcess";
+    inherit version;
     sha256 = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
   };
 

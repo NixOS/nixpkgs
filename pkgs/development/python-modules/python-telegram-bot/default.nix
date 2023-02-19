@@ -1,6 +1,6 @@
 { lib
 , aiolimiter
-, APScheduler
+, apscheduler
 , beautifulsoup4
 , buildPythonPackage
 , cachetools
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiolimiter
-    APScheduler
+    apscheduler
     cachetools
     cryptography
     httpx

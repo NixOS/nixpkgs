@@ -6,7 +6,7 @@
 , gitpython
 , networkx
 , pydot
-, PyGithub
+, pygithub
 , pythonOlder
 , pyyaml
 , toml
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     gitpython
     networkx
     pydot
-    PyGithub
+    pygithub
     pyyaml
     toml
     tqdm

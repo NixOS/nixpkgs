@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ColanderAlchemy";
+  pname = "colanderclchemy";
   version = "0.3.4";
 
   src = fetchPypi {

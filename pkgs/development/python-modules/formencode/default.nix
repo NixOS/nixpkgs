@@ -10,13 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "FormEncode";
+  pname = "formencode";
   version = "2.0.1";
 
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "FormEncode";
+    inherit version;
     sha256 = "8f2974112c2557839d5bae8b76490104c03830785d923abbdef148bf3f710035";
   };
 

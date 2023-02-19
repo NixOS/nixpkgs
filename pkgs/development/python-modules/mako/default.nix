@@ -18,13 +18,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Mako";
+  pname = "mako";
   version = "1.2.4";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Mako";
+    inherit version;
     sha256 = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
   };
 

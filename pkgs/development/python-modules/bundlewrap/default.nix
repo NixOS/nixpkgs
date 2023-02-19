@@ -4,7 +4,7 @@
 , pythonOlder
 , cryptography
 , jinja2
-, Mako
+, mako
 , passlib
 , pytest
 , pyyaml
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [
-    setuptools cryptography jinja2 Mako passlib pyyaml requests tomlkit librouteros
+    setuptools cryptography jinja2 mako passlib pyyaml requests tomlkit librouteros
   ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
