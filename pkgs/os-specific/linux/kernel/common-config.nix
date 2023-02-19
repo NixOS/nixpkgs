@@ -71,13 +71,13 @@ let
       PM_WAKELOCKS                     = yes;
       POWERCAP                         = yes;
       # ACPI Firmware Performance Data Table Support
-      ACPI_FPDT                        = whenAtLeast "5.12" yes;
+      ACPI_FPDT                        = whenAtLeast "5.12" (option yes);
       # ACPI Heterogeneous Memory Attribute Table Support
-      ACPI_HMAT                        = whenAtLeast "5.2" yes;
+      ACPI_HMAT                        = whenAtLeast "5.2" (option yes);
       # ACPI Platform Error Interface
-      ACPI_APEI                        = yes;
+      ACPI_APEI                        = (option yes);
       # APEI Generic Hardware Error Source
-      ACPI_APEI_GHES                   = yes;
+      ACPI_APEI_GHES                   = (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
