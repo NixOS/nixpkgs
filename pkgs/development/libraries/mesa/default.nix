@@ -227,7 +227,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
-    python3Packages.python python3Packages.Mako python3Packages.ply
+    python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
   ] ++ lib.optional haveWayland wayland-scanner;
 

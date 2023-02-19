@@ -5677,7 +5677,7 @@ self: super: with self; {
 
   maison = callPackage ../development/python-modules/maison { };
 
-  Mako = callPackage ../development/python-modules/Mako { };
+  mako = callPackage ../development/python-modules/mako { };
 
   malduck= callPackage ../development/python-modules/malduck { };
 

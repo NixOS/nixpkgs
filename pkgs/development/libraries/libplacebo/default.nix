@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3Packages.Mako
+    python3Packages.mako
   ];
 
   buildInputs = [

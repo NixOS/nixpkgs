@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     humanize
     importlib-metadata
     loguru
-    Mako
+    mako
     markupsafe
     mitmproxy
     six

@@ -14,7 +14,7 @@
 , ipykernel
 , jinja2
 , lxml
-, Mako
+, mako
 , markdown
 , micawber
 , mock
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     ipykernel
     jinja2
     lxml
-    Mako
+    mako
     markdown
     micawber
     natsort

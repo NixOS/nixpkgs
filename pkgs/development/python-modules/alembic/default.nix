@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, Mako
+, mako
 , python-dateutil
 , sqlalchemy
 , importlib-metadata
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    Mako
+    mako
     python-dateutil
     sqlalchemy
   ] ++ lib.optionals (pythonOlder "3.9") [

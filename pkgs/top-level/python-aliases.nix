@@ -135,6 +135,7 @@ mapAliases ({
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
+  Mako = mako; # added 2023-02-19
   Markups = markups; # added 2022-02-14
   MDP = mdp; # added 2023-02-19
   MechanicalSoup = mechanicalsoup; # added 2021-06-01

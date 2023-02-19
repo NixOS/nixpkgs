@@ -4,7 +4,7 @@
 , django
 , fetchFromGitHub
 , jinja2
-, Mako
+, mako
 , nose
 , pyramid
 , pyramid_mako
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     django
     jinja2
-    Mako
+    mako
     nose
     tornado
     pyramid

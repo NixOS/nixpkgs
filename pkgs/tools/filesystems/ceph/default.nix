@@ -121,7 +121,7 @@ let
     ps.setuptools
     ps.virtualenv
     # Libraries needed by the python tools
-    ps.Mako
+    ps.mako
     ceph-common
     ps.cherrypy
     ps.cmd2

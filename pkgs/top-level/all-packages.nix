@@ -9699,7 +9699,7 @@ with pkgs;
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
-    inherit (python3Packages) Mako;
+    inherit (python3Packages) mako;
   };
 
   manix = callPackage ../tools/nix/manix {

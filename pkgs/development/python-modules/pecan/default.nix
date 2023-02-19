@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , logutils
-, Mako
+, mako
 , webtest
 , pythonOlder
 , pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     logutils
-    Mako
+    mako
     webtest
     six
   ];

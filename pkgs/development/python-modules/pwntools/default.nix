@@ -3,7 +3,7 @@
 , buildPythonPackage
 , debugger
 , fetchPypi
-, Mako
+, mako
 , packaging
 , pysocks
 , pygments
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     packaging
     pysocks
     pygments
