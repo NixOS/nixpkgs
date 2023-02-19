@@ -6512,7 +6512,7 @@ self: super: with self; {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
-  Nuitka = callPackage ../development/python-modules/nuitka { };
+  nuitka = callPackage ../development/python-modules/nuitka { };
 
   nulltype = callPackage ../development/python-modules/nulltype { };
 
