@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "JayDeBeApi";
+  pname = "jaydebeapi";
   version = "1.2.3";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "JayDeBeApi";
+    inherit version;
     sha256 = "f25e9307fbb5960cb035394c26e37731b64cc465b197c4344cee85ec450ab92f";
   };
 

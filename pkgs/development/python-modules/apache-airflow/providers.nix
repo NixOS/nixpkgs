@@ -157,7 +157,7 @@
     imports = [ "airflow.providers.influxdb.hooks.influxdb" "airflow.providers.influxdb.operators.influxdb" ];
   };
   jdbc = {
-    deps = [ "JayDeBeApi" ];
+    deps = [ "jaydebeapi" ];
     imports = [ "airflow.providers.jdbc.hooks.jdbc" "airflow.providers.jdbc.operators.jdbc" ];
   };
   jenkins = {

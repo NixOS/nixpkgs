@@ -4876,7 +4876,7 @@ self: super: with self; {
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
-  JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
+  jaydebeapi = callPackage ../development/python-modules/jaydebeapi { };
 
   jc = callPackage ../development/python-modules/jc { };
 
