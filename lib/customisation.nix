@@ -1,5 +1,10 @@
 { lib }:
-
+let
+  inherit (lib)
+    isAttrs
+    isString
+    ;
+in
 rec {
 
 
@@ -209,10 +214,23 @@ rec {
       outputToAttrListElement = outputName:
         { name = outputName;
           value = commonAttrs // {
-            inherit (drv.${outputName}) type outputName;
+            type = drv.${outputName}.type or "derivation";
+            inherit outputName;
             outputSpecified = true;
-            drvPath = assert condition; drv.${outputName}.drvPath;
-            outPath = assert condition; drv.${outputName}.outPath;
+            drvPath = assert condition;
+              if isAttrs drv.${outputName}
+              then
+                drv.${outputName}.drvPath
+              else
+                assert isString drv.${outputName};
+                drv.${outputName};
+            outPath = assert condition;
+              if isAttrs drv.${outputName}
+              then
+                drv.${outputName}.outPath
+              else
+                assert isString drv.${outputName};
+                drv.${outputName};
           } //
             # TODO: give the derivation control over the outputs.
             #       `overrideAttrs` may not be the only attribute that needs
