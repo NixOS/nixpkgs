@@ -1,12 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   configDir = "/var/lib/foobar";
+  userName = "admin";
+  password = "secret";
 in {
   name = "home-assistant";
   meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass = { pkgs, ... }: {
+    virtualisation.memorySize = 1024;
+
     services.postgresql = {
       enable = true;
       ensureDatabases = [ "hass" ];
@@ -27,7 +31,10 @@ in {
         extraPackages = ps: with ps; [
           colorama
         ];
-        extraComponents = [ "zha" ];
+        extraComponents = [
+          "met"
+          "radio_browser"
+        ];
       }).overrideAttrs (oldAttrs: {
         doInstallCheck = false;
       });
@@ -79,6 +86,7 @@ in {
         # https://www.home-assistant.io/integrations/logger/
         logger = {
           default = "info";
+          logs."homeassistant.components.http" = "debug";
         };
       };
 
@@ -108,6 +116,22 @@ in {
       inheritParentConfig = true;
       configuration.services.home-assistant.config.esphome = {};
     };
+
+    environment.systemPackages = let
+      testRunner = pkgs.writers.writePython3Bin "test-runner" {
+        libraries = with pkgs.python3Packages; [
+          selenium
+          structlog
+         ];
+        flakeIgnore = [
+          "E501" # line too long
+        ];
+      } (builtins.readFile ./webdriver.py);
+    in with pkgs; [
+      chromium
+      chromedriver
+      testRunner
+    ];
   };
 
   testScript = { nodes, ... }: let
@@ -150,7 +174,7 @@ in {
 
     with subtest("Check extraComponents and extraPackages are considered from the package"):
         hass.succeed(f"grep -q 'colorama' {package}/extra_packages")
-        hass.succeed(f"grep -q 'zha' {package}/extra_components")
+        hass.succeed(f"grep -q 'radio_browser' {package}/extra_components")
 
     with subtest("Check extraComponents and extraPackages are considered from the module"):
         hass.succeed(f"grep -q 'psycopg2' {package}/extra_packages")
@@ -192,5 +216,11 @@ in {
     with subtest("Check systemd unit hardening"):
         hass.log(hass.succeed("systemctl cat home-assistant.service"))
         hass.log(hass.succeed("systemd-analyze security home-assistant.service"))
+
+    with subtest("Test onboarding"):
+        hass.execute(
+            "systemd-run --wait --unit hass-onboarding -E PATH=${pkgs.geckodriver}/bin:$PATH -E PYTHONUNBUFFERED=1 test-runner"
+        )
+        hass.copy_from_vm("/run/artifacts")
   '';
 })
