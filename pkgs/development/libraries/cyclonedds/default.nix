@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cyclondds";
+  pname = "cyclonedds";
   version = "0.10.2";
 
   src = fetchFromGitHub {
