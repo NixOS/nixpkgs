@@ -1,12 +1,12 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
-  version = "3.4.6";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
-    sha256 = "044ng2aazqy8g0m17q0a4939ck1ca4x230q2q7q7jndvwkrpaj5w";
+    hash = "sha256-5aoXBQowvHK6qGr9xgSMrepNHsLsxh14dxegWbgxnog=";
   };
 
   # ExtUtil::MakeMaker is bundled with Perl, but the bundled version
@@ -36,7 +36,7 @@ perlPackages.buildPerlPackage rec {
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]}
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]} --prefix C_INCLUDE_PATH : ${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}
     done
   '';
 
