@@ -157,7 +157,7 @@ in
       # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
       environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
         source = json.generate "podman.json" ({
-          dns_enabled = false;
+          dns_enabled = true;
           driver = "bridge";
           id = "0000000000000000000000000000000000000000000000000000000000000000";
           internal = false;
