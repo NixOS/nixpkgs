@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with MicroBot";
     homepage = "https://github.com/spycle/pyMicroBot/";
+    changelog = "https://github.com/spycle/pyMicroBot/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
