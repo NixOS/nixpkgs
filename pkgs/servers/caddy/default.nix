@@ -48,6 +48,7 @@ buildGoModule {
 
     installShellCompletion --cmd metal \
       --bash <($out/bin/caddy completion bash) \
+      --fish <($out/bin/caddy completion fish) \
       --zsh <($out/bin/caddy completion zsh)
   '';
 
