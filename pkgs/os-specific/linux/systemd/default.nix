@@ -82,6 +82,7 @@
 , bpftools
 , libbpf
 
+, withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
@@ -377,7 +378,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      acl
       audit
       kmod
       libxcrypt
@@ -390,6 +390,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
+    ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
@@ -436,6 +437,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
     "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
