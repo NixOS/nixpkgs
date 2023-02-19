@@ -16,10 +16,12 @@ from .md import Converter
 
 class ManualDocBookRenderer(DocBookRenderer):
     _toplevel_tag: str
+    _revision: str
 
-    def __init__(self, toplevel_tag: str, manpage_urls: Mapping[str, str]):
+    def __init__(self, toplevel_tag: str, revision: str, manpage_urls: Mapping[str, str]):
         super().__init__(manpage_urls)
         self._toplevel_tag = toplevel_tag
+        self._revision = revision
         self.rules |= {
             'included_sections': lambda *args: self._included_thing("section", *args),
             'included_chapters': lambda *args: self._included_thing("chapter", *args),
@@ -87,7 +89,7 @@ class ManualDocBookRenderer(DocBookRenderer):
             self._headings[-1] = self._headings[-1]._replace(partintro_closed=True)
         # must nest properly for structural includes. this requires saving at least
         # the headings stack, but creating new renderers is cheap and much easier.
-        r = ManualDocBookRenderer(tag, self._manpage_urls)
+        r = ManualDocBookRenderer(tag, self._revision, self._manpage_urls)
         for (included, path) in token.meta['included']:
             try:
                 result.append(r.render(included))
@@ -110,12 +112,10 @@ class ManualDocBookRenderer(DocBookRenderer):
 
 class DocBookConverter(Converter[ManualDocBookRenderer]):
     _base_paths: list[Path]
-    _revision: str
 
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
         super().__init__()
-        self._renderer = ManualDocBookRenderer('book', manpage_urls)
-        self._revision = revision
+        self._renderer = ManualDocBookRenderer('book', revision, manpage_urls)
 
     def convert(self, file: Path) -> str:
         self._base_paths = [ file ]
@@ -182,7 +182,7 @@ class DocBookConverter(Converter[ManualDocBookRenderer]):
 
         try:
             conv = options.DocBookConverter(
-                self._renderer._manpage_urls, self._revision, False, 'fragment', varlist_id, id_prefix)
+                self._renderer._manpage_urls, self._renderer._revision, False, 'fragment', varlist_id, id_prefix)
             with open(self._base_paths[-1].parent / source, 'r') as f:
                 conv.add_options(json.load(f))
             token.meta['rendered-options'] = conv.finalize(fragment=True)
