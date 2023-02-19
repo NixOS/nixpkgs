@@ -1797,6 +1797,11 @@ self: super: with self; {
 
   claripy = callPackage ../development/python-modules/claripy { };
 
+  inherit (import ../development/python-modules/clang self)
+   clang_5
+   clang_11
+   clang;
+
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi { };
