@@ -8949,7 +8949,7 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
-  PyStemmer = callPackage ../development/python-modules/pystemmer { };
+  pystemmer = callPackage ../development/python-modules/pystemmer { };
 
   pystray = callPackage ../development/python-modules/pystray { };
 

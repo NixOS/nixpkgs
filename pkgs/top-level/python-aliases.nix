@@ -199,6 +199,7 @@ mapAliases ({
   PyRSS2Gen = pyrss2gen; # added 2023-02-19
   pysmart-smartx = pysmart; # added 2021-10-22
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
+  PyStemmer = pystemmer; # added 2023-02-19
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
