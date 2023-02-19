@@ -192,6 +192,8 @@ with pkgs;
     meta.platforms = lib.platforms.linux;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
+  apl386 = callPackage ../data/fonts/apl386 { };
+
   appflowy = callPackage ../applications/office/appflowy { };
 
   appimageTools = callPackage ../build-support/appimage {
