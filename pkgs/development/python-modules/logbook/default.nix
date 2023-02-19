@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, brotli }:
 
 buildPythonPackage rec {
-  pname = "Logbook";
+  pname = "logbook";
   version = "1.5.3";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Logbook";
+    inherit version;
     sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
   };
 

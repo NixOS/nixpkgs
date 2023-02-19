@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
+  attrs, aiohttp, appdirs, click, keyring, logbook, peewee, janus,
   prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
   setuptools, installShellFiles, nixosTests,
 
@@ -29,7 +29,7 @@ buildPythonApplication rec {
     click
     janus
     keyring
-    Logbook
+    logbook
     matrix-nio
     peewee
     prompt-toolkit

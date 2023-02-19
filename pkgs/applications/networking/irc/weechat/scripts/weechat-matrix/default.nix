@@ -8,7 +8,7 @@
 , future
 , atomicwrites
 , attrs
-, Logbook
+, logbook
 , pygments
 , matrix-nio
 , aiohttp
@@ -45,7 +45,7 @@ in buildPythonPackage {
     future
     atomicwrites
     attrs
-    Logbook
+    logbook
     pygments
     matrix-nio
     aiohttp
