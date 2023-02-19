@@ -40,7 +40,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Nikola";
+  pname = "nikola";
   version = "8.2.3";
   disabled = pythonOlder "3.7";
 
