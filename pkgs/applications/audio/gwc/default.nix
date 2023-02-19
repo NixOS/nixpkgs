@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gwc";
-  version = "0.22-05";
+  version = "0.22-06";
 
   src = fetchFromGitHub {
     owner = "AlisterH";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FHKu5qAyRyMxXdWYTCeAc6Q4J+NOaU1SGgoTbe0PiFE=";
+    sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
   };
 
   nativeBuildInputs = [
