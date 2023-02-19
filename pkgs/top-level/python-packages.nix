@@ -8337,7 +8337,7 @@ self: super: with self; {
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
-  PyLTI = callPackage ../development/python-modules/pylti { };
+  pylti = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
 
