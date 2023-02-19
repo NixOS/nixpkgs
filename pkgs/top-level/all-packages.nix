@@ -10120,6 +10120,8 @@ with pkgs;
 
   nfs-ganesha = callPackage ../servers/nfs-ganesha { };
 
+  nflz = callPackage ../misc/nflz { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = callPackage ../tools/networking/ngrok { };
@@ -10679,6 +10681,8 @@ with pkgs;
   page = callPackage ../tools/misc/page { };
 
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
+
+  paging-calculator  = callPackage ../development/tools/paging-calculator { };
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
@@ -13131,6 +13135,8 @@ with pkgs;
   wakapi = callPackage ../tools/misc/wakapi { };
 
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
+
+  wambo = callPackage ../development/tools/wambo { };
 
   weather = callPackage ../applications/misc/weather { };
 
