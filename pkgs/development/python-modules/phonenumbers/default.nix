@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for handling international phone numbers";
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
+    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fadenb ];
   };
