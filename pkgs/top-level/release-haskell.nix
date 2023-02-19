@@ -351,9 +351,6 @@ let
       pkgsCross.ghcjs.haskellPackages =
         removePlatforms
           [
-            # Still unexplained build failure: https://github.com/NixOS/nixpkgs/issues/217127
-            "x86_64-darwin"
-
             # Hydra output size of 3GB is exceeded
             "aarch64-linux"
           ]

@@ -131,7 +131,7 @@ rec {
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 
-    js       = { bits = 32; significantByte = littleEndian; family = "js"; };
+    javascript = { bits = 32; significantByte = littleEndian; family = "javascript"; };
   };
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
