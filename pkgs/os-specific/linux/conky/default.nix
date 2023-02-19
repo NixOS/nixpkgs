@@ -67,22 +67,25 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.13.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
+    sha256 = "sha256-a0RGgX325NztDcQwg9+ibxOstU0MSS3eSTaljgt9qPQ=";
   };
+
+  # For some reason -Werror is on by default, causing the project to fail compilation.
+  buildPhase = ''
+    make
+  '';
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
       cmake/ConkyPlatformChecks.cmake
   '' + optionalString docsSupport ''
-    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
-    sed -i 's/ Example: .*$//' doc/config_settings.xml
-
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
