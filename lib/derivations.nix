@@ -98,4 +98,7 @@ in
       # `lazyDerivation` caller knew a shortcut, be taken from there.
       meta = args.meta or checked.meta;
     } // passthru;
+
+  inspectMkDerivationArgs = drv:
+    (drv.overrideAttrs (o: { passthru.__inspectArgs = o; })).__inspectArgs;
 }
