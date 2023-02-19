@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librsync";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
     rev = "v${version}";
-    sha256 = "sha256-GNwOIZ2UjvsYIthotiPDBrabYzCGFG/YVEbwVa9Nwi4=";
+    sha256 = "sha256-s7WmQhLG6xoBJx5OsdZSD8bSuEC3xUCfbH/GzMAevGQ=";
   };
 
   nativeBuildInputs = [ cmake ];
