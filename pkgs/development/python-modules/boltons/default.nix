@@ -41,6 +41,11 @@ buildPythonPackage rec {
     "boltons"
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/mahmoud/boltons/issues/326
+    "test_frozendict_api"
+  ];
+
   meta = with lib; {
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
