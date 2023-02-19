@@ -1,6 +1,5 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
 
 import dataclasses
@@ -458,7 +457,7 @@ class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
     def __init__(self, manpage_urls: Mapping[str, str]):
-        self._manpage_urls = frozendict(manpage_urls)
+        self._manpage_urls = manpage_urls
 
         self._md = markdown_it.MarkdownIt(
             "commonmark",

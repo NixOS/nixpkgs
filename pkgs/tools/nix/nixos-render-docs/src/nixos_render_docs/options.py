@@ -204,7 +204,7 @@ class DocBookConverter(BaseConverter):
     __renderer__ = OptionsDocBookRenderer
     __option_block_separator__ = ""
 
-    def __init__(self, manpage_urls: dict[str, str],
+    def __init__(self, manpage_urls: Mapping[str, str],
                  revision: str,
                  markdown_by_default: bool,
                  document_type: str,
