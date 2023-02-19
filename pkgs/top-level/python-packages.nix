@@ -7691,7 +7691,7 @@ self: super: with self; {
 
   pvo = callPackage ../development/python-modules/pvo { };
 
-  Pweave = callPackage ../development/python-modules/pweave { };
+  pweave = callPackage ../development/python-modules/pweave { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;

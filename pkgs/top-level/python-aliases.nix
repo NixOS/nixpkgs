@@ -168,6 +168,7 @@ mapAliases ({
   protonup = protonup-ng; # Added 2022-11-06
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
+  Pweave = pweave; # added 2023-02-19
   pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
