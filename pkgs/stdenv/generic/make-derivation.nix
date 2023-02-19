@@ -579,12 +579,13 @@ lib.extendDerivation
        disallowedRequisites = [ ];
      });
 
-     inherit meta passthru overrideAttrs;
-   } //
+     inherit meta overrideAttrs;
+   }
+   // lib.optionalAttrs (! attrs.__cleanAttrs or false) { inherit passthru; }
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
-   passthru)
+   // passthru)
   (
     let
       drvAttrs = derivationArg // lib.optionalAttrs envIsExportable checkedEnv;
