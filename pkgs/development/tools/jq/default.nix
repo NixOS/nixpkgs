@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version = "1.6";
+  version = "2022-05-26";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = builtins.fetchTarball {
-    url = "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256 = "sha256-Jb9kV1htQpc6EXTCgn0tSTCmCnxkpOBf/YQ2gCwQipc=";
+    url = "https://github.com/stedolan/jq/archive/cff5336ec71b6fee396a95bb0e4bea365e0cd1e8.tar.gz";
+    sha256 = "sha256-gsngye7EAmdSqH7ZH1g8/sQFj1nJWEGHpt48T8qXjZ0=";
   };
 
   patches = [
