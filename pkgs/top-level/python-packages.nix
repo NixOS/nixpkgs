@@ -7300,6 +7300,8 @@ self: super: with self; {
 
   python-fullykiosk = callPackage ../development/python-modules/python-fullykiosk { };
 
+  python-fx = callPackage ../development/python-modules/python-fx { };
+
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
 
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
