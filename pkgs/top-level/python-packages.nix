@@ -7068,6 +7068,8 @@ self: super: with self; {
 
   overpy = callPackage ../development/python-modules/overpy { };
 
+  overrides = callPackage ../development/python-modules/overrides { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
