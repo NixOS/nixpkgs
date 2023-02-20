@@ -218,19 +218,15 @@ rec {
             inherit outputName;
             outputSpecified = true;
             drvPath = assert condition;
-              if isAttrs drv.${outputName}
-              then
-                drv.${outputName}.drvPath
-              else
-                assert isString drv.${outputName};
-                drv.${outputName};
+              drv.${outputName}.drvPath or (
+                assert isString drv.drvPath;
+                drv.drvPath
+              );
             outPath = assert condition;
-              if isAttrs drv.${outputName}
-              then
-                drv.${outputName}.outPath
-              else
+              drv.${outputName}.outPath or (
                 assert isString drv.${outputName};
-                drv.${outputName};
+                drv.${outputName}
+              );
           } //
             # TODO: give the derivation control over the outputs.
             #       `overrideAttrs` may not be the only attribute that needs
