@@ -397,7 +397,7 @@ in
 
       provision = {
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
-        datasources =
+        datasources.settings.datasources =
           let
             esVersion = lib.getVersion config.services.elasticsearch.package;
           in
@@ -423,7 +423,7 @@ in
                 };
               }
             ];
-        dashboards = lib.mkIf cfg.provision.grafana.dashboard [{
+        dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
           options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
         }];
