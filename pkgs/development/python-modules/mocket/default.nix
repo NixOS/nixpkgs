@@ -17,16 +17,19 @@
 , requests
 , sure
 , pook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
   version = "3.10.9";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fAVw5WvpJOITQWqA8Y6Xi7QbaunZ1WGXxAuUMXbh+Aw=";
+    hash = "sha256-fAVw5WvpJOITQWqA8Y6Xi7QbaunZ1WGXxAuUMXbh+Aw=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +38,12 @@ buildPythonPackage rec {
     python-magic
     urllib3
   ];
+
+  passthru.optional-dependencies = {
+    pook = [
+      pook
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,11 +55,11 @@ buildPythonPackage rec {
     redis
     requests
     sure
-    pook
-  ];
+  ] ++ passthru.optional-dependencies.pook;
 
   # skip http tests
   SKIP_TRUE_HTTP = true;
+
   pytestFlagsArray = [
     # Requires a live Redis instance
     "--ignore=tests/main/test_redis.py"
@@ -77,8 +86,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mocket" ];
 
   meta = with lib; {
-    description = "A socket mock framework - for all kinds of socket animals, web-clients included";
+    description = "A socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
+    changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };
