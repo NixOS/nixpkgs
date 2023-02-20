@@ -8,16 +8,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.244";
+  version = "0.0.248";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oQBNVs7hoiXNqz5lYq5YNKHfpQ/c8LZAvNvtFqpTM2E=";
+    hash = "sha256-qsjn8AW6Wx0ZaTht9BToQxYWngrrrR8LIIWcNfr8fXw=";
   };
 
-  cargoSha256 = "sha256-61kypAXWfUZLfTbSp+b0gCKwuWtxAYVtKIwfVOcJ2o8=";
+  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
+  # inheritance within Git dependencies, but importCargoLock does.
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libcst-0.1.0" = "sha256-66Td5jnLEEDHgYapsSmxfgIE43T7PSTYRznllIOw81U=";
+      "rustpython-ast-0.2.0" = "sha256-k2WHnRtqSzdawHQKOfTjvyZxgRWXRv9dvSzfYC7171o=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,6 +34,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
+
+  cargoBuildFlags = [ "--package=ruff_cli" ];
 
   # building tests fails with `undefined symbols`
   doCheck = false;
