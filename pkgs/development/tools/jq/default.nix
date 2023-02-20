@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   version = "1.6";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
-  src = fetchurl {
+  src = builtins.fetchTarball {
     url = "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256 = "sha256-XejI4pqqP7nMa0e7JymfJxNU67clFOOsytx9OLW7qnI=";
+    sha256 = "sha256-Jb9kV1htQpc6EXTCgn0tSTCmCnxkpOBf/YQ2gCwQipc=";
   };
 
   patches = [
