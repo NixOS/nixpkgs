@@ -1260,6 +1260,8 @@ let
       inherit (pkgs) shine;
     };
 
+    simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
+
     sosa = callPackage ../development/ocaml-modules/sosa { };
 
     soundtouch = callPackage ../development/ocaml-modules/soundtouch {
