@@ -1,0 +1,6 @@
+id: yncnugwm6pe1kfvgh71gkdcslsjot8eyvukp7ivm6fraumu9
+name: test
+license: MIT
+description:
+root_dependencies:
+  - src: git https://github.com/Hejsil/zig-clap commit-8c98e64
