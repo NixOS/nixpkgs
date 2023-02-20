@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
 
     echo ""
-    echo "env.NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
+    echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
     echo ""
   '';
 
