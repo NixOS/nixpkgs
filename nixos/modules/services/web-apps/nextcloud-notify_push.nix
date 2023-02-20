@@ -84,6 +84,8 @@ in
         User = "nextcloud";
         Group = "nextcloud";
         RuntimeDirectory = [ "nextcloud-notify_push" ];
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
     };
 
