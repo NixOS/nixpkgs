@@ -132,6 +132,12 @@ in {
         return out
 
 
+    def get_unit_property(property) -> str:
+        exit, out = hass.execute(f"systemctl show --property={property} home-assistant.service")
+        assert exit == 0
+        return out
+
+
     def wait_for_homeassistant(cursor):
         hass.wait_until_succeeds(f"journalctl --after-cursor='{cursor}' -u home-assistant.service | grep -q 'Home Assistant initialized in'")
 
@@ -149,6 +155,12 @@ in {
         wait_for_homeassistant(cursor)
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
+
+    with subtest("Check that optional dependencies are in the PYTHONPATH"):
+        env = get_unit_property("Environment")
+        python_path = env.split("PYTHONPATH=")[1].split()[0]
+        for package in ["colorama", "paho-mqtt", "psycopg2"]:
+            assert package in python_path, f"{package} not in PYTHONPATH"
 
     with subtest("Check that declaratively configured components get setup"):
         journal = get_journal_since(cursor)
