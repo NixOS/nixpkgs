@@ -4018,6 +4018,8 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
+  clash-meta = callPackage ../tools/networking/clash-meta { };
+
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   clevis = callPackage ../tools/security/clevis {
