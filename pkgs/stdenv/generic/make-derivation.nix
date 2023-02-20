@@ -545,6 +545,10 @@ else let
         "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
       env;
 
+  drvAttrs = derivationArg // lib.optionalAttrs envIsExportable checkedEnv;
+  strict = builtins.derivationStrict drvAttrs;
+  outputName = lib.head outputs;
+
 in
 
 lib.extendDerivation
@@ -592,12 +596,6 @@ lib.extendDerivation
    # derivation (e.g., in assertions).
    // passthru)
   (
-    let
-      drvAttrs = derivationArg // lib.optionalAttrs envIsExportable checkedEnv;
-      strict = builtins.derivationStrict drvAttrs;
-      outputs = drvAttrs.outputs or ["out"];
-      outputName = lib.head outputs;
-    in
       (
         if attrs.__cleanAttrs or false
         then builtins.intersectAttrs { version = null; } drvAttrs
