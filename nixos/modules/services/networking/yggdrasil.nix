@@ -62,8 +62,8 @@ in
         default = null;
         example = "/run/keys/yggdrasil.conf";
         description = lib.mdDoc ''
-          A file which contains JSON configuration for yggdrasil.
-          See the {option}`settings` option for more information.
+          A file which contains JSON or HJSON configuration for yggdrasil. See
+          the {option}`settings` option for more information.
 
           Note: This file must not be larger than 1 MB because it is passed to
           the yggdrasil process via systemd‘s LoadCredential mechanism. For
@@ -125,8 +125,11 @@ in
   };
 
   config = mkIf cfg.enable (
-    let binYggdrasil = cfg.package + "/bin/yggdrasil";
-    in {
+    let
+      binYggdrasil = "${cfg.package}/bin/yggdrasil";
+      binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
+    in
+    {
       assertions = [{
         assertion = config.networking.enableIPv6;
         message = "networking.enableIPv6 must be true for yggdrasil to work";
@@ -171,7 +174,7 @@ in
             + (lib.optionalString settingsProvided
               "'${builtins.toJSON cfg.settings}'")
             + (lib.optionalString configFileProvided
-              "$(cat \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
+              "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
             + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
             + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
           else
