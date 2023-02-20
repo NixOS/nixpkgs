@@ -48,19 +48,18 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.88.0";
+  version = "7.88.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-yB9DntAkQvapuVg237OpjgxHdhDKey9NWqH8MpVD0z8=";
+    hash = "sha256-giS0XM4Sq94DnBLcBxG36oWxBLmtU01uTFtOGIphyQc=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./7.88.0-http2-breakage.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -185,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
+    changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;
