@@ -4319,6 +4319,8 @@ with pkgs;
   metricbeat = metricbeat7;
   packetbeat = packetbeat7;
 
+  filius = callPackage ../applications/networking/filius { };
+
   bfr = callPackage ../tools/misc/bfr { };
 
   bfscripts = callPackage ../tools/misc/bfscripts { };
