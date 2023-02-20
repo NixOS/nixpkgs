@@ -3095,7 +3095,7 @@ with pkgs;
 
   cuelsp = callPackage ../development/tools/cuelsp {};
 
-  cyclondds = callPackage ../development/libraries/cyclondds { };
+  cyclonedds = callPackage ../development/libraries/cyclonedds { };
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
@@ -3812,8 +3812,6 @@ with pkgs;
   bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
   bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
-
-  bpytop = callPackage ../tools/system/bpytop { };
 
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
@@ -7876,6 +7874,10 @@ with pkgs;
 
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
+  gptcommit = callPackage ../development/tools/gptcommit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gptman = callPackage ../tools/system/gptman { };
 
   ldmtool = callPackage ../tools/misc/ldmtool { };
@@ -9065,6 +9067,8 @@ with pkgs;
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
+
+  matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot {};
 
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
@@ -11992,6 +11996,8 @@ with pkgs;
   skydns = callPackage ../servers/skydns { };
 
   sing-box = callPackage ../tools/networking/sing-box { };
+
+  sing-geosite = callPackage ../data/misc/sing-geosite { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -17082,6 +17088,10 @@ with pkgs;
 
   verible = callPackage ../development/tools/language-servers/verible { };
 
+  zls = callPackage ../development/tools/language-servers/zls {
+    zig = zig_0_10;
+  };
+
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
@@ -18904,10 +18914,6 @@ with pkgs;
   yq-go = callPackage ../development/tools/yq-go { };
 
   ytt = callPackage ../development/tools/ytt {};
-
-  zls = callPackage ../development/tools/zls {
-    zig = zig_0_9;
-  };
 
   zydis = callPackage ../development/libraries/zydis { };
 
@@ -32584,7 +32590,7 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quisk = python38Packages.callPackage ../applications/radio/quisk { };
+  quisk = python39Packages.callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
@@ -37851,6 +37857,8 @@ with pkgs;
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
   neo = callPackage ../applications/misc/neo { };
+
+  networkd-dispatcher = callPackage ../tools/networking/networkd-dispatcher { };
 
   nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix {
     storeDir = config.nix.storeDir or "/nix/store";

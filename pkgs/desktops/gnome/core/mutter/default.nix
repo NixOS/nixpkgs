@@ -49,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.2";
+  version = "43.3";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "/S63B63DM8wnevhoXlzzkTXhxNeYofnQXojkU9w+u4Q=";
+    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
   };
 
   patches = [
@@ -64,6 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+    })
+
+    # Fix focus regression.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
+      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
     })
   ];
 

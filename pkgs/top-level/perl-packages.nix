@@ -9139,6 +9139,22 @@ let
     };
   };
 
+  FileDirList = buildPerlPackage {
+    version = "0.05";
+    pname = "File-DirList";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TP/TPABA/File-DirList/File-DirList-0.05.tar.gz";
+      sha256 = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
+    };
+    preCheck = ''
+      export HOME="$TMPDIR"
+    '';
+    meta = {
+      description = "Provide a sorted list of directory content";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileFindIterator = buildPerlPackage {
     pname = "File-Find-Iterator";
     version = "0.4";

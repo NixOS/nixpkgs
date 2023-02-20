@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"

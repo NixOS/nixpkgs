@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gitmux";
-  version = "0.7.12";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "arl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JPrXq4+53cem0TVnm1/AJz/mYcEKaYzqhptJU4V2U0o=";
+    sha256 = "sha256-Q0V4nUW/oL7YP7/UEcITLls6uCz5OKqqZymJ9eXHGac=";
   };
 
-  vendorHash = "sha256-V6xe+19NiHYIIN4rgkyzdP4eGnRXo0aW4fVbdlIcvig=";
+  vendorHash = "sha256-talZSkf8lQXwXKdkQliHFv2K+42BFtcg13oB5Szkff0=";
 
   # GitHub source does contain a regression test for the module
   # but it requires networking as it git clones a repo from github
