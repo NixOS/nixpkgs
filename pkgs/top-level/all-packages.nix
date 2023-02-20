@@ -7685,6 +7685,8 @@ with pkgs;
 
   gokart = callPackage ../development/tools/gokart { };
 
+  gokrazy-rsync = callPackage ../applications/networking/sync/gokrazy-rsync { };
+
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
