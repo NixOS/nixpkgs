@@ -603,7 +603,7 @@ lib.extendDerivation
       // builtins.intersectAttrs { version = null; } drvAttrs
       // {
         type = "derivation";
-        inherit outputName;
+        inherit outputName outputs;
         inherit (strict) drvPath;
         name = drvAttrs.pname or drvAttrs.name;
         outPath = strict.${outputName};
