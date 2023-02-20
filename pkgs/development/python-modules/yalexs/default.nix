@@ -3,7 +3,6 @@
 , aiohttp
 , aioresponses
 , aiounittest
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pubnub
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     aiounittest
-    asynctest
     pytestCheckHook
     requests-mock
   ];
