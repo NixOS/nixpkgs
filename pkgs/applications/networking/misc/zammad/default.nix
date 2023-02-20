@@ -7,7 +7,7 @@
 , callPackage
 , writeText
 , procps
-, ruby_2_7
+, ruby_3_0
 , postgresql
 , imlib2
 , jq
@@ -21,7 +21,7 @@
 
 let
   pname = "zammad";
-  version = "5.1.1";
+  version = "5.3.1";
 
   src = applyPatches {
 
@@ -30,9 +30,9 @@ let
     patches = [ ./0001-nulldb.patch ];
 
     postPatch = ''
-      sed -i -e "s|ruby '2.7.4'|ruby '${ruby_2_7.version}'|" Gemfile
-      sed -i -e "s|ruby 2.7.4p191|ruby ${ruby_2_7.version}|" Gemfile.lock
-      sed -i -e "s|2.7.4|${ruby_2_7.version}|" .ruby-version
+      sed -i -e "s|ruby '3.0.[0-9]\+'|ruby '${ruby_3_0.version}'|" Gemfile
+      sed -i -e "s|ruby 3.0.[0-9]\+p[0-9]\+|ruby ${ruby_3_0.version}|" Gemfile.lock
+      sed -i -e "s|3.0.[0-9]\+|${ruby_3_0.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
@@ -53,7 +53,7 @@ let
 
     # Which ruby version to select:
     #   https://docs.zammad.org/en/latest/prerequisites/software.html#ruby-programming-language
-    inherit ruby_2_7;
+    ruby = ruby_3_0;
 
     gemdir = src;
     gemset = ./gemset.nix;
@@ -91,9 +91,10 @@ let
   yarnEnv = yarn2nix-moretea.mkYarnPackage {
     pname = "${pname}-node-modules";
     inherit version src;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+    yarnLock = src + /yarn.lock;
     packageJSON = ./package.json;
+    #FIXME: packageResolutions should be remove when https://github.com/NixOS/nixpkgs/pull/214952/ is merged
+    packageResolutions = (lib.importJSON ./package.json).resolutions;
   };
 
 in
