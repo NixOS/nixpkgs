@@ -7,6 +7,7 @@
 , openssl
 , bash
 , nixosTests
+, writeTextDir
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,17 @@ stdenv.mkDerivation rec {
     openssl
     bash
   ];
+
+  # This can be removed when ppp 2.5.0 is released:
+  # https://github.com/ppp-project/ppp/commit/509f04959ad891d7f981f035ed461d51bd1f74b0
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMusl (writeTextDir "include/net/ppp_defs.h" ''
+    #ifndef _NET_PPP_DEFS_H
+    #define _NET_PPP_DEFS_H 1
+
+    #include <linux/ppp_defs.h>
+
+    #endif /* net/ppp_defs.h */
+  '');
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do

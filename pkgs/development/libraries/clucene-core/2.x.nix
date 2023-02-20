@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     ./Install-contribs-lib.patch
     # From arch
     ./fix-missing-include-time.patch
+
+    # required for darwin and linux-musl
+    ./pthread-include.patch
+
   ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
 
   # fails with "Unable to find executable:

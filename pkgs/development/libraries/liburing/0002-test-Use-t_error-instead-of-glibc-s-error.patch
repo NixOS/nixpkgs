@@ -1,0 +1,109 @@
+From e84f40ca872f0bce72b5686c95a11739d9c89494 Mon Sep 17 00:00:00 2001
+From: Steffen <steffen.winter@proton.me>
+Date: Mon, 13 Feb 2023 17:56:03 +0100
+Subject: [PATCH 2/3] test: Use t_error instead of glibc's error.
+
+On musl systems, liburing cannot build examples and tests due to
+it's usage of error.h. Replacing calls to error() with t_error().
+
+Closes: #786
+
+Signed-off-by: Steffen Winter <steffen.winter@proton.me>
+---
+ test/defer-taskrun.c |  1 -
+ test/send-zerocopy.c |  1 -
+ test/single-issuer.c | 15 +++++++--------
+ 3 files changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/test/defer-taskrun.c b/test/defer-taskrun.c
+index 9283f28..87cd256 100644
+--- a/test/defer-taskrun.c
++++ b/test/defer-taskrun.c
+@@ -4,7 +4,6 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <error.h>
+ #include <sys/eventfd.h>
+ #include <signal.h>
+ #include <poll.h>
+diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
+index 4db102b..be33094 100644
+--- a/test/send-zerocopy.c
++++ b/test/send-zerocopy.c
+@@ -4,7 +4,6 @@
+ #include <stdint.h>
+ #include <assert.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <limits.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+diff --git a/test/single-issuer.c b/test/single-issuer.c
+index 1d13f47..d71cd74 100644
+--- a/test/single-issuer.c
++++ b/test/single-issuer.c
+@@ -5,7 +5,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
+-#include <error.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
+@@ -56,13 +55,13 @@ static int try_submit(struct io_uring *ring)
+ 		return ret;
+ 
+ 	if (ret != 1)
+-		error(1, ret, "submit %i", ret);
++		t_error(1, ret, "submit %i", ret);
+ 	ret = io_uring_wait_cqe(ring, &cqe);
+ 	if (ret)
+-		error(1, ret, "wait fail %i", ret);
++		t_error(1, ret, "wait fail %i", ret);
+ 
+ 	if (cqe->res || cqe->user_data != 42)
+-		error(1, ret, "invalid cqe");
++		t_error(1, ret, "invalid cqe");
+ 
+ 	io_uring_cqe_seen(ring, cqe);
+ 	return 0;
+@@ -106,7 +105,7 @@ int main(int argc, char *argv[])
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER |
+ 					    IORING_SETUP_R_DISABLED);
+ 	if (ret)
+-		error(1, ret, "ring init (2) %i", ret);
++		t_error(1, ret, "ring init (2) %i", ret);
+ 
+ 	if (!fork_t()) {
+ 		io_uring_enable_rings(&ring);
+@@ -122,7 +121,7 @@ int main(int argc, char *argv[])
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER |
+ 					    IORING_SETUP_R_DISABLED);
+ 	if (ret)
+-		error(1, ret, "ring init (3) %i", ret);
++		t_error(1, ret, "ring init (3) %i", ret);
+ 
+ 	io_uring_enable_rings(&ring);
+ 	if (!fork_t()) {
+@@ -137,7 +136,7 @@ int main(int argc, char *argv[])
+ 	/* test that anyone can submit to a SQPOLL|SINGLE_ISSUER ring */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER|IORING_SETUP_SQPOLL);
+ 	if (ret)
+-		error(1, ret, "ring init (4) %i", ret);
++		t_error(1, ret, "ring init (4) %i", ret);
+ 
+ 	ret = try_submit(&ring);
+ 	if (ret) {
+@@ -157,7 +156,7 @@ int main(int argc, char *argv[])
+ 	/* test that IORING_ENTER_REGISTERED_RING doesn't break anything */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER);
+ 	if (ret)
+-		error(1, ret, "ring init (5) %i", ret);
++		t_error(1, ret, "ring init (5) %i", ret);
+ 
+ 	if (!fork_t()) {
+ 		ret = try_submit(&ring);
+-- 
+2.39.1
+
