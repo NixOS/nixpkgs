@@ -4758,6 +4758,8 @@ with pkgs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  giter8 = callPackage ../development/tools/giter8 {};
+
   gdu = callPackage ../tools/system/gdu { };
 
   gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
