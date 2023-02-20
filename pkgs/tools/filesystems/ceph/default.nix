@@ -9,7 +9,7 @@
 , gtest
 , cunit, snappy
 , makeWrapper
-, leveldb, oath-toolkit
+, oath-toolkit
 , libnl, libcap_ng
 , rdkafka
 , nixosTests
@@ -22,9 +22,12 @@
 , graphviz
 , fmt
 , python39
+, arrow-cpp
+, rocksdb
+, zstd
 
 # Optional Dependencies
-, yasm ? null, fcgi ? null, expat ? null
+, yasm ? null, expat ? null
 , curl ? null, fuse ? null
 , libedit ? null, libatomic_ops ? null
 , libs3 ? null
@@ -49,7 +52,6 @@ let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   optYasm = shouldUsePkg yasm;
-  optFcgi = shouldUsePkg fcgi;
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
@@ -68,7 +70,7 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
+  hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
 
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
@@ -140,10 +142,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.10";
+  version = "17.2.5";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "sha256-342+nUV3mCX7QJfZSnKEfnQFCJwJmVQeYnefJwW/AtU=";
+    sha256 = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -151,7 +153,10 @@ in rec {
     inherit src version;
 
     patches = [
-      ./0000-fix-SPDK-build-env.patch
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/144e629e33722c911c37fe58c84d90b632b1250e.patch";
+        hash = "sha256-w/PflHrXcazlEWnuxffDTJgSn2RzKtiqnoq2BZh2QcA=";
+      })
       # pacific: include/buffer: include <memory>
       # fixes build with gcc 12
       # https://github.com/ceph/ceph/pull/47295
@@ -184,14 +189,15 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oath-toolkit libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
+      arrow-cpp rocksdb zstd
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ lib.optionals hasRadosgw [
-      optFcgi optExpat optCurl optFuse optLibedit
+      optExpat optCurl optFuse optLibedit
     ];
 
     pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
@@ -208,9 +214,11 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
+      "-DWITH_SYSTEM_ARROW=ON"
+      "-DWITH_SYSTEM_ROCKSDB=ON"
+      "-DWITH_SYSTEM_ZSTD=ON"
       "-DWITH_SYSTEM_BOOST=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
