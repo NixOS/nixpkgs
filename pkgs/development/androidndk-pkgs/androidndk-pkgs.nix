@@ -145,7 +145,7 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {
-     outputs = [ "headers" "out" ];
+     outputs = [ "dev" "out" ];
   } ''
     lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
     if [ ! -d $lpath ]; then
@@ -156,6 +156,6 @@ rec {
     cp $lpath/*.so $lpath/*.a $out/lib
     chmod +w $out/lib/*
     cp $lpath/* $out/lib
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/include $headers
+    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/include $dev
   '';
 }
