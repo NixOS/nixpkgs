@@ -599,7 +599,7 @@ lib.extendDerivation
       (
         if attrs.__cleanAttrs or false
         then builtins.intersectAttrs { version = null; } drvAttrs
-        else drvAttrs // { inherit drvAttrs; }
+        else drvAttrs
       )
       // builtins.listToAttrs (map (outputName: {
           name = outputName;
@@ -610,6 +610,7 @@ lib.extendDerivation
         inherit outputName outputs;
         inherit (strict) drvPath;
         inherit (drvAttrs) name;
+        ${if attrs.__cleanAttrs or false then null else "drvAttrs"} = drvAttrs;
         outPath = strict.${outputName};
       }
   );
