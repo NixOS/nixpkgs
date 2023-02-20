@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9KIGBEszKtALEAcrDcenCzWfo2XseG+Sq3V+9K5YhHQ=";
+    hash = "sha256-9KIGBEszKtALEAcrDcenCzWfo2XseG+Sq3V+9K5YhHQ=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Package for representing electrophysiology data";
     homepage = "https://neuralensemble.org/neo/";
+    changelog = "https://neo.readthedocs.io/en/${version}/releases/${version}.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
