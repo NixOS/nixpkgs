@@ -1,18 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "first";
   version = "2.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gykyrm6zlrbf0iz318p57qwk594mx1jf0d79v79g32zql45na7z";
+    hash = "sha256-/yhbCMVfjJfOTqcBJ0OvJJXJ8SkXhfFjcivTb2r2078=";
   };
 
   doCheck = false; # no tests
+
+  pythonImportsCheck = [
+    "first"
+  ];
 
   meta = with lib; {
     description = "The function you always missed in Python";
