@@ -4020,6 +4020,8 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
+  clash-meta = callPackage ../tools/networking/clash-meta { };
+
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   clevis = callPackage ../tools/security/clevis {
@@ -10640,9 +10642,7 @@ with pkgs;
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
-  ovftool = callPackage ../tools/virtualization/ovftool {
-    libressl = libressl_3_4;
-  };
+  ovftool = callPackage ../tools/virtualization/ovftool { };
 
   overcommit = callPackage ../development/tools/overcommit { };
 
