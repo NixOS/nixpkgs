@@ -256,8 +256,9 @@ rec {
       outputs = drv.outputs or ["out"];
 
       commonAttrs =
-        { inherit (drv) name meta; inherit outputs; }
-        // lib.optionalAttrs (drv?system) { inherit (drv) system; }
+        { inherit (drv) name meta; inherit outputs;
+          ${if drv?system then "system" else null} = drv.system;
+        }
         // lib.optionalAttrs (drv._hydraAggregate or false) {
           _hydraAggregate = true;
           constituents = map hydraJob (lib.flatten drv.constituents);
