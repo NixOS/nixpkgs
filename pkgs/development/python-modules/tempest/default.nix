@@ -3,6 +3,7 @@
 , buildPythonPackage
 , cliff
 , debtcollector
+, defusedxml
 , fetchPypi
 , fixtures
 , hacking
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cliff
     debtcollector
+    defusedxml
     fixtures
     jsonschema
     netaddr
