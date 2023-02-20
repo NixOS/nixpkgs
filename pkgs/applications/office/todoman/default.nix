@@ -67,14 +67,13 @@ python3.pkgs.buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
+    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
     "test_sorting_null_values"
     "test_xdg_existant"
     # Tests are sensitive to performance
-    "test_sorting_fields"
-  ] ++ lib.optionals stdenv.isDarwin [
     "test_sorting_fields"
   ];
 
