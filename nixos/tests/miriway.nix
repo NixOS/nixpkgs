@@ -3,7 +3,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   meta = {
     maintainers = with lib.maintainers; [ OPNA2608 ];
-    # FIXME On ARM Miriway inside the VM doesn't receive keyboard inputs, why?
+    # Natively running Mir has problems with capturing the first registered libinput device.
+    # In our VM  runners on ARM and on some hardware configs (my RPi4, distro-independent), this misses the keyboard.
+    # It can be worked around by dis- and reconnecting the affected hardware, but we can't do this in these tests.
+    # https://github.com/MirServer/mir/issues/2837
     broken = pkgs.stdenv.hostPlatform.isAarch;
   };
 
@@ -30,6 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       enable = true;
       config = ''
         add-wayland-extensions=all
+        enable-x11=
 
         ctrl-alt=t:foot --maximized
         ctrl-alt=a:env WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty --option window.startup_mode=maximized
