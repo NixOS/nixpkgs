@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "asymworks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5i/O+u6BTqx0TajprAhnAa1ao3EzbBeBeKsczW05WRk=";
+    sha256 = "sha256-aab+3xrEiCjysa+DzXWelQwz8V2tr74y8v0NpDZiuTk=";
   };
 
   nativeBuildInputs = [
