@@ -3,11 +3,15 @@
 , fetchPypi
 , numpy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "quantities";
   version = "0.14.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
