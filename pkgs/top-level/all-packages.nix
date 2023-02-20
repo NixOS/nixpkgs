@@ -11240,6 +11240,8 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring {};
 
+  revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
+
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
