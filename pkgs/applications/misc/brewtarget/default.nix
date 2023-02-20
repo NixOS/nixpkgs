@@ -2,27 +2,29 @@
 , mkDerivation
 , fetchFromGitHub
 , bash
+, boost
 , cmake
 , qtbase
 , qttools
 , qtmultimedia
-, qtwebkit
 , qtsvg
+, xalanc
+, xercesc
 }:
 
 mkDerivation rec {
   pname = "brewtarget";
-  version = "2.3.1";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "Brewtarget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14xmm6f8xmvypagx4qdw8q9llzmyi9zzfhnzh4kbbflhjbcr7isz";
+    sha256 = "sha256-qgwzRjRVEk8hM1CmkoWrJT285RQnk5zq16dfSijai1Q=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qttools qtmultimedia qtwebkit qtsvg ];
+  buildInputs = [ boost qtbase qttools qtmultimedia qtsvg xalanc xercesc ];
 
   preConfigure = ''
     chmod +x configure
