@@ -174,6 +174,14 @@ in {
       ];
     };
 
+    linux_6_2 = callPackage ../os-specific/linux/kernel/linux-6.2.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
