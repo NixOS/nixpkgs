@@ -4,6 +4,8 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -17,6 +19,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-7+r//AwDZPiRqTJyOc0SSWvMtVzQN6bRv0TecG9yKHc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     numpy
