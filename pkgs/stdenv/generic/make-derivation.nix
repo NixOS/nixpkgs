@@ -601,7 +601,10 @@ lib.extendDerivation
         then builtins.intersectAttrs { version = null; } drvAttrs
         else drvAttrs // { inherit drvAttrs; }
       )
-      // lib.genAttrs outputs (o: strict.${o})
+      // builtins.listToAttrs (map (outputName: {
+          name = outputName;
+          value = strict.${outputName};
+        }) outputs)
       // {
         type = "derivation";
         inherit outputName outputs;
