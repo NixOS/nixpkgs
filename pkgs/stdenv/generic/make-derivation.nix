@@ -432,6 +432,9 @@ else let
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
     } // lib.optionalAttrs (stdenv.targetPlatform.useAndroidPrebuilt) {
       # NOTE(@cidkidnix):
+      # This might work on "non-prebuilt" android, though this is only tested with
+      # prebuilt at the moment
+
       # muldefs isn't a hardening flag, so we set it here on android since
       # bionic still needs it
       LD_FLAGS = "-z,muldefs $LD_FLAGS";
