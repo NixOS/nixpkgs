@@ -2,13 +2,11 @@ diff --git a/auto/unix b/auto/unix
 index a38c12dc..025a4899 100644
 --- a/auto/unix
 +++ b/auto/unix
-@@ -1072,9 +1072,7 @@ ngx_feature_test='int fd;
+@@ -1072,7 +1072,5 @@ ngx_feature_test='int fd;
  
  
- # Auto read nameserver from /etc/resolv.conf.
+ # Tengine: auto read nameserver from /etc/resolv.conf.
 - if [ -f "/etc/resolv.conf" ]; then
-     have=NGX_RESOLVER_FILE
-     value=\"/etc/resolv.conf\"
-     . auto/define
+     have=NGX_RESOLVER_FILE value="\"/etc/resolv.conf\"" . auto/define
 -fi
  
