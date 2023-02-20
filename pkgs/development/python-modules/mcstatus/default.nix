@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
     homepage = "https://github.com/py-mine/mcstatus";
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
