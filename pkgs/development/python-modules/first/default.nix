@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "first";
@@ -6,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gykyrm6zlrbf9iz318p57qwk594mx1jf0d79v79g32zql45na7z";
+    sha256 = "1gykyrm6zlrbf0iz318p57qwk594mx1jf0d79v79g32zql45na7z";
   };
 
   doCheck = false; # no tests
@@ -14,6 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "The function you always missed in Python";
     homepage = "https://github.com/hynek/first/";
+    changelog = "https://github.com/hynek/first/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };
