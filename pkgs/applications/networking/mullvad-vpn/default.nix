@@ -1,11 +1,36 @@
-{ stdenv, lib, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
-, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
-, makeWrapper, coreutils, gnugrep
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, alsa-lib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, pango
+, nspr
+, nss
+, gtk3
+, mesa
+, libGL
+, wayland
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
+, libappindicator
+, makeWrapper
+, coreutils
+, gnugrep
 }:
 
-let deps = [
+let
+  deps = [
     alsa-lib
     atk
     cairo
