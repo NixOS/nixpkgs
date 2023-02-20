@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";
     homepage = "https://github.com/pogzyb/asyncwhois";
+    changelog = "https://github.com/pogzyb/asyncwhois/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
