@@ -3418,6 +3418,18 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
   };
 
+  go-nvim = buildVimPluginFrom2Nix {
+    pname = "go.nvim";
+    version = "2023-02-19";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "go.nvim";
+      rev = "c11b8b50f3f4eeef7f7a8f07f697fd67794fd2ac";
+      sha256 = "12r0j62d76m2vh88wv4phc5s2r43scx3j8f814slnyigprdprs9k";
+    };
+    meta.homepage = "https://github.com/ray-x/go.nvim/";
+  };
+
   godbolt-nvim = buildVimPluginFrom2Nix {
     pname = "godbolt.nvim";
     version = "2023-01-02";
