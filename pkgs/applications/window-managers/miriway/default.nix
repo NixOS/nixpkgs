@@ -11,23 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "miriway";
-  version = "unstable-2022-12-18";
+  version = "unstable-2023-02-18";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "d294c303cb99b7becb0d6686be9a09f0a1f57596";
-    hash = "sha256-H+IZgI1IQxNl5yAygbDKXkyXajGHV/mp9gEqZcp0TeE=";
+    rev = "1363ae0452c5093f84418bc65354e93796caec65";
+    hash = "sha256-hQ2z3GlTJG9qewJLkPpoRMSn0D7xCLyl+1O+G4NnedA=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/bin" "\''${CMAKE_INSTALL_BINDIR}" \
-      --replace "/usr/share" "\''${CMAKE_INSTALL_DATADIR}" \
-      --replace "/etc" "\''${CMAKE_INSTALL_SYSCONFDIR}"
-
-    sed -i -e '/project(/a include(GNUInstallDirs)' CMakeLists.txt
-  '';
 
   strictDeps = true;
 
