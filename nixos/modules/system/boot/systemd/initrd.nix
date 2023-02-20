@@ -427,9 +427,6 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-
-        # the unwrapped systemd-cryptsetup executable
-        "${cfg.package}/lib/systemd/.systemd-cryptsetup-wrapped"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
