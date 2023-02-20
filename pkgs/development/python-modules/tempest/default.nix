@@ -15,6 +15,7 @@
 , oslo-serialization
 , oslo-utils
 , fixtures
+, pythonOlder
 , pyyaml
 , subunit
 , stevedore
@@ -30,6 +31,9 @@
 buildPythonPackage rec {
   pname = "tempest";
   version = "33.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
