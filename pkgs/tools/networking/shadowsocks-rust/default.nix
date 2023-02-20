@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
-  cargoBuildFeatures = [
+  buildFeatures = [
     "trust-dns"
     "local-http-native-tls"
     "local-tunnel"
