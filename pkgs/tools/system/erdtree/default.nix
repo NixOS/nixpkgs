@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solidiquis/erdtree";
     license = licenses.mit;
     maintainers = with maintainers; [ zendo ];
+    mainProgram = "et";
   };
 }
