@@ -226,6 +226,8 @@ with pkgs;
 
   quickemu = callPackage ../development/quickemu { };
 
+  quickgui = callPackage ../applications/virtualization/quickgui { };
+
   adcli = callPackage ../os-specific/linux/adcli { };
 
   aether = callPackage ../applications/networking/aether { };
