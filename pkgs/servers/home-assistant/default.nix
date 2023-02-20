@@ -355,7 +355,7 @@ in python.pkgs.buildPythonApplication rec {
     yarl
     # Implicit dependency via homeassistant/requirements.py
     setuptools
-  ] ++ componentBuildInputs ++ extraBuildInputs;
+  ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
@@ -431,6 +431,7 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
+    pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;
