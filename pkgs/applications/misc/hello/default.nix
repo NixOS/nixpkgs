@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
 
+  # We allow `hello.src` to be used in tests and examples.
+  passthru.src = finalAttrs.src;
+
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
     longDescription = ''
