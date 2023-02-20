@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf rustPlatform.bindgenHook ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-faligned-allocation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   meta = with lib; {
     description = "Vector Search Engine for the next generation of AI applications";

@@ -30,7 +30,7 @@ in
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-lablgtk";
-  inherit (param) version src NIX_CFLAGS_COMPILE;
+  inherit (param) version src env;
 
   # gnumake42: https://github.com/garrigue/lablgtk/issues/162
   nativeBuildInputs = [ pkg-config ocaml findlib gnumake42 ];
