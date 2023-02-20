@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
-  version = "3.6";
+  version = "3.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QdhJp7oUqOY8Z36haIrHgP4hVGaFXlOxNVg1ams7uhg=";
+    hash = "sha256-pqfb0CkWTPq6B8T7nn25lWuEQFRRziCDWYm5a1S3mIY=";
   };
 
   postInstall = ''
