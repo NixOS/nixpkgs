@@ -112,7 +112,7 @@ in {
   };
 
   testScript = { nodes, ... }: let
-    system = nodes.hass.config.system.build.toplevel;
+    system = nodes.hass.system.build.toplevel;
   in
   ''
     import json
