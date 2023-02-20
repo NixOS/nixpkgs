@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   sourceRoot = "./source/synapse_antispam";
 
-  propagatedBuildInputs = [ matrix-synapse ];
+  buildInputs = [ matrix-synapse ];
 
   doCheck = false; # no tests
   pythonImportsCheck = [ "mjolnir" ];
@@ -25,8 +25,9 @@ buildPythonPackage rec {
       Mjolnir's Synapse module is a way to interpret ban lists and apply
       them to your entire homeserver.
     '';
-    homepage = "https://github.com/matrix-org/mjolnir#synapse-module";
+    homepage = "https://github.com/matrix-org/mjolnir/blob/main/docs/synapse_module.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
+    broken = stdenv.isDarwin;
   };
 }
