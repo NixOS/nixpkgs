@@ -2,34 +2,33 @@
 , python3
 , fetchFromGitHub
 , withE2BE ? true
-, withHQthumbnails ? false
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.27.0a7";
+        version = "1.28.0a1";
         pname = "tulir-telethon";
         src = super.fetchPypi {
           inherit pname version;
-          sha256 = "sha256-w4WILvLvJBKf3Nlj0omTCDDD4z+b0XFlCplQ/IHwIPs=";
+          hash = "sha256-Kf7S5nSvedhA5RYt5rbTxBiQq6DGwHJ5uEYxd9AsYIc=";
         };
         doCheck = false;
       });
     };
   };
 in
-python.pkgs.buildPythonPackage rec {
+python.pkgs.buildPythonPackage {
   pname = "mautrix-telegram";
-  version = "unstable-2023-01-28";
+  version = "unstable-2023-02-16";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    rev = "f12abbe03846fd5897d58572ab24b70a58b337d2";
-    sha256 = "sha256-5ZZ85FOmTO26q2zhAIsF7mTlN4BLNLW2dQF+0culkUM=";
+    rev = "354b49d9e5f91f913b5fdf9288bc631a9a34d142";
+    hash = "sha256-zdK/0jgw++YwSzP8qs1BqInQlFOoM63TeI1jF1AqDnk=";
   };
 
   format = "setuptools";
@@ -59,9 +58,6 @@ python.pkgs.buildPythonPackage rec {
     prometheus-client
     # sqlite
     aiosqlite
-  ] ++ lib.optionals withHQthumbnails [
-    # hq_thumbnails
-    moviepy
   ] ++ lib.optionals withE2BE [
     # e2be
     python-olm

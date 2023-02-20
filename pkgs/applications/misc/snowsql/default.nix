@@ -5,21 +5,22 @@
 , patchelf
 , makeWrapper
 , openssl
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "snowsql";
   majorVersion = "1.2";
-  version = "${majorVersion}.21";
+  version = "${majorVersion}.23";
 
   src = fetchurl {
     url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${majorVersion}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
-    sha256 = "10pzxqk71amvaz951jl666ia6v0z22bgpvr108l3q62950hhhwmn";
+    sha256 = "16zx30l3g5i5ndgxsqlkmkrfzswbczpb3jcya3psq5170i8cfm8f";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
-  libPath = lib.makeLibraryPath [ openssl ];
+  libPath = lib.makeLibraryPath [ openssl libxcrypt ];
 
   buildCommand = ''
     mkdir -p $out/bin/
