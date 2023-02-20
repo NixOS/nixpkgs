@@ -598,9 +598,12 @@ lib.extendDerivation
       outputs = drvAttrs.outputs or ["out"];
       outputName = lib.head outputs;
     in
-      lib.optionalAttrs (! attrs.__cleanAttrs or false) (drvAttrs // { inherit drvAttrs; })
+      (
+        if attrs.__cleanAttrs or false
+        then builtins.intersectAttrs { version = null; } drvAttrs
+        else drvAttrs // { inherit drvAttrs; }
+      )
       // lib.genAttrs outputs (o: strict.${o})
-      // builtins.intersectAttrs { version = null; } drvAttrs
       // {
         type = "derivation";
         inherit outputName outputs;
