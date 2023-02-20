@@ -605,7 +605,7 @@ lib.extendDerivation
         type = "derivation";
         inherit outputName outputs;
         inherit (strict) drvPath;
-        name = drvAttrs.pname or drvAttrs.name;
+        inherit (drvAttrs) name;
         outPath = strict.${outputName};
       }
   );
