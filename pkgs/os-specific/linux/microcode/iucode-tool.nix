@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, fetchpatch }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, fetchpatch, argp-standalone }:
 
 stdenv.mkDerivation rec {
   pname = "iucode-tool";
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = lib.optional stdenv.hostPlatform.isMusl argp-standalone;
 
   enableParallelBuilding = true;
 

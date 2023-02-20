@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "4.5.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    rev = version;
-    sha256 = "sha256-9ADFtCrSJ4Y2QQY5YC/BMvoVZs2vaYHkhIM/rBlZm4I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1xasV9iLbSODy8q1wEVDvELdmSQwj3qVCXOE94lyjFU=";
   };
 
   postPatch = ''
@@ -38,11 +38,14 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [ "duo_client" ];
+  pythonImportsCheck = [
+    "duo_client"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
