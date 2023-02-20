@@ -7,12 +7,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pytz
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "eiswarnung";
-  version = "1.1.1";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sMR16if2Q+lK+ilnVNYVootBN2LFwBQLlZFkoX+oS/g=";
+    hash = "sha256-PVFAy34+UfNQNdzVdfvNiySrCTaKGuepnTINZYkOsuo=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    pytz
     yarl
   ];
 
