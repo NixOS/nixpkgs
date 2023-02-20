@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
+    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
