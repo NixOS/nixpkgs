@@ -1,6 +1,6 @@
 { stdenv, fetchurl, curl, cacert }:
 
-let 
+let
   version="0.16.1";
 in stdenv.mkDerivation {
   name = "giter8";
