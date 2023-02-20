@@ -28175,8 +28175,6 @@ with pkgs;
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
-  foxitreader = libsForQt5.callPackage ../applications/misc/foxitreader { };
-
   pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
     year = "2021";
   };
