@@ -113,14 +113,14 @@ stdenv.mkDerivation (self: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share}
-    cp qemu-system-i386 $out/bin/xemu
-
-    for RES in 16x16 24x24 32x32 48x48 128x128 256x256 512x512
-    do
-      mkdir -p $out/share/icons/hicolor/$RES/apps/
-      cp ../ui/icons/xemu_$RES.png $out/share/icons/hicolor/$RES/apps/xemu.png
-    done
+    install -Dm755 -T qemu-system-i386 $out/bin/xemu
+  '' +
+  # Generate code to install the icons
+  (lib.concatMapStringsSep ";\n"
+    (res:
+      "install -Dm644 -T ../ui/icons/xemu_${res}.png $out/share/icons/hicolor/${res}/apps/xemu.png")
+    [ "16x16" "24x24" "32x32" "48x48" "128x128" "256x256" "512x512" ]) +
+  ''
 
     runHook postInstall
   '';
