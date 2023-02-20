@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "sha256-3nHsdCndZx7TIbRXhuGdQx8fh8Ff7gYBQyNXIkJ2zPc=";
+    hash = "sha256-3nHsdCndZx7TIbRXhuGdQx8fh8Ff7gYBQyNXIkJ2zPc=";
   };
 
-  cargoSha256 = "sha256-jBl7+ElK+SEe92qygTocd6R1sgdHf+RpTVJZymhf3mQ=";
+  cargoHash = "sha256-jBl7+ElK+SEe92qygTocd6R1sgdHf+RpTVJZymhf3mQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with licenses; [ mit ];
