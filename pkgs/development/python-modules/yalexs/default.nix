@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "1.2.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
