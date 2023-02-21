@@ -66,6 +66,15 @@ stdenv.mkDerivation {
     install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
   '';
 
+  # On macOS the produced binaries' rpath references the build dir and is *not*
+  # rewritten to the install dir by cmake during installation (when
+  # `CMAKE_SKIP_BUILD_RPATH` is set to `Off`). So, we set rpath ourselves.
+  preFixup = lib.optional stdenv.hostPlatform.isDarwin ''
+    for exe in "$out/bin/"* ; do
+      ${stdenv.cc.targetPrefix}install_name_tool -add_rpath "$out/lib" "$exe"
+    done
+  '';
+
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
