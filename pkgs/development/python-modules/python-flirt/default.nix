@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -24,6 +26,10 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   buildAndTestSubdir = "pyflirt";
