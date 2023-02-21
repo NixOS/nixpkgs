@@ -27031,8 +27031,10 @@ with pkgs;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
+    withAcl = false;
     withAnalyze = false;
     withApparmor = false;
+    withAudit = false;
     withCompression = false;
     withCoredump = false;
     withCryptsetup = false;
@@ -27043,7 +27045,9 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
+    withKmod = false;
     withLibBPF = false;
+    withLibidn2 = false;
     withLocaled = false;
     withLogind = false;
     withMachined = false;
@@ -27051,6 +27055,7 @@ with pkgs;
     withNss = false;
     withOomd = false;
     withPCRE2 = false;
+    withPam = false;
     withPolkit = false;
     withPortabled = false;
     withRemote = false;
@@ -27063,13 +27068,17 @@ with pkgs;
   };
   systemdStage1 = systemdMinimal.override {
     pname = "systemd-stage-1";
+    withAcl = true;
     withCryptsetup = true;
     withFido2 = true;
+    withKmod = true;
+    withPam = true;
     withTpm2Tss = true;
   };
   systemdStage1Network = systemdStage1.override {
     pname = "systemd-stage-1-network";
     withNetworkd = true;
+    withLibidn2 = true;
   };
 
 
