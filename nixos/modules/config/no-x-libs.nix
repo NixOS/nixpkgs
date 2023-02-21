@@ -37,9 +37,9 @@ with lib;
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
-      gst_all_1 = super.gst_all_1 // {
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
-      };
+      gst_all_1 = super.gst_all_1.overrideScope' (const (super': {
+        gst-plugins-base = super'.gst-plugins-base.override { enableX11 = false; };
+      }));
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
       libdevil = super.libdevil-nox;

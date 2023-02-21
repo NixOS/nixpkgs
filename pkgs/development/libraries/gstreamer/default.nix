@@ -1,5 +1,12 @@
-{ callPackage, AudioToolbox, AVFoundation, Cocoa, CoreFoundation, CoreMedia, CoreServices, CoreVideo, DiskArbitration, Foundation, IOKit, MediaToolbox, OpenGL, VideoToolbox }:
+{ lib, pkgs }:
 
+(lib.makeScope pkgs.newScope (self:
+
+let
+  callPackage = self.callPackage;
+  # TODO: clean this up
+  inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
+in
 {
   gstreamer = callPackage ./core { inherit CoreServices; };
 
@@ -26,4 +33,4 @@
   gst-vaapi = callPackage ./vaapi { };
 
   # note: gst-python is in ./python/default.nix - called under pythonPackages
-}
+} // { libav = pkgs.ffmpeg; }))
