@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-1RlG1/2+NuMO9zqFHQaEkEX1YrYYMjnaNprjdl1ZnHQ=";
+    sha256 = "sha256-ytAKINcZwLyHWbzShxfxRKx4BepM0G2BYdLgwR48g7w=";
   };
 
-  cargoHash = "sha256-SYk2SiFbp40/6Z0aBoX4MPnPLHjEfsJKCW4cErm0D78=";
+  cargoHash = "sha256-yxFF5Yqj+xTB3FAJUtgcIeAEHR44JA1xONxGFdG0yS0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib ];
