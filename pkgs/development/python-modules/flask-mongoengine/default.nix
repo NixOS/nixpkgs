@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
+, email-validator
 , fetchFromGitHub
 , flask
 , flask-wtf
+, markupsafe
 , mongoengine
-, email-validator
 , pythonOlder
 , typing-extensions
+, wtforms
 }:
 
 buildPythonPackage rec {
@@ -31,6 +33,19 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    wtf = [
+      flask-wtf
+      wtforms
+    ] ++ wtforms.optional-dependencies.email;
+    # toolbar = [
+    #   flask-debugtoolbar
+    # ];
+    legacy = [
+      markupsafe
+    ];
+  };
 
   # Tests require working mongodb connection
   doCheck = false;
