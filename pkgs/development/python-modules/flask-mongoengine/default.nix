@@ -4,9 +4,9 @@
 , flask
 , flask-wtf
 , mongoengine
-, six
 , email-validator
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "10g9b13ls2msnhv8j44gslrfxa2ppqz2y1xjn2a4gg4m9mdjv8b2";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YqEtW02VvEeUsLIHLz6+V6juMtWPEIk2tLoKTUdY6YE=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,8 @@ buildPythonPackage rec {
     flask
     flask-wtf
     mongoengine
-    six
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   # Tests require working mongodb connection
