@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multiple argument dispatching";
-    homepage = "https://github.com/coady/multimethod";
+    homepage = "https://coady.github.io/multimethod/";
+    changelog = "https://github.com/coady/multimethod/tree/v${version}#changes";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };
