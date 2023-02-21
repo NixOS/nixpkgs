@@ -2,27 +2,37 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.5.0";
+  version = "3.5.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cdent";
     repo = "paste";
-    rev = version;
-    sha256 = "sha256-yaOxbfQ8rdViepxhdF0UzlelC/ozdsP1lOdU5w4OPEQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lpQMzrRpcG5TqWm/FJn4oo9TV8Skf0ypZVeQC4y8p1U=";
   };
 
   postPatch = ''
     patchShebangs tests/cgiapp_data/
   '';
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ 
+    setuptools
+    six
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # broken test
@@ -31,7 +41,9 @@ buildPythonPackage rec {
     "test_proxy_to_website"
   ];
 
-  pythonNamespaces = [ "paste" ];
+  pythonNamespaces = [
+    "paste"
+  ];
 
   meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
