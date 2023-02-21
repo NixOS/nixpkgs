@@ -45,6 +45,9 @@ let
           url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
           inherit sha256;
         };
+        extraMeta = {
+          broken = kernel.meta.broken || (stdenv.isx86_64 && lib.versions.majorMinor version == "5.4");
+        };
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
