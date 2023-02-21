@@ -106,6 +106,7 @@
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
+, withPam ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -132,6 +133,7 @@
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
+assert withHomed -> withPam;
 
 let
   wantCurl = withRemote || withImportd;
@@ -384,7 +386,6 @@ stdenv.mkDerivation (finalAttrs: {
       libcap
       libuuid
       linuxHeaders
-      pam
       bashInteractive # for patch shebangs
     ]
 
@@ -402,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
@@ -427,6 +429,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpam=${lib.boolToString withPam}"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
