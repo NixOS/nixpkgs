@@ -25,11 +25,8 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = runCommand "${pname}-src-${version}" {} ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
   '';
-  sourceRoot = "${src.name}/${pname}";
 
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
@@ -45,11 +42,21 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   cmakeFlags = [
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    # the libclc build uses the `clang` we pass in to build OpenCL C files but
+    # we don't want it to use this `clang` for building C/C++ files
+    #
+    # usually the `cmake` setup hook passes in `-DCMAKE_CXX_COMPILER=$CXX` where
+    # `$CXX` is the name of the compiler (i.e. `g++`, `clang++`, etc); in cases
+    # where the stdenv is `clang` based this causes `cmake` to search `$PATH`
+    # for `clang++` and to find our unwrapped `clang` instead of the stdenv's
+    #
+    # so, we explicitly tell CMake to use the C/C++ compiler from the stdenv:
+    "-DCMAKE_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "-DCMAKE_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ];
 
   meta = llvm_meta // {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
-    broken = stdenv.isDarwin;
   };
 }
