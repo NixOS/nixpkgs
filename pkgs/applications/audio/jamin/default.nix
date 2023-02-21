@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://jamin.sourceforge.net";
+    homepage = "https://jamin.sourceforge.net";
     description = "JACK Audio Mastering interface";
     license = licenses.gpl2;
     maintainers = [ maintainers.nico202 ];

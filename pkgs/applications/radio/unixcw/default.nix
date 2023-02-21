@@ -31,7 +31,7 @@ mkDerivation rec {
        These change the parameters used when sounding the Morse code.
        cw reports any errors in  embedded  commands
      '';
-    homepage = "http://unixcw.sourceforge.net";
+    homepage = "https://unixcw.sourceforge.net";
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl2;
     platforms=platforms.linux;

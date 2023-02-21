@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, fetchpatch
 , ncurses
 , perl
 , pkg-config
@@ -40,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
   };
 
-  # Rust 1.65 does better at enum packing (according to
-  # 40e08fafe2f6e5b0c70d55996a0814d6813442ef), but Nixpkgs doesn't have 1.65
-  # yet (still in staging), so skip these tests for now.
-  checkFlags = [
-    "--skip=escape::action_size"
-    "--skip=surface::line::storage::test::memory_usage"
+  patches = [
+    # fix build with rust 1.67
+    (fetchpatch {
+      url = "https://github.com/wez/wezterm/commit/36519f0d90e1875fb4b3f11f6cbf94c7d716ef78.patch";
+      sha256 = "sha256-sOGFmDan1uO1xOBCpvlGrSotjfw01MjRg0KVqa5omig=";
+    })
   ];
 
   postPatch = ''
@@ -122,9 +123,7 @@ rustPlatform.buildRustPackage rec {
     };
     terminfo = runCommand "wezterm-terminfo"
       {
-        nativeBuildInputs = [
-          ncurses
-        ];
+        nativeBuildInputs = [ ncurses ];
       } ''
       mkdir -p $out/share/terminfo $out/nix-support
       tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
@@ -132,10 +131,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

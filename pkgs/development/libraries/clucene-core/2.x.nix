@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     ./Install-contribs-lib.patch
     # From arch
     ./fix-missing-include-time.patch
+
+    # required for darwin and linux-musl
+    ./pthread-include.patch
+
   ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
 
   # fails with "Unable to find executable:
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
 
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
-    homepage = "http://clucene.sourceforge.net";
+    homepage = "https://clucene.sourceforge.net";
     platforms = platforms.unix;
     license = with licenses; [ asl20 lgpl2 ];
   };

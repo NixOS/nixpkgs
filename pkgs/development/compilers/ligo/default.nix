@@ -10,12 +10,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.59.0";
+  version = "0.60.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-JwFFreUV70W5soXY0UF8/4QlN2oWejdxqwh4KT5VDoQ=";
+    sha256 = "sha256-gyMSpy+F3pF2Kv1ygUs20mrspJ6GtJ6ySyZD7zfZj2w=";
     fetchSubmodules = true;
   };
 
@@ -94,6 +94,7 @@ ocamlPackages.buildDunePackage rec {
     data-encoding
     pure-splitmix
     zarith_stubs_js
+    simple-diff
   ];
 
   nativeCheckInputs = [

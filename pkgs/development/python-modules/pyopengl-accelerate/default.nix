@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "This set of C (Cython) extensions provides acceleration of common operations for slow points in PyOpenGL 3.x";
-    homepage = "http://pyopengl.sourceforge.net/";
+    homepage = "https://pyopengl.sourceforge.net/";
     maintainers = with lib.maintainers; [ laikq ];
     license = lib.licenses.bsd3;
   };
