@@ -3,6 +3,7 @@
 let
   llvm = llvmPackages.llvm;
   clang-unwrapped = llvmPackages.clang-unwrapped;
+  spirv = spirv-llvm-translator.override { inherit llvm; };
 in
 
 stdenv.mkDerivation rec {
@@ -23,10 +24,10 @@ stdenv.mkDerivation rec {
       --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
                 'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )' \
       --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
+                'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv}/bin" NO_DEFAULT_PATH )'
   '';
 
-  nativeBuildInputs = [ cmake ninja python3 spirv-llvm-translator ];
+  nativeBuildInputs = [ cmake ninja python3 spirv ];
   buildInputs = [ llvm clang-unwrapped ];
   strictDeps = true;
   cmakeFlags = [
