@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "python-flirt";
-  version = "0.7.0";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
     rev = "v${version}";
-    sha256 = "sha256-FsdnWWfyQte7FDz5ldo+S+3IEtbOIODOeh1fHDP2/4s=";
+    hash = "sha256-J48tRgJw6JjUrcAQdRELFE50pyDptbmbgYbr+rAK/PA=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "zydis-3.1.1" = "sha256-/L28cBTCg/S7onDQXnqUoB5udoEO/depmxDUcnfIQEw=";
+      "zydis-3.1.3" = "sha256-X+aURjNfXGXO4eh6RJ3bi8Eb2kvF09I34ZHffvYjt9I=";
     };
   };
 
