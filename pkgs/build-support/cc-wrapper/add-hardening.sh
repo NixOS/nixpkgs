@@ -19,7 +19,7 @@ for flag in @hardening_unsupported_flags@; do
 done
 
 # make fortify and fortify3 mutually exclusive
-if [[ -z "${hardeningEnableMap[fortify3]-}" ]]; then
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   unset -v "hardeningEnableMap['fortify']"
 fi
 
