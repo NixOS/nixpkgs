@@ -1,5 +1,4 @@
 from collections.abc import Mapping, MutableMapping, Sequence
-from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, cast, Optional, NamedTuple
 
 import markdown_it

@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     rev = "v${version}";
-    hash = "sha256-1yhBlQ/abT+/BKEIskgnAh+cmKCzXuS9hu6apaangVk=";
+    hash = "sha256-8fpOCyv/XafrVy76jtazRoHW2gidjikgnRdaWzh8kY8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
