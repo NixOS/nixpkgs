@@ -23360,6 +23360,8 @@ with pkgs;
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
+  span-lite = callPackage ../development/libraries/span-lite { };
+
   spandsp = callPackage ../development/libraries/spandsp {};
   spandsp3 = callPackage ../development/libraries/spandsp/3.nix {};
 
