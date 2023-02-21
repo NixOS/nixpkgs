@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , dbus
 , fetchFromGitHub
 , openssl
@@ -8,7 +9,6 @@
 , Cocoa
 , Foundation
 , Security
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "veeso";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-+5ljnCVbaiqqfXCJjMMInoLjLmZjCIoDkQi9pS6VKpc=";
   };
 
@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal tool for file transfer and explorer";
     homepage = "https://github.com/veeso/termscp";
+    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
