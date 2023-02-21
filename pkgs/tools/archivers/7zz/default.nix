@@ -53,39 +53,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = [ ./fix-build-on-darwin.patch ];
+  patches = [
+    ./fix-build-on-darwin.patch
+    ./fix-cross-mingw-build.patch
+  ];
   patchFlags = [ "-p0" ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
-    find . \( -iname '*.cpp' -o -iname '*.h' -o -iname '*.c' -o -iname '*.rc' \) -print0 \
-      | xargs -0 sed -i '
-        s/<Windows.h>/<windows.h>/
-        s/<WinIoCtl.h>/<winioctl.h>/
-        s/<ShlObj.h>/<shlobj.h>/
-        s/<CommCtrl.h>/<commctrl.h>/
-        s/<Shlwapi.h>/<shlwapi.h>/
-        s/<ShObjIdl.h>/<shobjidl.h>/
-        s/<Psapi.h>/<psapi.h>/
-        s/<WindowsX.h>/<windowsx.h>/
-        s/<WinBase.h>/<winbase.h>/
-        s/<TlHelp32.h>/<tlhelp32.h>/
-        s/<PrSht.h>/<prsht.h>/
-        s/<OleCtl.h>/<olectl.h>/
-        s/<NTSecAPI.h>/<ntsecapi.h>/
-        s/<MAPI.h>/<mapi.h>/
-        s/<InitGuid.h>/<initguid.h>/
-        s/<HtmlHelp.h>/<htmlhelp.h>/
-        s/<WinVer.h>/<winver.h>/
-        /#include/ s|\\|/|g
-      '
-    find . -iname '*mak*' -print0 \
-      | xargs -0 sed -i '
-        s/-lUser32/-luser32/g
-        s/-lOle32/-lole32/g
-        s/-lGdi32/-lgdi32/g
-        s/-lComctl32/-lcomctl32/g
-        s/-lComdlg32/-lcomdlg32/g
-      '
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
       --replace windres.exe ${stdenv.cc.targetPrefix}windres
   '';
