@@ -41,6 +41,14 @@ let
     in
       "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
 
+  adminDisabled = lib.fileContents (pkgs.runCommand "caddy-config-adapted" {} ''
+    ${cfg.package}/bin/caddy adapt --config ${configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} | ${pkgs.jq}/bin/jq .admin.disabled > $out
+  '') == "true";
+
+  etcConfigFile = "caddy/caddy_config";
+
+  configPath = "/etc/${etcConfigFile}";
+
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
@@ -155,11 +163,16 @@ in
       description = lib.mdDoc ''
         Override the configuration file used by Caddy. By default,
         NixOS generates one automatically.
+
+        The configuration file is exposed at {file}`${configPath}`.
       '';
     };
 
     adapter = mkOption {
-      default = null;
+      default = if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null;
+      defaultText = literalExpression ''
+        if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null
+      '';
       example = literalExpression "nginx";
       type = with types; nullOr str;
       description = lib.mdDoc ''
@@ -275,6 +288,21 @@ in
       '';
     };
 
+    enableReload = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Reload Caddy instead of restarting it when configuration file changes.
+
+        Note that enabling this option requires the [admin API](https://caddyserver.com/docs/caddyfile/options#admin)
+        to not be turned off.
+
+        If you enable this option, consider setting [`grace_period`](https://caddyserver.com/docs/caddyfile/options#grace-period)
+        to a non-infinite value in {option}`services.caddy.globalConfig`
+        to prevent Caddy waiting for active connections to finish,
+        which could delay the reload essentially indefinitely.
+      '';
+    };
   };
 
   # implementation
@@ -283,6 +311,9 @@ in
     assertions = [
       { assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
         message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
+      }
+      { assertion = cfg.enableReload -> !adminDisabled;
+        message = "You need to remove `admin off` from your Caddy configuration in order to use `services.caddy.enableReload`";
       }
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
@@ -311,13 +342,16 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+      reloadTriggers = optional cfg.enableReload cfg.configFile;
 
-      serviceConfig = {
+      serviceConfig = let
+        runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
+      in {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
-        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} --force'' ];
-        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
+        # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
@@ -353,5 +387,6 @@ in
       in
         listToAttrs certCfg;
 
+    environment.etc.${etcConfigFile}.source = cfg.configFile;
   };
 }
