@@ -1054,13 +1054,13 @@
     "vendorHash": "sha256-sVNtY2wDGE2ZOB4YNytx0n4V4cbNKoXAv7JCA+Ym3JU="
   },
   "stackpath": {
-    "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
+    "hash": "sha256-7KQUddq+M35WYyAIAL8sxBjAaXFcsczBRO1R5HURUZg=",
     "homepage": "https://registry.terraform.io/providers/stackpath/stackpath",
     "owner": "stackpath",
     "repo": "terraform-provider-stackpath",
-    "rev": "v1.4.0",
+    "rev": "v1.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Fvku4OB1sdWuvMx/FIHfOJt9STgao0xPDao6b2SYxcQ="
+    "vendorHash": "sha256-OGYiynCwbJU2KisS7Y6xmLuBKOtQvh3MWPrvBk/x95U="
   },
   "statuscake": {
     "hash": "sha256-PcA0t/G11w9ud+56NdiRXi82ubJ+wpL4XcexT1O2ADw=",
