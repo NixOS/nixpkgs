@@ -1,7 +1,7 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-mock
 , pytestCheckHook
 , python-socks
 , pythonOlder
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TpUiUW9ntrpuT/rUhucedl+DM5X88Mislrd+3D5/TUE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MYK09kszv7CTvZjdA9YQFfhlJ/A5d/aebLRaiMlnuB0=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
+    pytest-mock
     pytestCheckHook
   ];
 
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";
     homepage = "https://github.com/pogzyb/asyncwhois";
+    changelog = "https://github.com/pogzyb/asyncwhois/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
