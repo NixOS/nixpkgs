@@ -5,9 +5,6 @@
 , flask-wtf
 , mongoengine
 , six
-, nose
-, rednose
-, coverage
 , email-validator
 }:
 
@@ -30,15 +27,12 @@ buildPythonPackage rec {
     six
   ];
 
-  # they set test requirements to setup_requirements...
-  buildInputs = [
-    nose
-    rednose
-    coverage
-  ];
-
-  # tests require working mongodb connection
+  # Tests require working mongodb connection
   doCheck = false;
+
+  pythonImportsCheck = [
+    "flask_mongoengine"
+  ];
 
   meta = with lib; {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
