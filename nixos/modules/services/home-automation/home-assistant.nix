@@ -409,6 +409,7 @@ in {
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
       ;
+      environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = lib.unique ([
