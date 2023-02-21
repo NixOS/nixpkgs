@@ -7,6 +7,8 @@
 , markupsafe
 , mongoengine
 , pythonOlder
+, setuptools
+, setuptools-scm
 , typing-extensions
 , wtforms
 }:
@@ -14,7 +16,7 @@
 buildPythonPackage rec {
   pname = "flask-mongoengine";
   version = "1.0.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -24,6 +26,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-YqEtW02VvEeUsLIHLz6+V6juMtWPEIk2tLoKTUdY6YE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     email-validator
