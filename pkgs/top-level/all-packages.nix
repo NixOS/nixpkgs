@@ -9778,6 +9778,8 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
+  mfoc-hardnested = callPackage ../tools/security/mfoc-hardnested { };
+
   microbin = callPackage ../servers/microbin { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
@@ -19386,6 +19388,14 @@ with pkgs;
 
   uci = callPackage ../development/libraries/uci { };
 
+  uclient = callPackage ../development/libraries/uclient { };
+
+  ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
+
+  ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = wolfssl; };
+
+  ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl { ssl_implementation = mbedtls_2; };
+
   uri = callPackage ../development/libraries/uri { stdenv = gcc10StdenvCompat; };
 
   cppcms = callPackage ../development/libraries/cppcms { };
@@ -21830,7 +21840,13 @@ with pkgs;
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
-  libubox = callPackage ../development/libraries/libubox { };
+  libubox-nossl = callPackage ../development/libraries/libubox { };
+
+  libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
+
+  libubox-wolfssl = callPackage ../development/libraries/libubox { with_ustream_ssl = true; ustream-ssl = ustream-ssl-wolfssl; };
+
+  libubox-mbedtls = callPackage ../development/libraries/libubox { with_ustream_ssl = true; ustream-ssl = ustream-ssl-mbedtls; };
 
   libudev-zero = callPackage ../development/libraries/libudev-zero { };
 
@@ -23537,9 +23553,7 @@ with pkgs;
 
   theft = callPackage ../development/libraries/theft { };
 
-  thrift = callPackage ../development/libraries/thrift {
-    openssl = openssl_1_1;
-  };
+  thrift = callPackage ../development/libraries/thrift { };
 
   thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix { };
 
@@ -26009,6 +26023,8 @@ with pkgs;
   libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
+
+  libnl-tiny = callPackage ../os-specific/linux/libnl-tiny { };
 
   libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
 
@@ -29284,7 +29300,10 @@ with pkgs;
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix { };
+  keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   keepass-diff = callPackage ../applications/misc/keepass-diff { };
 
@@ -31973,6 +31992,10 @@ with pkgs;
   nedit = callPackage ../applications/editors/nedit { };
 
   ngt = callPackage ../development/libraries/ngt { };
+
+  nchat = callPackage ../applications/networking/instant-messengers/nchat {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
+  };
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko {
     # https://github.com/NixOS/nixpkgs/issues/201254
