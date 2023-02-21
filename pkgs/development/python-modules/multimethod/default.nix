@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , setuptools
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "multimethod";
-  version = "1.6";
+  version = "1.9.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coady";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09vrxzv8q0lqsbh6d83wjdd29ja66rj31y7wmyha14jk603fd9k0";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KfO+6bZOZOv9SWTV4eqJTWb3/PeCpnXknSF47ddZR5o=";
   };
 
   nativeBuildInputs = [
