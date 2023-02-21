@@ -327,7 +327,7 @@ in {
 
     dpdk = pkgs.dpdk.override { inherit kernel; };
 
-    exfat-nofuse = callPackage ../os-specific/linux/exfat { };
+    exfat-nofuse = if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
