@@ -1403,6 +1403,8 @@ self: super: with self; {
 
   bpython = callPackage ../development/python-modules/bpython { };
 
+  bqplot = callPackage ../development/python-modules/bqplot { };
+
   bqscales = callPackage ../development/python-modules/bqscales { };
 
   braceexpand = callPackage ../development/python-modules/braceexpand { };
