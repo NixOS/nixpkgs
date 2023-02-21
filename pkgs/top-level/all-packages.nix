@@ -36661,18 +36661,19 @@ with pkgs;
 
   lie = callPackage ../applications/science/math/LiE { };
 
-  magma = callPackage ../development/libraries/science/math/magma {
+  inherit (callPackage ../development/libraries/science/math/magma {
     inherit (llvmPackages_rocm) openmp;
-  };
+  }) magma magma_2_7_1 magma_2_6_2;
 
   magma-cuda = magma.override {
-    useCUDA = true;
-    useROCM = false;
+    cudaSupport = true;
+    rocmSupport = false;
   };
 
-  magma-hip = magma.override {
-    useCUDA = false;
-    useROCM = true;
+  # TODO:AMD won't compile with anything newer than 2.6.2 -- it fails at the linking stage.
+  magma-hip = magma_2_6_2.override {
+    cudaSupport = false;
+    rocmSupport = true;
   };
 
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
