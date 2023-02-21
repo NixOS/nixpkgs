@@ -63,6 +63,16 @@ let
     rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
     sha256 = "0q6760xdxsg18acdv8vq3yrq7ksr7wsm8zbyan01zf2khnb6fw4x";
   };
+
+  flatbuffers' = flatbuffers.overrideAttrs (_: {
+    version = "2.0.0";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "flatbuffers";
+      rev = "refs/tags/v2.0.0";
+      hash = "sha256-6Du6STEPR7SuYhIx5qmyEpWbe44AUBxyMgPpe9sybv0=";
+    };
+  });
 in
 stdenv.mkDerivation rec {
   pname = "tensorflow-lite";
@@ -90,7 +100,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib flatbuffers ];
+  buildInputs = [ zlib flatbuffers' ];
 
   dontConfigure = true;
 
@@ -140,7 +150,7 @@ stdenv.mkDerivation rec {
       ln -s ${tflite-eigen} "$prefix/eigen"
 
       # tensorflow lite is using the *source* of flatbuffers
-      ln -s ${flatbuffers.src} "$prefix/flatbuffers"
+      ln -s ${flatbuffers'.src} "$prefix/flatbuffers"
 
       # tensorflow lite expects to compile abseil into `libtensorflow-lite.a`
       ln -s ${abseil-cpp.src} "$prefix/absl"
@@ -169,6 +179,10 @@ stdenv.mkDerivation rec {
       chmod -x "$path"
     done
   '';
+
+  passthru = {
+    flatbuffers = flatbuffers';
+  };
 
   meta = with lib; {
     description = "An open source deep learning framework for on-device inference.";
