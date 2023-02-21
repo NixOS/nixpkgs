@@ -1117,6 +1117,8 @@ self: super: with self; {
 
   pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
 
+  pulumi-command = pkgs.pulumiPackages.pulumi-command.sdks.python;
+
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
   backcall = callPackage ../development/python-modules/backcall { };
