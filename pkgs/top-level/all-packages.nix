@@ -3670,6 +3670,8 @@ with pkgs;
 
   bc = callPackage ../tools/misc/bc { };
 
+  gavin-bc = callPackage ../tools/misc/gavin-bc { };
+
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bdf2sfd = callPackage ../tools/misc/bdf2sfd { };
@@ -34806,6 +34808,10 @@ with pkgs;
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };
+
+  _2048-cli = _2048-cli-terminal;
+  _2048-cli-curses = callPackage ../games/2048-cli { ui = "curses"; };
+  _2048-cli-terminal = callPackage ../games/2048-cli { ui = "terminal"; };
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 

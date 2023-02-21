@@ -2,20 +2,18 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, bz2file
-, setuptools
 , setuptools-scm
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "screed";
-  version = "1.1.1";
+  version = "1.1.2";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EB4ZNImNLUoU+dnJd3S4wTyQpmuNK3NLtakPsO1iCbU=";
+    sha256 = "sha256-c0/6eopkUoZJbYlbc2+R1rKYiVbi/UI1gSPZPshRm2o=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -31,8 +29,6 @@ buildPythonPackage rec {
     "Test_fa_shell_command"
     "Test_fq_shell_command"
   ];
-
-  propagatedBuildInputs = [ bz2file setuptools ];
 
   meta = with lib; {
     description = "A simple read-only sequence database, designed for short reads";
