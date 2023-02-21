@@ -107,6 +107,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
