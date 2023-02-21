@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , typish
 , tzdata
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "jsons";
-    rev = "v${version}";
-    sha256 = "0sdwc57f3lwzhbcapjdbay9f8rn65rlspxa67a2i5apcgg403qpc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7OIByHvsqhKFOkb1q2kuxmbkkleryavYgp/T4U5hvGk=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +37,11 @@ buildPythonPackage rec {
     # These tests are based on timings, which fail
     # on slow or overloaded machines.
     "tests/test_performance.py"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/ramonhagenaars/jsons/issues/187
+    "test_dump_load_parameterized_collections"
   ];
 
   pythonImportsCheck = [
