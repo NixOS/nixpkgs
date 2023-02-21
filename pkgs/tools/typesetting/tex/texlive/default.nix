@@ -30,9 +30,9 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix tl;
+    orig = import ./pkgs.nix;
     removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
+      (n: p: if p ? deps then p // { deps = lib.filter (dn: n != dn) p.deps; }
                          else p);
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
@@ -42,24 +42,24 @@ let
       };
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+        deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
       };
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
+        deps = lib.filter (n: n != "metafont" && n != "xdvi") orig.collection-basic.deps;
       };
       # add them elsewhere so that collections cover all packages
       collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
+        deps = orig.collection-metapost.deps ++ [ "metafont" ];
       };
       collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+        deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
       };
 
       # override cyclic dependency until #167226 is fixed
       xecjk = orig.xecjk // {
-        deps = removeAttrs orig.xecjk.deps [ "ctex" ];
+        deps = lib.remove "ctex" orig.xecjk.deps;
       };
 
       texdoc = orig.texdoc // {
@@ -82,8 +82,11 @@ let
       };
     }); # overrides
 
-    # tl =
-    in lib.mapAttrs flatDeps clean;
+    linkDeps = lib.mapAttrs (_: attrs: attrs // lib.optionalAttrs (attrs ? deps) {
+      deps = builtins.map (n: tl.${n}) attrs.deps;
+    }); # transform [ "dep1" "dep2" ... ] into [ tl."dep1" ... ]
+
+    in lib.mapAttrs flatDeps (linkDeps clean);
     # TODO: texlive.infra for web2c config?
 
 
@@ -113,7 +116,7 @@ let
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or {});
+        ++ combinePkgs (attrs.deps or []);
     };
 
   # for daily snapshots
@@ -183,8 +186,8 @@ let
       );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
-    (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
+  combinePkgs = pkgList: lib.concatLists # uniqueness is handled in `combine`
+    (builtins.map (a: a.pkgs) pkgList);
 
 in
   tl // {
