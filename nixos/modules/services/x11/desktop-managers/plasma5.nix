@@ -439,11 +439,6 @@ in
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      # Doing these one by one seems silly, but we currently lack a better
-      # construct for handling common pam configs.
-      security.pam.services.gdm.enableKwallet = true;
-      security.pam.services.kdm.enableKwallet = true;
-      security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
 
       systemd.user.services = {
