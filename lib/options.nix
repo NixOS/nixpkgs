@@ -337,19 +337,17 @@ rec {
 
   # Helper functions.
 
-  /* Convert an option, described as a list of the option parts in to a
-     safe, human readable version.
+  /* Convert an option, described as a list of the option parts to a
+     human-readable version.
 
      Example:
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
-       (showOption ["foo" "bar.baz" "tux"]) == "foo.bar.baz.tux"
+       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
 
      Placeholders will not be quoted as they are not actual values:
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
-
-     Unlike attributes, options can also start with numbers:
-       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
   showOption = parts: let
     escapeOptionPart = part:
