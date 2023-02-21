@@ -1,12 +1,13 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, boltons
 , attrs
+, boltons
+, buildPythonPackage
 , face
+, fetchPypi
 , pytestCheckHook
-, pyyaml
+, pythonAtLeast
 , pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Test is outdated (was made for PyYAML 3.x)
     "test_main_yaml_target"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "test_regular_error_stack"
+    "test_long_target_repr"
   ];
 
   pythonImportsCheck = [
@@ -47,12 +51,13 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''
       glom helps pull together objects from other objects in a
       declarative, dynamic, and downright simple way.
     '';
+    homepage = "https://github.com/mahmoud/glom";
+    changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
   };

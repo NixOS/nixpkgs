@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source braille translator and back-translator";
-    homepage = "http://liblouis.org/";
+    homepage = "https://liblouis.org/";
     license = with licenses; [
       lgpl21Plus # library
       gpl3Plus # tools

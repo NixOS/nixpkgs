@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Word-processor-style highlighting and replacement of misspelled words";
-    homepage = "http://gtkspell.sourceforge.net";
+    homepage = "https://gtkspell.sourceforge.net";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

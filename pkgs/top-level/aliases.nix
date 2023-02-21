@@ -492,6 +492,7 @@ mapAliases ({
   '';
 
   foomatic_filters = throw "'foomatic_filters' has been renamed to/replaced by 'foomatic-filters'"; # Converted to throw 2022-02-22
+  foxitreader = throw "foxitreader has been removed because it had vulnerabilities and was unmaintained"; # added 2023-02-20
   fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl"; # Added 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
   fslint = throw "fslint has been removed: end of life. Upstream recommends using czkawka (https://qarmin.github.io/czkawka/) instead"; # Added 2022-01-15

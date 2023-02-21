@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast image viewer";
-    homepage = "http://gqview.sourceforge.net";
+    homepage = "https://gqview.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
