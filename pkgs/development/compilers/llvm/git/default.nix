@@ -258,6 +258,10 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
+    libclc = callPackage ./libclc {
+      inherit llvm_meta targetLlvm;
+    };
+
     libcxxabi = let
       # CMake will "require" a compiler capable of compiling C++ programs
       # cxx-header's build does not actually use one so it doesn't really matter

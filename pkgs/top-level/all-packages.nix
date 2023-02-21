@@ -21192,9 +21192,7 @@ with pkgs;
 
   libcint = callPackage ../development/libraries/libcint { };
 
-  libclc = callPackage ../development/libraries/libclc {
-    llvmPackages = llvmPackages_latest;
-  };
+  libclc  = llvmPackages_latest.libclc;
 
   libcli = callPackage ../development/libraries/libcli { };
 

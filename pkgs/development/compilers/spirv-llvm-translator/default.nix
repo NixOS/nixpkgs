@@ -9,6 +9,8 @@
 }:
 
 let
+   # TODO(rrbutani): use release-version instead of version to support
+   # `llvmPackages_git`.
   llvmMajor = lib.versions.major llvm.version;
   isROCm = lib.hasPrefix "rocm" llvm.pname;
 

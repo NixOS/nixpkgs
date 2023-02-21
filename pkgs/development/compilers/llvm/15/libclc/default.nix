@@ -1,22 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages, spirv-llvm-translator }:
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, runCommand
+, cmake
+, ninja
+, python3
+, llvm
+, targetLlvm
+, clang-unwrapped
+, spirv-llvm-translator
+, version
+} @ args:
 
 let
-  llvm = llvmPackages.llvm;
-  clang-unwrapped = llvmPackages.clang-unwrapped;
-  spirv = spirv-llvm-translator.override { inherit llvm; };
+  llvm = if stdenv.buildPlatform == stdenv.hostPlatform then args.llvm else targetLlvm;
+  spirv = spirv-llvm-translator.override {
+    llvm = args.llvm; # use LLVM for the build platform here, not targetLlvm
+  };
 in
 
 stdenv.mkDerivation rec {
   pname = "libclc";
-  version = "15.0.7";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    rev = "llvmorg-${version}";
-    sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
-  };
-  sourceRoot = "source/libclc";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '';
+  sourceRoot = "${src.name}/${pname}";
 
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
@@ -34,11 +47,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = llvm_meta // {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
-    license = licenses.mit;
-    platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
