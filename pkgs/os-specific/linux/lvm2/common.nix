@@ -1,7 +1,6 @@
 { version, hash }:
 
 { lib, stdenv
-, fetchpatch
 , fetchurl
 , pkg-config
 , coreutils
@@ -69,10 +68,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals udevSupport [
     "--enable-udev_rules"
     "--enable-udev_sync"
+  ] ++ lib.optionals enableVDO [
+    "--enable-vdo"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
-  ] ++  lib.optionals enableVDO [
-    "--enable-vdo"
   ];
 
   preConfigure = ''
@@ -80,12 +79,6 @@ stdenv.mkDerivation rec {
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
 
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
-  '' + lib.optionalString (lib.versionOlder version "2.03") ''
-    substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-      --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
-    substituteInPlace udev/69-dm-lvm-metad.rules.in \
-      --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
-  '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
 
     substituteInPlace scripts/blk_availability_systemd_red_hat.service.in \
@@ -96,9 +89,8 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-  patches = lib.optionals (lib.versionAtLeast version "2.03.15") [
+  patches = [
     # fixes paths to and checks for tools
-    # TODO: needs backport to LVM 2.02 used by static/musl
     (substituteAll (let
       optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
     in {
@@ -109,22 +101,16 @@ stdenv.mkDerivation rec {
       multipath_tools = optionalTool enableMultipath multipath-tools;
       vdo = optionalTool enableVDO vdo;
     }))
-  ] ++ lib.optionals (lib.versionOlder version "2.03.15") [
-    # Musl fixes from Alpine.
+    # Musl fix from Alpine
     ./fix-stdio-usage.patch
-    (fetchpatch {
-      name = "mallinfo.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
-    })
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    ./no-shared.diff
+    ./no-shared.patch
   ];
 
   doCheck = false; # requires root
 
   makeFlags = lib.optionals udevSupport [
-    "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
+    "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
   ] ++ lib.optionals onlyLib [
     "libdm.device-mapper"
   ];
