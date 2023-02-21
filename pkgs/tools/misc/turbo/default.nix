@@ -14,12 +14,12 @@
 , go
 }:
 let
-  version = "1.7.0";
+  version = "1.8.1";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "YTuEv2S3jNV2o7HJML+P6OMazgwgRhUPnd/zaTWfDWs=";
+    hash = "sha256-CkGi7qtFcioQAHeqKkHGrI/iMu8MnlK7IVmCB4AqIfo=";
   };
 
   go-turbo = buildGoModule rec {
@@ -27,7 +27,7 @@ let
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorSha256 = "Kx/CLFv23h2TmGe8Jwu+S3QcONfqeHk2fCW1na75c0s=";
+    vendorSha256 = "sha256-lqumN+xqJXEPI+nVnWSNfAyvQQ6fS9ao8uhwA1EbWWM=";
 
     nativeBuildInputs = [
       git
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoSha256 = "ENw6NU3Fedd+OJEEWgL8A54aowNqjn3iv7rxlr+/4ZE=";
+  cargoSha256 = "sha256-swq8cOAM0AOvFtyHLyJgi/ngZ8vxGxylINMFzJH/Pd8=";
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
     pkg-config
