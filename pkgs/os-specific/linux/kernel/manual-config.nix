@@ -86,9 +86,6 @@ let
 
       buildDTBs = kernelConf.DTB or false;
 
-      installsFirmware = (config.isEnabled "FW_LOADER") &&
-        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
@@ -201,7 +198,6 @@ let
       installFlags = [
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
       ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
       preInstall = let
@@ -268,9 +264,7 @@ let
           else "install"))
       ];
 
-      postInstall = (optionalString installsFirmware ''
-        mkdir -p $out/lib/firmware
-      '') + (if isModular then ''
+      postInstall = optionalString isModular ''
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
@@ -343,10 +337,7 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '' else optionalString installsFirmware ''
-        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-      '');
+      '';
 
       requiredSystemFeatures = [ "big-parallel" ];
 
