@@ -26,21 +26,19 @@ in
       description = lib.mdDoc "Log level";
     };
   } // (
-    lib.listToAttrs (
-      map (
-        opt: lib.nameValuePair opt (options.services.nextcloud.config.${opt} // {
-          default = config.services.nextcloud.config.${opt};
-          defaultText = lib.mdDoc "config.services.nextcloud.config.${opt}";
-        })
-      ) [
-        "dbtype"
-        "dbname"
-        "dbuser"
-        "dbpassFile"
-        "dbhost"
-        "dbport"
-        "dbtableprefix"
-      ]
+    lib.genAttrs [
+      "dbtype"
+      "dbname"
+      "dbuser"
+      "dbpassFile"
+      "dbhost"
+      "dbport"
+      "dbtableprefix"
+    ] (
+      opt: options.services.nextcloud.config.${opt} // {
+        default = config.services.nextcloud.config.${opt};
+        defaultText = "config.services.nextcloud.config.${opt}";
+      }
     )
   );
 
