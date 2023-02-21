@@ -2,7 +2,7 @@
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost175
+, boost175, xz
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
@@ -182,7 +182,7 @@ in rec {
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+      boost xz ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
