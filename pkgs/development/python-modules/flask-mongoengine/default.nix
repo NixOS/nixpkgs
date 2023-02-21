@@ -41,10 +41,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
+    description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
