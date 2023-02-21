@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.7.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chezou";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/N4TqVHIlwqVeBKlUq5Oz1VW/105Ov6Yicvnn/lxlI=";
+    hash = "sha256-SV4QLvk7dXtU0/husS5A5mBYvbTejLyO9PpiO2oBtjs=";
   };
 
   patches = [
