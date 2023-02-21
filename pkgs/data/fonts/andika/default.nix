@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "andika";
-  version = "6.101";
+  version = "6.200";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/andika/Andika-${version}.zip";
-    hash = "sha256-LghkGd/cjuXghzsU9X/YneNIdBeDEnu0ARszipANm8w=";
+    hash = "sha256-Ge+Yq3+1IJ+mXhjw7Vtpu5DIWiMfwOdEH/S1RSzYh3A=";
   };
 
   installPhase = ''
