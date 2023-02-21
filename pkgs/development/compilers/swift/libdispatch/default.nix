@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , callPackage
+, fetchpatch
 , cmake
 , ninja
 , useSwift ? true, swift
@@ -19,7 +20,18 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ]
     ++ lib.optionals useSwift [ ninja swift ];
 
-  patches = [ ./disable-swift-overlay.patch ];
+  patches = [
+    ./disable-swift-overlay.patch
+
+    # Needed to build with clang 15+ without disabling warnings; can drop this
+    # once we update to 5.8.x.
+    (fetchpatch {
+      name = "swift-corelibs-libdispatch-fix-unused-but-set-warning";
+      url = "https://github.com/apple/swift-corelibs-libdispatch/commit/915f25141a7c57b6a2a3bc8697572644af181ec5.patch";
+      sha256 = "sha256-gxhMwSlE/y4LkOvmCaDMPjd7EcoX6xaacK4MLa3mOUM=";
+      includes = ["src/shims/yield.c"];
+    })
+  ];
 
   cmakeFlags = lib.optional useSwift "-DENABLE_SWIFT=ON";
 

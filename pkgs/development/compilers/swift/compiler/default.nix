@@ -307,6 +307,17 @@ in stdenv.mkDerivation {
       sha256 = "1rma1al0rbm3s3ql6bnvbcighp74lri1lcrwbyacgdqp80fgw1b6";
     }}
 
+    ${lib.optionalString (!stdenv.isDarwin) ''
+    # Needed to build with clang 15+ without disabling warnings; can drop this
+    # once we update to 5.8.x.
+    patch -p1 -d swift-corelibs-libdispatch -i ${fetchpatch {
+      name = "swift-corelibs-libdispatch-fix-unused-but-set-warning";
+      url = "https://github.com/apple/swift-corelibs-libdispatch/commit/915f25141a7c57b6a2a3bc8697572644af181ec5.patch";
+      sha256 = "sha256-gxhMwSlE/y4LkOvmCaDMPjd7EcoX6xaacK4MLa3mOUM=";
+      includes = ["src/shims/yield.c"];
+    }}
+    ''}
+
     ${lib.optionalString stdenv.isLinux ''
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
       --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
