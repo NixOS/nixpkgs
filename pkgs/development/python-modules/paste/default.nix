@@ -51,7 +51,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
-    homepage = "http://pythonpaste.org/";
+    homepage = "https://pythonpaste.readthedocs.io/";
+    changelog = "https://github.com/cdent/paste/blob/${version}/docs/news.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
