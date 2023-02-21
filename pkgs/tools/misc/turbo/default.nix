@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildGoModule
 , git
@@ -12,6 +13,7 @@
 , extra-cmake-modules
 , fontconfig
 , go
+, CoreServices
 }:
 let
   version = "1.8.1";
@@ -36,6 +38,8 @@ let
       protoc-gen-go
       protoc-gen-go-grpc
     ];
+
+    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
     preBuild = ''
       make compile-protos

@@ -12952,7 +12952,9 @@ with pkgs;
 
   tuptime = callPackage ../tools/system/tuptime { };
 
-  turbo = callPackage ../tools/misc/turbo { };
+  turbo = callPackage ../tools/misc/turbo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
