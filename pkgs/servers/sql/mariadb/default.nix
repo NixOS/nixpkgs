@@ -239,6 +239,7 @@ let
     };
 in
   self: {
+    # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_104 = self.callPackage generic {
       # Supported until 2024-06-18
       version = "10.4.28";
@@ -254,30 +255,37 @@ in
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
-      # Supported until 2026-07
+      # Supported until 2026-07-06
       version = "10.6.12";
       hash = "sha256-PtLrdCnC+uVCPKVcZhdC0QfjUkbxqwwQcJbwxLg5Rjo=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_108 = self.callPackage generic {
-      # Supported until 2023-05. TODO: remove ahead of 23.05 branchoff
+      # Supported until 2023-05-20. TODO: remove ahead of 23.05 branchoff
       version = "10.8.7";
       hash = "sha256-A6uqsKMvNTjqZZFbrUBBWf2mHEJE9HZJpC6xdUIGuAI=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_109 = self.callPackage generic {
-      # Supported until 2023-08. TODO: remove ahead of 23.05 branchoff?
+      # Supported until 2023-08-22. TODO: remove ahead of 23.05 branchoff?
       version = "10.9.5";
       hash = "sha256-CXYrdcZEuUEukV0w4bJm3tc5ZRf8L9hrvmf+zDcGWtw=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1010 = self.callPackage generic {
-      # Supported until 2023-11
+      # Supported until 2023-11-17
       version = "10.10.3";
       hash = "sha256-DQxF/oUFnY0mxuIp8wQQqLj3KC7C1WVg/JqJMOFO130=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
+    mariadb_1011 = self.callPackage generic {
+      # Supported until 2028-02-16
+      version = "10.11.2";
+      hash = "sha256-HIne4MrtD2i8Kh0gPrmKEjFQ5qF59u4PH8C6Pwjccdw=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
