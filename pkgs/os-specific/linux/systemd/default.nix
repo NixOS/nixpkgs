@@ -96,6 +96,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
+, withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
@@ -381,7 +382,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      kmod
       libxcrypt
       libcap
       libuuid
@@ -400,6 +400,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
+    ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
@@ -496,7 +497,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
     "-Dumount-path=${util-linux}/bin/umount"
@@ -530,6 +530,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
     "-Didn=false"
+  ] ++ lib.optionals withKmod [
+    "-Dkmod=true"
+    "-Dkmod-path=${kmod}/bin/kmod"
   ];
   preConfigure =
     let
@@ -564,7 +567,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "${coreutils}/bin/cat";
           where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
@@ -598,6 +600,8 @@ stdenv.mkDerivation (finalAttrs: {
             "src/import/pull-tar.c"
           ];
         }
+      ] ++ lib.optionals withKmod [
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
       ];
 
       # { replacement, search, where } -> List[str]
@@ -669,7 +673,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/example/systemd
-    mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+    mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
@@ -685,6 +689,8 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
+  '' + lib.optionalString withKmod ''
+    mv $out/lib/modules-load.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -719,7 +725,7 @@ stdenv.mkDerivation (finalAttrs: {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
