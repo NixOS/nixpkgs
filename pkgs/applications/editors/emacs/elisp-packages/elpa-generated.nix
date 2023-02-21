@@ -5411,10 +5411,10 @@
       elpaBuild {
         pname = "vertico-posframe";
         ename = "vertico-posframe";
-        version = "0.7.0";
+        version = "0.7.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.0.tar";
-          sha256 = "19ic4yjm9ccnvrhccfzhn4p3brk760hf8aw6qv53gf6qlj3mcyag";
+          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.1.tar";
+          sha256 = "18a65hnacavy375ry5qmfj454b10h2yg9p6wbx1wdx30fwpi247a";
         };
         packageRequires = [ emacs posframe vertico ];
         meta = {
@@ -5749,10 +5749,10 @@
       elpaBuild {
         pname = "xref";
         ename = "xref";
-        version = "1.6.1";
+        version = "1.6.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xref-1.6.1.tar";
-          sha256 = "0z9kpbnrdh9y9qlj2fa64v660biakvw6x3z9klqa47qcx8gbyqp6";
+          url = "https://elpa.gnu.org/packages/xref-1.6.2.tar";
+          sha256 = "16vzjl2dv5nmb40xfw7mfrk8i64fac3cy4sf2d2hy832rwlg15q0";
         };
         packageRequires = [ emacs ];
         meta = {
