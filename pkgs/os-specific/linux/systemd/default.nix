@@ -85,6 +85,7 @@
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
+, withAudit ? true
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -378,7 +379,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      audit
       kmod
       libxcrypt
       libcap
@@ -392,6 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withTests glib
     ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withAudit audit
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
@@ -439,6 +440,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=false"
     "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Daudit=${lib.boolToString withAudit}"
     "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
