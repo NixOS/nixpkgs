@@ -15058,6 +15058,7 @@ with pkgs;
   graalvm-ce = graalvm11-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
+  graalvm19-ce = graalvmCEPackages.graalvm19-ce;
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
