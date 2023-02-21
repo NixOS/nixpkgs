@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , azure-common
 , azure-mgmt-core
 , msrest
@@ -6,9 +9,11 @@
 }:
 
 buildPythonPackage rec {
-  version = "10.1.0";
   pname = "azure-mgmt-containerregistry";
-  disabled = isPy27;
+  version = "10.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
