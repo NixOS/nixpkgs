@@ -33,6 +33,7 @@ sconsInstallPhase() {
     fi
 
     local flagsArray=(
+        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         $sconsFlags ${sconsFlagsArray[@]}
         $installFlags ${installFlagsArray[@]}
         ${installTargets:-install}

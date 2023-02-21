@@ -1376,6 +1376,7 @@ installPhase() {
 
     # shellcheck disable=SC2086
     local flagsArray=(
+        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL=$SHELL
     )
     _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray

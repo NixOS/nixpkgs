@@ -28,6 +28,11 @@ mesonConfigurePhase() {
         echo "meson: enabled parallel building"
     fi
 
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "meson: enabled parallel installing"
+    fi
+
     runHook postConfigure
 }
 
