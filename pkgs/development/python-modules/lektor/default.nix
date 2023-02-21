@@ -93,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A static content management system";
     homepage = "https://www.getlektor.com/";
+    changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
     license = licenses.bsd0;
     maintainers = with maintainers; [ costrouc ];
   };
