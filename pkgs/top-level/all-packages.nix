@@ -35545,6 +35545,8 @@ with pkgs;
 
   openjk = callPackage ../games/openjk { };
 
+  openloco = pkgsi686Linux.callPackage ../games/openloco { };
+
   openmw = libsForQt5.callPackage ../games/openmw { };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
