@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Turn Python objects into dicts or json strings and back";
     homepage = "https://github.com/ramonhagenaars/jsons";
+    changelog = "https://github.com/ramonhagenaars/jsons/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fmoda3 ];
   };
