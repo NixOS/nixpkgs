@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for checking types of objects";
     homepage = "https://github.com/ramonhagenaars/typish";
+    changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fmoda3 ];
   };
