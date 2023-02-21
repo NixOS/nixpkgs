@@ -6460,8 +6460,6 @@ self: super: with self; {
 
   nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
 
-  nose_progressive = callPackage ../development/python-modules/nose_progressive { };
-
   nose-randomly = callPackage ../development/python-modules/nose-randomly { };
 
   nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
