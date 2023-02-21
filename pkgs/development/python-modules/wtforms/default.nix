@@ -21,15 +21,24 @@ buildPythonPackage rec {
     hash = "sha256-azUbuxLdWK9X/+8FvHhCXQjRkU4P1o7hQUO3reAjxbw=";
   };
 
-  propagatedBuildInputs = [ markupsafe babel ];
+  propagatedBuildInputs = [
+    markupsafe
+    babel
+  ];
 
+  passthru.optional-dependencies = {
+    email = [
+      email-validator
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-    email-validator
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "wtforms" ];
+  pythonImportsCheck = [
+    "wtforms"
+  ];
 
   meta = with lib; {
     description = "A flexible forms validation and rendering library for Python";
