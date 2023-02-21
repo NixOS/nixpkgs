@@ -16476,7 +16476,8 @@
     }];
   };
   yuu = {
-    email = "yuuyin@protonmail.com";
+    email = "yuunix@grrlz.net";
+    matrix = "@yuu:matrix.org";
     github = "yuuyins";
     githubId = 86538850;
     name = "Yuu Yin";
