@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "typish";
-    rev = "7875850f55e2df8a9e2426e2d484ab618e347c7f";
-    sha256 = "0mc5hw92f15mwd92rb2q9isc4wi7xq76449w7ph5bskcspas0wrf";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
 
   nativeCheckInputs = [
