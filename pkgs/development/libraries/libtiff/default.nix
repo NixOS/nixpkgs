@@ -63,6 +63,15 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-pgItgS+UhMjoSjkDJH5y7iGFZ+yxWKqlL7BdT2mFcH0=";
     })
     ./4.4.0-CVE-2022-48281.patch
+    ./4.4.0-CVE-2023-0800.CVE-2023-0801.CVE-2023-0802.CVE-2023-0803.CVE-2023-0804.patch
+    ./4.4.0-CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.prerequisite-0.patch
+    ./4.4.0-CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.prerequisite-1.patch
+    ./4.4.0-CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.patch
+    (fetchpatch {
+      name = "CVE-2022-4645.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/f00484b9519df933723deb38fff943dc291a793d.patch";
+      sha256 = "sha256-sFVi5BY/L8WisrtTThkux1Gw2x0UrurnSlv4KkEvw3w=";
+    })
   ];
 
   postPatch = ''
