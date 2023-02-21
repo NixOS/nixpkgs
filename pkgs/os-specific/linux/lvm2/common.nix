@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
   ] ++ lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
@@ -77,18 +78,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
-  '' + lib.optionalString (lib.versionOlder version "2.03.15") ''
+
+    substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+  '' + lib.optionalString (lib.versionOlder version "2.03") ''
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
       --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
-    # https://github.com/lvmteam/lvm2/issues/36
-  '' + lib.optionalString (lib.versionOlder version "2.03.14") ''
     substituteInPlace udev/69-dm-lvm-metad.rules.in \
       --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
-  '' + lib.optionalString (lib.versionAtLeast version "2.03.14") ''
-    substituteInPlace udev/69-dm-lvm.rules.in \
-      --replace "/usr/bin/systemd-run" /run/current-system/systemd/bin/systemd-run
-  '' + ''
-    substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
   '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
 
