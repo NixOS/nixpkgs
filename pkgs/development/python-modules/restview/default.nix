@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
+    changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ koral ];
   };

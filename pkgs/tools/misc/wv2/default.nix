@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Excellent MS Word filter lib, used in most Office suites";
     license = lib.licenses.lgpl2;
-    homepage = "http://wvware.sourceforge.net";
+    homepage = "https://wvware.sourceforge.net";
   };
 }
