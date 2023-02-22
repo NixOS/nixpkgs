@@ -61,6 +61,10 @@ in stdenv.mkDerivation {
     # to remove "cycle detected in the references"
     mkdir -p $dev/lib/wireshark
     mv $out/lib/wireshark/cmake $dev/lib/wireshark
+
+    # Point Wireshark_PLUGIN_INSTALL_DIR at the wireshark package
+    sed -i 's|''${CMAKE_CURRENT_LIST_DIR}/../../../|${placeholder "out"}|' $dev/lib/wireshark/cmake/WiresharkConfig.cmake
+
   '' + (if stdenv.isDarwin && withQt then ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
