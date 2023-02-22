@@ -19,30 +19,10 @@ let
     osVersion = config.system.nixos.release;
   };
 
-  plymouthLogos = pkgs.runCommand "plymouth-logos" { inherit (cfg) logo; } ''
-    mkdir -p $out
-
-    # For themes that are compiled with PLYMOUTH_LOGO_FILE
-    mkdir -p $out/etc/plymouth
-    ln -s $logo $out/etc/plymouth/logo.png
-
-    # Logo for bgrt theme
-    # Note this is technically an abuse of watermark for the bgrt theme
-    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/95#note_813768
-    mkdir -p $out/share/plymouth/themes/spinner
-    ln -s $logo $out/share/plymouth/themes/spinner/watermark.png
-
-    # Logo for spinfinity theme
-    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
-    mkdir -p $out/share/plymouth/themes/spinfinity
-    ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
-  '';
-
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
     paths = [
       plymouth
-      plymouthLogos
     ] ++ cfg.themePackages;
   };
 
@@ -174,8 +154,8 @@ in
 
           mkdir -p $out/renderers
           # module might come from a theme
-          cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out
-          cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/renderers
+          cp ${themesEnv}/lib/plymouth/*.so $out
+          cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
         '';
         "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
           # Check if the actual requested theme is here
@@ -249,8 +229,8 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
-      cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
+      cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
+      cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth

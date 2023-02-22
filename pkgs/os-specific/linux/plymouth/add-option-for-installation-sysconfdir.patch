@@ -1,0 +1,37 @@
+diff --git a/meson.build b/meson.build
+index 650ad189..f2b982a2 100644
+--- a/meson.build
++++ b/meson.build
+@@ -10,6 +10,8 @@ pkgconfig = import('pkgconfig')
+ # General variables
+ plymouth_soversion = '5.0.0'
+ 
++sysconfdir_install = get_option('prefix') / 'etc'
++
+ plymouth_theme_path = get_option('prefix') / get_option('datadir') / 'plymouth' / 'themes/'
+ plymouth_plugin_path = get_option('prefix') / get_option('libdir') / 'plymouth/'
+ plymouth_policy_dir = get_option('prefix') / get_option('datadir') / 'plymouth/'
+diff --git a/scripts/meson.build b/scripts/meson.build
+index 0fd635b3..395bcab2 100644
+--- a/scripts/meson.build
++++ b/scripts/meson.build
+@@ -49,5 +49,5 @@ configure_file(
+ 
+ install_data(
+   'bootlog',
+-  install_dir: get_option('sysconfdir') / 'logrotate.d',
++  install_dir: sysconfdir_install / 'logrotate.d',
+ )
+diff --git a/src/meson.build b/src/meson.build
+index 13ea0d98..b3649c7f 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -49,7 +49,7 @@ install_data('plymouthd.defaults',
+ )
+ 
+ install_data('plymouthd.conf',
+-  install_dir: plymouth_conf_dir,
++  install_dir: sysconfdir_install / 'plymouth/',
+ )
+ 
+ install_emptydir(plymouthd_run_dir)

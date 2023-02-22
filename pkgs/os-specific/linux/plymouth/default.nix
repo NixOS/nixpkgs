@@ -1,95 +1,93 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchFromGitLab
+, meson
 , pkg-config
-, autoreconfHook
-, libxslt
-, docbook-xsl-nons
-, gettext
-, gtk3
-, systemd
+, libpng
+, udev
 , pango
-, cairo
+, gtk3
 , libdrm
+, libevdev
+, libxkbcommon
+, xorg
+, libxslt
+, ninja
+, docbook-xsl-nons
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "plymouth";
-  version = "unstable-2021-10-18";
-
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "unstable-2023-02-22";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "plymouth";
-    repo = "plymouth";
-    rev = "18363cd887dbfe7e82a2f4cc1a49ef9513919142";
-    sha256 = "sha256-+AP4ALOFdYFt/8MDXjMaHptkogCwK1iXKuza1zfMaws=";
+    owner = pname;
+    repo = pname;
+    rev = "7302b49da8b98d01ab82d23e5be74146065cffd8";
+    hash = "sha256-PgVJezSUd/E3o1YigVto5KmQlflONrmKspOmAHSc5p4=";
   };
 
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+    ./dont-create-broken-symlink.patch
+  ];
+
   nativeBuildInputs = [
-    autoreconfHook
-    docbook-xsl-nons
-    gettext
-    libxslt
+    meson
     pkg-config
+    ninja
+    docbook-xsl-nons
   ];
 
   buildInputs = [
-    cairo
+    libpng
+    udev
+    pango
     gtk3
     libdrm
-    pango
+    libevdev
+    libxkbcommon
+    xorg.xkeyboardconfig
+    libxslt
     systemd
   ];
 
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dlogo=/etc/plymouth/logo.png"
+    "-Dbackground-color=0x000000"
+    "-Dbackground-start-color-stop=0x000000"
+    "-Dbackground-end-color-stop=0x000000"
+    "-Drelease-file=/etc/os-release"
+    "-Dtracing=true"
+    "-Dsystemd-integration=true"
+    "-Dudev=enabled"
+    "-Dpango=enabled"
+    "-Dfreetype=enabled"
+    "-Dgtk=enabled"
+    "-Ddrm=true"
+    "-Ddocs=true"
+    "-Drunstatedir=/run"
+  ];
+
   postPatch = ''
-    sed -i \
-      -e "s#plymouthplugindir=.*#plymouthplugindir=/etc/plymouth/plugins/#" \
-      -e "s#plymouththemedir=.*#plymouththemedir=/etc/plymouth/themes#" \
-      -e "s#plymouthpolicydir=.*#plymouthpolicydir=/etc/plymouth/#" \
-      -e "s#plymouthconfdir=.*#plymouthconfdir=/etc/plymouth/#" \
-      configure.ac
+    substituteInPlace meson.build \
+      --replace "run_command(['scripts/generate-version.sh'], check: true).stdout().strip()" "'${version}'"
+
+    sed -i '/^install_emptydir/d' src/meson.build
   '';
 
-  configurePlatforms = [ "host" ];
-
-  configureFlags = [
-    "--enable-documentation"
-    "--enable-drm"
-    "--enable-gtk"
-    "--enable-pango"
-    "--enable-systemd-integration"
-    "--enable-tracing"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-background-color=0x000000"
-    "--with-background-end-color-stop=0x000000"
-    "--with-background-start-color-stop=0x000000"
-    "--with-logo=/etc/plymouth/logo.png"
-    "--with-release-file=/etc/os-release"
-    "--with-runtimedir=/run"
-    "--with-systemdunitdir=${placeholder "out"}/etc/systemd/system"
-    "--without-rhgb-compat-link"
-    "--without-system-root-install"
-    "ac_cv_path_SYSTEMD_ASK_PASSWORD_AGENT=${lib.getBin systemd}/bin/systemd-tty-ask-password-agent"
-  ];
-
-  installFlags = [
-    "localstatedir=\${TMPDIR}"
-    "plymouthd_confdir=${placeholder "out"}/etc/plymouth"
-    "plymouthd_defaultsdir=${placeholder "out"}/share/plymouth"
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
-
   postInstall = ''
-    # Makes a symlink to /usr/share/pixmaps/system-logo-white.png
-    # We'll handle it in the nixos module.
-    rm $out/share/plymouth/themes/spinfinity/header-image.png
+    ln -s "/etc/plymouth/logo.png" "$out/etc/plymouth/logo.png"
+    # Logo for spinfinity theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
+    ln -s "/etc/plymouth/logo.png" "$out/share/plymouth/themes/spinfinity/header-image.png"
+    # Logo for bgrt theme
+    # Note this is technically an abuse of watermark for the bgrt theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/95#note_813768
+    ln -s "/etc/plymouth/logo.png" "$out/share/plymouth/themes/spinner/watermark.png"
   '';
 
   meta = with lib; {
