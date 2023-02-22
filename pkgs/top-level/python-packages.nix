@@ -12588,6 +12588,8 @@ self: super: with self; {
 
   yara-python = callPackage ../development/python-modules/yara-python { };
 
+  yaramod = callPackage ../development/python-modules/yaramod { };
+
   yarg = callPackage ../development/python-modules/yarg { };
 
   yark = callPackage ../development/python-modules/yark { };
