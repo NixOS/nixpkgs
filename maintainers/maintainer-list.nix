@@ -5959,6 +5959,11 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  FaustXVI = {
+    name = "Xavier Detant";
+    github = "FaustXVI";
+    githubId = 1016863;
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
