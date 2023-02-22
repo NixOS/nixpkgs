@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "owslib";
   version = "0.28.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,6 +39,10 @@ buildPythonPackage rec {
 
   # 'tests' dir not included in pypy distribution archive.
   doCheck = false;
+
+  pythonImportsCheck = [
+    "owslib"
+  ];
 
   meta = with lib; {
     description = "client for Open Geospatial Consortium web service interface standards";
