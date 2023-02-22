@@ -7,7 +7,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-UNMOLbZeSdvTuDgveQ/vRC+PlAdVo1bGnpMz3g1seY8=";
   };
 
@@ -16,6 +16,7 @@ crystal.buildCrystalPackage rec {
   meta = with lib; {
     description = "A static code analysis tool for Crystal";
     homepage = "https://crystal-ameba.github.io";
+    changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kimburgess ];
   };
