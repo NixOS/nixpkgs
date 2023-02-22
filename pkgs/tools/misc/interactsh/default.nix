@@ -10,8 +10,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ELj80stWOwACsCGmjt2QR8TxBFpvlYmVN7hWDPee8YE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ELj80stWOwACsCGmjt2QR8TxBFpvlYmVN7hWDPee8YE=";
   };
 
   vendorHash = "sha256-xm7Iup4+xhcJ+Bzv56A0C3+2Fxz53qY8fqlVsMtFLd8=";
@@ -33,6 +33,7 @@ buildGoModule rec {
       For example - Blind SQLi, Blind CMDi, SSRF, etc.
     '';
     homepage = "https://github.com/projectdiscovery/interactsh";
+    changelog = "https://github.com/projectdiscovery/interactsh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
   };
