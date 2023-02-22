@@ -319,7 +319,7 @@ stdenv.mkDerivation {
                       && targetPlatform.isLinux
                       && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
                       && !(stdenv.targetPlatform.useLLVM or false)
-                      && gccForLibs != null) ''
+                      && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
       # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
@@ -327,6 +327,11 @@ stdenv.mkDerivation {
       # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
       echo "-L${gccForLibs}/${optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
     ''
+    # this ensures that when clang passes -lgcc_s to lld (as it does
+    # when building e.g. firefox), lld is able to find libgcc_s.so
+    + lib.optionalString (gccForLibs?libgcc) ''
+      echo "-L${gccForLibs.libgcc}/lib" >> $out/nix-support/cc-ldflags
+    '')
 
     ##
     ## General libc support
