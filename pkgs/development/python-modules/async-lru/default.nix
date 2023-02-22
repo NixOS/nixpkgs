@@ -2,22 +2,29 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, typing-extensions
 , pytestCheckHook
 , pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "1.0.3";
+  version = "2.0.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
     rev = "v${version}";
-    hash = "sha256-98ZPFSOFRnymTCfCG9OuajfxXAWyCrByyJEHhpPVPbM=";
+    hash = "sha256-mCmEMN9D6kEkHb3GoYuVk4XxvhaSX5eOHqpKawrcoxs=";
   };
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   postPatch = ''
     sed -i -e '/^addopts/d' -e '/^filterwarnings/,+2d' setup.cfg
@@ -26,10 +33,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=strict"
   ];
 
   pythonImportsCheck = [ "async_lru" ];

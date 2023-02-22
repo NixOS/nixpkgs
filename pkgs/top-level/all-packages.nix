@@ -3443,6 +3443,8 @@ with pkgs;
 
   goku = callPackage ../os-specific/darwin/goku { };
 
+  grandperspective = callPackage ../os-specific/darwin/grandperspective { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
@@ -36423,11 +36425,11 @@ with pkgs;
 
   nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
 
-  neuron = callPackage ../applications/science/biology/neuron { python = null; };
+  neuron = callPackage ../applications/science/biology/neuron { };
 
   neuron-mpi = neuron.override {useMpi = true; };
 
-  neuron-full = neuron-mpi.override { python = python2; };
+  neuron-full = neuron-mpi.override { useCore = true; useRx3d = true; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
@@ -39146,12 +39148,11 @@ with pkgs;
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
-  jami = callPackages ../applications/networking/instant-messengers/jami {
+  jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
   };
-  inherit (jami) jami-daemon jami-client;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
