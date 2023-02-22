@@ -6621,6 +6621,8 @@ self: super: with self; {
 
   notedown = callPackage ../development/python-modules/notedown { };
 
+  notifications-android-tv = callPackage ../development/python-modules/notifications-android-tv { };
+
   notifications-python-client = callPackage ../development/python-modules/notifications-python-client { };
 
   notify-events = callPackage ../development/python-modules/notify-events { };
