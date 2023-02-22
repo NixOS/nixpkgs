@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     patch -p1 -i ${./minisat-fenv.patch} -d src/prop/bvminisat
   '';
 
+  patches = [
+    ../../../applications/science/logic/cvc4/cvc4-bash-patsub-replacement.patch
+  ];
+
   preConfigure = ''
     patchShebangs ./src/
   '';
