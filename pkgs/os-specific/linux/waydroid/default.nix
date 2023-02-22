@@ -9,11 +9,12 @@
 , kmod
 , lxc
 , iproute2
-, nftables
+, iptables
 , util-linux
 , which
 , wrapGAppsHook
 , xclip
+, runtimeShell
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -50,14 +51,15 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   installPhase = ''
-    make install PREFIX=$out USE_SYSTEMD=0 USE_NFTABLES=1
+    make install PREFIX=$out USE_SYSTEMD=0
   '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
+    patchShebangs --host $out/lib/waydroid/data/scripts
     wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
-       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 nftables ]}
+      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables ]}
 
     wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " [
       "$out"
@@ -71,6 +73,12 @@ python3Packages.buildPythonApplication rec {
       which
       xclip
     ]}"
+
+    substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
+      --replace '"sh"' '"${runtimeShell}"'
+
+    substituteInPlace $out/share/applications/*.desktop \
+      --replace  "/usr" "$out"
   '';
 
   meta = with lib; {

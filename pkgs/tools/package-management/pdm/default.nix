@@ -24,14 +24,18 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.3.4";
+  version = "2.4.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zaSNM5Ey4oI2MtUPYBHG0PCMgJdasVatwkjaRBrT1RQ=";
+    hash = "sha256-Gp8ju26XX0A2+LX+7b9OuEBJx4qUwR2tNUq+Chj56q4=";
   };
+
+  nativeBuildInputs = [
+    pdm-pep517
+  ];
 
   propagatedBuildInputs = [
     blinker
@@ -40,9 +44,6 @@ buildPythonApplication rec {
     findpython
     installer
     packaging
-    pdm-pep517
-    pep517
-    pip
     platformdirs
     pyproject-hooks
     python-dotenv
@@ -50,20 +51,22 @@ buildPythonApplication rec {
     resolvelib
     rich
     shellingham
-    tomli
     tomlkit
     unearth
     virtualenv
   ]
   ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.8") [
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    pytest-rerunfailures
     pytest-xdist
   ];
 
@@ -85,6 +88,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
+    changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
