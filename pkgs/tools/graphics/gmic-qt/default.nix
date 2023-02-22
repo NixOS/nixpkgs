@@ -25,6 +25,8 @@
 , gnused
 , coreutils
 , jq
+, nix-update-script
+, gimpPlugins
 }:
 
 let
@@ -50,13 +52,13 @@ assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps 
 
 mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256 = "sha256-I5XC7zbDyBPFj4zul9rshoyeVV0hRQQ3aZQzEvYrgdc=";
+    sha256 = "sha256-z+GtYLBcHVufXwdeSd8WKmPmU1+/EKMv26kNaEgyt5w=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +99,17 @@ mkDerivation rec {
     wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
   '';
 
+  passthru = {
+    tests = {
+      gimp-plugin = gimpPlugins.gmic;
+    };
+
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
+    # Broken since 3.2.0 update, cannot handle system gmic and cimg.
+    broken = true;
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
