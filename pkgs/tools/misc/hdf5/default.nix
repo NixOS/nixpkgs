@@ -16,6 +16,7 @@
 , jdk
 , usev110Api ? false
 , threadsafe ? false
+, python3
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -89,6 +90,10 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5fc' "''${!outputDev}"
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) h5py;
+  };
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
