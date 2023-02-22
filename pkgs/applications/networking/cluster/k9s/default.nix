@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.27.2";
+  version = "0.27.3";
 
   src = fetchFromGitHub {
     owner  = "derailed";
     repo   = "k9s";
     rev    = "v${version}";
-    sha256 = "sha256-9wdc3Wiqry8+q/60Y7mPzH0k4dp1nKIGinxfkYBaHJY=";
+    sha256 = "sha256-oUn9qQG4rpunfeHgSlY9THkYv1aGWrVmdTZoEWeZJTs=";
   };
 
   ldflags = [
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   tags = [ "netgo" ];
 
-  vendorHash = "sha256-8H7siVl6gXifQOBOLtyCeDbYflhKjaIRmP0KOTWVJk0=";
+  vendorHash = "sha256-sQ3D4JUK9epRkDZ7DC+IH+iMaLN+uKM2hZkhqji+0Zc=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);

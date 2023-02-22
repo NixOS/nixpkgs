@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dqMI51UHbkyfkxAPojRlS6qew2Ob4LbUkYua6zmcQgc=";
+    hash = "sha256-pPUn+1rv76N/7WVDyWJLPVMweJ1Qbx6/P4zIKU06hSs=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonImportsCheck = [ "dunamai" ];
+  pythonImportsCheck = [
+    "dunamai"
+  ];
 
   meta = with lib; {
     description = "Dynamic version generation";
     homepage = "https://github.com/mtkennerly/dunamai";
+    changelog = "https://github.com/mtkennerly/dunamai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jmgilman ];
   };

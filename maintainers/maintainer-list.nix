@@ -3404,6 +3404,12 @@
     githubId = 6754950;
     name = "David Armstrong Lewis";
   };
+  davidcromp = {
+    email = "davidcrompton1192@gmail.com";
+    github = "DavidCromp";
+    githubId = 10701143;
+    name = "David Crompton";
+  };
   davidrusu = {
     email = "davidrusu.me@gmail.com";
     github = "davidrusu";
@@ -9197,6 +9203,12 @@
     github = "mattchrist";
     githubId = 952712;
     name = "Matt Christ";
+  };
+  matthew-levan = {
+    email = "matthew@coeli.network";
+    github = "matthew-levan";
+    githubId = 91502660;
+    name = "Matthew LeVan";
   };
   matthewcroughan = {
     email = "matt@croughan.sh";

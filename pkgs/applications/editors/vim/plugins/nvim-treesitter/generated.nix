@@ -1203,12 +1203,12 @@
   };
   python = buildGrammar {
     language = "python";
-    version = "9e53981";
+    version = "528855e";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-python";
-      rev = "9e53981ec31b789ee26162ea335de71f02186003";
-      hash = "sha256-D2++Xg7dRfjGM2r4cxaXGQnBOAX5JBREcEAJeNa7Y9M=";
+      rev = "528855eee2665210e1bf5556de48b8d8dacb8932";
+      hash = "sha256-H2RWMbbKIMbfH/TMC5SKbO9qEB9RfFUOYrczwmDdrVo=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-python";
   };

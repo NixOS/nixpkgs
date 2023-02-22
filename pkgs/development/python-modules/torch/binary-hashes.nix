@@ -7,11 +7,6 @@
 
 version : builtins.getAttr version {
   "1.13.1" = {
-    x86_64-linux-37 = {
-      name = "torch-1.13.1-cp37-cp37m-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp37-cp37m-linux_x86_64.whl";
-      hash = "sha256-bXg6H3mHFyTK2jw3TKUJiGNZqMSseNBT34mxQu6QREA=";
-    };
     x86_64-linux-38 = {
       name = "torch-1.13.1-cp38-cp38-linux_x86_64.whl";
       url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp38-cp38-linux_x86_64.whl";
@@ -26,11 +21,6 @@ version : builtins.getAttr version {
       name = "torch-1.13.1-cp310-cp310-linux_x86_64.whl";
       url = "https://download.pytorch.org/whl/cu117/torch-1.13.1%2Bcu117-cp310-cp310-linux_x86_64.whl";
       hash = "sha256-FMXJ2wnfjPGzlCo0ecd52m4pOoShYtimrHHiveMOMMU=";
-    };
-    x86_64-darwin-37 = {
-      name = "torch-1.13.1-cp37-none-macosx_10_9_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torch-1.13.1-cp37-none-macosx_10_9_x86_64.whl";
-      hash = "sha256-DZuAYQSM+3jmdbnS6oUDv+MNtD1YNZmuhiaxJjoME4A=";
     };
     x86_64-darwin-38 = {
       name = "torch-1.13.1-cp38-none-macosx_10_9_x86_64.whl";
@@ -61,6 +51,21 @@ version : builtins.getAttr version {
       name = "torch-1.13.1-cp310-none-macosx_11_0_arm64.whl";
       url = "https://download.pytorch.org/whl/cpu/torch-1.13.1-cp310-none-macosx_11_0_arm64.whl";
       hash = "sha256-ASKAaxEblJ0h+hpfl2TR/S/MSkfLf4/5FCBP1Px1LtU=";
+    };
+    aarch64-linux-38 = {
+      name = "torch-1.13.1-cp38-cp38-manylinux2014_aarch64.whl";
+      url = "https://download.pytorch.org/whl/torch-1.13.1-cp38-cp38-manylinux2014_aarch64.whl";
+      hash = "sha256-34Q0sGlenOuMxwZQr8ExDYupSebbKgUl3dnDsrGB5f4=";
+    };
+    aarch64-linux-39 = {
+      name = "torch-1.13.1-cp39-cp39-manylinux2014_aarch64.whl";
+      url = "https://download.pytorch.org/whl/torch-1.13.1-cp39-cp39-manylinux2014_aarch64.whl";
+      hash = "sha256-LDWBo/2B6x8PIpl83f/qVp/qU7r6NyssBHHbNzsmqvw=";
+    };
+    aarch64-linux-310 = {
+      name = "torch-1.13.1-cp310-cp310-manylinux2014_aarch64.whl";
+      url = "https://download.pytorch.org/whl/torch-1.13.1-cp310-cp310-manylinux2014_aarch64.whl";
+      hash = "sha256-2f54XTdfLial1eul3pH4nmo75dEe+0l+dnBf35P6PC4=";
     };
   };
 }

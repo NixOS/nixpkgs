@@ -53,6 +53,7 @@
   ./hardware/cpu/intel-sgx.nix
   ./hardware/device-tree.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/flipperzero.nix
   ./hardware/flirc.nix
   ./hardware/gkraken.nix
   ./hardware/gpgsmartcards.nix
@@ -314,6 +315,7 @@
   ./services/audio/snapserver.nix
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
+  ./services/audio/tts.nix
   ./services/audio/ympd.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix

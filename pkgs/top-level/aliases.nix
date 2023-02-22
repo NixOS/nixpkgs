@@ -695,6 +695,8 @@ mapAliases ({
   jack2Full = jack2; # moved from top-level 2021-03-14
   jami-client-gnome = throw "jami-client-gnome has been removed: abandoned upstream"; # Added 2022-05-15
   jami-client-qt = jami-client; # Added 2022-11-06
+  jami-client = jami; # Added 2023-02-10
+  jami-daemon = jami.daemon; # Added 2023-02-10
   jami-libclient = throw "jami-libclient has been removed: moved into jami-qt"; # Added 2022-07-29
   jamomacore = throw "jamomacore has been removed: abandoned upstream"; # Added 2020-11-21
   jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # Added 2021-03-15
@@ -1298,6 +1300,7 @@ mapAliases ({
   pyrex096 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2"; # Added 2022-01-12
   pyrit = throw "pyrit has been removed from nixpkgs as the project is still stuck on python2"; # Added 2022-01-01
   python = python2; # Added 2022-01-11
+  python-language-server = throw "python-language-server has been removed as it is no longer maintained. Use e.g. python-lsp-server instead"; # Added 2023-01-07
   python-swiftclient = swiftclient; # Added 2021-09-09
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead"; # Added 2021-03-08
   pythonFull = python2Full; # Added 2022-01-11

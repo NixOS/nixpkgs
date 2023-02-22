@@ -1,6 +1,5 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from frozendict import frozendict # type: ignore[attr-defined]
 from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
 
 import dataclasses
@@ -27,6 +26,19 @@ _md_escape_table = {
 }
 def md_escape(s: str) -> str:
     return s.translate(_md_escape_table)
+
+def md_make_code(code: str, info: str = "", multiline: Optional[bool] = None) -> str:
+    # for multi-line code blocks we only have to count ` runs at the beginning
+    # of a line, but this is much easier.
+    multiline = multiline or info != "" or '\n' in code
+    longest, current = (0, 0)
+    for c in code:
+        current = current + 1 if c == '`' else 0
+        longest = max(current, longest)
+    # inline literals need a space to separate ticks from content, code blocks
+    # need newlines. inline literals need one extra tick, code blocks need three.
+    ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
+    return f"{ticks}{info}{sep}{code}{sep}{ticks}"
 
 AttrBlockKind = Literal['admonition', 'example']
 
@@ -458,7 +470,7 @@ class Converter(ABC):
     __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
 
     def __init__(self, manpage_urls: Mapping[str, str]):
-        self._manpage_urls = frozendict(manpage_urls)
+        self._manpage_urls = manpage_urls
 
         self._md = markdown_it.MarkdownIt(
             "commonmark",
