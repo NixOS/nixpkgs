@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.18.2";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ThBpVBt+B6Ltmpw1vWkihFM5JHlEawfu30a1LuOMpPE=";
+    sha256 = "sha256-PR8+4SK0Bb7+0fDwdvJBYERvhjWLXRGswNoEdRo5JiM=";
   };
 
-  cargoSha256 = "sha256-IuY1GWOygSMTcwWTwb/lvhdGGD+E1NfTtQ86PgTCUAI=";
+  cargoSha256 = "sha256-wZR5ylhtdAUvpJ0raTM5IrbdmaHLPAYrAKU31oE8Bbg=";
 
   nativeBuildInputs = [ pkg-config ];
 
