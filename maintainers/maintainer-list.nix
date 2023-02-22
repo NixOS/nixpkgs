@@ -14668,6 +14668,11 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  poweredbypie = {
+    name = "poweredbypie";
+    github = "poweredbypie";
+    githubId = 67135060;
+  };
   PowerUser64 = {
     email = "blakelysnorth@gmail.com";
     github = "PowerUser64";
