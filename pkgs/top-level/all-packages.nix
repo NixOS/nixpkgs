@@ -9213,6 +9213,8 @@ with pkgs;
 
   natscli = callPackage ../tools/system/natscli { };
 
+  nsc = callPackage ../tools/system/nsc { };
+
   nbench = callPackage ../tools/misc/nbench { };
 
   nbtscanner = callPackage ../tools/security/nbtscanner {
