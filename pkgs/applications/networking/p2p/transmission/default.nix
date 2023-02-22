@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -45,6 +46,14 @@ in stdenv.mkDerivation {
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix build with openssl 3.0
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
+      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
+    })
+  ];
 
   outputs = [ "out" "apparmor" ];
 
