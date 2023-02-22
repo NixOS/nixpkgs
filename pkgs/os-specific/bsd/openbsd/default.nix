@@ -10,7 +10,7 @@ let
   inherit (buildPackages.buildPackages) rsync;
 
   fetchOpenBSD = path: version: sha256: fetchcvs {
-    cvsRoot = ":pserver:anoncvs@anoncvs.OpenBSD.org:/cvsroot";
+    cvsRoot = "anoncvs@anoncvs.usa.openbsd.org:/cvs";
     module = "src/${path}";
     inherit sha256;
     tag = "OPENBSD_${lib.replaceStrings ["."] ["_"] version}";
@@ -62,10 +62,9 @@ in makeScopeWithSplicing
 
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install tsort lorder buildPackages.mandoc groff statHook rsync
     ];
-    buildInputs = with self; compatIfNeeded;
+    #buildInputs = with self; compatIfNeeded;
 
     HOST_SH = stdenv'.shell;
 
@@ -183,7 +182,6 @@ in makeScopeWithSplicing
 
     nativeBuildInputs = with buildPackages.openbsd; commonDeps ++ [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       rsync
     ];
 
@@ -274,15 +272,14 @@ in makeScopeWithSplicing
     extraPaths = with self; [ mtree.src make.src ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       mandoc groff rsync
     ];
     skipIncludesPhase = true;
-    buildInputs = with self; compatIfNeeded
+    buildInputs = with self;
       # fts header is needed. glibc already has this header, but musl doesn't,
       # so make sure pkgsMusl.openbsd.install still builds in case you want to
       # remove it!
-      ++ [ fts ];
+      [ ];
     installPhase = ''
       runHook preInstall
 
@@ -305,7 +302,7 @@ in makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook rsync
     ];
-    propagatedBuildInputs = with self; compatIfNeeded;
+    #propagatedBuildInputs = with self; compatIfNeeded;
     extraPaths = with self; [
       (fetchOpenBSD "lib/libc/gen/fts.c" "7.2" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
       (fetchOpenBSD "lib/libc/include/namespace.h" "7.2" "0kksr3pdwdc1cplqf5z12ih4cml6l11lqrz91f7hjjm64y7785kc")
@@ -340,7 +337,6 @@ in makeScopeWithSplicing
     sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff rsync
     ];
   };
@@ -362,7 +358,6 @@ in makeScopeWithSplicing
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff rsync
     ];
   };
@@ -373,7 +368,6 @@ in makeScopeWithSplicing
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff rsync
     ];
   };
@@ -387,7 +381,7 @@ in makeScopeWithSplicing
   ##
   make = mkDerivation {
     path = "usr.bin/make";
-    sha256 = "";
+    sha256 = "sha256-hhxQ88GWjyKlqODv66uYAG8mtjSFp2cpqqaOVXdEMls=";
     version = "7.2";
 
    postPatch = ''
@@ -507,10 +501,9 @@ in makeScopeWithSplicing
     version = "7.2";
     sha256 = "092y7db7k4kh2jq8qc55126r5qqvlb8lq8mhmy5ipbi36hwb4zrz";
     HOSTPROG = "tic";
-    buildInputs = with self; compatIfNeeded;
+    #buildInputs = with self; compatIfNeeded;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff nbperf rsync
     ];
     makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
@@ -543,9 +536,9 @@ in makeScopeWithSplicing
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal install mandoc byacc flex rsync
+      install mandoc byacc flex rsync
     ];
-    buildInputs = with self; compatIfNeeded;
+    #buildInputs = with self; compatIfNeeded;
     extraPaths = with self; [ cksum.src ];
   };
   ##
@@ -561,7 +554,6 @@ in makeScopeWithSplicing
     sha256 = "0nxnmj4c8s3hb9n3fpcmd0zl3l1nmhivqgi9a35sis943qvpgl9h";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff rsync nbperf rpcgen
     ];
 
@@ -612,7 +604,7 @@ in makeScopeWithSplicing
     propagatedBuildInputs = with self; [ include ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal install tsort lorder statHook rsync uudecode config genassym
+      install tsort lorder statHook rsync uudecode config genassym
     ];
 
     postConfigure = ''
@@ -684,7 +676,6 @@ in makeScopeWithSplicing
     extraPaths = with self; [ common libc.src sys.src ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       byacc install tsort lorder mandoc statHook rsync
     ];
     buildInputs = with self; [ headers ];
@@ -696,7 +687,7 @@ in makeScopeWithSplicing
     version = "7.2";
     sha256 = "1wqhngraxwqk4jgrf5f18jy195yrp7c06n1gf31pbplq79mg1bcj";
     buildInputs = with self; [ libterminfo libcurses ];
-    propagatedBuildInputs = with self; compatIfNeeded;
+    #propagatedBuildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = ''
@@ -718,9 +709,9 @@ in makeScopeWithSplicing
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal install tsort lorder mandoc statHook nbperf tic rsync
+      install tsort lorder mandoc statHook nbperf tic rsync
     ];
-    buildInputs = with self; compatIfNeeded;
+    #buildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";
     postPatch = ''
       substituteInPlace $COMPONENT_PATH/term.c --replace /usr/share $out/share
@@ -748,7 +739,7 @@ in makeScopeWithSplicing
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
     ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
-    propagatedBuildInputs = with self; compatIfNeeded;
+    #propagatedBuildInputs = with self; compatIfNeeded;
     MKDOC = "no"; # missing vfontedpr
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = lib.optionalString (!stdenv.isDarwin) ''
@@ -781,7 +772,6 @@ in makeScopeWithSplicing
     meta.platforms = lib.platforms.openbsd;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install tsort lorder rpcgen statHook
     ];
   };
@@ -869,7 +859,6 @@ in makeScopeWithSplicing
     meta.platforms = lib.platforms.openbsd;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff flex
       byacc genassym gencat lorder tsort statHook rsync
     ];
@@ -907,7 +896,6 @@ in makeScopeWithSplicing
     ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      makeMinimal
       install mandoc groff flex
       byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
