@@ -4046,10 +4046,10 @@ self: super: with self; {
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override {
+  gpgme = disabledIf (pythonAtLeast "3.11") (toPythonModule (pkgs.gpgme.override {
     pythonSupport = true;
     inherit python;
-  });
+  }));
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 { };
 
