@@ -4,6 +4,7 @@
 , libpng ? null
 , eigen ? null
 , libtiff ? null
+, ceres-solver
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableExamples ? false
 , enableDocs ? false }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ];
+  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ceres-solver ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
