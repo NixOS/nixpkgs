@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-ntlm";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "httpx_ntlm";
     inherit version;
-    hash = "sha256-pv/OxgcO0JWk2nCZp+bKlOdX7NqV6V5xZRDy5dd13qQ=";
+    hash = "sha256-a1a5laZ4tNOtpVDFCK1t2IXWbyJytZMhuad2JtmA52I=";
   };
 
   propagatedBuildInputs = [
