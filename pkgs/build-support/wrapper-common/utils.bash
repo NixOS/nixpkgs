@@ -144,7 +144,8 @@ checkLinkType() {
 }
 
 # When building static-pie executables we cannot have rpath
-# set. At least glibc requires rpath to be empty
+# set. At least glibc requires rpath to be empty.
+# Deprecated in favor of filterRpathFlagsArray.
 filterRpathFlags() {
     local linkType=$1 ret i
     shift
@@ -163,4 +164,39 @@ filterRpathFlags() {
         ret=("$@")
     fi
     echo "${ret[@]}"
+}
+
+# Array version of filterRpathFlags.
+# Preserve whitespace in strings.
+filterRpathFlagsArray() {
+    local linkType="$2"
+    [[ "$linkType" != "static-pie" ]] && return
+    local arrayName="$1" array i
+    typeset -n array=$arrayName
+    local L=${#array[@]}
+    for (( i=0; i<L; i++ )); do
+        [ "${array[$i]}" != '-rpath' ] && continue
+        unset -v 'array[$i]'
+        : $((i++))
+        unset -v 'array[$i]'
+    done
+    array=("${array[@]}") # fix indices in numeric array
+}
+
+# backslash-escape a string.
+escapeString() {
+    printf '%q' "$1"
+}
+
+# quote a string.
+# always add quotes, also when not needed.
+quoteString() {
+    echo "${1@Q}"
+}
+
+# read array of strings from a string.
+# decode escapes and quotes, preserve whitespace in strings.
+# compatible with escapeString and quoteString.
+readArrayString() {
+    readarray -d '' "$1" < <(<<<"$2" xargs -r printf '%s\0')
 }

@@ -164,17 +164,23 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_CFLAGS_LINK_@suffixSalt@))
+    readArrayString _flags "$NIX_CFLAGS_LINK_@suffixSalt@"
+    filterRpathFlagsArray _flags "$linkType"
+    extraAfter+=("${_flags[@]}")
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS_@suffixSalt@ again).
-    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@); do
+    readArrayString _flags "$NIX_LDFLAGS_BEFORE_@suffixSalt@"
+    filterRpathFlagsArray _flags "$linkType"
+    for i in "${_flags[@]}"; do
         extraBefore+=("-Wl,$i")
     done
     if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
         extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
     fi
-    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@); do
+    readArrayString _flags "$NIX_LDFLAGS_@suffixSalt@"
+    filterRpathFlagsArray _flags "$linkType"
+    for i in "${_flags[@]}"; do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
         else

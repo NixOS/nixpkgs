@@ -310,12 +310,12 @@ _accumFlagsArray() {
 # so it is defined here but tried after the hook.
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
+        export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib") ${NIX_LDFLAGS-}"
         if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib64") ${NIX_LDFLAGS-}"
         fi
         if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib32") ${NIX_LDFLAGS-}"
         fi
     fi
 }
@@ -1202,15 +1202,19 @@ patchPhase() {
 
 
 fixLibtool() {
-    local search_path
-    for flag in $NIX_LDFLAGS; do
-        case $flag in
+    local search_path flags flag
+    readarray -d '' flags < <(<<<"$NIX_LDFLAGS" xargs -r printf '%s\0')
+    for flag in "${flags[@]}"; do
+        case "$flag" in
             -L*)
-                search_path+=" ${flag#-L}"
+                search_path+=" $(printf '%q' "${flag#-L}")"
                 ;;
         esac
     done
 
+    # TODO(@milahu): verify parsing of escaped strings:
+    # sys_lib_search_path='/a\ a/ /b\ b/'
+    # TODO(@milahu): escape backslashes for sed?
     sed -i "$1" \
         -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
