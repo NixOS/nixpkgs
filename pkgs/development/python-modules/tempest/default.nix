@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , fetchPypi
 , pbr
 , cliff
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pbr
     cliff
+    defusedxml
     jsonschema
     testtools
     paramiko
