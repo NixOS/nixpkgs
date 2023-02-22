@@ -3499,6 +3499,8 @@ with pkgs;
 
   waypoint = callPackage ../applications/networking/cluster/waypoint { };
 
+  xc = callPackage ../development/tools/xc { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   gomobile = callPackage ../development/mobile/gomobile { };
