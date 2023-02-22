@@ -1089,6 +1089,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-2wPmLpjhG6QgG+BUCO0oIzHjBOWIOYuptgdtSIm9TZw="
   },
+  "talos": {
+    "hash": "sha256-Uj4UlxPvI80og/wJPtQgyrejXLcfc6R4IJfsXiVNm+Y=",
+    "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
+    "owner": "siderolabs",
+    "repo": "terraform-provider-talos",
+    "rev": "v0.1.1",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-tltQNtTsPoT5CTrKM7vLDVkmmW2FTd6MBubfXZveGxI="
+  },
   "tencentcloud": {
     "hash": "sha256-9SuXHKdOmmcYFWgf/WNL5CEYoxCdfOWa1afJ7frJJ20=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
