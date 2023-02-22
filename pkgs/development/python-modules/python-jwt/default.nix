@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "JSON Web Token library for Python 3";
     homepage = "https://github.com/GehirnInc/python-jwt";
     license = licenses.asl20;
+    maintainers = with maintainers; [ thornycrackers ];
   };
 }
