@@ -12307,6 +12307,8 @@ self: super: with self; {
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
+  webscrapbook = callPackage ../development/python-modules/webscrapbook { };
+
   websocket-client = callPackage ../development/python-modules/websocket-client { };
 
   websockets = callPackage ../development/python-modules/websockets { };
