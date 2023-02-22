@@ -1,10 +1,6 @@
 .Dd January 1, 1980
-.\" nixpkgs groff will use Nixpkgs the OS in the title by default, taking it from
-.\" doc-default-operating-system. mandoc doesn't have this register set by default,
-.\" so we can use it as a groff/mandoc switch.
-.ie ddoc-default-operating-system .Dt nixos-rebuild \&8 "NixOS System Manager's Manual"
-.el .Dt nixos-rebuild 8
-.Os NixOS
+.Dt nixos-rebuild 8
+.Os
 .Sh NAME
 .Nm nixos-rebuild
 .Nd reconfigure a NixOS machine
