@@ -56,7 +56,7 @@ in mkCoqDerivation {
   buildFlags = [ "OCAMLWARN=" ];
 
   mlPlugin = true;
-  propagatedBuildInputs = [ elpi ];
+  propagatedBuildInputs = [ coq.ocamlPackages.findlib elpi ];
 
   meta = {
     description = "Coq plugin embedding ELPI.";
