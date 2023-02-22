@@ -232,7 +232,7 @@ with pkgs;
 
   aether = callPackage ../applications/networking/aether { };
 
-  aishell = callPackage ../tools/misc/aishell { };
+  revchatgpt = callPackage ../tools/misc/revchatgpt {  };
 
   alda = callPackage ../development/interpreters/alda { };
 
