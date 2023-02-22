@@ -118,6 +118,11 @@ let
       })
     ];
 
+    # Don't introduce failures during NixOS 22.11 maintenance.
+    postPatch = ''
+      sed '1i#define PW_ENABLE_DEPRECATED' -i src/pipewire/keys.h
+    '';
+
     nativeBuildInputs = [
       docutils
       doxygen
