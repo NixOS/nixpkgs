@@ -47,6 +47,10 @@ stdenv.mkDerivation {
       url = "https://github.com/tpoechtrager/cctools-port/commit/4a734070cd2838e49658464003de5b92271d8b9e.patch";
       hash = "sha256-72KaJyu7CHXxJJ1GNq/fz+kW1RslO3UaKI91LhBtiXA=";
     })
+    (fetchpatch {
+      url = "https://github.com/MercuryTechnologies/cctools-port/commit/e1f2802ea4bfde6fe00d2d815303392b11a262eb.patch";
+      hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
+    })
   ]
     ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
 
