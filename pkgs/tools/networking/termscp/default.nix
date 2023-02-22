@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , dbus
 , fetchFromGitHub
 , openssl
@@ -8,21 +9,20 @@
 , Cocoa
 , Foundation
 , Security
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-AyDENQj73HzNh1moO/KJl7OG80w65XiYmIl8d9/iAtE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+5ljnCVbaiqqfXCJjMMInoLjLmZjCIoDkQi9pS6VKpc=";
   };
 
-  cargoHash = "sha256-NgBQvWtwkAvp0V7zWGw+lNAcVqqDMAeNC0KNIBrwjEE=";
+  cargoHash = "sha256-GoWVDU1XVjbzZlGPEuHucnxcvhf4Rqx/nSEVygD9gCo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal tool for file transfer and explorer";
     homepage = "https://github.com/veeso/termscp";
+    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
