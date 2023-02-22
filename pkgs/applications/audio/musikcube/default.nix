@@ -19,7 +19,7 @@
 , taglib
 # Linux Dependencies
 , alsa-lib
-, pipewireSupport ? true, pipewire
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
 , pulseaudio
 , sndioSupport ? true, sndio
 , systemd
@@ -27,7 +27,7 @@
 # Darwin Dependencies
 , Cocoa
 , SystemConfiguration
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +67,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa coreaudioSupport SystemConfiguration
+    Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
   ] ++ lib.optional sndioSupport [
     sndio
   ] ++ lib.optional pipewireSupport [
