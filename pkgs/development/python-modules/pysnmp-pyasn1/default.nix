@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-pyasn1";
-  version = "1.1.2";
+  version = "1.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pysnmp";
     repo = "pyasn1";
     rev = "v${version}";
-    hash = "sha256-R4reMwVcJBTfTEHUk6sSUugsEPuKIziH1WbjMakP/dA=";
+    hash = "sha256-W74aWMqGlat+aZfhbP1cTKRz7SomHdGwfK5yJwxgyqI=";
   };
 
   nativeBuildInputs = [
