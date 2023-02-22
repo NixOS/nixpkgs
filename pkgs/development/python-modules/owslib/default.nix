@@ -7,12 +7,15 @@
 , pytz
 , pyyaml
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
   version = "0.28.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
