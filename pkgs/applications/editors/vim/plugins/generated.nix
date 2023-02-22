@@ -3286,6 +3286,18 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
   };
 
+  go-nvim = buildVimPluginFrom2Nix {
+    pname = "go.nvim";
+    version = "2023-02-19";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "go.nvim";
+      rev = "c11b8b50f3f4eeef7f7a8f07f697fd67794fd2ac";
+      sha256 = "12r0j62d76m2vh88wv4phc5s2r43scx3j8f814slnyigprdprs9k";
+    };
+    meta.homepage = "https://github.com/ray-x/go.nvim/";
+  };
+
   golden-ratio = buildVimPluginFrom2Nix {
     pname = "golden-ratio";
     version = "2022-06-28";
@@ -12799,6 +12811,18 @@ final: prev:
       sha256 = "1ig8qacavr15i6z7whlkf2ivw5smnqsw3jwhh4dg5q6037k1hjh1";
     };
     meta.homepage = "https://github.com/posva/vim-vue/";
+  };
+
+  vim-vue-plugin = buildVimPluginFrom2Nix {
+    pname = "vim-vue-plugin";
+    version = "2023-02-02";
+    src = fetchFromGitHub {
+      owner = "leafOfTree";
+      repo = "vim-vue-plugin";
+      rev = "58ac69b2c8a98a9bd2a95fbaa7b5f0fe806bad0f";
+      sha256 = "0x8a66r1wlyashyqxmdpz3wnqhgfmscs42m2r82g5ic6a7n6f36l";
+    };
+    meta.homepage = "https://github.com/leafOfTree/vim-vue-plugin/";
   };
 
   vim-wakatime = buildVimPluginFrom2Nix {

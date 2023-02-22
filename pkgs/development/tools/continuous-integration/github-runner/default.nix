@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.301.1";
+  version = "2.302.1";
 
   inherit sdkSource;
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-GIWuN3/CnA0uZfpo1Gty+5tL2eDXmFyzYFHrRozHwk0=";
+    hash = "sha256-l7kGKhHpE5kEo8QMmwZKnG4cctj2INhnko7KfAXfrQ8=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '6.0.300' '${dotnetSdk.version}'
+      --replace '6.0.405' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
