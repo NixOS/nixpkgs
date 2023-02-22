@@ -8990,6 +8990,12 @@
     githubId = 1238350;
     name = "Matthias Herrmann";
   };
+  mahmoudk1000 = {
+    email = "mahmoudk1000@gmail.com";
+    github = "mahmoudk1000";
+    githubId = 24735185;
+    name = "Mahmoud Ayman";
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
