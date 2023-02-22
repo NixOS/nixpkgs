@@ -11,11 +11,11 @@
 stdenv.mkDerivation rec {
   pname = "qhyccd_sdk";
   version = "23.01.11";
-  archSuffix = if stdenv.system == "aarch64-linux" then "Arm64" else "linux64";
   linux64Sha256 = "3y26mskckf58fnl0l0zbs2v9l3z7kx1xjhxbm61p3qgr3dpzahfw";
   arm64Sha256 = "1qgjmdhqiz9bjf7v58yblcvh8s27w2nzd1z7vynhvrsscg8fv9n6";
 
-  strippedVersion = builtins.replaceStrings "." "" version;
+  archSuffix = if stdenv.system == "aarch64-linux" then "Arm64" else "linux64";
+  strippedVersion = builtins.replaceStrings [ "." "" ] version;
 
   src = fetchurl {
     url = "https://www.qhyccd.com/file/repository/publish/SDK/${version}/sdk_${archSuffix}_${strippedVersion}.tgz";
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     tar xf ${src}
-    cd sdk_${archSuffix}_${version//./}
+    cd sdk_${archSuffix}_${version}
     sudo ./distclean.sh
     sudo ./install.sh
   '';
 
   uninstallPhase = ''
-    cd sdk_${archSuffix}_${version//./}
+    cd sdk_${archSuffix}_${version}
     sudo ./uninstall.sh
   '';
 
