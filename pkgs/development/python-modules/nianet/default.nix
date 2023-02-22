@@ -8,12 +8,13 @@
 , pytestCheckHook
 , pythonOlder
 , scikit-learn
+, toml-adapt
 , torch
 }:
 
 buildPythonPackage rec {
-  pname = "nianet";
-  version = "1.1.1";
+  pname = "NiaNet";
+  version = "1.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,11 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SasoPavlic";
     repo = pname;
-    rev = "Latest";
-    sha256 = "sha256-df3kOWs17fT74dyKF2ZqPNOhMeH8yDEDkJOsMtFNHsM=";
+    rev = "version_1.1.4";
+    sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
   nativeBuildInputs = [
+    toml-adapt
     poetry-core
   ];
 
@@ -36,11 +38,15 @@ buildPythonPackage rec {
     torch
   ];
 
-  # no serious tests | some tests are incorrect | skip for now
-  # reported to the upstream
-  #checkInputs = [
-  #  pytestCheckHook
-  #];
+  # create niapy and torch dep version consistent
+  preBuild = ''
+    toml-adapt -path pyproject.toml -a change -dep niapy -ver X
+    toml-adapt -path pyproject.toml -a change -dep torch -ver X
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "nianet"
