@@ -3,35 +3,28 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-hyperion";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = "hyperion-obs-plugin";
     rev = version;
-    sha256 = "sha256-pfWfJWuIoa+74u5J76/GE+OuHkksbwOAPfsR9OGX3L4=";
+    sha256 = "sha256-UAfjafoZhhhHRSo+eUBLhHaCmn2GYFcYyRb9wHIp/9I=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ obs-studio libGL qtbase ];
+  nativeBuildInputs = [ cmake flatbuffers pkg-config ];
+  buildInputs = [ obs-studio flatbuffers libGL qtbase ];
 
   dontWrapQtApps = true;
 
   cmakeFlags = [
     "-DOBS_SOURCE=${obs-studio.src}"
     "-DGLOBAL_INSTALLATION=ON"
+    "-DUSE_SYSTEM_FLATBUFFERS_LIBS=ON"
   ];
 
   preConfigure = ''
-    # https://github.com/hyperion-project/hyperion-obs-plugin/issues/7
     rm -rf external/flatbuffers
-    cp -r ${flatbuffers.src} external/flatbuffers
-    chmod -R a+w external
-  '';
-
-  postInstall = ''
-    # Remove flatbuffers install
-    rm -rf $out/bin $out/lib/{libflatbuffers.a,cmake,pkgconfig} $out/include
   '';
 
   meta = with lib; {
