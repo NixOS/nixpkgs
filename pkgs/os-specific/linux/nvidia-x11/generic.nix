@@ -127,8 +127,7 @@ let
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
       maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-      # proprietary driver currently does not support X86_KERNEL_IBT, which is scheduled to be added in linux 6.2
-      broken = broken || (kernel != null && kernel.kernelAtLeast "6.2");
+      inherit broken;
     };
   };
 
