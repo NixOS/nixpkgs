@@ -52,4 +52,6 @@ stdenv.mkDerivation ({
     # Record all build inputs as runtime dependencies
     export >> $out
   '';
+
+  preferLocalBuild = true;
 } // rest)
