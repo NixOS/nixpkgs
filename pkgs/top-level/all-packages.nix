@@ -386,6 +386,8 @@ with pkgs;
 
   btdu = callPackage ../tools/misc/btdu { };
 
+  ccal = callPackage ../tools/misc/ccal { };
+
   cereal = callPackage ../development/libraries/cereal { };
 
   certgraph = callPackage ../tools/security/certgraph { };
