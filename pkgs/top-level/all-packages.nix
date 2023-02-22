@@ -8637,7 +8637,7 @@ with pkgs;
 
   jitterentropy = callPackage ../development/libraries/jitterentropy { };
 
-  jl = haskellPackages.callPackage ../development/tools/jl { };
+  jl = haskellPackages.jl;
 
   jless = callPackage ../development/tools/jless {
     inherit (darwin.apple_sdk.frameworks) AppKit;
