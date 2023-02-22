@@ -37,6 +37,44 @@ stdenv.mkDerivation {
 
   buildInputs = [ libkrb5 ];
 
+  patches = [
+    # LINUX: Run the 'sparse' checker if available
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=2cf76b31ce4c912b1151c141818f6e8c5cddcab2";
+      hash = "sha256-//7HSlotx70vWDEMB8P8or4ZmmXZthgioUOkvOcJpgk=";
+    })
+    # cf: Detect how to pass CFLAGS to linux kbuild
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=57df4dff496ca9bea04510759b8fdd9cd2cc0009";
+      hash = "sha256-pJnW9bVz2ZQZUvZ+PcZ5gEgCL5kcbTGxsyMNvM2IseU=";
+    })
+    # cf: Handle autoconf linux checks with -Werror
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b17625959386459059f6f43875d8817383554481";
+      hash = "sha256-Kqx5QEX1p4UoIsWxqvJVX4IyCQFiWxtAOgvAtk+ULuQ=";
+    })
+    # Linux: Fix functions without prototypes
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=3084117f10bd62acb1182cb54fc85b1d96738f70";
+      hash = "sha256-nNyqDQfS9zzlS2i3dbfud2tQOaTQ1x/rZcQEsaLu3qc=";
+    })
+    # Linux: Check for block_dirty_folio
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=f0fee2c7752d18ff183d60bcfba4c98c3348cd5f";
+      hash = "sha256-tnNlVjZ5exC+jo78HC/y8yp0L8KQroFvVRzTC+O6vlY=";
+    })
+    # Linux: Replace lru_cache_add with folio_add_lru
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b885159cc2bc6c746aec1d54cdd8a515d1115d14";
+      hash = "sha256-ptPALSbZPSGu8PMmZiOkHUd5x0UItqIM7U7wJlxtSL8=";
+    })
+    # LINUX 5.13: set .proc_lseek in proc_ops
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=cba2b88851c3ae0ab1b18ea3ce77f7f5e8200b2f";
+      hash = "sha256-suj7n0U0odHXZHLPqeB/k96gyBh52uoS3AuHvOzPyd8=";
+    })
+  ];
+
   hardeningDisable = [ "pic" ];
 
   configureFlags = [
