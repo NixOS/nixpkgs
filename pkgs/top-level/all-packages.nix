@@ -12549,7 +12549,7 @@ with pkgs;
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  texworks = libsForQt5.callPackage ../applications/editors/texworks { };
+  texworks = qt6Packages.callPackage ../applications/editors/texworks { };
 
   tf2pulumi = callPackage ../development/tools/tf2pulumi { };
 
