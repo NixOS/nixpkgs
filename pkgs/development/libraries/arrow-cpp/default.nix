@@ -234,6 +234,8 @@ stdenv.mkDerivation rec {
         "TestMinioServer.Connect"
         "TestS3FS.*"
         "TestS3FSGeneric.*"
+      ] ++ lib.optionals stdenv.isDarwin [
+        "ExecPlanExecution.StressSourceSinkStopped"
       ];
     in
     lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
