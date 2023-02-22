@@ -26,12 +26,6 @@ buildPythonPackage rec {
     pyspnego
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyspnego==0.3.*" "pyspnego>=0.3.*" \
-      --replace "cryptography==36.0.*" "cryptography>=36.0.*"
-  '';
-
   # https://github.com/ulodciv/httpx-ntlm/issues/5
   doCheck = false;
 
