@@ -14,6 +14,7 @@ buildPythonPackage rec {
   pname = "beautifulsoup4";
   version = "4.11.2";
   format = "setuptools";
+
   outputs = ["out" "doc"];
 
   disabled = pythonOlder "3.6";
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;
