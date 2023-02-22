@@ -5,11 +5,12 @@
 , sphinx
 , pydata-sphinx-theme
 , pyyaml
+, jupyter-book
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "0.4.0rc1";
+  version = "1.0.0rc2";
 
   format = "wheel";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    sha256 = "bfad8ef469885da5633f7cf7f8cd9a0ae11ea2351a91e507b44cf15973934512";
+    sha256 = "43977402f55b79706e117c6de6f50e67dac6dad698eb9b75be07dc2e6a689bde";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +30,13 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [ "sphinx_book_theme" ];
+  pythonImportsCheck = [
+    "sphinx_book_theme"
+  ];
+
+  passthru.tests = {
+    inherit jupyter-book;
+  };
 
   meta = with lib; {
     description = "A clean book theme for scientific explanations and documentation with Sphinx";
