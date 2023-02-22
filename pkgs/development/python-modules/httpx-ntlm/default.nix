@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, cryptography
 , fetchPypi
 , httpx
 , pyspnego
@@ -21,7 +20,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    cryptography
     httpx
     pyspnego
   ];
