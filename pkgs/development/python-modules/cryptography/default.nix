@@ -3,6 +3,7 @@
 , callPackage
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , rustPlatform
 , setuptools-rust
 , openssl
@@ -34,6 +35,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-HbPYB6FJMfoxf5ZDVpXZ7Dhr57hLYYzGHPpdCLCuM9c=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/advisories/GHSA-w7pp-m8wf-vj6r
+      name = "CVE-2023-23931.patch";
+      url = "https://github.com/pyca/cryptography/commit/94a50a9731f35405f0357fa5f3b177d46a726ab3.patch";
+      hash = "sha256-Tc7yHQdY6zEYHlaZ75yh+L6OOos6VDXgLNPS5dttiUY=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
