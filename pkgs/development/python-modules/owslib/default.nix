@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyproj
-, pytest
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pytz
 , pyyaml
 , requests
-, pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
@@ -17,20 +18,17 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-2tA/XZVcFqdjlU1VT2MxjNMDeu96vQj8Vk9eg/cvq5Q=";
+  src = fetchFromGitHub {
+    owner = "geopython";
+    repo = "OWSLib";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o/sNhnEZ9e0BsftN9AhJKuUjKHAHNRPe0grxdAWRVao=";
   };
 
-  # as now upstream https://github.com/geopython/OWSLib/pull/824
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'pyproj ' 'pyproj #'
+    substituteInPlace tox.ini \
+      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
   '';
-
-  buildInputs = [
-    pytest
-  ];
 
   propagatedBuildInputs = [
     pyproj
@@ -40,11 +38,26 @@ buildPythonPackage rec {
     requests
   ];
 
-  # 'tests' dir not included in pypy distribution archive.
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "owslib"
+  ];
+
+  preCheck = ''
+    # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
+    export PY_IGNORE_IMPORTMISMATCH=1
+  '';
+
+  disabledTests = [
+    # Tests require network access
+    "test_ows_interfaces_wcs"
+    "test_wfs_110_remotemd"
+    "test_wfs_200_remotemd"
+    "test_wms_130_remotemd"
+    "test_wmts_example_informatievlaanderen"
   ];
 
   meta = with lib; {
