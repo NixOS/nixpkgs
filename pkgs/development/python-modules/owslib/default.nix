@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "OWSLib";
+  pname = "owslib";
   version = "0.28.0";
 
   src = fetchPypi {
