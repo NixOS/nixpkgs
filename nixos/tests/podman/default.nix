@@ -6,7 +6,10 @@ import ../make-test-python.nix (
     };
 
     nodes = {
-      podman = { pkgs, ... }: {
+      rootful = { pkgs, ... }: {
+        virtualisation.podman.enable = true;
+      };
+      rootless = { pkgs, ... }: {
         virtualisation.podman.enable = true;
 
         users.users.alice = {
@@ -49,101 +52,109 @@ import ../make-test-python.nix (
           return f"su {user} -l -c {cmd}"
 
 
-      podman.wait_for_unit("sockets.target")
+      rootful.wait_for_unit("sockets.target")
+      rootless.wait_for_unit("sockets.target")
       dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       with subtest("Run container as root with crun"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       with subtest("Run container as root with the default backend"):
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
               "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
           )
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("podman stop sleeping")
-          podman.succeed("podman rm sleeping")
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
 
       # start systemd session for rootless
-      podman.succeed("loginctl enable-linger alice")
-      podman.succeed(su_cmd("whoami"))
-      podman.sleep(1)
+      rootless.succeed("loginctl enable-linger alice")
+      rootless.succeed(su_cmd("whoami"))
+      rootless.sleep(1)
 
       with subtest("Run container rootless with runc"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with crun"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
 
       with subtest("Run container rootless with the default backend"):
-          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
-          podman.succeed(
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
               su_cmd(
                   "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
-          podman.succeed(su_cmd("podman ps | grep sleeping"))
-          podman.succeed(su_cmd("podman stop sleeping"))
-          podman.succeed(su_cmd("podman rm sleeping"))
+          rootless.succeed(su_cmd("podman ps | grep sleeping"))
+          rootless.succeed(su_cmd("podman stop sleeping"))
+          rootless.succeed(su_cmd("podman rm sleeping"))
+
+      with subtest("rootlessport"):
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(
+              su_cmd(
+                  "podman run -d -p 9000:8888 --name=rootlessport -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8888"
+              )
+          )
+          rootless.succeed(su_cmd("podman ps | grep rootlessport"))
+          rootless.wait_until_succeeds(su_cmd("${pkgs.curl}/bin/curl localhost:9000 | grep Testing"))
+          rootless.succeed(su_cmd("podman stop rootlessport"))
+          rootless.succeed(su_cmd("podman rm rootlessport"))
 
       with subtest("Run container with init"):
-          podman.succeed(
+          rootful.succeed(
               "tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - busybox"
           )
-          pid = podman.succeed("podman run --rm busybox readlink /proc/self").strip()
+          pid = rootful.succeed("podman run --rm busybox readlink /proc/self").strip()
           assert pid == "1"
-          pid = podman.succeed("podman run --rm --init busybox readlink /proc/self").strip()
+          pid = rootful.succeed("podman run --rm --init busybox readlink /proc/self").strip()
           assert pid == "2"
 
       with subtest("aardvark-dns"):
-        dns.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-        dns.succeed(
-          "podman run -d --name=webserver -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Hi</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8000"
-        )
-        dns.succeed("podman ps | grep webserver")
-        dns.succeed("""
-          for i in `seq 0 120`; do
-            podman run --rm --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${pkgs.curl}/bin/curl http://webserver:8000 >/dev/console \
-              && exit 0
-            sleep 0.5
-          done
-          exit 1
-        """)
-        dns.succeed("podman stop webserver")
-        dns.succeed("podman rm webserver")
+          dns.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          dns.succeed(
+              "podman run -d --name=webserver -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8000"
+          )
+          dns.succeed("podman ps | grep webserver")
+          dns.wait_until_succeeds(
+              "podman run --rm --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${pkgs.curl}/bin/curl http://webserver:8000 | grep Testing"
+          )
+          dns.succeed("podman stop webserver")
+          dns.succeed("podman rm webserver")
 
       with subtest("A podman member can use the docker cli"):
           docker.succeed(su_cmd("docker version"))
