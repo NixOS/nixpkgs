@@ -4554,6 +4554,8 @@ with pkgs;
 
   enca = callPackage ../tools/text/enca { };
 
+  engage = callPackage ../tools/misc/engage { };
+
   ent = callPackage ../tools/misc/ent { };
 
   entwine = callPackage ../applications/graphics/entwine { };
