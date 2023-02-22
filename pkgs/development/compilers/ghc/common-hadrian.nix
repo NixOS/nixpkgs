@@ -182,7 +182,6 @@ let
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
     lib.optionals enableRelocatedStaticLibs [
-      "*.*.rts.*.opts += -fPIC -fexternal-dynamic-refs"
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
