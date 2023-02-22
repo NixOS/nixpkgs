@@ -160,7 +160,10 @@ stdenv.mkDerivation rec {
     moveToOutput lib/libdevmapper.so $lib
   '';
 
-  passthru.tests.installer = nixosTests.installer.lvm;
+  passthru.tests = {
+    installer = nixosTests.installer.lvm;
+    lvm2 = nixosTests.lvm2;
+  };
 
   meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
