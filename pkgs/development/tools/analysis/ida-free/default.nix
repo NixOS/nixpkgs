@@ -110,6 +110,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
