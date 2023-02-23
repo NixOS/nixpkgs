@@ -86,6 +86,8 @@ buildPythonApplication rec {
     "test_use_invalid_wrapper_python"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
