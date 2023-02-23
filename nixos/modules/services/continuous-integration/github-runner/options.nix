@@ -41,17 +41,42 @@ with lib;
   tokenFile = mkOption {
     type = types.path;
     description = lib.mdDoc ''
-      The full path to a file which contains either a runner registration token or a
-      (fine-grained) personal access token (PAT).
-      The file should contain exactly one line with the token without any newline.
-      If a registration token is given, it can be used to re-register a runner of the same
-      name but is time-limited. If the file contains a PAT, the service creates a new
-      registration token on startup as needed. Make sure the PAT has a scope of
-      `admin:org` for organization-wide registrations or a scope of
-      `repo` for a single repository. Fine-grained PATs need read and write permission
-      to the "Administration" resources.
+      The full path to a file which contains either
 
-      Changing this option or the file's content triggers a new runner registration.
+      * a fine-grained personal access token (PAT),
+      * a classic PAT
+      * or a runner registration token
+
+      Changing this option or the `tokenFile`’s content triggers a new runner registration.
+
+      We suggest using the fine-grained PATs. A runner registration token is valid
+      only for 1 hour after creation, so the next time the runner configuration changes
+      this will give you hard-to-debug HTTP 404 errors in the configure step.
+
+      The file should contain exactly one line with the token without any newline.
+      (Use `echo -n '…token…' > …token file…` to make sure no newlines sneak in.)
+
+      If the file contains a PAT, the service creates a new registration token
+      on startup as needed.
+      If a registration token is given, it can be used to re-register a runner of the same
+      name but is time-limited as noted above.
+
+      For fine-grained PATs:
+
+      Give it "Read and Write access to organization/repository self hosted runners",
+      depending on whether it is organization wide or per-repository. You might have to
+      experiment a little, fine-grained PATs are a `beta` Github feature and still subject
+      to change; nonetheless they are the best option at the moment.
+
+      For classic PATs:
+
+      Make sure the PAT has a scope of `admin:org` for organization-wide registrations
+      or a scope of `repo` for a single repository.
+
+      For runner registration tokens:
+
+      Nothing special needs to be done, but updating will break after one hour,
+      so these are not recommended.
     '';
     example = "/run/secrets/github-runner/nixos.token";
   };
