@@ -48,7 +48,7 @@ gcc10Stdenv.mkDerivation rec {
 
   # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
   dontFixCmake = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     sed -ie 's!/bin/echo!echo!' 3rdParty/V8/gypfiles/*.gypi

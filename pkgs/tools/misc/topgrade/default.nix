@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     Foundation
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-framework"
     "AppKit"
-  ];
+  ]);
 
   postInstall = ''
     installShellCompletion --cmd topgrade \

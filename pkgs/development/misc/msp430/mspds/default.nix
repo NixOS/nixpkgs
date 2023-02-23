@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   libName = "libmsp430${stdenv.hostPlatform.extensions.sharedLibrary}";
   makeFlags = [ "OUTPUT=$(libName)" "HIDOBJ=" ];
   NIX_LDFLAGS = [ "-lpugixml" "-lhidapi${hidapiDriver}" ];
-  NIX_CFLAGS_COMPILE = [ "-I${hidapi}/include/hidapi" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${hidapi}/include/hidapi" ];
 
   patches = [ ./bsl430.patch ];
 

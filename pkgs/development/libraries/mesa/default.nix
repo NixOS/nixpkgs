@@ -323,10 +323,10 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
-  ];
+  ]);
 
   passthru = {
     inherit (libglvnd) driverLink;

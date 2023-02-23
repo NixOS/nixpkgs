@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     speexdsp
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${SDL2_image}/include/SDL2"
     "-I${SDL2_net}/include/SDL2"
   ];

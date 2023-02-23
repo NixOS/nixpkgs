@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ xorg.libX11 ];
-  NIX_CFLAGS_COMPILE = "-Wno-format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
   installPhase =
   let

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_static_link.patch ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # fix build with gcc9
     "-Wno-error"
     # workaround build failure on -fno-common toolchains:

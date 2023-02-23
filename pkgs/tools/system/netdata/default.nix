@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
   # We pick zlib.dev as a simple canary package with pkg-config input.
   disallowedReferences = [ zlib.dev ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
     ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d

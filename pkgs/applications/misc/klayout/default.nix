@@ -45,7 +45,7 @@ mkDerivation rec {
     mv $out/lib/klayout $out/bin/
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-parentheses" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
 
   dontInstall = true; # Installation already happens as part of "build.sh"
 

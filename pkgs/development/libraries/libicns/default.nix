@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpng openjpeg ];
-  NIX_CFLAGS_COMPILE = [ "-I${openjpeg.dev}/include/${openjpeg.incDir}" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${openjpeg.dev}/include/${openjpeg.incDir}" ];
 
   meta = with lib; {
     description = "Library for manipulation of the Mac OS icns resource format";

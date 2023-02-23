@@ -17,14 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "palemoon-bin";
-  version = "32.0.0";
+  version = "32.0.1";
 
   src = fetchzip {
-    url = "http://linux.palemoon.org/datastore/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz";
+    urls = [
+      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+    ];
     hash = if withGTK3 then
-      "sha256-KipzrQEbwd3np3t2oTq2eHHLUPtnC/nnGYMGmFc7arw="
+      "sha256-CSAsZTMIeInuvN7mddiMDtzzNKuYST2zp1XczKAP1mQ="
     else
-      "sha256-dbHGThzLx23Ws0nfGTEYrQp0g+hYwkk1bOczQwt4NYg=";
+      "sha256-bvdy4tqnuoUxVVz/8zp7VwfS3wH51eKCzXDqgDWMb3A=";
   };
 
   preferLocalBuild = true;

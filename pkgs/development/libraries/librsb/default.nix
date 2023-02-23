@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Ensure C/Fortran code is position-independent.
-  NIX_CFLAGS_COMPILE = [ "-fPIC" "-Ofast" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fPIC" "-Ofast" ];
   FCFLAGS = [ "-fPIC" "-Ofast" ];
 
   enableParallelBuilding = true;

@@ -72,7 +72,7 @@ let
     # Workaround for
     # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
     # when building jtreg
-    NIX_CFLAGS_COMPILE = "-Wformat";
+    env.NIX_CFLAGS_COMPILE = "-Wformat";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"

@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     ];
 
   # Fixes error on a deprecated declaration
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };

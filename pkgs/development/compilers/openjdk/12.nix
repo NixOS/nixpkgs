@@ -77,7 +77,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
 
     NIX_LDFLAGS = lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #     ld: extract.o:/build/jfsutils-1.1.15/fscklog/extract.c:67: multiple definition of
   #       `xchklog_buffer'; display.o:/build/jfsutils-1.1.15/fscklog/display.c:57: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # this required for wipefreespace
   postInstall = ''
