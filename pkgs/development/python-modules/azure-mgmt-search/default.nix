@@ -2,11 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , msrest
-, msrestazure
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -25,12 +24,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
     msrest
-    msrestazure
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
