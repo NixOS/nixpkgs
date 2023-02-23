@@ -33,6 +33,8 @@ EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
 
 PRERELEASES = False
 
+BULK_UPDATE = False
+
 GIT = "git"
 
 NIXPKGS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
@@ -151,6 +153,13 @@ def _hash_to_sri(algorithm, value):
         "--type", algorithm,
         value
     ]).decode().strip()
+
+
+def _skip_bulk_update(attr_name: str) -> bool:
+    return bool(_get_attr_value(
+        f"{attr_name}.skipBulkUpdate"
+    ))
+
 
 SEMVER = {
     'major' : 0,
@@ -369,6 +378,8 @@ def _update_package(path, target):
     # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
     successful_fetch = False
     for pname in pnames:
+        if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
+            raise ValueError(f"Bulk update skipped for {pname}")
         try:
             new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
             successful_fetch = True
@@ -488,6 +499,10 @@ environment variables:
     target = args.target
 
     packages = list(map(os.path.abspath, args.package))
+
+    if len(packages) > 1:
+        global BULK_UPDATE
+        BULK_UPDATE = true
 
     logging.info("Updating packages...")
 
