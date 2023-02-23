@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openboardview";
-  version = "9.0.3";
+  version = "9.95.0";
 
   src = fetchFromGitHub {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     rev = version;
-    sha256 = "sha256-0vxWFNM9KQ5zs+VDDV3mVMfHZau4pgNxQ1HhH2vktCM=";
+    sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
 
