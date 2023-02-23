@@ -90,6 +90,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
         --replace '="''${prefix}//' '="/'
     fi
+  '' + lib.optionalString stdenv.isDarwin ''
+    ${stdenv.cc.targetPrefix}install_name_tool -change "@rpath/librocksdb.7.dylib" "$out/lib/librocksdb.7.dylib" $out/lib/librocksdb.dylib
   '';
 
   meta = with lib; {
