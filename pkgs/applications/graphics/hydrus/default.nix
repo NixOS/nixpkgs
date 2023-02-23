@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "517";
+  version = "518";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YTphPBwOVnCkCxrUe7ISZryVjbbZbBe7IFkrMij1s1w=";
+    hash = "sha256-DdzRi2Yw5epblN5oLpuwuvmidrbr2EBm1ocsWrNiDRk=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ python3Packages.buildPythonPackage rec {
     opencv4
     pillow
     psutil
+    pympler
     pyopenssl
     pyqt6
     pyqt6-charts
