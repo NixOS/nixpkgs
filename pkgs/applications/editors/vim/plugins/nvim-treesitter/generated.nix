@@ -1401,12 +1401,12 @@
   };
   smali = buildGrammar {
     language = "smali";
-    version = "d7f535e";
+    version = "e7da914";
     src = fetchFromGitHub {
       owner = "amaanq";
       repo = "tree-sitter-smali";
-      rev = "d7f535e176c928d33b0e202dd808ac247cacf2ff";
-      hash = "sha256-wSUHzQdpWtIXuqfFvqMNJPQjvdRZ29PBcwtMnyKwRR4=";
+      rev = "e7da91418fb1d88270688c7cbe72a25be4d66039";
+      hash = "sha256-EzoLWaxgWqHyVeuFVnIUau3XLkYhz4h8H8SVBLzYiUg=";
     };
     meta.homepage = "https://github.com/amaanq/tree-sitter-smali";
   };
