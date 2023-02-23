@@ -151,5 +151,8 @@ stdenv.mkDerivation {
       implementations of run-time libraries for dynamic testing tools such as
       AddressSanitizer, ThreadSanitizer, MemorySanitizer, and DataFlowSanitizer.
     '';
+    # "All of the code in the compiler-rt project is dual licensed under the MIT
+    # license and the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
   };
 }
