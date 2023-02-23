@@ -7,12 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "MDP";
+  pname = "mdp";
   version = "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "ac52a652ccbaed1857ff1209862f03bf9b06d093b12606fb410787da3aa65a0e";
+    pname = "MDP";
+    inherit version;
+    hash = "sha256-rFKmUsy67RhX/xIJhi8Dv5sG0JOxJgb7QQeH2jqmWg4=";
   };
 
   propagatedBuildInputs = [ future numpy ];
