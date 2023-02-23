@@ -600,6 +600,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  arpy = callPackage ../development/python-modules/arpy { };
+
   arnparse = callPackage ../development/python-modules/arnparse { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
