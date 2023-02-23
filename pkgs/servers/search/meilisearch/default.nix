@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-PARvz1LEEgmelku69ywKditAx0G4xJnEL6dYIh1IYTM=";
   };
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "Powerful, fast, and an easy to use search engine ";
+    description = "Powerful, fast, and an easy to use search engine";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
