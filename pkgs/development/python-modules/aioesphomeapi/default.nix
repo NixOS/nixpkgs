@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.3.1";
+  version = "13.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,13 +21,8 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pca+SMuUL3XyQpLAL6SOYPnztc95WF2o0v4+5Nc5Nxg=";
+    hash = "sha256-auqG+2Y+Dgwtkwbidi430n4t+GnZlBHIPUmsfl1aPa0=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
-  '';
 
   propagatedBuildInputs = [
     noiseprotocol

@@ -9303,6 +9303,10 @@ with pkgs;
 
   ox = callPackage ../applications/editors/ox { };
 
+  oxigraph = callPackage ../servers/oxigraph {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+  };
+
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd {};
@@ -24550,6 +24554,8 @@ with pkgs;
 
   mimir = callPackage ../servers/monitoring/mimir { };
 
+  phlare = callPackage ../servers/monitoring/phlare { };
+
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
@@ -31432,7 +31438,7 @@ with pkgs;
 
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
 
-  xmrig-mo = callPackage ../applications/misc/xmrig/moneroocean.nix { };
+  xmrig-mo = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/moneroocean.nix { };
 
   xmrig-proxy = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/proxy.nix { };
 

@@ -3,22 +3,22 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.58";
+  version = "2.1.60";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-9rlNShbdosCa60f4JlhC14dl3j2DxqFr3GgOOMWdXFY=";
+      sha256 = "sha256-IXgIVMcaZBTasRteZz3tRaDQ2rsWel2cNondK2VnzTU=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-Zp5C9r5uAfIg8szMtpCzWV3N7Em7iYN7WLO6DiEslWc=";
+      sha256 = "sha256-DQZsKkJ8SMAFpZ2/aVRAigmbsdnW79jW7otPOd8Y/v8=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-Ssg+SuCYBfaQ+XZP7hnZDD/k5dMduU5oj8H+gP+iPMY=";
+      sha256 = "sha256-y67nxlsyKT1PuBq8KMh8NatpLViClaN6BIMMoralKdQ=";
     };
   };
 
@@ -45,7 +45,7 @@ let
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ atemu ];
+    maintainers = with maintainers; [ mahmoudk1000 atemu ];
   };
 
   passthru = { inherit sources; };
