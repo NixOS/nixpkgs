@@ -458,7 +458,7 @@ self: super:
   xf86videowsfb    = super.xf86videowsfb.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
 
   xf86videoomap    = super.xf86videoomap.overrideAttrs (attrs: {
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
   });
 
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
@@ -592,7 +592,7 @@ self: super:
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=address" ]; # gcc12
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -893,7 +893,7 @@ self: super:
           "--disable-tls"
         ];
 
-        NIX_CFLAGS_COMPILE = [
+        env.NIX_CFLAGS_COMPILE = toString [
           # Needed with GCC 12
           "-Wno-error=array-bounds"
         ];

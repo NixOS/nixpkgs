@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   #  1278 |  int i;
   #       |      ^
   # cc1: all warnings being treated as errors
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=clobbered" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=clobbered" ];
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
 

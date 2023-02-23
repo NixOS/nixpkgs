@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib zstd openssl ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
   postPatch = ''
     patchShebangs .

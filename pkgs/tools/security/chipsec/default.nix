@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=dangling-pointer"
   ];

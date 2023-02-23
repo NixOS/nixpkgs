@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     IOKit
   ];
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   enableParallelBuilding = true;
 

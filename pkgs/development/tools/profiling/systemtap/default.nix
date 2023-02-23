@@ -19,7 +19,7 @@ let
     nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
     buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
 
   ## a kernel build dir as expected by systemtap

@@ -213,11 +213,11 @@ in buildPythonPackage rec {
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
   # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
+  env.NIX_CFLAGS_COMPILE = toString ((lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
   # Suppress gcc regression: avx512 math function raises uninitialized variable warning
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
   # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-  ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=maybe-uninitialized" "-Wno-error=uninitialized" ];
+  ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=maybe-uninitialized" "-Wno-error=uninitialized" ]));
 
   nativeBuildInputs = [
     cmake

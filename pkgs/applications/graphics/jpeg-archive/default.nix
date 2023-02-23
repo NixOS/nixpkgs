@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: src/util.o:(.bss+0x0): multiple definition of `progname'; /build/ccBZT2Za.o:(.bss+0x20): first defined here
   # https://github.com/danielgtaylor/jpeg-archive/issues/119
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

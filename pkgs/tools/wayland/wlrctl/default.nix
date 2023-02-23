@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson pkg-config scdoc ninja wayland-scanner ];
   buildInputs = [ libxkbcommon wayland ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
 
   meta = with lib; {
     description = "Command line utility for miscellaneous wlroots Wayland extensions";

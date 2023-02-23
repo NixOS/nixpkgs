@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "patchShebangs utils";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     make install prefix=$out

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   # still builds.
   #
   # [1]: https://github.com/ppp-project/ppp/commit/c2881a6b71a36d28a89166e82820dc5e711fd775
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.hostPlatform.isMusl "-UIPX_CHANGE";
 
   installPhase = ''

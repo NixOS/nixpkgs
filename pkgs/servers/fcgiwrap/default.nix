@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-znAsZk+aB2XO2NK8Mjc+DLwykYKHolnVQPErlaAx3Oc=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
   configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

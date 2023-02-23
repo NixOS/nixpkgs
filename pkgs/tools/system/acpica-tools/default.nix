@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "iasl"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-O3"
     # Needed with GCC 12
     "-Wno-dangling-pointer"

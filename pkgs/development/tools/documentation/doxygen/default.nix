@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
     lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   meta = {

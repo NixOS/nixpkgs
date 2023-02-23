@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #     ld: jamin-preferences.o:/build/jamin-0.95.0/src/hdeq.h:64: multiple definition of
   #       `l_notebook1'; jamin-callbacks.o:/build/jamin-0.95.0/src/hdeq.h:64: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa

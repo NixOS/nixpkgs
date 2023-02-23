@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
 
-  NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
 

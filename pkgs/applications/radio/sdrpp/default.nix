@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     OPT_BUILD_RIGCTL_SERVER = rigctl_server;
   };
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 

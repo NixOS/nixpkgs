@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
 
-  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
 

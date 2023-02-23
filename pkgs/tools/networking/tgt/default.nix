@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "SD_NOTIFY=1"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=maybe-uninitialized"
   ];

@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-faligned-allocation"
-  ];
+  ]);
 
   passthru.tests.version = testers.testVersion { package = mold; };
 

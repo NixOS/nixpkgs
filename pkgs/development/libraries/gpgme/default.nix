@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   # fit in the limit. https://github.com/NixOS/nix/pull/1085
   ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
-  NIX_CFLAGS_COMPILE = toString (
+  env.NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"

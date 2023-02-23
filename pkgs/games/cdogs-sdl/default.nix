@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
   ];

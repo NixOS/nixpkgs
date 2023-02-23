@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-isystem ${lib.getDev libcxx}/include/c++/v1"
     "-I${lib.getDev spirv-cross}/include/spirv_cross"
     "-I${lib.getDev spirv-headers}/include/spirv/unified1/"

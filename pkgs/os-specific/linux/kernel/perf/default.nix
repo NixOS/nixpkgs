@@ -121,7 +121,7 @@ stdenv.mkDerivation {
   ++ lib.optional withLibcap libcap
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"
