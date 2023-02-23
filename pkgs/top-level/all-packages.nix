@@ -22509,6 +22509,10 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
+  mesa_23 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+  };
   mesa = mesa_22;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
