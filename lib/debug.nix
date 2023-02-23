@@ -109,6 +109,8 @@ rec {
        traceSeqN 2 { a.b.c = 3; } null
        trace: { a = { b = {…}; }; }
        => null
+
+     Type: traceSeqN :: Int -> a -> b -> b
    */
   traceSeqN = depth: x: y:
     let snip = v: if      isList  v then noQuotes "[…]" v
@@ -173,17 +175,63 @@ rec {
 
   # -- TESTING --
 
-  /* Evaluate a set of tests.  A test is an attribute set `{expr,
-     expected}`, denoting an expression and its expected result.  The
-     result is a list of failed tests, each represented as `{name,
-     expected, actual}`, denoting the attribute name of the failing
-     test and its expected and actual results.
+  /* Evaluates a set of tests.
+
+     A test is an attribute set `{expr, expected}`,
+     denoting an expression and its expected result.
+
+     The result is a `list` of __failed tests__, each represented as
+     `{name, expected, result}`,
+
+     - expected
+       - What was passed as `expected`
+     - result
+       - The actual `result` of the test
 
      Used for regression testing of the functions in lib; see
-     tests.nix for an example. Only tests having names starting with
-     "test" are run.
+     tests.nix for more examples.
 
-     Add attr { tests = ["testName"]; } to run these tests only.
+     Important: Only attributes that start with `test` are executed.
+
+     - If you want to run only a subset of the tests add the attribute `tests = ["testName"];`
+
+    Example:
+
+     runTests {
+       testAndOk = {
+         expr = lib.and true false;
+         expected = false;
+       };
+       testAndFail = {
+         expr = lib.and true false;
+         expected = true;
+       };
+     }
+     ->
+     [
+       {
+         name = "testAndFail";
+         expected = true;
+         result = false;
+       }
+     ]
+
+    Type:
+      runTests :: {
+        tests = [ String ];
+        ${testName} :: {
+          expr :: a;
+          expected :: a;
+        };
+      }
+      ->
+      [
+        {
+          name :: String;
+          expected :: a;
+          result :: a;
+        }
+      ]
   */
   runTests =
     # Tests to run
