@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-prosody";
-  version = "1.0.6644";
+  version = "1.0.6991";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "41jlcsJpcFlNdBIOAdzTUF3wOUAOS9upF/uxFQaGULc=";
+    sha256 = "kgcbYpIM1lFmPrNPo4taD3EcL9LQc2Xxh3xEkDXCKhY=";
   };
 
   dontBuild = true;
