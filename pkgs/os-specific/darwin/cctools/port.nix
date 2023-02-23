@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       hash = "sha256-72KaJyu7CHXxJJ1GNq/fz+kW1RslO3UaKI91LhBtiXA=";
     })
     (fetchpatch {
-      url = "https://github.com/MercuryTechnologies/cctools-port/commit/e1f2802ea4bfde6fe00d2d815303392b11a262eb.patch";
+      url = "https://github.com/MercuryTechnologies/cctools-port/commit/025899b7b3593dedb0c681e689e57c0e7bbd9b80.patch";
       hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
     })
   ]
