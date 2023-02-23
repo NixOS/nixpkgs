@@ -27,6 +27,7 @@ let
     '';
 
     meta = with lib; {
+      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
@@ -55,8 +56,8 @@ in {
   };
 
   nextcloud25 = generic {
-    version = "25.0.3";
-    sha256 = "4b2b1423736ef92469096fe24f61c24cad87a34e07c1c7a81b385d3ea25c00ec";
+    version = "25.0.4";
+    sha256 = "sha256-wyUeAIOpQwPi1piLNS87Mwgqeacmsw/3RnCbD+hpoaY=";
   };
 
   # tip: get the sha with:
