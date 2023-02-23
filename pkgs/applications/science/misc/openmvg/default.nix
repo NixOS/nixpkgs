@@ -4,6 +4,7 @@
 , libpng ? null
 , eigen ? null
 , libtiff ? null
+, ceres-solver
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableExamples ? false
 , enableDocs ? false }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ];
+  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ceres-solver ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
     "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
+    "-DTARGET_ARCHITECTURE=generic"
   ] ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
 
   cmakeDir = "./src";

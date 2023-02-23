@@ -2467,6 +2467,12 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+  cbrewster = {
+    email = "cbrewster@hey.com";
+    github = "cbrewster";
+    githubId = 9086315;
+    name = "Connor Brewster";
+  };
   cburstedde = {
     email = "burstedde@ins.uni-bonn.de";
     github = "cburstedde";
@@ -2865,6 +2871,13 @@
     github = "cmm";
     githubId = 718298;
     name = "Michael Livshin";
+  };
+  CobaltCause = {
+    name = "Charles Hall";
+    email = "charles@computer.surgery";
+    github = "CobaltCause";
+    githubId = 7003738;
+    matrix = "@charles:computer.surgery";
   };
   cobbal = {
     email = "andrew.cobb@gmail.com";
@@ -7168,6 +7181,12 @@
     name = "Sven Slootweg";
     github = "joepie91";
     githubId = 1663259;
+  };
+  joerdav = {
+    email = "joe.davidson.21111@gmail.com";
+    github = "joerdav";
+    name = "Joe Davidson";
+    githubId = 19927761;
   };
   joesalisbury = {
     email = "salisbury.joseph@gmail.com";

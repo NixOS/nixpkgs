@@ -73,9 +73,9 @@ sha256 = "sha256-kiPErzrr5Ke77Zq9mxY7A6GzS4VfvCtKDRtwasCaWhY="
 gcc = "gcc11"
 
 ["12.0"]
-version = "12.0.0"
-url = "https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda_12.0.0_525.60.13_linux.run"
-sha256 = "sha256-kF6blRaQCDn7dgZHGdt1JDnzi4y3MLSTNdi9U93605I="
+version = "12.0.1"
+url = "https://developer.download.nvidia.com/compute/cuda/12.0.1/local_installers/cuda_12.0.1_525.85.12_linux.run"
+sha256 = "sha256-GyBaBicvFGP0dydv2rkD8/ZmkXwGjlIHOAAeacehh1s="
 # CUDA 12 is compatible with gcc12, but nixpkgs default gcc is still on gcc11 as
 # of 2023-01-08. See https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements.
 # This should be upgraded to gcc12 once nixpkgs default gcc is upgraded. Other
