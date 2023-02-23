@@ -17,7 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/helmfile/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

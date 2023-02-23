@@ -238,6 +238,8 @@ with pkgs;
 
   althttpd = callPackage ../servers/althttpd { };
 
+  amqpcat = callPackage ../development/tools/amqpcat { };
+
   anders = callPackage ../applications/science/logic/anders { };
 
   ankisyncd = callPackage ../servers/ankisyncd {
@@ -385,6 +387,8 @@ with pkgs;
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
   btdu = callPackage ../tools/misc/btdu { };
+
+  ccal = callPackage ../tools/misc/ccal { };
 
   cereal = callPackage ../development/libraries/cereal { };
 
@@ -30278,7 +30282,7 @@ with pkgs;
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
 
   musikcube = callPackage ../applications/audio/musikcube {
-    inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
   };
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
@@ -32194,6 +32198,7 @@ with pkgs;
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
+  palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   pamix = callPackage ../applications/audio/pamix { };
 
