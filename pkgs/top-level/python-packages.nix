@@ -6750,6 +6750,8 @@ self: super: with self; {
 
   opytimark = callPackage ../development/python-modules/opytimark { };
 
+  oracledb = callPackage ../development/python-modules/oracledb { };
+
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
