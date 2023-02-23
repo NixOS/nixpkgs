@@ -11194,6 +11194,8 @@ self: super: with self; {
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
+  sunweg = callPackage ../development/python-modules/sunweg { };
+
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
