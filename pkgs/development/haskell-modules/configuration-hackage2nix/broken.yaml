@@ -4913,7 +4913,8 @@ broken-packages:
   - snaplet-typed-sessions
   - snap-loader-dynamic
   - snap-predicates
-  - snappy
+  - snappy-iteratee
+  - snappy-conduit
   - snap-routes
   - snap-stream
   - snap-testing
@@ -5252,8 +5253,6 @@ broken-packages:
   - tempus
   - ten
   - tensor
-  - tensorflow
-  - tensorflow-opgen
   - tensor-safe
   - termbox-bindings
   - termination-combinators

@@ -459,7 +459,17 @@ self: super: {
   cmdtheline = dontCheck super.cmdtheline;
 
   # https://github.com/bos/snappy/issues/1
-  snappy = dontCheck super.snappy;
+  # https://github.com/bos/snappy/pull/10
+  snappy = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/bos/snappy/commit/8687802c0b85ed7fbbb1b1945a75f14fb9a9c886.patch";
+      sha256 = "sha256-p6rMzkjPAZVljsC1Ubj16/mNr4mq5JpxfP5xwT+Gt5M=";
+    })
+    (pkgs.fetchpatch {
+      url = "https://github.com/bos/snappy/commit/21c3250c1f3d273cdcf597e2b7909a22aeaa710f.patch";
+      sha256 = "sha256-qHEQ8FFagXGxvtblBvo7xivRARzXlaMLw8nt0068nt0=";
+    })
+  ] (dontCheck super.snappy);
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
