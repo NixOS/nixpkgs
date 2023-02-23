@@ -42,7 +42,7 @@ let
       # mis-compilation in firefox.
       # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
       ./revert-malloc-alignment-assumption.patch
-      ./add-nostdlibinc-flag.patch
+      ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
