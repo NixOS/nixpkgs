@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight package management system based upon ipkg";
     homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";
     changelog = "https://git.yoctoproject.org/opkg/tree/NEWS?h=v${version}";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };
