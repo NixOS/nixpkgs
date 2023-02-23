@@ -4010,6 +4010,11 @@
     githubId = 1931963;
     name = "David Sferruzza";
   };
+  dsymbol = {
+    name = "dsymbol";
+    github = "dsymbol";
+    githubId = 88138099;
+  };
   dtzWill = {
     email = "w@wdtz.org";
     github = "dtzWill";
