@@ -5253,8 +5253,6 @@ broken-packages:
   - tempus
   - ten
   - tensor
-  - tensorflow
-  - tensorflow-opgen
   - tensor-safe
   - termbox-bindings
   - termination-combinators
