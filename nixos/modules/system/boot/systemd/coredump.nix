@@ -67,7 +67,7 @@ in {
         group = "systemd-coredump";
       };
       users.groups.systemd-coredump = {
-        gid = config.ids.gids.systemd-coredump;
+        gid = mkIf (lib.versionAtLeast config.system.stateVersion "23.05") config.ids.gids.systemd-coredump;
       };
     })
 
