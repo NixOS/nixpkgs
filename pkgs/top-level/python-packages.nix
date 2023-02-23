@@ -6548,6 +6548,8 @@ self: super: with self; {
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
+  python-jwt = callPackage ../development/python-modules/python-jwt { };
+
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };

@@ -14815,6 +14815,12 @@
     githubId = 1634990;
     name = "Tom McLaughlin";
   };
+  thornycrackers = {
+    email = "codyfh@gmail.com";
+    github = "thornycrackers";
+    githubId = 4313010;
+    name = "Cody Hiar";
+  };
   thoughtpolice = {
     email = "aseipp@pobox.com";
     github = "thoughtpolice";
