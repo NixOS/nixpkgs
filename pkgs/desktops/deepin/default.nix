@@ -37,6 +37,7 @@ let
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
     deepin-calculator = callPackage ./apps/deepin-calculator { };
+    deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
