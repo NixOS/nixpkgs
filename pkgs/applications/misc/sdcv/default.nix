@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir locale
   '';
 
-  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
+  env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
   meta = with lib; {
     homepage = "https://dushistov.github.io/sdcv/";

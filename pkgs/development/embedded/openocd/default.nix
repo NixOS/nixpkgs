@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=cpp"
     "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
-  ];
+  ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

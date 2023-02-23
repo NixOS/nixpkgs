@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DFILE_DATA_PATH=${placeholder "out"}/lib/opensupaplex"
     "-DFILE_FHS_XDG_DIRS"
   ];

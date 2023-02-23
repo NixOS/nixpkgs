@@ -60,7 +60,7 @@ See the `zlib` example:
     (old: rec {
       buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
         HOME=$TMPDIR

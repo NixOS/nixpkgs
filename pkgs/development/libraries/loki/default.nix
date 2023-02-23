@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     make build-shared
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c++11"
   ];
 

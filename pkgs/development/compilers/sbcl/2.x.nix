@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (lib.versionOlder version "2.1.10") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
     "-fcommon"
   ]
     # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ];
+    ++ [ "-D_GNU_SOURCE" ]);
 
   buildPhase = ''
     runHook preBuild

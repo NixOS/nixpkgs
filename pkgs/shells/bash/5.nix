@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  NIX_CFLAGS_COMPILE = ''
+  env.NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
   '' + lib.optionalString (!forFHSEnv) ''

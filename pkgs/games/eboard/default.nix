@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
     homepage = "http://www.bergo.eng.br/eboard/";

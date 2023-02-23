@@ -44,7 +44,7 @@ buildPythonPackage rec {
     export PYSTEMMER_SYSTEM_LIBSTEMMER="${lib.getDev libstemmer}/include"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev libstemmer}/include"
   ];
 

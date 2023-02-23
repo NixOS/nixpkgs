@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
       --subst-var-by mamePath "$out/opt/mame"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=use-after-free"
   ];
 

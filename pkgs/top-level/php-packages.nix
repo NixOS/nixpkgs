@@ -563,7 +563,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           name = "xmlreader";
           buildInputs = [ libxml2 ];
           internalDeps = [ php.extensions.dom ];
-          NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
+          env.NIX_CFLAGS_COMPILE = toString [ "-I../.." "-DHAVE_DOM" ];
           doCheck = false;
           configureFlags = [
             "--enable-xmlreader"

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: libestools.a(editline.o):(.bss+0x28): multiple definition of
   #     `editline_history_file'; libestools.a(siodeditline.o):(.data.rel.local+0x8): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )
