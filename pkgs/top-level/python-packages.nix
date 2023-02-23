@@ -7361,6 +7361,8 @@ self: super: with self; {
 
   python-memcached = callPackage ../development/python-modules/python-memcached { };
 
+  python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
