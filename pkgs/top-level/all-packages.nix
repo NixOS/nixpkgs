@@ -15539,6 +15539,8 @@ with pkgs;
     langJit = true;
     enablePlugin = true;
     enableLTO = false;
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
   };
 
   gcj = gcj6;
