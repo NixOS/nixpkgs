@@ -40,7 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-    homepage = "https://mdp-toolkit.sourceforge.net";
+    homepage = "https://mdp-toolkit.github.io/";
+    changelog = "https://github.com/mdp-toolkit/mdp-toolkit/blob/MDP-${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nico202 ];
   };
