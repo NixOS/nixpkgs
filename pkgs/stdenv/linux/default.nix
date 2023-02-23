@@ -331,8 +331,6 @@ in
         gmp      = prev.gmp.override { cxx = false; };
         gcc-unwrapped =
           (prev.gcc-unwrapped.override (commonGccOverrides // {
-            enablePlugins = false;
-
             # The most logical name for this package would be something like
             # "gcc-stage1".  Unfortunately "stage" is already reserved for the
             # layers of stdenv, so using "stage" in the name of this package
