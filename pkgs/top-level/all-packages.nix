@@ -1568,6 +1568,8 @@ with pkgs;
 
   sgrep = callPackage ../tools/text/sgrep { };
 
+  shell-genie = callPackage  ../applications/misc/shell-genie { };
+
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
