@@ -86,6 +86,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/v${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
     license = licenses.mit;
