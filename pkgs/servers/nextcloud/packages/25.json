@@ -120,11 +120,21 @@
     ]
   },
   "polls": {
-    "sha256": "1amywiw91acp4g90wazmqmnw51s7z6rf27bdrzxrcqryd8igsniq",
-    "url": "https://github.com/nextcloud/polls/releases/download/v4.1.0-beta4/polls.tar.gz",
-    "version": "4.1.0-beta4",
+    "sha256": "0cm57d2nf7hc2wrwsss4b7zy17qrhqzj5p3wv7kwfk8i1cbzawx5",
+    "url": "https://github.com/nextcloud/polls/releases/download/v4.1.0-beta6/polls.tar.gz",
+    "version": "4.1.0-beta6",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "recognize": {
+    "sha256": "07jgkkb4iy3q6wr9xfp6y41z8vksc742m0snzvdkvnhyxvadi9nz",
+    "url": "https://github.com/nextcloud/recognize/releases/download/v3.3.6/recognize-3.3.6.tar.gz",
+    "version": "3.3.6",
+    "description": "This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.\n\n* 📷 👪 Recognizes faces from contact photos\n* 📷 🏔 Recognizes animals, landscapes, food, vehicles, buildings and other objects\n* 📷 🗼 Recognizes landmarks and monuments\n* 👂 🎵 Recognizes music genres\n* ⚡ Tagging works via Nextcloud's Collaborative Tags, allowing access by any of your apps\n  * 👂 listen to your tagged music with the audioplayer app\n  * 📷 view your tagged photos with the photos app\n\nAfter installation, you can enable tagging in the admin settings.\n\nRequirements:\n- PHP 7.4 and above\n- App \"collaborative tags\" enabled\n- For native speed:\n  - Processor: x86 64-bit (with support for AVX instructions)\n  - System with glibc (usually the norm on Linux; Alpine linux and FreeBSD are *not* such systems)\n- For sub-native speed (using JavaScript mode)\n  - Processor: x86 64-bit, arm64, armv7l (no AVX needed)\n  - System with glibc or musl (incl. Alpine linux)\n- ~4GB of free RAM (if you're cutting it close, make sure you have some swap available)\n\nThe app does not send any sensitive data to cloud providers or similar services. All processing is done on your Nextcloud machine, using Tensorflow.js running in Node.js.",
+    "homepage": "https://github.com/marcelklehr/recognize",
     "licenses": [
       "agpl"
     ]
