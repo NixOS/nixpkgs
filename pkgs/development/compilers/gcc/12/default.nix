@@ -29,6 +29,8 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
+, nukeReferences
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -177,6 +179,7 @@ let majorVersion = "12";
         mpfr
         name
         noSysDirs
+        nukeReferences
         patchelf
         perl
         profiledCompiler
@@ -347,5 +350,6 @@ lib.pipe (stdenv.mkDerivation ({
 ))
 [
   (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/checksum.nix { inherit langC langCC; })
 ]
 
