@@ -6,16 +6,20 @@
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
   version = "9.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-Gc+qoTa1EE4/YmJvUSqVG+zZ50wfohvWOe/fLJ/vgb0=";
+    hash = "sha256-Gc+qoTa1EE4/YmJvUSqVG+zZ50wfohvWOe/fLJ/vgb0=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +32,10 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.mgmt.search" ];
+
+  pythonImportsCheck = [
+    "azure.mgmt.search"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Search Management Client Library";
