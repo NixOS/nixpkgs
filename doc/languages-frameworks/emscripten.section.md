@@ -56,7 +56,7 @@ See the `zlib` example:
 
     zlib = (pkgs.zlib.override {
       stdenv = pkgs.emscriptenStdenv;
-    }).overrideDerivation
+    }).overrideAttrs
     (old: rec {
       buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
