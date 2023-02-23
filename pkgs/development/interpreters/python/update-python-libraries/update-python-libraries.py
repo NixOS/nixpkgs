@@ -101,23 +101,29 @@ def _get_unique_value(attribute, text):
     else:
         raise ValueError("no value found for {}".format(attribute))
 
-def _get_line_and_value(attribute, text):
+def _get_line_and_value(attribute, text, value=None):
     """Match attribute in text. Return the line and the value of the attribute."""
-    regex = '({}\s+=\s+"(.*)";)'.format(attribute)
+    if value is None:
+        regex = rf'({attribute}\s+=\s+\"(.*)\";)'
+    else:
+        regex = rf'({attribute}\s+=\s+\"({value})\";)'
     regex = re.compile(regex)
-    value = regex.findall(text)
-    n = len(value)
+    results = regex.findall(text)
+    n = len(results)
     if n > 1:
         raise ValueError("found too many values for {}".format(attribute))
     elif n == 1:
-        return value[0]
+        return results[0]
     else:
         raise ValueError("no value found for {}".format(attribute))
 
 
-def _replace_value(attribute, value, text):
+def _replace_value(attribute, value, text, oldvalue=None):
     """Search and replace value of attribute in text."""
-    old_line, old_value = _get_line_and_value(attribute, text)
+    if oldvalue is None:
+        old_line, old_value = _get_line_and_value(attribute, text)
+    else:
+        old_line, old_value = _get_line_and_value(attribute, text, oldvalue)
     new_line = old_line.replace(old_value, value)
     new_text = text.replace(old_line, new_line)
     return new_text
@@ -404,11 +410,15 @@ def _update_package(path, target):
     # sri hashes have been the default format since nix 2.4+
     sri_hash = _hash_to_sri("sha256", new_sha256)
 
-    # fetchers can specify a sha256, or a sri hash
-    try:
-        text = _replace_value('sha256', sri_hash, text)
-    except ValueError:
-        text = _replace_value('hash', sri_hash, text)
+    # retrieve the old output hash for a more precise match
+    if old_hash := _get_attr_value(f"python3Packages.{pname}.src.outputHash"):
+        # fetchers can specify a sha256, or a sri hash
+        try:
+            text = _replace_value('hash', sri_hash, text, old_hash)
+        except ValueError:
+            text = _replace_value('sha256', sri_hash, text, old_hash)
+    else:
+        raise ValueError(f"Unable to retrieve old hash for {pname}")
 
     if fetcher == 'fetchFromGitHub':
         # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
