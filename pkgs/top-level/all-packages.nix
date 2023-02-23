@@ -8771,6 +8771,8 @@ with pkgs;
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
 
+  kaniko = callPackage ../applications/networking/cluster/kaniko { };
+
   katana = callPackage ../tools/security/katana { };
 
   katriawm = callPackage ../applications/window-managers/katriawm { };
