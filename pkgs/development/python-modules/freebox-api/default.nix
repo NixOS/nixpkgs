@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
+    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };
