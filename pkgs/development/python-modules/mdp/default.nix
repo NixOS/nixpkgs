@@ -2,9 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , future
+, joblib
 , numpy
 , pytest
 , pythonOlder
+, scikit-learn
 }:
 
 buildPythonPackage rec {
@@ -20,18 +22,31 @@ buildPythonPackage rec {
     hash = "sha256-rFKmUsy67RhX/xIJhi8Dv5sG0JOxJgb7QQeH2jqmWg4=";
   };
 
-  propagatedBuildInputs = [ future numpy ];
-
-  nativeCheckInputs = [ pytest ];
-
-  doCheck = true;
-
-  pythonImportsCheck = [ "mdp" "bimdp" ];
-
   postPatch = ''
     # https://github.com/mdp-toolkit/mdp-toolkit/issues/92
-    substituteInPlace mdp/utils/routines.py --replace numx.typeDict numx.sctypeDict
+    substituteInPlace mdp/utils/routines.py \
+      --replace numx.typeDict numx.sctypeDict
+    substituteInPlace mdp/test/test_NormalizingRecursiveExpansionNode.py \
+      --replace py.test"" "pytest"
+    substituteInPlace mdp/test/test_RecursiveExpansionNode.py \
+      --replace py.test"" "pytest"
   '';
+
+  propagatedBuildInputs = [
+    future
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    joblib
+    pytest
+    scikit-learn
+  ];
+
+  pythonImportsCheck = [
+    "mdp"
+    "bimdp"
+  ];
 
   checkPhase = ''
     runHook preCheck
