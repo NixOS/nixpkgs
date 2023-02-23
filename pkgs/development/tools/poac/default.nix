@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   version = "0.5.1";
 
   src = fetchFromGitHub {
-    owner = "poacpm";
+    owner = "poac-dev";
     repo = pname;
     rev = version;
     sha256 = "sha256-JgGa7lomDvZG5HLxGJMALcezjnZprexJDTxyTUjLetg=";
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://poac.pm";
+    homepage = "https://poac.dev";
     description = "Package Manager for C++";
     license = licenses.asl20;
     maintainers = with maintainers; [ ken-matsui ];
