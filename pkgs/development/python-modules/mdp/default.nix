@@ -4,11 +4,15 @@
 , future
 , numpy
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mdp";
   version = "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "MDP";
