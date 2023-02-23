@@ -27,6 +27,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -115,6 +116,7 @@ let majorVersion = "11";
         enableLTO
         enableMultilib
         enablePlugin
+        disableGdbPlugin
         enableShared
         disableBootstrap
         fetchpatch
