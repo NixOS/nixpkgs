@@ -6050,6 +6050,8 @@ self: super: with self; {
 
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
 
+  mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
+
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   more-properties = callPackage ../development/python-modules/more-properties { };
