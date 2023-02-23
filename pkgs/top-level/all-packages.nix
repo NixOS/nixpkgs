@@ -5368,8 +5368,9 @@ with pkgs;
     citrix_workspace_22_05_0
     citrix_workspace_22_07_0
     citrix_workspace_22_12_0
+    citrix_workspace_23_02_0
   ;
-  citrix_workspace = citrix_workspace_22_12_0;
+  citrix_workspace = citrix_workspace_23_02_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -8753,6 +8754,8 @@ with pkgs;
   nats-top = callPackage ../tools/system/nats-top { };
 
   natscli = callPackage ../tools/system/natscli { };
+
+  nsc = callPackage ../tools/system/nsc { };
 
   nbench = callPackage ../tools/misc/nbench { };
 
