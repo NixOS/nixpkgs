@@ -30,6 +30,10 @@
 assert !enablePlugin -> disableGdbPlugin;
 assert langJava -> lib.versionOlder version "7";
 
+# Upstream configury does not check this requirement.  If not satisfied,
+# <dlfcn.h> will not be included, causing the build to fail.
+assert langJit -> enablePlugin;
+
 # Note [Windows Exception Handling]
 # sjlj (short jump long jump) exception handling makes no sense on x86_64,
 # it's forcably slowing programs down as it produces a constant overhead.

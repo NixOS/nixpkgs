@@ -15537,6 +15537,7 @@ with pkgs;
     langC = false;
     profiledCompiler = false;
     langJit = true;
+    enablePlugin = true;
     enableLTO = false;
   };
 
