@@ -2748,8 +2748,9 @@
       home-assistant-frontend
       janus
       pillow
+      python-otbr-api
       sqlalchemy
-    ]; # missing inputs: python-otbr-api
+    ];
     "otp" = ps: with ps; [
       pyotp
     ];
@@ -4863,6 +4864,7 @@
     "openweathermap"
     "opnsense"
     "oralb"
+    "otbr"
     "overkiz"
     "ovo_energy"
     "owntracks"
