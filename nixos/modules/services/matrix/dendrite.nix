@@ -91,6 +91,7 @@ in
           server_name = lib.mkOption {
             type = lib.types.str;
             example = "example.com";
+            default = "localhost";
             description = lib.mdDoc ''
               The domain name of the server, with optional explicit port.
               This is used by remote servers to connect to this server.
@@ -102,6 +103,7 @@ in
               lib.types.path
               (lib.types.strMatching "^\\$CREDENTIALS_DIRECTORY/.+");
             example = "$CREDENTIALS_DIRECTORY/private_key";
+            default = "${workingDir}/matrix_key.pem";
             description = lib.mdDoc ''
               The path to the signing private key file, used to sign
               requests and events.
@@ -111,51 +113,42 @@ in
               ```
             '';
           };
-          trusted_third_party_id_servers = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            example = [ "matrix.org" ];
-            default = [ "matrix.org" "vector.im" ];
-            description = lib.mdDoc ''
-              Lists of domains that the server will trust as identity
-              servers to verify third party identifiers such as phone
-              numbers and email addresses
-            '';
-          };
-        };
-        options.app_service_api.database = {
-          connection_string = lib.mkOption {
-            type = lib.types.str;
-            default = "file:federationapi.db";
-            description = lib.mdDoc ''
-              Database for the Appservice API.
-            '';
-          };
-        };
-        options.client_api = {
-          registration_disabled = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = lib.mdDoc ''
-              Whether to disable user registration to the server
-              without the shared secret.
-            '';
+          database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              example = "postgres:///dendrite?host=/run/postgresql";
+              default = "";
+              description =  lib.mdDoc ''
+                Connection string for global database connection
+                pool. Either specify only this option and none of the
+                other `connection_string` options, or omit this option
+                and specify all the other `connection_string`
+                options. Cannot be a SQLite database, i.e. cannot
+                start with `file:`.
+              '';
+            };
           };
         };
         options.federation_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:federationapi.db";
+            example = "file:dendrite_federationapi.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Federation API.
+              Database for the Federation API. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
         options.key_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:keyserver.db";
+            example = "file:dendrite_keyserver.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Key Server (for end-to-end encryption).
+              Database for the Key Server (for end-to-end
+              encryption). Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
@@ -163,9 +156,11 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mediaapi.db";
+              example = "file:dendrite_mediaapi.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for the Media API.
+                Database for the Media API. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -180,37 +175,22 @@ in
         options.room_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:roomserver.db";
+            example = "file:dendrite_roomserver.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Room Server.
+              Database for the Room Server. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
         options.sync_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:syncserver.db";
+            example = "file:dendrite_syncapi.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Sync API.
-            '';
-          };
-        };
-        options.sync_api.search = {
-          enable = lib.mkEnableOption (lib.mdDoc "Dendrite's full-text search engine");
-          index_path = lib.mkOption {
-            type = lib.types.str;
-            default = "${workingDir}/searchindex";
-            description = lib.mdDoc ''
-              The path the search index will be created in.
-            '';
-          };
-          language = lib.mkOption {
-            type = lib.types.str;
-            default = "en";
-            description = lib.mdDoc ''
-              The language most likely to be used on the server - used when indexing, to
-              ensure the returned results match expectations. A full list of possible languages
-              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
+              Database for the Sync API. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
@@ -218,18 +198,11 @@ in
           account_database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:userapi_accounts.db";
+              example = "file:dendrite_userapi.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for the User API, accounts.
-              '';
-            };
-          };
-          device_database = {
-            connection_string = lib.mkOption {
-              type = lib.types.str;
-              default = "file:userapi_devices.db";
-              description = lib.mdDoc ''
-                Database for the User API, devices.
+                Database for the User API, accounts. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -238,9 +211,11 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mscs.db";
+              example = "file:dendrite_mscs.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for exerimental MSC's.
+                Database for exerimental MSC's. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -253,24 +228,55 @@ in
         for available options with which to populate settings.
       '';
     };
-    openRegistration = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    extraFlags = lib.mkOption {
+      default = [ ];
+      example = [ "-really-enable-open-registration" ];
+      type = lib.types.listOf lib.types.str;
       description = lib.mdDoc ''
-        Allow open registration without secondary verification (reCAPTCHA).
+        Extra arguments to use for executing dendrite.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
-      message = ''
-        If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
+    assertions = [
+      {
+        assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
+        message = ''
+          If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
-        nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
-      '';
-    }];
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        '';
+      }
+      {
+        assertion = let
+          globalConn = cfg.settings.global.database.connection_string;
+          apiConns = (map (api: cfg.settings."${api}".database.connection_string)
+            [ "federation_api"
+              "key_server"
+              "media_api"
+              "room_server"
+              "sync_api"
+              "mscs"
+            ]) ++ [ cfg.settings.user_api.account_database.connection_string ];
+        in globalConn == "" && builtins.all (x: x != "") apiConns
+           ||
+           globalConn != "" && builtins.all (x: x == "") apiConns;
+        message = ''
+          Either specify
+          services.dendrite.settings.global.database.connection_string
+          and none of the other database connection_string options, or
+          do not specify
+          services.dendrite.settings.global.database.connection_string
+          and specify all of the other database connection_string
+          options.
+        '';
+      }
+      {
+        assertion = ! lib.strings.hasPrefix "file:" cfg.settings.global.database.connection_string;
+        message = "Global database cannot be a SQLite database";
+      }
+    ];
 
     systemd.services.dendrite = {
       description = "Dendrite Matrix homeserver";
@@ -278,6 +284,14 @@ in
         "network.target"
       ];
       wantedBy = [ "multi-user.target" ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -i ${configurationYaml} \
+          -o /run/dendrite/dendrite.yaml
+        if ! [ -s "${cfg.settings.global.private_key}" ]; then
+          ${pkgs.dendrite}/bin/generate-keys --private-key ${cfg.settings.global.private_key}
+        fi
+      '';
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -288,11 +302,6 @@ in
         LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         LoadCredential = cfg.loadCredential;
-        ExecStartPre = ''
-          ${pkgs.envsubst}/bin/envsubst \
-            -i ${configurationYaml} \
-            -o /run/dendrite/dendrite.yaml
-        '';
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"
@@ -302,9 +311,7 @@ in
           "--https-bind-address :${builtins.toString cfg.httpsPort}"
           "--tls-cert ${cfg.tlsCert}"
           "--tls-key ${cfg.tlsKey}"
-        ] ++ lib.optionals cfg.openRegistration [
-          "--really-enable-open-registration"
-        ]);
+        ] ++ cfg.extraFlags);
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
