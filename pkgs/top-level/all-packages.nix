@@ -30064,6 +30064,8 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
 
+  gossa = callPackage ../applications/networking/gossa { };
+
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpsbabel-gui = gpsbabel.override {
