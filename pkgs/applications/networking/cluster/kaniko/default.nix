@@ -46,7 +46,7 @@ buildGoModule rec {
     description = "A tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
     homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.superherointj ];
     mainProgram = "executor";
   };
