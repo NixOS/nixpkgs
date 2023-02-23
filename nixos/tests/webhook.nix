@@ -20,6 +20,7 @@ in
           echo = {
             execute-command = "echo";
             response-message = "Webhook is reachable!";
+            success-http-response-code = 200;
           };
         };
         hooksTemplated = {

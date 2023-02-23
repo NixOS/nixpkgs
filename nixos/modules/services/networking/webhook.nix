@@ -8,6 +8,19 @@ let
 
   hookFormat = pkgs.formats.json {};
 
+  source-name = {
+    options = {
+      name = mkOption {
+        type = types.str;
+        description = mdDoc "Name";
+      };
+      source = mkOption {
+        type = types.str;
+        description = mdDoc "Source";
+      };
+    };
+  };
+
   hookType = types.submodule ({ name, ... }: {
     freeformType = hookFormat.type;
     options = {
@@ -22,6 +35,58 @@ let
         type = types.str;
         description = mdDoc "The command that should be executed when the hook is triggered.";
       };
+      command-working-directory= mkOption {
+        type = types.str;
+        description = mdDoc "The working directory that will be used for the script when it's executed";
+      };
+      success-http-response-code = mkOption {
+        type = (types.ints.between 99 600);
+        default = 200;
+        description = mdDoc "The HTTP status code to be returned upon success";
+      };
+      http-methods = mkOption {
+        type = with types; listOf str;
+        default = [ "POST" "PUT" "GET" ];
+        description = mdDoc "The list of allowed HTTP methods, such as POST and GET";
+      };
+
+      pass-environment-to-command = mkOption {
+        type = with types; listOf (submodule {
+          options = {
+            envname = mkOption {
+              type = types.str;
+              description = mdDoc "Environment variable name";
+            };
+            name = mkOption {
+              type = types.str;
+              description = mdDoc "Name";
+            };
+            source = mkOption {
+              type = types.str;
+              description = mdDoc "Source";
+            };
+          };
+        });
+        default = [];
+        description = mdDoc "The list of arguments that will be passed to the command as environment variables.";
+      };
+
+      pass-arguments-to-command= mkOption {
+        type = with types; listOf (submodule source-name);
+        default = [];
+        description = mdDoc "The list of arguments that will be passed to the command.";
+      };
+
+      parse-parameters-as-json= mkOption {
+        type = with types; listOf (submodule source-name);
+        default = [];
+        description = mdDoc ''
+          The list of arguments that contain JSON strings. These parameters will
+          be decoded by webhook and you can access them like regular objects in
+          rules and pass-arguments-to-command.
+          '';
+      };
+
     };
   });
 
