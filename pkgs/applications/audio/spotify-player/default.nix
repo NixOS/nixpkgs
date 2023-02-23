@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iaDaPjh2wZXxBxBDhWp+hHrJZyXqw6HSzgCzbZj9iho=";
+    sha256 = "sha256-nWXXaRHTzCXmu4eKw88pKuWXgdG9n7azPeBbXYz+Fio=";
   };
 
-  cargoHash = "sha256-I8n/fR1aOsSex2p0u5FaqoJCh2J0oMxkikS9aynxgpA=";
+  cargoHash = "sha256-y/qHiwZes4nVtjbFN/jL2LFugGpRKnYij7+XXZbqguQ=";
 
   nativeBuildInputs = [
     pkg-config

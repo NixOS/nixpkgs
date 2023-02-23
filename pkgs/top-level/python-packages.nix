@@ -6074,8 +6074,6 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
-  mox = callPackage ../development/python-modules/mox { };
-
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
@@ -6549,6 +6547,8 @@ self: super: with self; {
   nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
+
+  python-jwt = callPackage ../development/python-modules/python-jwt { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
