@@ -81,7 +81,8 @@ in rec {
       stdenv
       subversion
       tarball
-      vim;
+      vim
+      tests-stdenv-gcc-stageCompare;
   };
 
   tested = let
@@ -131,6 +132,7 @@ in rec {
         "nixos.tests.proxy"
         "nixos.tests.simple"
         "nixpkgs.jdk"
+        "nixpkgs.tests-stdenv-gcc-stageCompare"
       ])
     ];
   };

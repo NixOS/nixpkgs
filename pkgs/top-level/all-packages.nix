@@ -33898,6 +33898,8 @@ with pkgs;
 
   testssl = callPackage ../applications/networking/testssl { };
 
+  tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
+
   lavalauncher = callPackage ../applications/misc/lavalauncher { };
 
   t-rec = callPackage ../misc/t-rec {
