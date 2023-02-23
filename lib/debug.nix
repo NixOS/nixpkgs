@@ -188,17 +188,12 @@ rec {
      - result
        - The actual `result` of the test
 
-     Denoting the attribute name of the failing
-     test and its expected and actual results.
-
      Used for regression testing of the functions in lib; see
-     tests.nix for an example.
+     tests.nix for more examples.
 
-     > Important: In general only `tests` having names starting with
-     "test" are run.
+     Important: Only attributes that start with `test` are executed.
 
-     - Add attr { tests = ["testName"]; } to run tests from list only.
-     - If `tests` in not specififed all tests will be evaluated.
+     - If you want to run only a subset of the tests add the attribute `tests = ["testName"];`
 
     Example:
 
