@@ -3,6 +3,7 @@
 , nukeReferences
 , langC
 , langCC
+, runtimeShell
 }:
 
 let
