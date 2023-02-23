@@ -83,6 +83,20 @@ buildPythonPackage rec {
     "test_4_File_deletion"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "test_1_Ram_Concurrency"
+    "test_2_File_Concurrency"
+    "test_HTTP10_KeepAlive"
+    "test_HTTP11_Timeout"
+    "test_iterator"
+    "test_malformed_header"
+    "test_no_content_length"
+    "test_No_Message_Body"
+    "test_post_filename_with_special_characters"
+    "test_post_multipart"
+    "testErrorHandling"
+    "testGzip"
+    "testHookErrors"
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [
@@ -106,6 +120,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object-oriented HTTP framework";
     homepage = "https://cherrypy.dev/";
+    changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
