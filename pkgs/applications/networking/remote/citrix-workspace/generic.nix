@@ -209,6 +209,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmenke michaeladler ];
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "23.02") [
+      "CVE-2023-24486: https://support.citrix.com/article/CTX477618/citrix-workspace-app-for-linux-security-bulletin-for-cve202324486"
+    ];
     inherit homepage;
   };
 }
