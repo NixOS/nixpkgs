@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to communicate with LIVISI Smart Home Controller";
     homepage = "https://github.com/StefanIacobLivisi/aiolivisi";
+    changelog = "https://github.com/StefanIacobLivisi/aiolivisi/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
