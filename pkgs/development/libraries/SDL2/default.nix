@@ -25,7 +25,6 @@
 , wayland-scanner
 , drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libdrm
-, mesa
 , libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , dbus
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional udevSupport udev
     ++ lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
     ++ lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
-    ++ lib.optionals drmSupport [ libdrm mesa ];
+    ++ lib.optionals drmSupport [ libdrm ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
