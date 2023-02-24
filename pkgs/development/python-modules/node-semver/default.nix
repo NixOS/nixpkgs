@@ -1,8 +1,16 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "0.9.0";
   pname = "node-semver";
+  version = "0.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   nativeCheckInputs = [ pytest ];
 
