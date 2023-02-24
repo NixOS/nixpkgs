@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , cmake
 , ninja
@@ -14,6 +15,7 @@
 , libjpeg
 , libtiff
 , libpng
+, libX11
 , writeShellScript
 , common-updater-scripts
 , curl
@@ -37,6 +39,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-oEH4GlSV+642TGSJJhV4yzydh1hAQZfzwaiPAZFNQtI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "gmic-3.2.1-fix-system-gmic.patch";
+      url = "https://github.com/GreycLab/gmic/commit/1fc184b40b7c31e7b100722d32cb9f7c5a79c90f.patch";
+      hash = "sha256-xLlZ87QUiBrfioG7DNXf0HioxqOu6HX+57LW2FGdbLI=";
+    })
+  ];
+
   # TODO: build this from source
   # https://github.com/dtschump/gmic/blob/b36b2428db5926af5eea5454f822f369c2d9907e/src/Makefile#L675-L729
   gmic_stdlib = fetchurl {
@@ -58,6 +68,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
+    libX11
     opencv
     openexr
     graphicsmagick
