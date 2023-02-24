@@ -101,6 +101,7 @@ in
     diskSize = "auto";
     additionalSpace = "0M"; # Defaults to 512M.
     copyChannel = false;
+    memSize = 2048; # Qemu VM memory size in megabytes. Defaults to 1024M.
   }
 ```
 

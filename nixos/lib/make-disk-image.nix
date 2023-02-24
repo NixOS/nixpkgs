@@ -154,6 +154,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Guest memory size
+  memSize ? 1024
+
 , # Copy the contents of the Nix store to the root of the image and
   # skip further setup. Incompatible with `contents`,
   # `installBootLoader` and `configFile`.
@@ -525,7 +528,7 @@ let format' = format; in let
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
         ]
       );
-      memSize = 1024;
+      inherit memSize;
     } ''
       export PATH=${binPath}:$PATH
 
