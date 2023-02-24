@@ -1,11 +1,11 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy, pythonAtLeast, sip-module ? "sip" }:
 
 buildPythonPackage rec {
   pname = sip-module;
   version = "4.19.25";
   format = "other";
 
-  disabled = isPyPy;
+  disabled = isPyPy || pythonAtLeast "3.11";
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
