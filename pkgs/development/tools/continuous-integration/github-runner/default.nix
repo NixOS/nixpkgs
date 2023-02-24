@@ -356,10 +356,12 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
+    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
     platforms = attrNames runtimeIds;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
