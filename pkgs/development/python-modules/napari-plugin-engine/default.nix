@@ -3,17 +3,21 @@
 , fetchFromGitHub
 , setuptools-scm
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "napari-plugin-engine";
   version = "0.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
