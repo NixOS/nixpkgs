@@ -32,7 +32,7 @@ let
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
     sha256 = "sha256-BJAiDv+Zg+wU6ovAkuMVTGN9WElOlC96m/GEYrg6exE=";
   } else if stdenv.isDarwin then fetchurl {
-    url = 
+    url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
     sha256 = "sha256-sAsSuCMFJL41GRGdXJgECPVKcCHkDM3lVHYiSqkM/K8=";
   } else throw "Not supported on ${stdenv.hostPlatform.system}.";
