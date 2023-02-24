@@ -36,8 +36,9 @@ buildPythonPackage rec {
       Flask-AutoIndex generates an index page for your Flask application automatically.
       The result is just like mod_autoindex, but the look is more awesome!
     '';
+    homepage = "https://flask-autoindex.readthedocs.io/";
+    changelog = "https://github.com/general03/flask-autoindex/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = teams.sage.members;
-    homepage = "https://pythonhosted.org/Flask-AutoIndex/";
   };
 }
