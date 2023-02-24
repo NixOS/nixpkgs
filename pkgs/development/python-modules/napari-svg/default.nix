@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "napari-svg";
-  version = "0.1.5";
+  version = "0.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-20NLi6JTugP+hxqF2AnhSkuvhkGGbeG+tT3M2SZbtRc=";
+    hash = "sha256-lvI6RWT9oUE95vL6WO75CASc/Z+1G5UMm2p8vhqIjA0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
