@@ -582,6 +582,45 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+  /* Return a list of all elements until a predicate matches an element.
+
+     Type: takeWhile :: (a -> Bool) -> [a] -> [a]
+
+     Example:
+       takeWhile (x: x < 3) [ 1 2 3 4 5 ]
+       => [ 1 2 ]
+       takeWhile (x: elem x ["a" "b"]) [ "a" "a" "b" "c" "a" ]
+       => [ "a" "a" "b" ]
+  */
+  takeWhile = pred: list: let
+    listWithIndices = imap0 (index: value: { inherit index value; }) list;
+    firstPredFailure = findFirst
+                         ({ index, value }: !(pred value))
+                         { index = length list; }
+                         listWithIndices;
+  in take firstPredFailure.index list;
+    # if list == [] || !(pred (head list))
+    #   then []
+    #   else [ (head list) ] ++ (takeWhile pred (tail list));
+
+  /* Return a list of all elements after a predicate matches an element.
+
+     Type: dropWhile :: (a -> Bool) -> [a] -> [a]
+
+     Example:
+       dropWhile (x: x < 3) [ 1 2 3 4 5 ]
+       => [ 3 4 5 ]
+       dropWhile (x: elem x ["a" "b"]) [ "a" "a" "b" "c" "a" ]
+       => [ "c" "a" ]
+  */
+  dropWhile = pred: list: let
+    listWithIndices = imap0 (index: value: { inherit index value; }) list;
+    firstPredFailure = findFirst
+                         ({ index, value }: !(pred value))
+                         { index = length list; }
+                         listWithIndices;
+  in drop firstPredFailure.index list;
+
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 

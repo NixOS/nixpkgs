@@ -466,6 +466,20 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testTakeWhile = testAllTrue [
+    ([ 1 2 ] == (takeWhile (x: x < 3) [ 1 2 3 4 5 ]))
+    ([ "a" "a" "b" ] == (takeWhile (x: elem x ["a" "b"]) [ "a" "a" "b" "c" "a" ]))
+    ([ 1 1 1 ] == (takeWhile (x: x < 3) [ 1 1 1 ]))
+    ([ ] == (takeWhile (x: x < 0) [ 1 1 1 ]))
+  ];
+
+  testDropWhile = testAllTrue [
+    ([ 3 4 5 ] == (dropWhile (x: x < 3) [ 1 2 3 4 5 ]))
+    ([ "c" "a" ] == (dropWhile (x: elem x ["a" "b"]) [ "a" "a" "b" "c" "a" ]))
+    ([ ] == (dropWhile (x: x < 3) [ 1 1 1 ]))
+    ([ 1 1 1 ] == (dropWhile (x: x < 0) [ 1 1 1 ]))
+  ];
+
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
     { a = 2; b = 7; }
