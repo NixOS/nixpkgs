@@ -42,7 +42,6 @@ buildPythonPackage rec {
     imap-tools
     pluggy
     requests
-    setuptools # for pkg_resources
   ];
 
   nativeCheckInputs = [
