@@ -48,7 +48,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -65,7 +65,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "RadeonOpenCompute";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-iyr3cstC8CB1YaACadNqBs/oI8lh4bJzK0WtEB0wZvg=";
+    hash = "sha256-BDvC6QFDFtahA9hmJDLiM6K4mrO3j9E9rEXm7KulcuA=";
   };
 
   nativeBuildInputs = [
