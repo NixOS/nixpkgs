@@ -12882,6 +12882,12 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rubyowo = {
+    name = "Rei Star";
+    email = "perhaps-you-know@what-is.ml";
+    github = "rubyowo";
+    githubId = 105302757;
+  };
   rumpelsepp = {
     name = "Stefan Tatschner";
     email = "stefan@rumpelsepp.org";
