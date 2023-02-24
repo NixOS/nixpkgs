@@ -202,7 +202,7 @@ let
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${passthru.gemPath}" -name gem_make.out -delete
+          find "$out/${passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -296,7 +296,7 @@ in {
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "2" "";
-    sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
+    version = rubyVersion "3" "1" "3" "";
+    sha256 = "sha256-XqSYo19M0Vh1IApS3eQrbrF54SZOF9eHMsOlfNHGq54=";
   };
 }
