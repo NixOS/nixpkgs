@@ -22,9 +22,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   meta = with lib; {
-    homepage = "https://github.com/pytest-dev/pytest-flask/";
+    description = "A set of pytest fixtures to test Flask applications";
+    homepage = "https://pytest-flask.readthedocs.io/";
+    changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    description = "A set of py.test fixtures to test Flask applications";
     maintainers = with maintainers; [ vanschelven ];
   };
 }
