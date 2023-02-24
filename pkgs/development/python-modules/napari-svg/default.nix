@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , imageio
 , napari-plugin-engine
+, pythonOlder
 , setuptools-scm
 , vispy
 }:
@@ -10,6 +11,9 @@
 buildPythonPackage rec {
   pname = "napari-svg";
   version = "0.1.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "napari";
