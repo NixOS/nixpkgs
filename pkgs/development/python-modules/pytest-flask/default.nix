@@ -12,16 +12,22 @@ buildPythonPackage rec {
     sha256 = "46fde652f77777bf02dc91205aec4ce20cdf2acbbbd66a918ab91f5c14693d3d";
   };
 
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     flask
     werkzeug
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pythonImportsCheck = [
+    "pytest_flask"
+  ];
 
   meta = with lib; {
     description = "A set of pytest fixtures to test Flask applications";
