@@ -1,4 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, pytest
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, werkzeug
+}:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
@@ -9,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46fde652f77777bf02dc91205aec4ce20cdf2acbbbd66a918ab91f5c14693d3d";
+    hash = "sha256-Rv3mUvd3d78C3JEgWuxM4gzfKsu71mqRirkfXBRpPT0=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +32,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     werkzeug
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
