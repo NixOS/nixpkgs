@@ -95,6 +95,8 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_inlineform.py"
     "flask_admin/tests/sqla/test_postgres.py"
     "flask_admin/tests/sqla/test_translation.py"
+    # RuntimeError: Working outside of application context.
+    "flask_admin/tests/sqla/test_multi_pk.py"
   ];
 
   pythonImportsCheck = [
@@ -104,6 +106,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
+    changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };
