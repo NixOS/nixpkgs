@@ -29,6 +29,10 @@ buildPythonPackage rec {
   # Circular dependency: napari
   doCheck = false;
 
+  pythonImportsCheck = [
+    "napari_plugin_engine"
+  ];
+
   meta = with lib; {
     description = "First generation napari plugin engine";
     homepage = "https://github.com/napari/napari-plugin-engine";
