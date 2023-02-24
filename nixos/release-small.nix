@@ -39,8 +39,7 @@ in rec {
         login
         misc
         nat
-        # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
-        #nfs3
+        nfs3
         openssh
         php
         predictable-interface-names
