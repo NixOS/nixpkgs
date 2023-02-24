@@ -5,7 +5,6 @@
 , ipykernel
 , ipython
 , napari-plugin-engine
-, pytest
 , pythonOlder
 , qtconsole
 , setuptools-scm
@@ -13,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "napari-console";
-  version = "0.0.4";
-  format = "setuptools";
+  version = "0.0.7";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aVdYOzkZ+dqB680oDjNCg6quXU+QgUZI09E/MSTagyA=";
+    hash = "sha256-vHLCVMgrcs54pGb48wQpc0h7QBIfE6r7hCSoDNI3QvA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,13 +30,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  # setup.py somehow requires pytest
   propagatedBuildInputs = [
     imageio
     ipykernel
     ipython
     napari-plugin-engine
-    pytest
     qtconsole
   ];
 
