@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , flask
 , flask-silk
-, future
-, pathlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "flask-autoindex";
   version = "0.6.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AutoIndex";
@@ -21,9 +22,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     flask-silk
-    future
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    pathlib
   ];
 
   pythonImportsCheck = [
