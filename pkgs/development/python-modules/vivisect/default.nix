@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tAIhsHFds3qwPngfOsR1+xDKgi29ACnvFAYoklRnCAI=";
+    hash = "sha256-tAIhsHFds3qwPngfOsR1+xDKgi29ACnvFAYoklRnCAI=";
   };
 
   postPatch = ''
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };
