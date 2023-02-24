@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools-scm, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
   version = "1.2.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
