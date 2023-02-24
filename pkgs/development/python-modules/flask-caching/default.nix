@@ -11,14 +11,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
+  pname = "flask-caching";
   version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Flask-Caching";
+    inherit version;
     hash = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
   };
 
@@ -42,6 +43,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # ignore flaky test
     "test_cached_view_class"
+  ];
+
+  pythonImportsCheck = [
+    "flask_caching"
   ];
 
   meta = with lib; {
