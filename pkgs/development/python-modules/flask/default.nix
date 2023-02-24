@@ -31,8 +31,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    asgiref
-    python-dotenv
     click
     itsdangerous
     jinja2
@@ -40,6 +38,15 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.10") [
     importlib-metadata
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      asgiref
+    ];
+    dotenv = [
+      python-dotenv
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
