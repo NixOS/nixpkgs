@@ -4638,6 +4638,8 @@ self: super: with self; {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  in-n-out = callPackage ../development/python-modules/in-n-out { };
+
   in-place = callPackage ../development/python-modules/in-place { };
 
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
