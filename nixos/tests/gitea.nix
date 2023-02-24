@@ -1,5 +1,6 @@
 { system ? builtins.currentSystem,
   config ? {},
+  giteaPackage,
   pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -9,7 +10,7 @@ with pkgs.lib;
 let
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
   makeGiteaTest = type: nameValuePair type (makeTest {
-    name = "gitea-${type}";
+    name = "${giteaPackage.pname}-${type}";
     meta.maintainers = with maintainers; [ aanderse kolaente ma27 ];
 
     nodes = {
@@ -18,9 +19,10 @@ let
         services.gitea = {
           enable = true;
           database = { inherit type; };
+          package = giteaPackage;
           settings.service.DISABLE_REGISTRATION = true;
         };
-        environment.systemPackages = [ pkgs.gitea pkgs.jq ];
+        environment.systemPackages = [ giteaPackage pkgs.jq ];
         services.openssh.enable = true;
       };
       client1 = { config, pkgs, ... }: {
