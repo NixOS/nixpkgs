@@ -20,6 +20,9 @@
 buildPythonPackage rec {
   pname = "flask";
   version = "2.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask";
