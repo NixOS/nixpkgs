@@ -2122,6 +2122,8 @@ self: super: with self; {
 
   cssutils = callPackage ../development/python-modules/cssutils { };
 
+  cstruct = callPackage ../development/python-modules/cstruct { };
+
   csvw = callPackage ../development/python-modules/csvw { };
 
   cu2qu = callPackage ../development/python-modules/cu2qu { };
