@@ -30431,6 +30431,8 @@ with pkgs;
 
   hello = callPackage ../applications/misc/hello { };
 
+  salve-mundi = callPackage ../applications/misc/hello/salve-mundi.nix { };
+
   hello-wayland = callPackage ../applications/graphics/hello-wayland { };
 
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
