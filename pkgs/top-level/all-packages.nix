@@ -10916,8 +10916,6 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  phodav_2_0 = callPackage ../tools/networking/phodav/2.0.nix { };
-
   photon-rss = callPackage ../applications/networking/feedreaders/photon { };
 
   pim6sd = callPackage ../servers/pim6sd { };
@@ -23417,8 +23415,6 @@ with pkgs;
   spice = callPackage ../development/libraries/spice { };
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
-
-  spice-gtk_libsoup2 = spice-gtk.override { withLibsoup2 = true; };
 
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
