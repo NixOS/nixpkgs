@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchPypi
 , wrapQtAppsHook
 
@@ -22,6 +22,9 @@
 buildPythonPackage rec {
   pname = "vivisect";
   version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
