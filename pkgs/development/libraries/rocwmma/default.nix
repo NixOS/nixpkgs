@@ -36,7 +36,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"

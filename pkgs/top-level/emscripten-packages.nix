@@ -8,7 +8,7 @@ with pkgs;
 rec {
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ zlib ];
@@ -47,7 +47,7 @@ rec {
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
     pythonSupport = false;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       propagatedBuildInputs = [ zlib ];
       nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
@@ -138,7 +138,7 @@ rec {
 
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
       # we need to reset this setting!
