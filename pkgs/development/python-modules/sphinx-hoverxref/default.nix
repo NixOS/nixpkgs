@@ -15,7 +15,7 @@
 , sphinxemoji
 # runtime dependencies
 , sphinx
-, sphinx-jquery
+, sphinxcontrib-jquery
 }:
 
 buildPythonPackage rec {
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     sphinxemoji
   ];
 
-  propagatedBuildInputs = [ sphinx sphinx-jquery ];
+  propagatedBuildInputs = [ sphinx sphinxcontrib-jquery ];
 
   pythonImportsCheck = [ "hoverxref" ];
 
