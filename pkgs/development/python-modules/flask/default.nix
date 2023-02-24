@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.2.2";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask";
     inherit version;
-    sha256 = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
+    sha256 = "sha256-frNzmEvxx3ACP86dsWTtDDNTzQtT8TD0aT2gynVqLm0=";
   };
 
   propagatedBuildInputs = [
