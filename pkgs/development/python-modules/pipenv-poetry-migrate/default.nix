@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.1";
+  version = "0.3.2";
   pname = "pipenv-poetry-migrate";
   format = "pyproject";
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HYzKp7ZYvJZX2CiHmR8wIeuL2a1xdk0Y87HLs9EP2tM=";
+    hash = "sha256-aPG0MgChnJbivJRjYx9aQE5OPhL4WlPyt5uKCHZUpeE=";
   };
 
   nativeBuildInputs = [
