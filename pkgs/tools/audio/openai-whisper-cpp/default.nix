@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
     license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dit7ya ];
   };
 }
