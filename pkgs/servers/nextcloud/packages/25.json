@@ -109,6 +109,16 @@
       "agpl"
     ]
   },
+  "notify_push": {
+    "sha256": "1raxkzdcd9mixg30ifv22lzf10j47n79n05yqbf6mjagrgj0rr7f",
+    "url": "https://github.com/nextcloud/notify_push/releases/download/v0.5.0/notify_push.tar.gz",
+    "version": "0.5.0",
+    "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "onlyoffice": {
     "sha256": "0gy4n86q7b5qmy609ncibp94v1b3z9msc0129572qz2zyxfqxq3i",
     "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v7.6.8/onlyoffice.tar.gz",
