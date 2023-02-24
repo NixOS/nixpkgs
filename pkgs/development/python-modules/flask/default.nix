@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://flask.palletsprojects.com/";
+    changelog = "https://github.com/pallets/flask/blob/${version}/CHANGES.rst";
     description = "The Python micro framework for building web applications";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is
