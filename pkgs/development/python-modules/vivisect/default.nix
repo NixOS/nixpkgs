@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8y6sAQJa9baPPdhtuR9Jv1tJkNWJsS1hJ1lknkHWU4=";
+    sha256 = "sha256-tAIhsHFds3qwPngfOsR1+xDKgi29ACnvFAYoklRnCAI=";
   };
 
   postPatch = ''
