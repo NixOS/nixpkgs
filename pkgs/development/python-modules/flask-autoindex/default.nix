@@ -26,6 +26,10 @@ buildPythonPackage rec {
     pathlib
   ];
 
+  pythonImportsCheck = [
+    "flask_autoindex"
+  ];
+
   meta = with lib; {
     description = "The mod_autoindex for Flask";
     longDescription = ''
