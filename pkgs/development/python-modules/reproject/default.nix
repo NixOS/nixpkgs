@@ -47,6 +47,8 @@ buildPythonPackage rec {
     "build/lib*"
     # Avoid failure due to user warning: Distutils was imported before Setuptools
     "-p no:warnings"
+    # Uses network
+    "--ignore build/lib*/reproject/interpolation/"
   ];
 
   pythonImportsCheck = [
