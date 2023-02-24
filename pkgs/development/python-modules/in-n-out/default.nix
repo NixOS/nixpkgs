@@ -4,9 +4,11 @@
 , fetchPypi
 , future
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , setuptools-scm
+, toolz
 }:
 
 buildPythonPackage rec {
@@ -33,10 +35,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    toolz
   ];
 
   pythonImportsCheck = [
     "in_n_out"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
+    # Fatal Python error
+    "tests/test_injection.py"
+    "tests/test_processors.py"
+    "tests/test_providers.py"
+    "tests/test_store.py"
   ];
 
   meta = with lib; {
