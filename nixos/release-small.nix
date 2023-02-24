@@ -122,8 +122,7 @@ in rec {
         "nixos.tests.nat.firewall-conntrack"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
-        # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
-        #"nixos.tests.nfs3.simple"
+        "nixos.tests.nfs3.simple"
         "nixos.tests.openssh"
         "nixos.tests.php.fpm"
         "nixos.tests.php.pcre"
