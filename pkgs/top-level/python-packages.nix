@@ -4380,6 +4380,8 @@ self: super: with self; {
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
+  homeassistant-stubs = callPackage ../servers/home-assistant/stubs.nix { };
+
   homeconnect = callPackage ../development/python-modules/homeconnect { };
 
   homematicip = callPackage ../development/python-modules/homematicip { };
@@ -12179,6 +12181,8 @@ self: super: with self; {
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
+
+  voluptuous-stubs = callPackage ../development/python-modules/voluptuous-stubs { };
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 

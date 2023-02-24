@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.0.0";
+  version = "2.0.2";
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "async-lru";
     rev = "v${version}";
-    hash = "sha256-mCmEMN9D6kEkHb3GoYuVk4XxvhaSX5eOHqpKawrcoxs=";
+    hash = "sha256-kcvtF/p1L5OVXJSRxRQ0NMFtV29tAysZs8cnTHqOBOo=";
   };
 
   propagatedBuildInputs = [

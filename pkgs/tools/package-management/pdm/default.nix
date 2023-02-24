@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.4.3";
+  version = "2.4.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gp8ju26XX0A2+LX+7b9OuEBJx4qUwR2tNUq+Chj56q4=";
+    hash = "sha256-g+fQxq2kwhNXXEJG2n5n4f9GMkmmLsjpHoay152fcVQ=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +85,8 @@ buildPythonApplication rec {
     "test_use_wrapper_python"
     "test_use_invalid_wrapper_python"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://pdm.fming.dev";

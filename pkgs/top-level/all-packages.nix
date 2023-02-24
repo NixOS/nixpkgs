@@ -17183,7 +17183,8 @@ with pkgs;
     electron_19
     electron_20
     electron_21
-    electron_22;
+    electron_22
+    electron_23;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -24256,6 +24257,8 @@ with pkgs;
 
   _389-ds-base = callPackage ../servers/ldap/389 { };
 
+  _5etools = callPackage ../servers/web-apps/5etools {};
+
   adguardhome = callPackage ../servers/adguardhome {};
 
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
@@ -30965,7 +30968,7 @@ with pkgs;
 
   kubernetes-helm-wrapped = wrapHelm kubernetes-helm {};
 
-  kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
+  kubernetes-helmPlugins = recurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
 
   chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
 
