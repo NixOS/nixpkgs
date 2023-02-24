@@ -12,6 +12,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
     homepage = "https://github.com/podhmo/python-semver";
     description = "A port of node-semver";
     license = licenses.mit;
