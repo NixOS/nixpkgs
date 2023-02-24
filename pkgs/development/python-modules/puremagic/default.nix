@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -11,13 +12,16 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bkaqeBE6Rmq8n2nm6KTOkOtX2Qja+4CVlwEmIQYUYr0=";
+  src = fetchFromGitHub {
+    owner = "cdgriffith";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-WnqDrVPTlNxz3SDt1wLdZmxtj0Vh6gLHDJlYGEHHxsg=";
   };
 
-  # test data not included on pypi
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "puremagic"
