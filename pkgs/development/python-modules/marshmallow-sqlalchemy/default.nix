@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KrDxKAx5Plrsgd6rPmPsI2iN3+BeXzislgNooQeVIKE=";
+    hash = "sha256-KrDxKAx5Plrsgd6rPmPsI2iN3+BeXzislgNooQeVIKE=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     description = "SQLAlchemy integration with marshmallow";
+    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
+    changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }
