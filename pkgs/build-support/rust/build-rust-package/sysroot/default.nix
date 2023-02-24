@@ -29,4 +29,7 @@ in rustPlatform.buildRustPackage {
     host=${rust.toRustTarget stdenv.buildPlatform}
     cp -r $RUST_SYSROOT/lib/rustlib/$host $out
   '';
+
+  # allows support for cross-compilation
+  meta.platforms = lib.platforms.all;
 }
