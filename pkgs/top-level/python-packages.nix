@@ -532,6 +532,8 @@ self: super: with self; {
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
+  app-model = callPackage ../development/python-modules/app-model { };
+
   appdirs = callPackage ../development/python-modules/appdirs { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
