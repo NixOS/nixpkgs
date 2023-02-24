@@ -1,4 +1,10 @@
-{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config }:
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, git
+, pkg-config
+}:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -32,15 +38,20 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.53.0";
   pname = "conan";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-2DNDNdZO1D30egOiYa3qw8F2xsUTBOm/CHv07v5OrC8=";
   };
+
+  postPatch = ''
+    substituteInPlace conans/requirements.txt \
+      --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
+  '';
 
   propagatedBuildInputs = with newPython.pkgs; [
     bottle
@@ -62,7 +73,11 @@ in newPython.pkgs.buildPythonApplication rec {
     six
     tqdm
     urllib3
-  ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    idna
+    cryptography
+    pyopenssl
+  ];
 
   nativeCheckInputs = [
     pkg-config
@@ -78,10 +93,6 @@ in newPython.pkgs.buildPythonApplication rec {
   # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
   # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace conans/requirements.txt --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
-  '';
 
   meta = with lib; {
     description = "Decentralized and portable C/C++ package manager";
