@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , importlib-metadata
 , jaconv
+, py-cpuinfo
 , pytest-benchmark
 , pytestCheckHook
 , pythonOlder
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    py-cpuinfo
     pytest-benchmark
     pytestCheckHook
   ];
