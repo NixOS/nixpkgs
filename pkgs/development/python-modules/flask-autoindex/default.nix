@@ -9,11 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-AutoIndex";
+  pname = "flask-autoindex";
   version = "0.6.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Flask-AutoIndex";
+    inherit version;
     sha256 = "ea319f7ccadf68ddf98d940002066278c779323644f9944b300066d50e2effc7";
   };
 
