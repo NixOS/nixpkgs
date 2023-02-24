@@ -12,7 +12,7 @@ let param =
       rev = version;
       sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
     };
-    env.NIX_CFLAGS_COMPILE = null;
+    env = { };
     buildInputs = [ camlp-streams ];
   } else if check "3.12" then {
     version = "2.18.5";
