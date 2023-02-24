@@ -54,7 +54,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
+    disableBootstrap = true;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -346,5 +346,6 @@ lib.pipe (stdenv.mkDerivation ({
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 [
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
 ]
 

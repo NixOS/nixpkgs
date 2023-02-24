@@ -49,7 +49,7 @@ with builtins;
 
 let majorVersion = "11";
     version = "${majorVersion}.3.0";
-    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
+    disableBootstrap = true;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -250,9 +250,8 @@ lib.pipe (stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags =
-    let target =
-          lib.optionalString (profiledCompiler) "profiled" +
-          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+    let target = lib.optionalString (profiledCompiler) "profiled"
+      + lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
 
   inherit (callFile ../common/strip-attributes.nix { })
@@ -312,4 +311,5 @@ lib.pipe (stdenv.mkDerivation ({
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 [
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
 ]
