@@ -23,7 +23,7 @@ buildKodiAddon rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/known-as-bmf/plugin.video.arteplussept";
+    homepage = "https://github.com/thomas-ernest/plugin.video.arteplussept";
     description = "Watch videos available on Arte+7";
     license = licenses.mit;
     maintainers = teams.kodi.members;
