@@ -568,6 +568,7 @@
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse.nix
+  ./services/matrix/synapse-diskspace-janitor.nix
   ./services/misc/airsonic.nix
   ./services/misc/ananicy.nix
   ./services/misc/ankisyncd.nix
