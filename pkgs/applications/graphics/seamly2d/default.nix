@@ -2,7 +2,6 @@
   addOpenGLRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, gcc, xvfb-run,
   fontconfig, freetype, xorg, ccache, qmake, python3, qttools, git
 }:
-with lib;
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
 in
@@ -21,22 +20,20 @@ stdenv.mkDerivation rec {
     git
     qtPython
     qtbase
-    addOpenGLRunpath
     poppler_utils
     qtxmlpatterns
     qtsvg
     mesa
-    gcc
-    xvfb-run
-    fontconfig
     freetype
     xorg.libXi
     xorg.libXrender
     xorg.libxcb
-    ccache
   ];
 
   nativeBuildInputs = [
+    addOpenGLRunpath
+    xvfb-run
+    fontconfig
     wrapQtAppsHook
     qmake
     qttools
@@ -44,16 +41,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace common.pri \
-      --replace '$$[QT_INSTALL_HEADERS]/QtXmlPatterns' '${getDev qtxmlpatterns}/include/QtXmlPatterns' \
-      --replace '$$[QT_INSTALL_HEADERS]/QtSvg' '${getDev qtsvg}/include/QtSvg' \
-      --replace '$$[QT_INSTALL_HEADERS]/' '${getDev qtbase}/include/' \
-      --replace '$$[QT_INSTALL_HEADERS]' '${getDev qtbase}'
+      --replace '$$[QT_INSTALL_HEADERS]/QtXmlPatterns' '${lib.getDev qtxmlpatterns}/include/QtXmlPatterns' \
+      --replace '$$[QT_INSTALL_HEADERS]/QtSvg' '${lib.getDev qtsvg}/include/QtSvg' \
+      --replace '$$[QT_INSTALL_HEADERS]/' '${lib.getDev qtbase}/include/' \
+      --replace '$$[QT_INSTALL_HEADERS]' '${lib.getDev qtbase}'
     substituteInPlace src/app/translations.pri \
-      --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${getDev qttools}/bin/lrelease'
+      --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
     substituteInPlace src/app/seamly2d/mainwindowsnogui.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler_utils}/bin/pdftops"'
     substituteInPlace src/libs/vwidgets/export_format_combobox.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler_utils}/bin/pdftops"'
     substituteInPlace src/app/seamlyme/mapplication.cpp \
       --replace 'diagrams.rcc' '../share/diagrams.rcc'
   '';
@@ -69,17 +66,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     mv $out/usr/share $out/
     rmdir $out/usr
 
     mv $out/share/seamly2d/* $out/share/.
     rmdir $out/share/seamly2d
-
-    mkdir -p $out/share/man/man1
-    gzip -9c dist/debian/seamly2d.1 > $out/share/man/man1/seamly2d.1.gz
 
     mkdir -p $out/share/mime/packages
     cp dist/debian/seamly2d.sharedmimeinfo $out/share/mime/packages/seamly2d.xml
@@ -88,8 +80,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source patternmaking software";
     homepage = "https://seamly.net/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ WhittlesJr ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ WhittlesJr ];
   };
 }
