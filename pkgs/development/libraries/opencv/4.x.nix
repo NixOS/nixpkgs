@@ -37,9 +37,14 @@
 , enableContrib ? true
 
 , enableCuda ? (config.cudaSupport or false) && stdenv.hostPlatform.isx86_64
-, cudaPackages ? { }
+, enableCublas ? enableCuda
+, enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
+, enableCufft ? enableCuda
+, cudaPackages ? {}
+, symlinkJoin
 , nvidia-optical-flow-sdk
 
+, enableLto ? true
 , enableUnfree ? false
 , enableIpp ? false
 , enablePython ? false
@@ -79,9 +84,6 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit;
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
-
   version = "4.7.0";
 
   src = fetchFromGitHub {
@@ -227,6 +229,33 @@ let
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
   #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
+
+  inherit (cudaPackages) cudaFlags cudatoolkit cudaVersion;
+  inherit (cudaFlags) cudaCapabilities;
+
+  cuda-common-redist = with cudaPackages; [
+    cuda_cccl # <thrust/*>
+    libnpp # npp.h
+  ] ++ lib.optionals enableCublas [
+    libcublas # cublas_v2.h
+  ] ++ lib.optionals enableCudnn [
+    cudnn # cudnn.h
+  ] ++ lib.optionals enableCufft [
+    libcufft # cufft.h
+  ];
+
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      cuda_nvcc
+    ] ++ cuda-common-redist;
+   };
+
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
+   };
 in
 
 stdenv.mkDerivation {
@@ -298,17 +327,18 @@ stdenv.mkDerivation {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
-    ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
+    ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
+    ++ lib.optionals enableCuda [ cuda-redist ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
-    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
+    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
-  ];
+  ] ++ lib.optionals enableCuda [ cuda-native-redist ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -338,12 +368,30 @@ stdenv.mkDerivation {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "OPENJPEG" enableJPEG2000)
     "-DWITH_JASPER=OFF" # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
-    (opencvFlag "CUDA" enableCuda)
-    (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)
+
+    # CUDA options
+    (opencvFlag "CUDA" enableCuda)
+    (opencvFlag "CUDA_FAST_MATH" enableCuda)
+    (opencvFlag "CUBLAS" enableCublas)
+    (opencvFlag "CUDNN" enableCudnn)
+    (opencvFlag "CUFFT" enableCufft)
+
+    # LTO options
+    (opencvFlag "ENABLE_LTO" enableLto)
+    (opencvFlag "ENABLE_THIN_LTO" (
+      enableLto && (
+        # Only clang supports thin LTO, so we must either be using clang through the stdenv,
+        stdenv.cc.isClang ||
+          # or through cudatoolkit.
+          (enableCuda && cudatoolkit.cc.isClang)
+      )
+    ))
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    # We need to set the C and C++ host compilers for CUDA to the same compiler.
+    "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/c++"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
 
     # OpenCV respects at least three variables:
