@@ -3,7 +3,9 @@
 , fetchPypi
 , flask
 , flask-silk
+, future
 , pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,6 +24,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     flask-silk
+    future
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -38,5 +45,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/general03/flask-autoindex/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = teams.sage.members;
+    # https://github.com/general03/flask-autoindex/issues/67
+    broken = true;
   };
 }
