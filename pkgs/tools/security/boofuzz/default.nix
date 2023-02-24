@@ -12,8 +12,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jtpereyda";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-mbxImm5RfYWq1JCCSvvG58Sxv2ad4BOh+RLvtNjQCKE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mbxImm5RfYWq1JCCSvvG58Sxv2ad4BOh+RLvtNjQCKE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -42,6 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     "TestNoResponseFailure"
     "TestProcessMonitor"
     "TestSocketConnection"
+    # SyntaxError: invalid syntax, https://github.com/jtpereyda/boofuzz/issues/663
+    "test_msg_60_bytes"
   ];
 
   pythonImportsCheck = [
