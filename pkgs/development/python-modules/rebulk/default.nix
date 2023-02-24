@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner, six, regex, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, regex
+}:
 
 buildPythonPackage rec {
   pname = "rebulk";
@@ -9,13 +15,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DTC/gPygD6nGlxhaxHXarJveX2Rs4zOMn/XV3B69/rw=";
+    hash = "sha256-DTC/gPygD6nGlxhaxHXarJveX2Rs4zOMn/XV3B69/rw=";
   };
 
-  # Some kind of trickery with imports that doesn't work.
-  doCheck = false;
-  buildInputs = [ pytest pytest-runner ];
-  propagatedBuildInputs = [ six regex ];
+  propagatedBuildInputs = [
+    regex
+  ];
+
+  buildInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "rebulk"
