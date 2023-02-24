@@ -18,7 +18,7 @@
 , zlib ? null
 , gnatboot ? null
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugins ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -27,7 +27,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
-, disableGdbPlugin ? !enablePlugin
+, disableGdbPlugin ? !enablePlugins
 }:
 
 # Make sure we get GNU sed.
@@ -115,7 +115,7 @@ let majorVersion = "11";
         crossStageStatic
         enableLTO
         enableMultilib
-        enablePlugin
+        enablePlugins
         disableGdbPlugin
         enableShared
         disableBootstrap

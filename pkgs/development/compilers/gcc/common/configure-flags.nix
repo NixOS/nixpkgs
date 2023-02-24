@@ -10,8 +10,8 @@
 
 , enableLTO
 , enableMultilib
-, enablePlugin
-, disableGdbPlugin ? !enablePlugin
+, enablePlugins
+, disableGdbPlugin ? !enablePlugins
 , enableShared
 
 , langC
@@ -27,7 +27,7 @@
 , disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
 }:
 
-assert !enablePlugin -> disableGdbPlugin;
+assert !enablePlugins -> disableGdbPlugin;
 assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
@@ -174,7 +174,7 @@ let
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"])
     ++ lib.optional (!enableShared) "--disable-shared"
-    ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
+    ++ lib.singleton (lib.enableFeature enablePlugins "plugin")
     # Libcc1 is the GCC cc1 plugin for the GDB debugger which is only used by gdb
     ++ lib.optional disableGdbPlugin "--disable-libcc1"
 

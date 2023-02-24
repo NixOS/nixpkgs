@@ -15,7 +15,7 @@
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugins ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -112,7 +112,7 @@ let majorVersion = "7";
         crossStageStatic
         enableLTO
         enableMultilib
-        enablePlugin
+        enablePlugins
         enableShared
         fetchpatch
         fetchurl

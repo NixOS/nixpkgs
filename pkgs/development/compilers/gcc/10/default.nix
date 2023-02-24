@@ -18,7 +18,7 @@
 , zlib ? null
 , gnatboot ? null
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugins ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -104,7 +104,7 @@ let majorVersion = "10";
         crossStageStatic
         enableLTO
         enableMultilib
-        enablePlugin
+        enablePlugins
         enableShared
         fetchpatch
         fetchurl

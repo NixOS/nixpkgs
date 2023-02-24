@@ -25,7 +25,7 @@
 , libXrandr ? null, libXi ? null
 , x11Support ? langJava
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugins ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -141,7 +141,7 @@ let majorVersion = "6";
         crossStageStatic
         enableLTO
         enableMultilib
-        enablePlugin
+        enablePlugins
         enableShared
         fetchFromGitHub
         fetchpatch
