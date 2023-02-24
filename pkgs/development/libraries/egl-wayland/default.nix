@@ -7,7 +7,7 @@
 , wayland-scanner
 , libGL
 , libX11
-, mesa
+, libdrm
 , wayland
 , wayland-protocols
 }:
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     eglexternalplatform
     libGL
     libX11
-    mesa
+    libdrm
     wayland
     wayland-protocols
   ];
