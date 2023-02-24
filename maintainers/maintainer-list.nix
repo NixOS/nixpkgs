@@ -15349,6 +15349,11 @@
     github = "unrooted";
     githubId = 30440603;
   };
+  unsolvedcypher = {
+    name = "Matthew M";
+    github = "UnsolvedCypher";
+    githubId = 3170853;
+  };
   uralbash = {
     email = "root@uralbash.ru";
     github = "uralbash";
