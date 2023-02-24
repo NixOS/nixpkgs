@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , ruby
 , which
+, runCommand
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +40,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ ruby which ];
+
+  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Pull a header that contains a definition of proc_pid_rusage().
+    (runCommand "${pname}_headers" { } ''
+      install -Dm444 ${lib.getDev darwin.apple_sdk.sdk}/include/libproc.h $out/include/libproc.h
+    '')
+  ];
+
+  LIBCLANG_PATH = lib.optionalString stdenv.isDarwin "${stdenv.cc.cc.lib}/lib";
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
