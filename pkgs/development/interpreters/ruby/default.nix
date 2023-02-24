@@ -68,6 +68,8 @@ let
 
         outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
 
+        strictDeps = true;
+
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
