@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
 
-  NIX_CFLAGS_COMPILE = "-O2";
+  env.NIX_CFLAGS_COMPILE = "-O2";
   FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
 
   nativeBuildInputs = [

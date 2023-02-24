@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "tools"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=deprecated-copy"
     "-Wno-error=pessimizing-move"
     # Needed with GCC 12
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=unused-private-field"
     "-faligned-allocation"
-  ];
+  ]);
 
   cmakeFlags = [
     "-DPORTABLE=1"

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   enableParallelBuilding = true;
 

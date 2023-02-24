@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.1.12"; #zen
+    version = "6.2"; #zen
     suffix = "zen1"; #zen
-    sha256 = "16g0rkgmxbj4425mbnadam7vbd8621ar13ddx26j298bc9m8yqic"; #zen
+    sha256 = "090xywfydzhcz2nqqms3n84n0vvsnhn2w7bb34xldnslbmzapgip"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.1.12"; #lqx
+    version = "6.1.13"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "0a6slrydf47hk4b3xlxycjw9y2xgjgvzjic2psbcb1c5y75zq720"; #lqx
+    sha256 = "07slp9ylrhh5xpsha2sa2qqzj8f46jc37avh20jbb3v1n27gc5zx"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {

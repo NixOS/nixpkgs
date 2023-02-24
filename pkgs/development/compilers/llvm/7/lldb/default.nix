@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
 
   cmakeFlags = [
     "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"

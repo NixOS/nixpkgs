@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Configure phase requires 64-bit time_t even on 32-bit platforms.
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.is32bit [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.is32bit [
     "-D_TIME_BITS=64" "-D_FILE_OFFSET_BITS=64"
-  ];
+  ]);
 
   configureFlags = [
     "--disable-silent-rules"

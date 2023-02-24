@@ -100,6 +100,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       libc++abi is a new implementation of low level support for a standard C++ library.
     '';
+    # "All of the code in libc++abi is dual licensed under the MIT license and
+    # the UIUC License (a BSD-like license)":
+    license = with lib.licenses; [ mit ncsa ];
     maintainers = llvm_meta.maintainers ++ [ lib.maintainers.vlstill ];
   };
 }

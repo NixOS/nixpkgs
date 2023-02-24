@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./pci.patch ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=implicit-fallthrough";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
   postInstall = ''
     cd ../

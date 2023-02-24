@@ -84,7 +84,7 @@ in let
   inherit (releaseInfo) release_version version;
 
   llvm_meta = {
-    license     = with lib.licenses; [ ncsa llvm-exception ];
+    license     = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
     platforms   = lib.platforms.all;
   };

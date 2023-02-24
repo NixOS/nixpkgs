@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://gitlab.com/libvirt/libvirt-glib/-/issues/4
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-sign" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=pointer-sign" ];
 
   meta = with lib; {
     description = "Library for working with virtual machines";

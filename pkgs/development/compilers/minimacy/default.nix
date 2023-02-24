@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-unused-result";
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
 
   preBuild = ''
     pushd ${if stdenv.isDarwin then "macos/cmdline" else "unix"}

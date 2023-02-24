@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     "-Dwlroots:libseat=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ]; # gcc12
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ]; # gcc12
 
   meta = with lib; {
     homepage = "https://gitlab.com/cardboardwm/cardboard";

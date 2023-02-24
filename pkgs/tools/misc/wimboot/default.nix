@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=array-bounds"
   ];

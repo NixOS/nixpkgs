@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "-DPROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc";
 
-  NIX_CFLAGS_COMPILE = [ "-DTM_VERSION=${finalAttrs.version}" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 
   postInstall = ''
     installManPage ../docs/man/tilemaker.1

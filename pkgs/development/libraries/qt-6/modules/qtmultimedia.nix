@@ -30,7 +30,7 @@ qtModule {
     ++ lib.optionals stdenv.isLinux [ gst-vaapi ]
     ++ lib.optionals stdenv.isDarwin [ VideoToolbox ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
     "-include AudioToolbox/AudioToolbox.h";
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
     "-framework AudioToolbox";

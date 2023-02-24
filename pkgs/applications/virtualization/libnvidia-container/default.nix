@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
   nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];

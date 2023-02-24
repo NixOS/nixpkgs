@@ -4378,6 +4378,8 @@ self: super: with self; {
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
+  homeassistant-stubs = callPackage ../servers/home-assistant/stubs.nix { };
+
   homeconnect = callPackage ../development/python-modules/homeconnect { };
 
   homematicip = callPackage ../development/python-modules/homematicip { };
@@ -6074,8 +6076,6 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
-  mox = callPackage ../development/python-modules/mox { };
-
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
@@ -6550,6 +6550,8 @@ self: super: with self; {
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
+  python-jwt = callPackage ../development/python-modules/python-jwt { };
+
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
@@ -6749,6 +6751,8 @@ self: super: with self; {
   opuslib = callPackage ../development/python-modules/opuslib { };
 
   opytimark = callPackage ../development/python-modules/opytimark { };
+
+  oracledb = callPackage ../development/python-modules/oracledb { };
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
@@ -12178,6 +12182,8 @@ self: super: with self; {
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
+
+  voluptuous-stubs = callPackage ../development/python-modules/voluptuous-stubs { };
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 

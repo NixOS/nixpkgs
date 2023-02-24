@@ -1,7 +1,6 @@
 { lib
 , acme
 , aiohttp
-, asynctest
 , atomicwrites-homeassistant
 , attrs
 , buildPythonPackage
@@ -44,7 +43,6 @@ buildPythonPackage rec {
   doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
   nativeCheckInputs = [
-    asynctest
     pytest-aiohttp
     pytestCheckHook
   ];

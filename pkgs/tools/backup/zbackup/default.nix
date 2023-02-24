@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # zbackup uses dynamic exception specifications which are not
   # allowed in C++17
-  NIX_CFLAGS_COMPILE = [ "--std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "--std=c++14" ];
 
   buildInputs = [ zlib openssl protobuf lzo libunwind ];
   nativeBuildInputs = [ cmake protobufc ];

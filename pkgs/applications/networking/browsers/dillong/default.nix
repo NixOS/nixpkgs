@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: main.o:/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set';
   #     dpid.o:/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     description = "Fork of Dillo, a lightweight web browser";

@@ -31,7 +31,7 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    NIX_CFLAGS_COMPILE = [
+    env.NIX_CFLAGS_COMPILE = toString [
       #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
       "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
 
@@ -95,7 +95,7 @@ in makePackage {
   # -fcommon: gstreamer workaround for -fno-common toolchains:
   #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
   #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
 
   stripDebugList = [ "." ];
 

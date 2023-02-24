@@ -345,7 +345,7 @@ lib.composeManyExtensions [
           LIB_DIR = "${lib.getLib pkgs.secp256k1}/lib";
 
           # for actual C toolchain build
-          NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
+          env.NIX_CFLAGS_COMPILE = "-I ${lib.getDev pkgs.secp256k1}/include";
           NIX_LDFLAGS = "-L ${lib.getLib pkgs.secp256k1}/lib";
         }
       );
@@ -1383,7 +1383,7 @@ lib.composeManyExtensions [
       openexr = super.openexr.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openexr pkgs.ilmbase ];
-          NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+          env.NIX_CFLAGS_COMPILE = toString [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
         }
       );
 
@@ -1838,7 +1838,7 @@ lib.composeManyExtensions [
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ (
             if withApplePCSC then [ PCSC ] else [ pcsclite ]
           );
-          NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
+          env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
             "-I ${lib.getDev pcsclite}/include/PCSC";
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.swig

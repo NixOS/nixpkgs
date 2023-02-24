@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
 
   postPatch = ''

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "-Dsysprof=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-lpthread";
+  env.NIX_CFLAGS_COMPILE = "-lpthread";
 
   doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
 

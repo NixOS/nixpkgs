@@ -60,7 +60,7 @@ let
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
           ];
 
-        NIX_CFLAGS_COMPILE = [
+        env.NIX_CFLAGS_COMPILE = toString [
           # Needed with GCC 12
           "-Wno-error=missing-template-keyword"
         ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLEATHERMAN_ENABLE_TESTING=OFF" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];

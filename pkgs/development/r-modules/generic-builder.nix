@@ -7,7 +7,7 @@ stdenv.mkDerivation ({
                 lib.optionals requireX [util-linux xvfb-run] ++
                 lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran libiconv];
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   configurePhase = ''

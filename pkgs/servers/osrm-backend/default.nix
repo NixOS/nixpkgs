@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
     "-Wno-error=uninitialized"
