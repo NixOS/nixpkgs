@@ -1,11 +1,13 @@
 { stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
-, openjdk11-bootstrap }:
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu71
+, openjdk11-bootstrap
+, withMedia ? true
+, withWebKit ? false }:
 
 let
   major = "11";
-  update = ".0.17";
-  build = "1";
+  update = ".0.19";
+  build = "0";
   repover = "${major}${update}+${build}";
   gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
@@ -28,10 +30,10 @@ let
       owner = "openjdk";
       repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-uKb6k+tIFdwy1BYiHWeGmKNz82X4CZjFlGYqLDpSFY0=";
+      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu71 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -81,8 +83,8 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${if withMedia then "true" else "false"}
+    COMPILE_WEBKIT = ${if withWebKit then "true" else "false"}
   '';
 
   preBuild = ''
