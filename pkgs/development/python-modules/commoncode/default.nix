@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UWd8fTHVEC5ywETfMIWjfXm4xiNaMrVpwkQ/woeXc0k=";
+    hash = "sha256-UWd8fTHVEC5ywETfMIWjfXm4xiNaMrVpwkQ/woeXc0k=";
   };
 
   postPatch = ''
@@ -83,6 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };
