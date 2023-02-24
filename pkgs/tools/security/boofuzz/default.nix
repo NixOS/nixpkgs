@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , python3
 }:
@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jtpereyda";
@@ -50,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Network protocol fuzzing tool";
     homepage = "https://github.com/jtpereyda/boofuzz";
+    changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
   };
