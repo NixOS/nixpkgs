@@ -52,7 +52,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/gcc"
     "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/g++"
     "-DMAGMA_ENABLE_CUDA=ON"
-    "-DGPU_TARGET=${builtins.concatStringsSep "," cudaFlags.cudaRealArchs}"
+    "-DGPU_TARGET=${builtins.concatStringsSep "," cudaFlags.cudaRealArches}"
   ] ++ lib.optionals useROCM [
     "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
     "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
