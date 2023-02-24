@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchPypi
 , marshmallow
+, packaging
 , sqlalchemy
 , pytest-lazy-fixture
 , pytestCheckHook
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     marshmallow
+    packaging
     sqlalchemy
   ];
 
