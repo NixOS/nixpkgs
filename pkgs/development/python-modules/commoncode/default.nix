@@ -5,7 +5,6 @@
 , buildPythonPackage
 , click
 , fetchPypi
-, intbitset
 , pytest-xdist
 , pytestCheckHook
 , pythonAtLeast
@@ -29,13 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-UWd8fTHVEC5ywETfMIWjfXm4xiNaMrVpwkQ/woeXc0k=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
-  '';
-
-  dontConfigure = true;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -44,7 +36,6 @@ buildPythonPackage rec {
     attrs
     beautifulsoup4
     click
-    intbitset
     requests
     saneyaml
     text-unidecode
