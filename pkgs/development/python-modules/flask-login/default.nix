@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     werkzeug
-  ];
+  ] ++ flask.optional-dependencies.async;
 
   nativeCheckInputs = [
     blinker
