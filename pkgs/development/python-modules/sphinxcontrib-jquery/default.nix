@@ -2,12 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
-, pythonImportsCheckHook
 , sphinx
 }:
 
 buildPythonPackage rec {
-  pname = "sphinx-jquery";
+  pname = "sphinxcontrib-jquery";
   version = "3.0.0";
   format = "flit";
 
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonImportsCheckHook
     flit-core
   ];
 

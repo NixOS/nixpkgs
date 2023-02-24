@@ -10972,6 +10972,8 @@ self: super: with self; {
 
   sphinxcontrib_httpdomain = callPackage ../development/python-modules/sphinxcontrib_httpdomain { };
 
+  sphinxcontrib-jquery = callPackage ../development/python-modules/sphinxcontrib-jquery { };
+
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath { };
 
   sphinxcontrib-katex = callPackage ../development/python-modules/sphinxcontrib-katex { };
@@ -11011,8 +11013,6 @@ self: super: with self; {
   sphinx = callPackage ../development/python-modules/sphinx { };
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
-
-  sphinx-jquery = callPackage ../development/python-modules/sphinx-jquery { };
 
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
