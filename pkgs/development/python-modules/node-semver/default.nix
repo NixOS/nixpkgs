@@ -1,7 +1,7 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
-, pytest
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -12,15 +12,15 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  nativeCheckInputs = [ pytest ];
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BKoLABbbwGdI1jeMQtjPgqNDQVvZ/KYoT0iAQdCLM7s=";
+  src = fetchFromGitHub {
+    owner = "podhmo";
+    repo = "python-node-semver";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
   };
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
