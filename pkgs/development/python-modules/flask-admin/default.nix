@@ -95,6 +95,8 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_inlineform.py"
     "flask_admin/tests/sqla/test_postgres.py"
     "flask_admin/tests/sqla/test_translation.py"
+    # RuntimeError: Working outside of application context.
+    "flask_admin/tests/sqla/test_multi_pk.py"
   ];
 
   pythonImportsCheck = [
