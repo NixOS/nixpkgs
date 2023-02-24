@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , flask
 , flask-sockets
-, isPy3k
+, pythonOlder
 , mock
 , moto
 , psutil
@@ -16,7 +16,6 @@
 , pytest-runner
 , requests
 , responses
-, six
 , sqlalchemy
 , websockets
 , websocket-client
@@ -27,7 +26,7 @@ buildPythonPackage rec {
   version = "3.20.0";
   format =  "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     aiohttp
     websocket-client
     requests
-    six
   ];
 
   nativeCheckInputs = [
