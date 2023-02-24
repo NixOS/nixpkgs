@@ -34,10 +34,16 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optional (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "flask"
   ];
 
   passthru.tests = {
