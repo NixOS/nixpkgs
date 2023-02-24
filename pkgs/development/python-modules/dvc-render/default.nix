@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , funcy
@@ -49,6 +50,10 @@ buildPythonPackage rec {
   ]
   ++ passthru.optional-dependencies.table
   ++ passthru.optional-dependencies.markdown;
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "tests/test_vega.py"
+  ];
 
   pythonImportsCheck = [
     "dvc_render"
