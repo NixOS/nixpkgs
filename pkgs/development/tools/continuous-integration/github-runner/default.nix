@@ -353,6 +353,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
