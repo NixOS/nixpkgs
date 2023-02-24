@@ -2,7 +2,7 @@
 , makeScopeWithSplicing, generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
-, zlib
+, zlib, bsdbuild, bmake
 , writeShellScript, writeText, runtimeShell, symlinkJoin
 }:
 
@@ -62,7 +62,7 @@ in makeScopeWithSplicing
 
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install tsort lorder buildPackages.mandoc groff statHook rsync
+      buildPackages.mandoc groff statHook rsync
     ];
     #buildInputs = with self; compatIfNeeded;
 
@@ -91,7 +91,7 @@ in makeScopeWithSplicing
     strictDeps = true;
 
     meta = with lib; {
-      maintainers = with maintainers; [ matthewbauer qyliss ];
+      maintainers = with maintainers; [ qbit ];
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
@@ -115,43 +115,6 @@ in makeScopeWithSplicing
   ##
   ## START BOOTSTRAPPING
   ##
-  makeMinimal = mkDerivation {
-    path = "tools/make";
-    sha256 = "0fh0nrnk18m613m5blrliq2aydciv51qhc0ihsj4k63incwbk90n";
-    version = "7.2";
-
-    buildInputs = with self; [];
-    nativeBuildInputs = with buildPackages.openbsd; [ bsdSetupHook openbsdSetupHook rsync ];
-
-    skipIncludesPhase = true;
-
-    postPatch = ''
-      patchShebangs $COMPONENT_PATH/configure
-      ${self.make.postPatch}
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      sh ./buildmake.sh
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      install -D nbmake $out/bin/nbmake
-      ln -s $out/bin/nbmake $out/bin/make
-      mkdir -p $out/share
-      cp -r $BSDSRCDIR/share/mk $out/share/mk
-
-      runHook postInstall
-    '';
-
-    extraPaths = with self; [ make.src ] ++ make.extraPaths;
-  };
-
   compat = mkDerivation (let
     version = "7.2";
     commonDeps = [ zlib ];
@@ -258,42 +221,6 @@ in makeScopeWithSplicing
     ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
   });
 
-  # HACK: to ensure parent directories exist. This emulates GNU
-  # install’s -D option. No alternative seems to exist in BSD install.
-  install = let binstall = writeShellScript "binstall" ''
-    set -eu
-    for last in "$@"; do true; done
-    mkdir -p $(dirname $last)
-    @out@/bin/xinstall "$@"
-  ''; in mkDerivation {
-    path = "usr.bin/xinstall";
-    version = "7.2";
-    sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
-    extraPaths = with self; [ mtree.src make.src ];
-    nativeBuildInputs = with buildPackages.openbsd; [
-      bsdSetupHook openbsdSetupHook
-      mandoc groff rsync
-    ];
-    skipIncludesPhase = true;
-    buildInputs = with self;
-      # fts header is needed. glibc already has this header, but musl doesn't,
-      # so make sure pkgsMusl.openbsd.install still builds in case you want to
-      # remove it!
-      [ ];
-    installPhase = ''
-      runHook preInstall
-
-      install -D install.1 $out/share/man/man1/install.1
-      install -D xinstall $out/bin/xinstall
-      install -D -m 0550 ${binstall} $out/bin/binstall
-      substituteInPlace $out/bin/binstall --subst-var out
-      ln -s $out/bin/binstall $out/bin/install
-
-      runHook postInstall
-    '';
-    setupHook = ./install-setup-hook.sh;
-  };
-
   fts = mkDerivation {
     pname = "fts";
     path = "include/fts.h";
@@ -337,8 +264,11 @@ in makeScopeWithSplicing
     sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff rsync
+      mandoc groff rsync bmake
     ];
+    buildPhase = ''
+      ${bmake}/bin/bmake
+      '';
   };
 
   # stat isn't in POSIX, and OpenBSD stat supports a completely
@@ -358,7 +288,7 @@ in makeScopeWithSplicing
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff rsync
+      mandoc groff rsync
     ];
   };
 
@@ -368,7 +298,7 @@ in makeScopeWithSplicing
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff rsync
+      mandoc groff rsync
     ];
   };
 
@@ -384,32 +314,17 @@ in makeScopeWithSplicing
     sha256 = "sha256-hhxQ88GWjyKlqODv66uYAG8mtjSFp2cpqqaOVXdEMls=";
     version = "7.2";
 
+    buildInputs = with self; [ include ];
+
    postPatch = ''
-     substituteInPlace $BSDSRCDIR/share/mk/bsd.doc.mk \
-       --replace '-o ''${DOCOWN}' "" \
-       --replace '-g ''${DOCGRP}' ""
-     for mk in $BSDSRCDIR/share/mk/bsd.inc.mk $BSDSRCDIR/share/mk/bsd.kinc.mk; do
-       substituteInPlace $mk \
-         --replace '-o ''${BINOWN}' "" \
-         --replace '-g ''${BINGRP}' ""
-     done
-     substituteInPlace $BSDSRCDIR/share/mk/bsd.kmodule.mk \
-       --replace '-o ''${KMODULEOWN}' "" \
-       --replace '-g ''${KMODULEGRP}' ""
      substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
        --replace '-o ''${LIBOWN}' "" \
        --replace '-g ''${LIBGRP}' "" \
        --replace '-o ''${DEBUGOWN}' "" \
        --replace '-g ''${DEBUGGRP}' ""
-     substituteInPlace $BSDSRCDIR/share/mk/bsd.lua.mk \
-       --replace '-o ''${LIBOWN}' "" \
-       --replace '-g ''${LIBGRP}' ""
      substituteInPlace $BSDSRCDIR/share/mk/bsd.man.mk \
        --replace '-o ''${MANOWN}' "" \
        --replace '-g ''${MANGRP}' ""
-     substituteInPlace $BSDSRCDIR/share/mk/bsd.nls.mk \
-       --replace '-o ''${NLSOWN}' "" \
-       --replace '-g ''${NLSGRP}' ""
      substituteInPlace $BSDSRCDIR/share/mk/bsd.prog.mk \
        --replace '-o ''${BINOWN}' "" \
        --replace '-g ''${BINGRP}' "" \
@@ -423,13 +338,20 @@ in makeScopeWithSplicing
 
       substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
         --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
-      substituteInPlace $BSDSRCDIR/share/mk/bsd.kinc.mk \
-        --replace /bin/rm rm
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
         --replace '-Wl,--warn-shared-textrel' ""
     '';
+
+    nativeBuildInputs = with buildPackages.openbsd; [
+      bsdSetupHook openbsdSetupHook rsync
+    ];
+
+    buildPhase = ''
+      ${bmake}/bin/bmake
+    '';
+
     postInstall = ''
       make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
     '';
@@ -490,12 +412,6 @@ in makeScopeWithSplicing
     sha256 = "0gd463x1hg36bhr7y0xryb5jyxk0z0g7xvy8rgk82nlbnlnsbbwb";
   };
 
-  nbperf = mkDerivation {
-    path = "usr.bin/nbperf";
-    version = "7.2";
-    sha256 = "1nxc302vgmjhm3yqdivqyfzslrg0vjpbss44s74rcryrl19mma9r";
-  };
-
   tic = mkDerivation {
     path = "tools/tic";
     version = "7.2";
@@ -504,7 +420,7 @@ in makeScopeWithSplicing
     #buildInputs = with self; compatIfNeeded;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff nbperf rsync
+      mandoc groff rsync
     ];
     makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
     extraPaths = with self; [
@@ -536,7 +452,7 @@ in makeScopeWithSplicing
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc byacc flex rsync
+      mandoc byacc flex rsync
     ];
     #buildInputs = with self; compatIfNeeded;
     extraPaths = with self; [ cksum.src ];
@@ -551,11 +467,13 @@ in makeScopeWithSplicing
   include = mkDerivation {
     path = "include";
     version = "7.2";
-    sha256 = "0nxnmj4c8s3hb9n3fpcmd0zl3l1nmhivqgi9a35sis943qvpgl9h";
+    sha256 = "";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff rsync nbperf rpcgen
+      mandoc groff rsync rpcgen
     ];
+
+    dontBuild = true;
 
     # The makefiles define INCSDIR per subdirectory, so we have to set
     # something else on the command line so those definitions aren't
@@ -572,29 +490,18 @@ in makeScopeWithSplicing
       makeFlags=''${makeFlags/INCSDIR/INCSDIR0}
     '';
 
-    extraPaths = with self; [ common ];
+    extraPaths = with self; [ ];
     headersOnly = true;
     noCC = true;
     meta.platforms = lib.platforms.openbsd;
     makeFlags = defaultMakeFlags ++ [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
   };
 
-  common = fetchOpenBSD "common" "7.2" "1pfylz9r3ap5wnwwbwczbfjb1m5qdyspzbnmxmcdkpzz2zgj64b9";
-
   sys-headers = mkDerivation {
     pname = "sys-headers";
     path = "sys";
     version = "7.2";
-    sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
-
-    patches = [
-      # Fix this error when building bootia32.efi and bootx64.efi:
-      # error: PHDR segment not covered by LOAD segment
-      ./no-dynamic-linker.patch
-
-      # multiple header dirs, see above
-      ./sys-headers-incsdir.patch
-    ];
+    sha256 = "";
 
     # multiple header dirs, see above
     inherit (self.include) postPatch;
@@ -604,7 +511,7 @@ in makeScopeWithSplicing
     propagatedBuildInputs = with self; [ include ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install tsort lorder statHook rsync uudecode config genassym
+      statHook rsync uudecode config genassym
     ];
 
     postConfigure = ''
@@ -629,7 +536,7 @@ in makeScopeWithSplicing
     '';
 
     meta.platforms = lib.platforms.openbsd;
-    extraPaths = with self; [ common ];
+    extraPaths = with self; [ ];
 
     installPhase = "includesPhase";
     dontBuild = true;
@@ -650,8 +557,6 @@ in makeScopeWithSplicing
     name = "openbsd-headers-7.2";
     paths = with self; [
       include
-      sys-headers
-      libpthread-headers
     ];
     meta.platforms = lib.platforms.openbsd;
   };
@@ -672,11 +577,11 @@ in makeScopeWithSplicing
   libutil = mkDerivation {
     path = "lib/libutil";
     version = "7.2";
-    sha256 = "02gm5a5zhh8qp5r5q5r7x8x6x50ir1i0ncgsnfwh1vnrz6mxbq7z";
-    extraPaths = with self; [ common libc.src sys.src ];
+    sha256 = "";
+    extraPaths = with self; [ libc.src sys.src ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      byacc install tsort lorder mandoc statHook rsync
+      byacc mandoc statHook rsync
     ];
     buildInputs = with self; [ headers ];
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -709,7 +614,7 @@ in makeScopeWithSplicing
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install tsort lorder mandoc statHook nbperf tic rsync
+      mandoc statHook tic rsync
     ];
     #buildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -772,7 +677,7 @@ in makeScopeWithSplicing
     meta.platforms = lib.platforms.openbsd;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install tsort lorder rpcgen statHook
+      rpcgen statHook
     ];
   };
 
@@ -810,7 +715,7 @@ in makeScopeWithSplicing
     pname = "libpthread-headers";
     path = "lib/libpthread";
     version = "7.2";
-    sha256 = "0mlmc31k509dwfmx5s2x010wxjc44mr6y0cbmk30cfipqh8c962h";
+    sha256 = "";
     installPhase = "includesPhase";
     dontBuild = true;
     noCC = true;
@@ -824,7 +729,7 @@ in makeScopeWithSplicing
     dontBuild = false;
     buildInputs = with self; [ headers ];
     SHLIBINSTALLDIR = "$(out)/lib";
-    extraPaths = with self; [ common libc.src librt.src sys.src ];
+    extraPaths = with self; [ libc.src librt.src sys.src ];
   };
 
   libresolv = mkDerivation {
@@ -859,8 +764,8 @@ in makeScopeWithSplicing
     meta.platforms = lib.platforms.openbsd;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff flex
-      byacc genassym gencat lorder tsort statHook rsync
+      mandoc groff flex
+      byacc genassym gencat statHook rsync
     ];
     buildInputs = with self; [ headers ];
     extraPaths = with self; [ sys.src ld_elf_so.src ];
@@ -880,7 +785,7 @@ in makeScopeWithSplicing
   };
 
   _mainLibcExtraPaths = with self; [
-      common i18n_module.src sys.src
+      i18n_module.src sys.src
       ld_elf_so.src libpthread.src libm.src libresolv.src
       librpcsvc.src libutil.src librt.src libcrypt.src
   ];
@@ -888,16 +793,13 @@ in makeScopeWithSplicing
   libc = mkDerivation {
     path = "lib/libc";
     version = "7.2";
-    sha256 = "1y9c13igg0kai07sqvf9cm6yqmd8lhfd8hq3q7biilbgs1l99as3";
+    sha256 = "";
     USE_FORT = "yes";
     MKPROFILE = "no";
-    extraPaths = with self; _mainLibcExtraPaths ++ [
-      (fetchOpenBSD "external/bsd/jemalloc" "7.2" "0cq704swa0h2yxv4gc79z2lwxibk9k7pxh3q5qfs7axx3jx3n8kb")
-    ];
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      install mandoc groff flex
-      byacc genassym gencat lorder tsort statHook rsync rpcgen
+      mandoc groff flex
+      byacc genassym gencat statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
     NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
