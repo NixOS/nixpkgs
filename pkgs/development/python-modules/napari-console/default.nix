@@ -7,6 +7,7 @@
 , napari-plugin-engine
 , pytest
 , pytestCheckHook
+, pythonOlder
 , qtconsole
 , setuptools-scm
 }:
@@ -14,6 +15,9 @@
 buildPythonPackage rec {
   pname = "napari-console";
   version = "0.0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
