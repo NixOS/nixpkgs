@@ -12913,6 +12913,8 @@ with pkgs;
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
+  ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
