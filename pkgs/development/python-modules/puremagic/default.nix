@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bkaqeBE6Rmq8n2nm6KTOkOtX2Qja+4CVlwEmIQYUYr0=";
+    hash = "sha256-bkaqeBE6Rmq8n2nm6KTOkOtX2Qja+4CVlwEmIQYUYr0=";
   };
 
   # test data not included on pypi
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
+    changelog = "https://github.com/cdgriffith/puremagic/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
