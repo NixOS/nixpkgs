@@ -6,7 +6,6 @@
 , ipython
 , napari-plugin-engine
 , pytest
-, pytestCheckHook
 , pythonOlder
 , qtconsole
 , setuptools-scm
@@ -42,9 +41,8 @@ buildPythonPackage rec {
     qtconsole
   ];
 
-  chechInputs = [
-    pytestCheckHook
-  ];
+  # Circular dependency: napari
+  doCheck = false;
 
   pythonImportsCheck = [
     "napari_console"
