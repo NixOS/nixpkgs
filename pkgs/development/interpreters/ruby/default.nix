@@ -12,7 +12,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
@@ -25,7 +24,6 @@ let
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-      , useRailsExpress ? true
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, openssl_1_1, opensslSupport ? true
@@ -51,11 +49,10 @@ let
       , libiconv, libobjc, libunwind, Foundation
       , makeBinaryWrapper, buildRubyGem, defaultGemConfig
       , baseRuby ? buildPackages.ruby_3_1.override {
-          useRailsExpress = false;
           docSupport = false;
           rubygemsSupport = false;
         }
-      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -93,12 +90,7 @@ let
 
         enableParallelBuilding = true;
 
-        patches =
-          (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops fetchpatch;
-            patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny}
-          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
+        patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           ++ ops (ver.majMin == "3.0") [
             # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
