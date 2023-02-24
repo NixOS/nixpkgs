@@ -1,20 +1,30 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.1";
-  format = "setuptools";
+  version = "1.7.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZgCqMx8X7uODNhH3GJmkOnZhLKdVoVdpzyBJLEsaoBY=";
+  src = fetchFromGitHub {
+    owner = "delfick";
+    repo = "python-dict2xml";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-Ara+eWaUQv4VuzuVrpb5mjMXHHCxydS22glLsYz+UE0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  # Tests are inplemented in a custom DSL (RSpec)
+  doCheck = false;
 
   pythonImportsCheck = [
     "dict2xml"
