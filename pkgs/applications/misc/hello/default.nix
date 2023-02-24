@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchurl
-, nixos
 , testers
 , hello
 }:
@@ -18,22 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  __cleanAttrs = true;
-
   passthru.tests = {
     version = testers.testVersion { package = hello; };
-
-    invariant-under-noXlibs =
-      testers.testEqualDerivation
-        "hello must not be rebuilt when environment.noXlibs is set."
-        hello
-        (nixos { environment.noXlibs = true; }).pkgs.hello;
+    run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
   };
-
-  passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
-
-  # We allow `hello.src` to be used in tests and examples.
-  passthru.src = finalAttrs.src;
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";
