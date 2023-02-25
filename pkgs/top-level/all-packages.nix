@@ -16121,6 +16121,8 @@ with pkgs;
 
   bupc = callPackage ../development/compilers/bupc { };
 
+  ubports-click = python3Packages.callPackage ../development/tools/click { };
+
   uasm = callPackage ../development/compilers/uasm { };
 
   urn = callPackage ../development/compilers/urn { };
