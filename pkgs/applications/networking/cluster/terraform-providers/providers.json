@@ -237,11 +237,11 @@
     "vendorHash": "sha256-mEWhLh4E3SI7xfmal1sJ5PdAYbYJrW/YFoBjTW9w4bA="
   },
   "cloudinit": {
-    "hash": "sha256-Ojr/qxfaj78Wfro5NZSoavW+FfByIi+P98RNxmG/1ao=",
+    "hash": "sha256-fdtUKD8XC1Y72IzrsCfTZYVYZwLqY3gV2sajiw4Krzw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/cloudinit",
     "owner": "hashicorp",
     "repo": "terraform-provider-cloudinit",
-    "rev": "v2.3.1",
+    "rev": "v2.3.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-h4CO3sC41RPSmkTlWUCiRvQ1NRZkT2v1uHFOemvBN8s="
   },
