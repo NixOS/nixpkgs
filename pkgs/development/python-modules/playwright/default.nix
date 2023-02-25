@@ -23,7 +23,7 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  driverVersion = "1.30.0";
+  driverVersion = "1.31.1";
 
   driver = let
     suffix = {
@@ -40,10 +40,10 @@ let
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
-        x86_64-linux = "0rk2j90j6gx1343fzj516vrsrnq8zk1wlg3zlg7awz12a3axx1vg";
-        aarch64-linux = "156byd2xpgw2h5fps3va9q1sddc5ks9lw8k7gc732y37zq06zy6h";
-        x86_64-darwin = "163sjhfz7smn48i3aacigzjkfv3k9ync1n2pldaksma78r446nkj";
-        aarch64-darwin = "0kwsbw8fnig96zrq6icpd0hdvq02sznjz9b9qqa9sxkq4f22wjzs";
+        x86_64-linux = "1wg49kfs8fflmx8g01bkckbjkghhwy7c44akckjf7dp4lbh1z8fd";
+        aarch64-linux = "0f09a0cxqxihy8lmbjzii80jkpf3n5xlvhjpgdkwmrr3wh0nnixj";
+        x86_64-darwin = "1zd0dz8jazymcpa1im5yzxb7rwl6wn4xz19lpz83bnpd1njq01b3";
+        aarch64-darwin = "0hcn80zm9aki8hzsf1cljzcmi4iaw7fascs8ajj0qcwqkkm4jnw0";
       }.${system} or throwSystem;
     };
 
@@ -101,7 +101,7 @@ let
     fontconfig = makeFontsConf {
       fontDirectories = [];
     };
-  in runCommand ("playwright-browsers")
+  in runCommand "playwright-browsers"
   {
     nativeBuildInputs = [
       makeWrapper
@@ -125,7 +125,7 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
-  version = "1.30.0";
+  version = "1.31.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -133,7 +133,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    hash = "sha256-HibuYggWNnUD0e506PAmSgkSzj8k3NoogxSy8Tyy2Uk=";
+    hash = "sha256-zVJiRIJDWmFdMCGK9siewiYgjeeTuOPY1wWxArcZDJg";
   };
 
   patches = [
@@ -155,7 +155,7 @@ buildPythonPackage rec {
     git commit -m "workaround setuptools-scm"
 
     substituteInPlace setup.py \
-      --replace "greenlet==1.1.3" "greenlet>=1.1.3" \
+      --replace "greenlet==2.0.1" "greenlet>=2.0.1" \
       --replace "pyee==8.1.0" "pyee>=8.1.0" \
       --replace "setuptools-scm==7.0.5" "setuptools-scm>=7.0.5" \
       --replace "wheel==0.38.1" "wheel>=0.37.1"
