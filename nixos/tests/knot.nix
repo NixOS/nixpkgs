@@ -31,7 +31,7 @@ let
   # DO NOT USE pkgs.writeText IN PRODUCTION. This put secrets in the nix store!
   tsigFile = pkgs.writeText "tsig.conf" ''
     key:
-      - id: slave_key
+      - id: xfr_key
         algorithm: hmac-sha256
         secret: zOYgOgnzx3TGe5J5I/0kxd7gTcxXhLYMEq3Ek3fY37s=
   '';
@@ -64,22 +64,17 @@ in {
         server:
             listen: 0.0.0.0@53
             listen: ::@53
-
-        acl:
-          - id: slave_acl
-            address: 192.168.0.2
-            key: slave_key
-            action: transfer
+            automatic-acl: true
 
         remote:
           - id: slave
             address: 192.168.0.2@53
+            key: xfr_key
 
         template:
           - id: default
             storage: ${knotZonesEnv}
             notify: [slave]
-            acl: [slave_acl]
             dnssec-signing: on
             # Input-only zone files
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
@@ -122,21 +117,16 @@ in {
         server:
             listen: 0.0.0.0@53
             listen: ::@53
-
-        acl:
-          - id: notify_from_master
-            address: 192.168.0.1
-            action: notify
+            automatic-acl: true
 
         remote:
           - id: master
             address: 192.168.0.1@53
-            key: slave_key
+            key: xfr_key
 
         template:
           - id: default
             master: master
-            acl: [notify_from_master]
             # zonefileless setup
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
             zonefile-sync: -1
