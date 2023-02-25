@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
+    changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
