@@ -3,19 +3,24 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "1.0.6";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SPBn+MuEEkXzTQMSC8G6mQDxOxnLUbzGx77gF/fIdNo=";
+    sha256 = "sha256-qZOEq8cAxAnp3vcUN2PhjfrTMv3/fjD64fbRows3J3I=";
   };
+
+  propagatedBuildInputs = [
+    six
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
