@@ -37,6 +37,7 @@ buildPythonPackage rec {
       non-programmers.
     '';
     homepage = "https://nestedtext.org";
+    changelog = "https://github.com/KenKundert/nestedtext/blob/v${version}/doc/releases.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jeremyschlatter ];
   };
