@@ -229,6 +229,7 @@ in
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
+    nativeBuildInputs = [ pkg-config ];
     buildFlags = [ "--use-system-libraries" ];
   };
 
