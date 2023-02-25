@@ -11,7 +11,7 @@
 , wayland, pipewire
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
-, enableWidevine ? false, vivaldi-widevine ? null
+, enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
-    ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
+    ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '' + ''
     runHook postInstall
   '';

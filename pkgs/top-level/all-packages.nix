@@ -32188,8 +32188,6 @@ with pkgs;
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
-  vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
-
   libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
   libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchzip
+{ lib
+, stdenv
+, fetchzip
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    install -vD libwidevinecdm.so $out/libwidevinecdm.so
+    runHook preInstall
+
+    install -vD manifest.json $out/share/google/chrome/WidevineCdm/manifest.json
+    install -vD LICENSE.txt $out/share/google/chrome/WidevineCdm/LICENSE.txt
+    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -21,6 +29,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ jlamur ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }
