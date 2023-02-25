@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
     pname = "sapi-python-client";
-    version = "0.4.1";
+    version = "0.5.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "keboola";
       repo = pname;
-      rev  = version;
-      sha256 = "189dzj06vzp7366h2qsfvbjmw9qgl7jbp8syhynn9yvrjqp4k8h3";
+      rev = "refs/tags/${version}";
+      sha256 = "sha256-79v9quhzeNRXcm6Z7BhD76lTZtw+Z0T1yK3zhrdreXw=";
     };
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;
