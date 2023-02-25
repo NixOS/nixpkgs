@@ -195,9 +195,7 @@ in stdenv.mkDerivation rec {
 
   configurePlatforms = [];
 
-  # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
-  # https://github.com/rust-lang/rust/issues/30181
-  # enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   setupHooks = ./setup-hook.sh;
 
