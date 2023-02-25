@@ -12,11 +12,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cdogs";
+  pname = "cdogs-sdl";
   version = "1.4.1";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
     sha256 = "sha256-CH0P8OrRUXtuqAHxDKv4ziKYdwGTccLPwpzh4xo7lQc=";
