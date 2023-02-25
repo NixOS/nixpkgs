@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.13.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-R7MhfAnVJJ2NK8zV408xAk8Q6aWn9Gw6DOmFFX26x1Q=";
+    sha256 = "sha256-919oxYi4e56EhSBN0FdcEZBA430owaDnKHkgTneScXw=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-DpPEDttQnRGHVNiIpMGj14KvZEGR0Y80sZOffjQ3UHk=";
+  vendorSha256 = "sha256-DtFywktiGHlsdOFVpKUtKLYXJYwQYy1VISfUYVXlOG8=";
 
   subPackages = [
     "cmd/cosign"
@@ -35,8 +35,9 @@ buildGoModule rec {
     # test all paths
     unset subPackages
 
+    rm pkg/cosign/ctlog_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
-    rm pkg/cosign/verify_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
   '';
 
   postInstall = ''
