@@ -9,6 +9,7 @@
 , gobject-introspection
 , buildPackages
 , withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
 , python3
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.4.2";
+  version = "3.5.0.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
+    sha256 = "gMNtrSS6a0ATwKNy/mz7GrzprzLM5Xs1yV+lPq2LbY8=";
   };
 
   postPatch = ''
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    vala
   ];
 
   buildInputs = [
@@ -82,6 +84,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
     (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
