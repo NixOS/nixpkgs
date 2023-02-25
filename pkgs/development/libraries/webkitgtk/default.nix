@@ -2,6 +2,7 @@
 , stdenv
 , runCommand
 , fetchurl
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -25,6 +26,7 @@
 , enchant2
 , xorg
 , libxkbcommon
+, libavif
 , libepoxy
 , at-spi2-core
 , libxml2
@@ -60,6 +62,7 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, unifdef
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
@@ -69,8 +72,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.38.5";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
+  version = "2.39.90";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QMIMQwIidN9Yk/IrEFT6iUw+6gVzibsIruCMWwuwwac=";
+    hash = "sha256-gnWGbDUppxXCPK442/Lt0xDYGIVGpHxaL3CdGT96X8A=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -90,13 +93,26 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (addOpenGLRunpath) driverLink;
     })
 
-    ./libglvnd-headers.patch
-
     # Hardcode path to WPE backend
     # https://github.com/NixOS/nixpkgs/issues/110468
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
+    })
+
+    # Various build fixes for 2.39.90, should be part of final release
+    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1445126808
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/5f8dc9d4cc01a31e53670acdcf7a9c4ea4626f58.patch";
+      hash = "sha256-dTok1QK93Fp8RFED4wgbVdLErUnmIB4Xsm/VPutmQuw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/f51987a0f316621a0ab324696c9a576bbaf1e686.patch";
+      hash = "sha256-TZVrrH4+JS2I/ist7MdMLsuk9X/Nyx62AcODvzGkdx8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/fe4fdc28cd214d36425d861791d05d1afaee60f5.patch";
+      hash = "sha256-p1LNyvc6kGRhptov6AKVl2Rc+rrRnzHEtpF/AhqbA+E=";
     })
   ];
 
@@ -122,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     gi-docgen
     glib # for gdbus-codegen
+    unifdef
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -129,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     enchant2
+    libavif
     libepoxy
     gnutls
     gst-plugins-bad
