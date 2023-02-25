@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, inform
-, pytestCheckHook
+{ lib
+, buildPythonPackage
 , docopt
+, fetchFromGitHub
+, inform
 , natsort
+, pytestCheckHook
 , voluptuous
 }:
 
@@ -13,15 +15,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     sha256 = "1dwks5apghg29aj90nc4qm0chk195jh881297zr1wk7mqd2n159y";
   };
 
-  propagatedBuildInputs = [ inform ];
+  propagatedBuildInputs = [ 
+    inform
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook docopt natsort voluptuous ];
-  pytestFlagsArray = [ "--ignore=build" ]; # Avoids an ImportMismatchError.
+  nativeCheckInputs = [
+    docopt
+    natsort
+    pytestCheckHook
+    voluptuous
+  ];
+
+  pytestFlagsArray = [
+    # Avoids an ImportMismatchError.
+    "--ignore=build"
+  ];
 
   meta = with lib; {
     description = "A human friendly data format";
