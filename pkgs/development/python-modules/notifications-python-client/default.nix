@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
+    changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
