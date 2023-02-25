@@ -151,9 +151,31 @@ stdenv.mkDerivation rec {
     mkdir -p $out/nix-support
     echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
 
-    # Set the host compiler to be used by nvcc for CMake-based projects:
+    # Set the host compiler to be used by nvcc.
+    # FIXME: redist cuda_nvcc copy-pastes this code
+
+    # For CMake-based projects:
     # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+    # https://cmake.org/cmake/help/latest/envvar/CUDAHOSTCXX.html
+    # https://cmake.org/cmake/help/latest/variable/CMAKE_CUDA_HOST_COMPILER.html
+
+    # For non-CMake projects:
+    # FIXME: results in "incompatible redefinition" warnings ...but we keep
+    # both this and cmake variables until we come up with a more general
+    # solution
+    # https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#compiler-bindir-directory-ccbin
+
+    cat <<EOF >> $out/nix-support/setup-hook
+
+    cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'
+    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${gcc}/bin'
+    if [ -z "\''${CUDAHOSTCXX-}" ]; then
+      export CUDAHOSTCXX=${gcc}/bin;
+    fi
+
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${gcc}/bin'
+    EOF
+
 
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
@@ -166,10 +188,6 @@ stdenv.mkDerivation rec {
       mv $out/lib64 $out/lib
       mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
-
-    # Set compiler for NVCC.
-    wrapProgram $out/bin/nvcc \
-      --prefix PATH : ${gcc}/bin
 
     # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
     wrapProgram $out/bin/nvprof \
@@ -191,7 +209,15 @@ stdenv.mkDerivation rec {
   preFixup =
     let rpath = lib.concatStringsSep ":" [
       (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
-      "${stdenv.cc.cc.lib}/lib64"
+
+      # The path to libstdc++ and such
+      #
+      # NB:
+      # 1. "gcc" (gcc-wrapper) here is what's exposed as cudaPackages.cudatoolkit.cc
+      # 2. "gcc.cc" is the unwrapped gcc
+      # 3. "gcc.cc.lib" is one of its outputs
+      "${gcc.cc.lib}/lib64"
+
       "$out/jre/lib/amd64/jli"
       "$out/lib64"
       "$out/nvvm/lib64"
