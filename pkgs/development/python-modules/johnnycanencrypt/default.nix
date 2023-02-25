@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.12.0";
+  version = "0.13.0";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aGhM/uyYE7l0h6L00qp+HRUVaj7s/tnHWIHJpLAkmR4=";
+    hash = "sha256-ckdM0LicUMZFt3bIsCCsWQeiinNSB5ZJ9Lv1PsHNRDY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-fcwDxkUFtA6LS77xdLktNnZJXmyl/ZzArvIW69SPpmI=";
+    hash = "sha256-ngrobmIgGLyJVw0hq1cDRa3uzxyFML2VGTJvnIQhliA=";
   };
 
   format = "pyproject";
