@@ -3478,8 +3478,6 @@ self: super: with self; {
 
   flask-restful = callPackage ../development/python-modules/flask-restful { };
 
-  flask-restplus = callPackage ../development/python-modules/flask-restplus { };
-
   flask-restx = callPackage ../development/python-modules/flask-restx { };
 
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
