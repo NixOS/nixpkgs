@@ -19,6 +19,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gnome
+, useWrappedDaemon ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-  postFixup = ''
+  postFixup = lib.optionalString useWrappedDaemon ''
     files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
     for file in ''${files[*]}; do

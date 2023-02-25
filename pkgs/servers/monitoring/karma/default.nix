@@ -19,16 +19,16 @@ in
 
 buildGoModule rec {
   pname = "karma";
-  version = "0.111";
+  version = "0.112";
 
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "karma";
     rev = "v${version}";
-    hash = "sha256-jcJ8rdggM4kDCVTsEBDtZ9nNnutl+RwABx7zHY39tDs=";
+    hash = "sha256-Dzz5BgWrI5f9HlRm7Mna8JgUJlTVJia31v1In2zzcBY=";
   };
 
-  vendorHash = "sha256-MYHgLKDSB/g/k4i+deBNeaeZ3BbHRnymwsNTTA7qNdU=";
+  vendorHash = "sha256-iYm19oAYPi3OUxp0wQsqgEkBLp3Fw2nCSdDI2vbV37w=";
 
   nativeBuildInputs = [
     nodejs-18_x
