@@ -14,11 +14,13 @@
 buildPythonPackage rec {
   pname = "ripser";
   version = "0.6.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "335112a0f94532ccbe686db7826ee8d0714b32f65891abf92c0a02f3cb0fc5fd";
+    hash = "sha256-M1ESoPlFMsy+aG23gm7o0HFLMvZYkav5LAoC88sPxf0=";
   };
 
   patches = [
@@ -28,8 +30,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     cython
+  ];
+
+  propagatedBuildInputs = [
     numpy
     scipy
     scikit-learn
