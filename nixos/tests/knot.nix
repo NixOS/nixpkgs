@@ -43,7 +43,7 @@ in {
 
 
   nodes = {
-    master = { lib, ... }: {
+    primary = { lib, ... }: {
       imports = [ common ];
 
       # trigger sched_setaffinity syscall
@@ -67,14 +67,14 @@ in {
             automatic-acl: true
 
         remote:
-          - id: slave
+          - id: secondary
             address: 192.168.0.2@53
             key: xfr_key
 
         template:
           - id: default
             storage: ${knotZonesEnv}
-            notify: [slave]
+            notify: [secondary]
             dnssec-signing: on
             # Input-only zone files
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
@@ -100,7 +100,7 @@ in {
       '';
     };
 
-    slave = { lib, ... }: {
+    secondary = { lib, ... }: {
       imports = [ common ];
       networking.interfaces.eth1 = {
         ipv4.addresses = lib.mkForce [
@@ -120,13 +120,13 @@ in {
             automatic-acl: true
 
         remote:
-          - id: master
+          - id: primary
             address: 192.168.0.1@53
             key: xfr_key
 
         template:
           - id: default
-            master: master
+            master: primary
             # zonefileless setup
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
             zonefile-sync: -1
@@ -164,19 +164,19 @@ in {
   };
 
   testScript = { nodes, ... }: let
-    master4 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv4.addresses).address;
-    master6 = (lib.head nodes.master.config.networking.interfaces.eth1.ipv6.addresses).address;
+    primary4 = (lib.head nodes.primary.config.networking.interfaces.eth1.ipv4.addresses).address;
+    primary6 = (lib.head nodes.primary.config.networking.interfaces.eth1.ipv6.addresses).address;
 
-    slave4 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv4.addresses).address;
-    slave6 = (lib.head nodes.slave.config.networking.interfaces.eth1.ipv6.addresses).address;
+    secondary4 = (lib.head nodes.secondary.config.networking.interfaces.eth1.ipv4.addresses).address;
+    secondary6 = (lib.head nodes.secondary.config.networking.interfaces.eth1.ipv6.addresses).address;
   in ''
     import re
 
     start_all()
 
     client.wait_for_unit("network.target")
-    master.wait_for_unit("knot.service")
-    slave.wait_for_unit("knot.service")
+    primary.wait_for_unit("knot.service")
+    secondary.wait_for_unit("knot.service")
 
 
     def test(host, query_type, query, pattern):
@@ -185,7 +185,7 @@ in {
         assert re.search(pattern, out), f'Did not match "{pattern}"'
 
 
-    for host in ("${master4}", "${master6}", "${slave4}", "${slave6}"):
+    for host in ("${primary4}", "${primary6}", "${secondary4}", "${secondary6}"):
         with subtest(f"Interrogate {host}"):
             test(host, "SOA", "example.com", r"start of authority.*noc\.example\.com\.")
             test(host, "A", "example.com", r"has no [^ ]+ record")
@@ -201,6 +201,6 @@ in {
             test(host, "RRSIG", "www.example.com", r"RR set signature is")
             test(host, "DNSKEY", "example.com", r"DNSSEC key is")
 
-    master.log(master.succeed("systemd-analyze security knot.service | grep -v '✓'"))
+    primary.log(primary.succeed("systemd-analyze security knot.service | grep -v '✓'"))
   '';
 })
