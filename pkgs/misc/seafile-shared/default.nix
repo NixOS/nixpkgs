@@ -1,10 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , curl
 , libevent
 , libsearpc
 , libuuid
+, libwebsockets
 , pkg-config
 , python3
 , sqlite
@@ -13,13 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "8.0.3";
+  version = "8.0.10";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
-    rev = "0fdc14d5175979919b7c741f6bb97bfaaacbbfbe";
-    sha256 = "1cr1hvpp96s5arnzh1r5sazapcghhvbazbf7zym37yp3fy3lpya1";
+    # Upstream has a habit of retagging, tracking revision instead
+    rev = "91e5d897395c728a1e862dbdaf3d8a519c2ed73e";
+    sha256 = "sha256-mHpH9Xr4t0wP0yKo3Zc8RzjKKipJ6kgxAZbtg6pq7vE=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +38,7 @@ stdenv.mkDerivation rec {
     sqlite
     libsearpc
     libevent
+    libwebsockets
     curl
   ];
 
