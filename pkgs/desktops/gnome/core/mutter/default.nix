@@ -1,7 +1,6 @@
 { fetchurl
 , runCommand
 , lib
-, fetchpatch
 , stdenv
 , pkg-config
 , gnome
@@ -19,6 +18,7 @@
 , xkeyboard_config
 , libxcvt
 , libxkbfile
+, libICE
 , libXdamage
 , libxkbcommon
 , libXtst
@@ -26,7 +26,11 @@
 , libdrm
 , gsettings-desktop-schemas
 , glib
+, atk
 , gtk3
+, gtk4
+, fribidi
+, harfbuzz
 , gnome-desktop
 , pipewire
 , libgudev
@@ -37,7 +41,7 @@
 , gnome-settings-daemon
 , xorgserver
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -50,30 +54,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.3";
+  version = "44.beta";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
+    sha256 = "+Lgh89e9o9o5yzygwDg84sn/HCqzFNyJXoRyKBVxKkc=";
   };
-
-  patches = [
-    # Fix build with separate sysprof.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
-      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
-    })
-
-    # Fix focus regression.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
-      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
-    })
-  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -105,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     gi-docgen
     xorgserver
   ];
@@ -118,7 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
+    atk
     gtk3
+    gtk4
+    fribidi
+    harfbuzz
     libcanberra
     libdrm
     libgudev
@@ -127,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwacom
     libxkbcommon
     libxkbfile
+    libICE
     libXdamage
     colord
     lcms2
@@ -150,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-11/doc" "$devdoc"
+    moveToOutput "share/mutter-12/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -159,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-12";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
