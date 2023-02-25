@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yapesdl";
-  version = "0.70.2";
+  version = "0.71.2";
 
   src = fetchFromGitHub {
     owner = "calmopyrin";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-51P6wNaSfVA3twu+yRUKXguEmVBvuuEnHxH1Zl1vsCc=";
+    hash = "sha256-QGF3aS/YSzdGxHONKyA/iTewEVYsjBAsKARVMXkFV2k=";
   };
 
   nativeBuildInputs = [
