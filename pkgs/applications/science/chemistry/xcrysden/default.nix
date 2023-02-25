@@ -7,6 +7,7 @@
 , libGLU
 , tcl
 , tk
+, togl
 , util-linux
 , libXmu
 }:
@@ -19,38 +20,6 @@ let
       url = "mirror://sourceforge.net/projects/tcllib/files/BWidget/${ver}/${tgz}";
       sha256 = "sha256-dtj0IoDnFgJCGG0SQ3lJgw6r1QCabBT059ug9mFAOoE=";
     };
-  };
-
-  togl = tcl.mkTclDerivation rec {
-    pname = "togl";
-    version = "2.0";
-
-    src = fetchurl {
-      url = "https://sourceforge.net/projects/togl/files/Togl/${version}/Togl${version}-src.tar.gz";
-      sha256 = "sha256-t9SpC7rTrKYY1QXumef9j7BMgp9jIx3aI2D1V7o/dhA=";
-    };
-
-    postPatch = ''
-      sed -i "s|\".*/generic/tclInt.h\"|\"${tcl}/include/tclInt.h\"|" configure
-      sed -i "s|\".*/generic/tkInt.h\"|\"${tk.dev}/include/tkInt.h\"|" configure
-    '';
-
-    configureFlags = [
-      "--with-tcl=${tcl}/lib"
-      "--with-tk=${tk}/lib"
-    ];
-
-    buildInputs = [
-      tcl
-      tk.dev
-      libGL
-      xorg.libX11
-      xorg.libXmu
-    ];
-
-    postInstall = ''
-      ln -s $out/lib/Togl2.0/libTogl2.0.so $out/lib/libTogl.so
-    '';
   };
 
 in

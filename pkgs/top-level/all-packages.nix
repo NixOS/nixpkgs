@@ -23133,6 +23133,8 @@ with pkgs;
 
   taco = callPackage ../development/libraries/taco { };
 
+  togl = callPackage ../development/libraries/togl { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
