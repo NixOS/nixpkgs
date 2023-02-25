@@ -3,7 +3,6 @@
 , buildPythonPackage
 , chromium
 , ffmpeg
-, firefox
 , git
 , greenlet
 , jq
@@ -98,13 +97,11 @@ let
     meta.platforms = lib.platforms.darwin;
   };
 
-  browsers-linux = { withFirefox ? true, withChromium ? true }: let
+  browsers-linux = {}: let
     fontconfig = makeFontsConf {
       fontDirectories = [];
     };
-  in runCommand ("playwright-browsers"
-    + lib.optionalString (withFirefox && !withChromium) "-firefox"
-    + lib.optionalString (!withFirefox && withChromium) "-chromium")
+  in runCommand ("playwright-browsers")
   {
     nativeBuildInputs = [
       makeWrapper
@@ -112,7 +109,6 @@ let
     ];
   } (''
     BROWSERS_JSON=${driver}/package/browsers.json
-  '' + lib.optionalString withChromium ''
     CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
     mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
 
@@ -121,11 +117,7 @@ let
     makeWrapper ${chromium}/bin/chromium $out/chromium-$CHROMIUM_REVISION/chrome-linux/chrome \
       --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
       --set FONTCONFIG_FILE ${fontconfig}
-  '' + lib.optionalString withFirefox ''
-    FIREFOX_REVISION=$(jq -r '.browsers[] | select(.name == "firefox").revision' $BROWSERS_JSON)
-    mkdir -p $out/firefox-$FIREFOX_REVISION/firefox
-    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox/firefox
-  '' + ''
+
     FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
     mkdir -p $out/ffmpeg-$FFMPEG_REVISION
     ln -s ${ffmpeg}/bin/ffmpeg $out/ffmpeg-$FFMPEG_REVISION/ffmpeg-linux
@@ -207,8 +199,7 @@ buildPythonPackage rec {
       x86_64-darwin = browsers-mac;
       aarch64-darwin = browsers-mac;
     }.${system} or throwSystem;
-    browsers-chromium = browsers-linux { withFirefox = false; };
-    browsers-firefox = browsers-linux { withChromium = false; };
+    browsers-chromium = browsers-linux { };
 
     tests = {
       inherit driver browsers;
