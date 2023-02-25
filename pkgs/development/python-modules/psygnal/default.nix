@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/tlambert03/psygnal";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };
