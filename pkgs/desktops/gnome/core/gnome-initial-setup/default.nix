@@ -27,7 +27,7 @@
 , networkmanager
 , pango
 , polkit
-, webkitgtk_5_0
+, webkitgtk_6_0
 , systemd
 , libadwaita
 , libnma-gtk4
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     networkmanager
     pango
     polkit
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   mesonFlags = [

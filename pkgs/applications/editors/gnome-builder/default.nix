@@ -34,7 +34,7 @@
 , template-glib
 , vala
 , vte-gtk4
-, webkitgtk_5_0
+, webkitgtk_6_0
 , wrapGAppsHook4
 , dbus
 , xvfb-run
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     sysprof
     template-glib
     vala
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   nativeCheckInputs = [
