@@ -8600,6 +8600,8 @@ self: super: with self; {
 
   pypiserver = callPackage ../development/python-modules/pypiserver { };
 
+  pypitoken = callPackage ../development/python-modules/pypitoken { };
+
   pyplaato  = callPackage ../development/python-modules/pyplaato { };
 
   pyplatec = callPackage ../development/python-modules/pyplatec { };
