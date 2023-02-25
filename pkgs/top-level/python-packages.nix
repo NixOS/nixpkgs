@@ -3478,8 +3478,6 @@ self: super: with self; {
 
   flask-restful = callPackage ../development/python-modules/flask-restful { };
 
-  flask-restplus = callPackage ../development/python-modules/flask-restplus { };
-
   flask-restx = callPackage ../development/python-modules/flask-restx { };
 
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
@@ -6055,6 +6053,8 @@ self: super: with self; {
   monty = callPackage ../development/python-modules/monty { };
 
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
+
+  mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
@@ -11202,6 +11202,8 @@ self: super: with self; {
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
+  sunweg = callPackage ../development/python-modules/sunweg { };
+
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
@@ -11243,6 +11245,8 @@ self: super: with self; {
   };
 
   sympy = callPackage ../development/python-modules/sympy { };
+
+  syncedlyrics = callPackage ../development/python-modules/syncedlyrics { };
 
   syncer = callPackage ../development/python-modules/syncer { };
 
