@@ -1,4 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "benthos";
@@ -19,7 +22,11 @@ buildGoModule rec {
     "cmd/benthos"
   ];
 
-  ldflags = [ "-s" "-w" "-X github.com/benthosdev/benthos/v4/internal/cli.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/benthosdev/benthos/v4/internal/cli.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Fancy stream processing made operationally mundane";
