@@ -8782,7 +8782,7 @@ with pkgs;
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit SystemConfiguration;
   };
 
   kdash = callPackage ../development/tools/kdash {
