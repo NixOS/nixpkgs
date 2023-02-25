@@ -13,8 +13,8 @@ to update all non-pinned libraries in that folder.
 
 import argparse
 import json
+import logging
 import os
-import pathlib
 import re
 import requests
 from concurrent.futures import ThreadPoolExecutor as Pool
@@ -39,7 +39,6 @@ GIT = "git"
 
 NIXPKGS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
 
-import logging
 logging.basicConfig(level=logging.INFO)
 
 
@@ -284,13 +283,21 @@ def _get_latest_version_github(package, extension, current_version, target):
         hash = _hash_to_sri(algorithm, document[algorithm])
     else:
         try:
-            hash = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
-                .decode('utf-8').strip()
-        except:
+            hash = subprocess.check_output([
+                "nix-prefetch-url",
+                "--type", "sha256",
+                "--unpack",
+                f"{release['tarball_url']}"
+            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
+        except (subprocess.CalledProcessError, UnicodeError):
             # this may fail if they have both a branch and a tag of the same name, attempt tag name
             tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
-            hash = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url], stderr=subprocess.DEVNULL)\
-                .decode('utf-8').strip()
+            hash = subprocess.check_output([
+                "nix-prefetch-url",
+                "--type", "sha256",
+                "--unpack",
+                tag_url
+            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
 
     return version, hash, prefix
 
@@ -337,12 +344,12 @@ def _determine_extension(text, fetcher):
     if fetcher == 'fetchPypi':
         try:
             src_format = _get_unique_value('format', text)
-        except ValueError as e:
+        except ValueError:
             src_format = None   # format was not given
 
         try:
             extension = _get_unique_value('extension', text)
-        except ValueError as e:
+        except ValueError:
             extension = None    # extension was not given
 
         if extension is None:
