@@ -10,6 +10,7 @@
 , lib
 , makeWrapper
 , nix
+, nixosTests
 , openssh
 , pam
 , pamSupport ? true
@@ -64,6 +65,8 @@ buildGoModule rec {
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
+
+  passthru.tests = nixosTests.forgejo;
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "update-forgejo";
