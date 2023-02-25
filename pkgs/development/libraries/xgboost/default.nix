@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-unTss2byytG8KUQfg5s34YpRuHHDLo7D/ZickHhz1AE=";
+    hash = "sha256-HGS9w4g2+Aw5foKjHK/XQvSCnFHUswhzAsQf6XkdvOI=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -89,6 +89,18 @@ stdenv.mkDerivation rec {
       lib.optionalString cudaSupport "-E TestXGBoostLib"
     }
   '';
+
+  # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
+  # confirmed xgboost itself does not use this part of the dmlc code.
+  GTEST_FILTER =
+    let
+      # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
+      filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
+        "ThreadGroup.TimerThread"
+        "ThreadGroup.TimerThreadSimple"
+      ];
+    in
+    "-${builtins.concatStringsSep ":" filteredTests}";
 
   installPhase =
     let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
