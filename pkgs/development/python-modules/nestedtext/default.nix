@@ -5,12 +5,16 @@
 , inform
 , natsort
 , pytestCheckHook
+, pythonOlder
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "nestedtext";
   version = "1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
