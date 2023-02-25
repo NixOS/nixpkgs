@@ -12193,6 +12193,7 @@
     github = "alyssais";
     githubId = 2768870;
     name = "Alyssa Ross";
+    matrix = "@qyliss:fairydust.space";
     keys = [{
       fingerprint = "7573 56D7 79BB B888 773E  415E 736C CDF9 EF51 BD97";
     }];
