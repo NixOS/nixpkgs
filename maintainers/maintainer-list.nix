@@ -12882,6 +12882,12 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rubyowo = {
+    name = "Rei Star";
+    email = "perhaps-you-know@what-is.ml";
+    github = "rubyowo";
+    githubId = 105302757;
+  };
   rumpelsepp = {
     name = "Stefan Tatschner";
     email = "stefan@rumpelsepp.org";
@@ -15342,6 +15348,11 @@
     email = "konrad.root.klawikowski@gmail.com";
     github = "unrooted";
     githubId = 30440603;
+  };
+  unsolvedcypher = {
+    name = "Matthew M";
+    github = "UnsolvedCypher";
+    githubId = 3170853;
   };
   uralbash = {
     email = "root@uralbash.ru";
