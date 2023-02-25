@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , hatch-vcs
 , hatchling
+, mypy-extensions
 , numpy
 , pydantic
 , pytest-mypy-plugins
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    mypy-extensions
     typing-extensions
   ];
 
