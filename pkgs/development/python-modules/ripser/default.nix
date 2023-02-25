@@ -1,34 +1,26 @@
 { lib
 , buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonOlder
 , cython
+, fetchPypi
 , numpy
-, scipy
-, scikit-learn
 , persim
 , pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.6.1";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M1ESoPlFMsy+aG23gm7o0HFLMvZYkav5LAoC88sPxf0=";
+    hash = "sha256-eps+lCCGnFDfhemkRskSuK+BYh5iyhr4+UksYzW35ZQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/scikit-tda/ripser.py/commit/4baa248994cee9a65d710fac91809bad8ed4e5f1.patch";
-      sha256 = "sha256-J/nxMOGOUiBueojJrUlAaXwktHDploYG/XL8/siF2kY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cython
