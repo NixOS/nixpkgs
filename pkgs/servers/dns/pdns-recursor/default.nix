@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-reproducible"
     "--enable-systemd"
+    "sysconfdir=/etc/powerdns-recursor"
   ];
+
+  installFlags = [ "sysconfdir=$(out)/etc/powerdns-recursor" ];
 
   enableParallelBuilding = true;
 
