@@ -1,5 +1,16 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
-
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+, installShellFiles
+, PCSC
+, pivKeySupport ? true
+, pkcs11Support ? true
+, testers
+, cosign
+}:
 buildGoModule rec {
   pname = "cosign";
   version = "2.0.0";
@@ -11,7 +22,8 @@ buildGoModule rec {
     sha256 = "sha256-919oxYi4e56EhSBN0FdcEZBA430owaDnKHkgTneScXw=";
   };
 
-  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+  buildInputs =
+    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
@@ -22,7 +34,7 @@ buildGoModule rec {
     "cmd/cosign"
   ];
 
-  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+  tags = [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
   ldflags = [
     "-s"
@@ -30,6 +42,8 @@ buildGoModule rec {
     "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     # test all paths
@@ -46,6 +60,12 @@ buildGoModule rec {
       --fish <($out/bin/cosign completion fish) \
       --zsh <($out/bin/cosign completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = cosign;
+    command = "cosign version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";
