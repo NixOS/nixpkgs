@@ -2,43 +2,36 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , ruby
 , which
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "FnUUX7qQWVZMHtWvneTLzBL1YYwF8v4e1913Op4Lvbw=";
+    hash = "sha256-e6ZCRIJVKl3xbJym+h+ah/J4c+s7wf1laF7p63ubE4A=";
   };
 
-  cargoSha256 = "98vmUoWSehX/9rMlHNSvKHJvJxW99pOhS08FI3OeLGo=";
+  cargoHash = "sha256-yhZ0QM9vZxyFCjTShbV7+Rn8w4lkPW7E7zKhrK4qa1E=";
   doCheck = true;
 
-  patches = [
-    # Backport rust 1.62 support. Should be removed in the next rbspy release.
-    (fetchpatch {
-      name = "rust-1.62.patch";
-      url = "https://github.com/rbspy/rbspy/commit/f5a8eecfbf2ad0b3ff9105115988478fb760d54d.patch";
-      sha256 = "sha256-+04rvEXU7/lx5IQkk3Bhe+KLN8PwxZ0j4nH5ySnS154=";
-    })
-  ];
-
-  # Tests in initialize.rs rely on specific PIDs being queried and attaching
-  # tracing to forked processes, which don't work well with the isolated build.
+  # The current implementation of rbspy fails to detect the version of ruby
+  # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
       --replace /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
-      --replace /usr/bin/which '${which}/bin/which'
-    substituteInPlace src/core/initialize.rs \
-      --replace 'fn test_initialize_with_disallowed_process(' '#[ignore] fn test_initialize_with_disallowed_process(' \
-      --replace 'fn test_get_exec_trace(' '#[ignore] fn test_get_exec_trace(' \
+      --replace /usr/bin/which '${which}/bin/which' \
+      --replace 'fn test_sample_single_process_with_time_limit(' '#[ignore] fn test_sample_single_process_with_time_limit(' \
+      --replace 'fn test_sample_single_process(' '#[ignore] fn test_sample_single_process(' \
+      --replace 'fn test_sample_subprocesses(' '#[ignore] fn test_sample_subprocesses('
+    substituteInPlace src/core/ruby_spy.rs \
+      --replace 'fn test_get_trace(' '#[ignore] fn test_get_trace(' \
+      --replace 'fn test_get_trace_when_process_has_exited(' '#[ignore] fn test_get_trace_when_process_has_exited('
   '';
 
   nativeBuildInputs = [ ruby which ];

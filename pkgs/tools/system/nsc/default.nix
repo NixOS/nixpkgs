@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -23,6 +24,15 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-gDwppx0ORG+pXzTdGtUVbiFyTD/P7avt+/V89Gl0QYY=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd nsc \
+      --bash <($out/bin/nsc completion bash) \
+      --fish <($out/bin/nsc completion fish) \
+      --zsh <($out/bin/nsc completion zsh)
+  '';
 
   preCheck = ''
     # Tests attempt to write to the home directory.

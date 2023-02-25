@@ -600,6 +600,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  arpy = callPackage ../development/python-modules/arpy { };
+
   arnparse = callPackage ../development/python-modules/arnparse { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
@@ -2121,6 +2123,8 @@ self: super: with self; {
   cssselect = callPackage ../development/python-modules/cssselect { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
+
+  cstruct = callPackage ../development/python-modules/cstruct { };
 
   csvw = callPackage ../development/python-modules/csvw { };
 
@@ -5812,7 +5816,7 @@ self: super: with self; {
 
   mdutils = callPackage ../development/python-modules/mdutils { };
 
-  MDP = callPackage ../development/python-modules/mdp { };
+  mdp = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
 

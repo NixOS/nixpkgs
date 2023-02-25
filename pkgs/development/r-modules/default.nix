@@ -154,8 +154,8 @@ let
   overrideRDepends = overrides: old:
     lib.mapAttrs (name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
-        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+        nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ value;
+        propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or []) ++ value;
       })
     ) overrides;
 

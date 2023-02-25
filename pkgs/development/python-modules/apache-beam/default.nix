@@ -48,13 +48,13 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.44.0";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5fnZxv2ZkFlv8vGDIt/6EL41v9P1iKa1tEd1nezq+PU=";
+    hash = "sha256-e+6Vt+SlOxi16udsdx7WFoDWYupuXhggpoEZPe4tPr0=";
   };
 
   patches = [
@@ -76,11 +76,15 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/issues/193613
     "protobuf"
 
-    # As of apache-beam v2.44.0, the requirement is httplib2>=0.8,<0.21.0, but
+    # As of apache-beam v2.45.0, the requirement is httplib2>=0.8,<0.21.0, but
     # the current (2023-02-08) nixpkgs's httplib2 version is 0.21.0. This can be
     # removed once beam is upgraded since the current requirement on master is
     # for httplib2>=0.8,<0.22.0.
     "httplib2"
+
+    # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
+    # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
+    "pyarrow"
   ];
 
   sourceRoot = "source/sdks/python";
