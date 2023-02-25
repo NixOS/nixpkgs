@@ -17120,7 +17120,6 @@ with pkgs;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
-  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
   antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
   antlr3 = antlr3_5;
