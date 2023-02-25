@@ -5,9 +5,12 @@
 , cmake
 , gsl
 , libtool
+, findutils
+, llvmPackages
 , mpi
 , nest
 , pkg-config
+, boost
 , python3
 , readline
 , autoPatchelfHook
@@ -37,23 +40,35 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
+    findutils
   ];
 
   buildInputs = [
     gsl
     readline
     libtool # libltdl
+    boost
   ] ++ lib.optionals withPython [
     python3
     python3.pkgs.cython
-  ] ++ lib.optional withMpi mpi;
+  ] ++ lib.optional withMpi mpi
+    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+
+  propagatedBuildInputs = with python3.pkgs; [
+    numpy
+  ];
 
   cmakeFlags = [
     "-Dwith-python=${if withPython then "ON" else "OFF"}"
     "-Dwith-mpi=${if withMpi then "ON" else "OFF"}"
-    "-Dwith-openmp=${if stdenv.isDarwin then "OFF" else "ON"}"
+    "-Dwith-openmp=ON"
   ];
+
+  postInstall = ''
+    # Alternative to autoPatchElf, moves libraries where
+    # Nest expects them to be
+    find $out/lib/nest -type f -exec ln -s {} $out/lib \;
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = nest;
@@ -64,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "NEST is a command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jiegec ];
+    maintainers = with maintainers; [ jiegec davidcromp ];
     platforms = platforms.unix;
   };
 }
