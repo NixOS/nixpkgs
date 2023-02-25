@@ -31,14 +31,14 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "fragments";
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
     rev = version;
-    sha256 = "sha256-CMa1yka0kOxMhxSuazlJxTk4fzxuuwKYLBpEMwHbBUE=";
+    sha256 = "sha256-/KtUcj41s9WeHzIgGWhYQv6oD/Df7WOnJAPuS6yGLHk=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/rFZcbpITYkpSCEZp9XH253u90RGmuVLEBGIRNBgI/o=";
+    hash = "sha256-CMXEArSufRNb6Osk1hlk8AwcMW76AhaitEShf1QY938=";
   };
 
   nativeBuildInputs = [
@@ -87,5 +87,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ emilytrau ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    broken = true;
   };
 }
