@@ -18,8 +18,7 @@
 }:
 
 let
-  version = "10.108.19-2";
-
+  version = "10.110.26-2";
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
     exec = "wavebox";
@@ -37,7 +36,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "https://download.wavebox.app/stable/linux/tar/${tarball}";
-    sha256 = "sha256-VI2/qhD5EK3e00lexcsGXt72Vm6ncVNqMkUmGbDATWc=";
+    sha256 = "04fnnqbyq8fd4wh61lwx3j32lilqannblxxkjha0h1qn4qvr9pj9";
   };
 
   # don't remove runtime deps
