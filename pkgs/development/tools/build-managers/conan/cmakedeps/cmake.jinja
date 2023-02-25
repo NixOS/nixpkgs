@@ -1,0 +1,93 @@
+########## MACROS ###########################################################################
+#############################################################################################
+# Requires CMake > 3.15
+if(${CMAKE_VERSION} VERSION_LESS "3.15")
+    message(FATAL_ERROR "The 'CMakeDeps' generator only works with CMake >= 3.15")
+endif()
+#include(${CMAKE_CURRENT_LIST_DIR}/cmakedeps_macros.cmake)
+function(conan_package_library_targets libraries package_libdir deps_target out_libraries_target config package_name)
+    set(_out_libraries "")
+    set(_out_libraries_target "")
+    set(_CONAN_ACTUAL_TARGETS "")
+    foreach(_LIBRARY_NAME ${libraries})
+        find_library(CONAN_FOUND_LIBRARY NAMES ${_LIBRARY_NAME} PATHS ${package_libdir}
+                    NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+        if(CONAN_FOUND_LIBRARY)
+            message(STATUS "Conan: Library ${_LIBRARY_NAME} found ${CONAN_FOUND_LIBRARY}")
+            # Create a micro-target for each lib/a found
+            # Allow only some characters for the target name
+            string(REGEX REPLACE "[^A-Za-z0-9.+_-]" "_" _LIBRARY_NAME ${_LIBRARY_NAME})
+            set(_LIB_NAME CONAN_LIB::${package_name}_${_LIBRARY_NAME})
+            if(NOT TARGET ${_LIB_NAME})
+                # Create a micro-target for each lib/a found
+                add_library(${_LIB_NAME} UNKNOWN IMPORTED)
+            endif()
+            # Enable configuration only when it is available to avoid missing configs
+            set_property(TARGET ${_LIB_NAME} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${config})
+            # Link library file
+            set_target_properties(${_LIB_NAME} PROPERTIES IMPORTED_LOCATION_${config} ${CONAN_FOUND_LIBRARY})
+            list(APPEND _CONAN_ACTUAL_TARGETS ${_LIB_NAME})
+            list(APPEND _out_libraries_target ${_LIB_NAME})
+            message(VERBOSE "Conan: Found: ${CONAN_FOUND_LIBRARY}")
+        else()
+            message(FATAL_ERROR "Library '${_LIBRARY_NAME}' not found in package. If '${_LIBRARY_NAME}' is a system library, declare it with 'cpp_info.system_libs' property")
+        endif()
+        unset(CONAN_FOUND_LIBRARY CACHE)
+    endforeach()
+    # Add the dependencies target for all the imported libraries
+    foreach(_CONAN_ACTUAL_TARGET ${_CONAN_ACTUAL_TARGETS})
+        set_property(TARGET ${_CONAN_ACTUAL_TARGET} PROPERTY INTERFACE_LINK_LIBRARIES ${deps_target} APPEND)
+    endforeach()
+    # ONLY FOR DEBUGGING PURPOSES
+    foreach(_CONAN_ACTUAL_TARGET ${_CONAN_ACTUAL_TARGETS})
+        get_target_property(linked_libs ${_CONAN_ACTUAL_TARGET} INTERFACE_LINK_LIBRARIES)
+        message(STATUS "Target Properties: ${_CONAN_ACTUAL_TARGET} INTERFACE_LINK_LIBRARIES ='${linked_libs}'")
+    endforeach()
+    set(${out_libraries_target} ${_out_libraries_target} PARENT_SCOPE)
+endfunction()
+include(${CMAKE_CURRENT_LIST_DIR}/{{ targets_include_file }})
+include(CMakeFindDependencyMacro)
+get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+           if(NOT isMultiConfig AND NOT CMAKE_BUILD_TYPE)
+               message(FATAL_ERROR "Please, set the CMAKE_BUILD_TYPE variable when calling to CMake "
+                                   "adding the '-DCMAKE_BUILD_TYPE=<build_type>' argument.")
+           endif()
+#check_build_type_defined()
+foreach(_DEPENDENCY {{ '${' + pkg_name + '_FIND_DEPENDENCY_NAMES' + '}' }} )
+    # Check that we have not already called a find_package with the transitive dependency
+    if(NOT {{ '${_DEPENDENCY}' }}_FOUND)
+        find_dependency({{ '${_DEPENDENCY}' }} REQUIRED ${${_DEPENDENCY}_FIND_MODE})
+    endif()
+endforeach()
+set({{ file_name }}_VERSION_STRING "{{ version }}")
+set({{ file_name }}_INCLUDE_DIRS {{ '${' + pkg_name + '_INCLUDE_DIRS' + config_suffix + '}' }} )
+set({{ file_name }}_INCLUDE_DIR {{ '${' + pkg_name + '_INCLUDE_DIRS' + config_suffix + '}' }} )
+set({{ file_name }}_LIBRARIES {{ '${' + pkg_name + '_LIBRARIES' + config_suffix + '}' }} )
+set({{ file_name }}_DEFINITIONS {{ '${' + pkg_name + '_DEFINITIONS' + config_suffix + '}' }} )
+# Only the first installed configuration is included to avoid the collision
+foreach(_BUILD_MODULE {{ '${' + pkg_name + '_BUILD_MODULES_PATHS' + config_suffix + '}' }} )
+    message(STATUS "Conan: Including build module from '${_BUILD_MODULE}'")
+    include({{ '${_BUILD_MODULE}' }})
+endforeach()
+{% if check_components_exist %}
+# Check that the specified components in the find_package(Foo COMPONENTS x y z) are there
+# This is the variable filled by CMake with the requested components in find_package
+if({{ file_name }}_FIND_COMPONENTS)
+    foreach(_FIND_COMPONENT {{ '${'+file_name+'_FIND_COMPONENTS}' }})
+        if (TARGET ${_FIND_COMPONENT})
+            message(STATUS "Conan: Component '${_FIND_COMPONENT}' found in package '{{ pkg_name }}'")
+        else()
+            message(FATAL_ERROR "Conan: Component '${_FIND_COMPONENT}' NOT found in package '{{ pkg_name }}'")
+        endif()
+    endforeach()
+endif()
+{% endif %}
+{% if is_module %}
+include(FindPackageHandleStandardArgs)
+set({{ file_name }}_FOUND 1)
+set({{ file_name }}_VERSION "{{ version }}")
+find_package_handle_standard_args({{ file_name }}
+                                    REQUIRED_VARS {{ file_name }}_VERSION
+                                    VERSION_VAR {{ file_name }}_VERSION)
+mark_as_advanced({{ file_name }}_FOUND {{ file_name }}_VERSION)
+{% endif %}
