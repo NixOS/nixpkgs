@@ -8,7 +8,7 @@
 , nixosTests
 }:
 
-let version = "1.0.1";
+let version = "1.0.2";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PARvz1LEEgmelku69ywKditAx0G4xJnEL6dYIh1IYTM=";
+    hash = "sha256-2HfwNoluPPOOAdCaqUVaZcAd8M2naPYAsphZO1Inefg=";
   };
 
-  cargoHash = "sha256-p9X2l5nUR02Emo6dt6LsrO2Vef4dbCvCljaXL9imnFs=";
+  cargoHash = "sha256-HuVNI1Y+rhuAzAkDUuJJCZ500WuGPgABFfEbJNXaVpA=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
