@@ -3,20 +3,29 @@
 , fetchPypi
 , flake8
 , pydocstyle
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "flake8-docstrings";
   version = "1.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fe7c6a306064af8e62a055c2f61e9eb1da55f84bb39caef2b84ce53708ac34b";
+    hash = "sha256-n+fGowYGSvjmKgVcL2Hp6x2lX4S7OcrvK4TOU3CKw0s=";
   };
 
-  propagatedBuildInputs = [ flake8 pydocstyle ];
+  propagatedBuildInputs = [
+    flake8
+    pydocstyle
+  ];
 
-  pythonImportsCheck = [ "flake8_docstrings" ];
+  pythonImportsCheck = [
+    "flake8_docstrings"
+  ];
 
   meta = with lib; {
     description = "Extension for flake8 which uses pydocstyle to check docstrings";
