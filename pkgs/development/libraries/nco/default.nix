@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils, libtool }:
+{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, which, curl, flex, coreutils, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "nco";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-M2GP92SIs4B92Re8McGKIIjQJ+qXAr/TwDtFKcH/zsk=";
   };
 
-  nativeBuildInputs = [ flex which antlr2 ];
+  nativeBuildInputs = [ flex which ];
 
   buildInputs = [ netcdf netcdfcxx4 gsl udunits curl coreutils ];
 
