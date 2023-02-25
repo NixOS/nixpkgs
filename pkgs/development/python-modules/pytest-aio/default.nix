@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "pytest-aio";
     rev = version;
-    sha256 = "pLH0yXe/KS9ohI8+hWSprP1OA3Qjki2BPqeApMPMGDs=";
+    sha256 = "sha256-BIVorMRWyboKFZCiELoBh/1oxSpdV263zfLce1fNVhU=";
   };
 
   postPatch = ''
