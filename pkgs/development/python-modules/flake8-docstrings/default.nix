@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flake8
 , pydocstyle
 , pythonOlder
@@ -8,20 +8,25 @@
 
 buildPythonPackage rec {
   pname = "flake8-docstrings";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-n+fGowYGSvjmKgVcL2Hp6x2lX4S7OcrvK4TOU3CKw0s=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-EafLWySeHB81HRcXiDs56lbUZzGvnT87WVqln0PoLCk=";
   };
 
   propagatedBuildInputs = [
     flake8
     pydocstyle
   ];
+
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "flake8_docstrings"
