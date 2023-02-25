@@ -24,7 +24,7 @@ buildPythonPackage rec {
       owner = "keboola";
       repo = pname;
       rev = "refs/tags/${version}";
-      sha256 = "sha256-79v9quhzeNRXcm6Z7BhD76lTZtw+Z0T1yK3zhrdreXw=";
+      hash = "sha256-79v9quhzeNRXcm6Z7BhD76lTZtw+Z0T1yK3zhrdreXw=";
     };
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     meta = with lib; {
       description = "Keboola Connection Storage API client";
       homepage = "https://github.com/keboola/sapi-python-client";
+      changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${version}";
       maintainers = with maintainers; [ mrmebelman ];
       license = licenses.mit;
     };
