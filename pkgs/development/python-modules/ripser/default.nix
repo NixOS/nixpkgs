@@ -47,6 +47,10 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
+  pythonImportsCheck = [
+    "ripser"
+  ];
+
   meta = with lib; {
     description = "A Lean Persistent Homology Library for Python";
     homepage = "https://ripser.scikit-tda.org";
