@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "43.2";
+  version = "44.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-oLmrINKKY99s5+keq7Xjr4ZjC/UitaiZfASXG9VR1zA=";
+    sha256 = "sha256-Km93B82bnMdzW7ryxbTFz4BZbvn0WxS7Nddt5H0a3kU=";
   };
 
   patches = lib.optionals stdenv.isLinux [
