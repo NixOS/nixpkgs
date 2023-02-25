@@ -7,7 +7,7 @@
 , gtk4
 , libadwaita
 , libnotify
-, webkitgtk_5_0
+, webkitgtk_6_0
 , meson
 , ninja
 , pkg-config
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     libadwaita
     libnotify
-    webkitgtk_5_0
+    webkitgtk_6_0
     gobject-introspection
   ];
 

@@ -31,7 +31,7 @@
 , openldap
 , enableOAuth2 ? stdenv.isLinux
 , webkitgtk_4_1
-, webkitgtk_5_0
+, webkitgtk_6_0
 , libaccounts-glib
 , json-glib
 , glib
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGtk4 [
     gtk4
   ] ++ lib.optionals (withGtk4 && enableOAuth2) [
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = [
