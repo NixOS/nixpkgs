@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , flask
@@ -40,6 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytest_flask"
+  ];
+
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [
+    "--ignore=tests/test_live_server.py"
   ];
 
   meta = with lib; {
