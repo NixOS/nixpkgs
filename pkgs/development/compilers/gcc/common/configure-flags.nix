@@ -27,7 +27,7 @@
 , disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
 }:
 
-assert disableGdbPlugin -> !enablePlugin;
+assert !enablePlugin -> disableGdbPlugin;
 assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
