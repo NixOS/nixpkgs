@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "etal";
     repo = "cnvkit";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mCQXo3abwC06x/g51UBshqUk3dpqEVNUvx+cJ/EdYGQ=";
+    hash = "sha256-mCQXo3abwC06x/g51UBshqUk3dpqEVNUvx+cJ/EdYGQ=";
   };
 
   postPatch = ''
@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";
     description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
+    changelog = "https://github.com/etal/cnvkit/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.jbedo ];
   };
