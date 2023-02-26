@@ -8,7 +8,13 @@ cargoSetupPostUnpackHook() {
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
-        unpackFile "$cargoDeps"
+        if [ -d "$cargoDeps" ]; then
+            local dest=$(stripHash "$cargoDeps")
+            cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
+            chmod -R +644 -- "$dest"
+        else
+            unpackFile "$cargoDeps"
+        fi
         export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
     else
         cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
