@@ -7,6 +7,15 @@
 , alsa-lib
 , dbus
 , fontconfig
+
+# build options
+, withStreaming ? true
+, withAudioBackend ? "rodio"
+, withMediaControl ? true
+, withLyrics ? false
+, withImage ? false
+, withNotify ? false
+, withSixel ? false
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,18 +45,20 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = true;
 
-  buildFeatures = [
-    "rodio-backend"
-    "media-control"
-    "image"
-    "lyric-finder"
-  ];
+  buildFeatures = [ ]
+    ++ lib.optionals withStreaming [ "streaming" ]
+    ++ lib.optionals (withAudioBackend != "") [ "${withAudioBackend}-backend" ]
+    ++ lib.optionals withMediaControl [ "media-control" ]
+    ++ lib.optionals withLyrics [ "lyric-finder" ]
+    ++ lib.optionals withImage [ "image" ]
+    ++ lib.optionals withNotify [ "notify" ]
+    ++ lib.optionals withSixel [ "sixel" ];
 
   meta = with lib; {
-    description = "A command driven spotify player";
+    description = "A fast, easy to use, and configurable terminal music player";
     homepage = "https://github.com/aome510/spotify-player";
     mainProgram = "spotify_player";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya Xyven1 ];
   };
 }
