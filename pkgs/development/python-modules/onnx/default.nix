@@ -21,7 +21,7 @@ let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.13.0";
+  version = "1.13.1";
   format = "setuptools";
 
   disabled = isPy27;
@@ -30,7 +30,7 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-D8POBAkZVr0O5i4qsSuYRkDfL8WsDTqzgNACmmkFwGs=";
+    sha256 = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
   };
 
   nativeBuildInputs = [
