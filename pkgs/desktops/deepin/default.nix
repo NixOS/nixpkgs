@@ -54,6 +54,7 @@ let
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { inherit replaceAll; };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
+    deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
 
     #### TOOLS
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
