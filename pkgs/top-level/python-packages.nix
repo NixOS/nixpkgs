@@ -372,6 +372,8 @@ self: super: with self; {
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
+  aioxmpp = callPackage ../development/python-modules/aioxmpp { };
+
   aioymaps = callPackage ../development/python-modules/aioymaps { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
