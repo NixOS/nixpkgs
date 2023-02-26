@@ -1,21 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, python
-
-# native inputs
 , pkgconfig
-, setuptools-scm
-
-# tests
 , psutil
 , pytestCheckHook
+, python
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "4.3.1";
+  version = "4.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -25,7 +21,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-XWkCZhBapjtzH3g3t+xXiB2f54p3Xw0+UBKVNH+gGHQ=";
+    sha256 = "sha256-aVnXCrTh+0Ip+FgYWN7hLw8N3iQCmXSywhReD5RTUfI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -35,8 +31,8 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools-scm
     pkgconfig
+    setuptools-scm
   ];
 
   pythonImportsCheck = [
@@ -47,8 +43,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     psutil
+    pytestCheckHook
   ];
 
   # for lz4.steam
@@ -63,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };
