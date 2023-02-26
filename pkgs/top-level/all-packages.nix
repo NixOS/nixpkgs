@@ -10229,6 +10229,8 @@ with pkgs;
 
   nb = callPackage ../tools/misc/nb { };
 
+  kb = callPackage ../tools/misc/kb { };
+
   notable = callPackage ../applications/misc/notable { };
 
   nth = with python3Packages; toPythonApplication name-that-hash;
