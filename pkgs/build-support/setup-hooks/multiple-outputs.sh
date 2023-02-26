@@ -15,8 +15,8 @@ _assignFirst() {
     local varName="$1"
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-    for var in "$@"; do
-        if [ -n "${!var-}" ]; then eval "${varName}"="${var}"; return; fi
+    for _var in "$@"; do
+        if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
     done
     echo
     echo "error: _assignFirst: could not find a non-empty variable to assign to ${varName}."
