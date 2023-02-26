@@ -4,10 +4,10 @@
 , icalendar
 , lxml
 , pytestCheckHook
+, pythonOlder
 , pytz
 , recurring-ical-events
 , requests
-, six
 , tzlocal
 , vobject
 }:
@@ -17,6 +17,7 @@ buildPythonPackage rec {
   version = "1.2.0";
 
   format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
@@ -29,7 +30,6 @@ buildPythonPackage rec {
     vobject
     lxml
     requests
-    six
     icalendar
     recurring-ical-events
   ];
