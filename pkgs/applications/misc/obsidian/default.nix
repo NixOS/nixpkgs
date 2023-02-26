@@ -25,7 +25,7 @@ let
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "sha256-x+9WG938YQFP/HF7B9xENOXFSdOrPFOJ1ufxXj3kXps=" else "sha256-rDA0GXQ++QAT4UaT23WkCA5CKCuJsF4ca0g086AiCao=";
+    sha256 = if stdenv.isDarwin then "sha256-8cHNIpgRhEQRRcuM0t6zZNweb92nMe8GopgjYfOLRSA=" else "sha256-rDA0GXQ++QAT4UaT23WkCA5CKCuJsF4ca0g086AiCao=";
   };
 
   icon = fetchurl {

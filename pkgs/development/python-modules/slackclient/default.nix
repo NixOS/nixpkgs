@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , flask
 , flask-sockets
-, isPy3k
+, pythonOlder
 , mock
 , moto
 , psutil
@@ -16,7 +16,6 @@
 , pytest-runner
 , requests
 , responses
-, six
 , sqlalchemy
 , websockets
 , websocket-client
@@ -24,23 +23,22 @@
 
 buildPythonPackage rec {
   pname = "slackclient";
-  version = "3.19.5";
+  version = "3.20.0";
   format =  "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/DVcnfHjvmRreHSlZbzxz6pbqytEUdqbaGbQVxIW4Qk=";
+    hash = "sha256-NlUmoOlRV7h7d553uX2tAWi2aWCAqpHflSUrdZxlaws=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     websocket-client
     requests
-    six
   ];
 
   nativeCheckInputs = [
@@ -83,6 +81,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli psyanticy ];
   };

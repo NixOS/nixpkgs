@@ -2,7 +2,7 @@
 
 let
   release = {
-    "8.16.0+0.16.0".sha256 = "sha256-Of5vO6wvqGyxagjGuuY3qCiLKbBr3VzLHiIn9U2R21E=";
+    "8.16.0+0.16.3".sha256 = "sha256-22Kawp8jAsgyBTppwN5vmN7zEaB1QfPs0qKxd6x/7Uc=";
     "8.15.0+0.15.0".sha256 = "1vh99ya2dq6a8xl2jrilgs0rpj4j227qx8zvzd2v5xylx0p4bbrp";
     "8.14.0+0.14.0".sha256 = "1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
     "8.13.0+0.13.0".sha256 = "0k69907xn4k61w4mkhwf8kh8drw9pijk9ynijsppihw98j8w38fy";
@@ -18,7 +18,7 @@ in
 
   defaultVersion =  with versions;
     lib.switch coq.version [
-      { case = isEq "8.16"; out = "8.16.0+0.16.0"; }
+      { case = isEq "8.16"; out = "8.16.0+0.16.3"; }
       { case = isEq "8.15"; out = "8.15.0+0.15.0"; }
       { case = isEq "8.14"; out = "8.14.0+0.14.0"; }
       { case = isEq "8.13"; out = "8.13.0+0.13.0"; }
@@ -88,7 +88,7 @@ in
     ];
 
     propagatedBuildInputs = o.propagatedBuildInputs ++
-      lib.optional (version == "8.16.0+0.16.0" || version == "dev") coq.ocamlPackages.ppx_hash
+      lib.optional (version == "8.16.0+0.16.3" || version == "dev") coq.ocamlPackages.ppx_hash
     ;
 
 })

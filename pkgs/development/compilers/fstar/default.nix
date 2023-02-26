@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    z3
     makeWrapper
     installShellFiles
     removeReferencesTo
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     menhir
   ]);
 
-  buildInputs = [
-    z3
-  ] ++ (with ocamlPackages; [
+  buildInputs = with ocamlPackages; [
     batteries
     zarith
     stdint
@@ -39,11 +38,9 @@ stdenv.mkDerivation rec {
     ppx_deriving
     ppx_deriving_yojson
     process
-  ]);
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  buildFlags = [ "libs" ];
 
   enableParallelBuilding = true;
 
