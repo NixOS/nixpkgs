@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "5.11.0";
+  version = "5.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uXvGaVsq/wIUQTPC5zmdWIUiPUK3kS/67CyjiY5nO/4=";
+    sha256 = "sha256-rvxRZ1sLUz1Wu1/RyMbAUi/jGJZnmILhxMY9XkoPzLM=";
   };
 
   # importlib-metadata could be added here if it wouldn't cause an infinite recursion
