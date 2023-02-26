@@ -2960,7 +2960,7 @@ with pkgs;
   bic = callPackage ../development/interpreters/bic { };
 
   binance = callPackage ../applications/misc/binance {
-    electron = electron_13;
+    electron = electron_bin_13;
   };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
@@ -4209,7 +4209,7 @@ with pkgs;
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
-    electron = electron_11;
+    electron = electron_bin_11;
   };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -4535,7 +4535,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_22;
+    electron = electron_bin_22;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5202,7 +5202,7 @@ with pkgs;
   };
 
   micropad = callPackage ../applications/office/micropad {
-    electron = electron_17;
+    electron = electron_bin_17;
   };
 
   midicsv = callPackage ../tools/audio/midicsv { };
@@ -5412,7 +5412,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_22;
+    electron = electron_bin_22;
   };
 
   pouf = callPackage ../tools/misc/pouf { };
@@ -6865,7 +6865,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_22;
+    electron = electron_bin_22;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -7102,7 +7102,7 @@ with pkgs;
   esshader = callPackage ../tools/graphics/esshader { };
 
   etcher = callPackage ../tools/misc/etcher {
-    electron = electron_12;
+    electron = electron_bin_12;
   };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
@@ -9905,7 +9905,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_22;
+    electron = electron_bin_22;
   };
 
   mosh = callPackage ../tools/networking/mosh { };
@@ -17170,23 +17170,25 @@ with pkgs;
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
-  inherit (callPackages ../development/tools/electron { })
-    electron
-    electron_9
-    electron_10
-    electron_11
-    electron_12
-    electron_13
-    electron_14
-    electron_15
-    electron_16
-    electron_17
-    electron_18
-    electron_19
-    electron_20
-    electron_21
-    electron_22
-    electron_23;
+  inherit (callPackages ../development/tools/electron/binary { })
+    electron_bin
+    electron_bin_9
+    electron_bin_10
+    electron_bin_11
+    electron_bin_12
+    electron_bin_13
+    electron_bin_14
+    electron_bin_15
+    electron_bin_16
+    electron_bin_17
+    electron_bin_18
+    electron_bin_19
+    electron_bin_20
+    electron_bin_21
+    electron_bin_22
+    electron_bin_23;
+
+  electron = electron_bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -31265,7 +31267,7 @@ with pkgs;
   markets = callPackage ../applications/misc/markets { };
 
   markmind = callPackage ../applications/misc/markmind {
-    electron = electron_9;
+    electron = electron_bin_9;
   };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -32079,7 +32081,7 @@ with pkgs;
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian {
-    electron = electron_21;
+    electron = electron_bin_21;
   };
 
   octoprint = callPackage ../applications/misc/octoprint { };
@@ -32449,7 +32451,7 @@ with pkgs;
   };
 
   pomotroid = callPackage ../applications/misc/pomotroid {
-    electron = electron_9;
+    electron = electron_bin_9;
   };
 
   ponymix = callPackage ../applications/audio/ponymix { };
@@ -33316,7 +33318,7 @@ with pkgs;
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
   teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux {
-    electron = electron_21;
+    electron = electron_bin_21;
   };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
@@ -34060,7 +34062,7 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix {};
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_19;
+    electron = electron_bin_19;
   };
 
   wio = callPackage ../applications/window-managers/wio {
@@ -37243,7 +37245,7 @@ with pkgs;
 
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_14;
+    electron = electron_bin_14;
    };
 
   maxima = callPackage ../applications/science/math/maxima {

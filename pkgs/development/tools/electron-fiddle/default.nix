@@ -1,5 +1,5 @@
 { buildFHSUserEnv
-, electron_22
+, electron_bin_22
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup_yarn_lock
@@ -15,7 +15,7 @@
 let
   pname = "electron-fiddle";
   version = "0.32.1";
-  electron = electron_22;
+  electron = electron_bin_22;
   nodejs = nodejs-16_x;
 
   src = fetchFromGitHub {

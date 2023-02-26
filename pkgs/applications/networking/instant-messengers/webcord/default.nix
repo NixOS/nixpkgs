@@ -1,5 +1,5 @@
 { lib, stdenv, buildNpmPackage, fetchFromGitHub, copyDesktopItems
-, python3, pipewire, libpulseaudio, xdg-utils, electron_22, makeDesktopItem }:
+, python3, pipewire, libpulseaudio, xdg-utils, electron_bin_22, makeDesktopItem }:
 
 buildNpmPackage rec {
   name = "webcord";
@@ -49,7 +49,7 @@ buildNpmPackage rec {
 
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
-    makeWrapper '${electron_22}/bin/electron' $out/bin/webcord \
+    makeWrapper '${electron_bin_22}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --prefix PATH : "${binPath}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
@@ -76,6 +76,6 @@ buildNpmPackage rec {
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ huantian ];
-    platforms = electron_22.meta.platforms;
+    platforms = electron_bin_22.meta.platforms;
   };
 }

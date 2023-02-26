@@ -1,9 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, jshon, electron_10
+{ lib, stdenvNoCC, fetchFromGitHub, jshon, electron_bin_10
 , runtimeShell, hyper-haskell-server, extra-packages ? [] }:
 
 let
   binPath = lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
-  electron = electron_10;
+  electron = electron_bin_10;
 in stdenvNoCC.mkDerivation rec {
   pname = "hyper-haskell";
   version = "0.2.3.0";

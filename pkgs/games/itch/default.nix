@@ -4,7 +4,7 @@
 , fetchzip
 , fetchFromGitHub
 , butler
-, electron_11
+, electron_bin_11
 , steam-run
 , makeWrapper
 , copyDesktopItems
@@ -82,7 +82,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${steam-run}/bin/steam-run $out/bin/${pname} \
-      --add-flags ${electron_11}/bin/electron \
+      --add-flags ${electron_bin_11}/bin/electron \
       --add-flags $out/share/${pname}/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}/bin/:${itch-setup}

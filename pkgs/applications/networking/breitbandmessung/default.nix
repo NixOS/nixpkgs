@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , dpkg
-, electron_16
+, electron_bin_16
 , makeWrapper
 , nixosTests
 , nodePackages
@@ -49,7 +49,7 @@ let
         }
         EOF
 
-        makeWrapper ${electron_16}/bin/electron $out/bin/breitbandmessung \
+        makeWrapper ${electron_bin_16}/bin/electron $out/bin/breitbandmessung \
           --add-flags $out/share/breitbandmessung/resources/build/electron.js
 
         # Fix the desktop link

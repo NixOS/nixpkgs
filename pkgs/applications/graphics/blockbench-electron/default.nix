@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_22 }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_bin_22 }:
 
 stdenv.mkDerivation rec {
   pname = "blockbench-electron";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_bin_22}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';

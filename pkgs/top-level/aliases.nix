@@ -412,6 +412,22 @@ mapAliases ({
   electron_7 = throw "electron_7 has been removed in favor of newer versions"; # added 2022-02-08
   electron_8 = throw "electron_8 has been removed in favor of newer versions"; # added 2022-02-08
 
+  electron_9 = electron_bin_9; # added 2023-02-26
+  electron_10 = electron_bin_10; # added 2023-02-26
+  electron_11 = electron_bin_11; # added 2023-02-26
+  electron_12 = electron_bin_12; # added 2023-02-26
+  electron_13 = electron_bin_13; # added 2023-02-26
+  electron_14 = electron_bin_14; # added 2023-02-26
+  electron_15 = electron_bin_15; # added 2023-02-26
+  electron_16 = electron_bin_16; # added 2023-02-26
+  electron_17 = electron_bin_17; # added 2023-02-26
+  electron_18 = electron_bin_18; # added 2023-02-26
+  electron_19 = electron_bin_19; # added 2023-02-26
+  electron_20 = electron_bin_20; # added 2023-02-26
+  electron_21 = electron_bin_21; # added 2023-02-26
+  electron_22 = electron_bin_22; # added 2023-02-26
+  electron_23 = electron_bin_23; # added 2023-02-26
+
   electrum-dash = throw "electrum-dash has been removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
 
   # Emacs
