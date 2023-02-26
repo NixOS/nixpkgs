@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zHP9ChwUeZJT/yCopFeRo8jSgCIXswHnDPoIroGeQ48=";
+    hash = "sha256-zHP9ChwUeZJT/yCopFeRo8jSgCIXswHnDPoIroGeQ48=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
+    changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };
