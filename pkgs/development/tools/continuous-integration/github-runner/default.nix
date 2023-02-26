@@ -33,6 +33,8 @@ buildDotnetModule rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install service
     ./patches/dont-install-service.patch
+    # Access `.env` and `.path` relative to `$RUNNER_ROOT`, if set
+    ./patches/env-sh-use-runner-root.patch
     # Fix FHS path: https://github.com/actions/runner/pull/2464
     (fetchpatch {
       name = "ln-fhs.patch";
@@ -166,6 +168,9 @@ buildDotnetModule rec {
     install -m755 src/Misc/layoutroot/config.sh                $out/lib/github-runner
     install -m755 src/Misc/layoutroot/env.sh                   $out/lib/github-runner
 
+    # env.sh is patched to not require any wrapping
+    ln -sr "$out/lib/github-runner/env.sh" "$out/bin/"
+
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
   '' + lib.optionalString stdenv.isLinux ''
@@ -193,12 +198,6 @@ buildDotnetModule rec {
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts
     install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
-
-    # Use $RUNNER_ROOT in env.sh, if set
-    substituteInPlace "$out/lib/github-runner/env.sh" \
-      --replace '.env'  ' ''${RUNNER_ROOT:-.}/.env' \
-      --replace '.path' ' ''${RUNNER_ROOT:-.}/.path'
-    ln -s "$out/lib/github-runner/env.sh" "$out/bin/env.sh"
   '' + lib.optionalString stdenv.isLinux ''
     # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
     makeWrapperArgs=()
