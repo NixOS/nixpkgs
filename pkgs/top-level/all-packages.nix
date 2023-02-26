@@ -386,6 +386,8 @@ with pkgs;
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
+  catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
+
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
   btdu = callPackage ../tools/misc/btdu { };
@@ -5507,6 +5509,8 @@ with pkgs;
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
+
+  shellclear = callPackage ../tools/security/shellclear { };
 
   shellnoob = callPackage ../tools/security/shellnoob { };
 
@@ -30088,6 +30092,8 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
 
+  gossa = callPackage ../applications/networking/gossa { };
+
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpsbabel-gui = gpsbabel.override {
@@ -32913,9 +32919,11 @@ with pkgs;
 
   shfmt = callPackage ../tools/text/shfmt { };
 
+  shipments = callPackage ../applications/misc/shipments { };
+
   shortwave = callPackage ../applications/audio/shortwave { };
 
-  shotgun = callPackage ../tools/graphics/shotgun {};
+  shotgun = callPackage ../tools/graphics/shotgun { };
 
   shutter = callPackage ../applications/graphics/shutter { };
 
