@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
+    changelog = "https://github.com/python-caldav/caldav/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz dotlambda ];
   };
