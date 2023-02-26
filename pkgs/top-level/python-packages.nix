@@ -7498,6 +7498,8 @@ self: super: with self; {
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
+  python-creole = callPackage ../development/python-modules/python-creole { };
+
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
