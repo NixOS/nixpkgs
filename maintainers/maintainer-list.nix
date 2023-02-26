@@ -18464,6 +18464,12 @@
     github = "XYenon";
     githubId = 20698483;
   };
+  xyven1 = {
+    name = "Xyven";
+    email = "nix@xyven.dev";
+    github = "xyven1";
+    githubId = 35360746;
+  };
   xzfc = {
     email = "xzfcpw@gmail.com";
     github = "xzfc";
