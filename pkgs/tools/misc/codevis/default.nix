@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codevis";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codevis";
     rev = "v${version}";
-    hash = "sha256-dkzBLDZK0BJ069mlkXMGtuDodZr9sxFmpEXjp5Nf0Qk=";
+    hash = "sha256-iw5ULK67AHLoffveZghk57lPQwE2oX+iwlO0dmdpE4E=";
   };
 
-  cargoHash = "sha256-/2sBd2RAOjGTgXMocuKea1qhkXj81vM8PlRhYsJKx5g=";
+  cargoHash = "sha256-IxQ8rnB+2xTBiFvxy2yo27HtBu0zLvbQzyoxH/4waxQ=";
 
   nativeBuildInputs = [
     pkg-config

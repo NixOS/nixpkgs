@@ -4811,7 +4811,8 @@ with pkgs;
 
   ghdorker = callPackage ../tools/security/ghdorker { };
 
-  ghidra = callPackage ../tools/security/ghidra/build.nix { };
+  ghidra = if stdenv.isDarwin then darwin.apple_sdk_11_0.callPackage ../tools/security/ghidra/build.nix {}
+  else callPackage ../tools/security/ghidra/build.nix {};
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
@@ -12022,6 +12023,8 @@ with pkgs;
   sing-box = callPackage ../tools/networking/sing-box { };
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
+
+  sing-geoip = callPackage ../data/misc/sing-geoip { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 

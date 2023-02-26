@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "v${version}";
-    hash = "sha256-zqk0N1S0vylleyyXaSflIZyWncZV0+wbSy1oAbyLx/4=";
+    hash = "sha256-o971F3JxZUfTCaLRPYxCsU5UZ2VcvZftVEl/sZAQwpA=";
   };
 
-  cargoHash = "sha256-9CTA7Yh2O5S8DvRjwvkrb4ye0/8f+l0tsTxNBMmxLpQ=";
+  cargoHash = "sha256-Otn5FvZZkzO0MHiopjU2/+redyusituDQb7DT5bdbPE=";
 
   nativeBuildInputs = [ pkg-config ];
 

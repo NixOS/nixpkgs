@@ -1,12 +1,12 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "neo4j-desktop";
-  version = "1.5.6";
+  version = "1.5.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${name}-x86_64.AppImage";
-    hash = "sha256-0/jS1LaaIam6w7RbLXSKXiXlpocZMTMuTZvFRU4qypg=";
+    hash = "sha256-5sIlLPfcoX5I4TBGKR8+WAo/xC6b9RP6ljhyTil1xJM=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
