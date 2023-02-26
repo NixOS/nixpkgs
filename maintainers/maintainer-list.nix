@@ -9680,6 +9680,12 @@
     github = "michaelBelsanti";
     githubId = 62124625;
   };
+  michaelgrahamevans = {
+    email = "michaelgrahamevans@gmail.com";
+    name = "Michael Evans";
+    github = "michaelgrahamevans";
+    githubId = 5932424;
+  };
   michaelpj = {
     email = "michaelpj@gmail.com";
     github = "michaelpj";
