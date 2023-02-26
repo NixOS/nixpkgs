@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "CNVkit";
+  pname = "cnvkit";
   version = "0.9.10";
 
   src = fetchFromGitHub {
