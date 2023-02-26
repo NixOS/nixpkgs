@@ -15,7 +15,6 @@
 , libjpeg
 , libtiff
 , libpng
-, libX11
 , writeShellScript
 , common-updater-scripts
 , curl
@@ -42,8 +41,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "gmic-3.2.1-fix-system-gmic.patch";
-      url = "https://github.com/GreycLab/gmic/commit/1fc184b40b7c31e7b100722d32cb9f7c5a79c90f.patch";
-      hash = "sha256-xLlZ87QUiBrfioG7DNXf0HioxqOu6HX+57LW2FGdbLI=";
+      url = "https://github.com/GreycLab/gmic/commit/9db3f6a39d9ed67b4279654da88993a8057575ff.patch";
+      hash = "sha256-JznKCs56t6cJ4HLqlhMZjSOupEB8cdkn3j6RgZpcpzo=";
     })
   ];
 
@@ -68,7 +67,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    libX11
     opencv
     openexr
     graphicsmagick
