@@ -28,6 +28,7 @@
 , ninja
 , gcab
 , gnutls
+, pandoc
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
@@ -130,9 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
   # CLI programs go to out
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vvNUidNdhW9xeksjEVnkIR7CZ4oBQizZJRMFtZUq6Ow=";
+  src = fetchFromGitHub {
+    owner = "fwupd";
+    repo = "fwupd";
+    rev = finalAttrs.version;
+    hash = "sha256-a4F7skyukl4jW3apGi1ie/EcuGlkZoszyZdtLFuJewA=";
   };
 
   patches = [
@@ -168,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     gcab
     gnutls
+    pandoc
     protobufc # for protoc
     python
     wrapGAppsNoGuiHook
@@ -272,6 +276,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/test(.*)//' libfwupdplugin/meson.build
     # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
     sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
+
+    # Device tests use device emulation and need to download emulation data from
+    # the internet, which does not work on our test VMs.
+    # It's probably better to disable these tests for NixOS by setting
+    # the device-tests directory to /dev/null.
+    # For more info on device emulation, see:
+    #   https://github.com/fwupd/fwupd/blob/eeeac4e9ba8a6513428b456a551bffd95d533e50/docs/device-emulation.md
+    substituteInPlace data/installed-tests/meson.build \
+      --replace "join_paths(datadir, 'fwupd', 'device-tests')" "'/dev/null'"
   '';
 
   preBuild = ''
