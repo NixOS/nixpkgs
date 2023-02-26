@@ -487,6 +487,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  harpoon = super.harpoon.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace plugin/himalaya.vim \

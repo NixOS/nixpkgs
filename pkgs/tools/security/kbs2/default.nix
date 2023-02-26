@@ -1,24 +1,33 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, python3
+, libxcb
+, AppKit
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-clbd4xHHGpFIr4s3Jocw4oQ3GbyGWMxZEVgj6JpVK94=";
+    hash = "sha256-lTxHG+Gul9yMdNPXiomP6crzF5J4wIKzeNyEHnlNM/4=";
   };
 
-  cargoSha256 = "sha256-gfrC9TOs/Vz3K1gVr6MJ1QAKCE5WOD8VZ/tjOw3Y1uI=";
+  cargoHash = "sha256-X5WlEvOmbZ3STogoFjDhT2zF5Udt6ABaD+f1qBvmNYE=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration AppKit ];
 
   preCheck = ''
     export HOME=$TMPDIR

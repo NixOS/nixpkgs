@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vttest";
-  version = "20221229";
+  version = "20230201";
 
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/${pname}/${pname}-${version}.tgz"
       "ftp://ftp.invisible-island.net/${pname}/${pname}-${version}.tgz"
     ];
-    sha256 = "sha256-a2oQmsrwVpz3Zg0g3NFTuD4yjpuT2uTnO5hbvMaxi/g=";
+    sha256 = "sha256-J/QwB5Hny8+dFfiEIfmONdOu5mMRNoQwYk4sGlqL5oM=";
   };
 
   meta = with lib; {

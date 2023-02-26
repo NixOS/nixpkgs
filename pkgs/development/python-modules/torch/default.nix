@@ -41,6 +41,7 @@
 }:
 
 let
+  inherit (lib) lists strings trivial;
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
@@ -54,6 +55,45 @@ assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
   setBool = v: if v then "1" else "0";
+
+  # https://github.com/pytorch/pytorch/blob/v1.13.1/torch/utils/cpp_extension.py#L1751
+  supportedTorchCudaCapabilities =
+    let
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6"];
+      ptx = lists.map (x: "${x}+PTX") real;
+    in
+    real ++ ptx;
+
+  # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
+  #   of the first list *from* the second list. That means:
+  #   lists.subtractLists a b = b - a
+
+  # For CUDA
+  supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
+  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+
+  # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
+  gpuArchWarner = supported: unsupported:
+    trivial.throwIf (supported == [ ])
+      (
+        "No supported GPU targets specified. Requested GPU targets: "
+        + strings.concatStringsSep ", " unsupported
+      )
+      supported;
+
+  # Create the gpuTargetString.
+  gpuTargetString = strings.concatStringsSep ";" (
+    if gpuTargets != [ ] then
+    # If gpuTargets is specified, it always takes priority.
+      gpuTargets
+    else if cudaSupport then
+      gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
+    else if rocmSupport then
+      hip.gpuTargets
+    else
+      throw "No GPU targets specified"
+  );
+
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
@@ -146,14 +186,14 @@ in buildPythonPackage rec {
   '';
 
   preConfigure = lib.optionalString cudaSupport ''
-    export TORCH_CUDA_ARCH_LIST="${cudaFlags.cudaCapabilitiesSemiColonString}"
+    export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '' + lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
-    export PYTORCH_ROCM_ARCH="${lib.strings.concatStringsSep ";" (if gpuTargets == [ ] then hip.gpuTargets else gpuTargets)}"
+    export PYTORCH_ROCM_ARCH="${gpuTargetString}"
     export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas"
     python tools/amd_build/build_amd.py
   '';
@@ -320,7 +360,8 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport cudaPackages;
+    inherit cudaSupport cudaPackages gpuTargetString;
+    cudaCapabilities = supportedCudaCapabilities;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
   };
