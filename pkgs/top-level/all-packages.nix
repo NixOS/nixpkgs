@@ -1894,6 +1894,8 @@ with pkgs;
 
   git-repo-updater = python3Packages.callPackage ../applications/version-management/git-repo-updater { };
 
+  git-repo-manager = callPackage ../applications/version-management/git-repo-manager { };
+
   git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
   git-remote-gcrypt = callPackage ../applications/version-management/git-remote-gcrypt { };
