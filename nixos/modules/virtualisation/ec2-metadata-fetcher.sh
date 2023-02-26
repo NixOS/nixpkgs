@@ -55,10 +55,9 @@ done
 echo "getting EC2 instance metadata..."
 
 get_imds() {
-  # Intentionally no --fail here, so that we proceed even if e.g. a
-  # 404 was returned (but we still fail if we can't reach the IMDS
-  # server).
-  curl --silent --show-error --header "X-aws-ec2-metadata-token: $IMDS_TOKEN" "$@"
+  # --fail to avoid populating missing files with 404 HTML response body
+  # || true to allow the script to continue even when encountering a 404
+  curl --silent --show-error --fail --header "X-aws-ec2-metadata-token: $IMDS_TOKEN" "$@" || true
 }
 
 get_imds -o "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
