@@ -69,19 +69,46 @@ in
       package = mkOption {
         type = types.package;
         internal = true;
+        default = cfg.mesaPackage;
         description = lib.mdDoc ''
           The package that provides the OpenGL implementation.
+
+          The default is mesa's drivers which should cover all OpenGL-capable
+          hardware. If you want to use another mesa version, adjust
+          {option}`mesaPackage`.
         '';
       };
-
       package32 = mkOption {
         type = types.package;
         internal = true;
+        default = cfg.mesaPackage32;
         description = lib.mdDoc ''
-          The package that provides the 32-bit OpenGL implementation on
-          64-bit systems. Used when {option}`driSupport32Bit` is
-          set.
+          Same as {option}`package` but for the 32-bit OpenGL implementation on
+          64-bit systems. Used when {option}`driSupport32Bit` is set.
         '';
+      };
+
+      mesaPackage = mkOption {
+        type = types.package;
+        default = pkgs.mesa;
+        example = "pkgs.mesa_23";
+        description = lib.mdDoc ''
+          The mesa driver package used for rendering support on the system.
+
+          You should only need to adjust this if you require a newer mesa
+          version for your hardware or because you need to patch a bug.
+        '';
+        apply = mesa: mesa.drivers or throw "mesa package must have a `drivers` output.";
+      };
+      mesaPackage32 = mkOption {
+        type = types.package;
+        default = pkgs.mesa;
+        example = "pkgs.pkgsi686Linux.mesa_23";
+        description = lib.mdDoc ''
+          Same as {option}`mesaPackage` but for the 32-bit mesa on 64-bit
+          systems. Used when {option}`driSupport32Bit` is set.
+        '';
+        apply = mesa: mesa.drivers or throw "mesa package must have a `drivers` output.";
       };
 
       extraPackages = mkOption {
@@ -97,7 +124,6 @@ in
           :::
         '';
       };
-
       extraPackages32 = mkOption {
         type = types.listOf types.package;
         default = [];
