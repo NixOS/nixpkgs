@@ -42,6 +42,7 @@ let
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
+    deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
