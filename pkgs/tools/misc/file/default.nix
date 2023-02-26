@@ -17,6 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N1HH+6jbyDHLjXzIr/IQNUWbjOUVXviwiAon0ChHXzs=";
   };
 
+  patches = [
+    # Backport fix to identification for pyzip files.
+    # Needed for strip-nondeterminism.
+    # https://salsa.debian.org/reproducible-builds/strip-nondeterminism/-/issues/20
+    ./pyzip.patch
+
+    # Backport fix for --uncompress always detecting contents as "empty"
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/file/files/file-5.44-decompress-empty.patch?h=dfc57da515a2aaf085bea68267cc727f1bfaa691";
+      hash = "sha256-fUzRQAlLWczBmR5iA1Gk66mHjP40MJcMdgCtm2+u1SQ=";
+    })
+  ];
+
   strictDeps = true;
   enableParallelBuilding = true;
 

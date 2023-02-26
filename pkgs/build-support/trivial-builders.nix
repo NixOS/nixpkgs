@@ -593,45 +593,28 @@ rec {
     in linkFarm name (map mkEntryFromDrv drvs);
 
 
-  /*
-    Make a package that just contains a setup hook with the given contents.
-    This setup hook will be invoked by any package that includes this package
-    as a buildInput. Optionally takes a list of substitutions that should be
-    applied to the resulting script.
-
-    Examples:
-    # setup hook that depends on the hello package and runs ./myscript.sh
-    myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
-
-    # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
-    # bash interpreter.
-    myhellohookSub = makeSetupHook {
-                   name = "myscript-hook";
-                   deps = [ hello ];
-                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-                   meta.platforms = lib.platforms.linux;
-                 } ./myscript.sh;
-
-    # setup hook with a package test
-    myhellohookTested = makeSetupHook {
-                   name = "myscript-hook";
-                   deps = [ hello ];
-                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-                   meta.platforms = lib.platforms.linux;
-                   passthru.tests.greeting = callPackage ./test { };
-                 } ./myscript.sh;
-   */
+  # docs in doc/builders/special/makesetuphook.section.md
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
-    , deps ? []
-    , substitutions ? {}
-    , meta ? {}
-    , passthru ? {}
+    , deps ? [ ]
+      # hooks go in nativeBuildInput so these will be nativeBuildInput
+    , propagatedBuildInputs ? [ ]
+      # these will be buildInputs
+    , depsTargetTargetPropagated ? [ ]
+    , meta ? { }
+    , passthru ? { }
+    , substitutions ? { }
     }:
     script:
     runCommand name
       (substitutions // {
         inherit meta;
+        inherit depsTargetTargetPropagated;
+        propagatedBuildInputs =
+          # remove list conditionals before 23.11
+          lib.warnIf (!lib.isList deps) "'deps' argument to makeSetupHook must be a list. content of deps: ${toString deps}"
+            (lib.warnIf (deps != [ ]) "'deps' argument to makeSetupHook is deprecated and will be removed in release 23.11., Please use propagatedBuildInputs instead. content of deps: ${toString deps}"
+              propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ]));
         strictDeps = true;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
@@ -642,8 +625,7 @@ rec {
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
-      '' + lib.optionalString (deps != []) ''
-        printWords ${toString deps} > $out/nix-support/propagated-build-inputs
+        recordPropagatedDependencies
       '' + lib.optionalString (substitutions != {}) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');

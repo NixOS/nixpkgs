@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstall-test-programs=true"
-    "-Domap=enabled"
     "-Dcairo-tests=disabled"
-    "-Dvalgrind=${if withValgrind then "enabled" else "disabled"}"
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=enabled"
-    "-Detnaviv=enabled"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
   ];
 
   meta = with lib; {

@@ -61,6 +61,8 @@
 , x11Support ? true
 , libcanberra
 , xorg
+, mysofaSupport ? true
+, libmysofa
 }:
 
 let
@@ -68,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.65";
+    version = "0.3.66";
 
     outputs = [
       "out"
@@ -86,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-O5nu58QFlOPTaN4qNi50Wp9acxM6dWNy63BD+AnVl5w=";
+      sha256 = "sha256-qx4mgNRhMdha+8ap+FhVfxpsHE9TcTx29uwQIHLyMHA=";
     };
 
     patches = [
@@ -102,20 +104,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # backport a fix to actually install the new module
-      # FIXME: remove after 0.3.66
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
-        hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
-      })
-
-      # backport a fix for rust-cbindgen errors in downstream packages
-      # See https://github.com/NixOS/nixpkgs/pull/211872#issuecomment-1415981135 for details.
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/caf58ecffb4dc8e2bfa7898d0ed910cf0a82d65f.patch";
-        hash = "sha256-kCQNG0j3lwT01WNfGsdUmKvDHg8tvMfS2eunPyXBV1E=";
-      })
     ];
 
     strictDeps = true;
@@ -153,7 +141,8 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+    ++ lib.optional mysofaSupport libmysofa;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -188,7 +177,9 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+      "-Drlimits-install=false" # installs to /etc, we won't use this anyway
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -239,6 +230,7 @@ let
             "nix-support/jack.conf.json"
             "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-aes67.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];
           paths-lib = [

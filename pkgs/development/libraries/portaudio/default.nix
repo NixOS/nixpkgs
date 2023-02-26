@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , alsa-lib
+, libjack2
 , pkg-config
 , which
 , AudioUnit
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
+  buildInputs = [ libjack2 ] ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
