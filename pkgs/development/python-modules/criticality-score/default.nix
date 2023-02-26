@@ -18,6 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool for computing the Open Source Project Criticality Score.";
     homepage = "https://github.com/ossf/criticality_score";
+    changelog = "https://github.com/ossf/criticality_score/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ wamserma ];
   };
