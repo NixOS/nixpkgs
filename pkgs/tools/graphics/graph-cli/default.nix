@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchPypi
+, qt5
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -13,10 +14,18 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-0mxOc8RJ3GNgSbppLylIViqfYf6zwJ49pltnsyQUpSA=";
   };
 
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
   propagatedBuildInputs = with python3Packages; [
     numpy
     pandas
-    matplotlib
+    (matplotlib.override { enableQt = true; })
   ];
 
   # does not contain tests despite reference in Makefile
