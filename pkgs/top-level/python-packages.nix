@@ -7012,6 +7012,8 @@ self: super: with self; {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pdm-backend = callPackage ../development/python-modules/pdm-backend { };
+
   pdm-pep517 = callPackage ../development/python-modules/pdm-pep517 { };
 
   pdoc = callPackage ../development/python-modules/pdoc { };
