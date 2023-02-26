@@ -2,11 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , django
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "django-cleanup";
   version = "7.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
