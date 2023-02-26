@@ -16,12 +16,16 @@
 , pomegranate
 , pyfaidx
 , python
+, pythonOlder
 , R
 }:
 
 buildPythonPackage rec {
   pname = "cnvkit";
   version = "0.9.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "etal";
