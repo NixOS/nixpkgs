@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchNpmDeps, nodeHooks, nodejs }:
+{ lib, stdenv, fetchYarnDeps, nodeHooks, nodejs }:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -10,8 +10,8 @@
 , nativeBuildInputs ? [ ]
 , buildInputs ? [ ]
   # The output hash of the dependencies for this project.
-  # Can be calculated in advance with prefetch-npm-deps.
-, npmDepsHash ? ""
+  # Can be calculated in advance with prefetch-yarn-deps.
+, yarnDepsHash ? ""
   # Whether to make the cache writable prior to installing dependencies.
   # Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 , makeCacheWritable ? false
@@ -21,8 +21,6 @@
 , npmFlags ? [ ]
   # Flags to pass to `npm ci` and `npm prune`.
 , npmInstallFlags ? [ ]
-  # Flags to pass to `npm rebuild`.
-, npmRebuildFlags ? [ ]
   # Flags to pass to `npm run ${npmBuildScript}`.
 , npmBuildFlags ? [ ]
   # Flags to pass to `npm pack`.
@@ -31,18 +29,18 @@
 } @ args:
 
 let
-  npmDeps = fetchNpmDeps {
-    inherit src srcs sourceRoot prePatch patches postPatch;
-    name = "${name}-npm-deps";
-    hash = npmDepsHash;
+  yarnDeps = fetchYarnDeps {
+    name = "${name}-yarn-deps";
+    yarnLock = "${src}/yarn.lock";
+    hash = yarnDepsHash;
   };
 
-  inherit (nodeHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmInstallHook;
+  inherit (nodeHooks.override { inherit nodejs; }) yarnConfigHook npmBuildHook npmInstallHook;
 in
 stdenv.mkDerivation (args // {
-  inherit npmDeps npmBuildScript;
+  inherit yarnDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs ++ [ nodejs yarnConfigHook npmBuildHook npmInstallHook ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;
@@ -50,7 +48,7 @@ stdenv.mkDerivation (args // {
   # Stripping takes way too long with the amount of files required by a typical Node.js project.
   dontStrip = args.dontStrip or true;
 
-  passthru = { inherit npmDeps; } // (args.passthru or { });
+  passthru = { inherit yarnDeps; } // (args.passthru or { });
 
   meta = (args.meta or { }) // { platforms = args.meta.platforms or nodejs.meta.platforms; };
 })
