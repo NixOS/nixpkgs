@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "CNVkit";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    rev = "v${version}";
-    sha256 = "1q4l7jhr1k135an3n9aa9wsid5lk6fwxb0hcldrr6v6y76zi4gj1";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-mCQXo3abwC06x/g51UBshqUk3dpqEVNUvx+cJ/EdYGQ=";
   };
 
   postPatch = ''
