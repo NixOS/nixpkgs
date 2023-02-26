@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.4.0";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    hash = "sha256-SCzs2v0LIgx3vBYTavPqc7uwAQdWsdmkbDyHgIjOxrk=";
+    hash = "sha256-h3d0h+WCrrNlfPOlUx6Rj0aG6untD6MiunqvPj4yT+0=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
