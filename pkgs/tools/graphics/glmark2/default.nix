@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , pkg-config
 , makeWrapper
+, meson
+, ninja
 , libjpeg
 , libpng
 , xorg
@@ -10,11 +12,9 @@
 , libGL
 , libdrm
 , udev
-, python3
 , wayland
 , wayland-protocols
 , mesa
-, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,21 +28,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];
   buildInputs = [
     libjpeg
     libpng
     xorg.libxcb
     libX11
     libdrm
-    python3
     udev
     wayland
     wayland-protocols
     mesa
   ];
 
-  wafConfigureFlags = [ "--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2" ];
+  mesonFlags = [ "-Dflavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2" ];
 
   postInstall = ''
     for binary in $out/bin/glmark2*; do
