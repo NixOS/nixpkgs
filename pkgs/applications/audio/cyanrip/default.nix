@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cyanrip";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "cyanreg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17bi2xhjv3f3i870whkyqckvjlg32wqkspash87zi0jw7m7jm229";
+    sha256 = "sha256-gH/rWTRYX10Q2Y9oSaMu0bOy3SMbcSNmH3dkXHFAw90";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
