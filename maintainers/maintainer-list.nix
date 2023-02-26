@@ -4023,6 +4023,11 @@
     githubId = 1931963;
     name = "David Sferruzza";
   };
+  dsymbol = {
+    name = "dsymbol";
+    github = "dsymbol";
+    githubId = 88138099;
+  };
   dtzWill = {
     email = "w@wdtz.org";
     github = "dtzWill";
@@ -9674,6 +9679,12 @@
     name = "Mike Belsanti";
     github = "michaelBelsanti";
     githubId = 62124625;
+  };
+  michaelgrahamevans = {
+    email = "michaelgrahamevans@gmail.com";
+    name = "Michael Evans";
+    github = "michaelgrahamevans";
+    githubId = 5932424;
   };
   michaelpj = {
     email = "michaelpj@gmail.com";
