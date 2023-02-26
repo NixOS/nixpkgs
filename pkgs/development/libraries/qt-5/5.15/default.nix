@@ -211,7 +211,7 @@ let
 
       qmake = makeSetupHook {
         name = "qmake-hook";
-        deps = [ self.qtbase.dev ];
+        propagatedBuildInputs = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -220,7 +220,7 @@ let
 
       wrapQtAppsHook = makeSetupHook {
         name = "wrap-qt5-apps-hook";
-        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
+        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };

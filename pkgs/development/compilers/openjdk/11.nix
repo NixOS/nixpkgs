@@ -4,15 +4,15 @@
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   major = "11";
   minor = "0";
-  update = "17";
-  build = "8";
+  update = "18";
+  build = "10";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,7 +22,7 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "sha256-kvgLYqQZPqyuigVyzbDHc3TMff0clvzM8IdzYLYcxPU=";
+      sha256 = "sha256-QGOpMIrWwOtIcUY/CLbTRDvcVTG2xioZu46v+n+IIQ4=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

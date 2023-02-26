@@ -11,6 +11,7 @@
 , nlsSupport ? true
 , translateManpages ? true
 , po4a
+, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
   buildInputs = [ zlib libxcrypt ]
@@ -78,6 +79,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    installShellCompletion --bash bash-completion/*
+  '';
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";

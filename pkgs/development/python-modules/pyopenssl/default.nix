@@ -2,32 +2,36 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , openssl
 , cryptography
 , pytestCheckHook
 , pretend
+, sphinxHook
+, sphinx-rtd-theme
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "22.1.0";
-
-  outputs = [ "out" "dev" ];
+  version = "23.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    sha256 = "sha256-eoO3snLdWVIi1nL1zimqAw8fuDdjDvIp9i5y45XOiWg=";
+    hash = "sha256-wcxfhrys78hNrafTEXXK4bFRjV9g09C7WVpngiqGim8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-flaky-darwin-handshake-tests.patch";
-      url = "https://github.com/pyca/pyopenssl/commit/8a75898356806784caf742e8277ef03de830ce11.patch";
-      hash = "sha256-UVsZ8Nq1jUTZhOUAilRgdtqMYp4AN7qvWHqc6RleqRI=";
-    })
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    openssl
+    sphinxHook
+    sphinx-rtd-theme
   ];
 
   postPatch = ''
@@ -35,10 +39,17 @@ buildPythonPackage rec {
     sed "/cryptography/ s/,<[0-9]*//g" setup.py
   '';
 
-  nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography ];
+  propagatedBuildInputs = [
+    cryptography
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pretend flaky ];
+  nativeCheckInputs = [
+    flaky
+    pretend
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export LANG="en_US.UTF-8"
@@ -82,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
+    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

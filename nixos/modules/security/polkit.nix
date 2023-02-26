@@ -113,7 +113,9 @@ in
       group = "polkituser";
     };
 
-    users.groups.polkituser.gid = config.ids.gids.polkituser;
+    users.groups.polkituser = {
+      gid = mkIf (lib.versionAtLeast config.system.stateVersion "23.05") config.ids.gids.polkituser;
+    };
   };
 
 }

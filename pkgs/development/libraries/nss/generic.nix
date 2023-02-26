@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
         -Dhost_arch=${host} \
         -Duse_system_zlib=1 \
         --enable-libpkix \
+        -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
         ${lib.optionalString stdenv.isDarwin "--clang"} \
         ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}

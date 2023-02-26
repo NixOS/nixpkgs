@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "toml-adapt";
-  version = "0.2.10";
+  version = "0.2.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eVRiMwdYDS2YdQsINy8lBzV8lhcKgq+Vwlc02C5ar0Q=";
+    sha256 = "sha256-7gQZCjsCtzvmV5NPZNAW4d34TkKemH9FgeN0Iwydwgc=";
   };
 
   nativeBuildInputs = [

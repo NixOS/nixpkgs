@@ -31,7 +31,7 @@ in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
@@ -41,7 +41,7 @@ in {
   cargoCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-check-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit rustTargetPlatformSpec;
       };
@@ -50,7 +50,7 @@ in {
   cargoInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-install-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         inherit shortTarget;
       };
@@ -59,7 +59,7 @@ in {
   cargoNextestHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-nextest-hook.sh";
-      deps = [ cargo cargo-nextest ];
+      propagatedBuildInputs = [ cargo cargo-nextest ];
       substitutions = {
         inherit rustTargetPlatformSpec;
       };
@@ -68,7 +68,7 @@ in {
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         defaultConfig = ../fetchcargo-default-config.toml;
 
@@ -117,7 +117,7 @@ in {
   maturinBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
-      deps = [ cargo maturin rustc ];
+      propagatedBuildInputs = [ cargo maturin rustc ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;

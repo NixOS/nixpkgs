@@ -36,7 +36,9 @@ let
     then builtins.readFile lockFile
     else args.lockFileContents;
 
-  packages = (builtins.fromTOML lockFileContents).package;
+  parsedLockFile = builtins.fromTOML lockFileContents;
+
+  packages = parsedLockFile.package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
@@ -79,17 +81,16 @@ let
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
   fetchCrate = pkg:
-    assert lib.assertMsg (pkg ? checksum) ''
+    let
+      checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
+    in
+    assert lib.assertMsg (checksum != null) ''
       Package ${pkg.name} does not have a checksum.
-      Please note that the Cargo.lock format where checksums used to be listed
-      under [metadata] is not supported.
-      If that is the case, running `cargo update` with a recent toolchain will
-      automatically update the format along with the crate's depenendencies.
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
       url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-      sha256 = pkg.checksum;
+      sha256 = checksum;
     };
 
   # Fetch and unpack a crate.
@@ -105,7 +106,7 @@ let
         tar xf "${crateTarball}" -C $out --strip-components=1
 
         # Cargo is happy with largely empty metadata.
-        printf '{"files":{},"package":"${pkg.checksum}"}' > "$out/.cargo-checksum.json"
+        printf '{"files":{},"package":"${crateTarball.outputHash}"}' > "$out/.cargo-checksum.json"
       ''
       else if gitParts != null then
       let
@@ -183,10 +184,15 @@ let
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
-    inherit lockFileContents;
-    passAsFile = [ "lockFileContents" ];
-  }) ''
+  vendorDir = runCommand "cargo-vendor-dir"
+    (if lockFile == null then {
+      inherit lockFileContents;
+      passAsFile = [ "lockFileContents" ];
+    } else {
+      passthru = {
+        inherit lockFile;
+      };
+    }) ''
     mkdir -p $out/.cargo
 
     ${
