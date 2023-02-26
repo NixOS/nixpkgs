@@ -88,7 +88,7 @@
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.3.5";
+  version = "22.3.6";
   branch  = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
@@ -120,7 +120,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9";
+    hash = "sha256-TsjsZdvbHulETbpylwiQEooZVDpYzwWTG9b1TxJOEX8=";
   };
 
   # TODO:
