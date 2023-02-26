@@ -8019,6 +8019,13 @@
     githubId = 15692230;
     name = "Muhammad Herdiansyah";
   };
+  konradmalik = {
+    email = "konrad.malik@gmail.com";
+    matrix = "@konradmalik:matrix.org";
+    name = "Konrad Malik";
+    github = "konradmalik";
+    githubId = 13033392;
+  };
   koozz = {
     email = "koozz@linux.com";
     github = "koozz";
