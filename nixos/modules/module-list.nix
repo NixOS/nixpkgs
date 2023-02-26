@@ -361,6 +361,7 @@
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme
+  ./security/agnos.nix
   ./security/apparmor.nix
   ./security/audit.nix
   ./security/auditd.nix
