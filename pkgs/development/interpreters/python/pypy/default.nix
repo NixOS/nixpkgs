@@ -12,7 +12,7 @@
 , pkgsTargetTarget
 , sourceVersion
 , pythonVersion
-, sha256
+, hash
 , passthruFun
 , pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
@@ -46,7 +46,7 @@ in with passthru; stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ pkg-config ];
