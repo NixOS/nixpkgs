@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "neuron";
-  version = "8.2.1";
+  version = "8.2.2";
 
   # format is for pythonModule conversion
   format = "other";
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/neuronsimulator/nrn/releases/download/${version}/full-src-package-${version}.tar.gz";
-    sha256 = "0kb0dn7nmivv3zflzkbj2fj3184zwp2crkxp0mdxkwm4kpnxqz0v";
+    sha256 = "sha256-orGeBxu3pu4AyAW5P1EGJv8G0dOUZcSOjpUaloqicZU=";
   };
 
   meta = with lib; {
