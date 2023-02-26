@@ -13,6 +13,7 @@ postFixupHooks+=(_multioutPropagateDev)
 # specific to this function's use case, which is setting up the output variables.
 _assignFirst() {
     local varName="$1"
+    local _var
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
     for _var in "$@"; do
