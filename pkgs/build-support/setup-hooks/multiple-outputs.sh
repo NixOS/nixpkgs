@@ -20,7 +20,7 @@ _assignFirst() {
         if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
     done
     echo
-    echo "error: _assignFirst: could not find a non-empty variable to assign to ${varName}."
+    echo "error: _assignFirst: could not find a non-empty variable whose name to assign to ${varName}."
     echo "       The following variables were all unset or empty:"
     echo "           $*"
     if [ -z "${out:-}" ]; then
