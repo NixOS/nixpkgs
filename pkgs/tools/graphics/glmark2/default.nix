@@ -5,6 +5,7 @@
 , makeWrapper
 , meson
 , ninja
+, wayland-scanner
 , libjpeg
 , libpng
 , xorg
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper meson ninja wayland-scanner ];
   buildInputs = [
     libjpeg
     libpng
