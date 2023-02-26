@@ -1,17 +1,20 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
 , django
 , funcy
 , redis
-, six
 , pytest-django
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
   version = "6.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +25,6 @@ buildPythonPackage rec {
     django
     funcy
     redis
-    six
   ];
 
   nativeCheckInputs = [
