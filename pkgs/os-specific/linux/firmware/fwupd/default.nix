@@ -79,12 +79,19 @@ let
   # Experimental
   haveFlashrom = isx86 && enableFlashrom;
 
-  runPythonCommand = name: buildCommandPython: runCommand name {
-    nativeBuildInputs = [ python3 ];
-      inherit buildCommandPython;
-  } ''
-    exec python3 -c "$buildCommandPython"
-  '';
+  runPythonCommand =
+    name:
+    buildCommandPython:
+
+    runCommand
+      name
+      {
+        nativeBuildInputs = [ python3 ];
+        inherit buildCommandPython;
+      }
+      ''
+        exec python3 -c "$buildCommandPython"
+      '';
 
   test-firmware =
     let
@@ -103,16 +110,16 @@ let
         };
       };
     in
-      src // {
-        meta = src.meta // {
-          # For update script
-          position =
-            let
-              pos = builtins.unsafeGetAttrPos "updateScript" test-firmware;
-            in
-            pos.file + ":" + toString pos.line;
-        };
+    src // {
+      meta = src.meta // {
+        # For update script
+        position =
+          let
+            pos = builtins.unsafeGetAttrPos "updateScript" test-firmware;
+          in
+          pos.file + ":" + toString pos.line;
       };
+    };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
@@ -241,7 +248,8 @@ stdenv.mkDerivation (finalAttrs: {
       fontsConf = makeFontsConf {
         fontDirectories = [ freefont_ttf ];
       };
-    in fontsConf;
+    in
+    fontsConf;
 
   # error: “PolicyKit files are missing”
   # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
@@ -294,19 +302,21 @@ stdenv.mkDerivation (finalAttrs: {
     cp --recursive --dereference "${test-firmware}/installed-tests/tests" "$installedTests/libexec/installed-tests/fwupd"
   '';
 
-  preFixup = let
-    binPath = [
-      efibootmgr
-      bubblewrap
-      tpm2-tools
-    ];
-  in ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      # See programs reached with fu_common_find_program_in_path in source
-      --prefix PATH : "${lib.makeBinPath binPath}"
-    )
-  '';
+  preFixup =
+    let
+      binPath = [
+        efibootmgr
+        bubblewrap
+        tpm2-tools
+      ];
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+        # See programs reached with fu_common_find_program_in_path in source
+        --prefix PATH : "${lib.makeBinPath binPath}"
+      )
+    '';
 
   postFixup = ''
     # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
@@ -359,32 +369,34 @@ stdenv.mkDerivation (finalAttrs: {
     # For updating.
     inherit test-firmware;
 
-    tests = let
-      listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
-    in {
-      installedTests = nixosTests.installed-tests.fwupd;
+    tests =
+      let
+        listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
+      in
+      {
+        installedTests = nixosTests.installed-tests.fwupd;
 
-      passthruMatches = runPythonCommand "fwupd-test-passthru-matches" ''
-        import itertools
-        import configparser
-        import os
-        import pathlib
+        passthruMatches = runPythonCommand "fwupd-test-passthru-matches" ''
+          import itertools
+          import configparser
+          import os
+          import pathlib
 
-        etc = '${finalAttrs.finalPackage}/etc'
-        package_etc = set(itertools.chain.from_iterable([[os.path.relpath(os.path.join(prefix, file), etc) for file in files] for (prefix, dirs, files) in os.walk(etc)]))
-        passthru_etc = set(${listToPy finalAttrs.passthru.filesInstalledToEtc})
-        assert len(package_etc - passthru_etc) == 0, f'fwupd package contains the following paths in /etc that are not listed in passthru.filesInstalledToEtc: {package_etc - passthru_etc}'
-        assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
+          etc = '${finalAttrs.finalPackage}/etc'
+          package_etc = set(itertools.chain.from_iterable([[os.path.relpath(os.path.join(prefix, file), etc) for file in files] for (prefix, dirs, files) in os.walk(etc)]))
+          passthru_etc = set(${listToPy finalAttrs.passthru.filesInstalledToEtc})
+          assert len(package_etc - passthru_etc) == 0, f'fwupd package contains the following paths in /etc that are not listed in passthru.filesInstalledToEtc: {package_etc - passthru_etc}'
+          assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
 
-        config = configparser.RawConfigParser()
-        config.read('${finalAttrs.finalPackage}/etc/fwupd/daemon.conf')
-        package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
-        passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
-        assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
+          config = configparser.RawConfigParser()
+          config.read('${finalAttrs.finalPackage}/etc/fwupd/daemon.conf')
+          package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
+          passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
+          assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
 
-        pathlib.Path(os.getenv('out')).touch()
-      '';
-    };
+          pathlib.Path(os.getenv('out')).touch()
+        '';
+      };
   };
 
   meta = with lib; {
