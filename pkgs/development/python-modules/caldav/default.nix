@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.1.3";
+  version = "1.2.0";
 
   format = "setuptools";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "python-caldav";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZilsCYr1M2WKSz/g5JV41JVsuHopPerxOevoG7FrEjQ=";
+    hash = "sha256-ibizwN4pxqzmVozVjrAPNSrmM1+8+/Qu6UnfRerrwUk=";
   };
 
   propagatedBuildInputs = [
