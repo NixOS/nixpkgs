@@ -12022,6 +12022,8 @@ with pkgs;
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
 
+  sing-geoip = callPackage ../data/misc/sing-geoip { };
+
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
   skribilo = callPackage ../tools/typesetting/skribilo {
