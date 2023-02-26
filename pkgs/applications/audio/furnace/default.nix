@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre3";
+  version = "0.6pre4-hotfix";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-bHVeTw69k6LLcrfkmGxvjlFfR/hWiCfm/P3utknid1o=";
+    sha256 = "sha256-lJtV/0GnWN5mSjv2LaPEMnkuThaNeijBMjLGFPOJX4k=";
   };
 
   nativeBuildInputs = [
