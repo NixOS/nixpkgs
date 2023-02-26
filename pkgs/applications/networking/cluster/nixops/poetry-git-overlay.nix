@@ -85,8 +85,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-libvirtd.git";
-        rev = "bc3cf1c5c774a80e05991ca040baa2b23e3ecd51";
-        sha256 = "06bcxchjgmgfvhg9dzlcdnr4ak0h1rdpfpgbix3z2via2gad8bvj";
+        rev = "be1ea32e02d8abb3dbe1b09b7c5a7419a7412991";
+        sha256 = "1mklm3lmicvhs0vcib3ss21an45wk24m1mkcwy1zvbpbmvhdz2m4";
       };
     }
   );
