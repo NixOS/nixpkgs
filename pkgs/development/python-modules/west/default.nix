@@ -56,6 +56,7 @@ buildPythonPackage rec {
       (https://docs.zephyrproject.org/latest/guides/west/repo-tool.html).
     '';
     homepage = "https://github.com/zephyrproject-rtos/west";
+    changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ siriobalmelli ];
   };
