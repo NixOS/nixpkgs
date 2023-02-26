@@ -28,7 +28,6 @@
 , nixosTests
 , runCommand
 , vulkan-loader
-, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -65,7 +64,6 @@ rustPlatform.buildRustPackage rec {
     ncurses # tic for terminfo
     pkg-config
     python3
-    makeWrapper
   ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
@@ -106,13 +104,13 @@ rustPlatform.buildRustPackage rec {
       --zsh assets/shell-completion/zsh
 
     install -Dm644 assets/wezterm-nautilus.py -t $out/share/nautilus-python/extensions
-  '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/wezterm \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
+    patchelf \
+      --add-needed "${libGL}/lib/libEGL.so.1" \
+      --add-needed "${vulkan-loader}/lib/libvulkan.so.1" \
+      $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"
