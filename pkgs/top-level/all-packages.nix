@@ -1639,6 +1639,8 @@ with pkgs;
 
   termusic = callPackage ../applications/audio/termusic { };
 
+  testkube = callPackage ../development/tools/testkube { };
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   tfplugindocs = callPackage ../development/tools/tfplugindocs { };
