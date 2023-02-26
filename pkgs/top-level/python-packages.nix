@@ -3908,8 +3908,6 @@ self: super: with self; {
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
 
-  google-apitools = callPackage ../development/python-modules/google-apitools { };
-
   googleapis-common-protos = callPackage ../development/python-modules/googleapis-common-protos { };
 
   google-auth = callPackage ../development/python-modules/google-auth { };
