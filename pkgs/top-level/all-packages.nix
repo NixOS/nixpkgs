@@ -5508,6 +5508,8 @@ with pkgs;
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
 
+  shellclear = callPackage ../tools/security/shellclear { };
+
   shellnoob = callPackage ../tools/security/shellnoob { };
 
   sheesy-cli = callPackage ../tools/security/sheesy-cli {
