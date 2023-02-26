@@ -8,6 +8,7 @@
 , glibc
 , glibcLocales
 , lib
+, nixosTests
 , nodejs-16_x
 , stdenv
 , which
@@ -250,7 +251,10 @@ buildDotnetModule rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests.smoke-test = nixosTests.github-runner;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/actions/runner/releases/tag/v${version}";
