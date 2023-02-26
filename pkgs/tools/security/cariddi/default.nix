@@ -10,8 +10,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pO1FXlkaQveDIfMSWiLB9QvVxmFJixc/HHcEuhg5KmY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pO1FXlkaQveDIfMSWiLB9QvVxmFJixc/HHcEuhg5KmY=";
   };
 
   vendorHash = "sha256-zDKByBISZNRb4sMCrHKGlp4EBtifBfj92tygcaBH/Fc=";
@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Crawler for URLs and endpoints";
     homepage = "https://github.com/edoardottt/cariddi";
+    changelog = "https://github.com/edoardottt/cariddi/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
