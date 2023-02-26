@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libjpeg
     libpng
-    xorg.libxcb
     libX11
     libdrm
     udev
