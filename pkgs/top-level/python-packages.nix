@@ -1449,6 +1449,8 @@ self: super: with self; {
 
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
+  browserexport = callPackage ../development/python-modules/browserexport { };
+
   brunt = callPackage ../development/python-modules/brunt { };
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
@@ -1526,6 +1528,8 @@ self: super: with self; {
   cachelib = callPackage ../development/python-modules/cachelib { };
 
   cachetools = callPackage ../development/python-modules/cachetools { };
+
+  cachew = callPackage ../development/python-modules/cachew { };
 
   cachey = callPackage ../development/python-modules/cachey { };
 
@@ -3904,6 +3908,8 @@ self: super: with self; {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
+  goodrexport = callPackage ../development/python-modules/goodrexport { };
+
   goodwe = callPackage ../development/python-modules/goodwe { };
 
   google-api-core = callPackage ../development/python-modules/google-api-core { };
@@ -4029,6 +4035,8 @@ self: super: with self; {
   google-reauth = callPackage ../development/python-modules/google-reauth { };
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
+
+  google-takeout-parser = callPackage ../development/python-modules/google-takeout-parser { };
 
   googletrans = callPackage ../development/python-modules/googletrans { };
 
@@ -4399,6 +4407,8 @@ self: super: with self; {
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
+
+  hpi = callPackage ../development/python-modules/HPI { };
 
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
@@ -6766,6 +6776,8 @@ self: super: with self; {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
+  orgparse = callPackage ../development/python-modules/orgparse { };
+
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
@@ -6946,6 +6958,8 @@ self: super: with self; {
 
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
+  patchy = callPackage ../development/python-modules/patchy { };
+
   path = callPackage ../development/python-modules/path { };
 
   path-and-address = callPackage ../development/python-modules/path-and-address { };
@@ -6991,6 +7005,8 @@ self: super: with self; {
   pcpp = callPackage ../development/python-modules/pcpp { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
+
+  pdfannots = callPackage ../development/python-modules/pdfannots { };
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
@@ -7173,6 +7189,8 @@ self: super: with self; {
   };
 
   pims = callPackage ../development/python-modules/pims { };
+
+  pinbexport = callPackage ../development/python-modules/pinbexport { };
 
   pinboard = callPackage ../development/python-modules/pinboard { };
 
@@ -7593,6 +7611,8 @@ self: super: with self; {
   prometheus-flask-exporter = callPackage ../development/python-modules/prometheus-flask-exporter { };
 
   promise = callPackage ../development/python-modules/promise { };
+
+  promnesia = callPackage ../development/python-modules/promnesia { };
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
 
@@ -9161,6 +9181,8 @@ self: super: with self; {
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
   pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
+
+  pytest-reraise = callPackage ../development/python-modules/pytest-reraise { };
 
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
@@ -11036,9 +11058,13 @@ self: super: with self; {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 { };
+
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
+
+  sqlite-backup = callPackage ../development/python-modules/sqlite_backup { };
 
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
 
