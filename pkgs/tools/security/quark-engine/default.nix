@@ -30,11 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "prompt-toolkit==3.0.19" "prompt-toolkit>=3.0.19"
-  '';
-
   # Project has no tests
   doCheck = false;
 
