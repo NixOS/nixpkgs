@@ -15,6 +15,7 @@
 , gobject-introspection
 , argyllcms
 , meson
+, mesonEmulatorHook
 , ninja
 , vala
 , libgudev
@@ -75,6 +76,8 @@ stdenv.mkDerivation rec {
     shared-mime-info
     vala
     wrapGAppsNoGuiHook
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
