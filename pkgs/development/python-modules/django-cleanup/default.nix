@@ -3,10 +3,10 @@
 
 buildPythonPackage rec {
   pname = "django-cleanup";
-  version = "6.0.0";
+  version = "7.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a";
+    sha256 = "sha256-KKlp+InGYeug2UOJeGk5gPCUgsl5g70I7lKVXa6NceQ=";
   };
 
   nativeCheckInputs = [ django ];
