@@ -36,6 +36,9 @@ let
   inherit (lib.types)
     mkOptionType
     ;
+  inherit (lib.lists)
+    last
+    ;
   prioritySuggestion = ''
    Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
   '';
@@ -107,17 +110,28 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     The package is specified as a list of strings representing its attribute path in nixpkgs.
+     Type: mkPackageOption :: pkgs -> (string|[string]) ->
+      { default? :: [string], example? :: null|string|[string], extraDescription? :: string } ->
+      option
 
-     Because of this, you need to pass nixpkgs itself as the first argument.
+     The package is specified in the third argument under `default` as a list of strings
+     representing its attribute path in nixpkgs (or another package set).
+     Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
 
-     The second argument is the name of the option, used in the description "The <name> package to use.".
+     The second argument may be either a string or a list of strings.
+     It provides the display name of the package in the description of the generated option
+     (using only the last element if the passed value is a list)
+     and serves as the fallback value for the `default` argument.
 
-     You can also pass an example value, either a literal string or a package's attribute path.
+     To include extra information in the description, pass `extraDescription` to
+     append arbitrary text to the generated description.
+     You can also pass an `example` value, either a literal string or an attribute path.
 
-     You can omit the default path if the name of the option is also attribute path in nixpkgs.
+     The default argument can be omitted if the provided name is
+     an attribute of pkgs (if name is a string) or a
+     valid attribute path in pkgs (if name is a list).
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string]; example :: null | string | [string]; } -> option
+     If you wish to explicitly provide no default, pass `null` as `default`.
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -129,27 +143,46 @@ rec {
          example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
+
+     Example:
+       mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+         extraDescription = "This is an example and doesn't actually do anything.";
+       }
+       => { _type = "option"; default = «derivation /nix/store/gvqgsnc4fif9whvwd9ppa568yxbkmvk8-python3.9-pytorch-1.10.2.drv»; defaultText = { ... }; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = { ... }; }
+
   */
   mkPackageOption =
-    # Package set (a specific version of nixpkgs)
+    # Package set (a specific version of nixpkgs or a subset)
     pkgs:
       # Name for the package, shown in option description
       name:
-      { default ? [ name ], example ? null }:
-      let default' = if !isList default then [ default ] else default;
+      {
+        # The attribute path where the default package is located
+        default ? name,
+        # A string or an attribute path to use as an example
+        example ? null,
+        # Additional text to include in the option description
+        extraDescription ? "",
+      }:
+      let
+        name' = if isList name then last name else name;
+        default' = if isList default then default else [ default ];
+        defaultPath = concatStringsSep "." default';
+        defaultValue = attrByPath default'
+          (throw "${defaultPath} cannot be found in pkgs") pkgs;
       in mkOption {
+        defaultText = literalExpression ("pkgs." + defaultPath);
         type = lib.types.package;
-        description = "The ${name} package to use.";
-        default = attrByPath default'
-          (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
-        defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+        ${if default != null then "default" else null} = defaultValue;
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
 
   /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
-  mkPackageOptionMD = args: name: extra:
-    let option = mkPackageOption args name extra;
+  mkPackageOptionMD = pkgs: name: extra:
+    let option = mkPackageOption pkgs name extra;
     in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.

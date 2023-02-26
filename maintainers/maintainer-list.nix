@@ -6903,6 +6903,12 @@
     githubId = 10786794;
     name = "Markus Hihn";
   };
+  jessemoore = {
+    email = "jesse@jessemoore.dev";
+    github = "jesseDMoore1994";
+    githubId = 30251156;
+    name = "Jesse Moore";
+  };
   jethro = {
     email = "jethrokuan95@gmail.com";
     github = "jethrokuan";
