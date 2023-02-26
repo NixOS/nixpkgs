@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ audiofile libtiff ];
 
