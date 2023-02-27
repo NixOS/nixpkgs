@@ -120,6 +120,10 @@ with pkgs;
 
   ### Nixpkgs maintainer tools
 
+  nixpkgsUpdater = callPackage ../nixpkgs-updater/default.nix { };
+
+  srcFromJSON = callPackage ../nixpkgs-updater/src-from-json.nix { };
+
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
