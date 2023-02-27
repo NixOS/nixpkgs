@@ -642,6 +642,9 @@ let
       XEN_SAVE_RESTORE            = option yes;
       XEN_SCRUB_PAGES             = whenOlder "4.19" yes;
       XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+
+      # Enable device detection on virtio-mmio hypervisors
+      VIRTIO_MMIO_CMDLINE_DEVICES = yes;
     };
 
     media = {
