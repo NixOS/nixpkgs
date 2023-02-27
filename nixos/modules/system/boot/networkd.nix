@@ -1029,6 +1029,65 @@ let
           "MUDURL"
         ])
       ];
+
+      sectionCAN = checkUnitConfig "CAN" [
+        (assertOnlyFields [
+          "BitRate"
+          "SamplePoint"
+          "TimeQuantaNSec"
+          "PropagationSegment"
+          "PhaseBufferSegment1"
+          "PhaseBufferSegment2"
+          "SyncJumpWidth"
+          "DataBitRate"
+          "DataSamplePoint"
+          "DataTimeQuantaNSec"
+          "DataPropagationSegment"
+          "DataPhaseBufferSegment1"
+          "DataPhaseBufferSegment2"
+          "DataSyncJumpWidth"
+          "FDMode"
+          "FDNonISO"
+          "RestartSec"
+          "Termination"
+          "TripleSampling"
+          "BusErrorReporting"
+          "ListenOnly"
+          "Loopback"
+          "OneShot"
+          "PresumeAck"
+          "ClassicDataLengthCode"
+        ])
+        (assertInt "TimeQuantaNSec" )
+        (assertRange "TimeQuantaNSec" 0 4294967295 )
+        (assertInt "PropagationSegment" )
+        (assertRange "PropagationSegment" 0 4294967295 )
+        (assertInt "PhaseBufferSegment1" )
+        (assertRange "PhaseBufferSegment1" 0 4294967295 )
+        (assertInt "PhaseBufferSegment2" )
+        (assertRange "PhaseBufferSegment2" 0 4294967295 )
+        (assertInt "SyncJumpWidth" )
+        (assertRange "SyncJumpWidth" 0 4294967295 )
+        (assertInt "DataTimeQuantaNSec" )
+        (assertRange "DataTimeQuantaNSec" 0 4294967295 )
+        (assertInt "DataPropagationSegment" )
+        (assertRange "DataPropagationSegment" 0 4294967295 )
+        (assertInt "DataPhaseBufferSegment1" )
+        (assertRange "DataPhaseBufferSegment1" 0 4294967295 )
+        (assertInt "DataPhaseBufferSegment2" )
+        (assertRange "DataPhaseBufferSegment2" 0 4294967295 )
+        (assertInt "DataSyncJumpWidth" )
+        (assertRange "DataSyncJumpWidth" 0 4294967295 )
+        (assertValueOneOf "FDMode" boolValues)
+        (assertValueOneOf "FDNonISO" boolValues)
+        (assertValueOneOf "TripleSampling" boolValues)
+        (assertValueOneOf "BusErrorReporting" boolValues)
+        (assertValueOneOf "ListenOnly" boolValues)
+        (assertValueOneOf "Loopback" boolValues)
+        (assertValueOneOf "OneShot" boolValues)
+        (assertValueOneOf "PresumeAck" boolValues)
+        (assertValueOneOf "ClassicDataLengthCode" boolValues)
+      ];
     };
   };
 
@@ -1675,6 +1734,17 @@ let
       '';
     };
 
+    canConfig = mkOption {
+      default = {};
+      example = { };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionCAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[CAN]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2097,6 +2167,10 @@ let
         + optionalString (def.lldpConfig != { }) ''
           [LLDP]
           ${attrsToSection def.lldpConfig}
+        ''
+        + optionalString (def.canConfig != { }) ''
+          [CAN]
+          ${attrsToSection def.canConfig}
         ''
         + def.extraConfig;
     };
