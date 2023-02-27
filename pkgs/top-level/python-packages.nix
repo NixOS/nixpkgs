@@ -13786,6 +13786,8 @@ self: super: with self; {
 
   sslib = callPackage ../development/python-modules/sslib { };
 
+  stable-ts = callPackage ../development/python-modules/stable-ts { };
+
   stack-data = callPackage ../development/python-modules/stack-data { };
 
   stanio = callPackage ../development/python-modules/stanio { };
