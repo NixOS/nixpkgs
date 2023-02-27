@@ -24773,6 +24773,8 @@ with pkgs;
 
   exim = callPackage ../servers/mail/exim { };
 
+  fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
+
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
   fedigroups = callPackage ../servers/fedigroups {
