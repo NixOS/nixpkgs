@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.7.2";
+  version = "4.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
-    hash = "sha256-5e05XkyxvOGLaEwKljYFppHQ99BxDQ7wPkViRlRo1VI=";
+    hash = "sha256-awgX862p1jU/LWdg7QMC9by0OJMkzGwnC0yrc93I/c0=";
   };
 
   nativeBuildInputs = [
