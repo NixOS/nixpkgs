@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.0.12";
+  version = "4.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MPjzFljxjNsV62JsjLOgdSDw2MIZMib7yzMmrhL7okY=";
+    hash = "sha256-yCAMyqlEDC6dqgvV4L12inGdtaLILqjXgvDj+gmjxeI=";
   };
 
   propagatedBuildInputs = [
