@@ -7147,6 +7147,8 @@ self: super: with self; {
 
   periodictable = callPackage ../development/python-modules/periodictable { };
 
+  permissionedforms = callPackage ../development/python-modules/permissionedforms { };
+
   persim = callPackage ../development/python-modules/persim { };
 
   persistent = callPackage ../development/python-modules/persistent { };
