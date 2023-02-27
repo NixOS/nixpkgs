@@ -8,6 +8,7 @@
 , fetchurl
 , flex
 , gnutls
+, installShellFiles
 , libuuid
 , meson-tools
 , ncurses
@@ -66,6 +67,7 @@ let
       bison
       dtc
       flex
+      installShellFiles
       openssl
       (buildPackages.python3.withPackages (p: [
         p.libfdt
@@ -136,6 +138,12 @@ in {
     dontStrip = false;
     extraMeta.platforms = lib.platforms.linux;
     extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+
+    outputs = [ "out" "man" ];
+
+    postInstall = ''
+      installManPage doc/*.1
+    '';
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
