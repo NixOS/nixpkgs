@@ -1270,6 +1270,13 @@ let
         ])
         (assertValueOneOf "ECN" boolValues)
       ];
+
+      sectionDeficitRoundRobinScheduler = checkUnitConfig "DeficitRoundRobinScheduler" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+      ];
     };
   };
 
@@ -2081,6 +2088,17 @@ let
       '';
     };
 
+    deficitRoundRobinSchedulerConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDeficitRoundRobinScheduler;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[DeficitRoundRobinScheduler]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2563,6 +2581,10 @@ let
         + optionalString (def.controlledDelayConfig != { }) ''
           [ControlledDelay]
           ${attrsToSection def.controlledDelayConfig}
+        ''
+        + optionalString (def.deficitRoundRobinSchedulerConfig != { }) ''
+          [DeficitRoundRobinScheduler]
+          ${attrsToSection def.deficitRoundRobinSchedulerConfig}
         ''
         + def.extraConfig;
     };
