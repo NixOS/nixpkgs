@@ -1333,6 +1333,26 @@ let
         (assertInt "Flows")
         (assertValueOneOf "ECN" boolValues)
       ];
+
+      sectionFairQueueing = checkUnitConfig "FairQueueing" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+          "FlowLimit"
+          "QuantumBytes"
+          "InitualQuantumBytes"
+          "MaximumRate"
+          "Buckets"
+          "OrphanMask"
+          "Pacing"
+          "CEThresholdSec"
+        ])
+        (assertInt "PacketLimit")
+        (assertInt "FlowLimit")
+        (assertInt "OrphanMask")
+        (assertValueOneOf "Pacing" boolValues)
+      ];
     };
   };
 
@@ -2199,6 +2219,17 @@ let
       '';
     };
 
+    fairQueueingConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; FlowLimit = 5; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFairQueueing;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[FairQueueing]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2701,6 +2732,10 @@ let
         + optionalString (def.fairQueueingControlledDelayConfig != { }) ''
           [FairQueueingControlledDelay]
           ${attrsToSection def.fairQueueingControlledDelayConfig}
+        ''
+        + optionalString (def.fairQueueingConfig != { }) ''
+          [FairQueueing]
+          ${attrsToSection def.fairQueueingConfig}
         ''
         + def.extraConfig;
     };
