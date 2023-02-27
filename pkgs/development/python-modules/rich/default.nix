@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.3.0";
+  version = "13.3.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-0bE3I3xuPIkBjKcHvXJhdPa4Kg+B7ByKUPJohgh9tHk=";
+    hash = "sha256-1soeb3aD4wB4stILvfOga/YZtyH6jd0XvnxkLmbW4G0=";
   };
 
   nativeBuildInputs = [ poetry-core ];
