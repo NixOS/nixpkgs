@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-P/cniy0xYaDoUbKdvV7KCubCpmOAhYp3cg2VBRA+a6I=";
   };
 
@@ -73,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CLI tool for advanced Databricks jobs management";
     homepage = "https://github.com/databrickslabs/dbx";
+    changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = licenses.databricks-dbx;
     maintainers = with maintainers; [ GuillaumeDesforges ];
   };
