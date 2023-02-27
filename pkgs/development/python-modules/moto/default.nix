@@ -4,6 +4,9 @@
 , fetchPypi
 , pythonOlder
 
+# build
+, setuptools
+
 # runtime
 , aws-xray-sdk
 , boto3
@@ -18,6 +21,7 @@
 , jinja2
 , jsondiff
 , openapi-spec-validator
+, pyparsing
 , python-dateutil
 , python-jose
 , pyyaml
@@ -36,15 +40,19 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.0.12";
-  format = "setuptools";
+  version = "4.1.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MPjzFljxjNsV62JsjLOgdSDw2MIZMib7yzMmrhL7okY=";
+    hash = "sha256-yCAMyqlEDC6dqgvV4L12inGdtaLILqjXgvDj+gmjxeI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -60,6 +68,7 @@ buildPythonPackage rec {
     jinja2
     jsondiff
     openapi-spec-validator
+    pyparsing
     python-dateutil
     python-jose
     pyyaml
