@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.7.1";
+  version = "5.7.3";
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OBCgEwRT7QMZcFIdIJibilkvPC5zKDqCgK40rh91s/g=";
+    sha256 = "sha256-SwIfyiTTp0e/TmJmlAM9eS1ZRwWCnl41sU7jNp+fZHc=";
   };
 
   nativeBuildInputs = [
