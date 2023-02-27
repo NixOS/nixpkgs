@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ux6x1R0wlzaMGHw+8InAKI7B/oqhxp+zJMaKodAt9ME=";
+    hash = "sha256-N0ZF82UJ0NyriVy6W0fa8Fhvd7/js2yXxgfbfaW+ATk=";
   };
 
   nativeBuildInputs = [
