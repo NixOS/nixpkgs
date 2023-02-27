@@ -2877,6 +2877,8 @@ self: super: with self; {
 
   dpkt = callPackage ../development/python-modules/dpkt { };
 
+  draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
+
   dragonfly = callPackage ../development/python-modules/dragonfly { };
 
   drawille = callPackage ../development/python-modules/drawille { };
