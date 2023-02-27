@@ -1,40 +1,40 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy3k
-, decorator
-, http-parser
-, python-magic
-, urllib3
-, pytestCheckHook
-, pytest-mock
 , aiohttp
+, asgiref
+, buildPythonPackage
+, decorator
 , fastapi
+, fetchPypi
 , gevent
+, httptools
 , httpx
+, isPy3k
+, pook
+, pytest-mock
+, pytestCheckHook
+, python-magic
+, pythonOlder
 , redis
 , requests
 , sure
-, pook
-, pythonOlder
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.10.9";
+  version = "3.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fAVw5WvpJOITQWqA8Y6Xi7QbaunZ1WGXxAuUMXbh+Aw=";
+    hash = "sha256-OIdLP3hHnPZ9MqrHt6G5t2SSO342+jTACgzxM6RjVYM=";
   };
 
   propagatedBuildInputs = [
     decorator
-    http-parser
+    httptools
     python-magic
     urllib3
   ];
@@ -46,26 +46,24 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
     aiohttp
+    asgiref
     fastapi
     gevent
     httpx
+    pytest-mock
+    pytestCheckHook
     redis
     requests
     sure
   ] ++ passthru.optional-dependencies.pook;
 
-  # skip http tests
+  # Skip http tests
   SKIP_TRUE_HTTP = true;
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # Requires a live Redis instance
-    "--ignore=tests/main/test_redis.py"
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    # Uses IsolatedAsyncioTestCase which is only available >= 3.8
-    "--ignore=tests/tests38/test_http_aiohttp.py"
+    "tests/main/test_redis.py"
   ];
 
   disabledTests = [
@@ -83,7 +81,9 @@ buildPythonPackage rec {
     "test_gethostbyname"
   ];
 
-  pythonImportsCheck = [ "mocket" ];
+  pythonImportsCheck = [
+    "mocket"
+  ];
 
   meta = with lib; {
     description = "A socket mock framework for all kinds of sockets including web-clients";
