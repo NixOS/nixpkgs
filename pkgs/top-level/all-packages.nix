@@ -17185,23 +17185,40 @@ with pkgs;
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
-  inherit (callPackages ../development/tools/electron { })
-    electron
-    electron_9
-    electron_10
-    electron_11
-    electron_12
-    electron_13
-    electron_14
-    electron_15
-    electron_16
-    electron_17
-    electron_18
-    electron_19
-    electron_20
-    electron_21
-    electron_22
-    electron_23;
+  inherit (callPackages ../development/tools/electron/binary { })
+    electron-bin
+    electron_9-bin
+    electron_10-bin
+    electron_11-bin
+    electron_12-bin
+    electron_13-bin
+    electron_14-bin
+    electron_15-bin
+    electron_16-bin
+    electron_17-bin
+    electron_18-bin
+    electron_19-bin
+    electron_20-bin
+    electron_21-bin
+    electron_22-bin
+    electron_23-bin;
+
+  electron = electron-bin;
+  electron_9 = electron_9-bin;
+  electron_10 = electron_10-bin;
+  electron_11 = electron_11-bin;
+  electron_12 = electron_12-bin;
+  electron_13 = electron_13-bin;
+  electron_14 = electron_14-bin;
+  electron_15 = electron_15-bin;
+  electron_16 = electron_16-bin;
+  electron_17 = electron_17-bin;
+  electron_18 = electron_18-bin;
+  electron_19 = electron_19-bin;
+  electron_20 = electron_20-bin;
+  electron_21 = electron_21-bin;
+  electron_22 = electron_22-bin;
+  electron_23 = electron_23-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
