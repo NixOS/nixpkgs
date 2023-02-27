@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.interpreter} setup.py install --root=$out \
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \

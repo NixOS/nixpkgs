@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd ../../..
-    ${python.interpreter} setup.py egg_info --build-type=pyside2
+    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside2
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 

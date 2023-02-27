@@ -59,14 +59,14 @@ stdenv.mkDerivation rec {
 
   buildPhase = with python3.pkgs; ''
     runHook preBuild
-    ${python.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonForBuild.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
-    ${python.interpreter} module/setup.py install --prefix=$out
+    ${python.pythonForBuild.interpreter} module/setup.py install --prefix=$out
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
