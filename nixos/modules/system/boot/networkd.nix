@@ -1119,6 +1119,20 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 0 4294967294)
       ];
+
+      sectionTokenBucketFilter = checkUnitConfig "TokenBucketFilter" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "LatencySec"
+          "LimitBytes"
+          "BurstBytes"
+          "Rate"
+          "MPUBytes"
+          "PeakRate"
+          "MTUBytes"
+        ])
+      ];
     };
   };
 
@@ -1809,6 +1823,17 @@ let
       '';
     };
 
+    tokenBucketFilterConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; Rate = "100k"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionTokenBucketFilter;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[TokenBucketFilter]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2247,6 +2272,10 @@ let
         + optionalString (def.networkEmulatorConfig != { }) ''
           [NetworkEmulator]
           ${attrsToSection def.networkEmulatorConfig}
+        ''
+        + optionalString (def.tokenBucketFilterConfig != { }) ''
+          [TokenBucketFilter]
+          ${attrsToSection def.tockenBucketFilterConfig}
         ''
         + def.extraConfig;
     };
