@@ -1180,8 +1180,18 @@ let
           "LimitBytes"
         ])
       ];
-    };
+
       sectionPFIFO = checkUnitConfig "PFIFO" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 0 4294967294)
+      ];
+
+      sectionPFIFOHeadDrop = checkUnitConfig "PFIFOHeadDrop" [
         (assertOnlyFields [
           "Parent"
           "Handle"
@@ -1957,6 +1967,17 @@ let
       '';
     };
 
+    pfifoHeadDropConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; PacketLimit = "300"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPFIFOHeadDrop;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[PFIFOHeadDrop]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2423,6 +2444,10 @@ let
         + optionalString (def.pfifoConfig != { }) ''
           [PFIFO]
           ${attrsToSection def.pfifoConfig}
+        ''
+        + optionalString (def.pfifoHeadDropConfig != { }) ''
+          [PFIFOHeadDrop]
+          ${attrsToSection def.pfifoHeadDropConfig}
         ''
         + def.extraConfig;
     };
