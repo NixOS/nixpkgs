@@ -33111,7 +33111,7 @@ with pkgs;
   peek = callPackage ../applications/video/peek { };
 
   peertube = callPackage ../servers/peertube {
-    nodejs = nodejs_16;
+    nodejs = nodejs_18;
   };
 
   peroxide = callPackage ../applications/networking/peroxide { };
