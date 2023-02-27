@@ -1414,6 +1414,16 @@ let
         (assertInt "Weight")
         (assertRange "Weight" 1 1023)
       ];
+
+      sectionBridgeVLAN = checkUnitConfig "BridgeVLAN" [
+        (assertOnlyFields [
+          "VLAN"
+          "EgressUntagged"
+          "PVID"
+        ])
+        (assertInt "PVID")
+        (assertRange "PVID" 0 4094)
+      ];
     };
   };
 
@@ -1873,6 +1883,21 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[BridgeMDB]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
+  bridgeVLANOptions = {
+    options = {
+      bridgeMDBConfig = mkOption {
+        default = {};
+        example = { VLAN = 20; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[BridgeVLAN]` section of the unit.  See
           {manpage}`systemd.network(5)` for details.
         '';
       };
@@ -2353,6 +2378,27 @@ let
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
         `[QuickFairQueueingClass]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    bridgeVLANConfig = mkOption {
+      default = {};
+      example = { VLAN = "10-20"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionbridgeVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[BridgeVLAN]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    bridgeVLANs = mkOption {
+      default = [];
+      example = [ { bridgeVLANConfig = { VLAN = "10-20"; }; } ];
+      type = with types; listOf (submodule bridgeVLANOptions);
+      description = lib.mdDoc ''
+        A list of BridgeVLAN sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -2888,6 +2934,10 @@ let
           [QuickFairQueueingClass]
           ${attrsToSection def.quickFairQueueingConfigClass}
         ''
+        + flip concatMapStrings def.bridgeVLANs (x: ''
+          [BridgeVLAN]
+          ${attrsToSection x.bridgeVLANConfig}
+        '')
         + def.extraConfig;
     };
 
