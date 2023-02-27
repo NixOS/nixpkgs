@@ -1257,6 +1257,19 @@ let
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
       ];
+
+      sectionControlledDelay = checkUnitConfig "ControlledDelay" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+          "TargetSec"
+          "IntervalSec"
+          "ECN"
+          "CEThresholdSec"
+        ])
+        (assertValueOneOf "ECN" boolValues)
+      ];
     };
   };
 
@@ -2057,6 +2070,17 @@ let
       '';
     };
 
+    controlledDelayConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; TargetSec = "20msec"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionControlledDelay;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[ControlledDelay]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2535,6 +2559,10 @@ let
         + optionalString (def.cakeConfig != { }) ''
           [CAKE]
           ${attrsToSection def.cakeConfig}
+        ''
+        + optionalString (def.controlledDelayConfig != { }) ''
+          [ControlledDelay]
+          ${attrsToSection def.controlledDelayConfig}
         ''
         + def.extraConfig;
     };
