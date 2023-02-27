@@ -39,5 +39,7 @@ in buildEnv {
     license = with licenses; [ cc-by-30 unfree ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ astro ];
+    # error: std::bind2nd is deprecated: use std::bind instead
+    broken = true; # At 2023-02-27
   };
 }
