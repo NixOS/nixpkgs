@@ -19149,6 +19149,8 @@ with pkgs;
 
   amdvlk = callPackage ../development/libraries/amdvlk { };
 
+  amf-headers = callPackage ../development/libraries/amf-headers { };
+
   aml = callPackage ../development/libraries/aml { };
 
   amrnb = callPackage ../development/libraries/amrnb { };
