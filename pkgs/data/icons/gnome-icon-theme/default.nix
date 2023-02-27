@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     rm -r "$out/share/locale"
   '';
 
+  allowedReferences = [ ];
+
   meta = with lib; {
     description = "Collection of icons for the GNOME 2 desktop";
     homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
