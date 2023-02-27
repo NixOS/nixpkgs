@@ -1153,6 +1153,16 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 1 4294967294)
       ];
+
+      sectionStochasticFairBlue = checkUnitConfig "StochasticFairBlue" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 1 4294967294)
+      ];
     };
   };
 
@@ -1876,6 +1886,17 @@ let
       '';
     };
 
+    stochasticFairBlueConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; PacketLimit = "3847"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionStochasticFairBlue;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[StochasticFairBlue]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2326,6 +2347,10 @@ let
         + optionalString (def.flowQueuePIEConfig != { }) ''
           [FlowQueuePIE]
           ${attrsToSection def.flowQueuePIEConfig}
+        ''
+        + optionalString (def.stochasticFairBlueConfig != { }) ''
+          [StochasticFairBlue]
+          ${attrsToSection def.stochasticFairBlueConfig}
         ''
         + def.extraConfig;
     };
