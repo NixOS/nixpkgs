@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2023.2.1";
+  version = "2023.2.2";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     rev = version;
-    hash = "sha256-vhcz/uk1sBt7XytXQYcPreoPfNz7fdPVE+j+FTH7tPc=";
+    hash = "sha256-qZ3h8KZLGSH+sqUs0wof5arKvcps1DdqBnT+coWEiys=";
   };
 
   vendorSha256 = null;
@@ -51,11 +51,6 @@ buildGoModule rec {
     # Workaround for: icmp_posix_test.go:88: Received unexpected error: Group ID 100 is not between ping group 65534 to 65534
     substituteInPlace "ingress/icmp_posix_test.go" \
       --replace "TestReuseFunnel" "SkipReuseFunnel"
-
-    # Workaround for: supervisor_test.go:49:
-    #   Expected nil, but got: Could not lookup srv records on _us-v2-origintunneld._tcp.argotunnel.com: lookup _us-v2-origintunneld._tcp.argotunnel.com on [::1]:53: read udp [::1]:49342->[::1]:53: read: connection refused
-    substituteInPlace "supervisor/supervisor_test.go" \
-      --replace "Test_Initialize_Same_Protocol" "Skip_Initialize_Same_Protocol"
 
     # Workaround for: manager_test.go:197:
     #   Should be false
