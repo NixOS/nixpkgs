@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.interpreter} wlroots/ffi_build.py
+    ${python.pythonForBuild.interpreter} wlroots/ffi_build.py
   '';
 
   pythonImportsCheck = [ "wlroots" ];

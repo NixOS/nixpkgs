@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pdm-pep517
 , flask
 , mock
-, sqlalchemy
+, pdm-pep517
 , pytestCheckHook
 , pythonOlder
+, sqlalchemy
 }:
 
 buildPythonPackage rec {

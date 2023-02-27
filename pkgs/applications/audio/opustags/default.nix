@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opustags";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "1wsfw713rhi2gg5xc04cx5i31hlw0l3wdflj3r1y8w45bdk6ag1z";
+    sha256 = "sha256-vGMRzw46X3DNRIvlI9XEKoDwiJsVL0v9Nfn8pbszRbw=";
   };
 
   buildInputs = [ libogg ];
