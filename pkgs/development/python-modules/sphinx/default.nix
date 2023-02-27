@@ -109,6 +109,9 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
+
+    # sphinx.errors.VersionRequirementError: The alabaster extension used by this project needs at least Sphinx v1.6; it therefore cannot be built with this version.
+    "test_needs_sphinx"
   ] ++ lib.optionals stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
