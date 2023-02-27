@@ -5324,6 +5324,8 @@ self: super: with self; {
 
   human-readable = callPackage ../development/python-modules/human-readable { };
 
+  humanhash3 = callPackage ../development/python-modules/humanhash3 { };
+
   humblewx = callPackage ../development/python-modules/humblewx { };
 
   hupper = callPackage ../development/python-modules/hupper { };
