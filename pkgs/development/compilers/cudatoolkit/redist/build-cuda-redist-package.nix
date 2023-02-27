@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, backendStdenv
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
@@ -11,7 +11,7 @@ attrs:
 let
   arch = "linux-x86_64";
 in
-stdenv.mkDerivation {
+backendStdenv.mkDerivation {
   inherit pname;
   inherit (attrs) version;
 
@@ -33,11 +33,8 @@ stdenv.mkDerivation {
     # autoPatchelfHook will search for a libstdc++ and we're giving it a
     # "compatible" libstdc++ from the same toolchain that NVCC uses.
     #
-    # E.g. it might happen that stdenv=gcc12Stdenv, but we build against cuda11
-    # that only "supports" gcc11. Linking against gcc12's libraries we might
-    # sometimes actually sometimes encounter dynamic linkage errors at runtime
     # NB: We don't actually know if this is the right thing to do
-    cudatoolkit.cc.cc.lib
+    backendStdenv.cc.cc.lib
   ];
 
   dontBuild = true;
@@ -51,7 +48,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.stdenv = stdenv;
+  passthru.stdenv = backendStdenv;
 
   meta = {
     description = attrs.name;

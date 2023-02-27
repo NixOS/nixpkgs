@@ -24,7 +24,7 @@ in
 
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs:
     let
-      inherit (prev.cudatoolkit) cc;
+      inherit (prev.backendStdenv) cc;
     in
     {
       # Point NVCC at a compatible compiler
@@ -44,7 +44,6 @@ in
       postInstall = (oldAttrs.postInstall or "") + ''
         mkdir -p $out/nix-support
         cat <<EOF >> $out/nix-support/setup-hook
-        cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
         cmakeFlags+=' -DCUDA_HOST_COMPILER=${cc}/bin'
         cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${cc}/bin'
         if [ -z "\''${CUDAHOSTCXX-}" ]; then

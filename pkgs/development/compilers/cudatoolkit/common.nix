@@ -11,7 +11,7 @@ args@
 , fetchurl
 , fontconfig
 , freetype
-, gcc
+, gcc # :: String
 , gdk-pixbuf
 , glib
 , glibc
@@ -22,13 +22,13 @@ args@
 , perl
 , python3
 , requireFile
-, stdenv
+, backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
 , xorg
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+backendStdenv.mkDerivation rec {
   pname = "cudatoolkit";
   inherit version runPatches;
 
@@ -146,36 +146,23 @@ stdenv.mkDerivation rec {
 
     # Fix builds with newer glibc version
     sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
-
-    # Ensure that cmake can find CUDA.
+  '' +
+  # Point NVCC at a compatible compiler
+  # FIXME: redist cuda_nvcc copy-pastes this code
+  # Refer to comments in the overrides for cuda_nvcc for explanation
+  # CUDA_TOOLKIT_ROOT_DIR is legacy,
+  # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+  ''
     mkdir -p $out/nix-support
-    echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
-
-    # Set the host compiler to be used by nvcc.
-    # FIXME: redist cuda_nvcc copy-pastes this code
-
-    # For CMake-based projects:
-    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-    # https://cmake.org/cmake/help/latest/envvar/CUDAHOSTCXX.html
-    # https://cmake.org/cmake/help/latest/variable/CMAKE_CUDA_HOST_COMPILER.html
-
-    # For non-CMake projects:
-    # FIXME: results in "incompatible redefinition" warnings ...but we keep
-    # both this and cmake variables until we come up with a more general
-    # solution
-    # https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#compiler-bindir-directory-ccbin
-
     cat <<EOF >> $out/nix-support/setup-hook
-
-    cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'
-    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${gcc}/bin'
+    cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
+    cmakeFlags+=' -DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
     if [ -z "\''${CUDAHOSTCXX-}" ]; then
-      export CUDAHOSTCXX=${gcc}/bin;
+      export CUDAHOSTCXX=${backendStdenv.cc}/bin;
     fi
-
-    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${gcc}/bin'
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin'
     EOF
-
 
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
@@ -212,11 +199,10 @@ stdenv.mkDerivation rec {
 
       # The path to libstdc++ and such
       #
-      # NB:
-      # 1. "gcc" (gcc-wrapper) here is what's exposed as cudaPackages.cudatoolkit.cc
-      # 2. "gcc.cc" is the unwrapped gcc
-      # 3. "gcc.cc.lib" is one of its outputs
-      "${gcc.cc.lib}/lib64"
+      # `backendStdenv` is the cuda-compatible toolchain that we pick in
+      # extension.nix; we hand it to NVCC to use as a back-end, and we link
+      # cudatoolkit's binaries against its libstdc++
+      "${backendStdenv.cc.cc.lib}/lib64"
 
       "$out/jre/lib/amd64/jli"
       "$out/lib64"
@@ -286,7 +272,7 @@ stdenv.mkDerivation rec {
     popd
   '';
   passthru = {
-    cc = gcc;
+    cc = backendStdenv.cc;
     majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };
