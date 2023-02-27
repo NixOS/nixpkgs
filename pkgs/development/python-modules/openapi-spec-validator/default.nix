@@ -22,15 +22,15 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.5.1";
+  version = "0.5.5";
   format = "pyproject";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = version;
-    hash = "sha256-8VhD57dNG0XrPUdcq39GEfHUAgdDwJ8nv+Lp57OpTLg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-t7u0p6V2woqIFsqywv7k5s5pbbnmcn45YnlFWH1PEi4=";
   };
 
   nativeBuildInputs = [
