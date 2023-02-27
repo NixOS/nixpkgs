@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "riscof";
-  version = "1.25.2";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = pname;
-    rev = "1.25.2";
-    hash = "sha256-6jiKBGj4NN038/qq3ze+L0MYpQEEaN5xt4CTWu0i4qs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ToI2xI0fvnDR+hJ++T4ss5X3gc4G6Cj1uJHx0m2X7GY=";
   };
 
   postPatch = "substituteInPlace riscof/requirements.txt --replace 'GitPython==3.1.17' GitPython";
