@@ -5,6 +5,7 @@
 , autoreconfHook
 , pkg-config
 , texinfo
+, bison
 , bash
 }:
 
@@ -51,7 +52,9 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
+    # Required due to the patch that changes .ypp files.
+    ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") bison;
   buildInputs = [ perl bash ]
     ++ lib.optionals enableGhostscript [ ghostscript ]
     ++ lib.optionals enableHtml [ psutils netpbm ];

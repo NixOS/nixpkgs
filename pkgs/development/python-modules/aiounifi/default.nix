@@ -12,7 +12,8 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "41";
+  version = "44";
+  format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rBluo4080m9jFnquXaQY/Cntp7wHToY16aNFhzrQJs8=";
+    hash = "sha256-SRI7c0cmrNSTOEyRbs6JGEg5O9tws+Dwn0G8HUqWEqc=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytest-asyncio
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
     homepage = "https://github.com/Kane610/aiounifi";
+    changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

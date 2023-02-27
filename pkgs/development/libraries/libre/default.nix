@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
     ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"
   ;
+  enableParallelBuilding = true;
   meta = {
     description = "A library for real-time communications with async IO support and a complete SIP stack";
     homepage = "https://github.com/baresip/re";

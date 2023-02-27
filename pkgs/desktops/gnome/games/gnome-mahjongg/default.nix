@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     description = "Disassemble a pile of tiles by removing matching pairs";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

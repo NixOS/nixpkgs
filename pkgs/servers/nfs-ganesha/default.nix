@@ -5,18 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "4.0.12";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-s6iZcZObBEHvIqyD0niNzuPJf4ENZGw3mhgZZZdj2zc=";
+    sha256 = "sha256-MafP6kl3SmtT2/vLPDwy8U7+tE6hUBr/lWmiAcjsQNU=";
   };
 
   preConfigure = "cd src";
 
-  cmakeFlags = [ "-DUSE_SYSTEM_NTIRPC=ON" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_NTIRPC=ON"
+    "-DSYSSTATEDIR=/var"
+    "-DENABLE_VFS_POSIX_ACL=ON"
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -3,7 +3,6 @@
 , buildPackages
 , fetchFromGitLab
 , fetchpatch
-, removeReferencesTo
 , python3
 , meson
 , ninja
@@ -20,20 +19,18 @@
 , libjack2
 , libusb1
 , udev
-, libva
 , libsndfile
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
-, readline81 # meson can't find <7 as those versions don't have a .pc file
+, readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
 , makeFontsConf
 , callPackage
 , nixosTests
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
@@ -64,15 +61,16 @@
 , x11Support ? true
 , libcanberra
 , xorg
+, mysofaSupport ? true
+, libmysofa
 }:
 
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
-  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.59";
+    version = "0.3.66";
 
     outputs = [
       "out"
@@ -90,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-4wDtdgkjBRlthhwbI3cSQFnbr+gxPQP5j5YnrWiQVp4=";
+      sha256 = "sha256-qx4mgNRhMdha+8ap+FhVfxpsHE9TcTx29uwQIHLyMHA=";
     };
 
     patches = [
@@ -106,14 +104,9 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # remove when updating to 0.3.60
-      (fetchpatch { # filter-chain: iterate the port correctly
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/94a64268613adac8ef6f3e6c1f04468220540d00.patch";
-        sha256 = "sha256-IDTB7NgadgR3vKv97Nvd9pBfnOnMi21YsvLdD1Ew7HE=";
-      })
     ];
 
+    strictDeps = true;
     nativeBuildInputs = [
       docutils
       doxygen
@@ -122,6 +115,7 @@ let
       ninja
       pkg-config
       python3
+      glib
     ];
 
     buildInputs = [
@@ -133,7 +127,7 @@ let
       libsndfile
       lilv
       ncurses
-      readline81
+      readline
       udev
       vulkan-headers
       vulkan-loader
@@ -147,10 +141,11 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+    ++ lib.optional mysofaSupport libmysofa;
 
     # Valgrind binary is required for running one optional test.
-    checkInputs = lib.optional withValgrind valgrind;
+    nativeCheckInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -182,7 +177,9 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+      "-Drlimits-install=false" # installs to /etc, we won't use this anyway
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -233,6 +230,7 @@ let
             "nix-support/jack.conf.json"
             "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-aes67.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];
           paths-lib = [
@@ -248,7 +246,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes ];
+      maintainers = with maintainers; [ jtojnar kranzes k900 ];
     };
   };
 

@@ -21,16 +21,20 @@ with pkgs;
   cc-wrapper-clang-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.stdenv; };
   cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
   stdenv-inputs = callPackage ./stdenv-inputs { };
+  stdenv = callPackage ./stdenv { };
 
   config = callPackage ./config.nix { };
 
   haskell = callPackage ./haskell { };
+
+  hooks = callPackage ./hooks { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
@@ -47,6 +51,8 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php {});
 
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
+
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
@@ -54,6 +60,8 @@ with pkgs;
   vim = callPackage ./vim {};
 
   nixos-functions = callPackage ./nixos-functions {};
+
+  overriding = callPackage ./overriding.nix { };
 
   patch-shebangs = callPackage ./patch-shebangs {};
 
@@ -76,7 +84,11 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
+  cue-validation = callPackage ./cue {};
+
   coq = callPackage ./coq {};
+
+  makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };
   makeBinaryWrapper = callPackage ./make-binary-wrapper {

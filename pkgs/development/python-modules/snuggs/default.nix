@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click numpy pyparsing ];
 
-  checkInputs = [ pytest hypothesis ];
+  nativeCheckInputs = [ pytest hypothesis ];
   checkPhase = "pytest test_snuggs.py";
 
   meta = with lib; {

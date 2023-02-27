@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.48";
+  version = "0.1.49";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YtUFR9BqVjjOHF6A19cB3fFpY7QHr89b3IPH3k25T3w=";
+    hash = "sha256-jPZ3ow28tL56mVNsF+ETCKgnpNIgKNxZpn9sbdPw9Yw=";
   };
 
   propagatedBuildInputs = [

@@ -7,6 +7,16 @@ runCommand "documentation-highlighter" {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.grahamc ];
   };
+  src = lib.sources.cleanSourceWith {
+    src = ./.;
+    filter = path: type: lib.elem path (map toString [
+      ./highlight.pack.js
+      ./LICENSE
+      ./loader.js
+      ./mono-blue.css
+      ./README.md
+    ]);
+  };
 } ''
-  cp -r ${./.} $out
+  cp -r "$src" "$out"
 ''

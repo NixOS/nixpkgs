@@ -88,7 +88,7 @@ let
       "-DENABLE_TOUCH=TRUE"
     ];
 
-    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+    env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
@@ -113,6 +113,9 @@ let
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
       patchShebangs $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/minetest.app $out/Applications
     '';
 
     meta = with lib; {

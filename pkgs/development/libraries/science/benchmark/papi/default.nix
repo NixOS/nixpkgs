@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.0.0.1";
+  version = "7.0.0";
   pname = "papi";
 
   src = fetchurl {
     url = "https://bitbucket.org/icl/papi/get/papi-${lib.replaceStrings ["."] ["-"] version}-t.tar.gz";
-    sha256 = "1jd67yadyffzxwsqlylsi0bx8ishb0cgj2ziz1wdslaz6ylvyf9j";
+    sha256 = "sha256-MxiOzfBxLmzsUg4jo2VHThyGE0/WYD3ZEBrq3WRjXGU=";
   };
 
   setSourceRoot = ''

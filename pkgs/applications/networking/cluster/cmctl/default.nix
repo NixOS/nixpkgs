@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
-    rev = "da3265115bfd8be5780801cc6105fa857ef71965";
-    sha256 = "0s6nki61crx62v6ypmm0yjbyy71ygifffhkp5554jh4g9hvcfbmr";
+    rev = "2a0ef53b06e183356d922cd58af2510d8885bef5";
+    sha256 = "0cvsmc06gg8w5j2k1zj4i8qpqlvpjfa6d7wn24v0hs1a1qk8c7a8";
   };
 
-  vendorSha256 = "sha256-WPFteR3t9qQiuBcCLqvp8GterqcD2SxJi59Wb7BvDT4=";
+  vendorSha256 = "sha256-aLEQoNt/5ikMw+wExSUITey/68Gk4+dsRbSydsiEiEg=";
 
   subPackages = [ "cmd/ctl" ];
 

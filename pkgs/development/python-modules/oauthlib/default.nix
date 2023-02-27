@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9Du0REnN7AkvMmejXsWc7Uy+YF8MYeLK+QnYHbrPhPA=";
+    hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

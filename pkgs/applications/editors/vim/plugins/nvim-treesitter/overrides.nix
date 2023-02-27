@@ -4,7 +4,7 @@ self: super:
 
 let
   generatedGrammars = callPackage ./generated.nix {
-    buildGrammar = callPackage ../../../../../development/tools/parsing/tree-sitter/grammar.nix { };
+    inherit (tree-sitter) buildGrammar;
   };
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
@@ -14,18 +14,18 @@ let
   #   ocaml-interface
   #   tree-sitter-ocaml-interface
   #   tree-sitter-ocaml_interface
-  builtGrammars = generatedGrammars // lib.listToAttrs
-    (lib.concatLists (lib.mapAttrsToList
-      (k: v:
-        let
-          replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
-        in
-        map (lib.flip lib.nameValuePair v)
-          ([ "tree-sitter-${k}" ] ++ lib.optionals (k != replaced) [
-            replaced
-            "tree-sitter-${replaced}"
-          ]))
-      generatedDerivations));
+  builtGrammars = generatedGrammars // lib.concatMapAttrs
+    (k: v:
+      let
+        replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
+      in
+      {
+        "tree-sitter-${k}" = v;
+      } // lib.optionalAttrs (k != replaced) {
+        ${replaced} = v;
+        "tree-sitter-${replaced}" = v;
+      })
+    generatedDerivations;
 
   allGrammars = lib.attrValues generatedDerivations;
 
@@ -62,6 +62,10 @@ let
 in
 
 {
+  postPatch = ''
+    rm -r parser
+  '';
+
   passthru = {
     inherit builtGrammars allGrammars withPlugins withAllGrammars;
 
@@ -90,5 +94,8 @@ in
         '';
   };
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta = with lib; (super.nvim-treesitter.meta or { }) // {
+    license = licenses.asl20;
+    maintainers = with maintainers; [ figsoda ];
+  };
 }

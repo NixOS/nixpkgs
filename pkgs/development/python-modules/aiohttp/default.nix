@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 # install_requires
 , attrs
@@ -30,6 +31,8 @@
 buildPythonPackage rec {
   pname = "aiohttp";
   version = "3.8.3";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -37,8 +40,19 @@ buildPythonPackage rec {
     sha256 = "3828fb41b7203176b82fe5d699e0d845435f2374750a44b480ea6b930f6be269";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7178
+      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
+      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+    })
+  ];
+
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+
+    substituteInPlace setup.cfg \
+      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
   propagatedBuildInputs = [
@@ -60,7 +74,7 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async_generator
     freezegun
     gunicorn

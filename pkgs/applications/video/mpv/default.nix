@@ -4,12 +4,11 @@
 , fetchFromGitHub
 , addOpenGLRunpath
 , docutils
-, perl
+, meson
+, ninja
 , pkg-config
 , python3
-, wafHook
-, which
-, ffmpeg
+, ffmpeg_5
 , freefont_ttf
 , freetype
 , libass
@@ -18,7 +17,7 @@
 , lua
 , libuchardet
 , libiconv
-, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
+, xcbuild
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -75,67 +74,62 @@
 , xineramaSupport    ? stdenv.isLinux, libXinerama
 , xvSupport          ? stdenv.isLinux, libXv
 , zimgSupport        ? true,           zimg
+, darwin
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (self: {
   pname = "mpv";
-  version = "0.35.0";
+  version = "0.35.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    rev = "v${version}";
-    sha256 = "sha256-U3NDSxlX4/WkoHFkOvpcwPMwfwTnSpCw0QI5yLMK08o=";
+    rev = "v${self.version}";
+    sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
   };
 
   postPatch = ''
     patchShebangs version.* ./TOOLS/
   '';
 
-  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
-    + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
-  # These flags are not supported and cause the build
-  # to fail, even when cross compilation itself works.
-  dontAddWafCrossFlags = true;
+  mesonFlags = [
+    (lib.mesonOption "default_library" "shared")
+    (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libarchive" archiveSupport)
+    (lib.mesonEnable "manpage-build" true)
+    (lib.mesonEnable "cdda" cddaSupport)
+    (lib.mesonEnable "dvbin" dvbinSupport)
+    (lib.mesonEnable "dvdnav" dvdnavSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "sdl2" sdl2Support)
+    # Disable whilst Swift isn't supported
+    (lib.mesonEnable "swift-build" swiftSupport)
+    (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
+  ];
 
-  wafConfigureFlags = [
-    "--enable-libmpv-shared"
-    "--enable-manpage-build"
-    "--disable-libmpv-static"
-    "--disable-static-build"
-    "--disable-build-date" # Purity
-    (lib.enableFeature archiveSupport  "libarchive")
-    (lib.enableFeature cddaSupport     "cdda")
-    (lib.enableFeature dvdnavSupport   "dvdnav")
-    (lib.enableFeature javascriptSupport "javascript")
-    (lib.enableFeature openalSupport   "openal")
-    (lib.enableFeature sdl2Support     "sdl2")
-    (lib.enableFeature sixelSupport    "sixel")
-    (lib.enableFeature vaapiSupport    "vaapi")
-    (lib.enableFeature waylandSupport  "wayland")
-    (lib.enableFeature dvbinSupport  "dvbin")
-  ] # Disable whilst Swift isn't supported
-    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+  mesonAutoFeatures = "auto";
 
   nativeBuildInputs = [
     addOpenGLRunpath
     docutils # for rst2man
-    perl
+    meson
+    ninja
     pkg-config
     python3
-    wafHook
-    which
-  ] ++ lib.optionals swiftSupport [ swift ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals swiftSupport [ swift ]
+  ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_5
     freetype
     libass
     libpthreadstubs
@@ -175,10 +169,10 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
     ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString stdenv.isDarwin ''
+    pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
+    popd
   '';
 
   postInstall = ''
@@ -186,16 +180,13 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-    cp TOOLS/mpv_identify.sh $out/bin
-    cp TOOLS/umpv $out/bin
+    cp ../TOOLS/mpv_identify.sh $out/bin
+    cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
-
-    substituteInPlace $out/lib/pkgconfig/mpv.pc \
-      --replace "$out/include" "$dev/include"
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r build/mpv.app $out/Applications
+    cp -r mpv.app $out/Applications
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
@@ -225,8 +216,9 @@ in stdenv.mkDerivation rec {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
+    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${self.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.unix;
   };
-}
+})

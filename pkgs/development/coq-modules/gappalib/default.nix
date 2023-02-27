@@ -1,12 +1,12 @@
 { which, lib, mkCoqDerivation, autoconf, coq, flocq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "gappalib";
   repo = "coq";
   owner = "gappa";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = if versions.range "8.8" "8.16" coq.coq-version then "1.5.2" else null;
+  defaultVersion = if lib.versions.range "8.8" "8.16" coq.coq-version then "1.5.2" else null;
   release."1.5.2".sha256 = "sha256-A021Bhqz5r2CZBayfjIiWrCIfUlejcQAfbTmOaf6QTM=";
   release."1.5.1".sha256 = "1806bq1z6q5rq2ma7d5kfbqfyfr755hjg0dq7b2llry8fx9cxjsg";
   release."1.5.0".sha256 = "1i1c0gakffxqqqqw064cbvc243yl325hxd50jmczr6mk18igk41n";
@@ -19,7 +19,7 @@ with lib; mkCoqDerivation {
   propagatedBuildInputs = [ flocq ];
   useMelquiondRemake.logpath = "Gappa";
 
-  meta = {
+  meta = with lib; {
     description = "Coq support library for Gappa";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];

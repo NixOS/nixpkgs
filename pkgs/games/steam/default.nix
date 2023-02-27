@@ -1,12 +1,11 @@
-{ lib, newScope, splicePackages, steamPackagesAttr ? "steamPackages"
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
+{ makeScopeWithSplicing, generateSplicesForMkScope
 , stdenv, buildFHSUserEnv, pkgsi686Linux
 }:
 
 let
   steamPackagesFun = self: let
     inherit (self) callPackage;
-  in {
+  in rec {
     steamArch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
                 else if stdenv.hostPlatform.system == "i686-linux" then "i386"
                 else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
@@ -18,19 +17,13 @@ let
       glxinfo-i686 = pkgsi686Linux.glxinfo;
       steam-runtime-wrapped-i686 =
         if self.steamArch == "amd64"
-        then pkgsi686Linux.${steamPackagesAttr}.steam-runtime-wrapped
+        then pkgsi686Linux.steamPackages.steam-runtime-wrapped
         else null;
       inherit buildFHSUserEnv;
     };
+    steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
     steamcmd = callPackage ./steamcmd.nix { };
-  };
-  otherSplices = {
-    selfBuildBuild = pkgsBuildBuild.${steamPackagesAttr};
-    selfBuildHost = pkgsBuildHost.${steamPackagesAttr};
-    selfBuildTarget = pkgsBuildTarget.${steamPackagesAttr};
-    selfHostHost = pkgsHostHost.${steamPackagesAttr};
-    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr} or {}; # might be missing;
   };
   keep = self: { };
   extra = spliced0: { };
-in lib.makeScopeWithSplicing splicePackages newScope otherSplices keep extra steamPackagesFun
+in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun

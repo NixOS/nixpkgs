@@ -3,20 +3,20 @@
 assert zlib != null;
 
 let
-  patchVersion = "1.6.37";
+  patchVersion = "1.6.39";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
-    sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2";
+    hash = "sha256-SsS26roAzeISxI22XLlCkQc/68oixcef2ocJFQLoDP0=";
   };
   whenPatched = lib.optionalString apngSupport;
 
 in stdenv.mkDerivation rec {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.37";
+  version = "1.6.39";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
-    sha256 = "1jl8in381z0128vgxnvn33nln6hzckl7l7j9nqvkaf1m9n1p0pjh";
+    hash = "sha256-H0aWznC07l+F8eFiPcEimyEAKfpLeu5XPfPiunsDaTc=";
   };
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
@@ -32,8 +32,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
+    changelog = "https://github.com/glennrp/libpng/blob/v1.6.39/CHANGES";
     license = licenses.libpng2;
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ vcunat ];
   };
 }

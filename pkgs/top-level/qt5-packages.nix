@@ -116,6 +116,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+  kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
+
   kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
   ldutils = callPackage ../development/libraries/ldutils { };
@@ -151,6 +153,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+
+  maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 

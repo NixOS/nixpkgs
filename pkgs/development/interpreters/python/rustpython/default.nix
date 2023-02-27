@@ -24,21 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably macOS SDK 10.13 or later. Check the current version in
-    # .../os-specific/darwin/apple-sdk/default.nix
-    #
-    # From the build logs:
-    #
-    # > Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

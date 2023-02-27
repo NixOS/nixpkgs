@@ -206,6 +206,57 @@ in
           description = lib.mdDoc "Create the database and database user locally.";
         };
       };
+
+      components = {
+        subversion = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Subversion integration.";
+        };
+
+        mercurial = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Mercurial integration.";
+        };
+
+        git = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "git integration.";
+        };
+
+        cvs = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "cvs integration.";
+        };
+
+        breezy = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "bazaar integration.";
+        };
+
+        imagemagick = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Allows exporting Gant diagrams as PNG.";
+        };
+
+        ghostscript = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Allows exporting Gant diagrams as PDF.";
+        };
+
+        minimagick_font_path = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "MiniMagick font path";
+          example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
+        };
+      };
     };
   };
 
@@ -225,16 +276,21 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
+      { assertion = cfg.components.imagemagick -> cfg.components.minimagick_font_path != "";
+        message = "services.redmine.components.minimagick_font_path must be configured with a path to a font file if services.redmine.components.imagemagick is set to true.";
+      }
     ];
 
     services.redmine.settings = {
       production = {
-        scm_subversion_command = "${pkgs.subversion}/bin/svn";
-        scm_mercurial_command = "${pkgs.mercurial}/bin/hg";
-        scm_git_command = "${pkgs.git}/bin/git";
-        scm_cvs_command = "${pkgs.cvs}/bin/cvs";
-        scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
-        scm_darcs_command = "${pkgs.darcs}/bin/darcs";
+        scm_subversion_command = if cfg.components.subversion then "${pkgs.subversion}/bin/svn" else "";
+        scm_mercurial_command = if cfg.components.mercurial then "${pkgs.mercurial}/bin/hg" else "";
+        scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
+        scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
+        scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
+        imagemagick_convert_command = if cfg.components.imagemagick then "${pkgs.imagemagick}/bin/convert" else "";
+        gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
+        minimagick_font_path = "${cfg.components.minimagick_font_path}";
       };
     };
 
@@ -296,14 +352,15 @@ in
       environment.REDMINE_LANG = "en";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
-        imagemagick
-        breezy
-        cvs
-        darcs
-        git
-        mercurial
-        subversion
-      ];
+      ]
+      ++ optional cfg.components.subversion subversion
+      ++ optional cfg.components.mercurial mercurial
+      ++ optional cfg.components.git git
+      ++ optional cfg.components.cvs cvs
+      ++ optional cfg.components.breezy breezy
+      ++ optional cfg.components.imagemagick imagemagick
+      ++ optional cfg.components.ghostscript ghostscript;
+
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
         rm -rf "${cfg.stateDir}/public/themes/"*

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";
-    homepage = "http://ario-player.sourceforge.net/";
+    homepage = "https://ario-player.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.garrison ];
     platforms = platforms.all;

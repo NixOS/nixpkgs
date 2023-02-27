@@ -32,7 +32,7 @@ nodePackages.n8n.override {
   };
 
   meta = with lib; {
-    description = "Free and open fair-code licensed node based Workflow Automation Tool";
+    description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
     license = {
       fullName = "Sustainable Use License";

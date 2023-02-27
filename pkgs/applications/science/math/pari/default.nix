@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gmp
 , libX11
 , libpthreadstubs
@@ -14,7 +15,7 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.13.4";
+  version = "2.15.2";
 
   src = fetchurl {
     urls = [
@@ -22,8 +23,17 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-vN6ezq4VkoFDgcFpfNtwY1Z7ZQQgGxvke7WJIPO84YU=";
+    hash = "sha256-sEYoER7iKHZRmksc2vsy/rqjTq+iT56B9Y+NBX++4N0=";
   };
+
+  patches = [
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2441
+    (fetchpatch {
+      name = "fix-find_isogenous_from_Atkin.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/bug2441.patch?id=9.8.rc0";
+      hash = "sha256-DvOUFlFDnopN+MJY6GYRPNabuoHPFch/nNn+49ygznc=";
+    })
+  ];
 
   buildInputs = [
     gmp
@@ -40,15 +50,10 @@ stdenv.mkDerivation rec {
     "--with-gmp=${lib.getDev gmp}"
     "--with-readline=${lib.getDev readline}"
   ]
-  ++ lib.optional stdenv.isDarwin "--host=x86_64-darwin"
   ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
-  '';
-
-  postConfigure = lib.optionalString stdenv.isDarwin ''
-    echo 'echo x86_64-darwin' > config/arch-osname
   '';
 
   makeFlags = [ "all" ];
@@ -83,7 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
     mainProgram = "gp";
   };
 }

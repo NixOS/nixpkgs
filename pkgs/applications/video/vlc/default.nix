@@ -83,11 +83,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.17.3";
+  version = "3.0.18";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
+    sha256 = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -190,12 +190,8 @@ stdenv.mkDerivation rec {
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
-    # patches to build with recent live555
+    # patch to build with recent live555
     # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/uploads/3c84ea58d7b94d7a8d354eaffe4b7d55/0001-Get-addr-by-ref.-from-getConnectionEndpointAddress.patch";
-      sha256 = "171d3qjl9a4dm13sqig3ra8s2zcr76wfnqz4ba4asg139cyc1axd";
-    })
     (fetchpatch {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";

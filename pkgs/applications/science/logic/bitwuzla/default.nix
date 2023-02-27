@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DBtor2Tools_LIBRARIES=${lib.getLib btor2tools}/lib/libbtor2parser${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optional doCheck "-DTESTING=YES";
 
-  checkInputs = [ python3 gtest ];
+  nativeCheckInputs = [ python3 gtest ];
   # two tests fail on darwin and 3 on aarch64-linux
   doCheck = stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAarch64);
   preCheck = let

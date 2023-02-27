@@ -1,19 +1,20 @@
-diff -ubr davfs2-1.4.7-orig/etc/Makefile.am davfs2-1.4.7/etc/Makefile.am
---- davfs2-1.4.7-orig/etc/Makefile.am	2013-02-21 11:45:00.185763558 +0100
-+++ davfs2-1.4.7/etc/Makefile.am	2013-02-21 11:53:05.423197775 +0100
-@@ -24,17 +24,17 @@
+diff --git a/etc/Makefile.am b/etc/Makefile.am
+index 5a01282..6a40921 100644
+--- a/etc/Makefile.am
++++ b/etc/Makefile.am
+@@ -24,17 +24,17 @@ pkgsysconfdir = $(sysconfdir)/@PACKAGE@
  
  install-data-local: $(dist_pkgdata_DATA)
  	@$(NORMAL_INSTALL)
 -	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)
--	$(INSTALL_DATA) -b davfs2.conf $(DESTDIR)$(pkgsysconfdir)/davfs2.conf
--	$(INSTALL_DATA) -b -m 600 secrets $(DESTDIR)$(pkgsysconfdir)/secrets
+-	$(INSTALL_DATA) -b $(srcdir)/davfs2.conf $(DESTDIR)$(pkgsysconfdir)/davfs2.conf
+-	$(INSTALL_DATA) -b -m 600 $(srcdir)/secrets $(DESTDIR)$(pkgsysconfdir)/secrets
 -	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs
 -	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs/private
 -	chmod 700 $(DESTDIR)$(pkgsysconfdir)/certs/private
 +	$(mkinstalldirs) $(out)$(pkgsysconfdir)
-+	$(INSTALL_DATA) -b davfs2.conf $(out)$(pkgsysconfdir)/davfs2.conf
-+	$(INSTALL_DATA) -b -m 600 secrets $(out)$(pkgsysconfdir)/secrets
++	$(INSTALL_DATA) -b $(srcdir)/davfs2.conf $(out)$(pkgsysconfdir)/davfs2.conf
++	$(INSTALL_DATA) -b -m 600 $(srcdir)/secrets $(out)$(pkgsysconfdir)/secrets
 +	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs
 +	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs/private
 +	chmod 700 $(out)$(pkgsysconfdir)/certs/private
@@ -27,34 +28,3 @@ diff -ubr davfs2-1.4.7-orig/etc/Makefile.am davfs2-1.4.7/etc/Makefile.am
 +	  echo " rm -f $(out)$(pkgsysconfdir)/$$f"; \
 +	  rm -f $(out)$(pkgsysconfdir)/$$f; \
  	done
-diff -ubr davfs2-1.4.7-orig/etc/Makefile.in davfs2-1.4.7/etc/Makefile.in
---- davfs2-1.4.7-orig/etc/Makefile.in	2013-02-21 11:45:00.185763558 +0100
-+++ davfs2-1.4.7/etc/Makefile.in	2013-02-21 11:53:27.241207128 +0100
-@@ -408,19 +408,19 @@
- 
- install-data-local: $(dist_pkgdata_DATA)
- 	@$(NORMAL_INSTALL)
--	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)
--	$(INSTALL_DATA) -b davfs2.conf $(DESTDIR)$(pkgsysconfdir)/davfs2.conf
--	$(INSTALL_DATA) -b -m 600 secrets $(DESTDIR)$(pkgsysconfdir)/secrets
--	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs
--	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs/private
--	chmod 700 $(DESTDIR)$(pkgsysconfdir)/certs/private
-+	$(mkinstalldirs) $(out)$(pkgsysconfdir)
-+	$(INSTALL_DATA) -b davfs2.conf $(out)$(pkgsysconfdir)/davfs2.conf
-+	$(INSTALL_DATA) -b -m 600 secrets $(out)$(pkgsysconfdir)/secrets
-+	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs
-+	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs/private
-+	chmod 700 $(out)$(pkgsysconfdir)/certs/private
- 
- uninstall-local:
- 	@$(NORMAL_UNINSTALL)
- 	@list='$(dist_pkgdata_DATA)'; for p in $$list; do \
- 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
--	  echo " rm -f $(DESTDIR)$(pkgsysconfdir)/$$f"; \
--	  rm -f $(DESTDIR)$(pkgsysconfdir)/$$f; \
-+	  echo " rm -f $(out)$(pkgsysconfdir)/$$f"; \
-+	  rm -f $(out)$(pkgsysconfdir)/$$f; \
- 	done
- 
- # Tell versions [3.59,3.63) of GNU make to not export all variables.

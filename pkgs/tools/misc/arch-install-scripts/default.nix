@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "arch-install-scripts";
-  version = "27";
+  version = "28";
 
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "arch-install-scripts";
     rev = "v${version}";
-    hash = "sha256-owJImToG8GIk1TfkSKJyXCu9RTJ1qYlvQ6DTMSazaeQ=";
+    hash = "sha256-TytCeejhjWYDzWFjGubUl08OrsAQa9fFULoamDfbdDY=";
   };
 
   nativeBuildInputs = [ asciidoc gnum4 ];
@@ -68,8 +68,9 @@ resholve.mkDerivation rec {
 
       # TODO: no good way to resolve mount/umount in Nix builds for now
       # see https://github.com/abathur/resholve/issues/29
-      fake = {
-        external = [ "mount" "umount" ];
+      fix = {
+        mount = true;
+        umount = true;
       };
 
       keep = [ "$setup" "$pid_unshare" "$mount_unshare" "${pacman}/bin/pacman" ];

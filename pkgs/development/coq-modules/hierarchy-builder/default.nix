@@ -1,10 +1,10 @@
 { lib, mkCoqDerivation, coq, coq-elpi, version ? null }:
 
-with lib; let hb = mkCoqDerivation {
+let hb = mkCoqDerivation {
   pname = "hierarchy-builder";
   owner = "math-comp";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.15" "8.16"; out = "1.4.0"; }
     { case = range "8.13" "8.14"; out = "1.2.0"; }
     { case = range "8.12" "8.13"; out = "1.1.0"; }
@@ -25,16 +25,16 @@ with lib; let hb = mkCoqDerivation {
 
   extraInstallFlags = [ "VFILES=structures.v" ];
 
-  meta = {
+  meta = with lib; {
     description = "High level commands to declare a hierarchy based on packed classes";
     maintainers = with maintainers; [ cohencyril siraben ];
     license = licenses.mit;
   };
 }; in
 hb.overrideAttrs (o:
-  optionalAttrs (versions.isGe "1.2.0" o.version || o.version == "dev")
+  lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev")
     { buildPhase = "make build"; }
   //
-  optionalAttrs (versions.isGe "1.1.0" o.version || o.version == "dev")
+  lib.optionalAttrs (lib.versions.isGe "1.1.0" o.version || o.version == "dev")
   { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
 )

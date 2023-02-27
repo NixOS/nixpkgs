@@ -28,11 +28,13 @@ stdenv.mkDerivation rec {
     libbsd
   ];
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   meta = with lib; {
     description = "A FREE, easy-to-use and portable implementation of a 9p file server daemon for UNIX-like systems";
     homepage = "https://kamid.omarpolo.com";
     license = licenses.isc;
     maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

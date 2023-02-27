@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitLab
 , meson
 , ninja
 , pkg-config
@@ -18,14 +18,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.2.1";
+  version = "0.3.2";
   format = "other";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "knuxify";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TlY2F2y7ZZ9f+vkYYkES5zoIGcuTWP1+rOJI62wc4SU=";
+    sha256 = "sha256-XvbfQtE8LsztQ2VByG2jLYND3qVpH6owdAgh3b//lI4=";
   };
 
   postPatch = ''
@@ -67,7 +68,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/knuxify/eartag";
+    homepage = "https://gitlab.gnome.org/knuxify/eartag";
     description = "Simple music tag editor";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from

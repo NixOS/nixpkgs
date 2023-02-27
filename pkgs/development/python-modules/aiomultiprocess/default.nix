@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
 

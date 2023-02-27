@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     ./0001-fix-build-with-ffmpeg-4.patch
   ];
 
+  postPatch = ''
+    sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
+  '';
+
   nativeBuildInputs = [ cmake nasm ];
 
   buildInputs = [
@@ -42,5 +46,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.mit; # expat version
     maintainers = [ ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
-, ngtcp2-gnutls
+, ngtcp2-gnutls, xdp-tools
 , autoreconfHook
 , nixosTests, knot-resolver, knot-dns, runCommandLocal
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.2";
+  version = "3.2.5";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "cea9c1988cdce7752f88fbe37378f65e83c4e54048978b94fb21a9c92f88788f";
+    sha256 = "c6b122e92baa179d09ba4c8ce5b0d42fb7475805f4ff9c81d5036acfaa161820";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
-    # knsupdate: fix segfault due to NULL pointer access when sending an update
-    (fetchpatch {
-      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/8a6645dab63d8fa7932c7d8f747fe33e8cc97e84.patch";
-      hash = "sha256-qzhSdRH5GqHqN9eLMWbDXmjO4JagsMRSZh3NWRFprao=";
-    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -46,7 +41,7 @@ stdenv.mkDerivation rec {
     # TODO: add dnstap support?
   ] ++ lib.optionals stdenv.isLinux [
     libcap_ng systemd
-    libbpf libmnl # XDP support (it's Linux kernel API)
+    xdp-tools libbpf libmnl # XDP support (it's Linux kernel API)
   ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
@@ -71,7 +66,7 @@ stdenv.mkDerivation rec {
     deps = runCommandLocal "knot-deps-test"
       { nativeBuildInputs = [ (lib.getBin stdenv.cc.libc) ]; }
       ''
-        for libname in libngtcp2 libbpf; do
+        for libname in libngtcp2 libxdp libbpf; do
           echo "Checking for $libname:"
           ldd '${knot-dns.bin}/bin/knotd' | grep -F "$libname"
           echo "OK"

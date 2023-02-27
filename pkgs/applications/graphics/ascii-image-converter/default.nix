@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ascii-image-converter";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "TheZoraiz";
     repo = "ascii-image-converter";
     rev = "v${version}";
-    sha256 = "sha256-2kg5W5u6YjLce3wNS3A1e89ZYAVK2LyNmPGCm86HxPM=";
+    sha256 = "sha256-svM/TzGQU/QgjqHboy0470+A6p4kR76typ9gnfjfAJk=";
   };
 
   vendorSha256 = "sha256-rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";

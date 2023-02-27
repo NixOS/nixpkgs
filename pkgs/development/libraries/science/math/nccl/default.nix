@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
+{ lib, stdenv, fetchFromGitHub, which, cudaPackages, addOpenGLRunpath }:
+
+let
+  inherit (cudaPackages) cudatoolkit;
+in
 
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
-  version = "2.12.10-1";
+  version = "2.16.5-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${version}";
-    sha256 = "sha256-QqORzm0gD+QG+P8rId8bQn2oZsxL5YyxCIobUVs85wE=";
+    hash = "sha256-JyhhYKSVIqUKIbC1rCJozPT1IrIyRLGrTjdPjJqsYaU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,12 +38,12 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/lib/lib*.so
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
   enableParallelBuilding = true;
 
   passthru = {
-    inherit cudatoolkit;
+    inherit cudaPackages;
   };
 
   meta = with lib; {

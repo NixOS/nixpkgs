@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, systemd, util-linux, coreutils, wall, hostname, man
 , enableCgiScripts ? true, gd
+, nixosTests
 }:
 
 assert enableCgiScripts -> gd != null;
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
                "$file"
     done
   '';
+
+  passthru.tests.smoke = nixosTests.apcupsd;
 
   meta = with lib; {
     description = "Daemon for controlling APC UPSes";

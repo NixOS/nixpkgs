@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1okr2L7+BKd2QqHdVuSoeTSb8c9bLAv1+4QQYZON7ws=";
+    sha256 = "sha256-pPsWje9TPzH/LAf32YRLsxMeZ5nwlOvnfQOArcmHwg4=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
     readline # required to build python
     libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 

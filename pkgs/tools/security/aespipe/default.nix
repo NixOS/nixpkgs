@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AES encrypting or decrypting pipe";
-    homepage = "http://loop-aes.sourceforge.net/aespipe.README";
+    homepage = "https://loop-aes.sourceforge.net/aespipe.README";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v

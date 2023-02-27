@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
+  LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
      "--disable-csharp" "--with-xz"
@@ -60,7 +60,9 @@ stdenv.mkDerivation rec {
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+  env = {
+    gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+  };
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes

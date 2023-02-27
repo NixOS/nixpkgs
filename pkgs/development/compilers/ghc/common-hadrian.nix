@@ -39,7 +39,8 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
+              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+              || stdenv.targetPlatform.isGhcjs)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -48,7 +49,9 @@
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
+                         && lib.meta.availableOn stdenv.targetPlatform gmp)
+                       || stdenv.targetPlatform.isGhcjs
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -62,7 +65,8 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
 
 , # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
+  enableTerminfo ? !(stdenv.targetPlatform.isWindows
+                     || stdenv.targetPlatform.isGhcjs)
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -156,12 +160,6 @@
 
 assert !enableNativeBignum -> gmp != null;
 
-assert stdenv.hostPlatform == stdenv.targetPlatform || throw ''
-  hadrian doesn't support building an installable GHC cross-compiler at the moment.
-  Consider using GHC 9.4 or lower which support this via the make build system.
-  See also: https://gitlab.haskell.org/ghc/ghc/-/issues/22090
-'';
-
 let
   src = (if rev != null then fetchgit else fetchurl) ({
     inherit url sha256;
@@ -201,17 +199,19 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ lib.optionals (!targetPlatform.isGhcjs) [libffi]
     # Bindist configure script fails w/o elfutils in linker search path
     # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
     ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
-    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows && !targetPlatform.isGhcjs) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
   # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
-    pkgsBuildTarget.targetPackages.stdenv.cc
+    (if targetPlatform.isGhcjs
+     then pkgsBuildTarget.emscripten
+     else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
@@ -251,7 +251,7 @@ in
 # C compiler, bintools and LLVM are used at build time, but will also leak into
 # the resulting GHC's settings file and used at runtime. This means that we are
 # currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert !targetPlatform.isGhcjs -> targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
 assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
@@ -334,6 +334,13 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
+  # Need to make writable EM_CACHE for emscripten
+  # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
+  + lib.optionalString targetPlatform.isGhcjs ''
+    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
+    cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
+    chmod u+rwX -R "$EM_CACHE"
+  ''
   # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
   # preConfigure, so overrideAttrs can be used to modify it effectively.
   # hadrianSettings are passed via the command line so they are more visible
@@ -345,6 +352,10 @@ stdenv.mkDerivation ({
     )
   '';
 
+  ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
+  # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
+  ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
+
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ lib.optional (targetPlatform != hostPlatform) "target";
@@ -353,7 +364,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi != null) [
+  ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
     "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
@@ -392,6 +403,9 @@ stdenv.mkDerivation ({
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals targetPlatform.isGhcjs [
+    # emscripten itself is added via depBuildTarget / targetCC
+    python3
   ];
 
   # For building runtime libs
@@ -450,7 +464,7 @@ stdenv.mkDerivation ({
   preInstall = ''
     pushd _build/bindist/*
 
-    ./configure $configureFlags "''${configureFlagsArray[@]}"
+    $configureScript $configureFlags "''${configureFlagsArray[@]}"
   '';
 
   postInstall = ''

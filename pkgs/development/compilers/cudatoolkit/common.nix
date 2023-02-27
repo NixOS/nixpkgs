@@ -20,7 +20,7 @@ args@
 , makeWrapper
 , ncurses5
 , perl
-, python27
+, python3
 , requireFile
 , stdenv
 , unixODBC
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
+    ncurses5 expat python3 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
     gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
@@ -229,6 +229,13 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
     addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
     addOpenGLRunpath $out/target-linux-x64/*
+  '' +
+  # Prune broken symlinks which can cause problems with consumers of this package.
+  ''
+    while read -r -d "" file; do
+      echo "Found and removing broken symlink $file"
+      rm "$file"
+    done < <(find "$out" "$lib" "$doc" -xtype l -print0)
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so

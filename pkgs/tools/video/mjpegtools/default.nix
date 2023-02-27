@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdv libjpeg libpng ]
               ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure

@@ -31,6 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    # needed on top of LIBCLANG_PATH to compile rquickjs
+    llvmPackages.clang
   ];
 
   buildInputs = [ openssl ]

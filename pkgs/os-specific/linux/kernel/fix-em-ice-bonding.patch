@@ -1,0 +1,87 @@
+From 1640688018f329559c61352646f283f98938af31 Mon Sep 17 00:00:00 2001
+From: Cole Helbling <cole.helbling@determinate.systems>
+Date: Thu, 16 Feb 2023 09:30:21 -0800
+Subject: [PATCH] Revert "RDMA/irdma: Report the correct link speed"
+
+This reverts commit 425c9bd06b7a70796d880828d15c11321bdfb76d.
+
+Some Equinix Metal instances, such as a3.large.x86, m3.large.x86
+(specific hardware revisions), and n3.large.x86, use the `ice` kernel
+driver for their network cards, in conjunction with bonded devices.
+However, this commit caused a regression where these bonded devices
+would deadlock. This was initially reported by Jaroslav Pulchart on
+the netdev mailing list[1], and there were follow-up patches from Dave
+Ertman[2][3] that attempted to fix this but were not up to snuff for
+various reasons[4].
+
+Specifically, v2 of the patch ([3]) appears to fix the issue on some
+devices (tested with 8086:159B network cards), while it is still broken
+on others (such as an 8086:1593 network card).
+
+We revert the patch exposing the issue until upstream has a working
+solution in order to make Equinix Metal instances work reliably again.
+
+[1]: https://lore.kernel.org/netdev/CAK8fFZ6A_Gphw_3-QMGKEFQk=sfCw1Qmq0TVZK3rtAi7vb621A@mail.gmail.com/
+[2]: https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20230111183145.1497367-1-david.m.ertman@intel.com/
+[3]: https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20230215191757.1826508-1-david.m.ertman@intel.com/
+[4]: https://lore.kernel.org/netdev/cb31a911-ba80-e2dc-231f-851757cfd0b8@intel.com/T/#m6e53f8c43093693c10268140126abe99e082dc1c
+---
+ drivers/infiniband/hw/irdma/verbs.c | 35 ++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
+index c5971a840b87..911902d2b93e 100644
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -60,6 +60,36 @@ static int irdma_query_device(struct ib_device *ibdev,
+ 	return 0;
+ }
+ 
++/**
++ * irdma_get_eth_speed_and_width - Get IB port speed and width from netdev speed
++ * @link_speed: netdev phy link speed
++ * @active_speed: IB port speed
++ * @active_width: IB port width
++ */
++static void irdma_get_eth_speed_and_width(u32 link_speed, u16 *active_speed,
++					  u8 *active_width)
++{
++	if (link_speed <= SPEED_1000) {
++		*active_width = IB_WIDTH_1X;
++		*active_speed = IB_SPEED_SDR;
++	} else if (link_speed <= SPEED_10000) {
++		*active_width = IB_WIDTH_1X;
++		*active_speed = IB_SPEED_FDR10;
++	} else if (link_speed <= SPEED_20000) {
++		*active_width = IB_WIDTH_4X;
++		*active_speed = IB_SPEED_DDR;
++	} else if (link_speed <= SPEED_25000) {
++		*active_width = IB_WIDTH_1X;
++		*active_speed = IB_SPEED_EDR;
++	} else if (link_speed <= SPEED_40000) {
++		*active_width = IB_WIDTH_4X;
++		*active_speed = IB_SPEED_FDR10;
++	} else {
++		*active_width = IB_WIDTH_4X;
++		*active_speed = IB_SPEED_EDR;
++	}
++}
++
+ /**
+  * irdma_query_port - get port attributes
+  * @ibdev: device pointer from stack
+@@ -87,9 +117,8 @@ static int irdma_query_port(struct ib_device *ibdev, u32 port,
+ 		props->state = IB_PORT_DOWN;
+ 		props->phys_state = IB_PORT_PHYS_STATE_DISABLED;
+ 	}
+-
+-	ib_get_eth_speed(ibdev, port, &props->active_speed,
+-			 &props->active_width);
++	irdma_get_eth_speed_and_width(SPEED_100000, &props->active_speed,
++				      &props->active_width);
+ 
+ 	if (rdma_protocol_roce(ibdev, 1)) {
+ 		props->gid_tbl_len = 32;
+-- 
+2.39.0
+

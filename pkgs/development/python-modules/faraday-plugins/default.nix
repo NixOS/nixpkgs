@@ -8,6 +8,7 @@
 , lxml
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pytz
 , requests
 , simplejson
@@ -16,15 +17,22 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.8.0";
+  version = "1.10.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-KAfy2AQWZYFT/+rX8dNe8aWTFI0kkGg5IaSHhwYGk3A=";
+    hash = "sha256-bVuysEr8VVFgA4OZ7N7UlL2FigbyLVyPr1HHwkshSMU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=version," "version='${version}',"
+  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -39,7 +47,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -64,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

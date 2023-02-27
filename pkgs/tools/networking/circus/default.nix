@@ -26,7 +26,7 @@ buildPythonApplication rec {
       --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0"
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   doCheck = false; # weird error
 

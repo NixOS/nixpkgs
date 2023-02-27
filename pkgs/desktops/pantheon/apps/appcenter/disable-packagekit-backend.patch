@@ -1,0 +1,167 @@
+diff --git a/src/Application.vala b/src/Application.vala
+index a1c4e0d4..35555946 100644
+--- a/src/Application.vala
++++ b/src/Application.vala
+@@ -180,9 +180,6 @@ public class AppCenter.App : Gtk.Application {
+     }
+ 
+     public override void activate () {
+-        if (fake_update_packages != null) {
+-            AppCenterCore.PackageKitBackend.get_default ().fake_packages = fake_update_packages;
+-        }
+ 
+         var client = AppCenterCore.Client.get_default ();
+ 
+@@ -200,12 +197,6 @@ public class AppCenter.App : Gtk.Application {
+ 
+         if (local_path != null) {
+             var file = File.new_for_commandline_arg (local_path);
+-
+-            try {
+-                local_package = AppCenterCore.PackageKitBackend.get_default ().add_local_component_file (file);
+-            } catch (Error e) {
+-                warning ("Failed to load local AppStream XML file: %s", e.message);
+-            }
+         }
+ 
+         if (active_window == null) {
+diff --git a/src/Core/BackendAggregator.vala b/src/Core/BackendAggregator.vala
+index 1747cd3b..20077394 100644
+--- a/src/Core/BackendAggregator.vala
++++ b/src/Core/BackendAggregator.vala
+@@ -26,8 +26,6 @@ public class AppCenterCore.BackendAggregator : Backend, Object {
+ 
+     construct {
+         backends = new Gee.ArrayList<unowned Backend> ();
+-        backends.add (PackageKitBackend.get_default ());
+-        backends.add (UbuntuDriversBackend.get_default ());
+         backends.add (FlatpakBackend.get_default ());
+ 
+         unowned Gtk.Application app = (Gtk.Application) GLib.Application.get_default ();
+diff --git a/src/Core/Package.vala b/src/Core/Package.vala
+index 40fa8262..e6b90dd9 100644
+--- a/src/Core/Package.vala
++++ b/src/Core/Package.vala
+@@ -327,23 +327,13 @@ public class AppCenterCore.Package : Object {
+     public string origin_description {
+         owned get {
+             unowned string origin = component.get_origin ();
+-            if (backend is PackageKitBackend) {
+-                if (origin == APPCENTER_PACKAGE_ORIGIN) {
+-                    return _("AppCenter");
+-                } else if (origin == ELEMENTARY_STABLE_PACKAGE_ORIGIN) {
+-                    return _("elementary Updates");
+-                } else if (origin.has_prefix ("ubuntu-")) {
+-                    return _("Ubuntu (non-curated)");
+-                }
+-            } else if (backend is FlatpakBackend) {
++            if (backend is FlatpakBackend) {
+                 var fp_package = this as FlatpakPackage;
+                 if (fp_package == null) {
+                     return origin;
+                 }
+ 
+                 return fp_package.remote_title;
+-            } else if (backend is UbuntuDriversBackend) {
+-                return _("Ubuntu Drivers");
+             }
+ 
+             return _("Unknown Origin (non-curated)");
+@@ -435,9 +425,7 @@ public class AppCenterCore.Package : Object {
+ 
+         // The version on a PackageKit package comes from the package not AppStream, so only reset the version
+         // on other backends
+-        if (!(backend is PackageKitBackend)) {
+-            _latest_version = null;
+-        }
++        _latest_version = null;
+ 
+         this.component = component;
+     }
+diff --git a/src/Core/UpdateManager.vala b/src/Core/UpdateManager.vala
+index 4d844abc..457137eb 100644
+--- a/src/Core/UpdateManager.vala
++++ b/src/Core/UpdateManager.vala
+@@ -71,35 +71,9 @@ public class AppCenterCore.UpdateManager : Object {
+             installed_package.update_state ();
+         }
+ 
+-        Pk.Results pk_updates;
+-        unowned PackageKitBackend client = PackageKitBackend.get_default ();
+-        try {
+-            pk_updates = yield client.get_updates (cancellable);
+-        } catch (Error e) {
+-            warning ("Unable to get updates from PackageKit backend: %s", e.message);
+-            return 0;
+-        }
+-
+         uint os_count = 0;
+         string os_desc = "";
+ 
+-        var package_array = pk_updates.get_package_array ();
+-        debug ("PackageKit backend reports %d updates", package_array.length);
+-
+-        package_array.foreach ((pk_package) => {
+-            var pkg_name = pk_package.get_name ();
+-            debug ("Added %s to OS updates", pkg_name);
+-            os_count++;
+-            unowned string pkg_summary = pk_package.get_summary ();
+-            unowned string pkg_version = pk_package.get_version ();
+-            os_desc += Markup.printf_escaped (
+-                " • %s\n\t%s\n\t%s\n",
+-                pkg_name,
+-                pkg_summary,
+-                _("Version: %s").printf (pkg_version)
+-            );
+-        });
+-
+         os_updates.component.set_pkgnames ({});
+         os_updates.change_information.clear_update_info ();
+ 
+@@ -207,30 +181,13 @@ public class AppCenterCore.UpdateManager : Object {
+             count += 1;
+         }
+ 
+-        pk_updates.get_details_array ().foreach ((pk_detail) => {
+-            var pk_package = new Pk.Package ();
+-            try {
+-                pk_package.set_id (pk_detail.get_package_id ());
+-                var pkg_name = pk_package.get_name ();
+-
+-                var pkgnames = os_updates.component.pkgnames;
+-                pkgnames += pkg_name;
+-                os_updates.component.pkgnames = pkgnames;
+-
+-                os_updates.change_information.updatable_packages.@set (client, pk_package.get_id ());
+-                os_updates.change_information.size += pk_detail.size;
+-            } catch (Error e) {
+-                critical (e.message);
+-            }
+-        });
+-
+         os_updates.update_state ();
+         runtime_updates.update_state ();
+         return count;
+     }
+ 
+     public void update_restart_state () {
+-        var should_restart = restart_file.query_exists () || PackageKitBackend.get_default ().is_restart_required ();
++        var should_restart = restart_file.query_exists ();
+ 
+         if (should_restart) {
+             if (!restart_required) {
+diff --git a/src/meson.build b/src/meson.build
+index e0ef5342..14319492 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -12,10 +12,8 @@ appcenter_files = files(
+     'Core/FlatpakBackend.vala',
+     'Core/Job.vala',
+     'Core/Package.vala',
+-    'Core/PackageKitBackend.vala',
+     'Core/ScreenshotCache.vala',
+     'Core/Task.vala',
+-    'Core/UbuntuDriversBackend.vala',
+     'Core/UpdateManager.vala',
+     'Dialogs/InstallFailDialog.vala',
+     'Dialogs/StripeDialog.vala',

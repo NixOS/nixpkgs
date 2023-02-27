@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pygraphviz # optional
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     graphviz

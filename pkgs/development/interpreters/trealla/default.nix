@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, readline, openssl, libffi, withThread ? true, withSSL ? true, xxd }:
+{ lib, stdenv, fetchFromGitHub, readline, openssl, libffi, valgrind, withThread ? true, withSSL ? true, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "trealla";
-  version = "2.2.6";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${version}";
-    sha256 = "sha256-DxlexijQPcNxlPjo/oIvsN//8nZ0injXFHc2t3n4yjg=";
+    sha256 = "sha256-/jB4jlYotvdU068+zj9Z+G0g75sI9dTmtgN874i0qAE=";
   };
 
   postPatch = ''
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xxd ];
   buildInputs = [ readline openssl libffi ];
+  checkInputs = [ valgrind ];
   enableParallelBuilding = true;
 
   installPhase = ''

@@ -39,6 +39,9 @@ stdenvNoCC.mkDerivation rec {
     yarnLock = ./yarn.lock;
     packageJSON = ./package.json;
 
+    # workaround for https://github.com/webpack/webpack/issues/14532
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
     patches = [
       # NOTE: fixes for hardcoded paths and assumptions about filesystem
       # permissions
@@ -86,8 +89,9 @@ stdenvNoCC.mkDerivation rec {
       yarn2nix;
   };
 
-  meta = {
+  meta = with lib; {
     inherit (mirakurun.meta) description platforms;
-    maintainers = with lib.maintainers; [ midchildan ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ midchildan ];
   };
 }

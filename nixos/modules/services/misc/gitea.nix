@@ -175,7 +175,7 @@ in
         };
 
         type = mkOption {
-          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
           default = "zip";
           description = lib.mdDoc "Archive format used to store the dump file.";
         };
@@ -183,7 +183,7 @@ in
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is chosen by gitea.";
           example = "gitea-dump";
         };
       };
@@ -235,7 +235,7 @@ in
       };
 
       httpPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = lib.mdDoc "HTTP listen port.";
       };
@@ -310,7 +310,7 @@ in
               };
 
               SSH_PORT = mkOption {
-                type = types.int;
+                type = types.port;
                 default = 22;
                 example = 2222;
                 description = lib.mdDoc ''
@@ -395,7 +395,7 @@ in
           ROOT_URL = cfg.rootUrl;
         }
         (mkIf cfg.enableUnixSocket {
-          PROTOCOL = "unix";
+          PROTOCOL = "http+unix";
           HTTP_ADDR = "/run/gitea/gitea.sock";
         })
         (mkIf (!cfg.enableUnixSocket) {
@@ -404,7 +404,6 @@ in
         })
         (mkIf cfg.lfs.enable {
           LFS_START_SERVER = true;
-          LFS_CONTENT_PATH = cfg.lfs.contentDir;
         })
 
       ];
@@ -425,6 +424,10 @@ in
 
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
+      };
+
+      lfs = mkIf (cfg.lfs.enable) {
+        PATH = cfg.lfs.contentDir;
       };
     };
 
@@ -465,12 +468,14 @@ in
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} gitea - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
@@ -483,11 +488,11 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea pkgs.git ];
+      path = [ gitea pkgs.git pkgs.gnupg ];
 
       # In older versions the secret naming for JWT was kind of confusing.
       # The file jwt_secret hold the value for LFS_JWT_SECRET and JWT_SECRET
-      # wasn't persistant at all.
+      # wasn't persistent at all.
       # To fix that, there is now the file oauth2_jwt_secret containing the
       # values for JWT_SECRET and the file jwt_secret gets renamed to
       # lfs_jwt_secret.
@@ -630,7 +635,6 @@ in
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
        path = [ gitea ];
 
        environment = {

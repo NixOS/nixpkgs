@@ -1,56 +1,66 @@
 { lib
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , fetchPypi
-, setuptools-scm
-, attrs
-, deprecated
+, hatch-vcs
+, hatchling
 , hepunits
-, pytestCheckHook
-, tabulate
 , pandas
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.20.1";
+  version = "0.21.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HoWWwoGMrkRqlYzrF2apGsxsZAHwHbHSO5TCSCelxUc=";
+    hash = "sha256-BDTTmqtPxyvORSoR+CJzb5WTfF9BFrDoMSVOvO9s/Ns=";
   };
+
+  postPatch = ''
+    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
+    # as dependencies
+    substituteInPlace pyproject.toml \
+      --replace '"--benchmark-disable",' ""
+  '';
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
     attrs
-    deprecated
     hepunits
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tabulate
+    pandas
   ];
 
   pythonImportsCheck = [
     "particle"
   ];
 
-  preCheck = ''
-    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
-    # as dependencies
-    substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable", ' ""
-    rm tests/particle/test_performance.py
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-    tabulate
-    pandas
+  disabledTestPaths = [
+    "tests/particle/test_performance.py"
   ];
 
-  meta = {
-    description = "Package to deal with particles, the PDG particle data table, PDGIDs, etc.";
+  meta = with lib; {
+    description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

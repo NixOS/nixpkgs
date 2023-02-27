@@ -4,6 +4,7 @@
 , pythonOlder
 , pytest
 , pysha3
+, safe-pysha3
 , pycryptodome
 }:
 
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ] ++ passthru.optional-dependencies.pycryptodome
   ++ passthru.optional-dependencies.pysha3;
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     pycryptodome = [ pycryptodome ];
-    pysha3 = [ pysha3 ];
+    pysha3 = if pythonOlder "3.9" then [ pysha3 ] else [ safe-pysha3 ];
   };
 
   meta = with lib; {

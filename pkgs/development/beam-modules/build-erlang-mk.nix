@@ -17,8 +17,6 @@
 , ...
 }@attrs:
 
-with lib;
-
 let
   debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
 
@@ -107,4 +105,4 @@ let
     };
   });
 in
-fix pkg
+lib.fix pkg

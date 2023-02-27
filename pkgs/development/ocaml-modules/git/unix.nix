@@ -15,10 +15,14 @@ buildDunePackage {
   inherit (git) version src;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   buildInputs = [
-    awa awa-mirage cmdliner
-    mirage-clock tcpip
+    awa
+    awa-mirage
+    cmdliner
+    mirage-clock
+    tcpip
   ];
   propagatedBuildInputs = [
     rresult result bigstringaf
@@ -31,10 +35,11 @@ buildDunePackage {
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 ke
-    mirage-crypto-rng git-binary
+    mirage-crypto-rng
     uri mtime
     cacert # sets up NIX_SSL_CERT_FILE
   ];
+  nativeCheckInputs = [ git-binary ];
   doCheck = true;
 
   meta = {

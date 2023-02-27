@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pacemaker";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "Pacemaker-${version}";
-    sha256 = "sha256-b3ljxAuawhqTnURBJMqy4Zzzfi8PCFwie/zC1yeErhQ=";
+    sha256 = "sha256-vsHWNKCrHJIgXlJYyZZEUfuIUBnaejPrPCM1HrYOTKQ=";
   };
 
   nativeBuildInputs = [
@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=strict-prototypes"
-  ];
+  ]);
 
   enableParallelBuilding = true;
 

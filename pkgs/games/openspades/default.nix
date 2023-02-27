@@ -58,11 +58,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ abbradar azahi ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

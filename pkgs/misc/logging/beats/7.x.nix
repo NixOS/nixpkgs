@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
+{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd, config }:
 
 let beat = package: extraArgs: buildGoModule (rec {
   pname = package;
@@ -36,10 +36,12 @@ rec {
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
     passthru.tests =
-      assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath;
-      {
-        elk = nixosTests.elk.ELK-7;
-      };
+      lib.optionalAttrs config.allowUnfree (
+        assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
+        {
+          elk = nixosTests.elk.unfree.ELK-7;
+        }
+      );
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];

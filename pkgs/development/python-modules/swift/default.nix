@@ -24,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.30.0";
+  version = "2.31.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ytxs7hWQa7iaBinO2nhiXhNvo7lsuhmDPnqE1K62C5k=";
+    sha256 = "sha256-gU6XQKiLv6E1OtSjwDunjhNIMK36//arcSsQRwuRtTY=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     installManPage doc/manpages/*
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     mock
     stestr

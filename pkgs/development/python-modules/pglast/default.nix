@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "3.17";
+  version = "5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C2SWuX6Lt4R62rkNJ9qOoVK50j+TUkhoGUw+seWjTQw=";
+    hash = "sha256-bR/e5pZCrnMCUt9zEszI0aVlqezTzwR3DIdpXv/6qGM=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace "--cov=pglast --cov-report term-missing" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/lelit/pglast/raw/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "pgpp";
   };
 }

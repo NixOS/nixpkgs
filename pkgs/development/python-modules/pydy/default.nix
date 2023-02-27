@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sympy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     cython
     pytestCheckHook

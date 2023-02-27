@@ -13,6 +13,7 @@ nixops-encrypted-links = {git = "https://github.com/nix-community/nixops-encrypt
 nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
 nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.git"}
 nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
+nixops-hetznercloud = {git = "https://github.com/lukebfox/nixops-hetznercloud.git"}
 nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
 nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
 

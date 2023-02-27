@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes.machine = { config, lib, pkgs, ... }: {
     services.nginx = {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.modsecurity-nginx ];
+      additionalModules = [ pkgs.nginxModules.modsecurity ];
       virtualHosts.localhost =
         let modsecurity_conf = pkgs.writeText "modsecurity.conf" ''
           SecRuleEngine On

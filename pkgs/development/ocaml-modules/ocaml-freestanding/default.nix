@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     ./configurable-binding.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     ocaml
     pkg-config

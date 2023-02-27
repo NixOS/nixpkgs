@@ -5,6 +5,7 @@
 , pkg-config
 , asciidoc
 , ncurses
+, glibc
 , dbus
 , cryptsetup
 , util-linux
@@ -24,18 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.3.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6CCSs359gPwUMQ2SFpxaWHXCjqqgIbvCaPL2zLuYRKg=";
+    hash = "sha256-PM+griFtuFT9g+Pqx33frWrucVCXSzfyWAJJXAzrMtI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-9nE/SFGv1tYyGDdemCahxHlRnLms3eK0r4XQMhQBjSQ=";
+    hash = "sha256-P5GKMNifnEvGcsg0hGZn6hg3/S44fUIzqf5Qjp4R/EM=";
   };
 
   postPatch = ''
@@ -61,6 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glibc
+    glibc.static
     dbus
     cryptsetup
     util-linux
@@ -70,7 +73,6 @@ stdenv.mkDerivation rec {
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
-    udev
   ] ++ lib.optionals clevisSupport [
     clevis
     jose
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
   ]);
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "INSTALL=install" ];
-  buildFlags = [ "build" "build-min" "docs/stratisd.8" ];
+  buildFlags = [ "build-all" ];
 
   doCheck = true;
   checkTarget = "test";

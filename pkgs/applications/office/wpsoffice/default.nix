@@ -83,6 +83,11 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
+  preFixup = ''
+    # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
+    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so}
+  '';
+
   postFixup = ''
     for f in "$out"/bin/*; do
       echo "Wrapping $f"

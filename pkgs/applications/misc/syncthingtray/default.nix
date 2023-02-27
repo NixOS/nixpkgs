@@ -22,14 +22,14 @@
 }:
 
 mkDerivation rec {
-  version = "1.3.0";
+  version = "1.3.1";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-uhVRO9aiYJbUmwDp1+LIYF3wNBbVduVpTtVzaS0oUMU=";
+    sha256 = "sha256-0rmfDkPvgubVqfbIOZ+mnv/x1p2sb88zGeg/Q2JCy3I=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ mkDerivation rec {
     # Hence we use a C definition with NIX_CFLAGS_COMPILE
     ./use-nix-path-in-autostart.patch
   ];
-  NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
+  env.NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
 
   buildInputs = [
     qtbase

@@ -9,8 +9,8 @@ let
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
   };
 in
 
@@ -21,6 +21,9 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
+  preBuild = ''
+    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
+  '';
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {

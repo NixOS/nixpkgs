@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , importlib-metadata
 , jaconv
+, py-cpuinfo
 , pytest-benchmark
 , pytestCheckHook
 , pythonOlder
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,7 +38,8 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py-cpuinfo
     pytest-benchmark
     pytestCheckHook
   ];
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
     homepage = "https://github.com/miurahr/pykakasi";
+    changelog = "https://github.com/miurahr/pykakasi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

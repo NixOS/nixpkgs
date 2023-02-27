@@ -13,16 +13,16 @@ Fix build issues on Darwin.
  define(`confLDOPTS', `${Extra_LD_Flags}')
 --- a/sendmail/sendmail.h	2020-05-18 14:51:17.000000000 +0200
 +++ b/sendmail/sendmail.h	2020-05-18 14:51:00.000000000 +0200
-@@ -104,7 +104,11 @@
- # endif /* NETX25 */
+@@ -122,7 +122,11 @@
+ # endif
  
- # if NAMED_BIND
--#  include <arpa/nameser.h>
-+#  ifdef __APPLE__
-+#   include <arpa/nameser_compat.h>
-+#  else
-+#   include <arpa/nameser.h>
-+#  endif
- #  ifdef NOERROR
- #   undef NOERROR		/* avoid <sys/streams.h> conflict */
- #  endif /* NOERROR */
+ #if NAMED_BIND
+-# include <arpa/nameser.h>
++# ifdef __APPLE__
++#  include <arpa/nameser_compat.h>
++# else
++#  include <arpa/nameser.h>
++# endif
+ # ifdef NOERROR
+ #  undef NOERROR		/* avoid <sys/streams.h> conflict */
+ # endif

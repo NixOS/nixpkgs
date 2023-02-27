@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dwarfs";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-bGJkgcq8JxueRTX08QpJv1A0O5wXbiIgUY7BrY0Ln/M=";
+    sha256 = "sha256-fA/3AooDndqYiK215cu/zTqCqeccHnwIX2CfJ9sC+Fc=";
   };
 
   patches = with lib.versions; [
@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
     # may be added under an option in the future
     # "-DWITH_LEGACY_FUSE=ON"
     "-DWITH_TESTS=ON"
+
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
   ];
 
   nativeBuildInputs = [
@@ -88,7 +92,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   # this fails inside of the sandbox due to missing access
   # to the FUSE device
   GTEST_FILTER = "-tools.everything";

@@ -177,6 +177,23 @@ let
 
         dune = dontConfigure super.dune;
 
+        emacsql = super.emacsql.overrideAttrs (old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
+        });
+
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
@@ -192,6 +209,13 @@ let
           '';
 
           stripDebugList = [ "share" ];
+        });
+
+        epkg = super.epkg.overrideAttrs (old: {
+          postPatch = ''
+            substituteInPlace lisp/epkg.el \
+              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+          '';
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
@@ -259,7 +283,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';

@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  # or you can check libc/include/sys/cdefs.h in bionic source code
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";

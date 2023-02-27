@@ -29,7 +29,7 @@ buildPythonPackage rec {
     nbformat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipykernel
     pandas
     pytestCheckHook

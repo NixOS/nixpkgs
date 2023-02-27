@@ -1,8 +1,60 @@
-{ pkgs, lib, callPackage, runCommand, stdenv }:
+{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, }:
 # Documentation is in doc/builders/testers.chapter.md
 {
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
+  # or doc/builders/testers.chapter.md
+  testBuildFailure = drv: drv.overrideAttrs (orig: {
+    builder = buildPackages.bash;
+    args = [
+      (substituteAll { coreutils = buildPackages.coreutils; src = ./expect-failure.sh; })
+      orig.realBuilder or stdenv.shell
+    ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
+  });
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
+  # or doc/builders/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
+  # or doc/builders/testers.chapter.md
+  testEqualContents = {
+    assertion,
+    actual,
+    expected,
+  }: runCommand "equal-contents-${lib.strings.toLower assertion}" {
+    inherit assertion actual expected;
+  } ''
+    echo "Checking:"
+    echo "$assertion"
+    if ! diff -U5 -r "$actual" "$expected" --color=always
+    then
+      echo
+      echo 'Contents must be equal, but were not!'
+      echo
+      echo "+: expected,   at $expected"
+      echo "-: unexpected, at $actual"
+      exit 1
+    else
+      find "$expected" -type f -executable > expected-executables | sort
+      find "$actual" -type f -executable > actual-executables | sort
+      if ! diff -U0 actual-executables expected-executables --color=always
+      then
+        echo
+        echo "Contents must be equal, but some files' executable bits don't match"
+        echo
+        echo "+: make this file executable in the actual contents"
+        echo "-: make this file non-executable in the actual contents"
+        exit 1
+      else
+        echo "expected $expected and actual $actual match."
+        echo 'OK'
+        touch $out
+      fi
+    fi
+  '';
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
+  # or doc/builders/testers.chapter.md
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
@@ -69,4 +121,7 @@
         in
           nixosTesting.simpleTest calledTest;
 
+  hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
+
+  testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }

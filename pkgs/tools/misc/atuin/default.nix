@@ -6,6 +6,7 @@
 , libiconv
 , Security
 , SystemConfiguration
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +32,10 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/atuin gen-completions -s fish) \
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) atuin;
+  };
 
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";

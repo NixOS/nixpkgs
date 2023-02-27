@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "bitcoinlib";
-  version = "0.11.2";
+  version = "0.12.0";
 
   disabled = !isPy3k;
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "petertodd";
     repo = "python-bitcoinlib";
     rev = "refs/tags/python-bitcoinlib-v${version}";
-    sha256 = "sha256-/VgCTN010W/Svdrs0mGA8W1YZnyTHhcaWJKgP/c8CN8=";
+    sha256 = "sha256-jguybrH86z6NWLaucQEYjvH2Gkoh3Aqh/PLZ6l8Qel4=";
   };
 
   postPatch = ''

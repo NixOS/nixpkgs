@@ -9,7 +9,7 @@ readonly BASEDIR="$(dirname $(readlink -f $0))"
 for directory in "basic" "full"; do
   pushd "$BASEDIR/$directory"
   rm -f Gemfile.lock gemset.nix
-  bundix --magic
+  BUNDLE_FORCE_RUBY_PLATFORM=true bundix --magic
   rm -rf .bundle vendor
   popd
 done

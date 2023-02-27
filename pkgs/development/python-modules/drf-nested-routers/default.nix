@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ django djangorestframework setuptools ];
-  checkInputs = [ pytest pytest-cov pytest-django ipdb ];
+  nativeCheckInputs = [ pytest pytest-cov pytest-django ipdb ];
 
   checkPhase = ''
     ${python.interpreter} runtests.py --nolint

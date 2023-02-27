@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
+      --replace '$$PROTOBUF/include' '${protobuf}/include' \
       --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
 

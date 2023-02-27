@@ -59,7 +59,7 @@ mkDerivation rec {
     "pokerth.pro"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL";
 
   meta = with lib; {
     homepage = "https://www.pokerth.net";

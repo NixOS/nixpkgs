@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs packaging pyparsing semantic-version semver ];
-  checkInputs = [ commoncode pytestCheckHook saneyaml ];
+  nativeCheckInputs = [ commoncode pytestCheckHook saneyaml ];
 
   dontConfigure = true; # ./configure tries to setup virtualenv and downloads dependencies
 

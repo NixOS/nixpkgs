@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "png" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";

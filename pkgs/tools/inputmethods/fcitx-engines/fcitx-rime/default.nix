@@ -30,5 +30,8 @@ stdenv.mkDerivation rec {
     license       = licenses.gpl2;
     platforms     = platforms.linux;
     maintainers   = with maintainers; [ sifmelcara ];
+    # this package is deprecated, please use fcitx5 instead.
+    # and it cannot be built with the new version of librime
+    broken        = true;
   };
 }

@@ -44,7 +44,7 @@ gnuradio.pkgs.mkDerivation rec {
     gnuradio.unwrapped.python.pkgs.Mako
     gnuradio.unwrapped.python.pkgs.six
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

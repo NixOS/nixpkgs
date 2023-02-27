@@ -35,7 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password run `mkpasswd -m sha-512`.
+    To generate a hashed password run `mkpasswd`.
 
     If set to an empty string (`""`), this user will
     be able to log in without being asked for a password (but not via remote
@@ -90,7 +90,7 @@ let
           only has an effect if {option}`uid` is
           {option}`null`, in which case it determines whether
           the user's UID is allocated in the range for system users
-          (below 500) or in the range for normal users (starting at
+          (below 1000) or in the range for normal users (starting at
           1000).
           Exactly one of `isNormalUser` and
           `isSystemUser` must be true.
@@ -101,16 +101,13 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Indicates whether this is an account for a “real” user. This
-          automatically sets {option}`group` to
-          `users`, {option}`createHome` to
-          `true`, {option}`home` to
-          {file}`/home/«username»`,
+          Indicates whether this is an account for a “real” user.
+          This automatically sets {option}`group` to `users`,
+          {option}`createHome` to `true`,
+          {option}`home` to {file}`/home/«username»`,
           {option}`useDefaultShell` to `true`,
-          and {option}`isSystemUser` to
-          `false`.
-          Exactly one of `isNormalUser` and
-          `isSystemUser` must be true.
+          and {option}`isSystemUser` to `false`.
+          Exactly one of `isNormalUser` and `isSystemUser` must be true.
         '';
       };
 
@@ -276,6 +273,9 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
+          Note that the {option}`hashedPassword` option will override
+          this option if both are set.
+
           ${hashedPasswordDescription}
         '';
       };
@@ -294,6 +294,9 @@ let
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
           promptly.
+
+          Note that the {option}`password` option will override this
+          option if both are set.
         '';
       };
 
@@ -447,8 +450,8 @@ let
 
 in {
   imports = [
-    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
@@ -592,13 +595,33 @@ in {
       '';
     };
 
+    # Warn about user accounts with deprecated password hashing schemes
+    system.activationScripts.hashes = {
+      deps = [ "users" ];
+      text = ''
+        users=()
+        while IFS=: read -r user hash tail; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+            users+=("$user")
+          fi
+        done </etc/shadow
+
+        if (( "''${#users[@]}" )); then
+          echo "
+        WARNING: The following user accounts rely on password hashes that will
+        be removed in NixOS 23.05. They should be renewed as soon as possible."
+          printf ' - %s\n' "''${users[@]}"
+        fi
+      '';
+    };
+
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
+    environment.etc = mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";
@@ -606,7 +629,7 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    }) (filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
       "$HOME/.nix-profile"
@@ -660,7 +683,7 @@ in {
           {
             assertion = let
               xor = a: b: a && !b || b && !a;
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 500);
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.

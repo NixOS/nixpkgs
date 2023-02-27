@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1bndxgvisw8kk52zfdifvly6dl4833wqilxf77pg473172yaf5gq";
   };
 
-  checkInputs = [ pytest pytest-django ];
+  nativeCheckInputs = [ pytest pytest-django ];
   checkPhase = ''
     rm -r logentry_admin __init__.py
     pytest

@@ -30,7 +30,6 @@
 , ghostscript
 , aalib
 , shared-mime-info
-, python2
 , libexif
 , gettext
 , makeWrapper
@@ -48,6 +47,8 @@
 , AppKit
 , Cocoa
 , gtk-mac-integration-gtk2
+, withPython ? false
+, python2
 }:
 
 let
@@ -116,9 +117,6 @@ in stdenv.mkDerivation rec {
     shared-mime-info
     libwebp
     libheif
-    python
-    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-    python2.pkgs.pygtk
     libexif
     xorg.libXpm
     glib-networking
@@ -130,6 +128,10 @@ in stdenv.mkDerivation rec {
     gtk-mac-integration-gtk2
   ] ++ lib.optionals stdenv.isLinux [
     libgudev
+  ] ++ lib.optionals withPython [
+    python
+    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
@@ -144,13 +146,15 @@ in stdenv.mkDerivation rec {
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
     "--libdir=\${exec_prefix}/lib"
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";

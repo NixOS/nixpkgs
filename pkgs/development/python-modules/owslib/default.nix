@@ -1,28 +1,70 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
-buildPythonPackage rec {
-  pname = "OWSLib";
-  version = "0.27.2";
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyproj
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, pyyaml
+, requests
+, python
+}:
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4QKqJETf4MhDmrHhd2zA+kfOoowJuKKCEsiTxgF8F5s=";
+buildPythonPackage rec {
+  pname = "owslib";
+  version = "0.28.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "geopython";
+    repo = "OWSLib";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o/sNhnEZ9e0BsftN9AhJKuUjKHAHNRPe0grxdAWRVao=";
   };
 
-  # as now upstream https://github.com/geopython/OWSLib/pull/824
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'pyproj ' 'pyproj #'
+    substituteInPlace tox.ini \
+      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
   '';
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
+  propagatedBuildInputs = [
+    pyproj
+    python-dateutil
+    pytz
+    pyyaml
+    requests
+  ];
 
-  # 'tests' dir not included in pypy distribution archive.
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "owslib"
+  ];
+
+  preCheck = ''
+    # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
+    export PY_IGNORE_IMPORTMISMATCH=1
+  '';
+
+  disabledTests = [
+    # Tests require network access
+    "test_ows_interfaces_wcs"
+    "test_wfs_110_remotemd"
+    "test_wfs_200_remotemd"
+    "test_wms_130_remotemd"
+    "test_wmts_example_informatievlaanderen"
+  ];
 
   meta = with lib; {
-    description = "client for Open Geospatial Consortium web service interface standards";
-    license = licenses.bsd3;
+    description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
+    changelog = "https://github.com/geopython/OWSLib/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

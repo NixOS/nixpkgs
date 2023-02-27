@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "14.0.1";
+  version = "14.0.3";
 
   disabled = pythonOlder "3.8";
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-eYn24FkAXj/ESCoC0QaLY+wRhkxZP1KnuY4VU1WiG24=";
+    hash = "sha256-LAYy1UpGHd3kTH1TIrp9gfrFwXzsXcME6AISf07rUYA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];

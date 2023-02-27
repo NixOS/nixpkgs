@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://tclap.sourceforge.net/";
+    homepage = "https://tclap.sourceforge.net/";
     description = "Templatized C++ Command Line Parser Library";
     platforms = platforms.all;
     license = licenses.mit;

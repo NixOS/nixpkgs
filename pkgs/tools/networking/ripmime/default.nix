@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/share/man/man1"
   '';
 
-  NIX_CFLAGS_COMPILE=" -Wno-error ";
+  env.NIX_CFLAGS_COMPILE = " -Wno-error ";
 
   meta = with lib; {
     description = "Attachment extractor for MIME messages";

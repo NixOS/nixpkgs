@@ -3,15 +3,13 @@
 with lib;
 
 let
-  json = pkgs.formats.json { };
+  yaml = pkgs.formats.yaml { };
   cfg = config.services.prometheus;
   checkConfigEnabled =
     (lib.isBool cfg.checkConfig && cfg.checkConfig)
       || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
-
-  prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
     PATH="${makeBinPath (with pkgs; [ systemd ])}"
@@ -38,7 +36,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
+  generatedPrometheusYml = yaml.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
@@ -73,7 +71,8 @@ let
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
+    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
+    ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -1716,6 +1715,15 @@ in
       description = lib.mdDoc ''
         The URL under which Prometheus is externally reachable (for example,
         if Prometheus is served via a reverse proxy).
+      '';
+    };
+
+    webConfigFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = lib.mdDoc ''
+        Specifies which file should be used as web.config.file and be passed on startup.
+        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
       '';
     };
 

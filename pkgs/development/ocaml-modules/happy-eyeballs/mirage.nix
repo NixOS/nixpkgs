@@ -19,8 +19,7 @@ buildDunePackage {
   inherit (happy-eyeballs) src version;
 
   minimalOCamlVersion = "4.08";
-
-  strictDeps = true;
+  duneVersion = "3";
 
   buildInputs = [
     duration

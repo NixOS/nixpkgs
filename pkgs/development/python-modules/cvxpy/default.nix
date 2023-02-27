@@ -17,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bWdkJkPR3bLyr1m0Zrh9QsSi42eDGte0PDO1nu+ltQ4=";
+    hash = "sha256-Zszme9xjW5spBmUQR0OSwM/A2V24rdpAENyM3Y4EYlA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools <= 64.0.2" "setuptools"
+  '';
 
   propagatedBuildInputs = [
     cvxopt
@@ -43,7 +48,7 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "./cvxpy" ];
 

@@ -54,7 +54,7 @@ let
     # We hard-code this by providing a little patch and then passing the absolute path to syminfo.lib as a
     # preprocessor flag.
     preBuild = ''
-      makeFlagsArray+=(CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"$out/share/syminfo.lib\"')
+      makeFlagsArray+=(CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"')
       export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
     '';
     makeFlags = [ "CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"" ];

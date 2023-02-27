@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "35PrC4UZJJJgDUMv/xoz4R9HA9hidZ9HmXSgte6B+a8=";
+    sha256 = "5/cScJpi5Z5Z/SjizKfMTGytuEo2uUT6QtpMnn7JhKc=";
   };
 
   nativeBuildInputs = [

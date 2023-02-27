@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-1BmXUZ/LpKHkbrSi/jG8EvD/lXsrgbrCjbJHRPMz6VU=";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin [
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-I${lib.getDev libcxx}/include/c++/v1"
   ];
 

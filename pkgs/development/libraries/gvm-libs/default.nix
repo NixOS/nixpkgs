@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGVM_RUN_DIR=$out/run/gvm"
+    "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
   ];
 
   meta = with lib; {

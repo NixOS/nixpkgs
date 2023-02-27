@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "tomli" ];
 

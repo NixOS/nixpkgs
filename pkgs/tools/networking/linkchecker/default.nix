@@ -1,54 +1,64 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, gettext
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.0.1";
+  version = "10.2.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v" + version;
-    sha256 = "sha256-OOssHbX9nTCURpMKIy+95ZTvahuUAabLUhPnRp3xpN4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
   };
 
-  nativeBuildInputs = [ gettext ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    configargparse
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     beautifulsoup4
-    pyopenssl
+    configargparse
     dnspython
-    pyxdg
+    hatch-vcs
+    hatchling
+    pyopenssl
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     parameterized
-    pytest
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
-    sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
-  '';
+  disabledTests = [
+    # test_timeit2 is flakey, and depends sleep being precise to the milisecond
+    "TestLoginUrl"
+    "test_timeit2"
+  ];
 
-  # test_timeit2 is flakey, and depends sleep being precise to the milisecond
-  checkPhase = ''
-    ${lib.optionalString stdenv.isDarwin ''
-      # network tests fails on darwin
-      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
-    ''}
-      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
-        -k 'not TestLoginUrl and not test_timeit2'
-  '';
+  disabledTestPaths = [
+    "tests/checker/telnetserver.py"
+    "tests/checker/test_telnet.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "tests/checker/test_content_allows_robots.py"
+    "tests/checker/test_http*.py"
+    "tests/test_network.py"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Check websites for broken links";
     homepage = "https://linkcheck.github.io/linkchecker/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ peterhoeg tweber ];
+    changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg tweber ];
   };
 }

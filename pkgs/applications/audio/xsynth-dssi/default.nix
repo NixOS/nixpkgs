@@ -30,7 +30,7 @@ stdenv.mkDerivation  rec {
       synths) with user interfaces, permitting them to be hosted
       in-process by audio applications.
     '';
-    homepage = "http://dssi.sourceforge.net/download.html#Xsynth-DSSI";
+    homepage = "https://dssi.sourceforge.net/download.html#Xsynth-DSSI";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

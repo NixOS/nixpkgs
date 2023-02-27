@@ -4,6 +4,9 @@ let
 in
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "alps";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ hmenke ];
+  };
 
   nodes = {
     server = {
@@ -90,7 +93,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: ''
     server.start()
     server.wait_for_unit("postfix.service")
     server.wait_for_unit("dovecot2.service")
@@ -99,6 +102,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     client.start()
     client.wait_for_unit("alps.service")
+    client.wait_for_open_port(${toString nodes.client.config.services.alps.port})
     client.succeed("test-alps-login")
   '';
 })

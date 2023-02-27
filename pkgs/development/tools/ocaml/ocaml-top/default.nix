@@ -2,25 +2,21 @@
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocaml-top";
-  version = "1.2.0-rc";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-top";
     rev = version;
-    sha256 = "sha256-ZXnPnPvJmHshkTwYWeBojrgJYAF/R6vUo0XkvVMFSeQ=";
+    hash = "sha256-xmPGGB/zUpfeAxUIhR1PhfoESAJq7sTpqHuf++EH3Lw=";
   };
 
-  buildInputs = [ ncurses ocp-build lablgtk3-sourceview3 ocp-index ];
+  nativeBuildInputs = [ ocp-build ];
+  buildInputs = [ ncurses lablgtk3-sourceview3 ocp-index ];
 
   configurePhase = ''
     export TERM=xterm
     ocp-build -init
-  '';
-
-  postPatch = ''
-    substituteInPlace src/completion.ml \
-      --replace 'LibIndex.load ' 'LibIndex.load ~qualify:false '
   '';
 
   meta = {

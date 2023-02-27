@@ -4,40 +4,45 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, makeDesktopItem
 , curl
 , extra-cmake-modules
-, libpulseaudio
 , libXrandr
+, libpulseaudio
+, makeDesktopItem
 , mesa # for libgbm
 , ninja
 , pkg-config
 , qtbase
 , qtsvg
 , qttools
+, qtwayland
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
+, enableWayland ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duckstation";
-  version = "unstable-2022-11-18";
+  version = "unstable-2023-01-01";
+
   src = fetchFromGitHub {
     owner = "stenzek";
-    repo = pname;
-    rev = "8d7aea5e19859ed483699cc4a5dbd47165c7be8b";
-    sha256 = "sha256-92Wn1ZEEZszmVK/KrJqjDuQf/lyD8/VScfTI/St5dY4=";
+    repo = "duckstation";
+    rev = "06d6447e59f208f21ba42f4df1665b789db13fb7";
+    sha256 = "sha256-DyuQ7J7MVSQHpvPZhMtwqNM8ifjI8UFYQ9SxY5kikBI=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     copyDesktopItems
     ninja
     pkg-config
     qttools
     wrapQtAppsHook
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
   ];
 
   buildInputs = [
@@ -49,13 +54,16 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     vulkan-loader
+  ]
+  ++ lib.optionals enableWayland [
+    qtwayland
     wayland
   ];
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
-    "-DUSE_WAYLAND=ON"
-  ];
+  ]
+  ++ lib.optionals enableWayland [ "-DUSE_WAYLAND=ON" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -91,9 +99,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  # Libpulseaudio fixes https://github.com/NixOS/nixpkgs/issues/171173
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
   ];
 

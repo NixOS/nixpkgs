@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
 
   # Default for release buildtype but passed manually because
   # we're using plain
-  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do

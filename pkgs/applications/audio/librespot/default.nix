@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
-, withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, openssl
+, withALSA ? true
+, alsa-lib
+, withPortAudio ? false
+, portaudio
+, withPulseAudio ? false
+, libpulseaudio
+, withRodio ? true
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
@@ -15,26 +26,26 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional withALSA alsa-lib
-    ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio;
+  buildInputs = [ openssl ]
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional withPulseAudio libpulseaudio;
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withRodio "rodio-backend"
     ++ lib.optional withALSA "alsa-backend"
-    ++ lib.optional withPulseAudio "pulseaudio-backend"
-    ++ lib.optional withPortAudio "portaudio-backend";
-
-  doCheck = false;
+    ++ lib.optional withPortAudio "portaudio-backend"
+    ++ lib.optional withPulseAudio "pulseaudio-backend";
 
   meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";
     homepage = "https://github.com/librespot-org/librespot";
+    changelog = "https://github.com/librespot-org/librespot/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/librespot.x86_64-darwin
   };
 }

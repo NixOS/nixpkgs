@@ -12,7 +12,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ocaml_lwt ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "A cryptographically secure PRNG";

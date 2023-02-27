@@ -17,10 +17,10 @@ in {
       configFile = lib.mkOption {
         type = lib.types.path;
         default = (pkgs.formats.yaml {}).generate "ergo.conf" cfg.settings;
-        defaultText = "generated config file from <literal>.settings</literal>";
+        defaultText = lib.literalMD "generated config file from `settings`";
         description = lib.mdDoc ''
           Path to configuration file.
-          Setting this will skip any configuration done via `.settings`
+          Setting this will skip any configuration done via `settings`
         '';
       };
 

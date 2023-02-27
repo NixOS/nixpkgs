@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ ];
-    platforms = [ "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

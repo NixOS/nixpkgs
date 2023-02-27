@@ -39,7 +39,7 @@ PKG_SET = "home-assistant.python.pkgs"
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "ha-av": "av",
-    "ha-HAP-python": "hap-python",
+    "HAP-python": "hap-python",
     "tensorflow": "tensorflow",
     "youtube_dl": "youtube-dl-light",
 }

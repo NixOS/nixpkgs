@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, flex, bison, bluez, pkg-config, withBluez ? false }:
-
-with lib;
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, bluez
+, libxcrypt
+, pkg-config
+, withBluez ? false
+, withRemote ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
@@ -11,16 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
   };
 
+  buildInputs = lib.optionals withRemote [ libxcrypt ];
+
   nativeBuildInputs = [ flex bison ]
-    ++ optionals withBluez [ bluez.dev pkg-config ];
+    ++ lib.optionals withBluez [ bluez.dev pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
   configureFlags = [
     "--with-pcap=${if stdenv.isLinux then "linux" else "bpf"}"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "--disable-universal"
-  ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
+  ] ++ lib.optionals withRemote [
+    "--enable-remote"
+  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform)
     [ "ac_cv_linux_vers=2" ];
 
   postInstall = ''
@@ -29,7 +41,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     platforms = platforms.unix;

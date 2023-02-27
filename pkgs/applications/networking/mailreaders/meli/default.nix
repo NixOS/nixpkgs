@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
 
   buildFeatures = lib.optionals withNotmuch [ "notmuch" ];
 

@@ -1,0 +1,12 @@
+diff --git a/cmake/Modules/AddCompilerRT.cmake b/cmake/Modules/AddCompilerRT.cmake
+--- a/cmake/Modules/AddCompilerRT.cmake
++++ b/cmake/Modules/AddCompilerRT.cmake
+@@ -406,7 +406,7 @@ function(add_compiler_rt_runtime name type)
+         if (HAD_ERROR)
+           message(FATAL_ERROR "${CMAKE_LINKER} failed with status ${HAD_ERROR}")
+         endif()
+-        set(NEED_EXPLICIT_ADHOC_CODESIGN 1)
++        set(NEED_EXPLICIT_ADHOC_CODESIGN 0) # `postLinkSignHook` handles this for us
+         if ("${LD_V_OUTPUT}" MATCHES ".*ld64-([0-9.]+).*")
+           string(REGEX REPLACE ".*ld64-([0-9.]+).*" "\\1" HOST_LINK_VERSION ${LD_V_OUTPUT})
+           if (HOST_LINK_VERSION VERSION_GREATER_EQUAL 609)

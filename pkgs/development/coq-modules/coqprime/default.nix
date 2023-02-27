@@ -1,11 +1,11 @@
 { which, lib, mkCoqDerivation, coq, bignums, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
 
   pname = "coqprime";
   owner = "thery";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.12" "8.16"; out = "8.15"; }
     { case = range "8.10" "8.11"; out = "8.10"; }
     { case = range "8.8"  "8.9";  out = "8.8"; }

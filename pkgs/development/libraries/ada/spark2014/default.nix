@@ -5,7 +5,6 @@
 , gnatcoll-core
 , gprbuild
 , python3
-, why3
 , ocaml
 , ocamlPackages
 , makeWrapper
@@ -53,11 +52,9 @@ stdenv.mkDerivation rec {
     make setup
   '';
 
-  postInstall = ''
+  installPhase = ''
+    make install-all
     cp -a ./install/. $out
-    # help gnatprove to locate why3server
-    wrapProgram "$out/bin/gnatprove" \
-        --prefix PATH : "${why3}/lib/why3"
   '';
 
   meta = with lib; {

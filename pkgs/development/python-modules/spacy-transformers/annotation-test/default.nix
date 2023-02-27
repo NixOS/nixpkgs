@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   dontBuild = true;
   doCheck = true;
 
-  checkInputs = [ pytest spacy_models.en_core_web_trf ];
+  nativeCheckInputs = [ pytest spacy_models.en_core_web_trf ];
 
   checkPhase = ''
     pytest annotate.py

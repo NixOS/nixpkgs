@@ -71,25 +71,27 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withNetworkManager [
     networkmanager
     glib
-  ] ++ lib.optional withSensors [
+  ] ++ lib.optionals withSensors [
     lm_sensors
   ];
 
   propagatedBuildInputs = [
-  ] ++ lib.optional withPython (python3.withPackages (ps: [
-    ps.numpy
-    ps.protobuf
-    ps.pyserial
-    ps.setuptools
-    ps.websockets
-  ]));
+  ] ++ lib.optionals withPython [
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.protobuf
+      ps.pyserial
+      ps.setuptools
+      ps.websockets
+    ]))
+  ];
 
   configureFlags = [
-  ] ++ lib.optional (!withNetworkManager) [
+  ] ++ lib.optionals (!withNetworkManager) [
     "--disable-libnm"
-  ] ++ lib.optional (!withPython) [
+  ] ++ lib.optionals (!withPython) [
     "--disable-python-tools"
-  ] ++ lib.optional (!withSensors) [
+  ] ++ lib.optionals (!withSensors) [
     "--disable-lmsensors"
   ];
 

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.17.0";
+  version = "0.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
-    rev = version;
-    hash = "sha256-M4eZzFphhc96Pf1bspD+Hvl9SUN1N72xnxdtVFiPc78=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3GHG4FBGMiF5kNk2gl05xiX9+5tcrUyi4SUCXTa6Qco=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytest-freezegun
@@ -73,6 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
+    changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

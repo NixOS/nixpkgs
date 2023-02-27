@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Heuristics-driven menu generator for several window managers";
-    homepage = "http://menumaker.sourceforge.net";
+    homepage = "https://menumaker.sourceforge.net";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

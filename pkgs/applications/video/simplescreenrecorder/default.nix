@@ -13,7 +13,10 @@ mkDerivation rec {
     sha256 = "0mrx8wprs8bi42fwwvk6rh634ic9jnn0gkfpd6q9pcawnnbz3vq8";
   };
 
-  cmakeFlags = [ "-DWITH_QT5=TRUE" ];
+  cmakeFlags = [
+    "-DWITH_QT5=TRUE"
+    "-DWITH_GLINJECT=${if stdenv.hostPlatform.isx86 then "TRUE" else "FALSE"}"
+  ];
 
   patches = [ ./fix-paths.patch ];
 
@@ -35,7 +38,7 @@ mkDerivation rec {
     description = "A screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
   };
 }

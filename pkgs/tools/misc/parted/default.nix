@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
-  checkInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
+  nativeCheckInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "subnetcalc";
-  version = "2.4.20";
+  version = "2.4.21";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-ZKEcDLwZPPgbaSx+LvTHNWcdYR/mZEGLc9b0Fb+CyEE=";
+    sha256 = "sha256-cFlNx59PaI5GvbEKUplNEq5HVCNt40ZJUvMj2UIbe2A=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

@@ -1,0 +1,161 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "d2930e8fcf9c33162b9fcc1d522bc975e2d4179b",
+            "version": "1.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-cmark",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-cmark.git",
+          "name": "cmark-gfm"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7-gfm",
+            "revision": "792c1c3326327515ce9bf64c44196b7f4daab9a6"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-cmark"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-crypto",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-crypto.git",
+          "name": "swift-crypto"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "9680b7251cd2be22caaed8f1468bd9e8915a62fb",
+            "version": "1.1.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-crypto"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-docc-plugin",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-docc-plugin",
+          "name": "SwiftDocCPlugin"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "3303b164430d9a7055ba484c8ead67a52f7b74f6",
+            "version": "1.0.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-docc-plugin"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-docc-symbolkit",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-docc-symbolkit",
+          "name": "SymbolKit"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "8682202025906dce29a8b04f9263f40ba87b89d8"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-docc-symbolkit"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-lmdb",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-lmdb.git",
+          "name": "CLMDB"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "6ea45a7ebf6d8f72bd299dfcc3299e284bbb92ee"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-lmdb"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-markdown",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-markdown.git",
+          "name": "swift-markdown"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "d6cd065a7e4b6c3fad615dcd39890e095a2f63a2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-markdown"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-nio",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-nio.git",
+          "name": "swift-nio"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "1d425b0851ffa2695d488cce1d68df2539f42500",
+            "version": "2.31.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-nio"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-nio-ssl",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-nio-ssl.git",
+          "name": "swift-nio-ssl"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "2e74773972bd6254c41ceeda827f229bccbf1c0f",
+            "version": "2.15.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-nio-ssl"
+      }
+    ]
+  },
+  "version": 5
+}

@@ -51,7 +51,7 @@ let
           inherit version;
           sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
         };
-        checkInputs = old.checkInputs ++ (with self; [
+        nativeCheckInputs = old.nativeCheckInputs ++ (with self; [
           requests
         ]);
         disabledTests = old.disabledTests ++ [

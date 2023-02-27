@@ -60,7 +60,7 @@ buildPythonPackage {
     kill $REDIS_PID
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytest-mock
     pytestCheckHook

@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 jq ];
   buildInputs = [ libX11 libXext zlib ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+    "-Wno-error=uninitialized"
+  ];
+
   # Make sure we include the drivers and icd files in the output as the cmake
   # generated install command only puts in the spirv-tools stuff.
   installPhase = ''

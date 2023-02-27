@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     cd build
   '';
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}c++"
+  ];
+
   installPhase = ''
     install -D SoliCurses.out $out/bin/solicurses
   '';

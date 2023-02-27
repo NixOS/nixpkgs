@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "2.3.1";
+  version = "2.3.5";
 
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bm/LfU6DIQmM8on1m2UFHK/TRn8InG5XyfiUrjLCO3E=";
+    hash = "sha256-pgwR+JUvQSy7Fl1wyx9nOjtDorqak84R+X5qTeg0qjo=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

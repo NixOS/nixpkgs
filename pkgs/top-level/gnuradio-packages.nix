@@ -16,7 +16,7 @@ let
 
   callPackage = self.newScope ({
     inherit (gnuradio)
-      # Packages that are potentially overriden and used as deps here.
+      # Packages that are potentially overridden and used as deps here.
       boost
       volk
     ;

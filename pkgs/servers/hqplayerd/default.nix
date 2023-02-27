@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.33.0-96sse42";
+  version = "4.34.0-100sse42";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc36/${pname}-${version}.fc36.x86_64.rpm";
-    hash = "sha256-4gPK31XMd5JUp2+il1Qa7r0EaXVGEvKoYLNGSD2dLUs=";
+    hash = "sha256-MCRZ0XKi6pztVTuPQpPEn6wHsOwtSxR0Px9r12jnC9U=";
   };
 
   unpackPhase = ''
@@ -75,14 +75,6 @@ stdenv.mkDerivation rec {
     # configuration
     mkdir -p $out/etc
     cp -rv ./etc/hqplayer $out/etc/
-
-    # udev rules
-    mkdir -p $out/etc/udev
-    cp -rv ./etc/udev/rules.d $out/etc/udev/
-
-    # kernel module cfgs
-    mkdir -p $out/etc
-    cp -rv ./etc/modules-load.d $out/etc/
 
     # systemd service file
     mkdir -p $out/lib/systemd

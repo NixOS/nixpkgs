@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "gallery-dl";
-  version = "1.23.5";
+  version = "1.24.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "gallery_dl";
-    sha256 = "sha256-NhnuW7rq5Dgrnkw/nUO/pFg/Sh2D/d9gFCIb+gQy5QE=";
+    sha256 = "sha256-P71JiGI9PpWMAlgk5TwQa/h3AUEZSEZ6/MahY+IIy9M=";
   };
 
   propagatedBuildInputs = [
@@ -16,7 +16,7 @@ buildPythonApplication rec {
     yt-dlp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

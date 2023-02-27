@@ -55,7 +55,7 @@ in
             passwordFile = mkOption {
               type = types.str;
               default = "";
-              description = lib.mdDoc "File that containts password";
+              description = lib.mdDoc "File that contains password";
             };
 
           };
@@ -92,7 +92,7 @@ in
         passwordFile = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "File that containts password";
+          description = lib.mdDoc "File that contains password";
         };
       };
 

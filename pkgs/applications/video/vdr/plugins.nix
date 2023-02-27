@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, fetchFromGitHub
+{ lib, stdenv, vdr, fetchFromGitHub
 , graphicsmagick, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
-    name = "vdr-${vdr.version}-${name}";
+    name = "vdr-${name}-${vdr.version}";
     inherit (vdr) src;
     buildInputs = [ vdr ];
     preConfigure = "cd PLUGINS/src/${name}";
@@ -55,13 +55,13 @@ in {
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    version = "3.0.26";
+    version = "3.1.1";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-markad";
       owner = "kfb77";
-      sha256 = "sha256-0J6XeLgr9IZSWsheQZWVNRLIxp8iyCvR9Y0z/yrbTnI=";
-      rev = "v${version}";
+      sha256 = "sha256-h2a400T6mHzZRWAVFXF5Wzhu4Zp1D3btEKlxnCtB13M=";
+      rev = "V${version}";
     };
 
     buildInputs = [ vdr ffmpeg ];
@@ -101,12 +101,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "2.4.1";
+    version = "2.4.2";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-epgsearch";
       owner = "vdr-projects";
-      sha256 = "sha256-UlbPCkUFN0Gyxjw9xq2STFTDZRVcPPNjadSQd4o2o9U=";
+      sha256 = "sha256-C+WSdGTnDBTWLvpjG5GBaK8pYbht431nL5iaL/a0H4Y=";
       rev = "v${version}";
     };
 
@@ -150,7 +150,7 @@ in {
 
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
-    version = "1.8.1";
+    version = "1.8.3";
 
     buildInputs = [ vdr ];
 
@@ -160,7 +160,7 @@ in {
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
       rev = version;
-      sha256 = "sha256-1C0Z7NoU+FNch4BhrAcbJdzVvGuH1YDaxJ+9PflR78E=";
+      sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
     meta = with lib; {
@@ -173,14 +173,15 @@ in {
 
   };
 
-  text2skin = stdenv.mkDerivation {
+  text2skin = stdenv.mkDerivation rec {
     pname = "vdr-text2skin";
     version = "1.3.4-20170702";
 
-    src = fetchgit {
-      url = "git://projects.vdr-developer.org/vdr-plugin-text2skin.git";
-      sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-text2skin";
+      owner = "vdr-projects";
       rev = "8f7954da2488ced734c30e7c2704b92a44e6e1ad";
+      sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
     };
 
     buildInputs = [ vdr graphicsmagick ];
@@ -200,7 +201,7 @@ in {
     dontInstall = true;
 
     meta = with lib; {
-      homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";
+      inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;

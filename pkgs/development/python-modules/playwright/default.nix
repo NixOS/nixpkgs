@@ -193,6 +193,8 @@ buildPythonPackage rec {
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   # Skip tests because they require network access.
   doCheck = false;
 
@@ -221,5 +223,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick yrd SuperSandro2000 ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

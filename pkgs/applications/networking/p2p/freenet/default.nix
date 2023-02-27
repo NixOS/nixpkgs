@@ -1,72 +1,58 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
+{ lib, stdenv, fetchurl, jdk, bash, coreutils, substituteAll, nixosTests, jna }:
 
 let
+  version = "build01494";
   freenet_ext = fetchurl {
-    url = "https://downloads.freenetproject.org/latest/freenet-ext.jar";
-    sha256 = "17ypljdvazgx2z6hhswny1lxfrknysz3x6igx8vl3xgdpvbb7wij";
+    url = "https://github.com/freenet/fred/releases/download/${version}/freenet-ext.jar";
+    sha256 = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
-
-  bcprov_version = "jdk15on-154";
   bcprov = fetchurl {
-    url = "https://www.bouncycastle.org/download/bcprov-ext-${bcprov_version}.jar";
-    sha256 = "0abmhg2h44g8c5p7skzqwfxj8xwcjh9vs84mc0hr78k1am0633jk";
+    url = "https://github.com/freenet/fred/releases/download/${version}/bcprov-jdk15on-1.59.jar";
+    sha256 = "sha256-HDHkTjMdJeRtKTs+juLQcCimfbAR50yyRDKFrtHVnIU=";
   };
   seednodes = fetchurl {
     url = "https://downloads.freenetproject.org/alpha/opennet/seednodes.fref";
     sha256 = "08awwr8n80b4cdzzb3y8hf2fzkr1f2ly4nlq779d6pvi5jymqdvv";
   };
-  version = "build01480";
 
   freenet-jars = stdenv.mkDerivation {
     pname = "freenet-jars";
     inherit version;
 
-    src = fetchFromGitHub {
-      owner = "freenet";
-      repo = "fred";
-      rev = version;
-      sha256 = "0wddkfyhsgs7bcq9svicz6l0a35yv82yqzmji3c345hg4hbch3kb";
+    src = fetchurl {
+      url = "https://github.com/freenet/fred/releases/download/${version}/freenet.jar";
+      sha256 = "sha256-1Pjc8Ob4EN7N05QkGTMKBn7z3myTDaQ98N48nNSLstg=";
     };
 
-    patchPhase = ''
-      cp ${freenet_ext} lib/freenet/freenet-ext.jar
-      cp ${bcprov} lib/bcprov-${bcprov_version}.jar
-
-      sed '/antcall.*-ext/d' -i build.xml
-      sed 's/@unknown@/${version}/g' -i build-clean.xml
-    '';
-
-    buildInputs = [ ant jdk ];
-
-    buildPhase = "ant package-only";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/share/freenet
-      cp lib/bcprov-${bcprov_version}.jar $out/share/freenet
-      cp lib/freenet/freenet-ext.jar $out/share/freenet
-      cp dist/freenet.jar $out/share/freenet
+      ln -s ${bcprov} $out/share/freenet/bcprov.jar
+      ln -s ${freenet_ext} $out/share/freenet/freenet-ext.jar
+      ln -s ${jna}/share/java/jna-platform.jar $out/share/freenet/jna_platform.jar
+      ln -s ${jna}/share/java/jna.jar $out/share/freenet/jna.jar
+      ln -s $src $out/share/freenet/freenet.jar
     '';
   };
 
 in stdenv.mkDerivation {
-  name = "freenet-${version}";
+  pname = "freenet";
   inherit version;
 
   src = substituteAll {
     src = ./freenetWrapper;
-    inherit bash coreutils seednodes bcprov_version;
+    inherit bash coreutils jdk seednodes;
     freenet = freenet-jars;
-    jre = jdk.jre;
   };
-
-  jars = freenet-jars;
 
   dontUnpack = true;
 
+  passthru.tests = { inherit (nixosTests) freenet; };
+
   installPhase = ''
     mkdir -p $out/bin
-    cp $src $out/bin/freenet
-    chmod +x $out/bin/freenet
+    install -Dm555 $src $out/bin/freenet
     ln -s ${freenet-jars}/share $out/share
   '';
 
@@ -75,7 +61,8 @@ in stdenv.mkDerivation {
     homepage = "https://freenetproject.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
+    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
   };
 }

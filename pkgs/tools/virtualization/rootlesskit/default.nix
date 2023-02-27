@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-ILGUJsfG60qVu1RWoe8gwjVDfhPoAVZck0CVORgN2y0=";
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
     tests = nixosTests.docker-rootless;
   };
 

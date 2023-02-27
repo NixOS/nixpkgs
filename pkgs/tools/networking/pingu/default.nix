@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pingu";
-  version = "0.0.3";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "sheepla";
     repo = "pingu";
     rev = "v${version}";
-    sha256 = "sha256-KYCG3L5x0ZdcyseffB0GoKpLZ/VG/qjMDh10qrLn62Y=";
+    sha256 = "sha256-iAHj6/qaZgpTfrUZZ9qdsjiNMJ2zH0CzhR4TVSC9oLE=";
   };
 
-  vendorSha256 = "sha256-HkESF/aADGPixOeh+osFnjzhpz+/4NIsJOjpyyFF9Eg=";
+  vendorHash = "sha256-xn6la6E0C5QASXxNee1Py/rBs4ls9X/ePeg4Q1e2UyU=";
 
   meta = with lib; {
     description = "Ping command implementation in Go but with colorful output and pingu ascii art";

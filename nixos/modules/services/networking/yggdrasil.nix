@@ -193,7 +193,7 @@ in {
     environment.systemPackages = [ cfg.package ];
   });
   meta = {
-    doc = ./yggdrasil.xml;
+    doc = ./yggdrasil.md;
     maintainers = with lib.maintainers; [ gazally ehmry ];
   };
 }

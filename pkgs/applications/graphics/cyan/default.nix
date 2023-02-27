@@ -27,9 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ imagemagick ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Image viewer and converter, designed for prepress (print) work";

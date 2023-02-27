@@ -65,8 +65,6 @@ in {
       ] ++ optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
-      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "5.16") [
-        rtw89-firmware
       ];
       hardware.wirelessRegulatoryDatabase = true;
     })

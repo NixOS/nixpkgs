@@ -57,4 +57,9 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  fix-em-ice-bonding = {
+    name = "fix-em-ice-bonding";
+    patch = ./fix-em-ice-bonding.patch;
+  };
 }

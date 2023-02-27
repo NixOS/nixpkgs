@@ -9,6 +9,7 @@
 , kconfig
 , kcoreaddons
 , ki18n
+, kirigami-addons
 , kirigami2
 , networkmanager-qt
 , qtkeychain
@@ -40,6 +41,7 @@ mkDerivation rec {
     kconfig
     kcoreaddons
     ki18n
+    kirigami-addons
     kirigami2
     networkmanager-qt
     qtkeychain

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../tests/test-yacas
   '';
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
   doCheck = true;
