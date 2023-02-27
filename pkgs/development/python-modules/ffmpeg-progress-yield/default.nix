@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Run an ffmpeg command with progress";
     homepage = "https://github.com/slhck/ffmpeg-progress-yield";
+    changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ prusnak ];
   };
