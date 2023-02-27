@@ -37088,6 +37088,10 @@ with pkgs;
 
   erigon = callPackage ../applications/blockchains/erigon { };
 
+  electrs-esplora = callPackage ../applications/blockchains/electrs-esplora {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   exodus = callPackage ../applications/blockchains/exodus { };
 
   faraday = callPackage ../applications/blockchains/faraday { };
