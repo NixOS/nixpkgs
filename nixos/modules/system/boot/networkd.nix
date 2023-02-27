@@ -1023,6 +1023,12 @@ let
         (assertInt "VLANId")
         (assertRange "VLANId" 0 4094)
       ];
+
+      sectionLLDP = checkUnitConfig "LLDP" [
+        (assertOnlyFields [
+          "MUDURL"
+        ])
+      ];
     };
   };
 
@@ -1658,6 +1664,17 @@ let
       '';
     };
 
+    lldpConfig = mkOption {
+      default = {};
+      example = { MUDURL = "https://things.example.org/product_abc123/v5"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionLLDP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[LLDP]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2077,6 +2094,10 @@ let
           [BridgeMDB]
           ${attrsToSection x.bridgeMDBConfig}
         '')
+        + optionalString (def.lldpConfig != { }) ''
+          [LLDP]
+          ${attrsToSection def.lldpConfig}
+        ''
         + def.extraConfig;
     };
 
