@@ -1105,6 +1105,20 @@ let
         ])
         (assertValueOneOf "Parent" [ "clsact" "ingress" ])
       ];
+
+      sectionNetworkEmulator = checkUnitConfig "NetworkEmulator" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "DelaySec"
+          "DelayJitterSec"
+          "PacketLimit"
+          "LossRate"
+          "DuplicateRate"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 0 4294967294)
+      ];
     };
   };
 
@@ -1784,6 +1798,17 @@ let
       '';
     };
 
+    networkEmulatorConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; DelaySec = "20msec"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionNetworkEmulator;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[NetworkEmulator]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2218,6 +2243,10 @@ let
         + optionalString (def.qdiscConfig != { }) ''
           [QDisc]
           ${attrsToSection def.qdiscConfig}
+        ''
+        + optionalString (def.networkEmulatorConfig != { }) ''
+          [NetworkEmulator]
+          ${attrsToSection def.networkEmulatorConfig}
         ''
         + def.extraConfig;
     };
