@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "3.0.6";
+  version = "4.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tophat";
     repo = "syrupy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8DdPgah1cWVY9YZT78otlAv7X00iwxfi+Fkn3OmLgeM=";
+    hash = "sha256-BL1Z1hPMwU1duAZb3ZTWWKS/XGv8RJ6/4YoBhktd5NE=";
   };
 
   nativeBuildInputs = [
