@@ -1386,6 +1386,16 @@ let
           "CeilBufferBytes"
         ])
       ];
+
+      sectionHeavyHitterFilter = checkUnitConfig "HeavyHitterFilter" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 0 4294967294)
+      ];
     };
   };
 
@@ -2296,6 +2306,17 @@ let
       '';
     };
 
+    heavyHitterFilterConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; PacketLimit = 10000; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHeavyHitterFilter;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[HeavyHitterFilter]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2814,6 +2835,10 @@ let
         + optionalString (def.hierarchyTokenBucketClassConfig != { }) ''
           [HierarchyTokenBucketClass]
           ${attrsToSection def.hierarchyTokenBucketClassConfig}
+        ''
+        + optionalString (def.heavyHitterFilterConfig != { }) ''
+          [HeavyHitterFilter]
+          ${attrsToSection def.heavyHitterFilterConfig}
         ''
         + def.extraConfig;
     };
