@@ -11194,8 +11194,6 @@ self: super: with self; {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
-  suds-jurko = callPackage ../development/python-modules/suds-jurko { };
-
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
