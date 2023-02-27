@@ -110,8 +110,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_12 = common {
-    version = "2.12.0";
-    sha256 = "sha256-sQ9C101CL/eVN5JgH91ozHFWU4+bXr8/Fi/8NQk6xRI=";
+    version = "2.12.1";
+    sha256 = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
     patches = [
       ./patches/flaky-tests.patch
       patch-monitorfdhup
