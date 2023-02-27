@@ -1133,6 +1133,16 @@ let
           "MTUBytes"
         ])
       ];
+
+      sectionPIE = checkUnitConfig "PIE" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 1 4294967294)
+      ];
     };
   };
 
@@ -1834,6 +1844,17 @@ let
       '';
     };
 
+    pieConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; PacketLimit = "3847"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPIE;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[PIE]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2276,6 +2297,10 @@ let
         + optionalString (def.tokenBucketFilterConfig != { }) ''
           [TokenBucketFilter]
           ${attrsToSection def.tockenBucketFilterConfig}
+        ''
+        + optionalString (def.pieConfig != { }) ''
+          [PIE]
+          ${attrsToSection def.pieConfig}
         ''
         + def.extraConfig;
     };
