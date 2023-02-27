@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.1.0";
+  version = "1.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "asymworks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1hkpfl8rdwyzqrr1drqlmcw3xpv3pi1jf19h1divspbzwarqxs1c";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-aab+3xrEiCjysa+DzXWelQwz8V2tr74y8v0NpDZiuTk=";
   };
 
   patches = [
