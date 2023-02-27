@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
-  version = "5.0.0";
+  version = "5.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nolze";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A5A578JZrxRXX6ewkFzittGTOebeNb99fuKsEm5QGoI=";
+    sha256 = "sha256-OrGgY+CEhAHGOOIPYK8OijRdoh0PRelnsKB++ksUIXY=";
   };
 
   nativeBuildInputs = [
