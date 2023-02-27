@@ -399,7 +399,6 @@ in
         {
           DOMAIN = cfg.domain;
           STATIC_ROOT_PATH = toString cfg.staticRootPath;
-          LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }
         (mkIf cfg.enableUnixSocket {
@@ -412,8 +411,8 @@ in
         })
         (mkIf cfg.lfs.enable {
           LFS_START_SERVER = true;
+          LFS_JWT_SECRET = "#lfsjwtsecret#";
         })
-
       ];
 
       session = {
@@ -434,7 +433,7 @@ in
         JWT_SECRET = "#oauth2jwtsecret#";
       };
 
-      lfs = mkIf (cfg.lfs.enable) {
+      lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
     };
@@ -466,9 +465,6 @@ in
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
@@ -490,6 +486,11 @@ in
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
       "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+
+    ] ++ lib.optionals cfg.lfs.enable [
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gitea = {
@@ -532,9 +533,11 @@ in
                 ${exe} generate secret JWT_SECRET > ${oauth2JwtSecret}
             fi
 
+            ${lib.optionalString cfg.lfs.enable ''
             if [ ! -s ${lfsJwtSecret} ]; then
                 ${exe} generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
             fi
+            ''}
 
             if [ ! -s ${internalToken} ]; then
                 ${exe} generate secret INTERNAL_TOKEN > ${internalToken}
@@ -544,8 +547,11 @@ in
             ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
             ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
             ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
-            ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
             ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+
+            ${lib.optionalString cfg.lfs.enable ''
+              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'"
+            ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
