@@ -1163,6 +1163,15 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 1 4294967294)
       ];
+
+      sectionStochasticFairnessQueueing = checkUnitConfig "StochasticFairnessQueueing" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PerturbPeriodSec"
+        ])
+        (assertInt "PerturbPeriodSec")
+      ];
     };
   };
 
@@ -1897,6 +1906,17 @@ let
       '';
     };
 
+    stochasticFairnessQueueingConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; PerturbPeriodSec = "30"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionStochasticFairnessQueueing;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[StochasticFairnessQueueing]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2351,6 +2371,10 @@ let
         + optionalString (def.stochasticFairBlueConfig != { }) ''
           [StochasticFairBlue]
           ${attrsToSection def.stochasticFairBlueConfig}
+        ''
+        + optionalString (def.stochasticFairnessQueueingConfig != { }) ''
+          [StochasticFairnessQueueing]
+          ${attrsToSection def.stochasticFairnessQueueingConfig}
         ''
         + def.extraConfig;
     };
