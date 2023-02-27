@@ -1173,6 +1173,14 @@ let
         (assertInt "PerturbPeriodSec")
       ];
 
+      sectionBFIFO = checkUnitConfig "BFIFO" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "LimitBytes"
+        ])
+      ];
+    };
       sectionPFIFO = checkUnitConfig "PFIFO" [
         (assertOnlyFields [
           "Parent"
@@ -1927,6 +1935,17 @@ let
       '';
     };
 
+    bfifoConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; LimitBytes = "20K"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBFIFO;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[BFIFO]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     pfifoConfig = mkOption {
       default = {};
       example = { Parent = "ingress"; PacketLimit = "300"; };
@@ -2396,6 +2415,10 @@ let
         + optionalString (def.stochasticFairnessQueueingConfig != { }) ''
           [StochasticFairnessQueueing]
           ${attrsToSection def.stochasticFairnessQueueingConfig}
+        ''
+        + optionalString (def.bfifoConfig != { }) ''
+          [BFIFO]
+          ${attrsToSection def.bfifoConfig}
         ''
         + optionalString (def.pfifoConfig != { }) ''
           [PFIFO]
