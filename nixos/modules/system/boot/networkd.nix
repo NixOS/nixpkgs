@@ -1097,6 +1097,14 @@ let
         (assertValueOneOf "Mode" [ "datagram" "connected" ])
         (assertValueOneOf "IgnoreUserspaceMulticastGroup" boolValues)
       ];
+
+      sectionQDisc = checkUnitConfig "QDisc" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+        (assertValueOneOf "Parent" [ "clsact" "ingress" ])
+      ];
     };
   };
 
@@ -1765,6 +1773,17 @@ let
       '';
     };
 
+    qdiscConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQDisc;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[QDisc]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2195,6 +2214,10 @@ let
         + optionalString (def.ipoIBConfig != { }) ''
           [IPoIB]
           ${attrsToSection def.ipoIBConfig}
+        ''
+        + optionalString (def.qdiscConfig != { }) ''
+          [QDisc]
+          ${attrsToSection def.qdiscConfig}
         ''
         + def.extraConfig;
     };
