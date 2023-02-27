@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zcwjyVKGAaiik+tDacvRT2tPNPB66HaUISUunCJxi28=";
+    hash = "sha256-nTnv/mkJvomLo+coap6bF6ap9zT7Hvnd4+m7aHFfyjk=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
