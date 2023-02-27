@@ -7,11 +7,11 @@
 }:
 buildPythonPackage rec {
   pname = "saneyaml";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6074f1959041342ab41d74a6f904720ffbcf63c94467858e0e22e17e3c43d41";
+    sha256 = "sha256-sjCfeDZiPNbbkyV067xD4/ZcdD52NReeZL7ssNFibkQ=";
   };
 
   dontConfigure = true;
