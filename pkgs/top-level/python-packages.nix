@@ -2711,6 +2711,8 @@ self: super: with self; {
 
   django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
 
+  django-localflavor = callPackage ../development/python-modules/django-localflavor { };
+
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-markup = callPackage ../development/python-modules/django-markup { };
