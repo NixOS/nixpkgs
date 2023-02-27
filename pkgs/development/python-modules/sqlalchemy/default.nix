@@ -7,10 +7,10 @@
 
 # build
 , cython
+, setuptools
 
 # propagates
 , greenlet
-, importlib-metadata
 , typing-extensions
 
 # optionals
@@ -22,7 +22,7 @@
 , mypy
 , mysql-connector
 , mysqlclient
-# TODO: oracledb
+, oracledb
 , pg8000
 , psycopg
 , psycopg2
@@ -34,28 +34,31 @@
 
 # tests
 , mock
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.46";
+  version = "2.0.4";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+    hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
   };
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
+  nativeBuildInputs =[
+    setuptools
+  ] ++ lib.optionals (!isPyPy) [
     cython
   ];
 
   propagatedBuildInputs = [
     greenlet
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   passthru.optional-dependencies = rec {
@@ -63,7 +66,7 @@ buildPythonPackage rec {
       greenlet
     ];
     mypy = [
-      #mypy
+      mypy
     ];
     mssql = [
       pyodbc
@@ -87,7 +90,7 @@ buildPythonPackage rec {
       cx_oracle
     ];
     oracle_oracledb = [
-      # TODO: oracledb
+      oracledb
     ];
     postgresql = [
       psycopg2
@@ -126,14 +129,16 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     mock
   ];
 
-  # disable mem-usage tests on mac, has trouble serializing pickle files
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "MemUsageWBackendTest"
-    "MemUsageTest"
+  disabledTestPaths = [
+    # typing correctness, not interesting
+    "test/ext/mypy"
+    # slow and high memory usage, not interesting
+    "test/aaa_profiling"
   ];
 
   meta = with lib; {
