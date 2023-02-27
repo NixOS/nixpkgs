@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "ascii-magic";
-  version = "2.1.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ascii_magic";
     inherit version;
-    hash = "sha256-YfGa+3nuqAAo69TydxO6uKNMcqZAkOEi/PMP8Frasfw=";
+    hash = "sha256-PtQaHLFn3u1cz8YotmnzWjoD9nvdctzBi+X/2KJkPYU=";
   };
 
   propagatedBuildInputs = [
