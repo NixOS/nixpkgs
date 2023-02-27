@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    ${python.interpreter} buildconfig/config.py
+    ${python.pythonForBuild.interpreter} buildconfig/config.py
   '';
 
   checkPhase = ''

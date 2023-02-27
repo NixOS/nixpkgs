@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
     platforms = platforms.linux;
+    mainProgram = "copyq";
   };
 }

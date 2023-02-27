@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.interpreter} xkbcommon/ffi_build.py
+    ${python.pythonForBuild.interpreter} xkbcommon/ffi_build.py
   '';
 
   pythonImportsCheck = [ "xkbcommon" ];

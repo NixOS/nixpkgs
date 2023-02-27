@@ -219,7 +219,7 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
-    ${python.interpreter} setup.py build --cmake-only
+    ${python.pythonForBuild.interpreter} setup.py build --cmake-only
     ${cmake}/bin/cmake build
   '';
 
