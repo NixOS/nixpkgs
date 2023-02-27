@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.27.2";
+  version = "0.28.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AMkCf29GG88kr+WZooG72ly9Xe5LZwW+++opOkyn0iE=";
+    hash = "sha256-sgkwhvDoCaPswktkohRTCe6PVtA0k2zVnlfFWKNXMp0=";
   };
 
   nativeCheckInputs = [
