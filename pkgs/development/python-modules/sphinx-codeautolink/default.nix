@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-codeautolink";
-  version = "0.12.1";
+  version = "0.15.0";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "felix-hilden";
     repo = "sphinx-codeautolink";
-    rev = "v${version}";
-    hash = "sha256-x81jhYknJ6lsLxR5ZyuYNNz/zt0kto6bNyaeZmPKDIE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iXUdOwyTRViDTDRPCcteiJ2Rcdbpiol7JPEzqbUwIPc=";
   };
 
   nativeBuildInputs = [
