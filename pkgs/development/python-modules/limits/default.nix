@@ -32,7 +32,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-NjrJ+oqVd8FFHwsNI3JMDxJAzh8GXbUn1t/Z0Quqjic=";
+    hash = "sha256-zMU2MU7MFTWSig2j1PaBLPtKM5/7gNkFajKXw3A+fIQ=";
   };
 
   propagatedBuildInputs = [
