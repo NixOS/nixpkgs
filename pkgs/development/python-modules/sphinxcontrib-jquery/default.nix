@@ -2,18 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
+, pytestCheckHook
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-jquery";
   version = "3.0.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "jquery";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-argG+jMUqLiWo4lKWAmHmUxotHl+ddJuJZ/zcUl9u5Q=";
   };
 
@@ -21,13 +22,23 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [ sphinx ];
+  pythonImportsCheck = [
+    "sphinxcontrib.jquery"
+  ];
 
-  pythonImportsCheck = [ "sphinxcontrib.jquery" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    sphinx
+  ];
 
   meta = with lib; {
-    description = "A sphinx extension that ensures that jQuery is installed for use in Sphinx themes or extensions";
+    description = "Extension to include jQuery on newer Sphinx releases";
+    longDescription = ''
+      A sphinx extension that ensures that jQuery is installed for use
+      in Sphinx themes or extensions
+    '';
     homepage = "https://github.com/sphinx-contrib/jquery";
+    changelog = "https://github.com/sphinx-contrib/jquery/blob/v${version}/CHANGES.rst";
     license = licenses.bsd0;
     maintainers = with maintainers; [ kaction ];
   };
