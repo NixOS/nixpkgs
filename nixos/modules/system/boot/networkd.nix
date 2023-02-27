@@ -1200,6 +1200,13 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 0 4294967294)
       ];
+
+      sectionPFIFOFast = checkUnitConfig "PFIFOFast" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+      ];
     };
   };
 
@@ -1978,6 +1985,17 @@ let
       '';
     };
 
+    pfifoFastConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionPFIFOFast;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[PFIFOFast]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2448,6 +2466,10 @@ let
         + optionalString (def.pfifoHeadDropConfig != { }) ''
           [PFIFOHeadDrop]
           ${attrsToSection def.pfifoHeadDropConfig}
+        ''
+        + optionalString (def.pfifoFastConfig != { }) ''
+          [PFIFOFast]
+          ${attrsToSection def.pfifoFastConfig}
         ''
         + def.extraConfig;
     };
