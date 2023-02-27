@@ -38836,6 +38836,8 @@ with pkgs;
 
   yara = callPackage ../tools/security/yara { };
 
+  yaralyzer = callPackage ../tools/security/yaralyzer { };
+
   yarGen = callPackage ../tools/security/yarGen { };
 
   yersinia = callPackage ../tools/security/yersinia { };
