@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.7.0";
+  version = "3.8.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6SqIetbyqYPlZKaZAt5KdkXDAGn8AavTU+xdolXF4f4=";
+    sha256 = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
   };
 
   nativeBuildInputs = [ cython ];
