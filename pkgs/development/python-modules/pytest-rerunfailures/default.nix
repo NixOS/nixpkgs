@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "11.0";
+  version = "11.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zuWeTm8Nc65j+6CZhlMUupuRW3GTSVQREPoBL/tu+xM=";
+    hash = "sha256-rKtEft/3wpp2uEECB8SNoBQGoWFlPJmjJc9XA9ROsWI=";
   };
 
   nativeBuildInputs = [ setuptools ];
