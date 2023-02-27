@@ -3663,6 +3663,12 @@
     github = "Dettorer";
     githubId = 2761682;
   };
+  developer-guy = {
+    name = "Batuhan Apaydın";
+    email = "developerguyn@gmail.com";
+    github = "developer-guy";
+    githubId = 16693043;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
