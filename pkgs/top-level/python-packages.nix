@@ -11475,6 +11475,8 @@ self: super: with self; {
 
   telegraph = callPackage ../development/python-modules/telegraph { };
 
+  telepath = callPackage ../development/python-modules/telepath { };
+
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
   };
