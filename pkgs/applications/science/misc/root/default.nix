@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    _llvm_9
+    _llvm_9.dev
     lz4
     xz
     gsl
