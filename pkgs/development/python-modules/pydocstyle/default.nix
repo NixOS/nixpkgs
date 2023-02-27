@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "6.1.1";
+  version = "6.3.0";
   disabled = !isPy3k;
 
   format = "setuptools";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-j0WMD2qKDdMaKG2FxrrM/O7zX4waJ1afaRPRv70djkE=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-MjRrnWu18f75OjsYIlOLJK437X3eXnlW8WkkX7vdS6k=";
   };
 
   propagatedBuildInputs = [
