@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchPypi {
     pname = "PyQt-builder";
     inherit version;
-    sha256 = "sha256-Z1WTHG0viUBVPgM00QyTPOXMGLZEJelP2hrM9P93T1k=";
+    sha256 = "sha256-g7w+MAr/i0FAWAS2qcKRM4mrWcSK2fDLhYSm73O8pQI=";
   };
 
   propagatedBuildInputs = [ packaging sip ];
