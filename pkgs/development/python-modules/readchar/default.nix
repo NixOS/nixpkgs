@@ -2,9 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# native
-, flake8
-
 # tests
 , pytestCheckHook
 , pexpect
@@ -26,11 +23,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov=readchar" ""
+    # run Linux tests on Darwin as well
+    # see https://github.com/magmax/python-readchar/pull/99 for why this is not upstreamed
+    substituteInPlace tests/linux/conftest.py \
+      --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
   '';
 
-  nativeBuildInputs = [
-    flake8
-  ];
+  pythonImportsCheck = [ "readchar" ];
 
   nativeCheckInputs = [
     pytestCheckHook

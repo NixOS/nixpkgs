@@ -42,6 +42,7 @@ let
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
+    deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
@@ -53,6 +54,7 @@ let
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { inherit replaceAll; };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
+    deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
 
     #### TOOLS
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
