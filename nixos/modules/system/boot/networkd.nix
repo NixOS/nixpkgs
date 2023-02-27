@@ -996,6 +996,23 @@ let
         (assertInt "Priority")
         (assertRange "Priority" 0 63)
       ];
+
+      sectionBridgeFDB = checkUnitConfig "BridgeFDB" [
+        (assertOnlyFields [
+          "MACAddress"
+          "Destination"
+          "VLANId"
+          "VNI"
+          "AssociatedWith"
+          "OutgoingInterface"
+        ])
+        (assertHasField "MACAddress")
+        (assertInt "VLANId")
+        (assertRange "VLANId" 0 4094)
+        (assertInt "VNI")
+        (assertRange "VNI" 1 16777215)
+        (assertValueOneOf "AssociatedWith" [ "use" "self" "master" "router" ])
+      ];
     };
   };
 
@@ -1431,6 +1448,21 @@ let
     };
   };
 
+  bridgeFDBOptions = {
+    options = {
+      bridgeFDBConfig = mkOption {
+        default = {};
+        example = { MACAddress = "65:43:4a:5b:d8:5f"; Destination = "192.168.1.42"; VNI = 20; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeFDB;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[BridgeFDB]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
   networkOptions = commonNetworkOptions // {
 
     linkConfig = mkOption {
@@ -1577,6 +1609,16 @@ let
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
         `[Bridge]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    bridgeFDBs = mkOption {
+      default = [];
+      example = [ { bridgeFDBConfig = { MACAddress = "90:e2:ba:43:fc:71"; Destination = "192.168.100.4"; VNI = 3600; }; } ];
+      type = with types; listOf (submodule bridgeFDBOptions);
+      description = lib.mdDoc ''
+        A list of BridgeFDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -1992,6 +2034,10 @@ let
           [Bridge]
           ${attrsToSection def.bridgeConfig}
         ''
+        + flip concatMapStrings def.bridgeFDBs (x: ''
+          [BridgeFDB]
+          ${attrsToSection x.bridgeFDBConfig}
+        '')
         + def.extraConfig;
     };
 
