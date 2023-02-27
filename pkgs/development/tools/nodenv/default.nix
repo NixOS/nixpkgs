@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nodenv/nodenv/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ alexnortung ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }
