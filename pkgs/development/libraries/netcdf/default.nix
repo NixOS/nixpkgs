@@ -53,6 +53,7 @@ in stdenv.mkDerivation rec {
       "--enable-dap"
       "--enable-shared"
       "--disable-dap-remote-tests"
+      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
 
