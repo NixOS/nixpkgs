@@ -1285,6 +1285,21 @@ let
           "QuantumBytes"
         ])
       ];
+
+      sectionEnhancedTransmissionSelection = checkUnitConfig "EnhancedTransmissionSelection" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "Bands"
+          "StrictBands"
+          "QuantumBytes"
+          "PriorityMap"
+        ])
+        (assertInt "Bands")
+        (assertRange "Bands" 1 16)
+        (assertInt "StrictBands")
+        (assertRange "StrictBands" 1 16)
+      ];
     };
   };
 
@@ -2118,6 +2133,17 @@ let
       '';
     };
 
+    enhancedTransmissionSelectionConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; QuantumBytes = "300k"; Bands = 3; PriorityMap = "100 200 300"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionEnhancedTransmissionSelection;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[EnhancedTransmissionSelection]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2608,6 +2634,10 @@ let
         + optionalString (def.deficitRoundRobinSchedulerClassConfig != { }) ''
           [DeficitRoundRobinSchedulerClass]
           ${attrsToSection def.deficitRoundRobinSchedulerClassConfig}
+        ''
+        + optionalString (def.enhancedTransmissionSelectionConfig != { }) ''
+          [EnhancedTransmissionSelection]
+          ${attrsToSection def.enhancedTransmissionSelectionConfig}
         ''
         + def.extraConfig;
     };
