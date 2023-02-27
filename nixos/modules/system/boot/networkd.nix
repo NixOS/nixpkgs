@@ -1315,6 +1315,24 @@ let
         (assertRange "DefaultVirtualQueue" 1 16)
         (assertValueOneOf "GenericRIO" boolValues)
       ];
+
+      sectionFairQueueingControlledDelay = checkUnitConfig "FairQueueingControlledDelay" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+          "MemoryLimitBytes"
+          "Flows"
+          "TargetSec"
+          "IntervalSec"
+          "QuantumBytes"
+          "ECN"
+          "CEThresholdSec"
+        ])
+        (assertInt "PacketLimit")
+        (assertInt "Flows")
+        (assertValueOneOf "ECN" boolValues)
+      ];
     };
   };
 
@@ -2170,6 +2188,17 @@ let
       '';
     };
 
+    fairQueueingControlledDelayConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; Flows = 5; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFairQueueingControlledDelay;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[FairQueueingControlledDelay]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2668,6 +2697,10 @@ let
         + optionalString (def.genericRandomEarlyDetectionConfig != { }) ''
           [GenericRandomEarlyDetection]
           ${attrsToSection def.genericRandomEarlyDetectionConfig}
+        ''
+        + optionalString (def.fairQueueingControlledDelayConfig != { }) ''
+          [FairQueueingControlledDelay]
+          ${attrsToSection def.fairQueueingControlledDelayConfig}
         ''
         + def.extraConfig;
     };
