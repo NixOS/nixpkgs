@@ -8,25 +8,30 @@
 
 buildPythonPackage rec  {
   pname = "voluptuous-serialize";
-  version = "2.5.0";
+  version = "2.6.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-8rWMz8tBanxHdU/F4HhBxxz3ltqbdRoP4JED2dmZfTk=";
+    repo = "voluptuous-serialize";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vvreXSQDkA3JkZpOKZqJgMRyObJX/cSR8r+A26h9fNE=";
   };
 
-  propagatedBuildInputs = [ voluptuous ];
+  propagatedBuildInputs = [
+    voluptuous
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     voluptuous
   ];
 
-  pythonImportsCheck = [ "voluptuous_serialize" ];
+  pythonImportsCheck = [
+    "voluptuous_serialize"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/home-assistant-libs/voluptuous-serialize";
