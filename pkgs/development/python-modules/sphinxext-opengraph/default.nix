@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.7.5";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fNtXj7iYX7rSaGO6JcxC+PvR8WzTFl8gYwHyRExYdfI=";
+    hash = "sha256-3q/OKkLtyA1Dw2PfTT4Fmzyn5qPbjprekpE7ItnFNUo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
