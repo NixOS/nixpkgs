@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "0.13";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garbled1";
     repo = pname;
-    rev = version;
-    sha256 = "0aw5jxpsvzyx05y1mg8d63lxx1i607yb6x19n9jil5wfis95m8pd";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-08FMNRArzmfmLH6y5Z8QPcRVZJIvU3VIOvdTry3iBGI=";
   };
 
   # Project has no tests
