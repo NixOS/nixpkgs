@@ -1361,6 +1361,16 @@ let
           "Id"
         ])
       ];
+
+      sectionHierarchyTokenBucket = checkUnitConfig "HierarchyTokenBucket" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "DefaultClass"
+          "RateToQuantum"
+        ])
+        (assertInt "RateToQuantum")
+      ];
     };
   };
 
@@ -2249,6 +2259,17 @@ let
       '';
     };
 
+    hierarchyTokenBucketConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHierarchyTokenBucket;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[HierarchyTokenBucket]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2759,6 +2780,10 @@ let
         + optionalString (def.trivialLinkEqualizerConfig != { }) ''
           [TrivialLinkEqualizer]
           ${attrsToSection def.trivialLinkEqualizerConfig}
+        ''
+        + optionalString (def.hierarchyTokenBucketConfig != { }) ''
+          [HierarchyTokenBucket]
+          ${attrsToSection def.hierarchyTokenBucketConfig}
         ''
         + def.extraConfig;
     };
