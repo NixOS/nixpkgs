@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.6.1";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-fZiODo+izOwGjCCTvi11GvUG/VQL1DV9bNXKjvIIw4A=";
+    sha256 = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
   };
 
   buildInputs = [ jaxlib ];
