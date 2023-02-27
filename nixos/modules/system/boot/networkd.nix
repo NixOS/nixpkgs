@@ -960,6 +960,42 @@ let
         (assertMacAddress "MACAddress")
       ];
 
+      sectionBridge = checkUnitConfig "Bridge" [
+        (assertOnlyFields [
+          "UnicastFlood"
+          "MulticastFlood"
+          "MulticastToUnicast"
+          "NeighborSuppression"
+          "Learning"
+          "Hairpin"
+          "Isolated"
+          "UseBPDU"
+          "FastLeave"
+          "AllowPortToBeRoot"
+          "ProxyARP"
+          "ProxyARPWiFi"
+          "MulticastRouter"
+          "Cost"
+          "Priority"
+        ])
+        (assertValueOneOf "UnicastFlood" boolValues)
+        (assertValueOneOf "MulticastFlood" boolValues)
+        (assertValueOneOf "MulticastToUnicast" boolValues)
+        (assertValueOneOf "NeighborSuppression" boolValues)
+        (assertValueOneOf "Learning" boolValues)
+        (assertValueOneOf "Hairpin" boolValues)
+        (assertValueOneOf "Isolated" boolValues)
+        (assertValueOneOf "UseBPDU" boolValues)
+        (assertValueOneOf "FastLeave" boolValues)
+        (assertValueOneOf "AllowPortToBeRoot" boolValues)
+        (assertValueOneOf "ProxyARP" boolValues)
+        (assertValueOneOf "ProxyARPWiFi" boolValues)
+        (assertValueOneOf "MulticastRouter" [ "no" "query" "permanent" "temporary" ])
+        (assertInt "Cost")
+        (assertRange "Cost" 1 65535)
+        (assertInt "Priority")
+        (assertRange "Priority" 0 63)
+      ];
     };
   };
 
@@ -1534,6 +1570,17 @@ let
       '';
     };
 
+    bridgeConfig = mkOption {
+      default = {};
+      example = { MulticastFlood = false; Cost = 20; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridge;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[Bridge]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -1941,6 +1988,10 @@ let
           [DHCPServerStaticLease]
           ${attrsToSection x.dhcpServerStaticLeaseConfig}
         '')
+        + optionalString (def.bridgeConfig != { }) ''
+          [Bridge]
+          ${attrsToSection def.bridgeConfig}
+        ''
         + def.extraConfig;
     };
 
