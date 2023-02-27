@@ -3059,6 +3059,8 @@ with pkgs;
 
   go-cve-search = callPackage ../tools/security/go-cve-search { };
 
+  go-dork = callPackage ../tools/security/go-dork { };
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   claws = callPackage ../tools/misc/claws { };
