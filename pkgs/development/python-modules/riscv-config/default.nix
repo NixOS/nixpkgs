@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "riscv-config";
-  version = "3.5.0";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = pname;
-    rev = version;
-    hash = "sha256-HKmHrvOF4OOzoILrBJG46UOKow5gRxMcXXiI6f34dPc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-K7W6yyqy/2c4WHyOojuvw2P/v7bND5K6WFfTujkofBw=";
   };
 
   propagatedBuildInputs = [ cerberus pyyaml ruamel-yaml ];
