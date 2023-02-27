@@ -4,6 +4,7 @@
 , colorama
 , tqdm
 , pytestCheckHook
+, pythonOlder
 , ffmpeg
 , procps
 }:
@@ -12,6 +13,8 @@ buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
   version = "0.7.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
