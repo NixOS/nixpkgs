@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.7";
+  version = "3.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "sepandhaghighi";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Yow5MVbaBgKA7U6RNpS/Yh1mG3XSLKPSDsUeBRSln1U=";
+    sha256 = "sha256-L0WPZomOU/I/x8QrdAerG0S2wnHyP661XTaDzzWeruk=";
   };
 
   propagatedBuildInputs = [
