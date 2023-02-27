@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "24.0.1";
+  version = "25.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IW9dfbtnFmdZ5ZsEebyoK4rPm+1gFbUmuOsQFD+wjnc=";
+    hash = "sha256-8zChosf4n9Swqk3Le/UCQ78cjami8e/DHa9XogRrMfI=";
   };
 
   buildInputs = [
