@@ -22325,6 +22325,8 @@ with pkgs;
 
   mpeg2dec = libmpeg2;
 
+  mqtt-benchmark = callPackage ../tools/networking/mqtt-benchmark { };
+
   mqttui = callPackage ../tools/networking/mqttui {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
