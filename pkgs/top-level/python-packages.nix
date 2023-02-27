@@ -2182,10 +2182,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.0a11";
+    version = "3.0.0b1";
     src = old.src.override {
       inherit version;
-      hash = "sha256-5GckkfsxVGuau2Nnf2OOc4CF3JMhOYFwlW72+/wOFyY=";
+      hash = "sha256-MMfXBQvA1Yy/tCKi/hZhXZYqU3QJ/QWIJ3rdKfJxyJc=";
     };
     patches = [ ];
   });
