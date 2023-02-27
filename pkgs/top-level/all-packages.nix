@@ -839,11 +839,14 @@ with pkgs;
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    stdenv = gcc11Stdenv;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
     icu =  icu69;
-    v8 = v8_8_x;
+    v8 = v8_8_x.override {
+      stdenv = gcc11Stdenv;
+    };
   };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
