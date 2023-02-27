@@ -1821,6 +1821,11 @@ hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 Updating packages in bulk leads to lots of breakages, which is why a
 stabilization period on the `python-unstable` branch is required.
 
+If a package is fragile and often breaks during these bulks updates, it
+may be reasonable to set `passthru.skipBulkUpdate = true` in the
+derivation. This decision should not be made on a whim and should
+always be supported by a qualifying comment.
+
 Once the branch is sufficiently stable it should normally be merged
 into the `staging` branch.
 
