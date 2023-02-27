@@ -1396,6 +1396,13 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 0 4294967294)
       ];
+
+      sectionQuickFairQueueing = checkUnitConfig "QuickFairQueueing" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+      ];
     };
   };
 
@@ -2317,6 +2324,17 @@ let
       '';
     };
 
+    quickFairQueueingConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQuickFairQueueing;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[QuickFairQueueing]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2839,6 +2857,10 @@ let
         + optionalString (def.heavyHitterFilterConfig != { }) ''
           [HeavyHitterFilter]
           ${attrsToSection def.heavyHitterFilterConfig}
+        ''
+        + optionalString (def.quickFairQueueingConfig != { }) ''
+          [QuickFairQueueing]
+          ${attrsToSection def.quickFairQueueingConfig}
         ''
         + def.extraConfig;
     };
