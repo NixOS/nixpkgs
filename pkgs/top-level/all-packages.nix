@@ -18663,7 +18663,7 @@ with pkgs;
   slimerjs = callPackage ../development/tools/slimerjs {};
 
   slint-lsp = callPackage ../development/tools/misc/slint-lsp {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
