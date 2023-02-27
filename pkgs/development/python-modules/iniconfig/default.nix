@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
+    changelog = "https://github.com/pytest-dev/iniconfig/blob/v${version}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
