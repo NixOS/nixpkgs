@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.14.2";
+  version = "1.15.0";
 
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wr4gXSh456heG5nsaEi2yo7LMre2Nd6QbTm0dcDCX1k=";
+    sha256 = "sha256-f28Dgc/ixSwbhkAgPaLLVpdLJuI5UN37GnazfZFvGX4=";
   };
 
   nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
