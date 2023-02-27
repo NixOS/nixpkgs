@@ -49,28 +49,39 @@ let
   };
 
   passthru = { inherit sources; };
+
+  fhsUserEnvAnki = buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
+    name = "anki";
+
+    # Dependencies of anki
+    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
+
+    runScript = writeShellScript "anki-wrapper.sh" ''
+      exec ${unpacked}/bin/anki
+    '';
+
+    extraInstallCommands = ''
+      mkdir -p $out/share
+      cp -R ${unpacked}/share/applications \
+        ${unpacked}/share/man \
+        ${unpacked}/share/pixmaps \
+        $out/share/
+    '';
+
+    inherit meta passthru;
+  });
+
+  fhsUserEnvAnkiWithVersion = fhsUserEnvAnki.overrideAttrs (oldAttrs: {
+    # buildFHSUserEnv doesn't have an easy way to set the version of the
+    # resulting derivation, so we manually override it here.  This makes
+    # it clear to end users the version of anki-bin.  Without this, users
+    # might assume anki-bin is an old version of Anki.
+    name = "${pname}-${version}";
+  });
 in
 
-if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-  name = "anki";
-
-  # Dependencies of anki
-  targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
-
-  runScript = writeShellScript "anki-wrapper.sh" ''
-    exec ${unpacked}/bin/anki
-  '';
-
-  extraInstallCommands = ''
-    mkdir -p $out/share
-    cp -R ${unpacked}/share/applications \
-      ${unpacked}/share/man \
-      ${unpacked}/share/pixmaps \
-      $out/share/
-  '';
-
-  inherit meta passthru;
-}) else stdenv.mkDerivation {
+if stdenv.isLinux then fhsUserEnvAnkiWithVersion
+else stdenv.mkDerivation {
   inherit pname version passthru;
 
   src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
