@@ -37,6 +37,8 @@ with pkgs.lib;
                 "-f",
                 "qcow2",
                 "-o",
+                "backing_fmt=qcow2",
+                "-o",
                 "backing_file=${image}",
                 disk_image,
             ]
