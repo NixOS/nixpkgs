@@ -21,6 +21,7 @@
 , requests
 , unidecode
 , tor
+, meek
 , obfs4
 , snowflake
 }:
@@ -57,9 +58,6 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
   };
-
-  # TODO: package meek https://support.torproject.org/glossary/meek/
-  meek = "/meek-not-available";
 
 in
 rec {

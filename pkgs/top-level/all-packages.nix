@@ -2488,6 +2488,8 @@ with pkgs;
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
+  meek = callPackage ../tools/networking/meek { };
+
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
