@@ -881,7 +881,6 @@ with pkgs;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
     icu =  icu69;
-    v8 = v8_8_x;
   };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
