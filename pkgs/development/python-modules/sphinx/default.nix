@@ -109,12 +109,6 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
-
-    # fails with pygments 2.14
-    # TODO remove for sphinx 6
-    "test_viewcode"
-    "test_additional_targets_should_be_translated"
-    "test_additional_targets_should_not_be_translated"
   ] ++ lib.optionals stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
