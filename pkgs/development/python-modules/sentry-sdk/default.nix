@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-xUDMi2xoRMsDDe7LcQxIxxozo8vV5ZPzZp5zmNld3ew=";
+    hash = "sha256-hJ6OikRro9YUEX8rqMs/JkTvM9aTabEj4E8iNQ71gEc=";
   };
 
   propagatedBuildInputs = [
