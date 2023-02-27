@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.1";
+  version = "0.23.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-1gRBHbGFUkaFvVgHHoXfpo9j0L074SyevFwMY202+uk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
   };
 
   nativeBuildInputs = [
@@ -98,8 +98,8 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+    "-W" "ignore::DeprecationWarning"
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
