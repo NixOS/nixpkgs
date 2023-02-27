@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.9.2";
+  version = "3.9.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3JEnQbS4CtZEqAb+/ngqkO+nv9SZ0Zi8sPJLyW+tQ9w=";
+    sha256 = "sha256-v0fIhf3P5Xjdn5/ryRNj0Q2YHAisMqi5RTmJQabaUO0=";
   };
 
   nativeBuildInputs = [
