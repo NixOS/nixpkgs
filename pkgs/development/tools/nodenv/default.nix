@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nodenv";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "nodenv";
     repo = "nodenv";
     rev = "v${version}";
-    sha256 = "0fgc23jd95rjll3dy5hnli8ksfc7rwscw53sdgss4yaharwlg8l2";
+    sha256 = "sha256-S7Uld7wiVJjwuvfupBodIAIOO2c/ywEmFfhEHVOCcCc=";
   };
 
   buildPhase = ''
