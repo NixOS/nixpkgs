@@ -43,7 +43,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     syncer
     pytest-xdist
     pytestCheckHook

@@ -3,10 +3,10 @@
     "link.max-buffers": 16,
     "core.daemon": true,
     "core.name": "pipewire-0",
-    "default.clock.min-quantum": 16,
     "vm.overrides": {
       "default.clock.min-quantum": 1024
-    }
+    },
+    "module.x11.bell": true
   },
   "context.spa-libs": {
     "audio.convert.*": "audioconvert/libspa-audioconvert",
@@ -70,6 +70,19 @@
     },
     {
       "name": "libpipewire-module-session-manager"
+    },
+    {
+      "name": "libpipewire-module-x11-bell",
+      "args": {},
+      "flags": [
+        "ifexists",
+        "nofail"
+      ],
+      "condition": [
+        {
+          "module.x11.bell": true
+        }
+      ]
     }
   ],
   "context.objects": [

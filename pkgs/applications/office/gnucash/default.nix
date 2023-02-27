@@ -72,11 +72,18 @@ stdenv.mkDerivation rec {
     ./0002-disable-gnc-fq-update.patch
     # this patch prevents the building of gnucash-valgrind
     ./0003-remove-valgrind.patch
+    # this patch makes gnucash exec the Finance::Quote helpers directly
+    ./0004-exec-fq-helpers.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
   GUILE_AUTO_COMPILE="0";
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+    "-Wno-error=use-after-free"
+  ]);
 
   # `make check` target does not define its prerequisites but expects them to
   # have already been built.  The list of targets below was built through trial

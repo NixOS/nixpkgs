@@ -49,11 +49,8 @@ in
 {
   options = {
     services.smokeping = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enable the smokeping service";
-      };
+      enable = mkEnableOption (lib.mdDoc "smokeping service");
+
       alertConfig = mkOption {
         type = types.lines;
         default = ''
@@ -186,7 +183,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8081;
         description = lib.mdDoc "TCP port to use for the web server.";
       };

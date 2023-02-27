@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, fetchpatch
 , ncurses
 , perl
 , pkg-config
@@ -30,15 +31,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220905-102802-7d4b8249";
+  version = "20221119-145034-49b9839f";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Xvi0bluLM4F3BFefIPhkhTF3dmRvP8u+qV70Rz4CGKI=";
+    sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
   };
+
+  patches = [
+    # fix build with rust 1.67
+    (fetchpatch {
+      url = "https://github.com/wez/wezterm/commit/36519f0d90e1875fb4b3f11f6cbf94c7d716ef78.patch";
+      sha256 = "sha256-sOGFmDan1uO1xOBCpvlGrSotjfw01MjRg0KVqa5omig=";
+    })
+  ];
 
   postPatch = ''
     echo ${version} > .tag
@@ -47,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-XJAeMDwtLtBzHMU/cb3lZgmcw5F3ifjKzKVmuP85/RY=";
+  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -114,9 +123,7 @@ rustPlatform.buildRustPackage rec {
     };
     terminfo = runCommand "wezterm-terminfo"
       {
-        nativeBuildInputs = [
-          ncurses
-        ];
+        nativeBuildInputs = [ ncurses ];
       } ''
       mkdir -p $out/share/terminfo $out/nix-support
       tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
@@ -124,10 +131,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

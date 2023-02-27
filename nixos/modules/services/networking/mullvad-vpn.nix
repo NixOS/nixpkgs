@@ -14,6 +14,15 @@ with lib;
       '';
     };
 
+    enableExcludeWrapper = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        This option activates the wrapper that allows the use of mullvad-exclude.
+        Might have minor security impact, so consider disabling if you do not use the feature.
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.mullvad;
@@ -27,11 +36,21 @@ with lib;
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
+    environment.systemPackages = [ cfg.package ];
+
     # mullvad-daemon writes to /etc/iproute2/rt_tables
     networking.iproute2.enable = true;
 
     # See https://github.com/NixOS/nixpkgs/issues/113589
     networking.firewall.checkReversePath = "loose";
+
+    # See https://github.com/NixOS/nixpkgs/issues/176603
+    security.wrappers.mullvad-exclude = mkIf cfg.enableExcludeWrapper {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${cfg.package}/bin/mullvad-exclude";
+    };
 
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";

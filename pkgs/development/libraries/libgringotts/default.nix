@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A small library to encapsulate data in an encrypted structure";
-    homepage = "http://libgringotts.sourceforge.net/";
+    homepage = "https://libgringotts.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

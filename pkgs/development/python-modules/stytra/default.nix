@@ -1,36 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, opencv3
-, pyqt5
-, pyqtgraph
-, numpy
-, scipy
-, numba
-, pandas
-, tables
-, git
-, scikitimage
-, matplotlib
-, qdarkstyle
-, GitPython
+{ lib
 , anytree
-, pims
+, arrayqueues
+, av
+, buildPythonPackage
+, colorspacious
+, fetchPypi
+, flammkuchen
+, git
+, gitpython
 , imageio
 , imageio-ffmpeg
-, av
-, nose
-, pytestCheckHook
-, pyserial
-, arrayqueues
-, colorspacious
-, qimage2ndarray
-, flammkuchen
 , lightparam
+, matplotlib
+, nose
+, numba
+, numpy
+, opencv3
+, pandas
+, pims
+, pyqt5
+, pyqtgraph
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, qdarkstyle
+, qimage2ndarray
+, scikitimage
+, scipy
+, tables
 }:
 
 buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,12 +46,6 @@ buildPythonPackage rec {
   preCheck = ''
     rm stytra/tests/test_z_experiments.py
   '';
-
-  checkInputs = [
-    nose
-    pytestCheckHook
-    pyserial
-  ];
 
   propagatedBuildInputs = [
     opencv3
@@ -61,7 +60,7 @@ buildPythonPackage rec {
     scikitimage
     matplotlib
     qdarkstyle
-    GitPython
+    gitpython
     anytree
     qimage2ndarray
     flammkuchen
@@ -74,10 +73,16 @@ buildPythonPackage rec {
     av
   ];
 
-  meta = {
-    homepage = "https://github.com/portugueslab/stytra";
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    pyserial
+  ];
+
+  meta = with lib; {
     description = "A modular package to control stimulation and track behaviour";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tbenst ];
+    homepage = "https://github.com/portugueslab/stytra";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ tbenst ];
   };
 }

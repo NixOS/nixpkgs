@@ -79,7 +79,7 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
+    hash   = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
   checkInputs = [ alcotest ppx_let ];
@@ -110,7 +110,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
+    hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
   meta = with lib; {
@@ -129,3 +129,8 @@ packaged libraries may still use the old spelling: maintainers are invited to
 fix this when updating packages. Massive renaming is strongly discouraged as it
 would be challenging to review, difficult to test, and will cause unnecessary
 rebuild.
+
+The build will automatically fail if two distinct versions of the same library
+are added to `buildInputs` (which usually happens transitively because of
+`propagatedBuildInputs`). Set `dontDetectOcamlConflicts` to true to disable this
+behavior.

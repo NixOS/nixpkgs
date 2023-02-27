@@ -1,6 +1,6 @@
 # Contains the ruby version heuristics
 { lib }:
-with lib;
+
 let
   # The returned set should be immutable
   rubyVersion = major: minor: tiny: tail:
@@ -10,15 +10,15 @@ let
       # Contains the patch number "223" if tail is "p223" or null
       patchLevel =
         let
-          p = removePrefix "p" tail;
+          p = lib.removePrefix "p" tail;
           isPosInt = num:
-            0 == stringLength
-              (replaceStrings
+            0 == lib.stringLength
+              (lib.replaceStrings
               ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"]
               [""  ""  ""  ""  ""  ""  ""  ""  ""  "" ]
               num);
         in
-          if hasPrefix "p" tail && isPosInt p then p
+          if lib.hasPrefix "p" tail && isPosInt p then p
           else null;
 
       # Shortcuts
@@ -28,11 +28,11 @@ let
       # Ruby separates lib and gem folders by ABI version which isn't very
       # consistent.
       libDir =
-        if versionAtLeast majMinTiny "2.1.0" then
+        if lib.versionAtLeast majMinTiny "2.1.0" then
           "${majMin}.0"
-        else if versionAtLeast majMinTiny "2.0.0" then
+        else if lib.versionAtLeast majMinTiny "2.0.0" then
           "2.0.0"
-        else if versionAtLeast majMinTiny "1.9.1" then
+        else if lib.versionAtLeast majMinTiny "1.9.1" then
           "1.9.1"
         else
           throw "version ${majMinTiny} is not supported";
@@ -55,9 +55,9 @@ let
         self.majMinTiny + (
           if self.patchLevel != null then
             "-p${self.patchLevel}"
-          else if self.tail != "" then
-            "-${self.tail}"
-          else "");
+          else
+            lib.optionalString (self.tail != "") "-${self.tail}"
+        );
     };
 in
   rubyVersion

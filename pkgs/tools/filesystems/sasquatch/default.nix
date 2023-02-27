@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: unsquashfs_xattr.o:/build/squashfs4.4/squashfs-tools/error.h:34: multiple definition of
   #     `verbose'; unsquashfs.o:/build/squashfs4.4/squashfs-tools/error.h:34: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 

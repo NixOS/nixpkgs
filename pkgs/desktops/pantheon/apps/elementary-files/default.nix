@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.2.0";
+  version = "6.2.2";
 
   outputs = [ "out" "dev" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-V1otkc1Og7J/A68j+4MrJzOtAH6PHSfj5fSpjKhhwo4=";
+    sha256 = "sha256-YV7fcRaLaDwa0m6zbdhayCAqeON5nqEdQ1IUtDKu5AY=";
   };
 
   nativeBuildInputs = [
@@ -73,9 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

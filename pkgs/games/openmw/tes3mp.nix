@@ -89,7 +89,7 @@ let
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
     patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
 
-    NIX_CFLAGS_COMPILE = "-fpermissive";
+    env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
     preConfigure = ''
       substituteInPlace files/version.in \

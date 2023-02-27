@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, future
 , pyparsing
 , pytestCheckHook
 , pythonOlder
@@ -22,19 +21,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    future
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/sciunto-org/python-bibtexparser/pull/259
-    substituteInPlace bibtexparser/tests/test_crossref_resolving.py \
-      --replace "import unittest2 as unittest" "import unittest"
-  '';
 
   pythonImportsCheck = [
     "bibtexparser"

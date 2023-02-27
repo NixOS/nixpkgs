@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.2";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/YHgJq+C5+yc+44s76OR0WELUm8KHL2xxtJmGDTChCM=";
+    hash = "sha256-nQAUVX409RWlFPeknnNwFNgo7e2xHkEXkAuXazZNntk=";
   };
 
   propagatedBuildInputs = [
     hy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

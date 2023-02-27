@@ -5,26 +5,31 @@
 , pkg-config
 , openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "selene";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6DbWz4u4mbW/aSDpaLxP4bG14gHxMGc4A8zMTVH/vj0=";
+    sha256 = "sha256-tw9OLdXhqxgqROub0P/+nd4LQGNw3QDxlCyyf8ogRQM=";
   };
 
-  cargoSha256 = "sha256-6dYXGxDNiLzpyZCmF2OJl2HAFyzJeAeQpEfaIZBBJD8=";
+  cargoSha256 = "sha256-5/xAX8BhB81cB7x2Pe/MKCV0Fi76ZcO6XHFQxTVIuLA=";
 
-  nativeBuildInputs = lib.optional robloxSupport pkg-config;
+  nativeBuildInputs = lib.optionals robloxSupport [
+    pkg-config
+  ];
 
-  buildInputs = lib.optional robloxSupport openssl
-    ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
+  buildInputs = lib.optionals robloxSupport [
+    openssl
+  ] ++ lib.optionals (robloxSupport && stdenv.isDarwin) [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   buildNoDefaultFeatures = !robloxSupport;
 

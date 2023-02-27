@@ -20,6 +20,7 @@
 , setuptools
 , toolz
 , xmltodict
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -54,6 +56,8 @@ buildPythonPackage rec {
     xmltodict
   ];
 
+  pythonRelaxDeps = [ "potentials" ];
+
   preCheck = ''
     # By default, pytestCheckHook imports atomman from the current directory
     # instead of from where `pip` installs it and fails due to missing Cython
@@ -62,7 +66,7 @@ buildPythonPackage rec {
     rm -r atomman
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ase
     phonopy
     pymatgen

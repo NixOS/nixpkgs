@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     ./fix_link_date_time.patch
   ];
 
+  # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
+  postPatch = lib.optionalString (!stdenv.isx86_64) ''
+    cp source/utils/StackTrace{Stub,Unix}.cpp
+  '';
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ogre cegui boost sfml openal ois ];
 

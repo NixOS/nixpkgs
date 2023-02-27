@@ -39,14 +39,14 @@ let
   } // cfg.extraSettings;
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
   serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
-  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
+  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {
   options = {
     services.factorio = {
       enable = mkEnableOption (lib.mdDoc name);
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 34197;
         description = lib.mdDoc ''
           The port to which the service should bind.
@@ -134,6 +134,15 @@ in
           the .zip, named correctly, into the output directory. Eventually,
           there will be a way to pull in the most up-to-date list of
           derivations via nixos-channel. Until then, this is for experts only.
+        '';
+      };
+      mods-dat = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          Mods settings can be changed by specifying a dat file, in the [mod
+          settings file
+          format](https://wiki.factorio.com/Mod_settings_file_format).
         '';
       };
       game-name = mkOption {

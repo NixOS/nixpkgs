@@ -22,7 +22,7 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

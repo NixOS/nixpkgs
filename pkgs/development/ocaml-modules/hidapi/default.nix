@@ -13,8 +13,6 @@ buildDunePackage rec {
     sha256 = "1j7rd7ajrzla76r3sxljx6fb18f4f4s3jd7vhv59l2ilxyxycai2";
   };
 
-  strictDeps = true;
-
   minimumOCamlVersion = "4.03";
 
   nativeBuildInputs = [ pkg-config ];

@@ -16,7 +16,7 @@
 , systemd
 , voms
 , zlib
-, enableTests ? true
+, enableTests ? stdenv.isLinux
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xrootd";
-  version = "5.5.0";
+  version = "5.5.3";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-a8qw8uHxd7OLMMq+HPMB36O0Yjctlnf8DkfEdMvc1NQ=";
+    hash = "sha256-61+8M6ubKX/GnsPLTql6XzGw/PTljpiXoDa1YoECya4=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
     openssl
     readline
     zlib
+    fuse
   ]
   ++ lib.optionals stdenv.isLinux [
-    fuse
     systemd
     voms
   ]
@@ -66,11 +66,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs genversion.sh
-
-    # Manually apply part of
-    # https://github.com/xrootd/xrootd/pull/1619
-    # Remove after the above PR is merged.
-    sed -i 's/set\((\s*CMAKE_INSTALL_[A-Z_]\+DIR\s\+"[^"]\+"\s*)\)/define_default\1/g' cmake/XRootDOSDefs.cmake
   '';
 
   # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=

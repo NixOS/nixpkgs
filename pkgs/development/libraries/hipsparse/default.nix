@@ -1,46 +1,37 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocsparse
 , hip
 , gfortran
 , git
-, fetchzip ? null
-, gtest ? null
+, gtest
+, openmp
 , buildTests ? false
+, buildSamples ? false
 }:
 
-assert buildTests -> fetchzip != null;
-assert buildTests -> gtest != null;
-
 # This can also use cuSPARSE as a backend instead of rocSPARSE
-let
-  matrices = lib.optionalAttrs buildTests import ./deps.nix {
-    inherit fetchzip;
-    mirror1 = "https://sparse.tamu.edu/MM";
-    mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  rocmVersion = "5.3.1";
-  version = "2.3.1-${rocmVersion}";
+  version = "5.4.2";
 
   outputs = [
     "out"
   ] ++ lib.optionals buildTests [
     "test"
+  ] ++ lib.optionals buildSamples [
+    "sample"
   ];
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "hipSPARSE";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-Phcihat774ZSAe1QetE/GSZzGlnCnvS9GwsHBHCaD4c=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-JWjmMvqIm4in1aPq2UgYmL0eWjrrRBiU6vH3FnCZZ40=";
   };
 
   nativeBuildInputs = [
@@ -51,17 +42,18 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocsparse
     git
   ] ++ lib.optionals buildTests [
     gtest
+  ] ++ lib.optionals (buildTests || buildSamples) [
+    openmp
   ];
 
   cmakeFlags = [
+    "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -79,25 +71,25 @@ in stdenv.mkDerivation rec {
   '' + lib.optionalString buildTests ''
     mkdir -p matrices
 
-    ln -s ${matrices.matrix-01}/*.mtx matrices
-    ln -s ${matrices.matrix-02}/*.mtx matrices
-    ln -s ${matrices.matrix-03}/*.mtx matrices
-    ln -s ${matrices.matrix-04}/*.mtx matrices
-    ln -s ${matrices.matrix-05}/*.mtx matrices
-    ln -s ${matrices.matrix-06}/*.mtx matrices
-    ln -s ${matrices.matrix-07}/*.mtx matrices
-    ln -s ${matrices.matrix-08}/*.mtx matrices
-    ln -s ${matrices.matrix-09}/*.mtx matrices
-    ln -s ${matrices.matrix-10}/*.mtx matrices
-    ln -s ${matrices.matrix-11}/*.mtx matrices
-    ln -s ${matrices.matrix-12}/*.mtx matrices
-    ln -s ${matrices.matrix-13}/*.mtx matrices
-    ln -s ${matrices.matrix-14}/*.mtx matrices
-    ln -s ${matrices.matrix-15}/*.mtx matrices
-    ln -s ${matrices.matrix-16}/*.mtx matrices
-    ln -s ${matrices.matrix-17}/*.mtx matrices
-    ln -s ${matrices.matrix-18}/*.mtx matrices
-    ln -s ${matrices.matrix-19}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-01}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-02}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-03}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-04}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-05}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-06}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-07}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-08}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-09}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-10}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-11}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-12}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-13}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-14}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-15}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-16}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-17}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-18}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-19}/*.mtx matrices
 
     # Not used by the original cmake, causes an error
     rm matrices/*_b.mtx
@@ -120,13 +112,25 @@ in stdenv.mkDerivation rec {
     mv $out/bin/hipsparse-test $test/bin
     mv /build/source/matrices $test
     rmdir $out/bin
+  '' + lib.optionalString buildSamples ''
+    mkdir -p $sample/bin
+    mv clients/staging/example_* $sample/bin
+    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
+      finalAttrs.buildInputs ++ [ hip gfortran.cc ])} $sample/bin/example_*
   '';
+
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "ROCm SPARSE marshalling library";
     homepage = "https://github.com/ROCmSoftwarePlatform/hipSPARSE";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
-}
+})

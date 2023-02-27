@@ -2,22 +2,44 @@
 , lib
 , buildPythonPackage
 , protobuf
-, pyext
 , isPyPy
+, fetchpatch
+, pythonAtLeast
 }:
 
+let
+  versionMajor = lib.versions.major protobuf.version;
+  versionMinor = lib.versions.minor protobuf.version;
+  versionPatch = lib.versions.patch protobuf.version;
+in
 buildPythonPackage {
-  inherit (protobuf) pname src version;
+  inherit (protobuf) pname src;
+
+  # protobuf 3.21 coresponds with its python library 4.21
+  version =
+    if lib.versionAtLeast protobuf.version "3.21"
+    then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
+    else protobuf.version;
+
   disabled = isPyPy;
 
-  prePatch = ''
-    while [ ! -d python ]; do
-      cd *
-    done
-    cd python
-  '';
+  sourceRoot = "source/python";
 
-  nativeBuildInputs = [ pyext ];
+  patches = lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/da973aff2adab60a9e516d3202c111dbdde1a50f.patch";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-a/12C6yIe1tEKjsMxcfDAQ4JHolA8CzkN7sNG8ZspPs=";
+    })
+  ];
+
+  prePatch = ''
+    if [[ "$(<../version.json)" != *'"python": "'"$version"'"'* ]]; then
+      echo "Python library version mismatch. Derivation version: $version, actual: $(<../version.json)"
+      exit 1
+    fi
+  '';
 
   buildInputs = [ protobuf ];
 
@@ -26,7 +48,7 @@ buildPythonPackage {
     buildPackages."protobuf${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}"
   ];
 
-  setupPyGlobalFlags = "--cpp_implementation";
+  setupPyGlobalFlags = [ "--cpp_implementation" ];
 
   pythonImportsCheck = [
     "google.protobuf"

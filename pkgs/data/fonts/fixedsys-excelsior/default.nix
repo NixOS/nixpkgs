@@ -1,19 +1,23 @@
-{ lib, fetchurl } :
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "fixedsys-excelsior";
   version = "3.00";
-in fetchurl rec {
-  name = "fixedsys-excelsior-${version}";
 
-  url = "https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf";
+  src = fetchurl {
+    url = "https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf";
+    hash = "sha256-buDzVzvF4z6TthbvYoL0m8DiJ6Map1Osdu0uPz0CBW0=";
+  };
 
-  downloadToTemp = true;
-  recursiveHash = true;
-  postFetch = ''
-    install -m444 -D $downloadedFile $out/share/fonts/truetype/${name}.ttf
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -m444 -D $src $out/share/fonts/truetype/${pname}-${version}.ttf
+
+    runHook postInstall
   '';
-
-  sha256 = "32d6f07f1ff08c764357f8478892b2ba5ade23427af99759f34a0ba24bcd2e37";
 
   meta = {
     homepage = "http://www.fixedsysexcelsior.com/";

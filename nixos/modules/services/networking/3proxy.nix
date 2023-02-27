@@ -158,7 +158,7 @@ in {
                   description = lib.mdDoc ''
                     List of target IP ranges, use empty list for any.
                     May also contain host names instead of addresses.
-                    It's possible to use wildmask in the begginning and in the the end of hostname, e.g. `*badsite.com` or `*badcontent*`.
+                    It's possible to use wildmask in the beginning and in the the end of hostname, e.g. `*badsite.com` or `*badcontent*`.
                     Hostname is only checked if hostname presents in request.
                   '';
                 };

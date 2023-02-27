@@ -1,0 +1,25 @@
+From 7a9405ed02b0d86839644a2c237ca7ca8b891b76 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Wed, 30 Nov 2022 21:07:56 -0500
+Subject: [PATCH] Add placeholders for runtime dependencies
+
+---
+ src/videomodel.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/videomodel.cpp b/src/videomodel.cpp
+index 4bb3451..b558f31 100644
+--- a/src/videomodel.cpp
++++ b/src/videomodel.cpp
+@@ -121,7 +121,7 @@ QString VideoModel::remoteUrl()
+         return {};
+     }
+ 
+-    QString youtubeDl = QStringLiteral("yt-dlp");
++    QString youtubeDl = QStringLiteral("@yt-dlp@");
+     QStringList arguments;
+     arguments << QLatin1String("--dump-json")
+               << m_videoId;
+-- 
+2.38.0
+

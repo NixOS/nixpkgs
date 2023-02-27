@@ -2,16 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trashy";
-  version = "1.0.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "oberblastmeister";
     repo = "trashy";
     rev = "v${version}";
-    sha256 = "sha256-b50Q7knJzXKDfM1kw6wLvXunhgOXVs+zYvZx/NYqMdk=";
+    sha256 = "sha256-xYSk0M8oNwbwZbKWDXMQlnt7vKi0p3+2Tr4eXCvtHEM=";
   };
 
-  cargoSha256 = "sha256-2hNNLXuAHd1bquhHimniqryTVMfBmPAOossggICScqQ=";
+  cargoSha256 = "sha256-ZWqWtWzb+CLH1ravBb/oV+aPxplEyiC1wEFhvchcLqg=";
+
+  # this patch must be removed after oberblastmeister/trashy#70 is solved or new
+  # version is released.
+  cargoPatches = [ ./lock-version.patch ];
 
   nativeBuildInputs = [ installShellFiles ];
 

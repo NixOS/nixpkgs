@@ -140,7 +140,7 @@ Keep an old app running and swap the ports when the new one is booted.
 
       # On deploy this will load our app, by moving it into the incoming dir
       # If the bundle content changes, this will run again.
-      # Because the bundle content contains the nix path to the exectuable,
+      # Because the bundle content contains the nix path to the executable,
       # we inherit nix based cache busting.
       systemd.services.load-keter-bundle = {
         description = "load keter bundle into incoming folder";

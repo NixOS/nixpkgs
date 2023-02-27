@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
-    license = with licenses; [ asl20 llvm-exception ];
+    license = licenses.asl20-llvm;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.2.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,15 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6FoadV5QMZCJnF/eD3FXRsyP4MymO5nayJ/54PJXOB4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hSSHCWi0L/ZfFz0JQ6Al5mjhb2g0DpykLF66uMKMIN8=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     pyyaml
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     broken = stdenv.isDarwin;

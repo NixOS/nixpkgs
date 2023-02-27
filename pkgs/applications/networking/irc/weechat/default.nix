@@ -36,14 +36,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.7.1";
+      version = "3.8";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-ZtJi1NhE1agZWnAv6FCUeO1GDtuQnLTraA5nkwWiCqs=";
+        hash = "sha256-objxAUGvBhTkbQl4GshDP3RsCkAW4z917L9WyaVoYj4=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -65,7 +65,7 @@ let
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
-      NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
+      env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
         + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 

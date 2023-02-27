@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.20.3";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-ocxXkayWujqAFV5N67VfmzJOUbjCPBZut9zmwNRYDeI=";
+    sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
   };
 
   sourceRoot = "source/Quake";

@@ -51,18 +51,9 @@ in {
               type = types.bool;
               default = false;
               description = lib.mdDoc ''
-                Explictly disables syncing of deposit logs from the execution node.
+                Explicitly disables syncing of deposit logs from the execution node.
                 This overrides any previous option that depends on it.
                 Useful if you intend to run a non-validating beacon node.
-              '';
-            };
-
-            group = mkOption {
-              type = types.str;
-              default = "ethereum";
-              description = lib.mdDoc ''
-                Group of the user running the lighthouse process. This is used to share the jwt
-                secret with the execution layer.
               '';
             };
 
@@ -221,19 +212,6 @@ in {
 
   config = mkIf (cfg.beacon.enable || cfg.validator.enable) {
 
-    users = {
-      users.lighthouse-beacon = {
-        name = "lighthouse-beacon";
-        group = cfg.beacon.group;
-        description = "Lighthouse beacon node user";
-        home = "${cfg.beacon.dataDir}";
-        isSystemUser = true;
-      };
-      groups = mkIf (cfg.beacon.group == "ethereum") {
-        ethereum = {};
-      };
-    };
-
     environment.systemPackages = [ pkgs.lighthouse ] ;
 
     networking.firewall = mkIf cfg.beacon.enable {
@@ -259,16 +237,17 @@ in {
           --network ${cfg.network} \
           --datadir ${cfg.beacon.dataDir}/${cfg.network} \
           --execution-endpoint http://${cfg.beacon.execution.address}:${toString cfg.beacon.execution.port} \
-          --execution-jwt ${cfg.beacon.execution.jwtPath} \
+          --execution-jwt ''${CREDENTIALS_DIRECTORY}/LIGHTHOUSE_JWT \
           ${lib.optionalString cfg.beacon.http.enable '' --http --http-address ${cfg.beacon.http.address} --http-port ${toString cfg.beacon.http.port}''} \
           ${lib.optionalString cfg.beacon.metrics.enable '' --metrics --metrics-address ${cfg.beacon.metrics.address} --metrics-port ${toString cfg.beacon.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.beacon.extraArgs}
       '';
       serviceConfig = {
-        User = "lighthouse-beacon";
-        Group = cfg.beacon.group;
+        LoadCredential = "LIGHTHOUSE_JWT:${cfg.beacon.execution.jwtPath}";
+        DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "lighthouse-beacon";
+        ReadWritePaths = [ cfg.beacon.dataDir ];
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectHome = true;
@@ -301,7 +280,7 @@ in {
         ${pkgs.lighthouse}/bin/lighthouse validator_client \
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
-          --datadir ${cfg.validator.dataDir}/${cfg.network}
+          --datadir ${cfg.validator.dataDir}/${cfg.network} \
           ${optionalString cfg.validator.metrics.enable ''--metrics --metrics-address ${cfg.validator.metrics.address} --metrics-port ${toString cfg.validator.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.validator.extraArgs}
       '';
@@ -309,6 +288,7 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         StateDirectory = "lighthouse-validator";
+        ReadWritePaths = [ cfg.validator.dataDir ];
         CapabilityBoundingSet = "";
         DynamicUser = true;
         NoNewPrivileges = true;

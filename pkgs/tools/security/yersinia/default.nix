@@ -58,5 +58,7 @@ stdenv.mkDerivation rec {
     # so not sure, but it could work on openbsd, illumos, and freebsd
     # if you have a machine to test with, feel free to add these
     platforms = with platforms; linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

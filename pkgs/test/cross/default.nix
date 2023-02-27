@@ -8,7 +8,7 @@ let
   ) lib.systems.examples;
 
   getExecutable = pkgs: pkgFun: exec:
-    "${pkgFun pkgs}${exec}${pkgs.hostPlatform.extensions.executable}";
+    "${pkgFun pkgs}${exec}${pkgs.stdenv.hostPlatform.extensions.executable}";
 
   compareTest = { emulator, pkgFun, hostPkgs, crossPkgs, exec, args ? [] }: let
     pkgName = (pkgFun hostPkgs).name;
@@ -55,7 +55,7 @@ let
 
   mapMultiPlatformTest = crossSystemFun: test: lib.mapAttrs (name: system: test rec {
     crossPkgs = import pkgs.path {
-      localSystem = { inherit (pkgs.hostPlatform) config; };
+      localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
       crossSystem = crossSystemFun system;
     };
 

@@ -127,7 +127,7 @@ rec {
     '';
     doCheck = true;
     buildInputs = [ resholve ];
-    checkInputs = [ coreutils bats python27 ];
+    nativeCheckInputs = [ coreutils bats python27 ];
     # LOGLEVEL="DEBUG";
 
     # default path
@@ -175,6 +175,13 @@ rec {
   resholvedScriptBin = resholve.writeScriptBin "resholved-script-bin" {
     inputs = [ file ];
     interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+  resholvedScriptBinNone = resholve.writeScriptBin "resholved-script-bin" {
+    inputs = [ file ];
+    interpreter = "none";
   } ''
     echo "Hello"
     file .

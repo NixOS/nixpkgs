@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wQpgdfCyBAoh4pmj9j7wPTlMtraJ62w/EShxi/olVMY=";
   };
 
+  postPatch = ''
+    sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
+  '';
+
   buildInputs = [ zlib libxml2 eigen python cairo pcre swig rapidjson ];
 
   nativeBuildInputs = [ cmake pkg-config ];

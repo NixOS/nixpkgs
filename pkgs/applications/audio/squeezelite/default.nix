@@ -34,13 +34,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1411";
+  version = "1.9.9.1419";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "ca44fc6e258bb413d6281d927063b25940f42e5c";
-    hash = "sha256-aZ+2nyy6tK3VwgTCWGoNaU4//kkHUzd6DZSfTEIgbvY=";
+    rev = "226efa300c4cf037e8486bad635e9deb3104636f";
+    hash = "sha256-ZZWliw1prFbBZMFp0QmXg6MKuHPNuFh2lFxQ8bbuWAM=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS = [ "-DLINKALL" ]
+  OPTS = [ "-DLINKALL" "-DGPIO" ]
     ++ optional dsdSupport "-DDSD"
     ++ optional (!faad2Support) "-DNO_FAAD"
     ++ optional ffmpegSupport "-DFFMPEG"

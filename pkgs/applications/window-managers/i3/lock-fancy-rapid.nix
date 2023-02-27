@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D i3lock-fancy-rapid $out/bin/i3lock-fancy-rapid
+    ln -s $out/bin/i3lock-fancy-rapid $out/bin/i3lock
   '';
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libX11 ];
 
   meta = with lib; {
-    homepage = "http://xosview.sourceforge.net/index.html";
+    homepage = "https://xosview.sourceforge.net/index.html";
     description = "Lightweight graphical operating system monitor";
     longDescription = ''
       xosview is a lightweight program that gathers information from your

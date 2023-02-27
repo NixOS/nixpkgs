@@ -114,7 +114,7 @@ in
       };
 
       components = mkOption {
-        description = lib.mdDoc "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
+        description = lib.mdDoc "An attribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
         type = types.attrsOf types.attrs;
       };

@@ -1,5 +1,5 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, libyamlcpp, libpwquality, parted, polkit-qt, python
+, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
@@ -36,12 +36,14 @@ mkDerivation rec {
     # Fix setting the kayboard layout on GNOME wayland
     # By default the module uses the setxkbmap, which will not change the keyboard
     ./waylandkbd.patch
+    # Change default location where calamares searches for locales
+    ./supportedlocale.patch
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb libyamlcpp libpwquality parted polkit-qt python
+    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
     qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
 

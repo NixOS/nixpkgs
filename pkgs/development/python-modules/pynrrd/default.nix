@@ -1,13 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
 , pythonOlder
+, numpy
+, nptyping
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "0.4.3";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,11 +18,13 @@ buildPythonPackage rec {
     owner = "mhe";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4UM2NAKWfsjxAoLQCFSPVKG5GukxqppywqvLM0V/dIs=";
+    hash = "sha256-R/bUItF2BaKTFdMNBHFJKq0jSX6z49e8CGXENUn07SU=";
   };
 
   propagatedBuildInputs = [
     numpy
+    nptyping
+    typing-extensions
   ];
 
   pythonImportsCheck = [

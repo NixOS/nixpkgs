@@ -97,12 +97,10 @@ let
     in
     mkComponent
       {
-        name = component.id;
+        pname = component.id;
         version = component.version.version_string;
         src =
-          if lib.hasAttrByPath [ "data" "source" ] component
-          then "${baseUrl}/${component.data.source}"
-          else "";
+          lib.optionalString (lib.hasAttrByPath [ "data" "source" ] component) "${baseUrl}/${component.data.source}";
         sha256 = lib.attrByPath [ "data" "checksum" ] "" component;
         dependencies = builtins.map (dep: builtins.getAttr dep components) component.dependencies;
         platforms =
@@ -120,7 +118,7 @@ let
 
   # Make a google-cloud-sdk component
   mkComponent =
-    { name
+    { pname
     , version
       # Source tarball, if any
     , src ? ""
@@ -135,15 +133,15 @@ let
       # The snapshot corresponding to this component
     , snapshot
     }: stdenv.mkDerivation {
-      inherit name version snapshot;
+      inherit pname version snapshot;
       src =
-        if src != "" then
-          builtins.fetchurl
+        lib.optionalString (src != "")
+          (builtins.fetchurl
             {
               url = src;
               inherit sha256;
-            } else "";
-      phases = [ "installPhase" "fixupPhase" ];
+            }) ;
+      dontUnpack = true;
       installPhase = ''
         mkdir -p $out/google-cloud-sdk/.install
 
@@ -159,7 +157,7 @@ let
         fi
 
         # Write the snapshot file to the `.install` folder
-        cp $snapshotPath $out/google-cloud-sdk/.install/${name}.snapshot.json
+        cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
       passthru = {
         dependencies = filterForSystem dependencies;

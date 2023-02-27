@@ -8,21 +8,30 @@
 , nixosTests
 }:
 
-let version = "0.29.1";
+let version = "1.0.2";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
-    rev = "v${version}";
-    sha256 = "sha256-1zZqarUxaSlux2ndSnQ3qAs+if2MxN9FPuEAxDnVv28=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2HfwNoluPPOOAdCaqUVaZcAd8M2naPYAsphZO1Inefg=";
   };
-  cargoSha256 = "sha256-VhCpqCBQhr4GgHEUJ30KPGMbN3EqhdJRKr7/PGYQ3OY=";
+
+  cargoHash = "sha256-HuVNI1Y+rhuAzAkDUuJJCZ500WuGPgABFfEbJNXaVpA=";
+
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
-  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    DiskArbitration
+    Foundation
+  ];
+
   passthru.tests = {
     meilisearch = nixosTests.meilisearch;
   };
@@ -31,8 +40,9 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "Powerful, fast, and an easy to use search engine ";
+    description = "Powerful, fast, and an easy to use search engine";
     homepage = "https://docs.meilisearch.com/";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];

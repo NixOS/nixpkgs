@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
@@ -39,7 +39,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
     tokenFile = pkgs.writeText "token" "p@s$w0rd";
   in
   {
-    name = "k3s-multi-node";
+    name = "${k3s.name}-multi-node";
 
     nodes = {
       server = { pkgs, ... }: {
@@ -52,7 +52,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           inherit tokenFile;
           enable = true;
           role = "server";
-          package = pkgs.k3s;
+          package = k3s;
           clusterInit = true;
           extraFlags = builtins.toString [
             "--disable" "coredns"

@@ -42,7 +42,7 @@ in import ../make-test-python.nix {
         ${nodes.server.config.networking.primaryIPAddress} uploads.example.com
       '';
       environment.systemPackages = [
-        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
+        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = "example.com"; })
       ];
     };
     server = { config, pkgs, ... }: {
@@ -82,6 +82,7 @@ in import ../make-test-python.nix {
 
   testScript = { nodes, ... }: ''
     # Check with sqlite storage
+    start_all()
     server.wait_for_unit("prosody.service")
     server.succeed('prosodyctl status | grep "Prosody is running"')
 

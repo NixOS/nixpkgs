@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     docutils
     imaplib2

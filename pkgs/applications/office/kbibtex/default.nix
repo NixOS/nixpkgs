@@ -5,6 +5,7 @@
 , extra-cmake-modules
 , shared-mime-info
 # Qt
+, qtnetworkauth
 , qtxmlpatterns
 , qtwebengine
 , qca-qt5
@@ -28,11 +29,13 @@
 
 mkDerivation rec {
   pname = "kbibtex";
-  version = "0.9.2";
+  version = "0.9.3.1";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/KBibTeX/${version}/kbibtex-${version}.tar.xz";
-    sha256 = "09xcdx363z9hps3wbr1kx96a6q6678y8pg8r3apyps4xm7xm31nr";
+  src = let
+    majorMinorPatch = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
+  in fetchurl {
+    url = "mirror://kde/stable/KBibTeX/${majorMinorPatch}/kbibtex-${version}.tar.xz";
+    hash = "sha256-kH/E5xv9dmzM7WrIMlGCo4y0Xv/7XHowELJP3OJz8kQ=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +44,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    qtnetworkauth
     qtxmlpatterns
     qtwebengine
     qca-qt5

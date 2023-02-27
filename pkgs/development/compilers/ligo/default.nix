@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitLab
 , git
 , coq
@@ -9,12 +10,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.54.1";
+  version = "0.60.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-P4oScKsf2A6qtkzpep8lewqSMM9A+vHyN5VaH7+/6xQ=";
+    sha256 = "sha256-gyMSpy+F3pF2Kv1ygUs20mrspJ6GtJ6ySyZD7zfZj2w=";
     fetchSubmodules = true;
   };
 
@@ -93,9 +94,10 @@ ocamlPackages.buildDunePackage rec {
     data-encoding
     pure-splitmix
     zarith_stubs_js
+    simple-diff
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     ocamlPackages.ca-certs
   ];
@@ -108,6 +110,7 @@ ocamlPackages.buildDunePackage rec {
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }

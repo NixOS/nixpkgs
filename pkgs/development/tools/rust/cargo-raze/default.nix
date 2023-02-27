@@ -1,31 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, curl, libgit2, openssl, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, curl
+, libgit2
+, openssl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";
-  version = "0.12.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "161m4y6i4sgqi9mg3f3348f5cr0m45vhix4a4bcw54wnmhiklnnl";
+    hash = "sha256-ip0WuBn1b7uN/pAhOl5tfmToK73ZSHK7rucdtufsbCQ=";
   };
   sourceRoot = "source/impl";
 
-  cargoSha256 = "1vlywdq0bx6b1k3w1grisca0hvv2s4s88yxq7bil8nhm5ghjgxdr";
+  cargoHash = "sha256-hNZgQwhm4UPqmANplZGxG0DYHa31tu06nmqYaCA7Vdg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libgit2
     openssl
-    (curl.override { inherit openssl; })
+    curl
   ]
   ++ lib.optional stdenv.isDarwin Security;
-
-  # thread 'main' panicked at 'Cannot ping mock server.: "cannot send request to mock server: cannot send request to mock server: failed to resolve host name"'
-  # __darwinAllowLocalNetworking does not fix the panic
-  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";

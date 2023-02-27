@@ -31,7 +31,7 @@ buildPythonPackage {
     multidict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     async-timeout

@@ -9,16 +9,17 @@
 , yosys-symbiflow
 , uhdm
 , surelog
+, flatbuffers
 }: let
 
   src = fetchFromGitHub {
     owner  = "chipsalliance";
     repo   = "yosys-f4pga-plugins";
-    rev    = "27208ce08200a5e89e3bd4f466bc68824df38c32";
-    hash   = "sha256-S7txjzlIp+idWIfp/DDOznluA3aMFfosMUt5dvi+g44=";
+    rev    = "08430ec4f53d1cf9d6a2091211d6c5ce501d5486";
+    hash   = "sha256-xCFi8OrNfsKt7bVSYJ/yuBify/pyCU1rI16gaCBgil8=";
   };
 
-  version = "2022.09.27";
+  version = "2023.02.08";
 
   # Supported symbiflow plugins.
   #
@@ -53,13 +54,14 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   # xdc has an incorrect path to a test which has yet to be patched
   doCheck = plugin != "xdc";
-  checkInputs = [ static_gtest ];
+  nativeCheckInputs = [ static_gtest ];
 
   # ql-qlf tries to fetch a yosys script from github
   # Run the script in preBuild instead.
   patches = lib.optional ( plugin == "ql-qlf" ) ./symbiflow-pmgen.patch;
 
   preBuild = ''
+    export LDFLAGS="-L${flatbuffers}/lib"
     mkdir -p ql-qlf-plugin/pmgen
   ''
   + lib.optionalString ( plugin == "ql-qlf" ) ''
@@ -68,8 +70,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   # Providing a symlink avoids the need for patching the test makefile
   postUnpack = ''
-    mkdir -p source/third_party/googletest/googletest/build/
-    ln -s ${static_gtest}/lib source/third_party/googletest/googletest/build/lib
+    mkdir -p source/third_party/googletest/build/
+    ln -s ${static_gtest}/lib source/third_party/googletest/build/lib
   '';
 
   makeFlags = [
@@ -77,13 +79,13 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   ];
 
   buildFlags = [
-    "PLUGINS_DIR=\${out}/share/yosys/plugins/"
-    "DATA_DIR=\${out}/share/yosys/"
+    "YOSYS_PLUGINS_DIR=\${out}/share/yosys/plugins/"
+    "YOSYS_DATA_DIR=\${out}/share/yosys/"
   ];
 
   checkFlags = [
-    "PLUGINS_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
-    "DATA_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
+    "YOSYS_PLUGINS_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
+    "YOSYS_DATA_DIR=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
     ( "NIX_YOSYS_PLUGIN_DIRS=\${NIX_BUILD_TOP}/source/${plugin}-plugin"
       # sdc and xdc plugins use design introspection for their tests
       + (lib.optionalString ( plugin == "sdc" || plugin == "xdc" )

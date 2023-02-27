@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ID3 tag manipulation library";
-    homepage = "http://mad.sourceforge.net/";
+    homepage = "https://mad.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = [ ];
     platforms = platforms.unix;

@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web application that allows for Karton task and queue introspection";
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
+    changelog = "https://github.com/CERT-Polska/karton-dashboard/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

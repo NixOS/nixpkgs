@@ -64,6 +64,7 @@ in python3.pkgs.buildPythonApplication rec {
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
       --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
       --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
+      --replace 'click = ">=7.2<=9.0"' 'click = ">=7.2,<=9.0"' # https://github.com/ManimCommunity/manim/pull/2954
   '';
 
   buildInputs = [ cairo ];
@@ -106,7 +107,7 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.pytest-xdist
     python3.pkgs.pytestCheckHook
 

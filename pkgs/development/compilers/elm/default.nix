@@ -2,7 +2,7 @@
 
 let
 
-  # To controll nodejs version we pass down
+  # To control nodejs version we pass down
   nodejs = pkgs.nodejs-14_x;
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
@@ -37,6 +37,7 @@ let
       */
       elm-format = justStaticExecutables (overrideCabal (drv: {
         jailbreak = true;
+        doCheck = assert (drv.version == "0.8.5"); false; # golden tests fail with optparse-applicative 0.17
 
         description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
         homepage = "https://github.com/avh4/elm-format";
@@ -96,6 +97,7 @@ let
       hspec = self.hspec_2_7_10;
       hspec-core = self.hspec-core_2_7_10;
       hspec-discover = self.hspec-discover_2_7_10;
+      hspec-meta = self.hspec-meta_2_7_8;
 
       elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
       elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
@@ -214,7 +216,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       elm-pages = nodePkgs."elm-pages".overrideAttrs (
         old: {
-          nativeBuildInputs = [ makeWrapper ];
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
 
           # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
           # need to patch in one of the build phases instead.
@@ -240,6 +242,10 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       lamdera = callPackage ./packages/lamdera.nix {};
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
+      elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ old.nodejs.pkgs.node-gyp-build ];
+      });
+
+      inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )

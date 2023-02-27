@@ -9,14 +9,14 @@
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "1.9.0";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KhgijXJ908uxM7VZdXo1WU/RGU0cfqctBCbpF2wOcy8=";
+    sha256 = "sha256-EOkxTliGcGwe0GWfNt9t4gosxrMq7748hcB0Snemtzw=";
   };
 
   postPatch = ''

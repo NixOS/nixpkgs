@@ -1,37 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses }:
 
-let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
+let
+  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.95.0";
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ ncurses ];
+  version = "4.98.0";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "sha256-HgU7/HxLdUOfLU2E/dpusko6gBOoEKeWPJIFbBQGzFU=";
+    sha256 = "sha256-DQLY0a0sOCZFEJA4Y4b18OcWZw47RyqKZ0mVG0CDVTI=";
   };
 
   patches = [
     ./no-build-info.patch
-
-    # Pull upstream fix for -fno-common toolchains:
-    #   https://github.com/lsof-org/lsof/pull/226
-    #   https://github.com/lsof-org/lsof/pull/233
-    (fetchpatch {
-      name = "add-extern.patch";
-      url = "https://github.com/lsof-org/lsof/commit/180ffa29b0544f77cabbc54d7f77d50d33dd27d7.patch";
-      sha256 = "sha256-zzcN9HrFYMTBeEekeAwi2RIcVukymgaqtpvFIBV6njU=";
-    })
-    (fetchpatch {
-      name = "add-declaration.patch";
-      url = "https://github.com/lsof-org/lsof/commit/8e47e1491636e8cf41baf834554391be45177b00.patch";
-      sha256 = "sha256-kwkDQp7VApLenOLTPMY24Me+/xUhD56skHWRd4ZB1I4=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -40,9 +25,14 @@ stdenv.mkDerivation rec {
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl which ];
+  buildInputs = [ ncurses ];
+
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
@@ -67,8 +57,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
     license = licenses.purdueBsd;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.unix;
   };
 }

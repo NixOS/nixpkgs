@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, m4, perl, help2man
+{ lib, stdenv, fetchurl, fetchpatch, m4
 , runtimeShell
 , file
 }:
@@ -23,28 +23,22 @@ stdenv.mkDerivation rec {
   #   https://lists.gnu.org/archive/html/autotools-announce/2022-03/msg00000.html
   FILECMD = "${file}/bin/file";
 
-  # Normally we'd use autoreconfHook, but that includes libtoolize.
-  postPatch = ''
-    aclocal -I m4
-    automake
-    autoconf
-
-    pushd libltdl
-    aclocal -I ../m4
-    automake
-    autoconf
-    popd
-  '' +
+  postPatch =
   # libtool commit da2e352735722917bf0786284411262195a6a3f6 changed
   # the shebang from `/bin/sh` (which is a special sandbox exception)
   # to `/usr/bin/env sh`, meaning that we now need to patch shebangs
   # in libtoolize.in:
   ''
     substituteInPlace libtoolize.in       --replace '#! /usr/bin/env sh' '#!${runtimeShell}'
+    # avoid help2man run after 'libtoolize.in' update
+    touch doc/libtoolize.1
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoconf automake help2man m4 perl ];
+  # As libtool is an early bootstrap dependency try hard not to
+  # add autoconf and automake or help2man dependencies here. That way we can
+  # avoid pulling in perl and get away with just an `m4` depend.
+  nativeBuildInputs = [ m4 file ];
   propagatedBuildInputs = [ m4 file ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the

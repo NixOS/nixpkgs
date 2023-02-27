@@ -35,4 +35,8 @@ mkDerivation {
   license = lib.licenses.agpl3Only;
   mainProgram = "ldgallery";
   maintainers = [ lib.maintainers.pacien ];
+
+  # Does not compile with ghc-9.2
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }

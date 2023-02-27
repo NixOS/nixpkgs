@@ -35,15 +35,11 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-django
     pytestCheckHook
   ] ++ passthru.optional-dependencies.daphne;
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
 
   pythonImportsCheck = [
     "channels"

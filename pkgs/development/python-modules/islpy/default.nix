@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   preCheck = "mv islpy islpy.hidden";
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "islpy" ];
 
   meta = with lib; {

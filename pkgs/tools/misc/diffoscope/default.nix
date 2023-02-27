@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
-, abootimg, acl, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
+{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles, fetchpatch
+, abootimg, acl, apksigcopier, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
 , e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
+, gzip, html2text, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
 , radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
 # updater only
@@ -11,17 +11,22 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "225";
+  version = "233";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-nuQmvYpCSzw2kUj/UdcBpn6jabaVMYT47MDblzpb/o0=";
+    sha256 = "sha256-A2GYnhdjkzSFnMsy99FmckiOsbRdymAdtjp55hyFLp4=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
+    # test_text_proper_indentation requires file >= 5.44
+    (fetchpatch {
+      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/9fdb78ec0bbc69f1980499dfdcbf6f1dd5e55cc8.patch";
+      sha256 = "sha256-F0N3L9yymj2NjeIKtSnOEDsxPe+ZTb0m/M4f8LPRHg0=";
+    })
   ];
 
   postPatch = ''
@@ -41,20 +46,25 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
       binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      html2text libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 tlsh
     ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
+    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr python3Packages.rpm acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
-      abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
+      abootimg apksigcopier apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
       hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
     ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
-  checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+
+  pytestFlagsArray = [
+    # always show more information when tests fail
+    "-vv"
+  ];
 
   postInstall = ''
     make -C doc

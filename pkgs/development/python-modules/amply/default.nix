@@ -21,7 +21,7 @@ buildPythonPackage rec {
     docutils
     pyparsing
   ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "amply" ];
 

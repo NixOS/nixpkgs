@@ -30,7 +30,7 @@ buildPythonPackage rec {
   #     `_PyThreadState_Current'; src/_vmprof.o:src/vmprof_common.h:92: first defined here
   # TODO: can be removed once next release contains:
   #   https://github.com/vmprof/vmprof-python/pull/203
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;

@@ -2,11 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  version = "1.24";
+  # Need a revision that supports DW_TAG_unspecified_type(0x3b).
+  # Was added after 1.24 release in a series of changes.
+  # Can switch back to release tags once 1.25 is cut.
+  version = "1.24-unstable-2022-11-24";
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
-    rev = "v${version}";
-    sha256 = "sha256-OPseVKt5kIKgK096+ufKrWMS1E/7Z0uxNqCMN6wKfKg=";
+    rev = "02d67c51765dfbd5893087da63744c864c7cc9e0";
+    hash = "sha256-hKc8UKxPtEM2zlYmolSt1pXJKNRt4wC/Uf+dP/Sb7+s=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
-    description = "Pahole and other DWARF utils";
+    description = "Shows, manipulates, and pretty-prints debugging information in DWARF, CTF, and BTF formats";
     license = licenses.gpl2Only;
 
     platforms = platforms.linux;

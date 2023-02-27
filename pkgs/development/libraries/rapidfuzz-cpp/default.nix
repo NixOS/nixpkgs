@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidfuzz-cpp";
-  version = "1.10.0";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${version}";
-    hash = "sha256-HhVkOPZ9LGoF5HSs0tOiZyUQWBwrfDTKJMc8WwGOdq8=";
+    hash = "sha256-I7MdeLs+J5a57ypgUJIW0/pSFPzK4nZA4ZrVRdKX7J4=";
   };
-
-  patches = [
-    ./dont-fetch-project-options.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -33,7 +29,7 @@ stdenv.mkDerivation rec {
     "-include algorithm"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch2_3
   ];
 

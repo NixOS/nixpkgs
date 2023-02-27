@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hanslub42/rlwrap";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 srapenne ];
+    maintainers = with maintainers; [ srapenne ];
   };
 }

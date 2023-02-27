@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spglib";
-  version = "2.0.1"; # N.B: if you change this, please update: pythonPackages.spglib
+  version = "2.0.2"; # N.B: if you change this, please update: pythonPackages.spglib
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    sha256 = "sha256-0M3GSnNvBNmE4ShW8NNkVrOBGEF9A0C5wd++xnyrcdI=";
+    sha256 = "sha256-8Voepj35CMbboL3Dc55Gc4+OLPTTSgqVQuvNcRQsqmU=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -47,15 +47,15 @@
 , wayland-protocols
 }:
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.0";
+  version = "43.3";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "jZulKO2Z72eZZC4Uez/p8ry+ypvs7ShFwcrbMxzT5SU=";
+    url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
   };
 
   patches = [
@@ -66,14 +66,12 @@ let self = stdenv.mkDerivation rec {
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
 
-    # color-device: Don't create profiles from obvious garbage data
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627
+    # Fix focus regression.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627.patch";
-      sha256 = "SafC29+gjcj6JswHY6yuwcOS16LPYvFwYW1TEpNNSHc=";
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
+      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
     })
-
-
   ];
 
   mesonFlags = [
@@ -159,12 +157,12 @@ let self = stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${self}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
-        if [[ ! -d ${self.libdir} ]]; then
-          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+        if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
         fi
         touch $out
@@ -172,8 +170,8 @@ let self = stdenv.mkDerivation rec {
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "mutter";
+      attrPath = "gnome.mutter";
     };
   };
 
@@ -184,5 +182,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-};
-in self
+})

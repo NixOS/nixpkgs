@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vk-bootstrap";
-  version = "0.5";
+  version = "0.7";
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
     rev = "v${version}";
-    sha256 = "sha256-rKyfUWfRYiVNzLWh6y44ASHW4j+yabY0kZTdZi8j2Dc=";
+    hash = "sha256-X3ANqfplrCF1R494+H5/plcwMH7rbW6zpLA4MZrYaoE=";
   };
 
   postPatch = ''

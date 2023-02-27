@@ -1,37 +1,58 @@
 { lib
+, awkward
 , buildPythonPackage
 , fetchPypi
 , hatch-vcs
 , hatchling
+, numba
 , numpy
+, notebook
+, packaging
+, papermill
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b785678f449de32476f427911248391ddcc7c3582a522a88cbbd50c92dcae490";
+    sha256 = "sha256-/e0wZDWIIm9vi37NEkIEitQj0p1M132AAO6id0eaA5Y=";
   };
 
   nativeBuildInputs = [
     hatch-vcs
     hatchling
   ];
+
   propagatedBuildInputs = [
     numpy
+    packaging
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    awkward
+    notebook
+    numba
+    papermill
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "vector" ];
+  pythonImportsCheck = [
+    "vector"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Python 3.7+ library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
+    description = "Library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
     homepage = "https://github.com/scikit-hep/vector";
+    changelog = "https://github.com/scikit-hep/vector/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
   };

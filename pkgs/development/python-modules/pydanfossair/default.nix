@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "pydanfossair";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JonasPed";
     repo = "pydanfoss-air";
     rev = "v${version}";
-    sha256 = "0950skga7x930whdn9f765x7fi8g6rr3zh99zpzaj8avjdwf096b";
+    sha256 = "sha256-WTRiEQbd3wwNAz1gk0rS3khy6lg61rcGZQTMlBc0uO8=";
   };
 
   # Project has no tests

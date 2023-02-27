@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, pep8, coverage, logilab_common, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "bugzilla";
@@ -11,8 +15,11 @@ buildPythonPackage rec {
     sha256 = "0q8c3k0kdnd11g2s56cp8va9365x0xfr2m2zn9fgxjijdyhwdic5";
   };
 
-  buildInputs = [ pep8 coverage logilab_common ];
   propagatedBuildInputs = [ requests ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     mkdir -p check-phase
@@ -22,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python-bugzilla/python-bugzilla";
     description = "Bugzilla XMLRPC access module";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pierron ];
   };

@@ -10,7 +10,7 @@
 , libuv
 , libwebsockets
 , openssl
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
 }:
@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.14";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ns4dxywsy9hsmd3ybanxvzwdvzs0szc2rg43c310l4xb1sd8wm2";
+    sha256 = "sha256-H2oaTphx5wvwXWDDaf9lLSVfHWmb2rMlxQmyRB4k5eg=";
   };
 
   patches = lib.optionals stdenv.isDarwin [

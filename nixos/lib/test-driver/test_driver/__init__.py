@@ -41,11 +41,9 @@ def writeable_dir(arg: str) -> Path:
     """
     path = Path(arg)
     if not path.is_dir():
-        raise argparse.ArgumentTypeError("{0} is not a directory".format(path))
+        raise argparse.ArgumentTypeError(f"{path} is not a directory")
     if not os.access(path, os.W_OK):
-        raise argparse.ArgumentTypeError(
-            "{0} is not a writeable directory".format(path)
-        )
+        raise argparse.ArgumentTypeError(f"{path} is not a writeable directory")
     return path
 
 

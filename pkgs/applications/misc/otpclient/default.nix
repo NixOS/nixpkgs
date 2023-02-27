@@ -10,21 +10,26 @@
 , libzip
 , libpng
 , libcotp
+, protobuf
+, protobufc
+, qrencode
+, libsecret
+, libuuid
 , zbar
 }:
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "2.5.1";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VUrLbGaDfPE+Ak20ZCJDmO/sgBzdf4S+SqvyQ7F6SQU=";
+    sha256 = "sha256-Cz3fxmtpSe7GMGmmSLDG9kDifmIMgCBlBRjX/qardXA=";
   };
 
-  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar ];
+  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar protobuf protobufc libsecret qrencode libuuid ];
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
   meta = with lib; {

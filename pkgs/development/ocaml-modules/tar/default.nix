@@ -1,40 +1,38 @@
 { lib
-, fetchFromGitHub
+, fetchurl
 , buildDunePackage
 , camlp-streams
 , ppx_cstruct
 , cstruct
-, re
-, ppx_tools
+, decompress
 }:
 
 buildDunePackage rec {
   pname = "tar";
-  version = "2.0.1";
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-tar";
-    rev = "v${version}";
-    sha256 = "1zr1ak164k1jm15xwqjf1iv77kdrrahak33wrxg7lifz9nnl0dms";
+  version = "2.2.2";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-tar/releases/download/v${version}/tar-${version}.tbz";
+    hash = "sha256-Q+41LPFZFHi9sXKFV3F13FZZNO3KXRSElEmr+nH58Uw=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     camlp-streams
-    ppx_cstruct
     cstruct
-    re
+    decompress
   ];
 
   buildInputs = [
-    ppx_tools
+    ppx_cstruct
   ];
 
   doCheck = true;
 
   meta = {
-    description = "Decode and encode tar format files from Unix";
+    description = "Decode and encode tar format files in pure OCaml";
+    homepage = "https://github.com/mirage/ocaml-tar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

@@ -104,6 +104,6 @@ stdenv.mkDerivation {
     homepage = "https://www.bay12games.com/dwarves/";
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
-    maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ncfavier ];
   };
 }

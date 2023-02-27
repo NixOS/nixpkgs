@@ -48,7 +48,7 @@ rec {
     trim = s: removeSuffix "/" (removePrefix "/" s);
     normalizedPath = strings.normalizePath s;
   in
-    replaceChars ["/"] ["-"]
+    replaceStrings ["/"] ["-"]
     (replacePrefix "." (strings.escapeC ["."] ".")
     (strings.escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-")
     (if normalizedPath == "/" then normalizedPath else trim normalizedPath)));
@@ -67,7 +67,7 @@ rec {
         else if builtins.isInt arg || builtins.isFloat arg then toString arg
         else throw "escapeSystemdExecArg only allows strings, paths and numbers";
     in
-      replaceChars [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
+      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
 
   # Quotes a list of arguments into a single string for use in a Exec*
   # line.
@@ -112,7 +112,7 @@ rec {
         else if isAttrs item then
           map (name:
             let
-              escapedName = ''"${replaceChars [''"'' "\\"] [''\"'' "\\\\"] name}"'';
+              escapedName = ''"${replaceStrings [''"'' "\\"] [''\"'' "\\\\"] name}"'';
             in
               recurse (prefix + "." + escapedName) item.${name}) (attrNames item)
         else if isList item then

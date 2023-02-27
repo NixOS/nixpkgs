@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1b2q7vsz6s9ighypsigqjm1mzjiq3xgnz5id5ssb4rh9zm190r82";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ eprover ocaml camlp4 perl zlib ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper eprover ocaml camlp4 perl ];
+  buildInputs = [ zlib ];
 
   patches = [ (fetchpatch {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";

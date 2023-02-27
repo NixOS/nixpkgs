@@ -31,7 +31,7 @@ buildPythonPackage rec {
     click-default-group
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     moto
     pytest-mock

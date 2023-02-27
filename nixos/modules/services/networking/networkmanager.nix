@@ -365,7 +365,7 @@ in {
           If you enable this option the
           `networkmanager_strongswan` plugin will be added to
           the {option}`networking.networkmanager.plugins` option
-          so you don't need to to that yourself.
+          so you don't need to do that yourself.
         '';
       };
 

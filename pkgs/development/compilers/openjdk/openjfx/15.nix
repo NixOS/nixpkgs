@@ -1,13 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_5
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4, python3, ruby }:
+{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_6
+, pkg-config, perl, cmake, gperf, gtk3, libXtst, libXxf86vm, glib, alsa-lib
+, ffmpeg_4-headless, python3, ruby
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "15";
   update = ".0.1";
   build = "+1";
   repover = "${major}${update}${build}";
-  gradle_ = (gradle_5.override {
+  gradle_ = (gradle_6.override {
     java = openjdk11_headless;
   });
 
@@ -21,7 +24,7 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
+    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -31,7 +34,7 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    NIX_CFLAGS_COMPILE = [
+    env.NIX_CFLAGS_COMPILE = toString [
       #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
       "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
 
@@ -69,19 +72,15 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    # Downloaded AWT jars differ by platform.
-    outputHash = {
-      x86_64-linux = "0hmyr5nnjgwyw3fcwqf0crqg9lny27jfirycg3xmkzbcrwqd6qkw";
-      i686-linux = "0hx69p2z96p7jbyq4r20jykkb8gx6r8q2cj7m30pldlsw3650bqx";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    outputHash = "sha256-fGLTMM9s/Vn7eMzn6OQR3tL0cGbAYc7c4J4/aW3JvkI=";
   };
 
 in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = true
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
   preBuild = ''
@@ -99,7 +98,7 @@ in makePackage {
   # -fcommon: gstreamer workaround for -fno-common toolchains:
   #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
   #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
 
   stripDebugList = [ "." ];
 
@@ -121,6 +120,9 @@ in makePackage {
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    knownVulnerabilities = [
+      "This OpenJFX version has reached its end of life."
+    ];
+    platforms = [ "x86_64-linux" ];
   };
 }

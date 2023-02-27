@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , autoreconfHook
 , pkg-config
@@ -17,24 +16,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.3.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Cu5mZzsqAO4X4Y8QAn851zIFPVPwxj5pB+jvA62L108=";
+    sha256 = "sha256-e+blEdO2KA/noW9pq56qZ0/vvtqQwiDbBJoQR0cQeds=";
   };
-
-  patches = [
-    # Fixes test failure on x86_64-darwin
-    # Drop when fix for https://github.com/libsidplayfp/libsidplayfp/issues/39 in a release (>2.3.1)
-    (fetchpatch {
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/337020a91caa0113de4f4374e0dc770e4056d2c7.patch";
-      sha256 = "0sd7bqic8k945f05d8sk9mshf5d90ykd7f5p6m0n6v3jjhpwmqlq";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -47,7 +37,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unittest-cpp ];
+  nativeCheckInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 
@@ -70,9 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

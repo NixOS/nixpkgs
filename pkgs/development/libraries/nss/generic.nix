@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    (if (lib.versionOlder version "3.77") then
-      ./85_security_load.patch
-    else
+    (if (lib.versionOlder version "3.84") then
       ./85_security_load_3.77+.patch
+    else
+      ./85_security_load_3.85+.patch
     )
     ./fix-cross-compilation.patch
   ];
@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
         -Dhost_arch=${host} \
         -Duse_system_zlib=1 \
         --enable-libpkix \
+        -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
         ${lib.optionalString stdenv.isDarwin "--clang"} \
         ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
@@ -103,7 +104,14 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\" " + lib.optionalString stdenv.hostPlatform.is64bit "-DNSS_USE_64=1";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error"
+    "-DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\""
+  ] ++ lib.optionals stdenv.hostPlatform.is64bit [
+    "-DNSS_USE_64=1"
+  ] ++ lib.optionals stdenv.hostPlatform.isILP32 [
+    "-DNS_PTR_LE_32=1" # See RNG_RandomUpdate() in drdbg.c
+  ]);
 
   installPhase = ''
     runHook preInstall

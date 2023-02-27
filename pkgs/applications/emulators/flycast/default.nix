@@ -3,43 +3,72 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, makeWrapper
 , alsa-lib
-, libX11
+, curl
+, egl-wayland
+, libao
+, libdecor
 , libevdev
-, udev
+, libffi
+, libGL
 , libpulseaudio
-, SDL2
+, libX11
+, libXext
+, libxkbcommon
 , libzip
+, mesa
 , miniupnpc
+, udev
+, vulkan-headers
+, vulkan-loader
+, wayland
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    rev = "v${version}";
-    sha256 = "sha256-vSyLg2lAJBV7crKVbGRbi1PUuCwHF9GB/8pjMTlaigA=";
+    rev = "V${version}";
+    sha256 = "sha256-PRInOqg9OpaUVLwSj1lOxDtjpVaYehkRsp0jLrVKPyY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
     alsa-lib
-    libX11
+    curl
+    egl-wayland
+    libao
+    libdecor
     libevdev
-    udev
+    libffi
+    libGL
     libpulseaudio
-    SDL2
+    libX11
+    libXext
+    libxkbcommon
     libzip
+    mesa # for libgbm
     miniupnpc
+    udev
+    vulkan-headers
+    wayland
+    zlib
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/flyinghead/flycast";

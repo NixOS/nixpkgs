@@ -3,7 +3,6 @@
 , bison, flex
 , makeWrapper }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "intercal";
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ick --suffix PATH ':' ${stdenv.cc}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The original esoteric programming language";
     longDescription = ''
       INTERCAL, an abbreviation for "Compiler Language With No

@@ -45,7 +45,7 @@ in
             default = "/etc/ssl/certs/ca-certificates.crt";
             description = lib.mdDoc ''
               Specifies which file should be used as the list of trusted CA
-              when negociating a TLS session.
+              when negotiating a TLS session.
             '';
           };
           options.db_name = mkOption {
@@ -111,7 +111,7 @@ in
             description = lib.mdDoc ''
               A directory that should contain the policy files,
               used to customize Botan’s behaviour
-              when negociating the TLS connections with the IRC servers.
+              when negotiating the TLS connections with the IRC servers.
             '';
           };
           options.port = mkOption {

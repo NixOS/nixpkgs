@@ -1,6 +1,8 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
+, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-qpV3UriOidIk/0di9d8RjXvjcjgD6dXqg7wLAywI66o=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "A package manager for JavaScript projects";

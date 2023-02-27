@@ -8,16 +8,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.20.0";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-mzhEw2kFv77SmeuEx66n9ujWMscZO3+03tHimk1/vk4=";
+    hash = "sha256-l1SOaQA4C8yXbrfi7pEE1PpUO4DVmLTTDUSACCSQ5LE=";
   };
 
-  passthru.tests = nixosTests.freshrss;
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql;
+  };
 
   buildInputs = [ php ];
 

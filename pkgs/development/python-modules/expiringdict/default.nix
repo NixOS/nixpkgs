@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     coverage
     coveralls

@@ -2,23 +2,25 @@
 , stdenv
 , mkDerivationWith
 , fetchFromGitHub
+, fetchpatch
 , doxygen
 , gtk3
 , libopenshot
-, python3Packages
+, python3
+, qtbase
 , qtsvg
 , wrapGAppsHook
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+mkDerivationWith python3.pkgs.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "2.6.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
+    hash = "sha256-h4R2txi038m6tzdKYiXIB8CiqWt2MFFRNerp1CFP5as=";
   };
 
   nativeBuildInputs = [
@@ -30,36 +32,40 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     httplib2
     libopenshot
-    pyqt5_with_qtwebkit
+    pyqtwebengine
     pyzmq
     requests
     sip_4
   ];
-
-  dontWrapGApps = true;
-  dontWrapQtApps = true;
 
   preConfigure = ''
     # tries to create caching directories during install
     export HOME=$(mktemp -d)
   '';
 
+  doCheck = false;
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
   postFixup = ''
     wrapProgram $out/bin/openshot-qt \
   ''
   # Fix toolbar icons on Darwin
   + lib.optionalString stdenv.isDarwin ''
-      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
-  ''
-  + ''
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}"
+    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
+  '' + ''
+    "''${gappsWrapperArgs[@]}" \
+    "''${qtWrapperArgs[@]}"
   '';
 
-  doCheck = false;
+  passthru = {
+    inherit libopenshot;
+    inherit (libopenshot) libopenshot-audio;
+  };
 
   meta = with lib; {
     homepage = "http://openshot.org/";
@@ -74,10 +80,5 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
-  };
-
-  passthru = {
-    inherit libopenshot;
-    inherit (libopenshot) libopenshot-audio;
   };
 }

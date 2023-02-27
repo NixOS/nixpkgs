@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.1.2";
+  version = "0.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "killer0071234";
     repo = "python-zamg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R3byV8llg7X+KYuYTsEtdLSFfLsPD4tyqAaU0CifDks=";
+    hash = "sha256-4q6/+/neWw0BFPjhCPXuLiCwyGqQn96D2pSyK/Yl6U8=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to read weather data from ZAMG Austria";
     homepage = "https://github.com/killer0071234/python-zamg";
+    changelog = "https://github.com/killer0071234/python-zamg/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

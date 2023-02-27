@@ -1,20 +1,18 @@
-diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
-index 9a18184fd3..278d146dd1 100644
---- a/Source/CMakeLists.txt
-+++ b/Source/CMakeLists.txt
-@@ -933,7 +933,6 @@ endif()
+diff -Naur cmake-3.25.1-old/Source/CMakeLists.txt cmake-3.25.1-new/Source/CMakeLists.txt
+--- cmake-3.25.1-old/Source/CMakeLists.txt	2022-11-30 10:57:03.000000000 -0300
++++ cmake-3.25.1-new/Source/CMakeLists.txt	2022-12-19 01:00:08.412064304 -0300
+@@ -916,7 +916,6 @@
  # On Apple we need CoreFoundation and CoreServices
  if(APPLE)
-   target_link_libraries(CMakeLib "-framework CoreFoundation")
--  target_link_libraries(CMakeLib "-framework CoreServices")
+   target_link_libraries(CMakeLib PUBLIC "-framework CoreFoundation")
+-  target_link_libraries(CMakeLib PUBLIC "-framework CoreServices")
  endif()
  
  if(WIN32 AND NOT UNIX)
-diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
-index 77403b076a..d5aac95e1e 100644
---- a/Source/cmGlobalXCodeGenerator.cxx
-+++ b/Source/cmGlobalXCodeGenerator.cxx
-@@ -49,10 +49,6 @@ struct cmLinkImplementation;
+diff -Naur cmake-3.25.1-old/Source/cmGlobalXCodeGenerator.cxx cmake-3.25.1-new/Source/cmGlobalXCodeGenerator.cxx
+--- cmake-3.25.1-old/Source/cmGlobalXCodeGenerator.cxx	2022-11-30 10:57:03.000000000 -0300
++++ cmake-3.25.1-new/Source/cmGlobalXCodeGenerator.cxx	2022-12-19 01:00:56.065135169 -0300
+@@ -56,10 +56,6 @@
  
  #if !defined(CMAKE_BOOTSTRAP) && defined(__APPLE__)
  #  include <CoreFoundation/CoreFoundation.h>
@@ -25,19 +23,17 @@ index 77403b076a..d5aac95e1e 100644
  #endif
  
  #if !defined(CMAKE_BOOTSTRAP)
-diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
-index 79452ffff6..a848731b7e 100644
---- a/Utilities/cmlibarchive/CMakeLists.txt
-+++ b/Utilities/cmlibarchive/CMakeLists.txt
-@@ -2013,11 +2013,6 @@ IF(ENABLE_TEST)
+diff -Naur cmake-3.25.1-old/Utilities/cmlibarchive/CMakeLists.txt cmake-3.25.1-new/Utilities/cmlibarchive/CMakeLists.txt
+--- cmake-3.25.1-old/Utilities/cmlibarchive/CMakeLists.txt	2022-11-30 10:57:03.000000000 -0300
++++ cmake-3.25.1-new/Utilities/cmlibarchive/CMakeLists.txt	2022-12-19 01:01:43.392205981 -0300
+@@ -2041,10 +2041,6 @@
+   ADD_CUSTOM_TARGET(run_all_tests)
  ENDIF(ENABLE_TEST)
- ENDIF()
  
 -# We need CoreServices on Mac OS.
 -IF(APPLE)
 -  LIST(APPEND ADDITIONAL_LIBS "-framework CoreServices")
 -ENDIF(APPLE)
--
+ 
  add_subdirectory(libarchive)
  IF(0) # CMake does not build libarchive's command-line tools.
- add_subdirectory(cat)

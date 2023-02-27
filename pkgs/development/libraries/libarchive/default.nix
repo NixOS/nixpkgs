@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , acl
 , attr
 , autoreconfHook
@@ -22,43 +23,47 @@
 , cmake
 , nix
 , samba
+, buildPackages
 }:
 
+let
+  autoreconfHook = buildPackages.autoreconfHook269;
+in
 assert xarSupport -> libxml2 != null;
-
-stdenv.mkDerivation rec {
+(stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
-    rev = "v${version}";
-    hash = "sha256-G4wL5DDbX0FqaA4cnOlVLZ25ObN8dNsRtxyas29tpDA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wQbA6vlXH8pnpY7LJLkjrRFEBpcaPR1SqxnK71UVwxg=";
   };
 
-  postPatch = ''
+  outputs = [ "out" "lib" "dev" ];
+
+  postPatch = let
+    skipTestPaths = [
+      # test won't work in nix sandbox
+      "libarchive/test/test_write_disk_perms.c"
+      # the filesystem does not necessarily have sparse capabilities
+      "libarchive/test/test_sparse_basic.c"
+      # the filesystem does not necessarily have hardlink capabilities
+      "libarchive/test/test_write_disk_hardlink.c"
+      # access-time-related tests flakey on some systems
+      "cpio/test/test_option_a.c"
+      "cpio/test/test_option_t.c"
+    ];
+    removeTest = testPath: ''
+      substituteInPlace Makefile.am --replace "${testPath}" ""
+      rm "${testPath}"
+    '';
+  in ''
     substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
 
-    declare -a skip_test_paths=(
-      # test won't work in nix sandbox
-      'libarchive/test/test_write_disk_perms.c'
-      # can't be sure builder will have sparse-capable fs
-      'libarchive/test/test_sparse_basic.c'
-      # can't even be sure builder will have hardlink-capable fs
-      'libarchive/test/test_write_disk_hardlink.c'
-      # access-time-related tests flakey on some systems
-      'cpio/test/test_option_a.c'
-      'cpio/test/test_option_t.c'
-    )
-
-    for test_path in "''${skip_test_paths[@]}" ; do
-      substituteInPlace Makefile.am --replace "$test_path" ""
-      rm "$test_path"
-    done
+    ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
   '';
-
-  outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -105,7 +110,7 @@ stdenv.mkDerivation rec {
       includes implementations of the common tar, cpio, and zcat command-line
       tools that use the libarchive library.
     '';
-    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
+    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jcumming AndersonTorres ];
     platforms = platforms.all;
@@ -114,4 +119,16 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit cmake nix samba;
   };
-}
+})).overrideAttrs(previousAttrs:
+  assert previousAttrs.version == "3.6.2";
+  lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    patches = [
+      # fixes static linking; upstream in releases after 3.6.2
+      # https://github.com/libarchive/libarchive/pull/1825 merged upstream
+      (fetchpatch {
+        name = "001-only-add-iconv-to-pc-file-if-needed.patch";
+        url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
+        hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
+      })
+    ];
+  })

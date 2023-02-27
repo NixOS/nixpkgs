@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Ensure C/Fortran code is position-independent.
-  NIX_CFLAGS_COMPILE = [ "-fPIC" "-Ofast" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fPIC" "-Ofast" ];
   FCFLAGS = [ "-fPIC" "-Ofast" ];
 
   enableParallelBuilding = true;
@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     make cleanall
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     octave
   ];
   checkTarget = "tests";
 
   meta = with lib; {
-    homepage = "http://librsb.sourceforge.net/";
+    homepage = "https://librsb.sourceforge.net/";
     description = "Shared memory parallel sparse matrix and sparse BLAS library";
     longDescription = ''
       Library for sparse matrix computations featuring the Recursive Sparse

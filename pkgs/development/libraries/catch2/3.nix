@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    hash = "sha256-bp/KLTr754txVUTAauJFrsxGKgZicUEe40CZBDkxRwk=";
+    hash = "sha256-JVxBYhKTejc8lfqgxz5Ig5G9H90YuIcGAUopGJG/3Dg=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 

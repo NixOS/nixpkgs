@@ -11,16 +11,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.2.4";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-swFNFw2a5PXwBkh0FBrCy5u3m5gErq29ZmWhMP7MpmQ=";
+    sha256 = "sha256-/l31w7ohBgjeE+Ywuo7aaDZBzVNLFD3dqMRr/P3ge+s=";
   };
 
-  nativeBuildInputs = [ gettext wrapGAppsHook ];
+  nativeBuildInputs = [ gettext wrapGAppsHook gobject-introspection ];
 
   propagatedBuildInputs = [
     gdk-pixbuf

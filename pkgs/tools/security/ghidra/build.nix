@@ -19,13 +19,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.2";
+  version = "10.2.3";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-b6xUSAZgyvpJFiG3/kl2s1vpq9n1etnoa7AJLF3NdZY=";
+    sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
   };
 
   desktopItem = makeDesktopItem {

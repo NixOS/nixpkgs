@@ -25,13 +25,13 @@
 , libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "2.8.2";
+  version = "2.9.0";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-+hkV9s4ORm4Kqu9zBmxtFZJFG3gh70OOxpjix052bM0=";
+    sha256 = "sha256-B4d8D4IfLYAIYVN80Lrh5bywD5iacSnUVwEzbc6Xq7g=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
 
-  NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
 

@@ -7,6 +7,7 @@
 { lib
 , pkgs
 , qt6
+, stdenv
 }:
 
 (lib.makeScope pkgs.newScope ( self:
@@ -24,9 +25,13 @@ let
 in
 
 (qt6 // {
+  inherit stdenv;
+
   # LIBRARIES
 
   inherit (kdeFrameworks) kcoreaddons;
+
+  qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
   quazip = callPackage ../development/libraries/quazip { };
 

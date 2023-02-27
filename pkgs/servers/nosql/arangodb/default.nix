@@ -1,5 +1,5 @@
 {
-  # gcc 11.2 suggested on 3.10.0.
+  # gcc 11.2 suggested on 3.10.3.
   # gcc 11.3.0 unsupported yet, investigate gcc support when upgrading
   # See https://github.com/arangodb/arangodb/issues/17454
   gcc10Stdenv
@@ -32,13 +32,13 @@ in
 
 gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
-  version = "3.10.0";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "0vjdiarfnvpfl4hnqgr7jigxgq3b3zhx88n8liv1zqa1nlvykfrb";
+    sha256 = "sha256-Jp2rvapTe0CtyYfh1YLJ5eUngh8V+BCUQ/OgH3nE2Ro=";
     fetchSubmodules = true;
   };
 
@@ -48,8 +48,7 @@ gcc10Stdenv.mkDerivation rec {
 
   # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
   dontFixCmake = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
-  preConfigure = "patchShebangs utils";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     sed -ie 's!/bin/echo!echo!' 3rdParty/V8/gypfiles/*.gypi
@@ -57,6 +56,10 @@ gcc10Stdenv.mkDerivation rec {
     # with nixpkgs, it has no sense to check for a version update
     substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
+  '';
+
+  preConfigure = ''
+    patchShebangs utils
   '';
 
   cmakeFlags = [
@@ -76,6 +79,6 @@ gcc10Stdenv.mkDerivation rec {
     description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.flosse maintainers.jsoo1 ];
+    maintainers = with maintainers; [ flosse jsoo1 ];
   };
 }

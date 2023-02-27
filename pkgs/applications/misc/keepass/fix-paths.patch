@@ -43,15 +43,15 @@ diff --git a/KeePass/Util/AppLocator.cs b/KeePass/Util/AppLocator.cs
 index af02803..8a32c9d 100644
 --- a/KeePass/Util/AppLocator.cs
 +++ b/KeePass/Util/AppLocator.cs
-@@ -429,7 +429,7 @@ namespace KeePass.Util
+@@ -468,7 +468,7 @@ namespace KeePass.Util
  			if(NativeLib.GetPlatformID() == PlatformID.MacOSX)
- 				strArgPrefix = string.Empty; // FR 3535696
+ 				strOpt = string.Empty; // FR 3535696
  
--			string str = NativeLib.RunConsoleApp("whereis", strArgPrefix + strApp);
-+			string str = NativeLib.RunConsoleApp("@whereis@", strArgPrefix + strApp);
- 			if(str == null) return null;
+-			string str = NativeLib.RunConsoleApp("whereis", strOpt + strApp);
++			string str = NativeLib.RunConsoleApp("@whereis@", strOpt + strApp);
+ 			if(string.IsNullOrEmpty(str)) return null;
  
- 			str = str.Trim();
+ 			int iSep = str.IndexOf(':');
 diff --git a/KeePass/Util/ClipboardUtil.Unix.cs b/KeePass/Util/ClipboardUtil.Unix.cs
 index ab49ee2..7f6c50f 100644
 --- a/KeePass/Util/ClipboardUtil.Unix.cs
@@ -108,14 +108,14 @@ diff --git a/KeePassLib/Native/NativeLib.cs b/KeePassLib/Native/NativeLib.cs
 index 2d227a3..243f4ee 100644
 --- a/KeePassLib/Native/NativeLib.cs
 +++ b/KeePassLib/Native/NativeLib.cs
-@@ -145,7 +145,7 @@ namespace KeePassLib.Native
- 			// Mono returns PlatformID.Unix on Mac OS X, workaround this
- 			if(m_platID.Value == PlatformID.Unix)
+@@ -143,7 +143,7 @@ namespace KeePassLib.Native
+ 			// Mono returns PlatformID.Unix on MacOS, workaround this
+ 			if(g_platID.Value == PlatformID.Unix)
  			{
 -				if((RunConsoleApp("uname", null) ?? string.Empty).Trim().Equals(
 +				if((RunConsoleApp("@uname@", null) ?? string.Empty).Trim().Equals(
  					"Darwin", StrUtil.CaseIgnoreCmp))
- 					m_platID = PlatformID.MacOSX;
+ 					g_platID = PlatformID.MacOSX;
  			}
 diff --git a/KeePassLib/Utility/MonoWorkarounds.cs b/KeePassLib/Utility/MonoWorkarounds.cs
 index e20bb3a..4fd875b 100644
@@ -130,7 +130,7 @@ index e20bb3a..4fd875b 100644
  
  		private static Dictionary<uint, bool> g_dForceReq = new Dictionary<uint, bool>();
  		private static Thread g_thFixClip = null;
-@@ -335,7 +335,7 @@ namespace KeePassLib.Utility
+@@ -356,7 +356,7 @@ namespace KeePassLib.Utility
  				// }
  				// else { Debug.Assert(false); }
  

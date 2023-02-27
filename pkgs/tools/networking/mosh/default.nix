@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./ssh_path.patch
     ./mosh-client_path.patch
-    ./utempter_path.patch
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
   ];

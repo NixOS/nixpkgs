@@ -34,6 +34,7 @@ let
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coqeal = callPackage ../development/coq-modules/coqeal {};
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
@@ -82,6 +83,7 @@ let
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
       metacoq-template-coq = self.metacoq.template-coq;
@@ -160,6 +162,7 @@ in rec {
   coq_8_14 = mkCoq "8.14";
   coq_8_15 = mkCoq "8.15";
   coq_8_16 = mkCoq "8.16";
+  coq_8_17 = mkCoq "8.17";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -173,6 +176,7 @@ in rec {
   coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages_8_15 = mkCoqPackages coq_8_15;
   coqPackages_8_16 = mkCoqPackages coq_8_16;
+  coqPackages_8_17 = mkCoqPackages coq_8_17;
   coqPackages = recurseIntoAttrs coqPackages_8_16;
   coq = coqPackages.coq;
 

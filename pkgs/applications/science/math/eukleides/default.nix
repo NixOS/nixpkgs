@@ -36,7 +36,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: eukleides_build/triangle.o:(.bss+0x28): multiple definition of `A';
   #     eukleides_build/quadrilateral.o:(.bss+0x18): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preInstall = ''
     mkdir -p $out/bin

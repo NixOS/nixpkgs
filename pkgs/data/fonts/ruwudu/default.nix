@@ -1,19 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "ruwudu";
   version = "2.000";
 
-  url = "https://software.sil.org/downloads/r/ruwudu/Ruwudu-${version}.zip";
+  src = fetchzip {
+    url = "https://software.sil.org/downloads/r/ruwudu/Ruwudu-${version}.zip";
+    hash = "sha256-FP+ZHm1fKlozAAI2PbJ4r4v5OwRxBtYMRLmRwPbqx2I=";
+  };
 
-  postFetch = ''
-    rm -rf $out/web $out/manifest.json
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/{doc/${pname},fonts/truetype}
-    mv $out/*.ttf $out/share/fonts/truetype/
-    mv $out/*.txt $out/documentation $out/share/doc/${pname}/
-  '';
+    mv *.ttf $out/share/fonts/truetype/
+    mv *.txt documentation $out/share/doc/${pname}/
 
-  sha256 = "sha256-JCvVPbAFBWHL2eEnEUSgdTZ+Vkw3wkS3aS85xQZKNQs=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://software.sil.org/ruwudu/";

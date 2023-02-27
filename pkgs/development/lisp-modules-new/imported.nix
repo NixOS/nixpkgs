@@ -364,11 +364,11 @@ in {
   };
   _3d-quaternions = {
     pname = "3d-quaternions";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "3d-quaternions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-quaternions/2022-03-31/3d-quaternions-20220331-git.tgz";
-      sha256 = "0gcqlgz19mhm2d3h5hhknhkmi4bah0bc14j0zf69i0bmkm5wncjv";
+      url = "http://beta.quicklisp.org/archive/3d-quaternions/2022-11-06/3d-quaternions-20221106-git.tgz";
+      sha256 = "1mrq6yhb90mhvxdkg3fx58ci5yj5xlixbbzf1q6p76wyq40qjv76";
       system = "3d-quaternions";
       asd = "3d-quaternions";
     });
@@ -377,11 +377,11 @@ in {
   };
   _3d-quaternions-test = {
     pname = "3d-quaternions-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "3d-quaternions-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-quaternions/2022-03-31/3d-quaternions-20220331-git.tgz";
-      sha256 = "0gcqlgz19mhm2d3h5hhknhkmi4bah0bc14j0zf69i0bmkm5wncjv";
+      url = "http://beta.quicklisp.org/archive/3d-quaternions/2022-11-06/3d-quaternions-20221106-git.tgz";
+      sha256 = "1mrq6yhb90mhvxdkg3fx58ci5yj5xlixbbzf1q6p76wyq40qjv76";
       system = "3d-quaternions-test";
       asd = "3d-quaternions-test";
     });
@@ -416,11 +416,11 @@ in {
   };
   _3d-vectors = {
     pname = "3d-vectors";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "3d-vectors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-vectors/2022-07-07/3d-vectors-20220707-git.tgz";
-      sha256 = "1y32ymdgkvvvf7z4v2hq1j73znl217q7048bnbcv0fnpdbk1d7m9";
+      url = "http://beta.quicklisp.org/archive/3d-vectors/2022-11-06/3d-vectors-20221106-git.tgz";
+      sha256 = "0vmf7nycc49ydcy0dfs25cgs655kwjc6jcjvpwxw61jq4gl2fh7x";
       system = "3d-vectors";
       asd = "3d-vectors";
     });
@@ -429,24 +429,37 @@ in {
   };
   _3d-vectors-test = {
     pname = "3d-vectors-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "3d-vectors-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-vectors/2022-07-07/3d-vectors-20220707-git.tgz";
-      sha256 = "1y32ymdgkvvvf7z4v2hq1j73znl217q7048bnbcv0fnpdbk1d7m9";
+      url = "http://beta.quicklisp.org/archive/3d-vectors/2022-11-06/3d-vectors-20221106-git.tgz";
+      sha256 = "0vmf7nycc49ydcy0dfs25cgs655kwjc6jcjvpwxw61jq4gl2fh7x";
       system = "3d-vectors-test";
       asd = "3d-vectors-test";
     });
     systems = [ "3d-vectors-test" ];
     lispLibs = [ (getAttr "_3d-vectors" pkgs) (getAttr "parachute" pkgs) ];
   };
+  _40ants-asdf-system = {
+    pname = "40ants-asdf-system";
+    version = "20221106-git";
+    asds = [ "40ants-asdf-system" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2022-11-06/40ants-asdf-system-20221106-git.tgz";
+      sha256 = "11k1pa1mpcm63n5acqb805266xs8wb4nxm00ac8i8abbp2pflama";
+      system = "40ants-asdf-system";
+      asd = "40ants-asdf-system";
+    });
+    systems = [ "40ants-asdf-system" ];
+    lispLibs = [ (getAttr "_40ants-doc" pkgs) (getAttr "uiop" pkgs) ];
+  };
   _40ants-ci = {
     pname = "40ants-ci";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "40ants-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci/2022-07-07/ci-20220707-git.tgz";
-      sha256 = "1khg8izdki0crlwvmy4rvk3f3nqd2mf73nq5cm3g1s7jrsxrivb4";
+      url = "http://beta.quicklisp.org/archive/ci/2022-11-06/ci-20221106-git.tgz";
+      sha256 = "0m735ciq3nkr928d5kfa9x9dv3w0yprj8i0xznih4pzkjvj93f5c";
       system = "40ants-ci";
       asd = "40ants-ci";
     });
@@ -455,11 +468,11 @@ in {
   };
   _40ants-ci-test = {
     pname = "40ants-ci-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "40ants-ci-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci/2022-07-07/ci-20220707-git.tgz";
-      sha256 = "1khg8izdki0crlwvmy4rvk3f3nqd2mf73nq5cm3g1s7jrsxrivb4";
+      url = "http://beta.quicklisp.org/archive/ci/2022-11-06/ci-20221106-git.tgz";
+      sha256 = "0m735ciq3nkr928d5kfa9x9dv3w0yprj8i0xznih4pzkjvj93f5c";
       system = "40ants-ci-test";
       asd = "40ants-ci-test";
     });
@@ -468,24 +481,24 @@ in {
   };
   _40ants-doc = {
     pname = "40ants-doc";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "40ants-doc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2022-03-31/doc-20220331-git.tgz";
-      sha256 = "0qljbvz37fwmxqm4x1zpapk0ldkxlkw3vg4a0vdaivkgd16z7jvb";
+      url = "http://beta.quicklisp.org/archive/doc/2022-11-06/doc-20221106-git.tgz";
+      sha256 = "1myf27502i7mkwb9dqywdbwlpprx7zwp4l7a6vc654h6f1zf65xv";
       system = "40ants-doc";
       asd = "40ants-doc";
     });
     systems = [ "40ants-doc" ];
-    lispLibs = [ (getAttr "named-readtables" pkgs) (getAttr "pythonic-string-reader" pkgs) ];
+    lispLibs = [ (getAttr "named-readtables" pkgs) (getAttr "pythonic-string-reader" pkgs) (getAttr "uiop" pkgs) ];
   };
   _40ants-doc-full = {
     pname = "40ants-doc-full";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "40ants-doc-full" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2022-03-31/doc-20220331-git.tgz";
-      sha256 = "0qljbvz37fwmxqm4x1zpapk0ldkxlkw3vg4a0vdaivkgd16z7jvb";
+      url = "http://beta.quicklisp.org/archive/doc/2022-11-06/doc-20221106-git.tgz";
+      sha256 = "1myf27502i7mkwb9dqywdbwlpprx7zwp4l7a6vc654h6f1zf65xv";
       system = "40ants-doc-full";
       asd = "40ants-doc-full";
     });
@@ -494,11 +507,11 @@ in {
   };
   _40ants-doc-test = {
     pname = "40ants-doc-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "40ants-doc-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2022-03-31/doc-20220331-git.tgz";
-      sha256 = "0qljbvz37fwmxqm4x1zpapk0ldkxlkw3vg4a0vdaivkgd16z7jvb";
+      url = "http://beta.quicklisp.org/archive/doc/2022-11-06/doc-20221106-git.tgz";
+      sha256 = "1myf27502i7mkwb9dqywdbwlpprx7zwp4l7a6vc654h6f1zf65xv";
       system = "40ants-doc-test";
       asd = "40ants-doc-test";
     });
@@ -598,16 +611,16 @@ in {
   };
   abstract-arrays = {
     pname = "abstract-arrays";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "abstract-arrays" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/abstract-arrays/2022-07-07/abstract-arrays-20220707-git.tgz";
-      sha256 = "0ih96w31lvkp3n7g97qbfm0blhzyqjc7nx6zvar6q91hgkwq2lyq";
+      url = "http://beta.quicklisp.org/archive/abstract-arrays/2022-11-06/abstract-arrays-20221106-git.tgz";
+      sha256 = "0rz09fywsrg23g1l9mm0g4y8bw4hdff67wqs7nj5b352g9l9f0xa";
       system = "abstract-arrays";
       asd = "abstract-arrays";
     });
     systems = [ "abstract-arrays" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "introspect-environment" pkgs) (getAttr "polymorphic-functions" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "introspect-environment" pkgs) (getAttr "polymorphic-functions" pkgs) (getAttr "trivial-types" pkgs) ];
   };
   abstract-classes = {
     pname = "abstract-classes";
@@ -653,11 +666,11 @@ in {
   };
   acclimation = {
     pname = "acclimation";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "acclimation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/acclimation/2022-07-07/acclimation-20220707-git.tgz";
-      sha256 = "0w9k9riwxh91jpv9cz732g05fbv67qmv5g5bjy8ikmyak4s2i747";
+      url = "http://beta.quicklisp.org/archive/acclimation/2022-11-06/acclimation-20221106-git.tgz";
+      sha256 = "04bk389p4fddh4vf9apry4a40ryfhcdf5fq23gh1ihvfdpv3b957";
       system = "acclimation";
       asd = "acclimation";
     });
@@ -666,11 +679,11 @@ in {
   };
   acclimation-temperature = {
     pname = "acclimation-temperature";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "acclimation-temperature" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/acclimation/2022-07-07/acclimation-20220707-git.tgz";
-      sha256 = "0w9k9riwxh91jpv9cz732g05fbv67qmv5g5bjy8ikmyak4s2i747";
+      url = "http://beta.quicklisp.org/archive/acclimation/2022-11-06/acclimation-20221106-git.tgz";
+      sha256 = "04bk389p4fddh4vf9apry4a40ryfhcdf5fq23gh1ihvfdpv3b957";
       system = "acclimation-temperature";
       asd = "acclimation-temperature";
     });
@@ -715,6 +728,19 @@ in {
     });
     systems = [ "acm-random-test" ];
     lispLibs = [ (getAttr "hu_dot_dwim_dot_stefil" pkgs) (getAttr "acm-random" pkgs) ];
+  };
+  action-list = {
+    pname = "action-list";
+    version = "20221106-git";
+    asds = [ "action-list" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/action-list/2022-11-06/action-list-20221106-git.tgz";
+      sha256 = "0w42wsk077lcv9hw62s8303fj4rpmrrx1xwsv1jachzd9alwnfcl";
+      system = "action-list";
+      asd = "action-list";
+    });
+    systems = [ "action-list" ];
+    lispLibs = [ (getAttr "documentation-utils" pkgs) (getAttr "trivial-extensible-sequences" pkgs) ];
   };
   adhoc = {
     pname = "adhoc";
@@ -823,6 +849,51 @@ in {
       broken = true;
     };
   };
+  adp = {
+    pname = "adp";
+    version = "20221106-git";
+    asds = [ "adp" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/adp/2022-11-06/adp-20221106-git.tgz";
+      sha256 = "1g6mdcv4kprx111m1glppqd23n12bsca3q6bm0v25hp4qb08l1my";
+      system = "adp";
+      asd = "adp";
+    });
+    systems = [ "adp" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "hyperspec" pkgs) ];
+  };
+  adp_slash_doc = {
+    pname = "adp_doc";
+    version = "20221106-git";
+    asds = [ "adp" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/adp/2022-11-06/adp-20221106-git.tgz";
+      sha256 = "1g6mdcv4kprx111m1glppqd23n12bsca3q6bm0v25hp4qb08l1my";
+      system = "adp";
+      asd = "adp";
+    });
+    systems = [ "adp/doc" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "hyperspec" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  adp_slash_github-md = {
+    pname = "adp_github-md";
+    version = "20221106-git";
+    asds = [ "adp" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/adp/2022-11-06/adp-20221106-git.tgz";
+      sha256 = "1g6mdcv4kprx111m1glppqd23n12bsca3q6bm0v25hp4qb08l1my";
+      system = "adp";
+      asd = "adp";
+    });
+    systems = [ "adp/github-md" ];
+    lispLibs = [ (getAttr "adp" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   advanced = {
     pname = "advanced";
     version = "clon-1.0b25";
@@ -877,11 +948,11 @@ in {
   };
   agnostic-lizard = {
     pname = "agnostic-lizard";
-    version = "20201016-git";
+    version = "20221106-git";
     asds = [ "agnostic-lizard" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/agnostic-lizard/2020-10-16/agnostic-lizard-20201016-git.tgz";
-      sha256 = "0ax78y8w4zlp5dcwyhz2nq7j3shi49qn31dkfg8lv2jlg7mkwh2d";
+      url = "http://beta.quicklisp.org/archive/agnostic-lizard/2022-11-06/agnostic-lizard-20221106-git.tgz";
+      sha256 = "13r1pzxkhci0pd8grhvim09lgvaykjyspnj58xq1rp1c017xnpmf";
       system = "agnostic-lizard";
       asd = "agnostic-lizard";
     });
@@ -890,11 +961,11 @@ in {
   };
   agnostic-lizard-debugger-prototype = {
     pname = "agnostic-lizard-debugger-prototype";
-    version = "20201016-git";
+    version = "20221106-git";
     asds = [ "agnostic-lizard-debugger-prototype" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/agnostic-lizard/2020-10-16/agnostic-lizard-20201016-git.tgz";
-      sha256 = "0ax78y8w4zlp5dcwyhz2nq7j3shi49qn31dkfg8lv2jlg7mkwh2d";
+      url = "http://beta.quicklisp.org/archive/agnostic-lizard/2022-11-06/agnostic-lizard-20221106-git.tgz";
+      sha256 = "13r1pzxkhci0pd8grhvim09lgvaykjyspnj58xq1rp1c017xnpmf";
       system = "agnostic-lizard-debugger-prototype";
       asd = "agnostic-lizard-debugger-prototype";
     });
@@ -968,11 +1039,11 @@ in {
   };
   alexandria_plus = {
     pname = "alexandria+";
-    version = "20211230-git";
+    version = "20221106-git";
     asds = [ "alexandria+" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/alexandria-plus/2021-12-30/alexandria-plus-20211230-git.tgz";
-      sha256 = "0qi20xc20mjxbyqcrgvc71qp7222xd9gbl5k9cfnh68d901q5c9m";
+      url = "http://beta.quicklisp.org/archive/alexandria-plus/2022-11-06/alexandria-plus-20221106-git.tgz";
+      sha256 = "1w9r19610h599303gqlx2x5n8mmdynss2gyl7xilg5h6v8z3hkfl";
       system = "alexandria+";
       asd = "alexandria+";
     });
@@ -981,11 +1052,11 @@ in {
   };
   alexandria_plus_slash_tests = {
     pname = "alexandria+_tests";
-    version = "20211230-git";
+    version = "20221106-git";
     asds = [ "alexandria+" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/alexandria-plus/2021-12-30/alexandria-plus-20211230-git.tgz";
-      sha256 = "0qi20xc20mjxbyqcrgvc71qp7222xd9gbl5k9cfnh68d901q5c9m";
+      url = "http://beta.quicklisp.org/archive/alexandria-plus/2022-11-06/alexandria-plus-20221106-git.tgz";
+      sha256 = "1w9r19610h599303gqlx2x5n8mmdynss2gyl7xilg5h6v8z3hkfl";
       system = "alexandria+";
       asd = "alexandria+";
     });
@@ -1121,13 +1192,39 @@ in {
     systems = [ "anaphoric-variants" ];
     lispLibs = [ (getAttr "map-bind" pkgs) ];
   };
+  anatevka = {
+    pname = "anatevka";
+    version = "v1.0.0";
+    asds = [ "anatevka" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/anatevka/2022-11-06/anatevka-v1.0.0.tgz";
+      sha256 = "1c8y91nv1jln22j7b82qiad861zfjs9a8nxm18r1dxblszpyygsk";
+      system = "anatevka";
+      asd = "anatevka";
+    });
+    systems = [ "anatevka" ];
+    lispLibs = [ (getAttr "aether" pkgs) (getAttr "alexandria" pkgs) ];
+  };
+  anatevka-tests = {
+    pname = "anatevka-tests";
+    version = "v1.0.0";
+    asds = [ "anatevka-tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/anatevka/2022-11-06/anatevka-v1.0.0.tgz";
+      sha256 = "1c8y91nv1jln22j7b82qiad861zfjs9a8nxm18r1dxblszpyygsk";
+      system = "anatevka-tests";
+      asd = "anatevka-tests";
+    });
+    systems = [ "anatevka-tests" ];
+    lispLibs = [ (getAttr "anatevka" pkgs) (getAttr "closer-mop" pkgs) (getAttr "fiasco" pkgs) (getAttr "uiop" pkgs) ];
+  };
   ansi-escape = {
     pname = "ansi-escape";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ansi-escape" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2022-07-07/croatoan-20220707-git.tgz";
-      sha256 = "1hz4naa2grb35cl8py378j2nm94qasjg54ks7chf1k96nar0b5x4";
+      url = "http://beta.quicklisp.org/archive/croatoan/2022-11-06/croatoan-20221106-git.tgz";
+      sha256 = "0zfwcc40dpj88jvkm45d4snxjfxdsncd5pj10zrbj7lm4awm9b5s";
       system = "ansi-escape";
       asd = "ansi-escape";
     });
@@ -1136,11 +1233,11 @@ in {
   };
   ansi-escape-test = {
     pname = "ansi-escape-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ansi-escape-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2022-07-07/croatoan-20220707-git.tgz";
-      sha256 = "1hz4naa2grb35cl8py378j2nm94qasjg54ks7chf1k96nar0b5x4";
+      url = "http://beta.quicklisp.org/archive/croatoan/2022-11-06/croatoan-20221106-git.tgz";
+      sha256 = "0zfwcc40dpj88jvkm45d4snxjfxdsncd5pj10zrbj7lm4awm9b5s";
       system = "ansi-escape-test";
       asd = "ansi-escape-test";
     });
@@ -1402,11 +1499,11 @@ in {
   };
   architecture_dot_builder-protocol = {
     pname = "architecture.builder-protocol";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol";
       asd = "architecture.builder-protocol";
     });
@@ -1415,11 +1512,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_inspection = {
     pname = "architecture.builder-protocol.inspection";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.inspection" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.inspection";
       asd = "architecture.builder-protocol.inspection";
     });
@@ -1428,11 +1525,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_json = {
     pname = "architecture.builder-protocol.json";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.json" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.json";
       asd = "architecture.builder-protocol.json";
     });
@@ -1441,11 +1538,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_json_slash_test = {
     pname = "architecture.builder-protocol.json_test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.json" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.json";
       asd = "architecture.builder-protocol.json";
     });
@@ -1455,13 +1552,42 @@ in {
       broken = true;
     };
   };
+  architecture_dot_builder-protocol_dot_print-tree = {
+    pname = "architecture.builder-protocol.print-tree";
+    version = "20221106-git";
+    asds = [ "architecture.builder-protocol.print-tree" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
+      system = "architecture.builder-protocol.print-tree";
+      asd = "architecture.builder-protocol.print-tree";
+    });
+    systems = [ "architecture.builder-protocol.print-tree" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "architecture_dot_builder-protocol" pkgs) (getAttr "utilities_dot_print-tree" pkgs) ];
+  };
+  architecture_dot_builder-protocol_dot_print-tree_slash_test = {
+    pname = "architecture.builder-protocol.print-tree_test";
+    version = "20221106-git";
+    asds = [ "architecture.builder-protocol.print-tree" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
+      system = "architecture.builder-protocol.print-tree";
+      asd = "architecture.builder-protocol.print-tree";
+    });
+    systems = [ "architecture.builder-protocol.print-tree/test" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "architecture_dot_builder-protocol_dot_print-tree" pkgs) (getAttr "fiveam" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   architecture_dot_builder-protocol_dot_universal-builder = {
     pname = "architecture.builder-protocol.universal-builder";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.universal-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.universal-builder";
       asd = "architecture.builder-protocol.universal-builder";
     });
@@ -1470,11 +1596,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_universal-builder_slash_test = {
     pname = "architecture.builder-protocol.universal-builder_test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.universal-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.universal-builder";
       asd = "architecture.builder-protocol.universal-builder";
     });
@@ -1486,11 +1612,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_xpath = {
     pname = "architecture.builder-protocol.xpath";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.xpath" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.xpath";
       asd = "architecture.builder-protocol.xpath";
     });
@@ -1499,11 +1625,11 @@ in {
   };
   architecture_dot_builder-protocol_dot_xpath_slash_test = {
     pname = "architecture.builder-protocol.xpath_test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol.xpath" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol.xpath";
       asd = "architecture.builder-protocol.xpath";
     });
@@ -1515,11 +1641,11 @@ in {
   };
   architecture_dot_builder-protocol_slash_test = {
     pname = "architecture.builder-protocol_test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "architecture.builder-protocol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-03-31/architecture.builder-protocol-20220331-git.tgz";
-      sha256 = "034zaf0aikpwkz24rpjd8dva1rxpi1m6k4lrcap7jch2hlimxmh1";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2022-11-06/architecture.builder-protocol-20221106-git.tgz";
+      sha256 = "0nv5wmcf7nvh44148cvq6fvz8zjm212rzzn5r3bi72phpywjxc9v";
       system = "architecture.builder-protocol";
       asd = "architecture.builder-protocol";
     });
@@ -1702,11 +1828,11 @@ in {
   };
   array-utils = {
     pname = "array-utils";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "array-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/array-utils/2020-12-20/array-utils-20201220-git.tgz";
-      sha256 = "1qiw31xxyd73pchim5q9ki012726xvn5ab869qksd1kys7gwgg86";
+      url = "http://beta.quicklisp.org/archive/array-utils/2022-11-06/array-utils-20221106-git.tgz";
+      sha256 = "0d7nddak8h2aa82z11vdbd97srk5bdgq41pzmibsz3ymspnndicd";
       system = "array-utils";
       asd = "array-utils";
     });
@@ -1715,11 +1841,11 @@ in {
   };
   array-utils-test = {
     pname = "array-utils-test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "array-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/array-utils/2020-12-20/array-utils-20201220-git.tgz";
-      sha256 = "1qiw31xxyd73pchim5q9ki012726xvn5ab869qksd1kys7gwgg86";
+      url = "http://beta.quicklisp.org/archive/array-utils/2022-11-06/array-utils-20221106-git.tgz";
+      sha256 = "0d7nddak8h2aa82z11vdbd97srk5bdgq41pzmibsz3ymspnndicd";
       system = "array-utils-test";
       asd = "array-utils-test";
     });
@@ -1835,11 +1961,11 @@ in {
   };
   asdf = {
     pname = "asdf";
-    version = "3.3.5";
+    version = "3.3.6";
     asds = [ "asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz";
-      sha256 = "19d8jzhvvyi40wn0fj8496wzfwkjs1z2qjm6byw0693wgrm23yj0";
+      url = "http://beta.quicklisp.org/archive/uiop/2022-11-06/uiop-3.3.6.tgz";
+      sha256 = "080lcdw90j30gg2vv9bnwj21aq08mp1kk4nax3ffkjssnrnjwhmr";
       system = "asdf";
       asd = "uiop";
     });
@@ -1861,11 +1987,11 @@ in {
   };
   asdf-driver = {
     pname = "asdf-driver";
-    version = "3.3.5";
+    version = "3.3.6";
     asds = [ "asdf-driver" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz";
-      sha256 = "19d8jzhvvyi40wn0fj8496wzfwkjs1z2qjm6byw0693wgrm23yj0";
+      url = "http://beta.quicklisp.org/archive/uiop/2022-11-06/uiop-3.3.6.tgz";
+      sha256 = "080lcdw90j30gg2vv9bnwj21aq08mp1kk4nax3ffkjssnrnjwhmr";
       system = "asdf-driver";
       asd = "asdf-driver";
     });
@@ -1903,61 +2029,16 @@ in {
   };
   asdf-finalizers = {
     pname = "asdf-finalizers";
-    version = "20170403-git";
+    version = "20221106-git";
     asds = [ "asdf-finalizers" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2017-04-03/asdf-finalizers-20170403-git.tgz";
+      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2022-11-06/asdf-finalizers-20221106-git.tgz";
       sha256 = "1w56c9yjjydjshsgqxz57qlp2v3r4ilbisnsgiqphvxnhvd41y0v";
       system = "asdf-finalizers";
       asd = "asdf-finalizers";
     });
     systems = [ "asdf-finalizers" ];
     lispLibs = [  ];
-  };
-  asdf-finalizers-test = {
-    pname = "asdf-finalizers-test";
-    version = "20170403-git";
-    asds = [ "asdf-finalizers-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2017-04-03/asdf-finalizers-20170403-git.tgz";
-      sha256 = "1w56c9yjjydjshsgqxz57qlp2v3r4ilbisnsgiqphvxnhvd41y0v";
-      system = "asdf-finalizers-test";
-      asd = "asdf-finalizers-test";
-    });
-    systems = [ "asdf-finalizers-test" ];
-    lispLibs = [ (getAttr "asdf-finalizers" pkgs) (getAttr "list-of" pkgs) (getAttr "fare-utils" pkgs) (getAttr "hu_dot_dwim_dot_stefil" pkgs) ];
-  };
-  asdf-finalizers-test_slash_1 = {
-    pname = "asdf-finalizers-test_1";
-    version = "20170403-git";
-    asds = [ "asdf-finalizers-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2017-04-03/asdf-finalizers-20170403-git.tgz";
-      sha256 = "1w56c9yjjydjshsgqxz57qlp2v3r4ilbisnsgiqphvxnhvd41y0v";
-      system = "asdf-finalizers-test";
-      asd = "asdf-finalizers-test";
-    });
-    systems = [ "asdf-finalizers-test/1" ];
-    lispLibs = [ (getAttr "asdf-finalizers" pkgs) (getAttr "list-of" pkgs) (getAttr "fare-utils" pkgs) (getAttr "hu_dot_dwim_dot_stefil" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
-  asdf-finalizers-test_slash_2 = {
-    pname = "asdf-finalizers-test_2";
-    version = "20170403-git";
-    asds = [ "asdf-finalizers-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2017-04-03/asdf-finalizers-20170403-git.tgz";
-      sha256 = "1w56c9yjjydjshsgqxz57qlp2v3r4ilbisnsgiqphvxnhvd41y0v";
-      system = "asdf-finalizers-test";
-      asd = "asdf-finalizers-test";
-    });
-    systems = [ "asdf-finalizers-test/2" ];
-    lispLibs = [ (getAttr "asdf-finalizers" pkgs) (getAttr "list-of" pkgs) (getAttr "fare-utils" pkgs) (getAttr "hu_dot_dwim_dot_stefil" pkgs) ];
-    meta = {
-      broken = true;
-    };
   };
   asdf-linguist = {
     pname = "asdf-linguist";
@@ -2152,11 +2233,11 @@ in {
   };
   assoc-utils = {
     pname = "assoc-utils";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "assoc-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/assoc-utils/2020-02-18/assoc-utils-20200218-git.tgz";
-      sha256 = "1yac1v7zmdxj0p6rvwrrhyqvy7yjfhmqbchkwqhhr89gpjvvaick";
+      url = "http://beta.quicklisp.org/archive/assoc-utils/2022-11-06/assoc-utils-20221106-git.tgz";
+      sha256 = "0mqb5iw4qwga66y7flifb1n0y5hp4gc3x8xfg4cild46x7mjqxws";
       system = "assoc-utils";
       asd = "assoc-utils";
     });
@@ -2165,11 +2246,11 @@ in {
   };
   assoc-utils-test = {
     pname = "assoc-utils-test";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "assoc-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/assoc-utils/2020-02-18/assoc-utils-20200218-git.tgz";
-      sha256 = "1yac1v7zmdxj0p6rvwrrhyqvy7yjfhmqbchkwqhhr89gpjvvaick";
+      url = "http://beta.quicklisp.org/archive/assoc-utils/2022-11-06/assoc-utils-20221106-git.tgz";
+      sha256 = "0mqb5iw4qwga66y7flifb1n0y5hp4gc3x8xfg4cild46x7mjqxws";
       system = "assoc-utils-test";
       asd = "assoc-utils-test";
     });
@@ -2327,11 +2408,11 @@ in {
   };
   auto-restart = {
     pname = "auto-restart";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "auto-restart" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/auto-restart/2022-03-31/auto-restart-20220331-git.tgz";
-      sha256 = "1176b6zzrd500gp8309wylxaix1lr2d9rj8dlri34hvd5zrdy6mq";
+      url = "http://beta.quicklisp.org/archive/auto-restart/2022-11-06/auto-restart-20221106-git.tgz";
+      sha256 = "1kzcxq57s3qfshvlp9w2yxs6kiyrvssrl94pa3vdf3x7644swrzi";
       system = "auto-restart";
       asd = "auto-restart";
     });
@@ -2340,11 +2421,11 @@ in {
   };
   auto-restart_slash_tests = {
     pname = "auto-restart_tests";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "auto-restart" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/auto-restart/2022-03-31/auto-restart-20220331-git.tgz";
-      sha256 = "1176b6zzrd500gp8309wylxaix1lr2d9rj8dlri34hvd5zrdy6mq";
+      url = "http://beta.quicklisp.org/archive/auto-restart/2022-11-06/auto-restart-20221106-git.tgz";
+      sha256 = "1kzcxq57s3qfshvlp9w2yxs6kiyrvssrl94pa3vdf3x7644swrzi";
       system = "auto-restart";
       asd = "auto-restart";
     });
@@ -2369,11 +2450,11 @@ in {
   };
   automaton = {
     pname = "automaton";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "automaton" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "automaton";
       asd = "automaton";
     });
@@ -2603,11 +2684,11 @@ in {
   };
   bdef = {
     pname = "bdef";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bdef" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bdef/2022-07-07/bdef-20220707-git.tgz";
-      sha256 = "0jr0r71rzca8wr630k2lk0dck4zkz5abmpm7i9sa8fb3rw9g5a0b";
+      url = "http://beta.quicklisp.org/archive/bdef/2022-11-06/bdef-20221106-git.tgz";
+      sha256 = "1zqal3xhbcrbq182h15a5qxpqsxm82400xyq34svzmsrk2nfrh08";
       system = "bdef";
       asd = "bdef";
     });
@@ -2616,11 +2697,11 @@ in {
   };
   bdef_slash_cl-collider = {
     pname = "bdef_cl-collider";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bdef" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bdef/2022-07-07/bdef-20220707-git.tgz";
-      sha256 = "0jr0r71rzca8wr630k2lk0dck4zkz5abmpm7i9sa8fb3rw9g5a0b";
+      url = "http://beta.quicklisp.org/archive/bdef/2022-11-06/bdef-20221106-git.tgz";
+      sha256 = "1zqal3xhbcrbq182h15a5qxpqsxm82400xyq34svzmsrk2nfrh08";
       system = "bdef";
       asd = "bdef";
     });
@@ -2632,11 +2713,11 @@ in {
   };
   bdef_slash_cl-patterns = {
     pname = "bdef_cl-patterns";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bdef" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bdef/2022-07-07/bdef-20220707-git.tgz";
-      sha256 = "0jr0r71rzca8wr630k2lk0dck4zkz5abmpm7i9sa8fb3rw9g5a0b";
+      url = "http://beta.quicklisp.org/archive/bdef/2022-11-06/bdef-20221106-git.tgz";
+      sha256 = "1zqal3xhbcrbq182h15a5qxpqsxm82400xyq34svzmsrk2nfrh08";
       system = "bdef";
       asd = "bdef";
     });
@@ -2648,11 +2729,11 @@ in {
   };
   bdef_slash_tests = {
     pname = "bdef_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bdef" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bdef/2022-07-07/bdef-20220707-git.tgz";
-      sha256 = "0jr0r71rzca8wr630k2lk0dck4zkz5abmpm7i9sa8fb3rw9g5a0b";
+      url = "http://beta.quicklisp.org/archive/bdef/2022-11-06/bdef-20221106-git.tgz";
+      sha256 = "1zqal3xhbcrbq182h15a5qxpqsxm82400xyq34svzmsrk2nfrh08";
       system = "bdef";
       asd = "bdef";
     });
@@ -3140,11 +3221,11 @@ in {
   };
   bit-smasher = {
     pname = "bit-smasher";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bit-smasher" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bit-smasher/2022-07-07/bit-smasher-20220707-git.tgz";
-      sha256 = "1j6sdyqyxbjldf455n98nazwgyhp3hli5bz0smc3nsnb9d42s46p";
+      url = "http://beta.quicklisp.org/archive/bit-smasher/2022-11-06/bit-smasher-20221106-git.tgz";
+      sha256 = "1dad4x9sjq45zz8rys6rflsklmw77631r3k4g248ynmaqkdaqjyd";
       system = "bit-smasher";
       asd = "bit-smasher";
     });
@@ -3153,11 +3234,11 @@ in {
   };
   bit-smasher-test = {
     pname = "bit-smasher-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bit-smasher-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bit-smasher/2022-07-07/bit-smasher-20220707-git.tgz";
-      sha256 = "1j6sdyqyxbjldf455n98nazwgyhp3hli5bz0smc3nsnb9d42s46p";
+      url = "http://beta.quicklisp.org/archive/bit-smasher/2022-11-06/bit-smasher-20221106-git.tgz";
+      sha256 = "1dad4x9sjq45zz8rys6rflsklmw77631r3k4g248ynmaqkdaqjyd";
       system = "bit-smasher-test";
       asd = "bit-smasher-test";
     });
@@ -3361,11 +3442,11 @@ in {
   };
   blackbird = {
     pname = "blackbird";
-    version = "20160531-git";
+    version = "20221106-git";
     asds = [ "blackbird" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/blackbird/2016-05-31/blackbird-20160531-git.tgz";
-      sha256 = "0xfds5yaya64arzr7w1x38karyz11swzbhxx1afldpradj9dh19c";
+      url = "http://beta.quicklisp.org/archive/blackbird/2022-11-06/blackbird-20221106-git.tgz";
+      sha256 = "1r0f9473akzm6zyj494ma5p39hfkixa8aj17dhcdfa4kmqf9f6al";
       system = "blackbird";
       asd = "blackbird";
     });
@@ -3374,11 +3455,11 @@ in {
   };
   blackbird-test = {
     pname = "blackbird-test";
-    version = "20160531-git";
+    version = "20221106-git";
     asds = [ "blackbird-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/blackbird/2016-05-31/blackbird-20160531-git.tgz";
-      sha256 = "0xfds5yaya64arzr7w1x38karyz11swzbhxx1afldpradj9dh19c";
+      url = "http://beta.quicklisp.org/archive/blackbird/2022-11-06/blackbird-20221106-git.tgz";
+      sha256 = "1r0f9473akzm6zyj494ma5p39hfkixa8aj17dhcdfa4kmqf9f6al";
       system = "blackbird-test";
       asd = "blackbird-test";
     });
@@ -3465,11 +3546,11 @@ in {
   };
   bmas = {
     pname = "bmas";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bmas" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bmas/2022-07-07/cl-bmas-20220707-git.tgz";
-      sha256 = "186gzx5hpdy03rp0v4pj01zbr98gygmzjhfcxabmxs5zgalp99cn";
+      url = "http://beta.quicklisp.org/archive/cl-bmas/2022-11-06/cl-bmas-20221106-git.tgz";
+      sha256 = "1z167v5hh4cawms8khpm76q8g0pk1xlkh97gxdbwym0sz27qb81j";
       system = "bmas";
       asd = "bmas";
     });
@@ -3976,11 +4057,11 @@ in {
   };
   bp = {
     pname = "bp";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bp/2022-07-07/bp-20220707-git.tgz";
-      sha256 = "11ajpn5ggfly0fm3hrg0xcwkqcyns315bj58fvn2rbpgrgwmpi9z";
+      url = "http://beta.quicklisp.org/archive/bp/2022-11-06/bp-20221106-git.tgz";
+      sha256 = "127gw3pyfx2vxprkbxc821923y6qmv3jd6r824m6zhalfya13w6k";
       system = "bp";
       asd = "bp";
     });
@@ -3989,11 +4070,11 @@ in {
   };
   bp_slash_tests = {
     pname = "bp_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "bp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bp/2022-07-07/bp-20220707-git.tgz";
-      sha256 = "11ajpn5ggfly0fm3hrg0xcwkqcyns315bj58fvn2rbpgrgwmpi9z";
+      url = "http://beta.quicklisp.org/archive/bp/2022-11-06/bp-20221106-git.tgz";
+      sha256 = "127gw3pyfx2vxprkbxc821923y6qmv3jd6r824m6zhalfya13w6k";
       system = "bp";
       asd = "bp";
     });
@@ -4005,11 +4086,11 @@ in {
   };
   bst = {
     pname = "bst";
-    version = "20200925-git";
+    version = "20221106-git";
     asds = [ "bst" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bst/2020-09-25/bst-20200925-git.tgz";
-      sha256 = "18ig7rvxcra69437g0i8sxyv7c5dg26jqnx1rc2f9pxmihdprgk8";
+      url = "http://beta.quicklisp.org/archive/bst/2022-11-06/bst-20221106-git.tgz";
+      sha256 = "0y052jf3gkqhb7rfx72961kg42dnqhmizk7cxlv87d1jr2906d1d";
       system = "bst";
       asd = "bst";
     });
@@ -4018,11 +4099,11 @@ in {
   };
   bst_slash_test = {
     pname = "bst_test";
-    version = "20200925-git";
+    version = "20221106-git";
     asds = [ "bst" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bst/2020-09-25/bst-20200925-git.tgz";
-      sha256 = "18ig7rvxcra69437g0i8sxyv7c5dg26jqnx1rc2f9pxmihdprgk8";
+      url = "http://beta.quicklisp.org/archive/bst/2022-11-06/bst-20221106-git.tgz";
+      sha256 = "0y052jf3gkqhb7rfx72961kg42dnqhmizk7cxlv87d1jr2906d1d";
       system = "bst";
       asd = "bst";
     });
@@ -4670,11 +4751,11 @@ in {
   };
   caveman-middleware-dbimanager = {
     pname = "caveman-middleware-dbimanager";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "caveman-middleware-dbimanager" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/caveman/2022-02-20/caveman-20220220-git.tgz";
-      sha256 = "1wvjm9m1fnapg0r9imhhcwgnhhqkkccnj3c0iw9yg1f72d7zhm2w";
+      url = "http://beta.quicklisp.org/archive/caveman/2022-11-06/caveman-20221106-git.tgz";
+      sha256 = "041i1g78cn6mjv8ba4bylw57f3px2rp5a0jnj17rwkfhfcvc76md";
       system = "caveman-middleware-dbimanager";
       asd = "caveman-middleware-dbimanager";
     });
@@ -4683,11 +4764,11 @@ in {
   };
   caveman2 = {
     pname = "caveman2";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "caveman2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/caveman/2022-02-20/caveman-20220220-git.tgz";
-      sha256 = "1wvjm9m1fnapg0r9imhhcwgnhhqkkccnj3c0iw9yg1f72d7zhm2w";
+      url = "http://beta.quicklisp.org/archive/caveman/2022-11-06/caveman-20221106-git.tgz";
+      sha256 = "041i1g78cn6mjv8ba4bylw57f3px2rp5a0jnj17rwkfhfcvc76md";
       system = "caveman2";
       asd = "caveman2";
     });
@@ -4696,11 +4777,11 @@ in {
   };
   caveman2-db = {
     pname = "caveman2-db";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "caveman2-db" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/caveman/2022-02-20/caveman-20220220-git.tgz";
-      sha256 = "1wvjm9m1fnapg0r9imhhcwgnhhqkkccnj3c0iw9yg1f72d7zhm2w";
+      url = "http://beta.quicklisp.org/archive/caveman/2022-11-06/caveman-20221106-git.tgz";
+      sha256 = "041i1g78cn6mjv8ba4bylw57f3px2rp5a0jnj17rwkfhfcvc76md";
       system = "caveman2-db";
       asd = "caveman2-db";
     });
@@ -4709,11 +4790,11 @@ in {
   };
   caveman2-test = {
     pname = "caveman2-test";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "caveman2-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/caveman/2022-02-20/caveman-20220220-git.tgz";
-      sha256 = "1wvjm9m1fnapg0r9imhhcwgnhhqkkccnj3c0iw9yg1f72d7zhm2w";
+      url = "http://beta.quicklisp.org/archive/caveman/2022-11-06/caveman-20221106-git.tgz";
+      sha256 = "041i1g78cn6mjv8ba4bylw57f3px2rp5a0jnj17rwkfhfcvc76md";
       system = "caveman2-test";
       asd = "caveman2-test";
     });
@@ -4772,6 +4853,19 @@ in {
     systems = [ "caveman2-widgets-test" ];
     lispLibs = [ (getAttr "caveman2-widgets" pkgs) (getAttr "prove" pkgs) (getAttr "prove-asdf" pkgs) ];
   };
+  cblas = {
+    pname = "cblas";
+    version = "20221106-git";
+    asds = [ "cblas" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-cblas/2022-11-06/cl-cblas-20221106-git.tgz";
+      sha256 = "1bd2w51r71pgm6sc6m2fms4j1bbnli023j4w3rbxw9cln0g7badp";
+      system = "cblas";
+      asd = "cblas";
+    });
+    systems = [ "cblas" ];
+    lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cl-autowrap" pkgs) (getAttr "uiop" pkgs) ];
+  };
   ccl-compat = {
     pname = "ccl-compat";
     version = "20171130-git";
@@ -4826,11 +4920,11 @@ in {
   };
   cephes = {
     pname = "cephes";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cephes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cephes.cl/2021-10-20/cephes.cl-20211020-git.tgz";
-      sha256 = "09adls1lwwzwm1jmvhf11arwlsy5w0bi2rmniahas824mysv77lr";
+      url = "http://beta.quicklisp.org/archive/cephes.cl/2022-11-06/cephes.cl-20221106-git.tgz";
+      sha256 = "07krprq23i9ncdkdq69lsvzswshhrfmjds4sk1kgicjxhm37l25h";
       system = "cephes";
       asd = "cephes";
     });
@@ -5021,11 +5115,11 @@ in {
   };
   cerberus = {
     pname = "cerberus";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "cerberus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cerberus/2020-02-18/cerberus-20200218-git.tgz";
-      sha256 = "14ffbs15xpm6f3dvzzcycbsrri1b41qc0lqzhav77v7wq5rxhc17";
+      url = "http://beta.quicklisp.org/archive/cerberus/2022-11-06/cerberus-20221106-git.tgz";
+      sha256 = "04yi0wqykx5v8drdw7ln382gxdklv60mg4aqrxg2j5wlsyacs0kb";
       system = "cerberus";
       asd = "cerberus";
     });
@@ -5034,11 +5128,11 @@ in {
   };
   cerberus-kdc = {
     pname = "cerberus-kdc";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "cerberus-kdc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cerberus/2020-02-18/cerberus-20200218-git.tgz";
-      sha256 = "14ffbs15xpm6f3dvzzcycbsrri1b41qc0lqzhav77v7wq5rxhc17";
+      url = "http://beta.quicklisp.org/archive/cerberus/2022-11-06/cerberus-20221106-git.tgz";
+      sha256 = "04yi0wqykx5v8drdw7ln382gxdklv60mg4aqrxg2j5wlsyacs0kb";
       system = "cerberus-kdc";
       asd = "cerberus";
     });
@@ -5073,11 +5167,11 @@ in {
   };
   cffi = {
     pname = "cffi";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi";
       asd = "cffi";
     });
@@ -5115,11 +5209,11 @@ in {
   };
   cffi-examples = {
     pname = "cffi-examples";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-examples";
       asd = "cffi-examples";
     });
@@ -5128,11 +5222,11 @@ in {
   };
   cffi-grovel = {
     pname = "cffi-grovel";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-grovel" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-grovel";
       asd = "cffi-grovel";
     });
@@ -5141,11 +5235,11 @@ in {
   };
   cffi-libffi = {
     pname = "cffi-libffi";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-libffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-libffi";
       asd = "cffi-libffi";
     });
@@ -5154,11 +5248,11 @@ in {
   };
   cffi-tests = {
     pname = "cffi-tests";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-tests";
       asd = "cffi-tests";
     });
@@ -5167,11 +5261,11 @@ in {
   };
   cffi-tests_slash_example = {
     pname = "cffi-tests_example";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-tests";
       asd = "cffi-tests";
     });
@@ -5183,11 +5277,11 @@ in {
   };
   cffi-toolchain = {
     pname = "cffi-toolchain";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-toolchain" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-toolchain";
       asd = "cffi-toolchain";
     });
@@ -5196,11 +5290,11 @@ in {
   };
   cffi-uffi-compat = {
     pname = "cffi-uffi-compat";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi-uffi-compat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi-uffi-compat";
       asd = "cffi-uffi-compat";
     });
@@ -5209,11 +5303,11 @@ in {
   };
   cffi_slash_c2ffi = {
     pname = "cffi_c2ffi";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi";
       asd = "cffi";
     });
@@ -5225,11 +5319,11 @@ in {
   };
   cffi_slash_c2ffi-generator = {
     pname = "cffi_c2ffi-generator";
-    version = "0.24.1";
+    version = "20221106-git";
     asds = [ "cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
+      url = "http://beta.quicklisp.org/archive/cffi/2022-11-06/cffi-20221106-git.tgz";
+      sha256 = "0199hzvvsflisp79zv6dpyfkm3d91h8f0ds8mkpijd5li5h17206";
       system = "cffi";
       asd = "cffi";
     });
@@ -5705,11 +5799,11 @@ in {
   };
   chunga = {
     pname = "chunga";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "chunga" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chunga/2022-03-31/chunga-20220331-git.tgz";
-      sha256 = "1w7jx1hrsxdxz1f9qrlsxdyb6fzb96rq72a919faxzgsrh4j87pa";
+      url = "http://beta.quicklisp.org/archive/chunga/2022-11-06/chunga-20221106-git.tgz";
+      sha256 = "117qvvfszi4s6zfcxi7mpwx14dpgamir7n124p4whwyam04b0y1b";
       system = "chunga";
       asd = "chunga";
     });
@@ -5718,11 +5812,11 @@ in {
   };
   ci-utils = {
     pname = "ci-utils";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ci-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci-utils/2022-07-07/ci-utils-20220707-git.tgz";
-      sha256 = "0zrmk58jcv1rrxsl8lzxh9izx3kprdjpwriwf3vlsjaknvva4yc4";
+      url = "http://beta.quicklisp.org/archive/ci-utils/2022-11-06/ci-utils-20221106-git.tgz";
+      sha256 = "0srypwhcfwmy6ppv724y0vhm0icninv2zzb2f8h1985zch73cqw3";
       system = "ci-utils";
       asd = "ci-utils";
     });
@@ -5731,11 +5825,11 @@ in {
   };
   ci-utils-features = {
     pname = "ci-utils-features";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ci-utils-features" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci-utils/2022-07-07/ci-utils-20220707-git.tgz";
-      sha256 = "0zrmk58jcv1rrxsl8lzxh9izx3kprdjpwriwf3vlsjaknvva4yc4";
+      url = "http://beta.quicklisp.org/archive/ci-utils/2022-11-06/ci-utils-20221106-git.tgz";
+      sha256 = "0srypwhcfwmy6ppv724y0vhm0icninv2zzb2f8h1985zch73cqw3";
       system = "ci-utils-features";
       asd = "ci-utils-features";
     });
@@ -5744,11 +5838,11 @@ in {
   };
   ci-utils_slash_coveralls = {
     pname = "ci-utils_coveralls";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ci-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci-utils/2022-07-07/ci-utils-20220707-git.tgz";
-      sha256 = "0zrmk58jcv1rrxsl8lzxh9izx3kprdjpwriwf3vlsjaknvva4yc4";
+      url = "http://beta.quicklisp.org/archive/ci-utils/2022-11-06/ci-utils-20221106-git.tgz";
+      sha256 = "0srypwhcfwmy6ppv724y0vhm0icninv2zzb2f8h1985zch73cqw3";
       system = "ci-utils";
       asd = "ci-utils";
     });
@@ -5760,11 +5854,11 @@ in {
   };
   ci-utils_slash_test = {
     pname = "ci-utils_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ci-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci-utils/2022-07-07/ci-utils-20220707-git.tgz";
-      sha256 = "0zrmk58jcv1rrxsl8lzxh9izx3kprdjpwriwf3vlsjaknvva4yc4";
+      url = "http://beta.quicklisp.org/archive/ci-utils/2022-11-06/ci-utils-20221106-git.tgz";
+      sha256 = "0srypwhcfwmy6ppv724y0vhm0icninv2zzb2f8h1985zch73cqw3";
       system = "ci-utils";
       asd = "ci-utils";
     });
@@ -5828,11 +5922,11 @@ in {
   };
   ckr-tables = {
     pname = "ckr-tables";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "ckr-tables" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-critic/2020-12-20/lisp-critic-20201220-git.tgz";
-      sha256 = "1x1kadwr38qhq8b8pabd8vqs54d16v1y5yfgjf3d02cvlsy67mx0";
+      url = "http://beta.quicklisp.org/archive/lisp-critic/2022-11-06/lisp-critic-20221106-git.tgz";
+      sha256 = "000vp8jsvpw80by7c7nb5394akfcr6rzzpzw049am67fh5qk89rn";
       system = "ckr-tables";
       asd = "ckr-tables";
     });
@@ -5841,11 +5935,11 @@ in {
   };
   cl_plus_ssl = {
     pname = "cl+ssl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl+ssl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-07-07/cl+ssl-20220707-git.tgz";
-      sha256 = "08g6x3b0dl89zydp4s611ghjapfzky6hbcffzxg817d79bld7qii";
+      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-11-06/cl+ssl-20221106-git.tgz";
+      sha256 = "19v19mkkwnbd73aim7az8ciahz7x39k6l3f2acxnpps35kqx2ipq";
       system = "cl+ssl";
       asd = "cl+ssl";
     });
@@ -5854,24 +5948,24 @@ in {
   };
   cl_plus_ssl_dot_test = {
     pname = "cl+ssl.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl+ssl.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-07-07/cl+ssl-20220707-git.tgz";
-      sha256 = "08g6x3b0dl89zydp4s611ghjapfzky6hbcffzxg817d79bld7qii";
+      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-11-06/cl+ssl-20221106-git.tgz";
+      sha256 = "19v19mkkwnbd73aim7az8ciahz7x39k6l3f2acxnpps35kqx2ipq";
       system = "cl+ssl.test";
       asd = "cl+ssl.test";
     });
     systems = [ "cl+ssl.test" ];
-    lispLibs = [ (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-coveralls" pkgs) (getAttr "fiveam" pkgs) (getAttr "usocket" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-coveralls" pkgs) (getAttr "fiveam" pkgs) (getAttr "trivial-sockets" pkgs) (getAttr "usocket" pkgs) ];
   };
   cl_plus_ssl_slash_config = {
     pname = "cl+ssl_config";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl+ssl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-07-07/cl+ssl-20220707-git.tgz";
-      sha256 = "08g6x3b0dl89zydp4s611ghjapfzky6hbcffzxg817d79bld7qii";
+      url = "http://beta.quicklisp.org/archive/cl+ssl/2022-11-06/cl+ssl-20221106-git.tgz";
+      sha256 = "19v19mkkwnbd73aim7az8ciahz7x39k6l3f2acxnpps35kqx2ipq";
       system = "cl+ssl";
       asd = "cl+ssl";
     });
@@ -5974,11 +6068,11 @@ in {
   };
   cl-alc = {
     pname = "cl-alc";
-    version = "20150302-git";
+    version = "20221106-git";
     asds = [ "cl-alc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-openal/2015-03-02/cl-openal-20150302-git.tgz";
-      sha256 = "1j7qcimrhd7nypalimfvb7zzixq79yzwqmkvs1bzhg7d86k8sg5h";
+      url = "http://beta.quicklisp.org/archive/cl-openal/2022-11-06/cl-openal-20221106-git.tgz";
+      sha256 = "0jmp81mf23ckcm4knnh0q7zpmyls5220imaqbmnl0xvvra10b1zy";
       system = "cl-alc";
       asd = "cl-alc";
     });
@@ -6000,11 +6094,11 @@ in {
   };
   cl-all = {
     pname = "cl-all";
-    version = "20200925-git";
+    version = "20221106-git";
     asds = [ "cl-all" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-all/2020-09-25/cl-all-20200925-git.tgz";
-      sha256 = "1ad0q071m2825dahllgmzacvk7z41h8lcbxf5jj0ql3m65ryz7qr";
+      url = "http://beta.quicklisp.org/archive/cl-all/2022-11-06/cl-all-20221106-git.tgz";
+      sha256 = "0rvl5zhza5fz91spk308glsnh50waz0iri8brl1ij74bb30rwlgc";
       system = "cl-all";
       asd = "cl-all";
     });
@@ -6013,11 +6107,11 @@ in {
   };
   cl-alut = {
     pname = "cl-alut";
-    version = "20150302-git";
+    version = "20221106-git";
     asds = [ "cl-alut" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-openal/2015-03-02/cl-openal-20150302-git.tgz";
-      sha256 = "1j7qcimrhd7nypalimfvb7zzixq79yzwqmkvs1bzhg7d86k8sg5h";
+      url = "http://beta.quicklisp.org/archive/cl-openal/2022-11-06/cl-openal-20221106-git.tgz";
+      sha256 = "0jmp81mf23ckcm4knnh0q7zpmyls5220imaqbmnl0xvvra10b1zy";
       system = "cl-alut";
       asd = "cl-alut";
     });
@@ -6804,6 +6898,45 @@ in {
     systems = [ "cl-annot-prove-test" ];
     lispLibs = [ (getAttr "cl-annot-prove" pkgs) (getAttr "prove" pkgs) (getAttr "prove-asdf" pkgs) ];
   };
+  cl-annot-revisit = {
+    pname = "cl-annot-revisit";
+    version = "20221106-git";
+    asds = [ "cl-annot-revisit" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-annot-revisit/2022-11-06/cl-annot-revisit-20221106-git.tgz";
+      sha256 = "0jlllgq14bi1rddzlmq9wfs4vb24apgqz17wfd79kjjcmnzzjp4m";
+      system = "cl-annot-revisit";
+      asd = "cl-annot-revisit";
+    });
+    systems = [ "cl-annot-revisit" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "named-readtables" pkgs) ];
+  };
+  cl-annot-revisit-compat = {
+    pname = "cl-annot-revisit-compat";
+    version = "20221106-git";
+    asds = [ "cl-annot-revisit-compat" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-annot-revisit/2022-11-06/cl-annot-revisit-20221106-git.tgz";
+      sha256 = "0jlllgq14bi1rddzlmq9wfs4vb24apgqz17wfd79kjjcmnzzjp4m";
+      system = "cl-annot-revisit-compat";
+      asd = "cl-annot-revisit-compat";
+    });
+    systems = [ "cl-annot-revisit-compat" ];
+    lispLibs = [ (getAttr "cl-annot-revisit" pkgs) ];
+  };
+  cl-annot-revisit-test = {
+    pname = "cl-annot-revisit-test";
+    version = "20221106-git";
+    asds = [ "cl-annot-revisit-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-annot-revisit/2022-11-06/cl-annot-revisit-20221106-git.tgz";
+      sha256 = "0jlllgq14bi1rddzlmq9wfs4vb24apgqz17wfd79kjjcmnzzjp4m";
+      system = "cl-annot-revisit-test";
+      asd = "cl-annot-revisit-test";
+    });
+    systems = [ "cl-annot-revisit-test" ];
+    lispLibs = [ (getAttr "_1am" pkgs) (getAttr "cl-annot-revisit" pkgs) (getAttr "cl-annot-revisit-compat" pkgs) (getAttr "trivial-macroexpand-all" pkgs) ];
+  };
   cl-anonfun = {
     pname = "cl-anonfun";
     version = "20111203-git";
@@ -6988,11 +7121,11 @@ in {
   };
   cl-async = {
     pname = "cl-async";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async";
       asd = "cl-async";
     });
@@ -7014,11 +7147,11 @@ in {
   };
   cl-async-base = {
     pname = "cl-async-base";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async-base";
       asd = "cl-async";
     });
@@ -7040,11 +7173,11 @@ in {
   };
   cl-async-repl = {
     pname = "cl-async-repl";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async-repl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async-repl";
       asd = "cl-async-repl";
     });
@@ -7053,11 +7186,11 @@ in {
   };
   cl-async-ssl = {
     pname = "cl-async-ssl";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async-ssl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async-ssl";
       asd = "cl-async-ssl";
     });
@@ -7066,11 +7199,11 @@ in {
   };
   cl-async-test = {
     pname = "cl-async-test";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async-test";
       asd = "cl-async-test";
     });
@@ -7079,11 +7212,11 @@ in {
   };
   cl-async-util = {
     pname = "cl-async-util";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-async-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
-      sha256 = "0x9nk96511wpbvi1pzd2wqynfyjl705bc4jqrmi01r1vw24cn2mr";
+      url = "http://beta.quicklisp.org/archive/cl-async/2022-11-06/cl-async-20221106-git.tgz";
+      sha256 = "1xl5dfq91dqx57hclq3m8kcndbfv5bbb4kissggmmmmrlnkd32cn";
       system = "cl-async-util";
       asd = "cl-async";
     });
@@ -7176,11 +7309,11 @@ in {
   };
   cl-autowrap = {
     pname = "cl-autowrap";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-autowrap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2021-12-09/cl-autowrap-20211209-git.tgz";
-      sha256 = "1db0knq4vfr0mlxx8y5bjjdc87mij3hf7m6f0z4hgw8jsx868krr";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
+      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
       system = "cl-autowrap";
       asd = "cl-autowrap";
     });
@@ -7189,11 +7322,11 @@ in {
   };
   cl-autowrap-test = {
     pname = "cl-autowrap-test";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-autowrap-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2021-12-09/cl-autowrap-20211209-git.tgz";
-      sha256 = "1db0knq4vfr0mlxx8y5bjjdc87mij3hf7m6f0z4hgw8jsx868krr";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
+      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
       system = "cl-autowrap-test";
       asd = "cl-autowrap-test";
     });
@@ -7202,11 +7335,11 @@ in {
   };
   cl-autowrap_slash_libffi = {
     pname = "cl-autowrap_libffi";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-autowrap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2021-12-09/cl-autowrap-20211209-git.tgz";
-      sha256 = "1db0knq4vfr0mlxx8y5bjjdc87mij3hf7m6f0z4hgw8jsx868krr";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
+      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
       system = "cl-autowrap";
       asd = "cl-autowrap";
     });
@@ -7413,6 +7546,35 @@ in {
     });
     systems = [ "cl-bloom" ];
     lispLibs = [ (getAttr "cl-murmurhash" pkgs) (getAttr "static-vectors" pkgs) ];
+  };
+  cl-bloom-filter = {
+    pname = "cl-bloom-filter";
+    version = "20221106-git";
+    asds = [ "cl-bloom-filter" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-bloom-filter/2022-11-06/cl-bloom-filter-20221106-git.tgz";
+      sha256 = "1s9m617fh3krh2klc2nx7jf89nk43cvvrnvqrhvw9jprw7gqanvq";
+      system = "cl-bloom-filter";
+      asd = "cl-bloom-filter";
+    });
+    systems = [ "cl-bloom-filter" ];
+    lispLibs = [  ];
+  };
+  cl-bloom-filter_slash_tests = {
+    pname = "cl-bloom-filter_tests";
+    version = "20221106-git";
+    asds = [ "cl-bloom-filter" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-bloom-filter/2022-11-06/cl-bloom-filter-20221106-git.tgz";
+      sha256 = "1s9m617fh3krh2klc2nx7jf89nk43cvvrnvqrhvw9jprw7gqanvq";
+      system = "cl-bloom-filter";
+      asd = "cl-bloom-filter";
+    });
+    systems = [ "cl-bloom-filter/tests" ];
+    lispLibs = [ (getAttr "cl-bloom-filter" pkgs) (getAttr "rove" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-bnf = {
     pname = "cl-bnf";
@@ -7919,11 +8081,11 @@ in {
   };
   cl-charms = {
     pname = "cl-charms";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "cl-charms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-charms/2020-02-18/cl-charms-20200218-git.tgz";
-      sha256 = "1jczaypa9dhxr34yyhsxb6lrdnircjx8am4iqkc3shfpjn32q323";
+      url = "http://beta.quicklisp.org/archive/cl-charms/2022-11-06/cl-charms-20221106-git.tgz";
+      sha256 = "1xi2q3xl756wyallfbyfp2v0zvf8mhfkwb59y11ny9jj5cdhgwdh";
       system = "cl-charms";
       asd = "cl-charms";
     });
@@ -7932,11 +8094,11 @@ in {
   };
   cl-charms-paint = {
     pname = "cl-charms-paint";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "cl-charms-paint" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-charms/2020-02-18/cl-charms-20200218-git.tgz";
-      sha256 = "1jczaypa9dhxr34yyhsxb6lrdnircjx8am4iqkc3shfpjn32q323";
+      url = "http://beta.quicklisp.org/archive/cl-charms/2022-11-06/cl-charms-20221106-git.tgz";
+      sha256 = "1xi2q3xl756wyallfbyfp2v0zvf8mhfkwb59y11ny9jj5cdhgwdh";
       system = "cl-charms-paint";
       asd = "cl-charms-paint";
     });
@@ -7945,11 +8107,11 @@ in {
   };
   cl-charms-timer = {
     pname = "cl-charms-timer";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "cl-charms-timer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-charms/2020-02-18/cl-charms-20200218-git.tgz";
-      sha256 = "1jczaypa9dhxr34yyhsxb6lrdnircjx8am4iqkc3shfpjn32q323";
+      url = "http://beta.quicklisp.org/archive/cl-charms/2022-11-06/cl-charms-20221106-git.tgz";
+      sha256 = "1xi2q3xl756wyallfbyfp2v0zvf8mhfkwb59y11ny9jj5cdhgwdh";
       system = "cl-charms-timer";
       asd = "cl-charms-timer";
     });
@@ -8049,11 +8211,11 @@ in {
   };
   cl-collider = {
     pname = "cl-collider";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-collider" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-collider/2022-07-07/cl-collider-20220707-git.tgz";
-      sha256 = "1dk6pfnm8vxk8f3wfxv46rsblkpbsmdnj3kdq37cijsbvybarzkq";
+      url = "http://beta.quicklisp.org/archive/cl-collider/2022-11-06/cl-collider-20221106-git.tgz";
+      sha256 = "03z11hcjvbawkli0bw90h4za7vvpm9pk7rh9gi6m2k7wwq2rsxk5";
       system = "cl-collider";
       asd = "cl-collider";
     });
@@ -8396,11 +8558,11 @@ in {
   };
   cl-cron = {
     pname = "cl-cron";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-cron" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-cron/2021-12-09/cl-cron-20211209-git.tgz";
-      sha256 = "0y4li8j2h1nbpldpqm39ld9kgs4a7biy94h49n27l59l7mn1jd0d";
+      url = "http://beta.quicklisp.org/archive/cl-cron/2022-11-06/cl-cron-20221106-git.tgz";
+      sha256 = "1yl7ajy8b2mf5i9f8x3458s4y00rkkpy70xbzz3fi08l9rp2sp3z";
       system = "cl-cron";
       asd = "cl-cron";
     });
@@ -8636,11 +8798,11 @@ in {
   };
   cl-data-structures = {
     pname = "cl-data-structures";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-data-structures" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-data-structures/2022-07-07/cl-data-structures-20220707-git.tgz";
-      sha256 = "1i01akirf7pn4k4p8afq1ay9h8vdbrpq4qinwq5yi87sn3miinv0";
+      url = "http://beta.quicklisp.org/archive/cl-data-structures/2022-11-06/cl-data-structures-20221106-git.tgz";
+      sha256 = "04m537pdkjcpr1fhkmdvn0bh77ilwqa2sf43s6gv52s63drfws3l";
       system = "cl-data-structures";
       asd = "cl-data-structures";
     });
@@ -8649,11 +8811,11 @@ in {
   };
   cl-data-structures-tests = {
     pname = "cl-data-structures-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-data-structures-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-data-structures/2022-07-07/cl-data-structures-20220707-git.tgz";
-      sha256 = "1i01akirf7pn4k4p8afq1ay9h8vdbrpq4qinwq5yi87sn3miinv0";
+      url = "http://beta.quicklisp.org/archive/cl-data-structures/2022-11-06/cl-data-structures-20221106-git.tgz";
+      sha256 = "04m537pdkjcpr1fhkmdvn0bh77ilwqa2sf43s6gv52s63drfws3l";
       system = "cl-data-structures-tests";
       asd = "cl-data-structures-tests";
     });
@@ -8854,6 +9016,64 @@ in {
     });
     systems = [ "cl-disque-test" ];
     lispLibs = [ (getAttr "cl-disque" pkgs) (getAttr "prove" pkgs) (getAttr "prove-asdf" pkgs) ];
+  };
+  cl-djula-svg = {
+    pname = "cl-djula-svg";
+    version = "20221106-git";
+    asds = [ "cl-djula-svg" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-djula-svg/2022-11-06/cl-djula-svg-20221106-git.tgz";
+      sha256 = "1jxgngr51ars234by4vnczfqmkwi2iy94sdxnj3pkjrdximy5any";
+      system = "cl-djula-svg";
+      asd = "cl-djula-svg";
+    });
+    systems = [ "cl-djula-svg" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "xmls" pkgs) ];
+  };
+  cl-djula-svg_slash_tests = {
+    pname = "cl-djula-svg_tests";
+    version = "20221106-git";
+    asds = [ "cl-djula-svg" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-djula-svg/2022-11-06/cl-djula-svg-20221106-git.tgz";
+      sha256 = "1jxgngr51ars234by4vnczfqmkwi2iy94sdxnj3pkjrdximy5any";
+      system = "cl-djula-svg";
+      asd = "cl-djula-svg";
+    });
+    systems = [ "cl-djula-svg/tests" ];
+    lispLibs = [ (getAttr "cl-djula-svg" pkgs) (getAttr "rove" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  cl-djula-tailwind = {
+    pname = "cl-djula-tailwind";
+    version = "20221106-git";
+    asds = [ "cl-djula-tailwind" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-djula-tailwind/2022-11-06/cl-djula-tailwind-20221106-git.tgz";
+      sha256 = "059mfgh53gpj74rgr7b61fnm24bwx8hdrw15mjk687y9sna3avda";
+      system = "cl-djula-tailwind";
+      asd = "cl-djula-tailwind";
+    });
+    systems = [ "cl-djula-tailwind" ];
+    lispLibs = [ (getAttr "cl-css" pkgs) (getAttr "cl-minify-css" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "djula" pkgs) ];
+  };
+  cl-djula-tailwind_slash_tests = {
+    pname = "cl-djula-tailwind_tests";
+    version = "20221106-git";
+    asds = [ "cl-djula-tailwind" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-djula-tailwind/2022-11-06/cl-djula-tailwind-20221106-git.tgz";
+      sha256 = "059mfgh53gpj74rgr7b61fnm24bwx8hdrw15mjk687y9sna3avda";
+      system = "cl-djula-tailwind";
+      asd = "cl-djula-tailwind";
+    });
+    systems = [ "cl-djula-tailwind/tests" ];
+    lispLibs = [ (getAttr "cl-djula-tailwind" pkgs) (getAttr "rove" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-dot = {
     pname = "cl-dot";
@@ -9259,29 +9479,16 @@ in {
   };
   cl-factoring = {
     pname = "cl-factoring";
-    version = "20180430-git";
+    version = "20221106-git";
     asds = [ "cl-factoring" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-factoring/2018-04-30/cl-factoring-20180430-git.tgz";
+      url = "http://beta.quicklisp.org/archive/cl-factoring/2022-11-06/cl-factoring-20221106-git.tgz";
       sha256 = "0vn3kb8mmi93pr76lx1mbwp7qc2krzb0ayzcrffwq2aw2q201fhd";
       system = "cl-factoring";
       asd = "cl-factoring";
     });
     systems = [ "cl-factoring" ];
     lispLibs = [ (getAttr "cl-primality" pkgs) (getAttr "iterate" pkgs) ];
-  };
-  cl-factoring-test = {
-    pname = "cl-factoring-test";
-    version = "20180430-git";
-    asds = [ "cl-factoring-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-factoring/2018-04-30/cl-factoring-20180430-git.tgz";
-      sha256 = "0vn3kb8mmi93pr76lx1mbwp7qc2krzb0ayzcrffwq2aw2q201fhd";
-      system = "cl-factoring-test";
-      asd = "cl-factoring-test";
-    });
-    systems = [ "cl-factoring-test" ];
-    lispLibs = [ (getAttr "cl-factoring" pkgs) (getAttr "cl-primality" pkgs) (getAttr "iterate" pkgs) (getAttr "stefil" pkgs) ];
   };
   cl-fad = {
     pname = "cl-fad";
@@ -9586,11 +9793,11 @@ in {
   };
   cl-form-types = {
     pname = "cl-form-types";
-    version = "20211230-git";
+    version = "20221106-git";
     asds = [ "cl-form-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-form-types/2021-12-30/cl-form-types-20211230-git.tgz";
-      sha256 = "1x3zx3r4mhbbi8pwb251czbb8fj1yv77ab16crg5k1fachf2016l";
+      url = "http://beta.quicklisp.org/archive/cl-form-types/2022-11-06/cl-form-types-20221106-git.tgz";
+      sha256 = "063yylsdy9zp3gr3l1mw0rbhfy853m1x4yv3s8y3qwmxsxdfjs10";
       system = "cl-form-types";
       asd = "cl-form-types";
     });
@@ -9599,11 +9806,11 @@ in {
   };
   cl-form-types_slash_test = {
     pname = "cl-form-types_test";
-    version = "20211230-git";
+    version = "20221106-git";
     asds = [ "cl-form-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-form-types/2021-12-30/cl-form-types-20211230-git.tgz";
-      sha256 = "1x3zx3r4mhbbi8pwb251czbb8fj1yv77ab16crg5k1fachf2016l";
+      url = "http://beta.quicklisp.org/archive/cl-form-types/2022-11-06/cl-form-types-20221106-git.tgz";
+      sha256 = "063yylsdy9zp3gr3l1mw0rbhfy853m1x4yv3s8y3qwmxsxdfjs10";
       system = "cl-form-types";
       asd = "cl-form-types";
     });
@@ -9615,11 +9822,11 @@ in {
   };
   cl-forms = {
     pname = "cl-forms";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms";
       asd = "cl-forms";
     });
@@ -9628,11 +9835,11 @@ in {
   };
   cl-forms_dot_demo = {
     pname = "cl-forms.demo";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.demo";
       asd = "cl-forms.demo";
     });
@@ -9641,11 +9848,11 @@ in {
   };
   cl-forms_dot_djula = {
     pname = "cl-forms.djula";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.djula" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.djula";
       asd = "cl-forms.djula";
     });
@@ -9654,11 +9861,11 @@ in {
   };
   cl-forms_dot_peppol = {
     pname = "cl-forms.peppol";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.peppol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.peppol";
       asd = "cl-forms.peppol";
     });
@@ -9667,11 +9874,11 @@ in {
   };
   cl-forms_dot_test = {
     pname = "cl-forms.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.test";
       asd = "cl-forms.test";
     });
@@ -9680,11 +9887,11 @@ in {
   };
   cl-forms_dot_who = {
     pname = "cl-forms.who";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.who" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.who";
       asd = "cl-forms.who";
     });
@@ -9693,11 +9900,11 @@ in {
   };
   cl-forms_dot_who_dot_bootstrap = {
     pname = "cl-forms.who.bootstrap";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-forms.who.bootstrap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2022-07-07/cl-forms-20220707-git.tgz";
-      sha256 = "1jcixxsfvsjhy8r8y6jvrnh1c32p6sw5wrmxjkyy13dxlcb4yjs2";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2022-11-06/cl-forms-20221106-git.tgz";
+      sha256 = "11vcmi96x93npdga9hmpbhxi260bccgrllz6bzd0spkzazr3q0ap";
       system = "cl-forms.who.bootstrap";
       asd = "cl-forms.who.bootstrap";
     });
@@ -9823,11 +10030,11 @@ in {
   };
   cl-gamepad = {
     pname = "cl-gamepad";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-gamepad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gamepad/2022-07-07/cl-gamepad-20220707-git.tgz";
-      sha256 = "12smlrshfwc9n5p4lvw0r2xsvrz8kwds9k1ppw1gsvwn3vpkrqxc";
+      url = "http://beta.quicklisp.org/archive/cl-gamepad/2022-11-06/cl-gamepad-20221106-git.tgz";
+      sha256 = "00rd483p063wf8m18mpgbk09fxass2zfc6vmkx0c26f690g6a14z";
       system = "cl-gamepad";
       asd = "cl-gamepad";
     });
@@ -9992,11 +10199,11 @@ in {
   };
   cl-generator = {
     pname = "cl-generator";
-    version = "20190307-git";
+    version = "20221106-git";
     asds = [ "cl-generator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-generator/2019-03-07/cl-generator-20190307-git.tgz";
-      sha256 = "10yw3nnjc3dm0pkry35ybgi3pq30c2fh4x1aa95xxawi3xc5g280";
+      url = "http://beta.quicklisp.org/archive/cl-generator/2022-11-06/cl-generator-20221106-git.tgz";
+      sha256 = "0aa5prw6f4fqw9j8m6kvdb3h3lqyvi15dd1l6437p9408mmyxk30";
       system = "cl-generator";
       asd = "cl-generator";
     });
@@ -10005,11 +10212,11 @@ in {
   };
   cl-generator-test = {
     pname = "cl-generator-test";
-    version = "20190307-git";
+    version = "20221106-git";
     asds = [ "cl-generator-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-generator/2019-03-07/cl-generator-20190307-git.tgz";
-      sha256 = "10yw3nnjc3dm0pkry35ybgi3pq30c2fh4x1aa95xxawi3xc5g280";
+      url = "http://beta.quicklisp.org/archive/cl-generator/2022-11-06/cl-generator-20221106-git.tgz";
+      sha256 = "0aa5prw6f4fqw9j8m6kvdb3h3lqyvi15dd1l6437p9408mmyxk30";
       system = "cl-generator-test";
       asd = "cl-generator-test";
     });
@@ -10180,11 +10387,11 @@ in {
   };
   cl-git = {
     pname = "cl-git";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-git" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-git/2022-07-07/cl-git-20220707-git.tgz";
-      sha256 = "01f1w8pvli9fd8wxdyvrkm15nb0z1l5k1ddgmhfiwxa3ybpri39l";
+      url = "http://beta.quicklisp.org/archive/cl-git/2022-11-06/cl-git-20221106-git.tgz";
+      sha256 = "0pk8pnsndkp3mcxknbq41crdv75djz5s4f40i1j9xkl6a39q0arf";
       system = "cl-git";
       asd = "cl-git";
     });
@@ -10193,11 +10400,11 @@ in {
   };
   cl-git_slash_tests = {
     pname = "cl-git_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-git" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-git/2022-07-07/cl-git-20220707-git.tgz";
-      sha256 = "01f1w8pvli9fd8wxdyvrkm15nb0z1l5k1ddgmhfiwxa3ybpri39l";
+      url = "http://beta.quicklisp.org/archive/cl-git/2022-11-06/cl-git-20221106-git.tgz";
+      sha256 = "0pk8pnsndkp3mcxknbq41crdv75djz5s4f40i1j9xkl6a39q0arf";
       system = "cl-git";
       asd = "cl-git";
     });
@@ -14783,6 +14990,45 @@ in {
     systems = [ "cl-glfw3-examples" ];
     lispLibs = [ (getAttr "cl-glfw3" pkgs) (getAttr "cl-opengl" pkgs) (getAttr "trivial-main-thread" pkgs) ];
   };
+  cl-glib = {
+    pname = "cl-glib";
+    version = "20221106-git";
+    asds = [ "cl-glib" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-glib/2022-11-06/cl-glib-20221106-git.tgz";
+      sha256 = "189w4flgjr6asqlb2zzm0c6b1ngdws4dkhq4ap458h5al33sxphg";
+      system = "cl-glib";
+      asd = "cl-glib";
+    });
+    systems = [ "cl-glib" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl-gobject-introspection-wrapper" pkgs) ];
+  };
+  cl-glib_dot_gio = {
+    pname = "cl-glib.gio";
+    version = "20221106-git";
+    asds = [ "cl-glib.gio" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-glib/2022-11-06/cl-glib-20221106-git.tgz";
+      sha256 = "189w4flgjr6asqlb2zzm0c6b1ngdws4dkhq4ap458h5al33sxphg";
+      system = "cl-glib.gio";
+      asd = "cl-glib.gio";
+    });
+    systems = [ "cl-glib.gio" ];
+    lispLibs = [ (getAttr "cl-gobject-introspection-wrapper" pkgs) ];
+  };
+  cl-glib_dot_gobject = {
+    pname = "cl-glib.gobject";
+    version = "20221106-git";
+    asds = [ "cl-glib.gobject" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-glib/2022-11-06/cl-glib-20221106-git.tgz";
+      sha256 = "189w4flgjr6asqlb2zzm0c6b1ngdws4dkhq4ap458h5al33sxphg";
+      system = "cl-glib.gobject";
+      asd = "cl-glib.gobject";
+    });
+    systems = [ "cl-glib.gobject" ];
+    lispLibs = [ (getAttr "cl-gobject-introspection-wrapper" pkgs) ];
+  };
   cl-gltf = {
     pname = "cl-gltf";
     version = "20220331-git";
@@ -14860,6 +15106,19 @@ in {
     });
     systems = [ "cl-gobject-introspection-test" ];
     lispLibs = [ (getAttr "cl-gobject-introspection" pkgs) (getAttr "fiveam" pkgs) (getAttr "iterate" pkgs) ];
+  };
+  cl-gobject-introspection-wrapper = {
+    pname = "cl-gobject-introspection-wrapper";
+    version = "20221106-git";
+    asds = [ "cl-gobject-introspection-wrapper" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection-wrapper/2022-11-06/cl-gobject-introspection-wrapper-20221106-git.tgz";
+      sha256 = "1bxb0cs8b92ixigw1lmza8dm75hhc6qdcdkmz6rk77aq7zsp25w4";
+      system = "cl-gobject-introspection-wrapper";
+      asd = "cl-gobject-introspection-wrapper";
+    });
+    systems = [ "cl-gobject-introspection-wrapper" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-gobject-introspection" pkgs) (getAttr "cl-ppcre" pkgs) ];
   };
   cl-gopher = {
     pname = "cl-gopher";
@@ -15015,51 +15274,6 @@ in {
     });
     systems = [ "cl-growl" ];
     lispLibs = [ (getAttr "flexi-streams" pkgs) (getAttr "ironclad" pkgs) (getAttr "trivial-utf-8" pkgs) (getAttr "usocket" pkgs) ];
-  };
-  cl-gserver = {
-    pname = "cl-gserver";
-    version = "20220707-git";
-    asds = [ "cl-gserver" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-07-07/cl-gserver-20220707-git.tgz";
-      sha256 = "12w4wpb3sw7a5gdpnflqfj3zxy73a3c5qhwv08k3b62rlq831xy1";
-      system = "cl-gserver";
-      asd = "cl-gserver";
-    });
-    systems = [ "cl-gserver" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "atomics" pkgs) (getAttr "binding-arrows" pkgs) (getAttr "blackbird" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-speedy-queue" pkgs) (getAttr "str" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "timer-wheel" pkgs) ];
-  };
-  cl-gserver_slash_docs = {
-    pname = "cl-gserver_docs";
-    version = "20220707-git";
-    asds = [ "cl-gserver" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-07-07/cl-gserver-20220707-git.tgz";
-      sha256 = "12w4wpb3sw7a5gdpnflqfj3zxy73a3c5qhwv08k3b62rlq831xy1";
-      system = "cl-gserver";
-      asd = "cl-gserver";
-    });
-    systems = [ "cl-gserver/docs" ];
-    lispLibs = [ (getAttr "cl-gserver" pkgs) (getAttr "mgl-pax" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
-  cl-gserver_slash_tests = {
-    pname = "cl-gserver_tests";
-    version = "20220707-git";
-    asds = [ "cl-gserver" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-07-07/cl-gserver-20220707-git.tgz";
-      sha256 = "12w4wpb3sw7a5gdpnflqfj3zxy73a3c5qhwv08k3b62rlq831xy1";
-      system = "cl-gserver";
-      asd = "cl-gserver";
-    });
-    systems = [ "cl-gserver/tests" ];
-    lispLibs = [ (getAttr "cl-gserver" pkgs) (getAttr "cl-mock" pkgs) (getAttr "fiveam" pkgs) ];
-    meta = {
-      broken = true;
-    };
   };
   cl-gss = {
     pname = "cl-gss";
@@ -15462,11 +15676,11 @@ in {
   };
   cl-i18n = {
     pname = "cl-i18n";
-    version = "20210807-git";
+    version = "20221106-git";
     asds = [ "cl-i18n" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-i18n/2021-08-07/cl-i18n-20210807-git.tgz";
-      sha256 = "1mdhfkk61djj39vgnns5y1cssd12h0m1cfwd21m8xpa2l3rqvmgf";
+      url = "http://beta.quicklisp.org/archive/cl-i18n/2022-11-06/cl-i18n-20221106-git.tgz";
+      sha256 = "0kj1wfvlbi7qwq61b0rcdxa0bmb4sfsnh1bj3n5jxp24sdib73w2";
       system = "cl-i18n";
       asd = "cl-i18n";
     });
@@ -15614,11 +15828,11 @@ in {
   };
   cl-info = {
     pname = "cl-info";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-info" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-info/2022-07-07/cl-info-20220707-git.tgz";
-      sha256 = "1qxnn7pz0b2ck4jcnkafgvjkgxwpcgxb5r2m0g472hhlmz93nihi";
+      url = "http://beta.quicklisp.org/archive/cl-info/2022-11-06/cl-info-20221106-git.tgz";
+      sha256 = "1mg58n6qizssm8wqxnxgkrxaabmjzbrfjh9qld69y5z60zrybg1f";
       system = "cl-info";
       asd = "cl-info";
     });
@@ -15627,11 +15841,11 @@ in {
   };
   cl-info-test = {
     pname = "cl-info-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-info-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-info/2022-07-07/cl-info-20220707-git.tgz";
-      sha256 = "1qxnn7pz0b2ck4jcnkafgvjkgxwpcgxb5r2m0g472hhlmz93nihi";
+      url = "http://beta.quicklisp.org/archive/cl-info/2022-11-06/cl-info-20221106-git.tgz";
+      sha256 = "1mg58n6qizssm8wqxnxgkrxaabmjzbrfjh9qld69y5z60zrybg1f";
       system = "cl-info-test";
       asd = "cl-info-test";
     });
@@ -15718,29 +15932,32 @@ in {
   };
   cl-interpol = {
     pname = "cl-interpol";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-interpol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-interpol/2020-12-20/cl-interpol-20201220-git.tgz";
-      sha256 = "1kr00zf62m7la7rxa2m5w49r9cyzamc106hvjcc8ffmi7a4jw490";
+      url = "http://beta.quicklisp.org/archive/cl-interpol/2022-11-06/cl-interpol-20221106-git.tgz";
+      sha256 = "1nkjn8byyfdxhi84rbpqs87bb5m478lvphfgxqqv0q37rn75c946";
       system = "cl-interpol";
       asd = "cl-interpol";
     });
     systems = [ "cl-interpol" ];
     lispLibs = [ (getAttr "cl-unicode" pkgs) (getAttr "named-readtables" pkgs) ];
   };
-  cl-interpol-test = {
-    pname = "cl-interpol-test";
-    version = "20201220-git";
-    asds = [ "cl-interpol-test" ];
+  cl-interpol_slash_test = {
+    pname = "cl-interpol_test";
+    version = "20221106-git";
+    asds = [ "cl-interpol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-interpol/2020-12-20/cl-interpol-20201220-git.tgz";
-      sha256 = "1kr00zf62m7la7rxa2m5w49r9cyzamc106hvjcc8ffmi7a4jw490";
-      system = "cl-interpol-test";
+      url = "http://beta.quicklisp.org/archive/cl-interpol/2022-11-06/cl-interpol-20221106-git.tgz";
+      sha256 = "1nkjn8byyfdxhi84rbpqs87bb5m478lvphfgxqqv0q37rn75c946";
+      system = "cl-interpol";
       asd = "cl-interpol";
     });
-    systems = [ "cl-interpol-test" ];
+    systems = [ "cl-interpol/test" ];
     lispLibs = [ (getAttr "cl-interpol" pkgs) (getAttr "flexi-streams" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-interval = {
     pname = "cl-interval";
@@ -15822,11 +16039,11 @@ in {
   };
   cl-isaac = {
     pname = "cl-isaac";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-isaac" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-isaac/2022-07-07/cl-isaac-20220707-git.tgz";
-      sha256 = "1zapl8m5hlj09hqpdr95w60lsiivpn8a85fk87jfg7ahafqp851d";
+      url = "http://beta.quicklisp.org/archive/cl-isaac/2022-11-06/cl-isaac-20221106-git.tgz";
+      sha256 = "0ig1mf8iridfr7vci9gy499194h0hda0xki5s6g0y04g85ibnpw9";
       system = "cl-isaac";
       asd = "cl-isaac";
     });
@@ -15939,24 +16156,24 @@ in {
   };
   cl-json-pointer = {
     pname = "cl-json-pointer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-json-pointer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-07-07/cl-json-pointer-20220707-git.tgz";
-      sha256 = "1rr7msd19wpfzl5ggg34f7js8hsffdh98f7hv3s34zc2v50np48s";
+      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-11-06/cl-json-pointer-20221106-git.tgz";
+      sha256 = "0b7a755wc2ghsd1pv7d32877b21h4nssp41xs017anbmj55czb2h";
       system = "cl-json-pointer";
       asd = "cl-json-pointer";
     });
     systems = [ "cl-json-pointer" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "st-json" pkgs) ];
   };
   cl-json-pointer_slash_core = {
     pname = "cl-json-pointer_core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-json-pointer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-07-07/cl-json-pointer-20220707-git.tgz";
-      sha256 = "1rr7msd19wpfzl5ggg34f7js8hsffdh98f7hv3s34zc2v50np48s";
+      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-11-06/cl-json-pointer-20221106-git.tgz";
+      sha256 = "0b7a755wc2ghsd1pv7d32877b21h4nssp41xs017anbmj55czb2h";
       system = "cl-json-pointer";
       asd = "cl-json-pointer";
     });
@@ -15968,11 +16185,11 @@ in {
   };
   cl-json-pointer_slash_st-json-support = {
     pname = "cl-json-pointer_st-json-support";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-json-pointer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-07-07/cl-json-pointer-20220707-git.tgz";
-      sha256 = "1rr7msd19wpfzl5ggg34f7js8hsffdh98f7hv3s34zc2v50np48s";
+      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-11-06/cl-json-pointer-20221106-git.tgz";
+      sha256 = "0b7a755wc2ghsd1pv7d32877b21h4nssp41xs017anbmj55czb2h";
       system = "cl-json-pointer";
       asd = "cl-json-pointer";
     });
@@ -15984,11 +16201,11 @@ in {
   };
   cl-json-pointer_slash_synonyms = {
     pname = "cl-json-pointer_synonyms";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-json-pointer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-07-07/cl-json-pointer-20220707-git.tgz";
-      sha256 = "1rr7msd19wpfzl5ggg34f7js8hsffdh98f7hv3s34zc2v50np48s";
+      url = "http://beta.quicklisp.org/archive/cl-json-pointer/2022-11-06/cl-json-pointer-20221106-git.tgz";
+      sha256 = "0b7a755wc2ghsd1pv7d32877b21h4nssp41xs017anbmj55czb2h";
       system = "cl-json-pointer";
       asd = "cl-json-pointer";
     });
@@ -16308,11 +16525,11 @@ in {
   };
   cl-las = {
     pname = "cl-las";
-    version = "20210807-git";
+    version = "20221106-git";
     asds = [ "cl-las" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-las/2021-08-07/cl-las-20210807-git.tgz";
-      sha256 = "0x36nq6x5q54balkyd0i7vk3dnmsw8hlv904q66w1kxzai26sgqr";
+      url = "http://beta.quicklisp.org/archive/cl-las/2022-11-06/cl-las-20221106-git.tgz";
+      sha256 = "119v5mrvxhz8b3alqj9gzfbzhigdm1n1hmwyylncn5w5dkq3jc9k";
       system = "cl-las";
       asd = "cl-las";
     });
@@ -16399,11 +16616,11 @@ in {
   };
   cl-liballegro = {
     pname = "cl-liballegro";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-liballegro" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-liballegro/2022-07-07/cl-liballegro-20220707-git.tgz";
-      sha256 = "0ab7vmkkk9gcvjmnbc2drdy46bvb6sh2g8hva37jmia627wz5bms";
+      url = "http://beta.quicklisp.org/archive/cl-liballegro/2022-11-06/cl-liballegro-20221106-git.tgz";
+      sha256 = "0x2q91s2242gw03w50l227llfb3hrsvjsyhjbc6dqarf1n1y3kw3";
       system = "cl-liballegro";
       asd = "cl-liballegro";
     });
@@ -16412,11 +16629,11 @@ in {
   };
   cl-liballegro-nuklear = {
     pname = "cl-liballegro-nuklear";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-liballegro-nuklear" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-liballegro-nuklear/2022-07-07/cl-liballegro-nuklear-20220707-git.tgz";
-      sha256 = "0dfpi5hib7r6dd0gdk0s2f9zjx99lqykw6wgipfpd38pj6gk2w4w";
+      url = "http://beta.quicklisp.org/archive/cl-liballegro-nuklear/2022-11-06/cl-liballegro-nuklear-20221106-git.tgz";
+      sha256 = "196lyp469rdjkpkcqpy4h860nsjqfifrvm798xip93sxzcg9zkba";
       system = "cl-liballegro-nuklear";
       asd = "cl-liballegro-nuklear";
     });
@@ -16594,16 +16811,29 @@ in {
   };
   cl-libuv = {
     pname = "cl-libuv";
-    version = "20200610-git";
+    version = "20221106-git";
     asds = [ "cl-libuv" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-libuv/2020-06-10/cl-libuv-20200610-git.tgz";
-      sha256 = "12y30jlb88kn96nvh4ma654scibmdy9dnbnf1z18hmnrczjgyq81";
+      url = "http://beta.quicklisp.org/archive/cl-libuv/2022-11-06/cl-libuv-20221106-git.tgz";
+      sha256 = "0rdcg0grxmylxf547n1m8qn87zspld7aswz7bvajxjryhfq7hqxh";
       system = "cl-libuv";
       asd = "cl-libuv";
     });
     systems = [ "cl-libuv" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) ];
+  };
+  cl-libuv-config = {
+    pname = "cl-libuv-config";
+    version = "20221106-git";
+    asds = [ "cl-libuv-config" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-libuv/2022-11-06/cl-libuv-20221106-git.tgz";
+      sha256 = "0rdcg0grxmylxf547n1m8qn87zspld7aswz7bvajxjryhfq7hqxh";
+      system = "cl-libuv-config";
+      asd = "cl-libuv-config";
+    });
+    systems = [ "cl-libuv-config" ];
+    lispLibs = [ (getAttr "cffi-grovel" pkgs) ];
   };
   cl-libxml2 = {
     pname = "cl-libxml2";
@@ -17273,11 +17503,11 @@ in {
   };
   cl-migratum = {
     pname = "cl-migratum";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum";
       asd = "cl-migratum";
     });
@@ -17286,11 +17516,11 @@ in {
   };
   cl-migratum_dot_cli = {
     pname = "cl-migratum.cli";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.cli" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.cli";
       asd = "cl-migratum.cli";
     });
@@ -17299,11 +17529,11 @@ in {
   };
   cl-migratum_dot_driver_dot_dbi = {
     pname = "cl-migratum.driver.dbi";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.driver.dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.driver.dbi";
       asd = "cl-migratum.driver.dbi";
     });
@@ -17312,11 +17542,11 @@ in {
   };
   cl-migratum_dot_driver_dot_mixins = {
     pname = "cl-migratum.driver.mixins";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.driver.mixins" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.driver.mixins";
       asd = "cl-migratum.driver.mixins";
     });
@@ -17325,11 +17555,11 @@ in {
   };
   cl-migratum_dot_driver_dot_rdbms-postgresql = {
     pname = "cl-migratum.driver.rdbms-postgresql";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.driver.rdbms-postgresql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.driver.rdbms-postgresql";
       asd = "cl-migratum.driver.rdbms-postgresql";
     });
@@ -17338,11 +17568,11 @@ in {
   };
   cl-migratum_dot_provider_dot_local-path = {
     pname = "cl-migratum.provider.local-path";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.provider.local-path" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.provider.local-path";
       asd = "cl-migratum.provider.local-path";
     });
@@ -17351,11 +17581,11 @@ in {
   };
   cl-migratum_dot_test = {
     pname = "cl-migratum.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-migratum.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-07-07/cl-migratum-20220707-git.tgz";
-      sha256 = "1lcw90q3rrckkrjy6v5gmwnfli2jpvjpa85vs33kscdjc50mb13s";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2022-11-06/cl-migratum-20221106-git.tgz";
+      sha256 = "1f4lhj168garrncmif4i2zdvg3458ylihw6khayz1m1gyzb8v7fx";
       system = "cl-migratum.test";
       asd = "cl-migratum.test";
     });
@@ -17455,11 +17685,11 @@ in {
   };
   cl-mixed = {
     pname = "cl-mixed";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed";
       asd = "cl-mixed";
     });
@@ -17468,11 +17698,11 @@ in {
   };
   cl-mixed-alsa = {
     pname = "cl-mixed-alsa";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-alsa" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-alsa";
       asd = "cl-mixed-alsa";
     });
@@ -17481,11 +17711,11 @@ in {
   };
   cl-mixed-coreaudio = {
     pname = "cl-mixed-coreaudio";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-coreaudio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-coreaudio";
       asd = "cl-mixed-coreaudio";
     });
@@ -17494,11 +17724,11 @@ in {
   };
   cl-mixed-examples = {
     pname = "cl-mixed-examples";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-examples";
       asd = "cl-mixed-examples";
     });
@@ -17507,11 +17737,11 @@ in {
   };
   cl-mixed-flac = {
     pname = "cl-mixed-flac";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-flac" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-flac";
       asd = "cl-mixed-flac";
     });
@@ -17520,11 +17750,11 @@ in {
   };
   cl-mixed-jack = {
     pname = "cl-mixed-jack";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-jack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-jack";
       asd = "cl-mixed-jack";
     });
@@ -17533,11 +17763,11 @@ in {
   };
   cl-mixed-mpg123 = {
     pname = "cl-mixed-mpg123";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-mpg123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-mpg123";
       asd = "cl-mixed-mpg123";
     });
@@ -17546,11 +17776,11 @@ in {
   };
   cl-mixed-mpt = {
     pname = "cl-mixed-mpt";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-mpt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-mpt";
       asd = "cl-mixed-mpt";
     });
@@ -17559,11 +17789,11 @@ in {
   };
   cl-mixed-oss = {
     pname = "cl-mixed-oss";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-oss" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-oss";
       asd = "cl-mixed-oss";
     });
@@ -17572,11 +17802,11 @@ in {
   };
   cl-mixed-out123 = {
     pname = "cl-mixed-out123";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-out123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-out123";
       asd = "cl-mixed-out123";
     });
@@ -17585,11 +17815,11 @@ in {
   };
   cl-mixed-pulse = {
     pname = "cl-mixed-pulse";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-pulse" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-pulse";
       asd = "cl-mixed-pulse";
     });
@@ -17598,11 +17828,11 @@ in {
   };
   cl-mixed-sdl2 = {
     pname = "cl-mixed-sdl2";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-sdl2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-sdl2";
       asd = "cl-mixed-sdl2";
     });
@@ -17611,11 +17841,11 @@ in {
   };
   cl-mixed-vorbis = {
     pname = "cl-mixed-vorbis";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-vorbis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-vorbis";
       asd = "cl-mixed-vorbis";
     });
@@ -17624,11 +17854,11 @@ in {
   };
   cl-mixed-wasapi = {
     pname = "cl-mixed-wasapi";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-wasapi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-wasapi";
       asd = "cl-mixed-wasapi";
     });
@@ -17637,11 +17867,11 @@ in {
   };
   cl-mixed-wav = {
     pname = "cl-mixed-wav";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-wav" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-wav";
       asd = "cl-mixed-wav";
     });
@@ -17650,11 +17880,11 @@ in {
   };
   cl-mixed-winmm = {
     pname = "cl-mixed-winmm";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-winmm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-winmm";
       asd = "cl-mixed-winmm";
     });
@@ -17663,11 +17893,11 @@ in {
   };
   cl-mixed-xaudio2 = {
     pname = "cl-mixed-xaudio2";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-mixed-xaudio2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-07-07/cl-mixed-20220707-git.tgz";
-      sha256 = "1dyc6yk13acf4fssl4x6g0lh4sy2aamk212253z2psih4vw413iq";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2022-11-06/cl-mixed-20221106-git.tgz";
+      sha256 = "0xl3iss8mhxsyjsr6mbbf5x75cg893f2im1hywcj1mq8adsyxcf7";
       system = "cl-mixed-xaudio2";
       asd = "cl-mixed-xaudio2";
     });
@@ -17676,11 +17906,11 @@ in {
   };
   cl-mock = {
     pname = "cl-mock";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "cl-mock" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mock/2021-06-30/cl-mock-20210630-git.tgz";
-      sha256 = "12dqxg473syqbkmpb9qi9hnk3mv033jp3l38r1ga1nc58f4c9viv";
+      url = "http://beta.quicklisp.org/archive/cl-mock/2022-11-06/cl-mock-20221106-git.tgz";
+      sha256 = "19641sm3klx9yfk8lr376rfkd26vy72yp1hkpkqcw3q3m1xrf9xp";
       system = "cl-mock";
       asd = "cl-mock";
     });
@@ -17689,24 +17919,24 @@ in {
   };
   cl-mock-basic = {
     pname = "cl-mock-basic";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "cl-mock-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mock/2021-06-30/cl-mock-20210630-git.tgz";
-      sha256 = "12dqxg473syqbkmpb9qi9hnk3mv033jp3l38r1ga1nc58f4c9viv";
+      url = "http://beta.quicklisp.org/archive/cl-mock/2022-11-06/cl-mock-20221106-git.tgz";
+      sha256 = "19641sm3klx9yfk8lr376rfkd26vy72yp1hkpkqcw3q3m1xrf9xp";
       system = "cl-mock-basic";
       asd = "cl-mock-basic";
     });
     systems = [ "cl-mock-basic" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) ];
   };
   cl-mock-tests = {
     pname = "cl-mock-tests";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "cl-mock-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mock/2021-06-30/cl-mock-20210630-git.tgz";
-      sha256 = "12dqxg473syqbkmpb9qi9hnk3mv033jp3l38r1ga1nc58f4c9viv";
+      url = "http://beta.quicklisp.org/archive/cl-mock/2022-11-06/cl-mock-20221106-git.tgz";
+      sha256 = "19641sm3klx9yfk8lr376rfkd26vy72yp1hkpkqcw3q3m1xrf9xp";
       system = "cl-mock-tests";
       asd = "cl-mock-tests";
     });
@@ -17715,11 +17945,11 @@ in {
   };
   cl-mock-tests-basic = {
     pname = "cl-mock-tests-basic";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "cl-mock-tests-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mock/2021-06-30/cl-mock-20210630-git.tgz";
-      sha256 = "12dqxg473syqbkmpb9qi9hnk3mv033jp3l38r1ga1nc58f4c9viv";
+      url = "http://beta.quicklisp.org/archive/cl-mock/2022-11-06/cl-mock-20221106-git.tgz";
+      sha256 = "19641sm3klx9yfk8lr376rfkd26vy72yp1hkpkqcw3q3m1xrf9xp";
       system = "cl-mock-tests-basic";
       asd = "cl-mock-tests-basic";
     });
@@ -18218,11 +18448,11 @@ in {
   };
   cl-naive-store = {
     pname = "cl-naive-store";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store";
       asd = "cl-naive-store";
     });
@@ -18231,11 +18461,11 @@ in {
   };
   cl-naive-store_dot_document-type-defs = {
     pname = "cl-naive-store.document-type-defs";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.document-type-defs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.document-type-defs";
       asd = "cl-naive-store.document-type-defs";
     });
@@ -18244,11 +18474,11 @@ in {
   };
   cl-naive-store_dot_document-types = {
     pname = "cl-naive-store.document-types";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.document-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.document-types";
       asd = "cl-naive-store.document-types";
     });
@@ -18257,11 +18487,11 @@ in {
   };
   cl-naive-store_dot_naive-core = {
     pname = "cl-naive-store.naive-core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.naive-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.naive-core";
       asd = "cl-naive-store.naive-core";
     });
@@ -18270,11 +18500,11 @@ in {
   };
   cl-naive-store_dot_naive-documents = {
     pname = "cl-naive-store.naive-documents";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.naive-documents" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.naive-documents";
       asd = "cl-naive-store.naive-documents";
     });
@@ -18283,11 +18513,11 @@ in {
   };
   cl-naive-store_dot_naive-indexed = {
     pname = "cl-naive-store.naive-indexed";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.naive-indexed" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.naive-indexed";
       asd = "cl-naive-store.naive-indexed";
     });
@@ -18296,11 +18526,11 @@ in {
   };
   cl-naive-store_dot_naive-merkle = {
     pname = "cl-naive-store.naive-merkle";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.naive-merkle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.naive-merkle";
       asd = "cl-naive-store.naive-merkle";
     });
@@ -18309,11 +18539,11 @@ in {
   };
   cl-naive-store_dot_test = {
     pname = "cl-naive-store.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-naive-store.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-07-07/cl-naive-store-20220707-git.tgz";
-      sha256 = "0llxcf9yh8jlgfmciwbd99h42h7rq3rm7fcj5f20wivvib0gnx7n";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2022-11-06/cl-naive-store-20221106-git.tgz";
+      sha256 = "0mrk64dzs9v6d2gggz8v2b6ng7f1qzkw9nsdm62qcax63p2v19v8";
       system = "cl-naive-store.test";
       asd = "cl-naive-store.test";
     });
@@ -18631,6 +18861,35 @@ in {
       broken = true;
     };
   };
+  cl-oju = {
+    pname = "cl-oju";
+    version = "20221106-git";
+    asds = [ "cl-oju" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-oju/2022-11-06/cl-oju-20221106-git.tgz";
+      sha256 = "0xj8csalyrcpj1r0k7l0qdqyrm8s3vw60dmg5pgi59lif98l491x";
+      system = "cl-oju";
+      asd = "cl-oju";
+    });
+    systems = [ "cl-oju" ];
+    lispLibs = [ (getAttr "_1am" pkgs) ];
+  };
+  cl-oju_slash_test = {
+    pname = "cl-oju_test";
+    version = "20221106-git";
+    asds = [ "cl-oju" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-oju/2022-11-06/cl-oju-20221106-git.tgz";
+      sha256 = "0xj8csalyrcpj1r0k7l0qdqyrm8s3vw60dmg5pgi59lif98l491x";
+      system = "cl-oju";
+      asd = "cl-oju";
+    });
+    systems = [ "cl-oju/test" ];
+    lispLibs = [ (getAttr "_1am" pkgs) (getAttr "cl-oju" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   cl-olefs = {
     pname = "cl-olefs";
     version = "20150709-git";
@@ -18711,24 +18970,24 @@ in {
   };
   cl-openal = {
     pname = "cl-openal";
-    version = "20150302-git";
+    version = "20221106-git";
     asds = [ "cl-openal" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-openal/2015-03-02/cl-openal-20150302-git.tgz";
-      sha256 = "1j7qcimrhd7nypalimfvb7zzixq79yzwqmkvs1bzhg7d86k8sg5h";
+      url = "http://beta.quicklisp.org/archive/cl-openal/2022-11-06/cl-openal-20221106-git.tgz";
+      sha256 = "0jmp81mf23ckcm4knnh0q7zpmyls5220imaqbmnl0xvvra10b1zy";
       system = "cl-openal";
       asd = "cl-openal";
     });
     systems = [ "cl-openal" ];
-    lispLibs = [ (getAttr "cffi" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) ];
   };
   cl-openal-examples = {
     pname = "cl-openal-examples";
-    version = "20150302-git";
+    version = "20221106-git";
     asds = [ "cl-openal-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-openal/2015-03-02/cl-openal-20150302-git.tgz";
-      sha256 = "1j7qcimrhd7nypalimfvb7zzixq79yzwqmkvs1bzhg7d86k8sg5h";
+      url = "http://beta.quicklisp.org/archive/cl-openal/2022-11-06/cl-openal-20221106-git.tgz";
+      sha256 = "0jmp81mf23ckcm4knnh0q7zpmyls5220imaqbmnl0xvvra10b1zy";
       system = "cl-openal-examples";
       asd = "cl-openal-examples";
     });
@@ -19000,11 +19259,11 @@ in {
   };
   cl-patterns = {
     pname = "cl-patterns";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19013,11 +19272,11 @@ in {
   };
   cl-patterns_slash_debug = {
     pname = "cl-patterns_debug";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19029,11 +19288,11 @@ in {
   };
   cl-patterns_slash_generic-cl = {
     pname = "cl-patterns_generic-cl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19045,11 +19304,11 @@ in {
   };
   cl-patterns_slash_midifile = {
     pname = "cl-patterns_midifile";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19061,11 +19320,11 @@ in {
   };
   cl-patterns_slash_sugar = {
     pname = "cl-patterns_sugar";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19077,11 +19336,11 @@ in {
   };
   cl-patterns_slash_supercollider = {
     pname = "cl-patterns_supercollider";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19093,11 +19352,11 @@ in {
   };
   cl-patterns_slash_tests = {
     pname = "cl-patterns_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-07-07/cl-patterns-20220707-git.tgz";
-      sha256 = "0ah7pkmwfinljph4q9q6mpv3am12w7h64p07ilc5ah5bsms6d5rv";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2022-11-06/cl-patterns-20221106-git.tgz";
+      sha256 = "0hgr6f3f3iggbacpkglqykah0xjimnbn21z4fliw3qgzzagz6hbb";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -19161,11 +19420,11 @@ in {
   };
   cl-pdf = {
     pname = "cl-pdf";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "cl-pdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pdf/2022-02-20/cl-pdf-20220220-git.tgz";
-      sha256 = "0ir9xyj10lyp8mwb3n2pbhnwv0jx0ph1xlhh32sfgalk3bz0ms58";
+      url = "http://beta.quicklisp.org/archive/cl-pdf/2022-11-06/cl-pdf-20221106-git.tgz";
+      sha256 = "1qk22mxmq2wxj9hc27cn51bwia9llzlxfmhl04l7kvqv9ki4z0j2";
       system = "cl-pdf";
       asd = "cl-pdf";
     });
@@ -19187,11 +19446,11 @@ in {
   };
   cl-pdf-parser = {
     pname = "cl-pdf-parser";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "cl-pdf-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pdf/2022-02-20/cl-pdf-20220220-git.tgz";
-      sha256 = "0ir9xyj10lyp8mwb3n2pbhnwv0jx0ph1xlhh32sfgalk3bz0ms58";
+      url = "http://beta.quicklisp.org/archive/cl-pdf/2022-11-06/cl-pdf-20221106-git.tgz";
+      sha256 = "1qk22mxmq2wxj9hc27cn51bwia9llzlxfmhl04l7kvqv9ki4z0j2";
       system = "cl-pdf-parser";
       asd = "cl-pdf-parser";
     });
@@ -19330,11 +19589,11 @@ in {
   };
   cl-plus-c = {
     pname = "cl-plus-c";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-plus-c" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2021-12-09/cl-autowrap-20211209-git.tgz";
-      sha256 = "1db0knq4vfr0mlxx8y5bjjdc87mij3hf7m6f0z4hgw8jsx868krr";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
+      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
       system = "cl-plus-c";
       asd = "cl-plus-c";
     });
@@ -19440,16 +19699,16 @@ in {
   };
   cl-postgres = {
     pname = "cl-postgres";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "cl-postgres" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "cl-postgres";
       asd = "cl-postgres";
     });
     systems = [ "cl-postgres" ];
-    lispLibs = [ (getAttr "cl-base64" pkgs) (getAttr "ironclad" pkgs) (getAttr "md5" pkgs) (getAttr "split-sequence" pkgs) (getAttr "uax-15" pkgs) (getAttr "usocket" pkgs) ];
+    lispLibs = [ (getAttr "cl-base64" pkgs) (getAttr "ironclad" pkgs) (getAttr "md5" pkgs) (getAttr "split-sequence" pkgs) (getAttr "uax-15" pkgs) ];
   };
   cl-postgres_plus_local-time = {
     pname = "cl-postgres+local-time";
@@ -19505,11 +19764,11 @@ in {
   };
   cl-postgres_slash_simple-date-tests = {
     pname = "cl-postgres_simple-date-tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "cl-postgres" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "cl-postgres";
       asd = "cl-postgres";
     });
@@ -19521,11 +19780,11 @@ in {
   };
   cl-postgres_slash_tests = {
     pname = "cl-postgres_tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "cl-postgres" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "cl-postgres";
       asd = "cl-postgres";
     });
@@ -19868,11 +20127,11 @@ in {
   };
   cl-protobufs = {
     pname = "cl-protobufs";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "cl-protobufs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-03-31/cl-protobufs-20220331-git.tgz";
-      sha256 = "0p6ykx0plvl3pan80ycpgpwl2zhhcjp7jccym0gz58pi0aygixww";
+      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-11-06/cl-protobufs-20221106-git.tgz";
+      sha256 = "1nlxhz0xisfi8jdhh393ds2asjid4rwjddrbhyijbadaj9gl9jkf";
       system = "cl-protobufs";
       asd = "cl-protobufs";
     });
@@ -19881,11 +20140,11 @@ in {
   };
   cl-protobufs_dot_asdf = {
     pname = "cl-protobufs.asdf";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "cl-protobufs.asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-03-31/cl-protobufs-20220331-git.tgz";
-      sha256 = "0p6ykx0plvl3pan80ycpgpwl2zhhcjp7jccym0gz58pi0aygixww";
+      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-11-06/cl-protobufs-20221106-git.tgz";
+      sha256 = "1nlxhz0xisfi8jdhh393ds2asjid4rwjddrbhyijbadaj9gl9jkf";
       system = "cl-protobufs.asdf";
       asd = "cl-protobufs.asdf";
     });
@@ -19894,11 +20153,11 @@ in {
   };
   cl-protobufs_slash_tests = {
     pname = "cl-protobufs_tests";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "cl-protobufs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-03-31/cl-protobufs-20220331-git.tgz";
-      sha256 = "0p6ykx0plvl3pan80ycpgpwl2zhhcjp7jccym0gz58pi0aygixww";
+      url = "http://beta.quicklisp.org/archive/cl-protobufs/2022-11-06/cl-protobufs-20221106-git.tgz";
+      sha256 = "1nlxhz0xisfi8jdhh393ds2asjid4rwjddrbhyijbadaj9gl9jkf";
       system = "cl-protobufs";
       asd = "cl-protobufs";
     });
@@ -20175,11 +20434,11 @@ in {
   };
   cl-randist = {
     pname = "cl-randist";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-randist" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-randist/2020-12-20/cl-randist-20201220-git.tgz";
-      sha256 = "026bh4aqrfhsbfysbsgpahh8xlfn3f7j4kqf9a16yizqynlpffvc";
+      url = "http://beta.quicklisp.org/archive/cl-randist/2022-11-06/cl-randist-20221106-git.tgz";
+      sha256 = "1r0d76n5zjqg5fb2ypqx5i1wg4hsg5g0c126ylqb28wdaf2yjz5a";
       system = "cl-randist";
       asd = "cl-randist";
     });
@@ -20198,14 +20457,17 @@ in {
     });
     systems = [ "cl-random" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "cl-num-utils" pkgs) (getAttr "cl-rmath" pkgs) (getAttr "cl-slice" pkgs) (getAttr "gsll" pkgs) (getAttr "let-plus" pkgs) (getAttr "lla" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-random-forest = {
     pname = "cl-random-forest";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "cl-random-forest" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-random-forest/2022-03-31/cl-random-forest-20220331-git.tgz";
-      sha256 = "02g404xdqgniqgz6ymjv0bm0l4dc85q8v1bwjgp8nvhay75i4j7d";
+      url = "http://beta.quicklisp.org/archive/cl-random-forest/2022-11-06/cl-random-forest-20221106-git.tgz";
+      sha256 = "0jn5f3s1zvjql35c4m67lqc0vjr7sm7kzf8w4jfbfabcnxf3y6jx";
       system = "cl-random-forest";
       asd = "cl-random-forest";
     });
@@ -20214,11 +20476,11 @@ in {
   };
   cl-random-forest-test = {
     pname = "cl-random-forest-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "cl-random-forest-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-random-forest/2022-03-31/cl-random-forest-20220331-git.tgz";
-      sha256 = "02g404xdqgniqgz6ymjv0bm0l4dc85q8v1bwjgp8nvhay75i4j7d";
+      url = "http://beta.quicklisp.org/archive/cl-random-forest/2022-11-06/cl-random-forest-20221106-git.tgz";
+      sha256 = "0jn5f3s1zvjql35c4m67lqc0vjr7sm7kzf8w4jfbfabcnxf3y6jx";
       system = "cl-random-forest-test";
       asd = "cl-random-forest-test";
     });
@@ -20237,6 +20499,9 @@ in {
     });
     systems = [ "cl-random-tests" ];
     lispLibs = [ (getAttr "cl-random" pkgs) (getAttr "clunit" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-rdfxml = {
     pname = "cl-rdfxml";
@@ -20373,11 +20638,11 @@ in {
   };
   cl-replica = {
     pname = "cl-replica";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-replica" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-replica/2022-07-07/cl-replica-20220707-git.tgz";
-      sha256 = "09zhkg044m0hq1j1xmgghwhvjk50whvh4qxm4n6b6l25c3z8nyap";
+      url = "http://beta.quicklisp.org/archive/cl-replica/2022-11-06/cl-replica-20221106-git.tgz";
+      sha256 = "1kp50xw1v0kfa8g4g2vmg5rfhpyr9phqk0rs4s36f6nwfpsasw7w";
       system = "cl-replica";
       asd = "cl-replica";
     });
@@ -20386,11 +20651,11 @@ in {
   };
   cl-replica_slash_test = {
     pname = "cl-replica_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-replica" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-replica/2022-07-07/cl-replica-20220707-git.tgz";
-      sha256 = "09zhkg044m0hq1j1xmgghwhvjk50whvh4qxm4n6b6l25c3z8nyap";
+      url = "http://beta.quicklisp.org/archive/cl-replica/2022-11-06/cl-replica-20221106-git.tgz";
+      sha256 = "1kp50xw1v0kfa8g4g2vmg5rfhpyr9phqk0rs4s36f6nwfpsasw7w";
       system = "cl-replica";
       asd = "cl-replica";
     });
@@ -20858,32 +21123,6 @@ in {
     systems = [ "cl-sat.test" ];
     lispLibs = [ (getAttr "cl-sat" pkgs) (getAttr "fiveam" pkgs) ];
   };
-  cl-schedule = {
-    pname = "cl-schedule";
-    version = "20220220-git";
-    asds = [ "cl-schedule" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-schedule/2022-02-20/cl-schedule-20220220-git.tgz";
-      sha256 = "005h2al5d8jivm1v9mp03bz5k6yxmfxsd7rv1bl4ynmwq20fpvjc";
-      system = "cl-schedule";
-      asd = "cl-schedule";
-    });
-    systems = [ "cl-schedule" ];
-    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "local-time" pkgs) (getAttr "trivial-timers" pkgs) ];
-  };
-  cl-schedule-test = {
-    pname = "cl-schedule-test";
-    version = "20220220-git";
-    asds = [ "cl-schedule-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-schedule/2022-02-20/cl-schedule-20220220-git.tgz";
-      sha256 = "005h2al5d8jivm1v9mp03bz5k6yxmfxsd7rv1bl4ynmwq20fpvjc";
-      system = "cl-schedule-test";
-      asd = "cl-schedule";
-    });
-    systems = [ "cl-schedule-test" ];
-    lispLibs = [ (getAttr "cl-schedule" pkgs) ];
-  };
   cl-scram = {
     pname = "cl-scram";
     version = "20150923-git";
@@ -20967,11 +21206,11 @@ in {
   };
   cl-scsu = {
     pname = "cl-scsu";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "cl-scsu" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-scsu/2020-03-25/cl-scsu-20200325-git.tgz";
-      sha256 = "0lq3g4c10vgczlaxm4irjgnki3691m34gnav089kynl4n4gc2wdl";
+      url = "http://beta.quicklisp.org/archive/cl-scsu/2022-11-06/cl-scsu-20221106-git.tgz";
+      sha256 = "0jiqyayflyyrdks4yl894vzw2bkxkd87w4sy4n6ikjz450xk3yxf";
       system = "cl-scsu";
       asd = "cl-scsu";
     });
@@ -20980,11 +21219,11 @@ in {
   };
   cl-scsu-test = {
     pname = "cl-scsu-test";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "cl-scsu-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-scsu/2020-03-25/cl-scsu-20200325-git.tgz";
-      sha256 = "0lq3g4c10vgczlaxm4irjgnki3691m34gnav089kynl4n4gc2wdl";
+      url = "http://beta.quicklisp.org/archive/cl-scsu/2022-11-06/cl-scsu-20221106-git.tgz";
+      sha256 = "0jiqyayflyyrdks4yl894vzw2bkxkd87w4sy4n6ikjz450xk3yxf";
       system = "cl-scsu-test";
       asd = "cl-scsu-test";
     });
@@ -21019,11 +21258,11 @@ in {
   };
   cl-semver = {
     pname = "cl-semver";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-semver" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-semver/2020-12-20/cl-semver-20201220-git.tgz";
-      sha256 = "09pndxk8fc6h409ygnac4s6qi48apkslv1xx7ifq07dmf2zj08vn";
+      url = "http://beta.quicklisp.org/archive/cl-semver/2022-11-06/cl-semver-20221106-git.tgz";
+      sha256 = "17ghn3s5pbiahkm2i8fh460ykx7n9c4jpjazrw45ixmx832agzbz";
       system = "cl-semver";
       asd = "cl-semver";
     });
@@ -21032,11 +21271,11 @@ in {
   };
   cl-semver-test = {
     pname = "cl-semver-test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-semver-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-semver/2020-12-20/cl-semver-20201220-git.tgz";
-      sha256 = "09pndxk8fc6h409ygnac4s6qi48apkslv1xx7ifq07dmf2zj08vn";
+      url = "http://beta.quicklisp.org/archive/cl-semver/2022-11-06/cl-semver-20221106-git.tgz";
+      sha256 = "17ghn3s5pbiahkm2i8fh460ykx7n9c4jpjazrw45ixmx832agzbz";
       system = "cl-semver-test";
       asd = "cl-semver-test";
     });
@@ -21058,11 +21297,11 @@ in {
   };
   cl-ses4 = {
     pname = "cl-ses4";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-ses4" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-ses4/2021-10-20/cl-ses4-20211020-git.tgz";
-      sha256 = "1avz8kwqgl472vad7vjx87rbafmrnfjp387rhrn7gkbfhw2nv2r2";
+      url = "http://beta.quicklisp.org/archive/cl-ses4/2022-11-06/cl-ses4-20221106-git.tgz";
+      sha256 = "1n31k81i19hx26h9wcz39fsciq92hbblnbd15krblx9g877a1598";
       system = "cl-ses4";
       asd = "cl-ses4";
     });
@@ -21071,11 +21310,11 @@ in {
   };
   cl-ses4_slash_test = {
     pname = "cl-ses4_test";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cl-ses4" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-ses4/2021-10-20/cl-ses4-20211020-git.tgz";
-      sha256 = "1avz8kwqgl472vad7vjx87rbafmrnfjp387rhrn7gkbfhw2nv2r2";
+      url = "http://beta.quicklisp.org/archive/cl-ses4/2022-11-06/cl-ses4-20221106-git.tgz";
+      sha256 = "1n31k81i19hx26h9wcz39fsciq92hbblnbd15krblx9g877a1598";
       system = "cl-ses4";
       asd = "cl-ses4";
     });
@@ -21548,19 +21787,6 @@ in {
     systems = [ "cl-spidev" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "documentation-utils" pkgs) (getAttr "trivial-garbage" pkgs) ];
   };
-  cl-splicing-macro = {
-    pname = "cl-splicing-macro";
-    version = "20140713-git";
-    asds = [ "cl-splicing-macro" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-splicing-macro/2014-07-13/cl-splicing-macro-20140713-git.tgz";
-      sha256 = "1hsmr6fv3s3k6ds41g3kg60naj1mgsy6hbc0r2jwzhmfmcmv4d73";
-      system = "cl-splicing-macro";
-      asd = "cl-splicing-macro";
-    });
-    systems = [ "cl-splicing-macro" ];
-    lispLibs = [  ];
-  };
   cl-ssdb = {
     pname = "cl-ssdb";
     version = "20210124-git";
@@ -21641,11 +21867,11 @@ in {
   };
   cl-steamworks = {
     pname = "cl-steamworks";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "cl-steamworks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-steamworks/2021-05-31/cl-steamworks-20210531-git.tgz";
-      sha256 = "0qsf72bdszbjjmi77g482myaldiqjmdb49jx4sy6zximcqkmf0sa";
+      url = "http://beta.quicklisp.org/archive/cl-steamworks/2022-11-06/cl-steamworks-20221106-git.tgz";
+      sha256 = "0vmr40fylqd3k2mbds823pxz5aprh76bc604y7cf8y7md30r1azn";
       system = "cl-steamworks";
       asd = "cl-steamworks";
     });
@@ -21654,11 +21880,11 @@ in {
   };
   cl-steamworks-generator = {
     pname = "cl-steamworks-generator";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "cl-steamworks-generator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-steamworks/2021-05-31/cl-steamworks-20210531-git.tgz";
-      sha256 = "0qsf72bdszbjjmi77g482myaldiqjmdb49jx4sy6zximcqkmf0sa";
+      url = "http://beta.quicklisp.org/archive/cl-steamworks/2022-11-06/cl-steamworks-20221106-git.tgz";
+      sha256 = "0vmr40fylqd3k2mbds823pxz5aprh76bc604y7cf8y7md30r1azn";
       system = "cl-steamworks-generator";
       asd = "cl-steamworks-generator";
     });
@@ -22102,16 +22328,16 @@ in {
   };
   cl-telegram-bot = {
     pname = "cl-telegram-bot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-telegram-bot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-telegram-bot/2022-07-07/cl-telegram-bot-20220707-git.tgz";
-      sha256 = "04jfn1nj2xk4vp4v5nllh1yzkpxqz31pa6bxy35ihi3snmh319vx";
+      url = "http://beta.quicklisp.org/archive/cl-telegram-bot/2022-11-06/cl-telegram-bot-20221106-git.tgz";
+      sha256 = "1pvwkr2bai0l7n8mqrbcl35mlv7kic1wsd41zavmljx0fj14bwj6";
       system = "cl-telegram-bot";
       asd = "cl-telegram-bot";
     });
     systems = [ "cl-telegram-bot" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "arrows" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-strings" pkgs) (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) (getAttr "kebab" pkgs) (getAttr "log4cl" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivial-backtrace" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "arrows" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-strings" pkgs) (getAttr "closer-mop" pkgs) (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) (getAttr "kebab" pkgs) (getAttr "log4cl" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivial-backtrace" pkgs) ];
   };
   cl-template = {
     pname = "cl-template";
@@ -22329,11 +22555,11 @@ in {
   };
   cl-tls = {
     pname = "cl-tls";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "cl-tls" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-tls/2021-12-09/cl-tls-20211209-git.tgz";
-      sha256 = "01bis3605hgcdcipdd6bvxmlk7d9dhm533c8i794i0njinfh2f44";
+      url = "http://beta.quicklisp.org/archive/cl-tls/2022-11-06/cl-tls-20221106-git.tgz";
+      sha256 = "1j6gwv21ibkk6xd1xxm54wgwp09dzqg60b8z72hivpnq8gwm0ba7";
       system = "cl-tls";
       asd = "cl-tls";
     });
@@ -22651,6 +22877,19 @@ in {
     systems = [ "cl-unification-test" ];
     lispLibs = [ (getAttr "cl-unification" pkgs) (getAttr "ptester" pkgs) ];
   };
+  cl-union-find = {
+    pname = "cl-union-find";
+    version = "20221106-git";
+    asds = [ "cl-union-find" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-union-find/2022-11-06/cl-union-find-20221106-git.tgz";
+      sha256 = "14xciva5v3c4zi4vzp1vfhs82a2654yhkfyllr3b0cr7x36jdm7y";
+      system = "cl-union-find";
+      asd = "cl-union-find";
+    });
+    systems = [ "cl-union-find" ];
+    lispLibs = [  ];
+  };
   cl-utilities = {
     pname = "cl-utilities";
     version = "1.2.4";
@@ -22877,11 +23116,11 @@ in {
   };
   cl-wav = {
     pname = "cl-wav";
-    version = "20180131-git";
+    version = "20221106-git";
     asds = [ "cl-wav" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-wav/2018-01-31/cl-wav-20180131-git.tgz";
-      sha256 = "1izdn4wd640cdh8vjf32nilbr34wbyca24nazhx1j878qhm2bisa";
+      url = "http://beta.quicklisp.org/archive/cl-wav/2022-11-06/cl-wav-20221106-git.tgz";
+      sha256 = "1nf4zw72v0c9fl8mr4si5cr2xz753ydzv19mfzy5dqqx0k1g7wyl";
       system = "cl-wav";
       asd = "cl-wav";
     });
@@ -23042,11 +23281,11 @@ in {
   };
   cl-webkit2 = {
     pname = "cl-webkit2";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cl-webkit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-webkit/2022-07-07/cl-webkit-20220707-git.tgz";
-      sha256 = "0vn20xv5idv01qz6c76v5vq1agr616ckslcs1qsl72ryqbgykm7y";
+      url = "http://beta.quicklisp.org/archive/cl-webkit/2022-11-06/cl-webkit-20221106-git.tgz";
+      sha256 = "13f6s7zwnx0nvllizij4vziph8pz28xkqzfyyis1dzz7cxksf6fy";
       system = "cl-webkit2";
       asd = "cl-webkit2";
     });
@@ -23214,11 +23453,11 @@ in {
   };
   cl-xkb = {
     pname = "cl-xkb";
-    version = "20180228-git";
+    version = "20221106-git";
     asds = [ "cl-xkb" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-xkb/2018-02-28/cl-xkb-20180228-git.tgz";
-      sha256 = "026bps1hdj0gnsnss8gs9kp40alwlnhy7cca4117l8ai9wb0m694";
+      url = "http://beta.quicklisp.org/archive/cl-xkb/2022-11-06/cl-xkb-20221106-git.tgz";
+      sha256 = "08c4c4cfwq9yk09pfqir7nxyv8qbb97m0yrzind8vdlxy1lbgxgz";
       system = "cl-xkb";
       asd = "cl-xkb";
     });
@@ -23357,11 +23596,11 @@ in {
   };
   cl-yaml = {
     pname = "cl-yaml";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-yaml" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-yaml/2020-12-20/cl-yaml-20201220-git.tgz";
-      sha256 = "1izjg0v6rf7dh069bbnnr67l30lsqj86wdk7y9ggbgiwh6v9j185";
+      url = "http://beta.quicklisp.org/archive/cl-yaml/2022-11-06/cl-yaml-20221106-git.tgz";
+      sha256 = "053fvrrd0p2xx4zxbz4kg9469895ypwsbjfd3nwpi7lwcll2bir5";
       system = "cl-yaml";
       asd = "cl-yaml";
     });
@@ -23370,11 +23609,11 @@ in {
   };
   cl-yaml-test = {
     pname = "cl-yaml-test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "cl-yaml-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-yaml/2020-12-20/cl-yaml-20201220-git.tgz";
-      sha256 = "1izjg0v6rf7dh069bbnnr67l30lsqj86wdk7y9ggbgiwh6v9j185";
+      url = "http://beta.quicklisp.org/archive/cl-yaml/2022-11-06/cl-yaml-20221106-git.tgz";
+      sha256 = "053fvrrd0p2xx4zxbz4kg9469895ypwsbjfd3nwpi7lwcll2bir5";
       system = "cl-yaml-test";
       asd = "cl-yaml-test";
     });
@@ -23461,11 +23700,11 @@ in {
   };
   clack = {
     pname = "clack";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack";
       asd = "clack";
     });
@@ -23513,11 +23752,11 @@ in {
   };
   clack-handler-fcgi = {
     pname = "clack-handler-fcgi";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-handler-fcgi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-handler-fcgi";
       asd = "clack-handler-fcgi";
     });
@@ -23526,11 +23765,11 @@ in {
   };
   clack-handler-hunchentoot = {
     pname = "clack-handler-hunchentoot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-handler-hunchentoot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-handler-hunchentoot";
       asd = "clack-handler-hunchentoot";
     });
@@ -23539,11 +23778,11 @@ in {
   };
   clack-handler-toot = {
     pname = "clack-handler-toot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-handler-toot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-handler-toot";
       asd = "clack-handler-toot";
     });
@@ -23565,11 +23804,11 @@ in {
   };
   clack-handler-wookie = {
     pname = "clack-handler-wookie";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-handler-wookie" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-handler-wookie";
       asd = "clack-handler-wookie";
     });
@@ -23591,11 +23830,11 @@ in {
   };
   clack-socket = {
     pname = "clack-socket";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-socket" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-socket";
       asd = "clack-socket";
     });
@@ -23643,11 +23882,11 @@ in {
   };
   clack-test = {
     pname = "clack-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clack-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "clack-test";
       asd = "clack-test";
     });
@@ -24178,11 +24417,11 @@ in {
   };
   clgplot = {
     pname = "clgplot";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clgplot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clgplot/2022-03-31/clgplot-20220331-git.tgz";
-      sha256 = "1kj5zyfadp2576ni48a3dv4n23ginnff913h0d51kwmzd9gf8fpy";
+      url = "http://beta.quicklisp.org/archive/clgplot/2022-11-06/clgplot-20221106-git.tgz";
+      sha256 = "0qhhbdwahpn9ass9am9fdpvcnfpi4jrss60kip6jkkzgir9iyz0p";
       system = "clgplot";
       asd = "clgplot";
     });
@@ -24191,11 +24430,11 @@ in {
   };
   clgplot-test = {
     pname = "clgplot-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clgplot-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clgplot/2022-03-31/clgplot-20220331-git.tgz";
-      sha256 = "1kj5zyfadp2576ni48a3dv4n23ginnff913h0d51kwmzd9gf8fpy";
+      url = "http://beta.quicklisp.org/archive/clgplot/2022-11-06/clgplot-20221106-git.tgz";
+      sha256 = "0qhhbdwahpn9ass9am9fdpvcnfpi4jrss60kip6jkkzgir9iyz0p";
       system = "clgplot-test";
       asd = "clgplot-test";
     });
@@ -24243,50 +24482,85 @@ in {
   };
   clim = {
     pname = "clim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim";
       asd = "clim";
     });
     systems = [ "clim" ];
     lispLibs = [ (getAttr "clim-core" pkgs) (getAttr "drei-mcclim" pkgs) ];
   };
-  clim-basic = {
-    pname = "clim-basic";
-    version = "20220707-git";
-    asds = [ "clim-basic" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
-      system = "clim-basic";
-      asd = "clim-basic";
-    });
-    systems = [ "clim-basic" ];
-    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "clim-lisp" pkgs) (getAttr "trivial-garbage" pkgs) ];
-  };
   clim-core = {
     pname = "clim-core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-core";
       asd = "clim-core";
     });
     systems = [ "clim-core" ];
-    lispLibs = [ (getAttr "clim-basic" pkgs) (getAttr "spatial-trees" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) (getAttr "spatial-trees" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+  };
+  clim-core_slash_frames = {
+    pname = "clim-core_frames";
+    version = "20221106-git";
+    asds = [ "clim-core" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
+      system = "clim-core";
+      asd = "clim-core";
+    });
+    systems = [ "clim-core/frames" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) (getAttr "spatial-trees" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  clim-core_slash_silex = {
+    pname = "clim-core_silex";
+    version = "20221106-git";
+    asds = [ "clim-core" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
+      system = "clim-core";
+      asd = "clim-core";
+    });
+    systems = [ "clim-core/silex" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) (getAttr "spatial-trees" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  clim-core_slash_system = {
+    pname = "clim-core_system";
+    version = "20221106-git";
+    asds = [ "clim-core" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
+      system = "clim-core";
+      asd = "clim-core";
+    });
+    systems = [ "clim-core/system" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   clim-debugger = {
     pname = "clim-debugger";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-debugger" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-debugger";
       asd = "clim-debugger";
     });
@@ -24295,11 +24569,11 @@ in {
   };
   clim-examples = {
     pname = "clim-examples";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-examples";
       asd = "clim-examples";
     });
@@ -24308,11 +24582,11 @@ in {
   };
   clim-examples_slash_superapp = {
     pname = "clim-examples_superapp";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-examples";
       asd = "clim-examples";
     });
@@ -24324,24 +24598,24 @@ in {
   };
   clim-lisp = {
     pname = "clim-lisp";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-lisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-lisp";
       asd = "clim-lisp";
     });
     systems = [ "clim-lisp" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "closer-mop" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
   };
   clim-listener = {
     pname = "clim-listener";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-listener" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-listener";
       asd = "clim-listener";
     });
@@ -24350,11 +24624,11 @@ in {
   };
   clim-pdf = {
     pname = "clim-pdf";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-pdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-pdf";
       asd = "clim-pdf";
     });
@@ -24363,11 +24637,11 @@ in {
   };
   clim-pdf_slash_test = {
     pname = "clim-pdf_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-pdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-pdf";
       asd = "clim-pdf";
     });
@@ -24379,11 +24653,11 @@ in {
   };
   clim-postscript = {
     pname = "clim-postscript";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-postscript" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-postscript";
       asd = "clim-postscript";
     });
@@ -24392,11 +24666,11 @@ in {
   };
   clim-postscript-font = {
     pname = "clim-postscript-font";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-postscript-font" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-postscript-font";
       asd = "clim-postscript-font";
     });
@@ -24405,11 +24679,11 @@ in {
   };
   clim-postscript_slash_test = {
     pname = "clim-postscript_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clim-postscript" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clim-postscript";
       asd = "clim-postscript";
     });
@@ -24444,6 +24718,32 @@ in {
     });
     systems = [ "climacs" ];
     lispLibs = [ (getAttr "flexichain" pkgs) (getAttr "mcclim" pkgs) ];
+  };
+  climc = {
+    pname = "climc";
+    version = "20221106-git";
+    asds = [ "climc" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/climc/2022-11-06/climc-20221106-git.tgz";
+      sha256 = "0a05l6yzgnnijk6868r1mz13md28lbmm7hnfiz19aflndj7602cf";
+      system = "climc";
+      asd = "climc";
+    });
+    systems = [ "climc" ];
+    lispLibs = [ (getAttr "cl-ppcre" pkgs) (getAttr "cl-xmpp-tls" pkgs) (getAttr "mcclim" pkgs) ];
+  };
+  climc-test = {
+    pname = "climc-test";
+    version = "20221106-git";
+    asds = [ "climc-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/climc/2022-11-06/climc-20221106-git.tgz";
+      sha256 = "0a05l6yzgnnijk6868r1mz13md28lbmm7hnfiz19aflndj7602cf";
+      system = "climc-test";
+      asd = "climc-test";
+    });
+    systems = [ "climc-test" ];
+    lispLibs = [ (getAttr "climc" pkgs) (getAttr "lisp-unit" pkgs) ];
   };
   climon = {
     pname = "climon";
@@ -24551,11 +24851,11 @@ in {
   };
   clingon = {
     pname = "clingon";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clingon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2022-03-31/clingon-20220331-git.tgz";
-      sha256 = "04iykchbm7b3zq5s9rswr1x77arnk7mhmq7k4m19yw7mr6b2n2bw";
+      url = "http://beta.quicklisp.org/archive/clingon/2022-11-06/clingon-20221106-git.tgz";
+      sha256 = "1v47c7pgmvpp3wn52waj55vy6804lsswxv7sbjlpfnd67na91vn7";
       system = "clingon";
       asd = "clingon";
     });
@@ -24564,11 +24864,11 @@ in {
   };
   clingon_dot_demo = {
     pname = "clingon.demo";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clingon.demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2022-03-31/clingon-20220331-git.tgz";
-      sha256 = "04iykchbm7b3zq5s9rswr1x77arnk7mhmq7k4m19yw7mr6b2n2bw";
+      url = "http://beta.quicklisp.org/archive/clingon/2022-11-06/clingon-20221106-git.tgz";
+      sha256 = "1v47c7pgmvpp3wn52waj55vy6804lsswxv7sbjlpfnd67na91vn7";
       system = "clingon.demo";
       asd = "clingon.demo";
     });
@@ -24577,11 +24877,11 @@ in {
   };
   clingon_dot_intro = {
     pname = "clingon.intro";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clingon.intro" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2022-03-31/clingon-20220331-git.tgz";
-      sha256 = "04iykchbm7b3zq5s9rswr1x77arnk7mhmq7k4m19yw7mr6b2n2bw";
+      url = "http://beta.quicklisp.org/archive/clingon/2022-11-06/clingon-20221106-git.tgz";
+      sha256 = "1v47c7pgmvpp3wn52waj55vy6804lsswxv7sbjlpfnd67na91vn7";
       system = "clingon.intro";
       asd = "clingon.intro";
     });
@@ -24590,11 +24890,11 @@ in {
   };
   clingon_dot_test = {
     pname = "clingon.test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "clingon.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2022-03-31/clingon-20220331-git.tgz";
-      sha256 = "04iykchbm7b3zq5s9rswr1x77arnk7mhmq7k4m19yw7mr6b2n2bw";
+      url = "http://beta.quicklisp.org/archive/clingon/2022-11-06/clingon-20221106-git.tgz";
+      sha256 = "1v47c7pgmvpp3wn52waj55vy6804lsswxv7sbjlpfnd67na91vn7";
       system = "clingon.test";
       asd = "clingon.test";
     });
@@ -24694,11 +24994,11 @@ in {
   };
   clj-re = {
     pname = "clj-re";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "clj-re" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clj-re/2021-10-20/clj-re-20211020-git.tgz";
-      sha256 = "1rs3axxa1vk2d9py96mcx7jxis7rllnkrccz0k4d4bwfq5l4haf6";
+      url = "http://beta.quicklisp.org/archive/clj-re/2022-11-06/clj-re-20221106-git.tgz";
+      sha256 = "1ybcf687hybq2n9vag9i90mdx3cqajdj63q7vryxamp39zmgqks6";
       system = "clj-re";
       asd = "clj-re";
     });
@@ -24707,11 +25007,11 @@ in {
   };
   clj-re-test = {
     pname = "clj-re-test";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "clj-re-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clj-re/2021-10-20/clj-re-20211020-git.tgz";
-      sha256 = "1rs3axxa1vk2d9py96mcx7jxis7rllnkrccz0k4d4bwfq5l4haf6";
+      url = "http://beta.quicklisp.org/archive/clj-re/2022-11-06/clj-re-20221106-git.tgz";
+      sha256 = "1ybcf687hybq2n9vag9i90mdx3cqajdj63q7vryxamp39zmgqks6";
       system = "clj-re-test";
       asd = "clj-re-test";
     });
@@ -24798,6 +25098,9 @@ in {
     });
     systems = [ "clml.blas.hompack" ];
     lispLibs = [ (getAttr "f2cl-lib" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   clml_dot_blas_dot_real = {
     pname = "clml.blas.real";
@@ -25152,11 +25455,11 @@ in {
   };
   clobber = {
     pname = "clobber";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "clobber" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clobber/2022-02-20/clobber-20220220-git.tgz";
-      sha256 = "0zz0vigi2arc9y7ji5jpk55hk7g15cdd6xbchlql8m4g0c4gdl5d";
+      url = "http://beta.quicklisp.org/archive/clobber/2022-11-06/clobber-20221106-git.tgz";
+      sha256 = "0pqzfn2wqbzzwlwc3l84iv3i3wa9zfgnh14mq67h9qkib8wjzx3n";
       system = "clobber";
       asd = "clobber";
     });
@@ -25191,24 +25494,24 @@ in {
   };
   clog = {
     pname = "clog";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2022-07-07/clog-20220707-git.tgz";
-      sha256 = "0y3ji5r9km6g02sjk1zxh2v9bvz8lxv5849majqycf0rqqcqhfcx";
+      url = "http://beta.quicklisp.org/archive/clog/2022-11-06/clog-20221106-git.tgz";
+      sha256 = "135mj69shjayml9xfwg3sccfw5r901lzmf5vj5crnp9wywjfzywx";
       system = "clog";
       asd = "clog";
     });
     systems = [ "clog" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-dbi" pkgs) (getAttr "cl-pass" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "sqlite" pkgs) (getAttr "cl-template" pkgs) (getAttr "clack" pkgs) (getAttr "closer-mop" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "lack-middleware-static" pkgs) (getAttr "lack-request" pkgs) (getAttr "lack-util-writer-stream" pkgs) (getAttr "mgl-pax" pkgs) (getAttr "parse-float" pkgs) (getAttr "quri" pkgs) (getAttr "trivial-open-browser" pkgs) (getAttr "websocket-driver" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "atomics" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-dbi" pkgs) (getAttr "cl-isaac" pkgs) (getAttr "cl-pass" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "sqlite" pkgs) (getAttr "cl-template" pkgs) (getAttr "clack" pkgs) (getAttr "closer-mop" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "lack-middleware-static" pkgs) (getAttr "lack-request" pkgs) (getAttr "lack-util-writer-stream" pkgs) (getAttr "mgl-pax" pkgs) (getAttr "parse-float" pkgs) (getAttr "quri" pkgs) (getAttr "trivial-open-browser" pkgs) (getAttr "websocket-driver" pkgs) ];
   };
   clog-ace = {
     pname = "clog-ace";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clog-ace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog-ace/2022-07-07/clog-ace-20220707-git.tgz";
-      sha256 = "03s2k4fczxaphyk5q70wz8wy896hq2icch6x5c0harg649p6ghhg";
+      url = "http://beta.quicklisp.org/archive/clog-ace/2022-11-06/clog-ace-20221106-git.tgz";
+      sha256 = "0hci7qwbnjnjiy4jr6pkn3h4l9j80mypa4fi60adsz4fqm09yr41";
       system = "clog-ace";
       asd = "clog-ace";
     });
@@ -25217,11 +25520,11 @@ in {
   };
   clog-ace_slash_tools = {
     pname = "clog-ace_tools";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clog-ace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog-ace/2022-07-07/clog-ace-20220707-git.tgz";
-      sha256 = "03s2k4fczxaphyk5q70wz8wy896hq2icch6x5c0harg649p6ghhg";
+      url = "http://beta.quicklisp.org/archive/clog-ace/2022-11-06/clog-ace-20221106-git.tgz";
+      sha256 = "0hci7qwbnjnjiy4jr6pkn3h4l9j80mypa4fi60adsz4fqm09yr41";
       system = "clog-ace";
       asd = "clog-ace";
     });
@@ -25231,13 +25534,71 @@ in {
       broken = true;
     };
   };
+  clog-plotly = {
+    pname = "clog-plotly";
+    version = "20221106-git";
+    asds = [ "clog-plotly" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clog-plotly/2022-11-06/clog-plotly-20221106-git.tgz";
+      sha256 = "0jzpd41vchn6ag93kfrl8gd3ckds9rq6jpy34dlla6y5s2mbjbif";
+      system = "clog-plotly";
+      asd = "clog-plotly";
+    });
+    systems = [ "clog-plotly" ];
+    lispLibs = [ (getAttr "clog" pkgs) ];
+  };
+  clog-plotly_slash_tools = {
+    pname = "clog-plotly_tools";
+    version = "20221106-git";
+    asds = [ "clog-plotly" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clog-plotly/2022-11-06/clog-plotly-20221106-git.tgz";
+      sha256 = "0jzpd41vchn6ag93kfrl8gd3ckds9rq6jpy34dlla6y5s2mbjbif";
+      system = "clog-plotly";
+      asd = "clog-plotly";
+    });
+    systems = [ "clog-plotly/tools" ];
+    lispLibs = [ (getAttr "clog" pkgs) (getAttr "clog-plotly" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  clog-terminal = {
+    pname = "clog-terminal";
+    version = "20221106-git";
+    asds = [ "clog-terminal" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clog-terminal/2022-11-06/clog-terminal-20221106-git.tgz";
+      sha256 = "1ma7x3q4gak0ndwgbpnc1par3zcc6b02mpzwrgqmyi1251868rrq";
+      system = "clog-terminal";
+      asd = "clog-terminal";
+    });
+    systems = [ "clog-terminal" ];
+    lispLibs = [ (getAttr "clog" pkgs) ];
+  };
+  clog-terminal_slash_tools = {
+    pname = "clog-terminal_tools";
+    version = "20221106-git";
+    asds = [ "clog-terminal" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clog-terminal/2022-11-06/clog-terminal-20221106-git.tgz";
+      sha256 = "1ma7x3q4gak0ndwgbpnc1par3zcc6b02mpzwrgqmyi1251868rrq";
+      system = "clog-terminal";
+      asd = "clog-terminal";
+    });
+    systems = [ "clog-terminal/tools" ];
+    lispLibs = [ (getAttr "clog" pkgs) (getAttr "clog-terminal" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   clog_slash_docs = {
     pname = "clog_docs";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2022-07-07/clog-20220707-git.tgz";
-      sha256 = "0y3ji5r9km6g02sjk1zxh2v9bvz8lxv5849majqycf0rqqcqhfcx";
+      url = "http://beta.quicklisp.org/archive/clog/2022-11-06/clog-20221106-git.tgz";
+      sha256 = "135mj69shjayml9xfwg3sccfw5r901lzmf5vj5crnp9wywjfzywx";
       system = "clog";
       asd = "clog";
     });
@@ -25249,16 +25610,16 @@ in {
   };
   clog_slash_tools = {
     pname = "clog_tools";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2022-07-07/clog-20220707-git.tgz";
-      sha256 = "0y3ji5r9km6g02sjk1zxh2v9bvz8lxv5849majqycf0rqqcqhfcx";
+      url = "http://beta.quicklisp.org/archive/clog/2022-11-06/clog-20221106-git.tgz";
+      sha256 = "135mj69shjayml9xfwg3sccfw5r901lzmf5vj5crnp9wywjfzywx";
       system = "clog";
       asd = "clog";
     });
     systems = [ "clog/tools" ];
-    lispLibs = [ (getAttr "clog" pkgs) (getAttr "s-base64" pkgs) ];
+    lispLibs = [ (getAttr "clog" pkgs) (getAttr "clog-ace" pkgs) (getAttr "clog-terminal" pkgs) (getAttr "definitions" pkgs) (getAttr "s-base64" pkgs) (getAttr "swank" pkgs) ];
     meta = {
       broken = true;
     };
@@ -25343,11 +25704,11 @@ in {
   };
   closer-mop = {
     pname = "closer-mop";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "closer-mop" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/closer-mop/2022-07-07/closer-mop-20220707-git.tgz";
-      sha256 = "0xi3dqv4i2z9gzl1ld32w4sb08h86rc490qllla5scyri8vj0b4g";
+      url = "http://beta.quicklisp.org/archive/closer-mop/2022-11-06/closer-mop-20221106-git.tgz";
+      sha256 = "15bn0v1cvv725smq66ra9yvc7b0jysrmgkalibqzngzmr3mlzqd4";
       system = "closer-mop";
       asd = "closer-mop";
     });
@@ -25434,11 +25795,11 @@ in {
   };
   clouseau = {
     pname = "clouseau";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clouseau" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clouseau";
       asd = "clouseau";
     });
@@ -25447,11 +25808,11 @@ in {
   };
   clouseau_slash_test = {
     pname = "clouseau_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clouseau" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "clouseau";
       asd = "clouseau";
     });
@@ -25588,11 +25949,11 @@ in {
   };
   clsql = {
     pname = "clsql";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql";
       asd = "clsql";
     });
@@ -25601,11 +25962,11 @@ in {
   };
   clsql-aodbc = {
     pname = "clsql-aodbc";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-aodbc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-aodbc";
       asd = "clsql-aodbc";
     });
@@ -25614,11 +25975,11 @@ in {
   };
   clsql-cffi = {
     pname = "clsql-cffi";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-cffi";
       asd = "clsql-cffi";
     });
@@ -25705,11 +26066,11 @@ in {
   };
   clsql-mysql = {
     pname = "clsql-mysql";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-mysql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-mysql";
       asd = "clsql-mysql";
     });
@@ -25718,11 +26079,11 @@ in {
   };
   clsql-odbc = {
     pname = "clsql-odbc";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-odbc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-odbc";
       asd = "clsql-odbc";
     });
@@ -25744,11 +26105,11 @@ in {
   };
   clsql-postgresql = {
     pname = "clsql-postgresql";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-postgresql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-postgresql";
       asd = "clsql-postgresql";
     });
@@ -25757,11 +26118,11 @@ in {
   };
   clsql-postgresql-socket = {
     pname = "clsql-postgresql-socket";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-postgresql-socket" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-postgresql-socket";
       asd = "clsql-postgresql-socket";
     });
@@ -25770,11 +26131,11 @@ in {
   };
   clsql-postgresql-socket3 = {
     pname = "clsql-postgresql-socket3";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-postgresql-socket3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-postgresql-socket3";
       asd = "clsql-postgresql-socket3";
     });
@@ -25783,11 +26144,11 @@ in {
   };
   clsql-sqlite = {
     pname = "clsql-sqlite";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-sqlite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-sqlite";
       asd = "clsql-sqlite";
     });
@@ -25796,11 +26157,11 @@ in {
   };
   clsql-sqlite3 = {
     pname = "clsql-sqlite3";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-sqlite3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-sqlite3";
       asd = "clsql-sqlite3";
     });
@@ -25809,11 +26170,11 @@ in {
   };
   clsql-tests = {
     pname = "clsql-tests";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-tests";
       asd = "clsql-tests";
     });
@@ -25822,11 +26183,11 @@ in {
   };
   clsql-uffi = {
     pname = "clsql-uffi";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "clsql-uffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clsql/2021-02-28/clsql-20210228-git.tgz";
-      sha256 = "1hm4y742h4ib6zjasyfm91rl4363zdn3zi0vhgqsf8jksrjrw6p8";
+      url = "http://beta.quicklisp.org/archive/clsql/2022-11-06/clsql-20221106-git.tgz";
+      sha256 = "15kxrjv88ai9nvzxswa6rp8dbd1ad3816r4c5zb8xynsd8i5vpz0";
       system = "clsql-uffi";
       asd = "clsql-uffi";
     });
@@ -25835,11 +26196,11 @@ in {
   };
   clss = {
     pname = "clss";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clss" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clss/2022-07-07/clss-20220707-git.tgz";
-      sha256 = "08rj3hsnn6dnz45i5c3s0sdzqiqf82zmmn3p3vpw8190ysbnpchr";
+      url = "http://beta.quicklisp.org/archive/clss/2022-11-06/clss-20221106-git.tgz";
+      sha256 = "1033dchpanhcgxl5qfhr80aw9adbp9bvllhzvvy5p9mrfnidd1fv";
       system = "clss";
       asd = "clss";
     });
@@ -25861,11 +26222,11 @@ in {
   };
   cluffer = {
     pname = "cluffer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer";
       asd = "cluffer";
     });
@@ -25874,11 +26235,11 @@ in {
   };
   cluffer-base = {
     pname = "cluffer-base";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-base";
       asd = "cluffer-base";
     });
@@ -25887,11 +26248,11 @@ in {
   };
   cluffer-simple-buffer = {
     pname = "cluffer-simple-buffer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-simple-buffer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-simple-buffer";
       asd = "cluffer-simple-buffer";
     });
@@ -25900,11 +26261,11 @@ in {
   };
   cluffer-simple-line = {
     pname = "cluffer-simple-line";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-simple-line" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-simple-line";
       asd = "cluffer-simple-line";
     });
@@ -25913,11 +26274,11 @@ in {
   };
   cluffer-standard-buffer = {
     pname = "cluffer-standard-buffer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-standard-buffer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-standard-buffer";
       asd = "cluffer-standard-buffer";
     });
@@ -25926,11 +26287,11 @@ in {
   };
   cluffer-standard-line = {
     pname = "cluffer-standard-line";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-standard-line" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-standard-line";
       asd = "cluffer-standard-line";
     });
@@ -25939,11 +26300,11 @@ in {
   };
   cluffer-test = {
     pname = "cluffer-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cluffer-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cluffer/2022-07-07/cluffer-20220707-git.tgz";
-      sha256 = "0wdifi7ssp9vjdbks2c06v28p527f8fksglsnvn6lgy7xxsixicn";
+      url = "http://beta.quicklisp.org/archive/cluffer/2022-11-06/cluffer-20221106-git.tgz";
+      sha256 = "0z85s26gsgclql5p6iwklnddrv3l8i0pc41ircqp1zxhzdyf5jsx";
       system = "cluffer-test";
       asd = "cluffer-test";
     });
@@ -26017,11 +26378,11 @@ in {
   };
   clunit2 = {
     pname = "clunit2";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "clunit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clunit2/2021-10-20/clunit2-20211020-git.tgz";
-      sha256 = "06gsqgh7y6y1sr91makvs1s6s24darxigq8n8rnvsfsw0zk17kcv";
+      url = "http://beta.quicklisp.org/archive/clunit2/2022-11-06/clunit2-20221106-git.tgz";
+      sha256 = "094bg5r8dslcapkg1kakay5axnqal9nhq8z1cfmhmjsbrvz9vyz4";
       system = "clunit2";
       asd = "clunit2";
     });
@@ -26153,11 +26514,11 @@ in {
   };
   clx = {
     pname = "clx";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clx/2022-07-07/clx-20220707-git.tgz";
-      sha256 = "0zdwlb07rj311rwfys3i9q6dgn85pxifl1kbkdlciprpk376sj0h";
+      url = "http://beta.quicklisp.org/archive/clx/2022-11-06/clx-20221106-git.tgz";
+      sha256 = "0vjc8ii6zajqfxp0vbj5fkq125ky042w59bmkp3zvi5pwsh3y2hf";
       system = "clx";
       asd = "clx";
     });
@@ -26166,11 +26527,11 @@ in {
   };
   clx_slash_test = {
     pname = "clx_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "clx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clx/2022-07-07/clx-20220707-git.tgz";
-      sha256 = "0zdwlb07rj311rwfys3i9q6dgn85pxifl1kbkdlciprpk376sj0h";
+      url = "http://beta.quicklisp.org/archive/clx/2022-11-06/clx-20221106-git.tgz";
+      sha256 = "0vjc8ii6zajqfxp0vbj5fkq125ky042w59bmkp3zvi5pwsh3y2hf";
       system = "clx";
       asd = "clx";
     });
@@ -26195,11 +26556,11 @@ in {
   };
   cmd = {
     pname = "cmd";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "cmd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cmd/2022-07-07/cmd-20220707-git.tgz";
-      sha256 = "0j2yns565mp2rsiz8lc75psk7wws9qz8rh74n4vf9zdyrw16ckpf";
+      url = "http://beta.quicklisp.org/archive/cmd/2022-11-06/cmd-20221106-git.tgz";
+      sha256 = "0y3ma71fwihn9km8jx2cdm8z2yk5zd6kk8bigp4wvrx8hll0ajxi";
       system = "cmd";
       asd = "cmd";
     });
@@ -26286,11 +26647,11 @@ in {
   };
   coleslaw = {
     pname = "coleslaw";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "coleslaw" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-07-07/coleslaw-20220707-git.tgz";
-      sha256 = "0kjmm4yn5xdw6w1ad7aby83jzg4zfzj0lr28k09zbac1hi2byzzy";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
+      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
       system = "coleslaw";
       asd = "coleslaw";
     });
@@ -26299,11 +26660,11 @@ in {
   };
   coleslaw-cli = {
     pname = "coleslaw-cli";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "coleslaw-cli" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-07-07/coleslaw-20220707-git.tgz";
-      sha256 = "0kjmm4yn5xdw6w1ad7aby83jzg4zfzj0lr28k09zbac1hi2byzzy";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
+      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
       system = "coleslaw-cli";
       asd = "coleslaw-cli";
     });
@@ -26312,11 +26673,11 @@ in {
   };
   coleslaw-test = {
     pname = "coleslaw-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "coleslaw-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-07-07/coleslaw-20220707-git.tgz";
-      sha256 = "0kjmm4yn5xdw6w1ad7aby83jzg4zfzj0lr28k09zbac1hi2byzzy";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
+      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
       system = "coleslaw-test";
       asd = "coleslaw-test";
     });
@@ -26996,11 +27357,11 @@ in {
   };
   common-lisp-jupyter = {
     pname = "common-lisp-jupyter";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "common-lisp-jupyter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/common-lisp-jupyter/2022-07-07/common-lisp-jupyter-20220707-git.tgz";
-      sha256 = "0smmhs1822f7l8zan234c1hh8k3f0pjs4k1zlnd0xzg0v65fzbj9";
+      url = "http://beta.quicklisp.org/archive/common-lisp-jupyter/2022-11-06/common-lisp-jupyter-20221106-git.tgz";
+      sha256 = "1zpmvjlwgvr49ha997kkwwix444x5kvaawlxq4iknzs0mqgnwczs";
       system = "common-lisp-jupyter";
       asd = "common-lisp-jupyter";
     });
@@ -27009,24 +27370,24 @@ in {
   };
   commondoc-markdown = {
     pname = "commondoc-markdown";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "commondoc-markdown" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-03-31/commondoc-markdown-20220331-git.tgz";
-      sha256 = "1r3a8i5fbd6vf6ywhdhaxmgdnhdgj01q42fpiz65v7pwlr2c8pka";
+      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-11-06/commondoc-markdown-20221106-git.tgz";
+      sha256 = "10mkr80jx1gpdpmhy3rzq813wnn5rsqkwcvmsdwr4d0iwk1hm48g";
       system = "commondoc-markdown";
       asd = "commondoc-markdown";
     });
     systems = [ "commondoc-markdown" ];
-    lispLibs = [ (getAttr "_3bmd" pkgs) (getAttr "_3bmd-ext-code-blocks" pkgs) (getAttr "alexandria" pkgs) (getAttr "babel" pkgs) (getAttr "str" pkgs) (getAttr "common-doc" pkgs) (getAttr "common-html" pkgs) (getAttr "esrap" pkgs) (getAttr "ironclad" pkgs) (getAttr "quri" pkgs) ];
+    lispLibs = [ (getAttr "_3bmd" pkgs) (getAttr "_3bmd-ext-code-blocks" pkgs) (getAttr "alexandria" pkgs) (getAttr "babel" pkgs) (getAttr "str" pkgs) (getAttr "common-doc" pkgs) (getAttr "common-html" pkgs) (getAttr "esrap" pkgs) (getAttr "ironclad" pkgs) (getAttr "quri" pkgs) (getAttr "uiop" pkgs) ];
   };
   commondoc-markdown-docs = {
     pname = "commondoc-markdown-docs";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "commondoc-markdown-docs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-03-31/commondoc-markdown-20220331-git.tgz";
-      sha256 = "1r3a8i5fbd6vf6ywhdhaxmgdnhdgj01q42fpiz65v7pwlr2c8pka";
+      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-11-06/commondoc-markdown-20221106-git.tgz";
+      sha256 = "10mkr80jx1gpdpmhy3rzq813wnn5rsqkwcvmsdwr4d0iwk1hm48g";
       system = "commondoc-markdown-docs";
       asd = "commondoc-markdown-docs";
     });
@@ -27035,11 +27396,11 @@ in {
   };
   commondoc-markdown-test = {
     pname = "commondoc-markdown-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "commondoc-markdown-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-03-31/commondoc-markdown-20220331-git.tgz";
-      sha256 = "1r3a8i5fbd6vf6ywhdhaxmgdnhdgj01q42fpiz65v7pwlr2c8pka";
+      url = "http://beta.quicklisp.org/archive/commondoc-markdown/2022-11-06/commondoc-markdown-20221106-git.tgz";
+      sha256 = "10mkr80jx1gpdpmhy3rzq813wnn5rsqkwcvmsdwr4d0iwk1hm48g";
       system = "commondoc-markdown-test";
       asd = "commondoc-markdown-test";
     });
@@ -27100,11 +27461,11 @@ in {
   };
   compiler-macro-notes = {
     pname = "compiler-macro-notes";
-    version = "v0.2.0";
+    version = "v0.2.1";
     asds = [ "compiler-macro-notes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/compiler-macro-notes/2021-12-09/compiler-macro-notes-v0.2.0.tgz";
-      sha256 = "1jv8snj2wvim3k9qhl1vsx82n56nzdmwa3ms9c4ml2d58fwpfjzs";
+      url = "http://beta.quicklisp.org/archive/compiler-macro-notes/2022-11-06/compiler-macro-notes-v0.2.1.tgz";
+      sha256 = "13zzygv0j0a6xacwir4yllpan8j9zh68n9kgkpppg1br8x8s78pk";
       system = "compiler-macro-notes";
       asd = "compiler-macro-notes";
     });
@@ -27220,11 +27581,11 @@ in {
   };
   conditional-commands = {
     pname = "conditional-commands";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "conditional-commands" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "conditional-commands";
       asd = "conditional-commands";
     });
@@ -27478,11 +27839,11 @@ in {
   };
   consfigurator = {
     pname = "consfigurator";
-    version = "v1.0.3";
+    version = "v1.1.1";
     asds = [ "consfigurator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/consfigurator/2022-07-07/consfigurator-v1.0.3.tgz";
-      sha256 = "0qcj84drnziiyygs1q8jjyr910d3vi7485dxlqkb8jp8blc4xz6d";
+      url = "http://beta.quicklisp.org/archive/consfigurator/2022-11-06/consfigurator-v1.1.1.tgz";
+      sha256 = "12k3billjgkdk9yr0a2dv2jkrggi9kgm7nncvlz5m22y3sh7f5kh";
       system = "consfigurator";
       asd = "consfigurator";
     });
@@ -27491,11 +27852,11 @@ in {
   };
   consfigurator_slash_tests = {
     pname = "consfigurator_tests";
-    version = "v1.0.3";
+    version = "v1.1.1";
     asds = [ "consfigurator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/consfigurator/2022-07-07/consfigurator-v1.0.3.tgz";
-      sha256 = "0qcj84drnziiyygs1q8jjyr910d3vi7485dxlqkb8jp8blc4xz6d";
+      url = "http://beta.quicklisp.org/archive/consfigurator/2022-11-06/consfigurator-v1.1.1.tgz";
+      sha256 = "12k3billjgkdk9yr0a2dv2jkrggi9kgm7nncvlz5m22y3sh7f5kh";
       system = "consfigurator";
       asd = "consfigurator";
     });
@@ -27773,11 +28134,11 @@ in {
   };
   croatoan = {
     pname = "croatoan";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "croatoan" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2022-07-07/croatoan-20220707-git.tgz";
-      sha256 = "1hz4naa2grb35cl8py378j2nm94qasjg54ks7chf1k96nar0b5x4";
+      url = "http://beta.quicklisp.org/archive/croatoan/2022-11-06/croatoan-20221106-git.tgz";
+      sha256 = "0zfwcc40dpj88jvkm45d4snxjfxdsncd5pj10zrbj7lm4awm9b5s";
       system = "croatoan";
       asd = "croatoan";
     });
@@ -27786,11 +28147,11 @@ in {
   };
   croatoan-ncurses = {
     pname = "croatoan-ncurses";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "croatoan-ncurses" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2022-07-07/croatoan-20220707-git.tgz";
-      sha256 = "1hz4naa2grb35cl8py378j2nm94qasjg54ks7chf1k96nar0b5x4";
+      url = "http://beta.quicklisp.org/archive/croatoan/2022-11-06/croatoan-20221106-git.tgz";
+      sha256 = "0zfwcc40dpj88jvkm45d4snxjfxdsncd5pj10zrbj7lm4awm9b5s";
       system = "croatoan-ncurses";
       asd = "croatoan-ncurses";
     });
@@ -27799,11 +28160,11 @@ in {
   };
   croatoan-test = {
     pname = "croatoan-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "croatoan-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2022-07-07/croatoan-20220707-git.tgz";
-      sha256 = "1hz4naa2grb35cl8py378j2nm94qasjg54ks7chf1k96nar0b5x4";
+      url = "http://beta.quicklisp.org/archive/croatoan/2022-11-06/croatoan-20221106-git.tgz";
+      sha256 = "0zfwcc40dpj88jvkm45d4snxjfxdsncd5pj10zrbj7lm4awm9b5s";
       system = "croatoan-test";
       asd = "croatoan-test";
     });
@@ -27864,16 +28225,32 @@ in {
   };
   css-lite = {
     pname = "css-lite";
-    version = "20120407-git";
+    version = "20221106-git";
     asds = [ "css-lite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/css-lite/2012-04-07/css-lite-20120407-git.tgz";
-      sha256 = "1lyvw7hcy09k5qs6icky23s13psqxncyc73hdyiimb66p0jx6k0d";
+      url = "http://beta.quicklisp.org/archive/css-lite/2022-11-06/css-lite-20221106-git.tgz";
+      sha256 = "1klfpiqbg8gg10s2dmladaq06ard5v92lzk3ck2d1nbbl3rk4m1l";
       system = "css-lite";
       asd = "css-lite";
     });
     systems = [ "css-lite" ];
     lispLibs = [  ];
+  };
+  css-lite_slash_test = {
+    pname = "css-lite_test";
+    version = "20221106-git";
+    asds = [ "css-lite" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/css-lite/2022-11-06/css-lite-20221106-git.tgz";
+      sha256 = "1klfpiqbg8gg10s2dmladaq06ard5v92lzk3ck2d1nbbl3rk4m1l";
+      system = "css-lite";
+      asd = "css-lite";
+    });
+    systems = [ "css-lite/test" ];
+    lispLibs = [ (getAttr "css-lite" pkgs) (getAttr "fiveam" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   css-selectors = {
     pname = "css-selectors";
@@ -28272,11 +28649,11 @@ in {
   };
   cytoscape-clj = {
     pname = "cytoscape-clj";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "cytoscape-clj" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cytoscape-clj/2021-10-20/cytoscape-clj-20211020-git.tgz";
-      sha256 = "1hs9hzbnh16w4qs3smzwgf3bqkd0616l6v3ir7kjpq3rlcfwyiqb";
+      url = "http://beta.quicklisp.org/archive/cytoscape-clj/2022-11-06/cytoscape-clj-20221106-git.tgz";
+      sha256 = "0212c9aw2qpcijz2sglabbn51h93ljw1l3sj4kbff724xgc96ijh";
       system = "cytoscape-clj";
       asd = "cytoscape-clj";
     });
@@ -28298,11 +28675,11 @@ in {
   };
   damn-fast-priority-queue = {
     pname = "damn-fast-priority-queue";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "damn-fast-priority-queue" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2021-05-31/damn-fast-priority-queue-20210531-git.tgz";
-      sha256 = "1zcgswjh5crr02l8mdkl20kaxpa8biny8n9ggz1nx69qfgbrs1xd";
+      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2022-11-06/damn-fast-priority-queue-20221106-git.tgz";
+      sha256 = "14917b1z7ag3a7f88p4fk4649iy07kn9vpq6bszdxcp1irnc5a13";
       system = "damn-fast-priority-queue";
       asd = "damn-fast-priority-queue";
     });
@@ -28311,11 +28688,11 @@ in {
   };
   damn-fast-priority-queue_slash_test = {
     pname = "damn-fast-priority-queue_test";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "damn-fast-priority-queue" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2021-05-31/damn-fast-priority-queue-20210531-git.tgz";
-      sha256 = "1zcgswjh5crr02l8mdkl20kaxpa8biny8n9ggz1nx69qfgbrs1xd";
+      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2022-11-06/damn-fast-priority-queue-20221106-git.tgz";
+      sha256 = "14917b1z7ag3a7f88p4fk4649iy07kn9vpq6bszdxcp1irnc5a13";
       system = "damn-fast-priority-queue";
       asd = "damn-fast-priority-queue";
     });
@@ -28327,11 +28704,11 @@ in {
   };
   damn-fast-stable-priority-queue = {
     pname = "damn-fast-stable-priority-queue";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "damn-fast-stable-priority-queue" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2021-05-31/damn-fast-priority-queue-20210531-git.tgz";
-      sha256 = "1zcgswjh5crr02l8mdkl20kaxpa8biny8n9ggz1nx69qfgbrs1xd";
+      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2022-11-06/damn-fast-priority-queue-20221106-git.tgz";
+      sha256 = "14917b1z7ag3a7f88p4fk4649iy07kn9vpq6bszdxcp1irnc5a13";
       system = "damn-fast-stable-priority-queue";
       asd = "damn-fast-stable-priority-queue";
     });
@@ -28340,11 +28717,11 @@ in {
   };
   damn-fast-stable-priority-queue_slash_test = {
     pname = "damn-fast-stable-priority-queue_test";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "damn-fast-stable-priority-queue" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2021-05-31/damn-fast-priority-queue-20210531-git.tgz";
-      sha256 = "1zcgswjh5crr02l8mdkl20kaxpa8biny8n9ggz1nx69qfgbrs1xd";
+      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2022-11-06/damn-fast-priority-queue-20221106-git.tgz";
+      sha256 = "14917b1z7ag3a7f88p4fk4649iy07kn9vpq6bszdxcp1irnc5a13";
       system = "damn-fast-stable-priority-queue";
       asd = "damn-fast-stable-priority-queue";
     });
@@ -28525,24 +28902,24 @@ in {
   };
   data-frame = {
     pname = "data-frame";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "data-frame" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-frame/2021-12-09/data-frame-20211209-git.tgz";
-      sha256 = "1rq51dbhjzjm1vicjq7sps21i0wvl27m0x17qykx8qjnmg7np0va";
+      url = "http://beta.quicklisp.org/archive/data-frame/2022-11-06/data-frame-20221106-git.tgz";
+      sha256 = "0bs1jh66bml25bj1lxdzz8cjhj3g060yyd5ggqsnsr4l2j0zyszv";
       system = "data-frame";
       asd = "data-frame";
     });
     systems = [ "data-frame" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "alexandria_plus" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) (getAttr "select" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "alexandria_plus" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "duologue" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) (getAttr "select" pkgs) (getAttr "statistics" pkgs) ];
   };
   data-frame_slash_tests = {
     pname = "data-frame_tests";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "data-frame" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-frame/2021-12-09/data-frame-20211209-git.tgz";
-      sha256 = "1rq51dbhjzjm1vicjq7sps21i0wvl27m0x17qykx8qjnmg7np0va";
+      url = "http://beta.quicklisp.org/archive/data-frame/2022-11-06/data-frame-20221106-git.tgz";
+      sha256 = "0bs1jh66bml25bj1lxdzz8cjhj3g060yyd5ggqsnsr4l2j0zyszv";
       system = "data-frame";
       asd = "data-frame";
     });
@@ -28554,11 +28931,11 @@ in {
   };
   data-lens = {
     pname = "data-lens";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "data-lens" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-lens/2022-07-07/data-lens-20220707-git.tgz";
-      sha256 = "1w4rvhcnss037q0bb1j70kdlhfh9085hy95d9q56sk519alhzhrp";
+      url = "http://beta.quicklisp.org/archive/data-lens/2022-11-06/data-lens-20221106-git.tgz";
+      sha256 = "08h8i1y0mzhwh0nb70y448zv12plgzwbbr32hsw2vzjbas31rv02";
       system = "data-lens";
       asd = "data-lens";
     });
@@ -28567,11 +28944,11 @@ in {
   };
   data-lens_slash_beta_slash_transducers = {
     pname = "data-lens_beta_transducers";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "data-lens" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-lens/2022-07-07/data-lens-20220707-git.tgz";
-      sha256 = "1w4rvhcnss037q0bb1j70kdlhfh9085hy95d9q56sk519alhzhrp";
+      url = "http://beta.quicklisp.org/archive/data-lens/2022-11-06/data-lens-20221106-git.tgz";
+      sha256 = "08h8i1y0mzhwh0nb70y448zv12plgzwbbr32hsw2vzjbas31rv02";
       system = "data-lens";
       asd = "data-lens";
     });
@@ -28581,13 +28958,29 @@ in {
       broken = true;
     };
   };
-  data-lens_slash_transducers_slash_test = {
-    pname = "data-lens_transducers_test";
-    version = "20220707-git";
+  data-lens_slash_test = {
+    pname = "data-lens_test";
+    version = "20221106-git";
     asds = [ "data-lens" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-lens/2022-07-07/data-lens-20220707-git.tgz";
-      sha256 = "1w4rvhcnss037q0bb1j70kdlhfh9085hy95d9q56sk519alhzhrp";
+      url = "http://beta.quicklisp.org/archive/data-lens/2022-11-06/data-lens-20221106-git.tgz";
+      sha256 = "08h8i1y0mzhwh0nb70y448zv12plgzwbbr32hsw2vzjbas31rv02";
+      system = "data-lens";
+      asd = "data-lens";
+    });
+    systems = [ "data-lens/test" ];
+    lispLibs = [ (getAttr "data-lens" pkgs) (getAttr "fiveam" pkgs) (getAttr "serapeum" pkgs) (getAttr "string-case" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  data-lens_slash_transducers_slash_test = {
+    pname = "data-lens_transducers_test";
+    version = "20221106-git";
+    asds = [ "data-lens" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/data-lens/2022-11-06/data-lens-20221106-git.tgz";
+      sha256 = "08h8i1y0mzhwh0nb70y448zv12plgzwbbr32hsw2vzjbas31rv02";
       system = "data-lens";
       asd = "data-lens";
     });
@@ -28625,11 +29018,11 @@ in {
   };
   data-table = {
     pname = "data-table";
-    version = "20160208-git";
+    version = "20221106-git";
     asds = [ "data-table" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2016-02-08/data-table-20160208-git.tgz";
-      sha256 = "0wa5zlgcnlf7k18alg9a03m2524dhbxv0sgzyia4bsy07nx97afb";
+      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
+      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
       system = "data-table";
       asd = "data-table";
     });
@@ -28638,11 +29031,11 @@ in {
   };
   data-table-clsql = {
     pname = "data-table-clsql";
-    version = "20160208-git";
+    version = "20221106-git";
     asds = [ "data-table-clsql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2016-02-08/data-table-20160208-git.tgz";
-      sha256 = "0wa5zlgcnlf7k18alg9a03m2524dhbxv0sgzyia4bsy07nx97afb";
+      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
+      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
       system = "data-table-clsql";
       asd = "data-table-clsql";
     });
@@ -28651,11 +29044,11 @@ in {
   };
   data-table-test = {
     pname = "data-table-test";
-    version = "20160208-git";
+    version = "20221106-git";
     asds = [ "data-table-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2016-02-08/data-table-20160208-git.tgz";
-      sha256 = "0wa5zlgcnlf7k18alg9a03m2524dhbxv0sgzyia4bsy07nx97afb";
+      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
+      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
       system = "data-table-test";
       asd = "data-table";
     });
@@ -28729,11 +29122,11 @@ in {
   };
   datamuse = {
     pname = "datamuse";
-    version = "20200610-git";
+    version = "20221106-git";
     asds = [ "datamuse" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/datamuse/2020-06-10/datamuse-20200610-git.tgz";
-      sha256 = "1nfjz4z4i6shprv5wv6qc9sq9ixqdswpm12d82lvi2ckkrnx1s91";
+      url = "http://beta.quicklisp.org/archive/datamuse/2022-11-06/datamuse-20221106-git.tgz";
+      sha256 = "1x37rjf2gyvlq6jlflw628g299qdgzb0bwiv3qxk0nv22an50rp0";
       system = "datamuse";
       asd = "datamuse";
     });
@@ -28943,6 +29336,19 @@ in {
     });
     systems = [ "ddo" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-mpi" pkgs) (getAttr "cl-mpi-extensions" pkgs) (getAttr "femlisp-basic" pkgs) (getAttr "femlisp-dictionary" pkgs) (getAttr "femlisp-parallel" pkgs) (getAttr "lfarm-admin" pkgs) (getAttr "lfarm-client" pkgs) (getAttr "lfarm-server" pkgs) (getAttr "trees" pkgs) (getAttr "uiop" pkgs) ];
+  };
+  de-mock-racy = {
+    pname = "de-mock-racy";
+    version = "20221106-git";
+    asds = [ "de-mock-racy" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/de-mock-racy/2022-11-06/de-mock-racy-20221106-git.tgz";
+      sha256 = "02rkg1i5r8fgyhaipb0mkz543c8r81kqmwmmvywnnw8hpyvav2xb";
+      system = "de-mock-racy";
+      asd = "de-mock-racy";
+    });
+    systems = [ "de-mock-racy" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) ];
   };
   dealii-tutorial = {
     pname = "dealii-tutorial";
@@ -29157,24 +29563,24 @@ in {
   };
   defmain = {
     pname = "defmain";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "defmain" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/defmain/2022-07-07/defmain-20220707-git.tgz";
-      sha256 = "0aklfyfm7rpd825qm6ba1r5acjl6wvg1drl5r7li45mjd5lmp0a9";
+      url = "http://beta.quicklisp.org/archive/defmain/2022-11-06/defmain-20221106-git.tgz";
+      sha256 = "08mmb0rgbipmjhmpvr1889n1665309pwsa16qsrsbmgnmmaznw6a";
       system = "defmain";
       asd = "defmain";
     });
     systems = [ "defmain" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "net_dot_didierverna_dot_clon_dot_core" pkgs) (getAttr "cl-inflector" pkgs) (getAttr "cl-strings" pkgs) (getAttr "_40ants-doc" pkgs) (getAttr "docs-config" pkgs) (getAttr "named-readtables" pkgs) (getAttr "pythonic-string-reader" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "net_dot_didierverna_dot_clon_dot_core" pkgs) (getAttr "cl-inflector" pkgs) (getAttr "cl-strings" pkgs) (getAttr "_40ants-doc" pkgs) (getAttr "docs-config" pkgs) (getAttr "named-readtables" pkgs) (getAttr "pythonic-string-reader" pkgs) (getAttr "uiop" pkgs) ];
   };
   defmain-test = {
     pname = "defmain-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "defmain-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/defmain/2022-07-07/defmain-20220707-git.tgz";
-      sha256 = "0aklfyfm7rpd825qm6ba1r5acjl6wvg1drl5r7li45mjd5lmp0a9";
+      url = "http://beta.quicklisp.org/archive/defmain/2022-11-06/defmain-20221106-git.tgz";
+      sha256 = "08mmb0rgbipmjhmpvr1889n1665309pwsa16qsrsbmgnmmaznw6a";
       system = "defmain-test";
       asd = "defmain-test";
     });
@@ -29423,11 +29829,11 @@ in {
   };
   dense-arrays = {
     pname = "dense-arrays";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays";
       asd = "dense-arrays";
     });
@@ -29436,11 +29842,11 @@ in {
   };
   dense-arrays_plus_cuda = {
     pname = "dense-arrays+cuda";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays+cuda" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays+cuda";
       asd = "dense-arrays+cuda";
     });
@@ -29449,11 +29855,11 @@ in {
   };
   dense-arrays_plus_magicl = {
     pname = "dense-arrays+magicl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays+magicl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays+magicl";
       asd = "dense-arrays+magicl";
     });
@@ -29462,11 +29868,11 @@ in {
   };
   dense-arrays_plus_static-vectors = {
     pname = "dense-arrays+static-vectors";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays+static-vectors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays+static-vectors";
       asd = "dense-arrays+static-vectors";
     });
@@ -29475,11 +29881,11 @@ in {
   };
   dense-arrays-plus = {
     pname = "dense-arrays-plus";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays-plus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays-plus";
       asd = "dense-arrays-plus";
     });
@@ -29488,16 +29894,29 @@ in {
   };
   dense-arrays-plus-lite = {
     pname = "dense-arrays-plus-lite";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dense-arrays-plus-lite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-07-07/dense-arrays-20220707-git.tgz";
-      sha256 = "043nckn4hham4da90dlwv9chhq76idd0zb51sxwwgn96crkb6f1i";
+      url = "http://beta.quicklisp.org/archive/dense-arrays/2022-11-06/dense-arrays-20221106-git.tgz";
+      sha256 = "1601pv6ml5hljax3w5s480avrb4vrmzm8z2853kfd41mpzgk9nri";
       system = "dense-arrays-plus-lite";
       asd = "dense-arrays-plus-lite";
     });
     systems = [ "dense-arrays-plus-lite" ];
     lispLibs = [ (getAttr "dense-arrays" pkgs) (getAttr "trivial-coerce" pkgs) (getAttr "uiop" pkgs) ];
+  };
+  dense-numericals = {
+    pname = "dense-numericals";
+    version = "2022.09.0";
+    asds = [ "dense-numericals" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/numericals/2022-11-06/numericals-2022.09.0.tgz";
+      sha256 = "0hfyd045yq7pr4sh9xgqag67yrvnfia1h8ycnxss244zrziabyci";
+      system = "dense-numericals";
+      asd = "dense-numericals";
+    });
+    systems = [ "dense-numericals" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cl-autowrap" pkgs) (getAttr "bmas" pkgs) (getAttr "dense-arrays_plus_static-vectors" pkgs) (getAttr "dense-arrays-plus-lite" pkgs) (getAttr "fiveam" pkgs) (getAttr "iterate" pkgs) (getAttr "lparallel" pkgs) (getAttr "magicl" pkgs) (getAttr "numericals_dot_common" pkgs) (getAttr "policy-cond" pkgs) (getAttr "polymorphic-functions" pkgs) (getAttr "swank" pkgs) (getAttr "trivial-coerce" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) (getAttr "uiop" pkgs) ];
   };
   deoxybyte-gzip = {
     pname = "deoxybyte-gzip";
@@ -29644,11 +30063,11 @@ in {
   };
   depot = {
     pname = "depot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "depot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2022-07-07/depot-20220707-git.tgz";
-      sha256 = "1iw5wsmcv7wskxr3zwjzxy5i81jwyqiyda53jdc908017gbn1dff";
+      url = "http://beta.quicklisp.org/archive/depot/2022-11-06/depot-20221106-git.tgz";
+      sha256 = "09q1zd74xyc86gl3l4slfv84xld9cq8i4r7n4wpzs674qvzsadbb";
       system = "depot";
       asd = "depot";
     });
@@ -29657,11 +30076,11 @@ in {
   };
   depot-in-memory = {
     pname = "depot-in-memory";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "depot-in-memory" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2022-07-07/depot-20220707-git.tgz";
-      sha256 = "1iw5wsmcv7wskxr3zwjzxy5i81jwyqiyda53jdc908017gbn1dff";
+      url = "http://beta.quicklisp.org/archive/depot/2022-11-06/depot-20221106-git.tgz";
+      sha256 = "09q1zd74xyc86gl3l4slfv84xld9cq8i4r7n4wpzs674qvzsadbb";
       system = "depot-in-memory";
       asd = "depot-in-memory";
     });
@@ -29670,11 +30089,11 @@ in {
   };
   depot-test = {
     pname = "depot-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "depot-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2022-07-07/depot-20220707-git.tgz";
-      sha256 = "1iw5wsmcv7wskxr3zwjzxy5i81jwyqiyda53jdc908017gbn1dff";
+      url = "http://beta.quicklisp.org/archive/depot/2022-11-06/depot-20221106-git.tgz";
+      sha256 = "09q1zd74xyc86gl3l4slfv84xld9cq8i4r7n4wpzs674qvzsadbb";
       system = "depot-test";
       asd = "depot-test";
     });
@@ -29683,11 +30102,11 @@ in {
   };
   depot-virtual = {
     pname = "depot-virtual";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "depot-virtual" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2022-07-07/depot-20220707-git.tgz";
-      sha256 = "1iw5wsmcv7wskxr3zwjzxy5i81jwyqiyda53jdc908017gbn1dff";
+      url = "http://beta.quicklisp.org/archive/depot/2022-11-06/depot-20221106-git.tgz";
+      sha256 = "09q1zd74xyc86gl3l4slfv84xld9cq8i4r7n4wpzs674qvzsadbb";
       system = "depot-virtual";
       asd = "depot-virtual";
     });
@@ -29696,11 +30115,11 @@ in {
   };
   depot-zip = {
     pname = "depot-zip";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "depot-zip" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2022-07-07/depot-20220707-git.tgz";
-      sha256 = "1iw5wsmcv7wskxr3zwjzxy5i81jwyqiyda53jdc908017gbn1dff";
+      url = "http://beta.quicklisp.org/archive/depot/2022-11-06/depot-20221106-git.tgz";
+      sha256 = "09q1zd74xyc86gl3l4slfv84xld9cq8i4r7n4wpzs674qvzsadbb";
       system = "depot-zip";
       asd = "depot-zip";
     });
@@ -29790,11 +30209,11 @@ in {
   };
   dexador = {
     pname = "dexador";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dexador" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dexador/2022-07-07/dexador-20220707-git.tgz";
-      sha256 = "0h4g3ll3rgjhr5sy73k5nlkhld35irbwm8waiwklw40n8d3i5h3b";
+      url = "http://beta.quicklisp.org/archive/dexador/2022-11-06/dexador-20221106-git.tgz";
+      sha256 = "1kz1k122zgxzsvvdv467ydgggw2k16b6b3krv0gjrf6hc8v8qby9";
       system = "dexador";
       asd = "dexador";
     });
@@ -29803,11 +30222,11 @@ in {
   };
   dexador-test = {
     pname = "dexador-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dexador-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dexador/2022-07-07/dexador-20220707-git.tgz";
-      sha256 = "0h4g3ll3rgjhr5sy73k5nlkhld35irbwm8waiwklw40n8d3i5h3b";
+      url = "http://beta.quicklisp.org/archive/dexador/2022-11-06/dexador-20221106-git.tgz";
+      sha256 = "1kz1k122zgxzsvvdv467ydgggw2k16b6b3krv0gjrf6hc8v8qby9";
       system = "dexador-test";
       asd = "dexador-test";
     });
@@ -29816,40 +30235,24 @@ in {
   };
   dfio = {
     pname = "dfio";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "dfio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dfio/2021-10-20/dfio-20211020-git.tgz";
-      sha256 = "1wka8y4526x8yy3asiy15jxdzhsmyiq6ra6wbi8a4vcry3g2v9a0";
+      url = "http://beta.quicklisp.org/archive/dfio/2022-11-06/dfio-20221106-git.tgz";
+      sha256 = "1p53r7773939jnap518xp4b4wfvc1kbrz9jp6yd40xq0jpf9pbqg";
       system = "dfio";
       asd = "dfio";
     });
     systems = [ "dfio" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "data-frame" pkgs) (getAttr "dexador" pkgs) (getAttr "fare-csv" pkgs) (getAttr "let-plus" pkgs) ];
   };
-  dfio_slash_json = {
-    pname = "dfio_json";
-    version = "20211020-git";
-    asds = [ "dfio" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dfio/2021-10-20/dfio-20211020-git.tgz";
-      sha256 = "1wka8y4526x8yy3asiy15jxdzhsmyiq6ra6wbi8a4vcry3g2v9a0";
-      system = "dfio";
-      asd = "dfio";
-    });
-    systems = [ "dfio/json" ];
-    lispLibs = [ (getAttr "dfio" pkgs) (getAttr "yason" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
   dfio_slash_tests = {
     pname = "dfio_tests";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "dfio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dfio/2021-10-20/dfio-20211020-git.tgz";
-      sha256 = "1wka8y4526x8yy3asiy15jxdzhsmyiq6ra6wbi8a4vcry3g2v9a0";
+      url = "http://beta.quicklisp.org/archive/dfio/2022-11-06/dfio-20221106-git.tgz";
+      sha256 = "1p53r7773939jnap518xp4b4wfvc1kbrz9jp6yd40xq0jpf9pbqg";
       system = "dfio";
       asd = "dfio";
     });
@@ -29955,16 +30358,29 @@ in {
   };
   dissect = {
     pname = "dissect";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "dissect" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dissect/2022-07-07/dissect-20220707-git.tgz";
-      sha256 = "1a85dxzvr4dw6j78jh7rrgfqyb6nzbw82flsqv13bzv4lv357f51";
+      url = "http://beta.quicklisp.org/archive/dissect/2022-11-06/dissect-20221106-git.tgz";
+      sha256 = "10daj37ivvkcghlhl3c4nlg6rf8y968b0zy5qa2fmk8iqd7l67d7";
       system = "dissect";
       asd = "dissect";
     });
     systems = [ "dissect" ];
     lispLibs = [  ];
+  };
+  distributions = {
+    pname = "distributions";
+    version = "20221106-git";
+    asds = [ "distributions" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/distributions/2022-11-06/distributions-20221106-git.tgz";
+      sha256 = "1fkzigd0s0s0mvszgmv04yc8jp9gm4812445hfh6kpz6cjy5zpsk";
+      system = "distributions";
+      asd = "distributions";
+    });
+    systems = [ "distributions" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "cephes" pkgs) (getAttr "float-features" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) (getAttr "special-functions" pkgs) ];
   };
   djula = {
     pname = "djula";
@@ -30085,11 +30501,11 @@ in {
   };
   docparser = {
     pname = "docparser";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "docparser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/docparser/2020-12-20/docparser-20201220-git.tgz";
-      sha256 = "1i0bc1i7r5awvaj3lbw9isfhvb6n1qz89rpz3dl49w8xzxgy4qwi";
+      url = "http://beta.quicklisp.org/archive/docparser/2022-11-06/docparser-20221106-git.tgz";
+      sha256 = "0b8ipv14h8f46kf6hqmcgp3yxry9xww7957iwkzq8n1i0biq74y1";
       system = "docparser";
       asd = "docparser";
     });
@@ -30098,24 +30514,24 @@ in {
   };
   docparser-test = {
     pname = "docparser-test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "docparser-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/docparser/2020-12-20/docparser-20201220-git.tgz";
-      sha256 = "1i0bc1i7r5awvaj3lbw9isfhvb6n1qz89rpz3dl49w8xzxgy4qwi";
+      url = "http://beta.quicklisp.org/archive/docparser/2022-11-06/docparser-20221106-git.tgz";
+      sha256 = "0b8ipv14h8f46kf6hqmcgp3yxry9xww7957iwkzq8n1i0biq74y1";
       system = "docparser-test";
       asd = "docparser-test";
     });
     systems = [ "docparser-test" ];
-    lispLibs = [ (getAttr "docparser" pkgs) (getAttr "fiveam" pkgs) ];
+    lispLibs = [ (getAttr "docparser" pkgs) (getAttr "docparser-test-system" pkgs) (getAttr "fiveam" pkgs) ];
   };
   docparser-test-system = {
     pname = "docparser-test-system";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "docparser-test-system" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/docparser/2020-12-20/docparser-20201220-git.tgz";
-      sha256 = "1i0bc1i7r5awvaj3lbw9isfhvb6n1qz89rpz3dl49w8xzxgy4qwi";
+      url = "http://beta.quicklisp.org/archive/docparser/2022-11-06/docparser-20221106-git.tgz";
+      sha256 = "0b8ipv14h8f46kf6hqmcgp3yxry9xww7957iwkzq8n1i0biq74y1";
       system = "docparser-test-system";
       asd = "docparser-test-system";
     });
@@ -30124,24 +30540,24 @@ in {
   };
   docs-builder = {
     pname = "docs-builder";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "docs-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/docs-builder/2021-12-09/docs-builder-20211209-git.tgz";
-      sha256 = "1dbgh12vlqv8i8j0lv3qidmxk4r2kbjkc1ggr1mbqln2isx62hx1";
+      url = "http://beta.quicklisp.org/archive/docs-builder/2022-11-06/docs-builder-20221106-git.tgz";
+      sha256 = "1xqhknz74a43sk0cax7m7h5bzax6yriqczyvpzx2z3nbhq8knr9k";
       system = "docs-builder";
       asd = "docs-builder";
     });
     systems = [ "docs-builder" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "_40ants-doc" pkgs) (getAttr "docs-config" pkgs) (getAttr "log4cl" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "_40ants-doc" pkgs) (getAttr "docs-config" pkgs) (getAttr "log4cl" pkgs) (getAttr "uiop" pkgs) ];
   };
   docs-config = {
     pname = "docs-config";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "docs-config" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/docs-builder/2021-12-09/docs-builder-20211209-git.tgz";
-      sha256 = "1dbgh12vlqv8i8j0lv3qidmxk4r2kbjkc1ggr1mbqln2isx62hx1";
+      url = "http://beta.quicklisp.org/archive/docs-builder/2022-11-06/docs-builder-20221106-git.tgz";
+      sha256 = "1xqhknz74a43sk0cax7m7h5bzax6yriqczyvpzx2z3nbhq8knr9k";
       system = "docs-config";
       asd = "docs-config";
     });
@@ -30345,11 +30761,11 @@ in {
   };
   drei-mcclim = {
     pname = "drei-mcclim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "drei-mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "drei-mcclim";
       asd = "drei-mcclim";
     });
@@ -30358,11 +30774,11 @@ in {
   };
   drei-mcclim_slash_test = {
     pname = "drei-mcclim_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "drei-mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "drei-mcclim";
       asd = "drei-mcclim";
     });
@@ -30930,6 +31346,35 @@ in {
     systems = [ "easy-bind" ];
     lispLibs = [  ];
   };
+  easy-macros = {
+    pname = "easy-macros";
+    version = "20221106-git";
+    asds = [ "easy-macros" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/easy-macros/2022-11-06/easy-macros-20221106-git.tgz";
+      sha256 = "0mashvad1ssh2kmr0wxgas13vxs6dsfb6b1q69cpxmpmx6sc067g";
+      system = "easy-macros";
+      asd = "easy-macros";
+    });
+    systems = [ "easy-macros" ];
+    lispLibs = [  ];
+  };
+  easy-macros_slash_tests = {
+    pname = "easy-macros_tests";
+    version = "20221106-git";
+    asds = [ "easy-macros" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/easy-macros/2022-11-06/easy-macros-20221106-git.tgz";
+      sha256 = "0mashvad1ssh2kmr0wxgas13vxs6dsfb6b1q69cpxmpmx6sc067g";
+      system = "easy-macros";
+      asd = "easy-macros";
+    });
+    systems = [ "easy-macros/tests" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "easy-macros" pkgs) (getAttr "fiveam" pkgs) (getAttr "fiveam-matchers" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   easy-routes = {
     pname = "easy-routes";
     version = "20220707-git";
@@ -31153,11 +31598,11 @@ in {
   };
   eclector = {
     pname = "eclector";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "eclector" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2022-07-07/eclector-20220707-git.tgz";
-      sha256 = "1f3gl34lsxagrpglin3nd27i83191cwr58wmhx11h4079xnfz1jv";
+      url = "http://beta.quicklisp.org/archive/eclector/2022-11-06/eclector-20221106-git.tgz";
+      sha256 = "087f3z0j13fc9brb6390qsbw79lr7fhgfdc0hcrib2h5idv406xz";
       system = "eclector";
       asd = "eclector";
     });
@@ -31166,11 +31611,11 @@ in {
   };
   eclector-concrete-syntax-tree = {
     pname = "eclector-concrete-syntax-tree";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "eclector-concrete-syntax-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2022-07-07/eclector-20220707-git.tgz";
-      sha256 = "1f3gl34lsxagrpglin3nd27i83191cwr58wmhx11h4079xnfz1jv";
+      url = "http://beta.quicklisp.org/archive/eclector/2022-11-06/eclector-20221106-git.tgz";
+      sha256 = "087f3z0j13fc9brb6390qsbw79lr7fhgfdc0hcrib2h5idv406xz";
       system = "eclector-concrete-syntax-tree";
       asd = "eclector-concrete-syntax-tree";
     });
@@ -31179,11 +31624,11 @@ in {
   };
   eclector-concrete-syntax-tree_slash_test = {
     pname = "eclector-concrete-syntax-tree_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "eclector-concrete-syntax-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2022-07-07/eclector-20220707-git.tgz";
-      sha256 = "1f3gl34lsxagrpglin3nd27i83191cwr58wmhx11h4079xnfz1jv";
+      url = "http://beta.quicklisp.org/archive/eclector/2022-11-06/eclector-20221106-git.tgz";
+      sha256 = "087f3z0j13fc9brb6390qsbw79lr7fhgfdc0hcrib2h5idv406xz";
       system = "eclector-concrete-syntax-tree";
       asd = "eclector-concrete-syntax-tree";
     });
@@ -31195,11 +31640,11 @@ in {
   };
   eclector_slash_test = {
     pname = "eclector_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "eclector" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2022-07-07/eclector-20220707-git.tgz";
-      sha256 = "1f3gl34lsxagrpglin3nd27i83191cwr58wmhx11h4079xnfz1jv";
+      url = "http://beta.quicklisp.org/archive/eclector/2022-11-06/eclector-20221106-git.tgz";
+      sha256 = "087f3z0j13fc9brb6390qsbw79lr7fhgfdc0hcrib2h5idv406xz";
       system = "eclector";
       asd = "eclector";
     });
@@ -31695,11 +32140,11 @@ in {
   };
   erudite = {
     pname = "erudite";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "erudite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/erudite/2021-05-31/erudite-20210531-git.tgz";
-      sha256 = "16srblkkbhjzz7xz365ip3g83j51bgb648pv0ibr38x1szaqg6xv";
+      url = "http://beta.quicklisp.org/archive/erudite/2022-11-06/erudite-20221106-git.tgz";
+      sha256 = "0za0wrblmk2kclc3wvlvsjf5mkri5ndhgc5ppc9p4zac3fd7p67n";
       system = "erudite";
       asd = "erudite";
     });
@@ -31708,11 +32153,11 @@ in {
   };
   erudite-test = {
     pname = "erudite-test";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "erudite-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/erudite/2021-05-31/erudite-20210531-git.tgz";
-      sha256 = "16srblkkbhjzz7xz365ip3g83j51bgb648pv0ibr38x1szaqg6xv";
+      url = "http://beta.quicklisp.org/archive/erudite/2022-11-06/erudite-20221106-git.tgz";
+      sha256 = "0za0wrblmk2kclc3wvlvsjf5mkri5ndhgc5ppc9p4zac3fd7p67n";
       system = "erudite-test";
       asd = "erudite-test";
     });
@@ -31721,11 +32166,11 @@ in {
   };
   esa-mcclim = {
     pname = "esa-mcclim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "esa-mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "esa-mcclim";
       asd = "esa-mcclim";
     });
@@ -32107,29 +32552,45 @@ in {
   };
   extensible-compound-types = {
     pname = "extensible-compound-types";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "extensible-compound-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2022-07-07/extensible-compound-types-20220707-git.tgz";
-      sha256 = "0zl6dgb24awxp0jgpw4g4z7qzh9k4m7f75nack8br8d87k7k5hwc";
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2022-11-06/extensible-compound-types-20221106-git.tgz";
+      sha256 = "02why0lajvf4iccw7xhcpsn7956i731xavq2mmyv4plwhd71rczc";
       system = "extensible-compound-types";
       asd = "extensible-compound-types";
     });
     systems = [ "extensible-compound-types" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-environments" pkgs) (getAttr "compiler-macro-notes" pkgs) (getAttr "fiveam" pkgs) (getAttr "in-nomine" pkgs) (getAttr "trivial-types" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-environments" pkgs) (getAttr "compiler-macro-notes" pkgs) (getAttr "fiveam" pkgs) (getAttr "in-nomine" pkgs) (getAttr "optima" pkgs) (getAttr "trivial-types" pkgs) ];
   };
   extensible-compound-types-cl = {
     pname = "extensible-compound-types-cl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "extensible-compound-types-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2022-07-07/extensible-compound-types-20220707-git.tgz";
-      sha256 = "0zl6dgb24awxp0jgpw4g4z7qzh9k4m7f75nack8br8d87k7k5hwc";
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2022-11-06/extensible-compound-types-20221106-git.tgz";
+      sha256 = "02why0lajvf4iccw7xhcpsn7956i731xavq2mmyv4plwhd71rczc";
       system = "extensible-compound-types-cl";
       asd = "extensible-compound-types-cl";
     });
     systems = [ "extensible-compound-types-cl" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "extensible-compound-types" pkgs) (getAttr "fiveam" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-form-types" pkgs) (getAttr "extensible-compound-types" pkgs) (getAttr "fiveam" pkgs) ];
+  };
+  extensible-compound-types-cl_slash_specializable-structs = {
+    pname = "extensible-compound-types-cl_specializable-structs";
+    version = "20221106-git";
+    asds = [ "extensible-compound-types-cl" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2022-11-06/extensible-compound-types-20221106-git.tgz";
+      sha256 = "02why0lajvf4iccw7xhcpsn7956i731xavq2mmyv4plwhd71rczc";
+      system = "extensible-compound-types-cl";
+      asd = "extensible-compound-types-cl";
+    });
+    systems = [ "extensible-compound-types-cl/specializable-structs" ];
+    lispLibs = [ (getAttr "cl-form-types" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "extensible-compound-types-cl" pkgs) (getAttr "fiveam" pkgs) (getAttr "polymorphic-functions" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   extensible-sequences = {
     pname = "extensible-sequences";
@@ -32292,6 +32753,19 @@ in {
     meta = {
       broken = true;
     };
+  };
+  facts = {
+    pname = "facts";
+    version = "20221106-git";
+    asds = [ "facts" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-facts/2022-11-06/cl-facts-20221106-git.tgz";
+      sha256 = "09z1vwzjm7hlb529jl3hcjnfd11gh128lmdg51im7ar4jv4746iw";
+      system = "facts";
+      asd = "facts";
+    });
+    systems = [ "facts" ];
+    lispLibs = [ (getAttr "lessp" pkgs) (getAttr "rollback" pkgs) (getAttr "local-time" pkgs) ];
   };
   fakenil = {
     pname = "fakenil";
@@ -32506,11 +32980,11 @@ in {
   };
   fast-io = {
     pname = "fast-io";
-    version = "20200925-git";
+    version = "20221106-git";
     asds = [ "fast-io" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fast-io/2020-09-25/fast-io-20200925-git.tgz";
-      sha256 = "131cqlf84md6kgw2slrpgmksz2j3w1rx4a0cwfrkd8kdvwbh16rd";
+      url = "http://beta.quicklisp.org/archive/fast-io/2022-11-06/fast-io-20221106-git.tgz";
+      sha256 = "0wh02yagbqahy9z6787jz5ggpagvr18qd0z13wvwq1vjf8xd2530";
       system = "fast-io";
       asd = "fast-io";
     });
@@ -32519,11 +32993,11 @@ in {
   };
   fast-io-test = {
     pname = "fast-io-test";
-    version = "20200925-git";
+    version = "20221106-git";
     asds = [ "fast-io-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fast-io/2020-09-25/fast-io-20200925-git.tgz";
-      sha256 = "131cqlf84md6kgw2slrpgmksz2j3w1rx4a0cwfrkd8kdvwbh16rd";
+      url = "http://beta.quicklisp.org/archive/fast-io/2022-11-06/fast-io-20221106-git.tgz";
+      sha256 = "0wh02yagbqahy9z6787jz5ggpagvr18qd0z13wvwq1vjf8xd2530";
       system = "fast-io-test";
       asd = "fast-io-test";
     });
@@ -32802,6 +33276,45 @@ in {
     });
     systems = [ "file-types" ];
     lispLibs = [  ];
+  };
+  filesystem-utils = {
+    pname = "filesystem-utils";
+    version = "20221106-git";
+    asds = [ "filesystem-utils" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/filesystem-utils/2022-11-06/filesystem-utils-20221106-git.tgz";
+      sha256 = "1lnfy1zxiixdjmy5xy4wb7xq2n6srwxiyv8ghbjb5x4hsxn5m2j7";
+      system = "filesystem-utils";
+      asd = "filesystem-utils";
+    });
+    systems = [ "filesystem-utils" ];
+    lispLibs = [ (getAttr "documentation-utils" pkgs) (getAttr "pathname-utils" pkgs) (getAttr "trivial-features" pkgs) ];
+  };
+  filesystem-utils-test = {
+    pname = "filesystem-utils-test";
+    version = "20221106-git";
+    asds = [ "filesystem-utils-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/filesystem-utils/2022-11-06/filesystem-utils-20221106-git.tgz";
+      sha256 = "1lnfy1zxiixdjmy5xy4wb7xq2n6srwxiyv8ghbjb5x4hsxn5m2j7";
+      system = "filesystem-utils-test";
+      asd = "filesystem-utils-test";
+    });
+    systems = [ "filesystem-utils-test" ];
+    lispLibs = [ (getAttr "filesystem-utils" pkgs) (getAttr "parachute" pkgs) ];
+  };
+  filter-maker = {
+    pname = "filter-maker";
+    version = "20221106-git";
+    asds = [ "filter-maker" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/filter-maker/2022-11-06/filter-maker-20221106-git.tgz";
+      sha256 = "00algyghniqsvjy5vwx39fd98nd7x4w944ahy981jlh33lzc2qmn";
+      system = "filter-maker";
+      asd = "filter-maker";
+    });
+    systems = [ "filter-maker" ];
+    lispLibs = [ (getAttr "mcclim" pkgs) ];
   };
   filtered-functions = {
     pname = "filtered-functions";
@@ -33111,16 +33624,45 @@ in {
   };
   fiveam-asdf = {
     pname = "fiveam-asdf";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "fiveam-asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fiveam-asdf/2021-12-09/fiveam-asdf-20211209-git.tgz";
-      sha256 = "1p68ql680awcnjn3sgibs8n3jkfiysinlwk6dfxzc7z20kkig22x";
+      url = "http://beta.quicklisp.org/archive/fiveam-asdf/2022-11-06/fiveam-asdf-20221106-git.tgz";
+      sha256 = "18dhyznwl56lpp289dwg9xm9qwwv5062yawfaj6h1b2jwybqfrq7";
       system = "fiveam-asdf";
       asd = "fiveam-asdf";
     });
     systems = [ "fiveam-asdf" ];
     lispLibs = [  ];
+  };
+  fiveam-matchers = {
+    pname = "fiveam-matchers";
+    version = "20221106-git";
+    asds = [ "fiveam-matchers" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/fiveam-matchers/2022-11-06/fiveam-matchers-20221106-git.tgz";
+      sha256 = "1l2pzr71y7x7qwwnqxirz567linxzdbjnsdlis2inxbpm1gssdc6";
+      system = "fiveam-matchers";
+      asd = "fiveam-matchers";
+    });
+    systems = [ "fiveam-matchers" ];
+    lispLibs = [ (getAttr "str" pkgs) (getAttr "fiveam" pkgs) ];
+  };
+  fiveam-matchers_slash_tests = {
+    pname = "fiveam-matchers_tests";
+    version = "20221106-git";
+    asds = [ "fiveam-matchers" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/fiveam-matchers/2022-11-06/fiveam-matchers-20221106-git.tgz";
+      sha256 = "1l2pzr71y7x7qwwnqxirz567linxzdbjnsdlis2inxbpm1gssdc6";
+      system = "fiveam-matchers";
+      asd = "fiveam-matchers";
+    });
+    systems = [ "fiveam-matchers/tests" ];
+    lispLibs = [ (getAttr "fiveam-matchers" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   fiveam_slash_test = {
     pname = "fiveam_test";
@@ -33211,11 +33753,11 @@ in {
   };
   flare = {
     pname = "flare";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "flare" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flare/2021-05-31/flare-20210531-git.tgz";
-      sha256 = "00nm3sjngbflj2gd5q0xs2m136w4kix6krww23nk64pkkyq2fs86";
+      url = "http://beta.quicklisp.org/archive/flare/2022-11-06/flare-20221106-git.tgz";
+      sha256 = "12scbnjqkyvaqmawfvih42vxp9nydlqh08nif9glv7nlav6dgvlp";
       system = "flare";
       asd = "flare";
     });
@@ -33224,11 +33766,11 @@ in {
   };
   flare-viewer = {
     pname = "flare-viewer";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "flare-viewer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flare/2021-05-31/flare-20210531-git.tgz";
-      sha256 = "00nm3sjngbflj2gd5q0xs2m136w4kix6krww23nk64pkkyq2fs86";
+      url = "http://beta.quicklisp.org/archive/flare/2022-11-06/flare-20221106-git.tgz";
+      sha256 = "12scbnjqkyvaqmawfvih42vxp9nydlqh08nif9glv7nlav6dgvlp";
       system = "flare-viewer";
       asd = "flare-viewer";
     });
@@ -33302,11 +33844,11 @@ in {
   };
   float-features = {
     pname = "float-features";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "float-features" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/float-features/2022-07-07/float-features-20220707-git.tgz";
-      sha256 = "0c84fq1hp01c6qxw7h6w2pkvkc6ypf3kz3z55p2kmr376739brjh";
+      url = "http://beta.quicklisp.org/archive/float-features/2022-11-06/float-features-20221106-git.tgz";
+      sha256 = "0d1n9zricjqbyxlalwwdsrhrz1cbg1wlhyr66v6rad84gscx1v29";
       system = "float-features";
       asd = "float-features";
     });
@@ -33315,11 +33857,11 @@ in {
   };
   float-features-tests = {
     pname = "float-features-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "float-features-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/float-features/2022-07-07/float-features-20220707-git.tgz";
-      sha256 = "0c84fq1hp01c6qxw7h6w2pkvkc6ypf3kz3z55p2kmr376739brjh";
+      url = "http://beta.quicklisp.org/archive/float-features/2022-11-06/float-features-20221106-git.tgz";
+      sha256 = "0d1n9zricjqbyxlalwwdsrhrz1cbg1wlhyr66v6rad84gscx1v29";
       system = "float-features-tests";
       asd = "float-features-tests";
     });
@@ -33903,11 +34445,11 @@ in {
   };
   font-discovery = {
     pname = "font-discovery";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "font-discovery" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/font-discovery/2022-07-07/font-discovery-20220707-git.tgz";
-      sha256 = "08x77gp2x5hpgnk2wilxqm87db4m88k4r3d2h1mlymgffg953nzn";
+      url = "http://beta.quicklisp.org/archive/font-discovery/2022-11-06/font-discovery-20221106-git.tgz";
+      sha256 = "1p9wkwc23rnif8vcjaj5ih1fmr5g57sidqjlz08qw6k0z4f6bia1";
       system = "font-discovery";
       asd = "font-discovery";
     });
@@ -33929,11 +34471,11 @@ in {
   };
   for = {
     pname = "for";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "for" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/for/2020-03-25/for-20200325-git.tgz";
-      sha256 = "1akz9ggh33x2cq3h0f1cd0p632v1mbagv3dzsb0r10bwg9lh3nmv";
+      url = "http://beta.quicklisp.org/archive/for/2022-11-06/for-20221106-git.tgz";
+      sha256 = "1abh18767wivawcqgg8ac2hi8ss57k2fnn2y0y9b5ymk7aqw1c0m";
       system = "for";
       asd = "for";
     });
@@ -34389,11 +34931,11 @@ in {
   };
   functional-geometry = {
     pname = "functional-geometry";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "functional-geometry" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "functional-geometry";
       asd = "functional-geometry";
     });
@@ -34402,16 +34944,16 @@ in {
   };
   functional-trees = {
     pname = "functional-trees";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "functional-trees" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/functional-trees/2022-07-07/functional-trees-20220707-git.tgz";
-      sha256 = "0m33492vq64b8zk3m2hhm61lhj140npai7z19ylb1gkjijcwlhp7";
+      url = "http://beta.quicklisp.org/archive/functional-trees/2022-11-06/functional-trees-20221106-git.tgz";
+      sha256 = "1fr3684219i9glgx06qfzqh0lp5y0d9786hv3g18dljhfp21vaqy";
       system = "functional-trees";
       asd = "functional-trees";
     });
     systems = [ "functional-trees" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "asdf-package-system" pkgs) (getAttr "cl-store" pkgs) (getAttr "closer-mop" pkgs) (getAttr "fset" pkgs) (getAttr "iterate" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "asdf-package-system" pkgs) (getAttr "cl-store" pkgs) (getAttr "closer-mop" pkgs) (getAttr "fset" pkgs) (getAttr "iterate" pkgs) (getAttr "serapeum" pkgs) ];
   };
   funds = {
     pname = "funds";
@@ -35409,11 +35951,11 @@ in {
   };
   github-api-cl = {
     pname = "github-api-cl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "github-api-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-07-07/github-api-cl-20220707-git.tgz";
-      sha256 = "0wlbp9x1bi3c37ch9ii9y12i0nf08jg45vqg1aj3d2n0pq8fwr70";
+      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-11-06/github-api-cl-20221106-git.tgz";
+      sha256 = "1f7hgncmi7d5chvlixhigysx68bchdcr2hh54iwlpfk8p3an7gwz";
       system = "github-api-cl";
       asd = "github-api-cl";
     });
@@ -35422,11 +35964,11 @@ in {
   };
   github-api-cl_slash_tests = {
     pname = "github-api-cl_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "github-api-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-07-07/github-api-cl-20220707-git.tgz";
-      sha256 = "0wlbp9x1bi3c37ch9ii9y12i0nf08jg45vqg1aj3d2n0pq8fwr70";
+      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-11-06/github-api-cl-20221106-git.tgz";
+      sha256 = "1f7hgncmi7d5chvlixhigysx68bchdcr2hh54iwlpfk8p3an7gwz";
       system = "github-api-cl";
       asd = "github-api-cl";
     });
@@ -35435,6 +35977,19 @@ in {
     meta = {
       broken = true;
     };
+  };
+  github-gist-api-cl = {
+    pname = "github-gist-api-cl";
+    version = "20221106-git";
+    asds = [ "github-gist-api-cl" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-11-06/github-api-cl-20221106-git.tgz";
+      sha256 = "1f7hgncmi7d5chvlixhigysx68bchdcr2hh54iwlpfk8p3an7gwz";
+      system = "github-gist-api-cl";
+      asd = "github-gist-api-cl";
+    });
+    systems = [ "github-gist-api-cl" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "cl-base64" pkgs) (getAttr "str" pkgs) (getAttr "clack" pkgs) (getAttr "dexador" pkgs) (getAttr "github-api-cl" pkgs) (getAttr "trivial-features" pkgs) (getAttr "woo" pkgs) (getAttr "yason" pkgs) ];
   };
   glacier = {
     pname = "glacier";
@@ -36000,11 +36555,11 @@ in {
   };
   gt = {
     pname = "gt";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "gt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-utils/2022-02-20/cl-utils-20220220-git.tgz";
-      sha256 = "1ls6xcf1jfmkc7w7cwi84x0x8w7l0p3164vn0lg3hyps510z5ahv";
+      url = "http://beta.quicklisp.org/archive/cl-utils/2022-11-06/cl-utils-20221106-git.tgz";
+      sha256 = "1znzwnapsjl3fijwyrp7gd8q2wbdgvqyx3fad5sqawkgz4qnlq1n";
       system = "gt";
       asd = "gt";
     });
@@ -36026,11 +36581,11 @@ in {
   };
   gtirb-capstone = {
     pname = "gtirb-capstone";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "gtirb-capstone" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtirb-capstone/2021-12-09/gtirb-capstone-20211209-git.tgz";
-      sha256 = "0kh203bg36r4ps6zy62r5jydd7dx1wzdrqfbbw8621ch5dgz7z3a";
+      url = "http://beta.quicklisp.org/archive/gtirb-capstone/2022-11-06/gtirb-capstone-20221106-git.tgz";
+      sha256 = "15h1x74f7w1b4634cab958vanqx4z3lgpi5fvmcpjdp945iv2ybc";
       system = "gtirb-capstone";
       asd = "gtirb-capstone";
     });
@@ -36039,11 +36594,11 @@ in {
   };
   gtirb-functions = {
     pname = "gtirb-functions";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "gtirb-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtirb-functions/2022-07-07/gtirb-functions-20220707-git.tgz";
-      sha256 = "0q16qww2xs6gds6v95i75qps3c22wsx35iy686pgqc9ljq9hvb3z";
+      url = "http://beta.quicklisp.org/archive/gtirb-functions/2022-11-06/gtirb-functions-20221106-git.tgz";
+      sha256 = "1wf4i4c687krh3b1p14y3v6k8356b0m7a4dng7309vbs2kagw5ri";
       system = "gtirb-functions";
       asd = "gtirb-functions";
     });
@@ -36097,29 +36652,29 @@ in {
   };
   gtwiwtg = {
     pname = "gtwiwtg";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "gtwiwtg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-02-20/gtwiwtg-20220220-git.tgz";
-      sha256 = "1gn538p9q8mbbmpq29qssjxhc7wjiln05xd6j9b8sqh5rcrnss0y";
+      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-11-06/gtwiwtg-20221106-git.tgz";
+      sha256 = "07wzaizp9jr6x8yvivk3iak2q7yh1ps0mj5mrd6i7y2f614gl8ll";
       system = "gtwiwtg";
       asd = "gtwiwtg";
     });
     systems = [ "gtwiwtg" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "testiere" pkgs) ];
   };
   gtwiwtg-test = {
     pname = "gtwiwtg-test";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "gtwiwtg-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-02-20/gtwiwtg-20220220-git.tgz";
-      sha256 = "1gn538p9q8mbbmpq29qssjxhc7wjiln05xd6j9b8sqh5rcrnss0y";
+      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-11-06/gtwiwtg-20221106-git.tgz";
+      sha256 = "07wzaizp9jr6x8yvivk3iak2q7yh1ps0mj5mrd6i7y2f614gl8ll";
       system = "gtwiwtg-test";
       asd = "gtwiwtg-test";
     });
     systems = [ "gtwiwtg-test" ];
-    lispLibs = [ (getAttr "gtwiwtg" pkgs) (getAttr "osicat" pkgs) (getAttr "prove" pkgs) (getAttr "prove-asdf" pkgs) ];
+    lispLibs = [ (getAttr "gtwiwtg" pkgs) ];
   };
   gtype = {
     pname = "gtype";
@@ -36149,11 +36704,11 @@ in {
   };
   gute = {
     pname = "gute";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "gute" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gute/2022-07-07/gute-20220707-git.tgz";
-      sha256 = "0i1s4k49zz2syczcaalrn2kv12nypl94l93s9pqh34kacvqjzdwg";
+      url = "http://beta.quicklisp.org/archive/gute/2022-11-06/gute-20221106-git.tgz";
+      sha256 = "1d1m4qaygvmkglwdqlnhkvwq0wrig13h97w8ansfkyig359vpzy0";
       system = "gute";
       asd = "gute";
     });
@@ -36162,11 +36717,11 @@ in {
   };
   gute_slash_tests = {
     pname = "gute_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "gute" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gute/2022-07-07/gute-20220707-git.tgz";
-      sha256 = "0i1s4k49zz2syczcaalrn2kv12nypl94l93s9pqh34kacvqjzdwg";
+      url = "http://beta.quicklisp.org/archive/gute/2022-11-06/gute-20221106-git.tgz";
+      sha256 = "1d1m4qaygvmkglwdqlnhkvwq0wrig13h97w8ansfkyig359vpzy0";
       system = "gute";
       asd = "gute";
     });
@@ -36243,11 +36798,11 @@ in {
   };
   harmony = {
     pname = "harmony";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "harmony" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/harmony/2022-07-07/harmony-20220707-git.tgz";
-      sha256 = "1w0mmi389m200xc7qpf03kvljw0kqp6xrw76s3bq0mg8gvz62iy6";
+      url = "http://beta.quicklisp.org/archive/harmony/2022-11-06/harmony-20221106-git.tgz";
+      sha256 = "1s8msnlscsa1138l1vrld9rwl1ib56caxkc4hr938wbihqg9gigs";
       system = "harmony";
       asd = "harmony";
     });
@@ -36399,11 +36954,11 @@ in {
   };
   hello-builder = {
     pname = "hello-builder";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "hello-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2022-07-07/clog-20220707-git.tgz";
-      sha256 = "0y3ji5r9km6g02sjk1zxh2v9bvz8lxv5849majqycf0rqqcqhfcx";
+      url = "http://beta.quicklisp.org/archive/clog/2022-11-06/clog-20221106-git.tgz";
+      sha256 = "135mj69shjayml9xfwg3sccfw5r901lzmf5vj5crnp9wywjfzywx";
       system = "hello-builder";
       asd = "hello-builder";
     });
@@ -36412,11 +36967,11 @@ in {
   };
   hello-clog = {
     pname = "hello-clog";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "hello-clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2022-07-07/clog-20220707-git.tgz";
-      sha256 = "0y3ji5r9km6g02sjk1zxh2v9bvz8lxv5849majqycf0rqqcqhfcx";
+      url = "http://beta.quicklisp.org/archive/clog/2022-11-06/clog-20221106-git.tgz";
+      sha256 = "135mj69shjayml9xfwg3sccfw5r901lzmf5vj5crnp9wywjfzywx";
       system = "hello-clog";
       asd = "hello-clog";
     });
@@ -36859,11 +37414,11 @@ in {
   };
   http2 = {
     pname = "http2";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
@@ -36872,80 +37427,80 @@ in {
   };
   http2_slash_all = {
     pname = "http2_all";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
     systems = [ "http2/all" ];
-    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "fiasco" pkgs) (getAttr "http2" pkgs) (getAttr "puri" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "fiasco" pkgs) (getAttr "gzip-stream" pkgs) (getAttr "http2" pkgs) (getAttr "parenscript" pkgs) (getAttr "puri" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
     meta = {
       broken = true;
     };
   };
   http2_slash_client = {
     pname = "http2_client";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
     systems = [ "http2/client" ];
-    lispLibs = [ (getAttr "cl_plus_ssl" pkgs) (getAttr "http2" pkgs) (getAttr "puri" pkgs) ];
+    lispLibs = [ (getAttr "cl_plus_ssl" pkgs) (getAttr "gzip-stream" pkgs) (getAttr "http2" pkgs) (getAttr "puri" pkgs) ];
     meta = {
       broken = true;
     };
   };
   http2_slash_server = {
     pname = "http2_server";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
     systems = [ "http2/server" ];
-    lispLibs = [ (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "http2" pkgs) (getAttr "puri" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "http2" pkgs) (getAttr "parenscript" pkgs) (getAttr "puri" pkgs) ];
     meta = {
       broken = true;
     };
   };
   http2_slash_test = {
     pname = "http2_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
     systems = [ "http2/test" ];
-    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "fiasco" pkgs) (getAttr "http2" pkgs) (getAttr "puri" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "cl-who" pkgs) (getAttr "fiasco" pkgs) (getAttr "gzip-stream" pkgs) (getAttr "http2" pkgs) (getAttr "parenscript" pkgs) (getAttr "puri" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
     meta = {
       broken = true;
     };
   };
   http2_slash_tls = {
     pname = "http2_tls";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "http2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/http2/2022-07-07/http2-20220707-git.tgz";
-      sha256 = "06f90zr632vk1qx0bjkcd032qrs018d2c9lv0rgcg9jziawysjj3";
+      url = "http://beta.quicklisp.org/archive/http2/2022-11-06/http2-20221106-git.tgz";
+      sha256 = "0503pbp43slwhg3n9d3x16qbiqmwc1vvlgl2fkxv85nl4ygrkl4f";
       system = "http2";
       asd = "http2";
     });
     systems = [ "http2/tls" ];
-    lispLibs = [ (getAttr "cl_plus_ssl" pkgs) (getAttr "http2" pkgs) ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "http2" pkgs) ];
     meta = {
       broken = true;
     };
@@ -37441,6 +37996,9 @@ in {
     });
     systems = [ "hu.dwim.graphviz" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "metabang-bind" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_graphviz_dot_documentation = {
     pname = "hu.dwim.graphviz.documentation";
@@ -37480,6 +38038,9 @@ in {
     });
     systems = [ "hu.dwim.logger" ];
     lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_def_plus_hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star_plus_hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) (getAttr "local-time" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_logger_plus_iolib = {
     pname = "hu.dwim.logger+iolib";
@@ -37831,6 +38392,9 @@ in {
     });
     systems = [ "hu.dwim.quasi-quote" ];
     lispLibs = [ (getAttr "babel" pkgs) (getAttr "babel-streams" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star_plus_hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_syntax-sugar" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) (getAttr "hu_dot_dwim_dot_walker" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_quasi-quote_dot_css = {
     pname = "hu.dwim.quasi-quote.css";
@@ -38168,6 +38732,9 @@ in {
     });
     systems = [ "hu.dwim.serializer" ];
     lispLibs = [ (getAttr "babel" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_syntax-sugar" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_serializer_dot_documentation = {
     pname = "hu.dwim.serializer.documentation";
@@ -38829,6 +39396,9 @@ in {
     });
     systems = [ "hu.dwim.zlib" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_zlib_slash_fancy = {
     pname = "hu.dwim.zlib_fancy";
@@ -38890,24 +39460,24 @@ in {
   };
   hunchensocket = {
     pname = "hunchensocket";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "hunchensocket" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/hunchensocket/2021-05-31/hunchensocket-20210531-git.tgz";
-      sha256 = "15j7wpxadil5aapbmx67ih06mjrc4rp5d8x8xww6qbmw14rbk7ww";
+      url = "http://beta.quicklisp.org/archive/hunchensocket/2022-11-06/hunchensocket-20221106-git.tgz";
+      sha256 = "1vhd009lwl62l1czmhsalblxmyz4x9v3nspjflpajwm1db5rnd7h";
       system = "hunchensocket";
       asd = "hunchensocket";
     });
     systems = [ "hunchensocket" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "chunga" pkgs) (getAttr "cl-fad" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "ironclad" pkgs) (getAttr "trivial-backtrace" pkgs) (getAttr "trivial-utf-8" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "chunga" pkgs) (getAttr "cl-base64" pkgs) (getAttr "cl-fad" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "sha1" pkgs) (getAttr "trivial-backtrace" pkgs) (getAttr "trivial-utf-8" pkgs) ];
   };
   hunchensocket-tests = {
     pname = "hunchensocket-tests";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "hunchensocket-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/hunchensocket/2021-05-31/hunchensocket-20210531-git.tgz";
-      sha256 = "15j7wpxadil5aapbmx67ih06mjrc4rp5d8x8xww6qbmw14rbk7ww";
+      url = "http://beta.quicklisp.org/archive/hunchensocket/2022-11-06/hunchensocket-20221106-git.tgz";
+      sha256 = "1vhd009lwl62l1czmhsalblxmyz4x9v3nspjflpajwm1db5rnd7h";
       system = "hunchensocket-tests";
       asd = "hunchensocket";
     });
@@ -38981,11 +39551,11 @@ in {
   };
   hunchentoot-errors = {
     pname = "hunchentoot-errors";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "hunchentoot-errors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/hunchentoot-errors/2022-07-07/hunchentoot-errors-20220707-git.tgz";
-      sha256 = "101fqfgbw24avcnf1n6p2sr32r2i14md31a6317zjgb8wk445mp8";
+      url = "http://beta.quicklisp.org/archive/hunchentoot-errors/2022-11-06/hunchentoot-errors-20221106-git.tgz";
+      sha256 = "1wv4p1wyz40kk9z4dabyk4xqlv78zq3inhvaqnwrhxww2w2cim5z";
       system = "hunchentoot-errors";
       asd = "hunchentoot-errors";
     });
@@ -39312,11 +39882,11 @@ in {
   };
   imago = {
     pname = "imago";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39325,11 +39895,11 @@ in {
   };
   imago_slash_bit-io = {
     pname = "imago_bit-io";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39341,11 +39911,11 @@ in {
   };
   imago_slash_jpeg-turbo = {
     pname = "imago_jpeg-turbo";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39357,11 +39927,11 @@ in {
   };
   imago_slash_jupyter = {
     pname = "imago_jupyter";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39373,11 +39943,11 @@ in {
   };
   imago_slash_pngload = {
     pname = "imago_pngload";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39389,11 +39959,11 @@ in {
   };
   imago_slash_tests = {
     pname = "imago_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2022-07-07/imago-20220707-git.tgz";
-      sha256 = "18fqw7fw9a20l19pxgsap0lrxpzk5aq64pkj1qk6lgp8fw7pwlw3";
+      url = "http://beta.quicklisp.org/archive/imago/2022-11-06/imago-20221106-git.tgz";
+      sha256 = "1s2adbz84ibp8j4f4zxb0c45qcrih4cdl44z1z379rvj8wqmy1gn";
       system = "imago";
       asd = "imago";
     });
@@ -39418,11 +39988,11 @@ in {
   };
   in-nomine = {
     pname = "in-nomine";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "in-nomine" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/in-nomine/2022-02-20/in-nomine-20220220-git.tgz";
-      sha256 = "11ivzl28aa7r5csk0dk7gk1iwm8f50xsaj8c7sy6m0dccbdvlkly";
+      url = "http://beta.quicklisp.org/archive/in-nomine/2022-11-06/in-nomine-20221106-git.tgz";
+      sha256 = "1r28c3c7bbk91fk4w80x2mm0n3czkavip9qfbvgyd19mlarkdwv5";
       system = "in-nomine";
       asd = "in-nomine";
     });
@@ -39431,11 +40001,11 @@ in {
   };
   in-nomine_slash_test = {
     pname = "in-nomine_test";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "in-nomine" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/in-nomine/2022-02-20/in-nomine-20220220-git.tgz";
-      sha256 = "11ivzl28aa7r5csk0dk7gk1iwm8f50xsaj8c7sy6m0dccbdvlkly";
+      url = "http://beta.quicklisp.org/archive/in-nomine/2022-11-06/in-nomine-20221106-git.tgz";
+      sha256 = "1r28c3c7bbk91fk4w80x2mm0n3czkavip9qfbvgyd19mlarkdwv5";
       system = "in-nomine";
       asd = "in-nomine";
     });
@@ -39581,6 +40151,19 @@ in {
     systems = [ "infix-math" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "asdf-package-system" pkgs) (getAttr "parse-number" pkgs) (getAttr "serapeum" pkgs) (getAttr "wu-decimal" pkgs) ];
   };
+  infix-reader = {
+    pname = "infix-reader";
+    version = "20221106-git";
+    asds = [ "infix-reader" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/infix-reader/2022-11-06/infix-reader-20221106-git.tgz";
+      sha256 = "16b6cw4w80p3yxsv0pqaiq0ay1v3jswlav2mlfsmhawpvhxsmb7z";
+      system = "infix-reader";
+      asd = "infix-reader";
+    });
+    systems = [ "infix-reader" ];
+    lispLibs = [  ];
+  };
   inheriting-readers = {
     pname = "inheriting-readers";
     version = "1.0.1";
@@ -39711,6 +40294,35 @@ in {
     systems = [ "inotify" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "iolib" pkgs) ];
   };
+  input-event-codes = {
+    pname = "input-event-codes";
+    version = "20221106-git";
+    asds = [ "input-event-codes" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/input-event-codes/2022-11-06/input-event-codes-20221106-git.tgz";
+      sha256 = "1m96m9ia4frcn2xqaw4mfspjjzwl8gyj4k4rv0lq28va4s6mkgii";
+      system = "input-event-codes";
+      asd = "input-event-codes";
+    });
+    systems = [ "input-event-codes" ];
+    lispLibs = [ (getAttr "trivial-features" pkgs) ];
+  };
+  input-event-codes_slash_test = {
+    pname = "input-event-codes_test";
+    version = "20221106-git";
+    asds = [ "input-event-codes" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/input-event-codes/2022-11-06/input-event-codes-20221106-git.tgz";
+      sha256 = "1m96m9ia4frcn2xqaw4mfspjjzwl8gyj4k4rv0lq28va4s6mkgii";
+      system = "input-event-codes";
+      asd = "input-event-codes";
+    });
+    systems = [ "input-event-codes/test" ];
+    lispLibs = [ (getAttr "input-event-codes" pkgs) (getAttr "parachute" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   inquisitor = {
     pname = "inquisitor";
     version = "20190521-git";
@@ -39762,6 +40374,19 @@ in {
     });
     systems = [ "inquisitor-test" ];
     lispLibs = [ (getAttr "babel" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "inquisitor" pkgs) (getAttr "prove" pkgs) (getAttr "prove-asdf" pkgs) ];
+  };
+  instance-tracking = {
+    pname = "instance-tracking";
+    version = "20221106-git";
+    asds = [ "instance-tracking" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/instance-tracking/2022-11-06/instance-tracking-20221106-git.tgz";
+      sha256 = "0bbxvl14ahws30x5dgjhilhybjgn1jfcbxwr8ji1ls31zf88fphr";
+      system = "instance-tracking";
+      asd = "instance-tracking";
+    });
+    systems = [ "instance-tracking" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) ];
   };
   integral = {
     pname = "integral";
@@ -40182,11 +40807,11 @@ in {
   };
   ironclad = {
     pname = "ironclad";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40195,11 +40820,11 @@ in {
   };
   ironclad-text = {
     pname = "ironclad-text";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad-text" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad-text";
       asd = "ironclad-text";
     });
@@ -40208,11 +40833,11 @@ in {
   };
   ironclad_slash_aead_slash_eax = {
     pname = "ironclad_aead_eax";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40224,11 +40849,11 @@ in {
   };
   ironclad_slash_aead_slash_etm = {
     pname = "ironclad_aead_etm";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40240,11 +40865,11 @@ in {
   };
   ironclad_slash_aead_slash_gcm = {
     pname = "ironclad_aead_gcm";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40256,11 +40881,11 @@ in {
   };
   ironclad_slash_aeads = {
     pname = "ironclad_aeads";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40272,11 +40897,11 @@ in {
   };
   ironclad_slash_cipher_slash_aes = {
     pname = "ironclad_cipher_aes";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40288,11 +40913,11 @@ in {
   };
   ironclad_slash_cipher_slash_arcfour = {
     pname = "ironclad_cipher_arcfour";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40304,11 +40929,11 @@ in {
   };
   ironclad_slash_cipher_slash_aria = {
     pname = "ironclad_cipher_aria";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40320,11 +40945,11 @@ in {
   };
   ironclad_slash_cipher_slash_blowfish = {
     pname = "ironclad_cipher_blowfish";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40336,11 +40961,11 @@ in {
   };
   ironclad_slash_cipher_slash_camellia = {
     pname = "ironclad_cipher_camellia";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40352,11 +40977,11 @@ in {
   };
   ironclad_slash_cipher_slash_cast5 = {
     pname = "ironclad_cipher_cast5";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40368,11 +40993,11 @@ in {
   };
   ironclad_slash_cipher_slash_chacha = {
     pname = "ironclad_cipher_chacha";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40384,11 +41009,11 @@ in {
   };
   ironclad_slash_cipher_slash_des = {
     pname = "ironclad_cipher_des";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40400,11 +41025,11 @@ in {
   };
   ironclad_slash_cipher_slash_idea = {
     pname = "ironclad_cipher_idea";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40416,11 +41041,11 @@ in {
   };
   ironclad_slash_cipher_slash_kalyna = {
     pname = "ironclad_cipher_kalyna";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40432,11 +41057,11 @@ in {
   };
   ironclad_slash_cipher_slash_keystream = {
     pname = "ironclad_cipher_keystream";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40448,11 +41073,11 @@ in {
   };
   ironclad_slash_cipher_slash_kuznyechik = {
     pname = "ironclad_cipher_kuznyechik";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40464,11 +41089,11 @@ in {
   };
   ironclad_slash_cipher_slash_misty1 = {
     pname = "ironclad_cipher_misty1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40480,11 +41105,11 @@ in {
   };
   ironclad_slash_cipher_slash_rc2 = {
     pname = "ironclad_cipher_rc2";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40496,11 +41121,11 @@ in {
   };
   ironclad_slash_cipher_slash_rc5 = {
     pname = "ironclad_cipher_rc5";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40512,11 +41137,11 @@ in {
   };
   ironclad_slash_cipher_slash_rc6 = {
     pname = "ironclad_cipher_rc6";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40528,11 +41153,11 @@ in {
   };
   ironclad_slash_cipher_slash_salsa20 = {
     pname = "ironclad_cipher_salsa20";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40544,11 +41169,11 @@ in {
   };
   ironclad_slash_cipher_slash_seed = {
     pname = "ironclad_cipher_seed";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40560,11 +41185,11 @@ in {
   };
   ironclad_slash_cipher_slash_serpent = {
     pname = "ironclad_cipher_serpent";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40576,11 +41201,11 @@ in {
   };
   ironclad_slash_cipher_slash_sm4 = {
     pname = "ironclad_cipher_sm4";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40592,11 +41217,11 @@ in {
   };
   ironclad_slash_cipher_slash_sosemanuk = {
     pname = "ironclad_cipher_sosemanuk";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40608,11 +41233,11 @@ in {
   };
   ironclad_slash_cipher_slash_square = {
     pname = "ironclad_cipher_square";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40624,11 +41249,11 @@ in {
   };
   ironclad_slash_cipher_slash_tea = {
     pname = "ironclad_cipher_tea";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40640,11 +41265,11 @@ in {
   };
   ironclad_slash_cipher_slash_threefish = {
     pname = "ironclad_cipher_threefish";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40656,11 +41281,11 @@ in {
   };
   ironclad_slash_cipher_slash_twofish = {
     pname = "ironclad_cipher_twofish";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40672,11 +41297,11 @@ in {
   };
   ironclad_slash_cipher_slash_xchacha = {
     pname = "ironclad_cipher_xchacha";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40688,11 +41313,11 @@ in {
   };
   ironclad_slash_cipher_slash_xor = {
     pname = "ironclad_cipher_xor";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40704,11 +41329,11 @@ in {
   };
   ironclad_slash_cipher_slash_xsalsa20 = {
     pname = "ironclad_cipher_xsalsa20";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40720,11 +41345,11 @@ in {
   };
   ironclad_slash_cipher_slash_xtea = {
     pname = "ironclad_cipher_xtea";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40736,11 +41361,11 @@ in {
   };
   ironclad_slash_ciphers = {
     pname = "ironclad_ciphers";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40752,11 +41377,11 @@ in {
   };
   ironclad_slash_core = {
     pname = "ironclad_core";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40768,11 +41393,11 @@ in {
   };
   ironclad_slash_digest_slash_adler32 = {
     pname = "ironclad_digest_adler32";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40784,11 +41409,11 @@ in {
   };
   ironclad_slash_digest_slash_blake2 = {
     pname = "ironclad_digest_blake2";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40800,11 +41425,11 @@ in {
   };
   ironclad_slash_digest_slash_blake2s = {
     pname = "ironclad_digest_blake2s";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40816,11 +41441,11 @@ in {
   };
   ironclad_slash_digest_slash_crc24 = {
     pname = "ironclad_digest_crc24";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40832,11 +41457,11 @@ in {
   };
   ironclad_slash_digest_slash_crc32 = {
     pname = "ironclad_digest_crc32";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40848,11 +41473,11 @@ in {
   };
   ironclad_slash_digest_slash_groestl = {
     pname = "ironclad_digest_groestl";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40864,11 +41489,11 @@ in {
   };
   ironclad_slash_digest_slash_jh = {
     pname = "ironclad_digest_jh";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40880,11 +41505,11 @@ in {
   };
   ironclad_slash_digest_slash_kupyna = {
     pname = "ironclad_digest_kupyna";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40896,11 +41521,11 @@ in {
   };
   ironclad_slash_digest_slash_md2 = {
     pname = "ironclad_digest_md2";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40912,11 +41537,11 @@ in {
   };
   ironclad_slash_digest_slash_md4 = {
     pname = "ironclad_digest_md4";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40928,11 +41553,11 @@ in {
   };
   ironclad_slash_digest_slash_md5 = {
     pname = "ironclad_digest_md5";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40944,11 +41569,11 @@ in {
   };
   ironclad_slash_digest_slash_ripemd-128 = {
     pname = "ironclad_digest_ripemd-128";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40960,11 +41585,11 @@ in {
   };
   ironclad_slash_digest_slash_ripemd-160 = {
     pname = "ironclad_digest_ripemd-160";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40976,11 +41601,11 @@ in {
   };
   ironclad_slash_digest_slash_sha1 = {
     pname = "ironclad_digest_sha1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -40992,11 +41617,11 @@ in {
   };
   ironclad_slash_digest_slash_sha256 = {
     pname = "ironclad_digest_sha256";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41008,11 +41633,11 @@ in {
   };
   ironclad_slash_digest_slash_sha3 = {
     pname = "ironclad_digest_sha3";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41024,11 +41649,11 @@ in {
   };
   ironclad_slash_digest_slash_sha512 = {
     pname = "ironclad_digest_sha512";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41040,11 +41665,11 @@ in {
   };
   ironclad_slash_digest_slash_skein = {
     pname = "ironclad_digest_skein";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41056,11 +41681,11 @@ in {
   };
   ironclad_slash_digest_slash_sm3 = {
     pname = "ironclad_digest_sm3";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41072,11 +41697,11 @@ in {
   };
   ironclad_slash_digest_slash_streebog = {
     pname = "ironclad_digest_streebog";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41088,11 +41713,11 @@ in {
   };
   ironclad_slash_digest_slash_tiger = {
     pname = "ironclad_digest_tiger";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41104,11 +41729,11 @@ in {
   };
   ironclad_slash_digest_slash_tree-hash = {
     pname = "ironclad_digest_tree-hash";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41120,11 +41745,11 @@ in {
   };
   ironclad_slash_digest_slash_whirlpool = {
     pname = "ironclad_digest_whirlpool";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41136,11 +41761,11 @@ in {
   };
   ironclad_slash_digests = {
     pname = "ironclad_digests";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41152,11 +41777,11 @@ in {
   };
   ironclad_slash_kdf_slash_argon2 = {
     pname = "ironclad_kdf_argon2";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41168,11 +41793,11 @@ in {
   };
   ironclad_slash_kdf_slash_bcrypt = {
     pname = "ironclad_kdf_bcrypt";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41184,11 +41809,11 @@ in {
   };
   ironclad_slash_kdf_slash_hmac = {
     pname = "ironclad_kdf_hmac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41200,11 +41825,11 @@ in {
   };
   ironclad_slash_kdf_slash_password-hash = {
     pname = "ironclad_kdf_password-hash";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41216,11 +41841,11 @@ in {
   };
   ironclad_slash_kdf_slash_pkcs5 = {
     pname = "ironclad_kdf_pkcs5";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41232,11 +41857,11 @@ in {
   };
   ironclad_slash_kdf_slash_scrypt = {
     pname = "ironclad_kdf_scrypt";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41248,11 +41873,11 @@ in {
   };
   ironclad_slash_kdfs = {
     pname = "ironclad_kdfs";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41264,11 +41889,11 @@ in {
   };
   ironclad_slash_mac_slash_blake2-mac = {
     pname = "ironclad_mac_blake2-mac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41280,11 +41905,11 @@ in {
   };
   ironclad_slash_mac_slash_blake2s-mac = {
     pname = "ironclad_mac_blake2s-mac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41296,11 +41921,11 @@ in {
   };
   ironclad_slash_mac_slash_cmac = {
     pname = "ironclad_mac_cmac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41312,11 +41937,11 @@ in {
   };
   ironclad_slash_mac_slash_gmac = {
     pname = "ironclad_mac_gmac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41328,11 +41953,11 @@ in {
   };
   ironclad_slash_mac_slash_hmac = {
     pname = "ironclad_mac_hmac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41344,11 +41969,11 @@ in {
   };
   ironclad_slash_mac_slash_poly1305 = {
     pname = "ironclad_mac_poly1305";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41360,11 +41985,11 @@ in {
   };
   ironclad_slash_mac_slash_siphash = {
     pname = "ironclad_mac_siphash";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41376,11 +42001,11 @@ in {
   };
   ironclad_slash_mac_slash_skein-mac = {
     pname = "ironclad_mac_skein-mac";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41392,11 +42017,11 @@ in {
   };
   ironclad_slash_macs = {
     pname = "ironclad_macs";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41408,11 +42033,11 @@ in {
   };
   ironclad_slash_prng_slash_fortuna = {
     pname = "ironclad_prng_fortuna";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41424,11 +42049,11 @@ in {
   };
   ironclad_slash_prngs = {
     pname = "ironclad_prngs";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41440,11 +42065,11 @@ in {
   };
   ironclad_slash_public-key_slash_curve25519 = {
     pname = "ironclad_public-key_curve25519";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41456,11 +42081,11 @@ in {
   };
   ironclad_slash_public-key_slash_curve448 = {
     pname = "ironclad_public-key_curve448";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41472,11 +42097,11 @@ in {
   };
   ironclad_slash_public-key_slash_dsa = {
     pname = "ironclad_public-key_dsa";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41488,11 +42113,11 @@ in {
   };
   ironclad_slash_public-key_slash_ed25519 = {
     pname = "ironclad_public-key_ed25519";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41504,11 +42129,11 @@ in {
   };
   ironclad_slash_public-key_slash_ed448 = {
     pname = "ironclad_public-key_ed448";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41520,11 +42145,11 @@ in {
   };
   ironclad_slash_public-key_slash_elgamal = {
     pname = "ironclad_public-key_elgamal";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41536,11 +42161,11 @@ in {
   };
   ironclad_slash_public-key_slash_rsa = {
     pname = "ironclad_public-key_rsa";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41552,11 +42177,11 @@ in {
   };
   ironclad_slash_public-key_slash_secp256k1 = {
     pname = "ironclad_public-key_secp256k1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41568,11 +42193,11 @@ in {
   };
   ironclad_slash_public-key_slash_secp256r1 = {
     pname = "ironclad_public-key_secp256r1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41584,11 +42209,11 @@ in {
   };
   ironclad_slash_public-key_slash_secp384r1 = {
     pname = "ironclad_public-key_secp384r1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41600,11 +42225,11 @@ in {
   };
   ironclad_slash_public-key_slash_secp521r1 = {
     pname = "ironclad_public-key_secp521r1";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41616,11 +42241,11 @@ in {
   };
   ironclad_slash_public-keys = {
     pname = "ironclad_public-keys";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -41632,11 +42257,11 @@ in {
   };
   ironclad_slash_tests = {
     pname = "ironclad_tests";
-    version = "v0.57";
+    version = "v0.58";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-02-20/ironclad-v0.57.tgz";
-      sha256 = "123qnf4rmi06vyfmnpdzbjskz8vk35kppjpmms21bxhb7rhxzlh2";
+      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
+      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -42034,11 +42659,11 @@ in {
   };
   jp-numeral = {
     pname = "jp-numeral";
-    version = "20190521-git";
+    version = "20221106-git";
     asds = [ "jp-numeral" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jp-numeral/2019-05-21/jp-numeral-20190521-git.tgz";
-      sha256 = "03gn6j1m80qz57rkrwi999fvsm67ybpcms3cm6y4h6s65aba30fa";
+      url = "http://beta.quicklisp.org/archive/jp-numeral/2022-11-06/jp-numeral-20221106-git.tgz";
+      sha256 = "1xqvah6mjd8lb2n19wzsn29q6az9kx1c48js3yj0ij73kjncby30";
       system = "jp-numeral";
       asd = "jp-numeral";
     });
@@ -42047,11 +42672,11 @@ in {
   };
   jp-numeral-test = {
     pname = "jp-numeral-test";
-    version = "20190521-git";
+    version = "20221106-git";
     asds = [ "jp-numeral-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jp-numeral/2019-05-21/jp-numeral-20190521-git.tgz";
-      sha256 = "03gn6j1m80qz57rkrwi999fvsm67ybpcms3cm6y4h6s65aba30fa";
+      url = "http://beta.quicklisp.org/archive/jp-numeral/2022-11-06/jp-numeral-20221106-git.tgz";
+      sha256 = "1xqvah6mjd8lb2n19wzsn29q6az9kx1c48js3yj0ij73kjncby30";
       system = "jp-numeral-test";
       asd = "jp-numeral-test";
     });
@@ -42139,6 +42764,19 @@ in {
     systems = [ "js-parser-tests" ];
     lispLibs = [ (getAttr "js-parser" pkgs) ];
   };
+  json-lib = {
+    pname = "json-lib";
+    version = "20221106-git";
+    asds = [ "json-lib" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/json-lib/2022-11-06/json-lib-20221106-git.tgz";
+      sha256 = "0a9f70niknjnggpn200idvyx77578qjn07qvbs0rknly31b98bh2";
+      system = "json-lib";
+      asd = "json-lib";
+    });
+    systems = [ "json-lib" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "babel" pkgs) (getAttr "cl-fad" pkgs) (getAttr "str" pkgs) (getAttr "parse-float" pkgs) ];
+  };
   json-mop = {
     pname = "json-mop";
     version = "20210411-git";
@@ -42193,11 +42831,11 @@ in {
   };
   json-schema = {
     pname = "json-schema";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "json-schema" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-schema/2022-02-20/json-schema-20220220-git.tgz";
-      sha256 = "0azmlvx7plmhdf2gaf1sq7b7g968riskycfgdz12r722mzk4pcns";
+      url = "http://beta.quicklisp.org/archive/json-schema/2022-11-06/json-schema-20221106-git.tgz";
+      sha256 = "11rgnj14p8x059zx8hs02jji1p69v8kix783vf557zpcbydrw2mn";
       system = "json-schema";
       asd = "json-schema";
     });
@@ -42206,11 +42844,11 @@ in {
   };
   json-schema_slash_json-schema-test-suite = {
     pname = "json-schema_json-schema-test-suite";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "json-schema" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-schema/2022-02-20/json-schema-20220220-git.tgz";
-      sha256 = "0azmlvx7plmhdf2gaf1sq7b7g968riskycfgdz12r722mzk4pcns";
+      url = "http://beta.quicklisp.org/archive/json-schema/2022-11-06/json-schema-20221106-git.tgz";
+      sha256 = "11rgnj14p8x059zx8hs02jji1p69v8kix783vf557zpcbydrw2mn";
       system = "json-schema";
       asd = "json-schema";
     });
@@ -42222,11 +42860,11 @@ in {
   };
   json-schema_slash_test = {
     pname = "json-schema_test";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "json-schema" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-schema/2022-02-20/json-schema-20220220-git.tgz";
-      sha256 = "0azmlvx7plmhdf2gaf1sq7b7g968riskycfgdz12r722mzk4pcns";
+      url = "http://beta.quicklisp.org/archive/json-schema/2022-11-06/json-schema-20221106-git.tgz";
+      sha256 = "11rgnj14p8x059zx8hs02jji1p69v8kix783vf557zpcbydrw2mn";
       system = "json-schema";
       asd = "json-schema";
     });
@@ -42238,11 +42876,11 @@ in {
   };
   json-schema_slash_unit-tests = {
     pname = "json-schema_unit-tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "json-schema" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-schema/2022-02-20/json-schema-20220220-git.tgz";
-      sha256 = "0azmlvx7plmhdf2gaf1sq7b7g968riskycfgdz12r722mzk4pcns";
+      url = "http://beta.quicklisp.org/archive/json-schema/2022-11-06/json-schema-20221106-git.tgz";
+      sha256 = "11rgnj14p8x059zx8hs02jji1p69v8kix783vf557zpcbydrw2mn";
       system = "json-schema";
       asd = "json-schema";
     });
@@ -42278,26 +42916,13 @@ in {
     systems = [ "json-streams-tests" ];
     lispLibs = [ (getAttr "cl-quickcheck" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "json-streams" pkgs) ];
   };
-  json-template = {
-    pname = "json-template";
-    version = "20170630-git";
-    asds = [ "json-template" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-json-template/2017-06-30/cl-json-template-20170630-git.tgz";
-      sha256 = "15492p6zj7aqr09aa91qxslxy6qzly2w8n5hji28bj5gl4qdypz1";
-      system = "json-template";
-      asd = "json-template";
-    });
-    systems = [ "json-template" ];
-    lispLibs = [  ];
-  };
   jsonrpc = {
     pname = "jsonrpc";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "jsonrpc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jsonrpc/2021-10-20/jsonrpc-20211020-git.tgz";
-      sha256 = "1kayfwlhkpj9x06hb9v7gx49kbjx14rarvrcnsxvacwrir11mkr4";
+      url = "http://beta.quicklisp.org/archive/jsonrpc/2022-11-06/jsonrpc-20221106-git.tgz";
+      sha256 = "0g8g9mak6sl27cbf6rrw9pwk2qxx03ijzihhqmcrrr33y9zkdqkk";
       system = "jsonrpc";
       asd = "jsonrpc";
     });
@@ -42410,11 +43035,11 @@ in {
   };
   kaputt = {
     pname = "kaputt";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "kaputt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-03-31/cl-kaputt-20220331-git.tgz";
-      sha256 = "0g9a14i4mdy9ywb0sv6jdrxn6s3mpikrwmwmimx1ks7g30219nr3";
+      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-11-06/cl-kaputt-20221106-git.tgz";
+      sha256 = "1jd9lmdzkjm6mawsxczg6czyv7zbmaplq0ikmda0ysh4aq3apnnj";
       system = "kaputt";
       asd = "kaputt";
     });
@@ -42423,11 +43048,11 @@ in {
   };
   kaputt_slash_example = {
     pname = "kaputt_example";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "kaputt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-03-31/cl-kaputt-20220331-git.tgz";
-      sha256 = "0g9a14i4mdy9ywb0sv6jdrxn6s3mpikrwmwmimx1ks7g30219nr3";
+      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-11-06/cl-kaputt-20221106-git.tgz";
+      sha256 = "1jd9lmdzkjm6mawsxczg6czyv7zbmaplq0ikmda0ysh4aq3apnnj";
       system = "kaputt";
       asd = "kaputt";
     });
@@ -42439,11 +43064,11 @@ in {
   };
   kaputt_slash_testsuite = {
     pname = "kaputt_testsuite";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "kaputt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-03-31/cl-kaputt-20220331-git.tgz";
-      sha256 = "0g9a14i4mdy9ywb0sv6jdrxn6s3mpikrwmwmimx1ks7g30219nr3";
+      url = "http://beta.quicklisp.org/archive/cl-kaputt/2022-11-06/cl-kaputt-20221106-git.tgz";
+      sha256 = "1jd9lmdzkjm6mawsxczg6czyv7zbmaplq0ikmda0ysh4aq3apnnj";
       system = "kaputt";
       asd = "kaputt";
     });
@@ -42481,11 +43106,11 @@ in {
   };
   kekule-clj = {
     pname = "kekule-clj";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "kekule-clj" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/kekule-clj/2022-07-07/kekule-clj-20220707-git.tgz";
-      sha256 = "1lp4s9q26nw2rs2k3v23pcqx8zm801s1rlmhkhbn31ska1qvdsmh";
+      url = "http://beta.quicklisp.org/archive/kekule-clj/2022-11-06/kekule-clj-20221106-git.tgz";
+      sha256 = "12bwymk9vh9bdyi85pfgi79815g0vdlj37y85zld13f9cnf4kl3v";
       system = "kekule-clj";
       asd = "kekule-clj";
     });
@@ -42688,11 +43313,11 @@ in {
   };
   lack = {
     pname = "lack";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack";
       asd = "lack";
     });
@@ -42701,11 +43326,11 @@ in {
   };
   lack-app-directory = {
     pname = "lack-app-directory";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-app-directory" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-app-directory";
       asd = "lack-app-directory";
     });
@@ -42714,11 +43339,11 @@ in {
   };
   lack-app-file = {
     pname = "lack-app-file";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-app-file" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-app-file";
       asd = "lack-app-file";
     });
@@ -42727,11 +43352,11 @@ in {
   };
   lack-component = {
     pname = "lack-component";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-component" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-component";
       asd = "lack-component";
     });
@@ -42740,11 +43365,11 @@ in {
   };
   lack-middleware-accesslog = {
     pname = "lack-middleware-accesslog";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-accesslog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-accesslog";
       asd = "lack-middleware-accesslog";
     });
@@ -42766,11 +43391,11 @@ in {
   };
   lack-middleware-auth-basic = {
     pname = "lack-middleware-auth-basic";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-auth-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-auth-basic";
       asd = "lack-middleware-auth-basic";
     });
@@ -42779,11 +43404,11 @@ in {
   };
   lack-middleware-backtrace = {
     pname = "lack-middleware-backtrace";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-backtrace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-backtrace";
       asd = "lack-middleware-backtrace";
     });
@@ -42805,11 +43430,11 @@ in {
   };
   lack-middleware-csrf = {
     pname = "lack-middleware-csrf";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-csrf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-csrf";
       asd = "lack-middleware-csrf";
     });
@@ -42818,11 +43443,11 @@ in {
   };
   lack-middleware-mito = {
     pname = "lack-middleware-mito";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-mito" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2022-07-07/mito-20220707-git.tgz";
-      sha256 = "1r7g7rylmfziivlbzaj2m6ilrdn6imvac9pzjgj5i830p9grlcvc";
+      url = "http://beta.quicklisp.org/archive/mito/2022-11-06/mito-20221106-git.tgz";
+      sha256 = "1wm0kmlg8b7l74s1kxs2yxrv07c6fhfb7yn3018pjh1y28i5cx7n";
       system = "lack-middleware-mito";
       asd = "lack-middleware-mito";
     });
@@ -42831,11 +43456,11 @@ in {
   };
   lack-middleware-mount = {
     pname = "lack-middleware-mount";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-mount" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-mount";
       asd = "lack-middleware-mount";
     });
@@ -42844,11 +43469,11 @@ in {
   };
   lack-middleware-session = {
     pname = "lack-middleware-session";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-session" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-session";
       asd = "lack-middleware-session";
     });
@@ -42857,11 +43482,11 @@ in {
   };
   lack-middleware-static = {
     pname = "lack-middleware-static";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-middleware-static" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-middleware-static";
       asd = "lack-middleware-static";
     });
@@ -42870,11 +43495,11 @@ in {
   };
   lack-request = {
     pname = "lack-request";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-request" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-request";
       asd = "lack-request";
     });
@@ -42883,11 +43508,11 @@ in {
   };
   lack-response = {
     pname = "lack-response";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-response" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-response";
       asd = "lack-response";
     });
@@ -42896,11 +43521,11 @@ in {
   };
   lack-session-store-dbi = {
     pname = "lack-session-store-dbi";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-session-store-dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-session-store-dbi";
       asd = "lack-session-store-dbi";
     });
@@ -42909,11 +43534,11 @@ in {
   };
   lack-session-store-redis = {
     pname = "lack-session-store-redis";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-session-store-redis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-session-store-redis";
       asd = "lack-session-store-redis";
     });
@@ -42922,11 +43547,11 @@ in {
   };
   lack-test = {
     pname = "lack-test";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-test";
       asd = "lack-test";
     });
@@ -42935,11 +43560,11 @@ in {
   };
   lack-util = {
     pname = "lack-util";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-util";
       asd = "lack-util";
     });
@@ -42948,11 +43573,11 @@ in {
   };
   lack-util-writer-stream = {
     pname = "lack-util-writer-stream";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lack-util-writer-stream" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "lack-util-writer-stream";
       asd = "lack-util-writer-stream";
     });
@@ -43233,16 +43858,16 @@ in {
   };
   latter-day-paypal = {
     pname = "latter-day-paypal";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "latter-day-paypal" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/latter-day-paypal/2022-07-07/latter-day-paypal-20220707-git.tgz";
-      sha256 = "1wsn9cz11262ba27aihnw3w8ayvws0xjpmjvkkp9wx7zzsikx7v4";
+      url = "http://beta.quicklisp.org/archive/latter-day-paypal/2022-11-06/latter-day-paypal-20221106-git.tgz";
+      sha256 = "0a4xji2ymmr7s4gq0gc3bhbf62gwfs93ymmpvgsmb0afcsi5099q";
       system = "latter-day-paypal";
       asd = "latter-day-paypal";
     });
     systems = [ "latter-day-paypal" ];
-    lispLibs = [ (getAttr "cl-base64" pkgs) (getAttr "cl-json" pkgs) (getAttr "str" pkgs) (getAttr "cl-tls" pkgs) (getAttr "closer-mop" pkgs) (getAttr "dexador" pkgs) (getAttr "do-urlencode" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "ironclad" pkgs) (getAttr "jonathan" pkgs) (getAttr "local-time" pkgs) ];
+    lispLibs = [ (getAttr "cl-base64" pkgs) (getAttr "str" pkgs) (getAttr "cl-tls" pkgs) (getAttr "closer-mop" pkgs) (getAttr "dexador" pkgs) (getAttr "do-urlencode" pkgs) (getAttr "hunchentoot" pkgs) (getAttr "ironclad" pkgs) (getAttr "jonathan" pkgs) (getAttr "local-time" pkgs) (getAttr "ningle" pkgs) (getAttr "quri" pkgs) ];
   };
   lazy = {
     pname = "lazy";
@@ -43347,6 +43972,19 @@ in {
     });
     systems = [ "lense" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "documentation-utils-extensions" pkgs) ];
+  };
+  lessp = {
+    pname = "lessp";
+    version = "20221106-git";
+    asds = [ "lessp" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-lessp/2022-11-06/cl-lessp-20221106-git.tgz";
+      sha256 = "0i3ia14dzqwjpygd0zn785ff5vqnnmkn75psfpyx0ni3jr71lkq9";
+      system = "lessp";
+      asd = "lessp";
+    });
+    systems = [ "lessp" ];
+    lispLibs = [  ];
   };
   let-over-lambda = {
     pname = "let-over-lambda";
@@ -43574,11 +44212,11 @@ in {
   };
   lib-helper = {
     pname = "lib-helper";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lib-helper" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-07-07/cl-lib-helper-20220707-git.tgz";
-      sha256 = "1gln159hg8dc5v42qpbz6c4j3y8ii7li0jadb7bpd3ls8f1jq84g";
+      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-11-06/cl-lib-helper-20221106-git.tgz";
+      sha256 = "1ml1zy65z2yckh2fa0sdjk1iqhbzzb3xf6ccj63n5ff986jr797k";
       system = "lib-helper";
       asd = "lib-helper";
     });
@@ -43587,11 +44225,11 @@ in {
   };
   lib-helper-test-system = {
     pname = "lib-helper-test-system";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lib-helper-test-system" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-07-07/cl-lib-helper-20220707-git.tgz";
-      sha256 = "1gln159hg8dc5v42qpbz6c4j3y8ii7li0jadb7bpd3ls8f1jq84g";
+      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-11-06/cl-lib-helper-20221106-git.tgz";
+      sha256 = "1ml1zy65z2yckh2fa0sdjk1iqhbzzb3xf6ccj63n5ff986jr797k";
       system = "lib-helper-test-system";
       asd = "lib-helper-test-system";
     });
@@ -43600,11 +44238,11 @@ in {
   };
   lib-helper_slash_test = {
     pname = "lib-helper_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lib-helper" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-07-07/cl-lib-helper-20220707-git.tgz";
-      sha256 = "1gln159hg8dc5v42qpbz6c4j3y8ii7li0jadb7bpd3ls8f1jq84g";
+      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2022-11-06/cl-lib-helper-20221106-git.tgz";
+      sha256 = "1ml1zy65z2yckh2fa0sdjk1iqhbzzb3xf6ccj63n5ff986jr797k";
       system = "lib-helper";
       asd = "lib-helper";
     });
@@ -43746,11 +44384,11 @@ in {
   };
   lift = {
     pname = "lift";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "lift" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2021-12-09/lift-20211209-git.tgz";
-      sha256 = "1yjhyb4x7dryy1n85l0d84nqchr4flvmm50bkaq4yp9vl5a3x3mg";
+      url = "http://beta.quicklisp.org/archive/lift/2022-11-06/lift-20221106-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift";
       asd = "lift";
     });
@@ -43759,11 +44397,11 @@ in {
   };
   lift-documentation = {
     pname = "lift-documentation";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "lift-documentation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2021-12-09/lift-20211209-git.tgz";
-      sha256 = "1yjhyb4x7dryy1n85l0d84nqchr4flvmm50bkaq4yp9vl5a3x3mg";
+      url = "http://beta.quicklisp.org/archive/lift/2022-11-06/lift-20221106-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift-documentation";
       asd = "lift-documentation";
     });
@@ -43772,11 +44410,11 @@ in {
   };
   lift-test = {
     pname = "lift-test";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "lift-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2021-12-09/lift-20211209-git.tgz";
-      sha256 = "1yjhyb4x7dryy1n85l0d84nqchr4flvmm50bkaq4yp9vl5a3x3mg";
+      url = "http://beta.quicklisp.org/archive/lift/2022-11-06/lift-20221106-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift-test";
       asd = "lift-test";
     });
@@ -43866,11 +44504,11 @@ in {
   };
   linear-programming = {
     pname = "linear-programming";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "linear-programming" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/linear-programming/2022-07-07/linear-programming-20220707-git.tgz";
-      sha256 = "030ygv9dk63zchg4zpiiwbkfmcjjcjh2a55adg245pa4zldkh2bz";
+      url = "http://beta.quicklisp.org/archive/linear-programming/2022-11-06/linear-programming-20221106-git.tgz";
+      sha256 = "03lpyywz1q5ky18ivfpqvzmi11h3daqznj6lh73vij9wjlms7yxk";
       system = "linear-programming";
       asd = "linear-programming";
     });
@@ -43879,11 +44517,11 @@ in {
   };
   linear-programming-glpk = {
     pname = "linear-programming-glpk";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "linear-programming-glpk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/linear-programming-glpk/2020-12-20/linear-programming-glpk-20201220-git.tgz";
-      sha256 = "1yazh7l7dphfi4cqqm5a6hfck7mgqc3r2l8sh5bi9bgxqsj3n1lm";
+      url = "http://beta.quicklisp.org/archive/linear-programming-glpk/2022-11-06/linear-programming-glpk-20221106-git.tgz";
+      sha256 = "0vm4qgjvw5k3v62h78j6802dm075aif06hbjw600m3hybn84rs3l";
       system = "linear-programming-glpk";
       asd = "linear-programming-glpk";
     });
@@ -43892,11 +44530,11 @@ in {
   };
   linear-programming-glpk_slash_test = {
     pname = "linear-programming-glpk_test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "linear-programming-glpk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/linear-programming-glpk/2020-12-20/linear-programming-glpk-20201220-git.tgz";
-      sha256 = "1yazh7l7dphfi4cqqm5a6hfck7mgqc3r2l8sh5bi9bgxqsj3n1lm";
+      url = "http://beta.quicklisp.org/archive/linear-programming-glpk/2022-11-06/linear-programming-glpk-20221106-git.tgz";
+      sha256 = "0vm4qgjvw5k3v62h78j6802dm075aif06hbjw600m3hybn84rs3l";
       system = "linear-programming-glpk";
       asd = "linear-programming-glpk";
     });
@@ -43908,11 +44546,11 @@ in {
   };
   linear-programming-test = {
     pname = "linear-programming-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "linear-programming-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/linear-programming/2022-07-07/linear-programming-20220707-git.tgz";
-      sha256 = "030ygv9dk63zchg4zpiiwbkfmcjjcjh2a55adg245pa4zldkh2bz";
+      url = "http://beta.quicklisp.org/archive/linear-programming/2022-11-06/linear-programming-20221106-git.tgz";
+      sha256 = "03lpyywz1q5ky18ivfpqvzmi11h3daqznj6lh73vij9wjlms7yxk";
       system = "linear-programming-test";
       asd = "linear-programming-test";
     });
@@ -43931,6 +44569,35 @@ in {
     });
     systems = [ "linedit" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "osicat" pkgs) (getAttr "terminfo" pkgs) ];
+  };
+  lineva = {
+    pname = "lineva";
+    version = "20221106-git";
+    asds = [ "lineva" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/lineva/2022-11-06/lineva-20221106-git.tgz";
+      sha256 = "193v40llsi51b4zk93fyrg5ll2309waw7ibl4z75bbw73kc4f2wx";
+      system = "lineva";
+      asd = "lineva";
+    });
+    systems = [ "lineva" ];
+    lispLibs = [  ];
+  };
+  lineva_slash_test = {
+    pname = "lineva_test";
+    version = "20221106-git";
+    asds = [ "lineva" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/lineva/2022-11-06/lineva-20221106-git.tgz";
+      sha256 = "193v40llsi51b4zk93fyrg5ll2309waw7ibl4z75bbw73kc4f2wx";
+      system = "lineva";
+      asd = "lineva";
+    });
+    systems = [ "lineva/test" ];
+    lispLibs = [ (getAttr "fiveam" pkgs) (getAttr "lineva" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   linewise-template = {
     pname = "linewise-template";
@@ -44047,24 +44714,24 @@ in {
   };
   lisp-binary = {
     pname = "lisp-binary";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lisp-binary" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-07-07/lisp-binary-20220707-git.tgz";
-      sha256 = "00inm2djqn5ipqw6fsprl5snl017k42fiyaxrcjb9iv1rsrkmgqv";
+      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-11-06/lisp-binary-20221106-git.tgz";
+      sha256 = "0vn1kjvcch9ky50rq1axg5hixf3zkbb46as99g0aks1b7y250a17";
       system = "lisp-binary";
       asd = "lisp-binary";
     });
     systems = [ "lisp-binary" ];
-    lispLibs = [ (getAttr "cffi" pkgs) (getAttr "closer-mop" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "moptilities" pkgs) (getAttr "quasiquote-2_dot_0" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "closer-mop" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "moptilities" pkgs) (getAttr "quasiquote-2_dot_0" pkgs) ];
   };
   lisp-binary-test = {
     pname = "lisp-binary-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lisp-binary-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-07-07/lisp-binary-20220707-git.tgz";
-      sha256 = "00inm2djqn5ipqw6fsprl5snl017k42fiyaxrcjb9iv1rsrkmgqv";
+      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-11-06/lisp-binary-20221106-git.tgz";
+      sha256 = "0vn1kjvcch9ky50rq1axg5hixf3zkbb46as99g0aks1b7y250a17";
       system = "lisp-binary-test";
       asd = "lisp-binary-test";
     });
@@ -44118,11 +44785,11 @@ in {
   };
   lisp-critic = {
     pname = "lisp-critic";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "lisp-critic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-critic/2020-12-20/lisp-critic-20201220-git.tgz";
-      sha256 = "1x1kadwr38qhq8b8pabd8vqs54d16v1y5yfgjf3d02cvlsy67mx0";
+      url = "http://beta.quicklisp.org/archive/lisp-critic/2022-11-06/lisp-critic-20221106-git.tgz";
+      sha256 = "000vp8jsvpw80by7c7nb5394akfcr6rzzpzw049am67fh5qk89rn";
       system = "lisp-critic";
       asd = "lisp-critic";
     });
@@ -44212,11 +44879,11 @@ in {
   };
   lisp-namespace = {
     pname = "lisp-namespace";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "lisp-namespace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-namespace/2021-10-20/lisp-namespace-20211020-git.tgz";
-      sha256 = "1flq8ayvlrkfcy0jnzh1jyh24h9inm3pkys8qmnddm49nxnzxy9x";
+      url = "http://beta.quicklisp.org/archive/lisp-namespace/2022-11-06/lisp-namespace-20221106-git.tgz";
+      sha256 = "1p5db9mab4whapy1pl38ajw5fkrrdw266n05mnhf4xx2fb9sbx6p";
       system = "lisp-namespace";
       asd = "lisp-namespace";
     });
@@ -44225,11 +44892,11 @@ in {
   };
   lisp-namespace_dot_test = {
     pname = "lisp-namespace.test";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "lisp-namespace.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-namespace/2021-10-20/lisp-namespace-20211020-git.tgz";
-      sha256 = "1flq8ayvlrkfcy0jnzh1jyh24h9inm3pkys8qmnddm49nxnzxy9x";
+      url = "http://beta.quicklisp.org/archive/lisp-namespace/2022-11-06/lisp-namespace-20221106-git.tgz";
+      sha256 = "1p5db9mab4whapy1pl38ajw5fkrrdw266n05mnhf4xx2fb9sbx6p";
       system = "lisp-namespace.test";
       asd = "lisp-namespace.test";
     });
@@ -44264,32 +44931,16 @@ in {
   };
   lisp-stat = {
     pname = "lisp-stat";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "lisp-stat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-stat/2021-12-09/lisp-stat-20211209-git.tgz";
-      sha256 = "0xh9z5qn4308qg681805zg8bxv715z9rix9fpd2r5rm88bzx3dp2";
+      url = "http://beta.quicklisp.org/archive/lisp-stat/2022-11-06/lisp-stat-20221106-git.tgz";
+      sha256 = "0qwlxrbwj884mr67sf6aj0zwrndv33aiiid4bqrkji41kjhqfcz5";
       system = "lisp-stat";
       asd = "lisp-stat";
     });
     systems = [ "lisp-stat" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "array-operations" pkgs) (getAttr "data-frame" pkgs) (getAttr "dexador" pkgs) (getAttr "dfio" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) (getAttr "select" pkgs) (getAttr "split-sequence" pkgs) ];
-  };
-  lisp-stat_slash_tests = {
-    pname = "lisp-stat_tests";
-    version = "20211209-git";
-    asds = [ "lisp-stat" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-stat/2021-12-09/lisp-stat-20211209-git.tgz";
-      sha256 = "0xh9z5qn4308qg681805zg8bxv715z9rix9fpd2r5rm88bzx3dp2";
-      system = "lisp-stat";
-      asd = "lisp-stat";
-    });
-    systems = [ "lisp-stat/tests" ];
-    lispLibs = [ (getAttr "lisp-stat" pkgs) (getAttr "parachute" pkgs) ];
-    meta = {
-      broken = true;
-    };
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "alexandria_plus" pkgs) (getAttr "array-operations" pkgs) (getAttr "org_dot_tfeb_dot_conduit-packages" pkgs) (getAttr "data-frame" pkgs) (getAttr "dexador" pkgs) (getAttr "dfio" pkgs) (getAttr "distributions" pkgs) (getAttr "num-utils" pkgs) (getAttr "select" pkgs) (getAttr "statistics" pkgs) ];
   };
   lisp-types = {
     pname = "lisp-types";
@@ -44345,29 +44996,32 @@ in {
   };
   lisp-unit2 = {
     pname = "lisp-unit2";
-    version = "20180131-git";
+    version = "20221106-git";
     asds = [ "lisp-unit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz";
-      sha256 = "1rsqy8y0jqll6xn9a593848f5wvd5ribv4csry1ly0hmdhfnqzlp";
+      url = "http://beta.quicklisp.org/archive/lisp-unit2/2022-11-06/lisp-unit2-20221106-git.tgz";
+      sha256 = "0jm0vfdj9w65r43an9sy90ddpi8ra1rh9vswaq6bhnzzmsrrbjyq";
       system = "lisp-unit2";
       asd = "lisp-unit2";
     });
     systems = [ "lisp-unit2" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-interpol" pkgs) (getAttr "iterate" pkgs) (getAttr "symbol-munger" pkgs) ];
   };
-  lisp-unit2-test = {
-    pname = "lisp-unit2-test";
-    version = "20180131-git";
-    asds = [ "lisp-unit2-test" ];
+  lisp-unit2_slash_tests = {
+    pname = "lisp-unit2_tests";
+    version = "20221106-git";
+    asds = [ "lisp-unit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz";
-      sha256 = "1rsqy8y0jqll6xn9a593848f5wvd5ribv4csry1ly0hmdhfnqzlp";
-      system = "lisp-unit2-test";
+      url = "http://beta.quicklisp.org/archive/lisp-unit2/2022-11-06/lisp-unit2-20221106-git.tgz";
+      sha256 = "0jm0vfdj9w65r43an9sy90ddpi8ra1rh9vswaq6bhnzzmsrrbjyq";
+      system = "lisp-unit2";
       asd = "lisp-unit2";
     });
-    systems = [ "lisp-unit2-test" ];
+    systems = [ "lisp-unit2/tests" ];
     lispLibs = [ (getAttr "lisp-unit2" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   lispbuilder-lexer = {
     pname = "lispbuilder-lexer";
@@ -44884,10 +45538,10 @@ in {
   };
   list-of = {
     pname = "list-of";
-    version = "20170403-git";
+    version = "20221106-git";
     asds = [ "list-of" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2017-04-03/asdf-finalizers-20170403-git.tgz";
+      url = "http://beta.quicklisp.org/archive/asdf-finalizers/2022-11-06/asdf-finalizers-20221106-git.tgz";
       sha256 = "1w56c9yjjydjshsgqxz57qlp2v3r4ilbisnsgiqphvxnhvd41y0v";
       system = "list-of";
       asd = "list-of";
@@ -44965,11 +45619,11 @@ in {
   };
   literate-demo = {
     pname = "literate-demo";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "literate-demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/literate-lisp/2022-07-07/literate-lisp-20220707-git.tgz";
-      sha256 = "1n35kh9j234189xbpk7r4ddnkwxpiqgn0723fjkx192q674drwky";
+      url = "http://beta.quicklisp.org/archive/literate-lisp/2022-11-06/literate-lisp-20221106-git.tgz";
+      sha256 = "18lp0bwi4ws7d2xm0lf0jxlvajrxpfyp0z0zamgs97swz5rb8qpk";
       system = "literate-demo";
       asd = "literate-demo";
     });
@@ -44978,11 +45632,11 @@ in {
   };
   literate-lisp = {
     pname = "literate-lisp";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "literate-lisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/literate-lisp/2022-07-07/literate-lisp-20220707-git.tgz";
-      sha256 = "1n35kh9j234189xbpk7r4ddnkwxpiqgn0723fjkx192q674drwky";
+      url = "http://beta.quicklisp.org/archive/literate-lisp/2022-11-06/literate-lisp-20221106-git.tgz";
+      sha256 = "18lp0bwi4ws7d2xm0lf0jxlvajrxpfyp0z0zamgs97swz5rb8qpk";
       system = "literate-lisp";
       asd = "literate-lisp";
     });
@@ -45234,11 +45888,11 @@ in {
   };
   log4cl-extras = {
     pname = "log4cl-extras";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "log4cl-extras" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/log4cl-extras/2022-07-07/log4cl-extras-20220707-git.tgz";
-      sha256 = "0hzw55pyhzwdg5gi8mhdvbxbqd6c2sixm1pm0xb2jwsjm6l1zck7";
+      url = "http://beta.quicklisp.org/archive/log4cl-extras/2022-11-06/log4cl-extras-20221106-git.tgz";
+      sha256 = "1dsvfzavrb2if285shjcb7hjh3sjpb9fmarj6y6sjgip2zxsjg9s";
       system = "log4cl-extras";
       asd = "log4cl-extras";
     });
@@ -45247,11 +45901,11 @@ in {
   };
   log4cl-extras-test = {
     pname = "log4cl-extras-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "log4cl-extras-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/log4cl-extras/2022-07-07/log4cl-extras-20220707-git.tgz";
-      sha256 = "0hzw55pyhzwdg5gi8mhdvbxbqd6c2sixm1pm0xb2jwsjm6l1zck7";
+      url = "http://beta.quicklisp.org/archive/log4cl-extras/2022-11-06/log4cl-extras-20221106-git.tgz";
+      sha256 = "1dsvfzavrb2if285shjcb7hjh3sjpb9fmarj6y6sjgip2zxsjg9s";
       system = "log4cl-extras-test";
       asd = "log4cl-extras-test";
     });
@@ -45516,11 +46170,11 @@ in {
   };
   ltk = {
     pname = "ltk";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ltk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ltk/2022-07-07/ltk-20220707-git.tgz";
-      sha256 = "0vfyn194kyl9mgf42zdy2mvkhm0c25hyci23hmza7arxn04ypj33";
+      url = "http://beta.quicklisp.org/archive/ltk/2022-11-06/ltk-20221106-git.tgz";
+      sha256 = "0vqmdq3k235hd8d9cg0ipv0kw28aiydvr9j1igfnrs1ns9sm79va";
       system = "ltk";
       asd = "ltk";
     });
@@ -45529,11 +46183,11 @@ in {
   };
   ltk-mw = {
     pname = "ltk-mw";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ltk-mw" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ltk/2022-07-07/ltk-20220707-git.tgz";
-      sha256 = "0vfyn194kyl9mgf42zdy2mvkhm0c25hyci23hmza7arxn04ypj33";
+      url = "http://beta.quicklisp.org/archive/ltk/2022-11-06/ltk-20221106-git.tgz";
+      sha256 = "0vqmdq3k235hd8d9cg0ipv0kw28aiydvr9j1igfnrs1ns9sm79va";
       system = "ltk-mw";
       asd = "ltk-mw";
     });
@@ -45542,11 +46196,11 @@ in {
   };
   ltk-remote = {
     pname = "ltk-remote";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "ltk-remote" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ltk/2022-07-07/ltk-20220707-git.tgz";
-      sha256 = "0vfyn194kyl9mgf42zdy2mvkhm0c25hyci23hmza7arxn04ypj33";
+      url = "http://beta.quicklisp.org/archive/ltk/2022-11-06/ltk-20221106-git.tgz";
+      sha256 = "0vqmdq3k235hd8d9cg0ipv0kw28aiydvr9j1igfnrs1ns9sm79va";
       system = "ltk-remote";
       asd = "ltk-remote";
     });
@@ -45566,13 +46220,39 @@ in {
     systems = [ "lucene-in-action-tests" ];
     lispLibs = [ (getAttr "lift" pkgs) (getAttr "montezuma" pkgs) ];
   };
+  luckless = {
+    pname = "luckless";
+    version = "20221106-git";
+    asds = [ "luckless" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/luckless/2022-11-06/luckless-20221106-git.tgz";
+      sha256 = "0mychj1rfx4hzpgbp9x09qn2y4jhjgfdi5d973mcvaqmcmby6b9p";
+      system = "luckless";
+      asd = "luckless";
+    });
+    systems = [ "luckless" ];
+    lispLibs = [ (getAttr "atomics" pkgs) (getAttr "documentation-utils" pkgs) ];
+  };
+  luckless-test = {
+    pname = "luckless-test";
+    version = "20221106-git";
+    asds = [ "luckless-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/luckless/2022-11-06/luckless-20221106-git.tgz";
+      sha256 = "0mychj1rfx4hzpgbp9x09qn2y4jhjgfdi5d973mcvaqmcmby6b9p";
+      system = "luckless-test";
+      asd = "luckless-test";
+    });
+    systems = [ "luckless-test" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "luckless" pkgs) (getAttr "parachute" pkgs) ];
+  };
   lunamech-matrix-api = {
     pname = "lunamech-matrix-api";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "lunamech-matrix-api" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lunamech-matrix-api/2022-02-20/lunamech-matrix-api-20220220-git.tgz";
-      sha256 = "07il7qv7qpgmiqs9rii7zif6kcmqh9n3yif80rp79q7yf14kxlbg";
+      url = "http://beta.quicklisp.org/archive/lunamech-matrix-api/2022-11-06/lunamech-matrix-api-20221106-git.tgz";
+      sha256 = "0dsfm2z4pnf9xc1c8rqj3h0k7r7y5gv5mqlizczndsm2d0s5sh4d";
       system = "lunamech-matrix-api";
       asd = "lunamech-matrix-api";
     });
@@ -45607,11 +46287,11 @@ in {
   };
   lzlib = {
     pname = "lzlib";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lzlib" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lzlib/2022-07-07/cl-lzlib-20220707-git.tgz";
-      sha256 = "1glg1y1s1mqgypvxp0ss11cicrddri006wqwhy47lgq7mk5853zz";
+      url = "http://beta.quicklisp.org/archive/cl-lzlib/2022-11-06/cl-lzlib-20221106-git.tgz";
+      sha256 = "1dxzlkay7aqcs65h2f7j7rl4sdjija60dshlahzyllfw174p9d3m";
       system = "lzlib";
       asd = "lzlib";
     });
@@ -45620,11 +46300,11 @@ in {
   };
   lzlib-tests = {
     pname = "lzlib-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "lzlib-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lzlib/2022-07-07/cl-lzlib-20220707-git.tgz";
-      sha256 = "1glg1y1s1mqgypvxp0ss11cicrddri006wqwhy47lgq7mk5853zz";
+      url = "http://beta.quicklisp.org/archive/cl-lzlib/2022-11-06/cl-lzlib-20221106-git.tgz";
+      sha256 = "1dxzlkay7aqcs65h2f7j7rl4sdjija60dshlahzyllfw174p9d3m";
       system = "lzlib-tests";
       asd = "lzlib-tests";
     });
@@ -45779,6 +46459,9 @@ in {
     });
     systems = [ "magicl" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "abstract-classes" pkgs) (getAttr "interface" pkgs) (getAttr "policy-cond" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   magicl-examples = {
     pname = "magicl-examples";
@@ -46580,11 +47263,11 @@ in {
   };
   markup = {
     pname = "markup";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "markup" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/markup/2022-07-07/markup-20220707-git.tgz";
-      sha256 = "178mw7npbbm4msf7wxjzfwnilhf1qw38xvk5iy33lan2qy5b2878";
+      url = "http://beta.quicklisp.org/archive/markup/2022-11-06/markup-20221106-git.tgz";
+      sha256 = "1ds9nbc6828kiilfjq47nwqms4lmps8hwd5kk8iwydpl5x1j43wx";
       system = "markup";
       asd = "markup";
     });
@@ -46593,11 +47276,11 @@ in {
   };
   markup_dot_test = {
     pname = "markup.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "markup.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/markup/2022-07-07/markup-20220707-git.tgz";
-      sha256 = "178mw7npbbm4msf7wxjzfwnilhf1qw38xvk5iy33lan2qy5b2878";
+      url = "http://beta.quicklisp.org/archive/markup/2022-11-06/markup-20221106-git.tgz";
+      sha256 = "1ds9nbc6828kiilfjq47nwqms4lmps8hwd5kk8iwydpl5x1j43wx";
       system = "markup.test";
       asd = "markup.test";
     });
@@ -46606,11 +47289,11 @@ in {
   };
   marshal = {
     pname = "marshal";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "marshal" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-marshal/2021-10-20/cl-marshal-20211020-git.tgz";
-      sha256 = "0wjbhq06l78pijw6ws3cjj4bbaga1faswvp77xargciqmga5dzyc";
+      url = "http://beta.quicklisp.org/archive/cl-marshal/2022-11-06/cl-marshal-20221106-git.tgz";
+      sha256 = "0pclq0q43f3nlb2np957i10ysmky32qlz78an3hf2adg8if776ys";
       system = "marshal";
       asd = "marshal";
     });
@@ -46619,11 +47302,11 @@ in {
   };
   marshal-tests = {
     pname = "marshal-tests";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "marshal-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-marshal/2021-10-20/cl-marshal-20211020-git.tgz";
-      sha256 = "0wjbhq06l78pijw6ws3cjj4bbaga1faswvp77xargciqmga5dzyc";
+      url = "http://beta.quicklisp.org/archive/cl-marshal/2022-11-06/cl-marshal-20221106-git.tgz";
+      sha256 = "0pclq0q43f3nlb2np957i10ysmky32qlz78an3hf2adg8if776ys";
       system = "marshal-tests";
       asd = "marshal-tests";
     });
@@ -46632,40 +47315,27 @@ in {
   };
   math = {
     pname = "math";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
     systems = [ "math" ];
-    lispLibs = [ (getAttr "cl-utilities" pkgs) (getAttr "font-discovery" pkgs) (getAttr "vgplot" pkgs) ];
-  };
-  math_slash_2d-array = {
-    pname = "math_2d-array";
-    version = "20220707-git";
-    asds = [ "math" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
-      system = "math";
-      asd = "math";
-    });
-    systems = [ "math/2d-array" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "cl-utilities" pkgs) (getAttr "font-discovery" pkgs) (getAttr "gsll" pkgs) (getAttr "vgplot" pkgs) ];
     meta = {
       broken = true;
     };
   };
   math_slash_appr = {
     pname = "math_appr";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46675,29 +47345,13 @@ in {
       broken = true;
     };
   };
-  math_slash_arr-matr = {
-    pname = "math_arr-matr";
-    version = "20220707-git";
-    asds = [ "math" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
-      system = "math";
-      asd = "math";
-    });
-    systems = [ "math/arr-matr" ];
-    lispLibs = [ (getAttr "cl-utilities" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
   math_slash_coord = {
     pname = "math_coord";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46709,11 +47363,11 @@ in {
   };
   math_slash_core = {
     pname = "math_core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46725,11 +47379,11 @@ in {
   };
   math_slash_docs = {
     pname = "math_docs";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46741,11 +47395,11 @@ in {
   };
   math_slash_equation = {
     pname = "math_equation";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46757,11 +47411,11 @@ in {
   };
   math_slash_geom = {
     pname = "math_geom";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46773,11 +47427,11 @@ in {
   };
   math_slash_gnuplot = {
     pname = "math_gnuplot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46787,29 +47441,29 @@ in {
       broken = true;
     };
   };
-  math_slash_list-matr = {
-    pname = "math_list-matr";
-    version = "20220707-git";
+  math_slash_half-div = {
+    pname = "math_half-div";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
-    systems = [ "math/list-matr" ];
-    lispLibs = [ (getAttr "cl-utilities" pkgs) ];
+    systems = [ "math/half-div" ];
+    lispLibs = [  ];
     meta = {
       broken = true;
     };
   };
   math_slash_ls-gauss = {
     pname = "math_ls-gauss";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46819,45 +47473,77 @@ in {
       broken = true;
     };
   };
-  math_slash_ls-rotation = {
-    pname = "math_ls-rotation";
-    version = "20220707-git";
+  math_slash_ls-gsll = {
+    pname = "math_ls-gsll";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
-    systems = [ "math/ls-rotation" ];
-    lispLibs = [  ];
+    systems = [ "math/ls-gsll" ];
+    lispLibs = [ (getAttr "cl-utilities" pkgs) (getAttr "gsll" pkgs) ];
     meta = {
       broken = true;
     };
   };
-  math_slash_ls-solve = {
-    pname = "math_ls-solve";
-    version = "20220707-git";
+  math_slash_matr = {
+    pname = "math_matr";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
-    systems = [ "math/ls-solve" ];
-    lispLibs = [ (getAttr "gsll" pkgs) (getAttr "math" pkgs) ];
+    systems = [ "math/matr" ];
+    lispLibs = [ (getAttr "cl-utilities" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  math_slash_rnd = {
+    pname = "math_rnd";
+    version = "20221106-git";
+    asds = [ "math" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
+      system = "math";
+      asd = "math";
+    });
+    systems = [ "math/rnd" ];
+    lispLibs = [ (getAttr "cl-utilities" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  math_slash_series = {
+    pname = "math_series";
+    version = "20221106-git";
+    asds = [ "math" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
+      system = "math";
+      asd = "math";
+    });
+    systems = [ "math/series" ];
+    lispLibs = [  ];
     meta = {
       broken = true;
     };
   };
   math_slash_smooth = {
     pname = "math_smooth";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46869,11 +47555,11 @@ in {
   };
   math_slash_stat = {
     pname = "math_stat";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -46885,11 +47571,11 @@ in {
   };
   math_slash_tests = {
     pname = "math_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2022-07-07/math-20220707-git.tgz";
-      sha256 = "00n8xxr3lrynwgmwkss66jczysnwk7xkyadsy3bcsvnwxpnmcvs1";
+      url = "http://beta.quicklisp.org/archive/math/2022-11-06/math-20221106-git.tgz";
+      sha256 = "1xafh94y5q840fzlcvxw9p4ahgm9c4bwsm3fyrmm7n3j05xsgfml";
       system = "math";
       asd = "math";
     });
@@ -47018,11 +47704,11 @@ in {
   };
   mcclim = {
     pname = "mcclim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -47031,11 +47717,11 @@ in {
   };
   mcclim-backend-common = {
     pname = "mcclim-backend-common";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-backend-common" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-backend-common";
       asd = "mcclim-backend-common";
     });
@@ -47044,24 +47730,27 @@ in {
   };
   mcclim-bezier = {
     pname = "mcclim-bezier";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-bezier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-bezier";
       asd = "mcclim-bezier";
     });
     systems = [ "mcclim-bezier" ];
     lispLibs = [ (getAttr "flexichain" pkgs) (getAttr "clim" pkgs) (getAttr "clim-pdf" pkgs) (getAttr "clim-postscript" pkgs) (getAttr "mcclim-clx" pkgs) (getAttr "mcclim-null" pkgs) (getAttr "mcclim-render" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   mcclim-bezier_slash_clx = {
     pname = "mcclim-bezier_clx";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-bezier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-bezier";
       asd = "mcclim-bezier";
     });
@@ -47073,11 +47762,11 @@ in {
   };
   mcclim-bezier_slash_core = {
     pname = "mcclim-bezier_core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-bezier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-bezier";
       asd = "mcclim-bezier";
     });
@@ -47089,11 +47778,11 @@ in {
   };
   mcclim-bitmaps = {
     pname = "mcclim-bitmaps";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-bitmaps" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-bitmaps";
       asd = "mcclim-bitmaps";
     });
@@ -47102,11 +47791,11 @@ in {
   };
   mcclim-clx = {
     pname = "mcclim-clx";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-clx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-clx";
       asd = "mcclim-clx";
     });
@@ -47115,11 +47804,11 @@ in {
   };
   mcclim-clx-fb = {
     pname = "mcclim-clx-fb";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-clx-fb" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-clx-fb";
       asd = "mcclim-clx-fb";
     });
@@ -47128,11 +47817,11 @@ in {
   };
   mcclim-fontconfig = {
     pname = "mcclim-fontconfig";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-fontconfig" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-fontconfig";
       asd = "mcclim-fontconfig";
     });
@@ -47141,11 +47830,11 @@ in {
   };
   mcclim-fonts = {
     pname = "mcclim-fonts";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-fonts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-fonts";
       asd = "mcclim-fonts";
     });
@@ -47154,11 +47843,11 @@ in {
   };
   mcclim-fonts_slash_truetype = {
     pname = "mcclim-fonts_truetype";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-fonts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-fonts";
       asd = "mcclim-fonts";
     });
@@ -47170,11 +47859,11 @@ in {
   };
   mcclim-franz = {
     pname = "mcclim-franz";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-franz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-franz";
       asd = "mcclim-franz";
     });
@@ -47183,11 +47872,11 @@ in {
   };
   mcclim-harfbuzz = {
     pname = "mcclim-harfbuzz";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-harfbuzz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-harfbuzz";
       asd = "mcclim-harfbuzz";
     });
@@ -47196,11 +47885,11 @@ in {
   };
   mcclim-layouts = {
     pname = "mcclim-layouts";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-layouts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-layouts";
       asd = "mcclim-layouts";
     });
@@ -47209,11 +47898,11 @@ in {
   };
   mcclim-layouts_slash_tab = {
     pname = "mcclim-layouts_tab";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-layouts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-layouts";
       asd = "mcclim-layouts";
     });
@@ -47225,11 +47914,11 @@ in {
   };
   mcclim-null = {
     pname = "mcclim-null";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-null" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-null";
       asd = "mcclim-null";
     });
@@ -47238,11 +47927,11 @@ in {
   };
   mcclim-raster-image = {
     pname = "mcclim-raster-image";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-raster-image" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-raster-image";
       asd = "mcclim-raster-image";
     });
@@ -47251,11 +47940,11 @@ in {
   };
   mcclim-raster-image_slash_test = {
     pname = "mcclim-raster-image_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-raster-image" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-raster-image";
       asd = "mcclim-raster-image";
     });
@@ -47267,11 +47956,11 @@ in {
   };
   mcclim-render = {
     pname = "mcclim-render";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-render" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-render";
       asd = "mcclim-render";
     });
@@ -47280,11 +47969,11 @@ in {
   };
   mcclim-svg = {
     pname = "mcclim-svg";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-svg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-svg";
       asd = "mcclim-svg";
     });
@@ -47293,11 +47982,11 @@ in {
   };
   mcclim-tooltips = {
     pname = "mcclim-tooltips";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-tooltips" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-tooltips";
       asd = "mcclim-tooltips";
     });
@@ -47306,11 +47995,11 @@ in {
   };
   mcclim-tree-with-cross-edges = {
     pname = "mcclim-tree-with-cross-edges";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim-tree-with-cross-edges" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim-tree-with-cross-edges";
       asd = "mcclim-tree-with-cross-edges";
     });
@@ -47319,11 +48008,11 @@ in {
   };
   mcclim_slash_extensions = {
     pname = "mcclim_extensions";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -47335,11 +48024,11 @@ in {
   };
   mcclim_slash_looks = {
     pname = "mcclim_looks";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -47351,11 +48040,11 @@ in {
   };
   mcclim_slash_test = {
     pname = "mcclim_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -47367,11 +48056,11 @@ in {
   };
   mcclim_slash_test-util = {
     pname = "mcclim_test-util";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -48240,29 +48929,16 @@ in {
   };
   mito = {
     pname = "mito";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mito" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2022-07-07/mito-20220707-git.tgz";
-      sha256 = "1r7g7rylmfziivlbzaj2m6ilrdn6imvac9pzjgj5i830p9grlcvc";
+      url = "http://beta.quicklisp.org/archive/mito/2022-11-06/mito-20221106-git.tgz";
+      sha256 = "1wm0kmlg8b7l74s1kxs2yxrv07c6fhfb7yn3018pjh1y28i5cx7n";
       system = "mito";
       asd = "mito";
     });
     systems = [ "mito" ];
     lispLibs = [ (getAttr "cl-reexport" pkgs) (getAttr "lack-middleware-mito" pkgs) (getAttr "mito-core" pkgs) (getAttr "mito-migration" pkgs) ];
-  };
-  mito-attachment = {
-    pname = "mito-attachment";
-    version = "20201016-git";
-    asds = [ "mito-attachment" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito-attachment/2020-10-16/mito-attachment-20201016-git.tgz";
-      sha256 = "0irvcq9kvhfzgi59qi4gwk1qj28rlzk7gsbj4jibi0sn6nhab4jq";
-      system = "mito-attachment";
-      asd = "mito-attachment";
-    });
-    systems = [ "mito-attachment" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-reexport" pkgs) (getAttr "lack-component" pkgs) (getAttr "mito" pkgs) (getAttr "trivial-mimes" pkgs) (getAttr "uiop" pkgs) (getAttr "uuid" pkgs) (getAttr "zs3" pkgs) ];
   };
   mito-auth = {
     pname = "mito-auth";
@@ -48279,11 +48955,11 @@ in {
   };
   mito-core = {
     pname = "mito-core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mito-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2022-07-07/mito-20220707-git.tgz";
-      sha256 = "1r7g7rylmfziivlbzaj2m6ilrdn6imvac9pzjgj5i830p9grlcvc";
+      url = "http://beta.quicklisp.org/archive/mito/2022-11-06/mito-20221106-git.tgz";
+      sha256 = "1wm0kmlg8b7l74s1kxs2yxrv07c6fhfb7yn3018pjh1y28i5cx7n";
       system = "mito-core";
       asd = "mito-core";
     });
@@ -48292,11 +48968,11 @@ in {
   };
   mito-migration = {
     pname = "mito-migration";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mito-migration" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2022-07-07/mito-20220707-git.tgz";
-      sha256 = "1r7g7rylmfziivlbzaj2m6ilrdn6imvac9pzjgj5i830p9grlcvc";
+      url = "http://beta.quicklisp.org/archive/mito/2022-11-06/mito-20221106-git.tgz";
+      sha256 = "1wm0kmlg8b7l74s1kxs2yxrv07c6fhfb7yn3018pjh1y28i5cx7n";
       system = "mito-migration";
       asd = "mito-migration";
     });
@@ -48305,11 +48981,11 @@ in {
   };
   mito-test = {
     pname = "mito-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mito-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2022-07-07/mito-20220707-git.tgz";
-      sha256 = "1r7g7rylmfziivlbzaj2m6ilrdn6imvac9pzjgj5i830p9grlcvc";
+      url = "http://beta.quicklisp.org/archive/mito/2022-11-06/mito-20221106-git.tgz";
+      sha256 = "1wm0kmlg8b7l74s1kxs2yxrv07c6fhfb7yn3018pjh1y28i5cx7n";
       system = "mito-test";
       asd = "mito-test";
     });
@@ -48500,11 +49176,11 @@ in {
   };
   mnas-graph = {
     pname = "mnas-graph";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48513,11 +49189,11 @@ in {
   };
   mnas-graph_slash_alg = {
     pname = "mnas-graph_alg";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48529,11 +49205,11 @@ in {
   };
   mnas-graph_slash_core = {
     pname = "mnas-graph_core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48545,11 +49221,11 @@ in {
   };
   mnas-graph_slash_demos = {
     pname = "mnas-graph_demos";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48561,11 +49237,11 @@ in {
   };
   mnas-graph_slash_docs = {
     pname = "mnas-graph_docs";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48577,11 +49253,11 @@ in {
   };
   mnas-graph_slash_filter = {
     pname = "mnas-graph_filter";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48593,11 +49269,11 @@ in {
   };
   mnas-graph_slash_printer-viewer = {
     pname = "mnas-graph_printer-viewer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48609,11 +49285,11 @@ in {
   };
   mnas-graph_slash_sample = {
     pname = "mnas-graph_sample";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48625,11 +49301,11 @@ in {
   };
   mnas-graph_slash_tests = {
     pname = "mnas-graph_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48641,11 +49317,11 @@ in {
   };
   mnas-graph_slash_view = {
     pname = "mnas-graph_view";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-07-07/mnas-graph-20220707-git.tgz";
-      sha256 = "1p4z3ki78r45ir6l7zkjfnq4b25dwvh46dmfyk6bw1b5mdwak7za";
+      url = "http://beta.quicklisp.org/archive/mnas-graph/2022-11-06/mnas-graph-20221106-git.tgz";
+      sha256 = "0lhq9m8js55jlzmc2jiwk2q8nzlnarsh5cpjrnl2gznxaxmml0wi";
       system = "mnas-graph";
       asd = "mnas-graph";
     });
@@ -48702,24 +49378,40 @@ in {
   };
   mnas-package = {
     pname = "mnas-package";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
     systems = [ "mnas-package" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "inferior-shell" pkgs) (getAttr "mnas-graph" pkgs) (getAttr "mnas-string" pkgs) (getAttr "slynk" pkgs) ];
   };
-  mnas-package_slash_docs = {
-    pname = "mnas-package_docs";
-    version = "20220707-git";
+  mnas-package_slash_doc = {
+    pname = "mnas-package_doc";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
+      system = "mnas-package";
+      asd = "mnas-package";
+    });
+    systems = [ "mnas-package/doc" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "slynk" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  mnas-package_slash_docs = {
+    pname = "mnas-package_docs";
+    version = "20221106-git";
+    asds = [ "mnas-package" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48731,11 +49423,11 @@ in {
   };
   mnas-package_slash_example = {
     pname = "mnas-package_example";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48747,11 +49439,11 @@ in {
   };
   mnas-package_slash_make = {
     pname = "mnas-package_make";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48763,11 +49455,11 @@ in {
   };
   mnas-package_slash_obj = {
     pname = "mnas-package_obj";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48779,11 +49471,11 @@ in {
   };
   mnas-package_slash_pkg = {
     pname = "mnas-package_pkg";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48795,11 +49487,11 @@ in {
   };
   mnas-package_slash_sec = {
     pname = "mnas-package_sec";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48811,11 +49503,11 @@ in {
   };
   mnas-package_slash_sys = {
     pname = "mnas-package_sys";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48827,11 +49519,11 @@ in {
   };
   mnas-package_slash_tests = {
     pname = "mnas-package_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -48843,11 +49535,11 @@ in {
   };
   mnas-package_slash_view = {
     pname = "mnas-package_view";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mnas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-package/2022-07-07/mnas-package-20220707-git.tgz";
-      sha256 = "0ygbwhr9gzg83gczhzy1rp1aycxjq5gz01x6vlg0cpdqzdxy0grs";
+      url = "http://beta.quicklisp.org/archive/mnas-package/2022-11-06/mnas-package-20221106-git.tgz";
+      sha256 = "1x5csk262qghdg1a6vjsn8khqjkm7rpmzn5mpp0hkid88gdi9acj";
       system = "mnas-package";
       asd = "mnas-package";
     });
@@ -49384,6 +50076,19 @@ in {
     systems = [ "moptilities-test" ];
     lispLibs = [ (getAttr "lift" pkgs) (getAttr "moptilities" pkgs) ];
   };
+  more-cffi = {
+    pname = "more-cffi";
+    version = "20221106-git";
+    asds = [ "more-cffi" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/more-cffi/2022-11-06/more-cffi-20221106-git.tgz";
+      sha256 = "0bnpz5c1c6paifdy2krrw2plz1w2rb90mghhip8154amwzgacm35";
+      system = "more-cffi";
+      asd = "more-cffi";
+    });
+    systems = [ "more-cffi" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "iterate" pkgs) ];
+  };
   more-conditions = {
     pname = "more-conditions";
     version = "20180831-git";
@@ -49600,11 +50305,11 @@ in {
   };
   multiposter = {
     pname = "multiposter";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter";
       asd = "multiposter";
     });
@@ -49613,11 +50318,11 @@ in {
   };
   multiposter-git = {
     pname = "multiposter-git";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-git" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-git";
       asd = "multiposter-git";
     });
@@ -49626,11 +50331,11 @@ in {
   };
   multiposter-lichat = {
     pname = "multiposter-lichat";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-lichat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-lichat";
       asd = "multiposter-lichat";
     });
@@ -49639,11 +50344,11 @@ in {
   };
   multiposter-mastodon = {
     pname = "multiposter-mastodon";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-mastodon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-mastodon";
       asd = "multiposter-mastodon";
     });
@@ -49652,11 +50357,11 @@ in {
   };
   multiposter-studio = {
     pname = "multiposter-studio";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-studio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-studio";
       asd = "multiposter-studio";
     });
@@ -49665,11 +50370,11 @@ in {
   };
   multiposter-tumblr = {
     pname = "multiposter-tumblr";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-tumblr" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-tumblr";
       asd = "multiposter-tumblr";
     });
@@ -49678,11 +50383,11 @@ in {
   };
   multiposter-twitter = {
     pname = "multiposter-twitter";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "multiposter-twitter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2021-06-30/multiposter-20210630-git.tgz";
-      sha256 = "1sw7pal7db3ccazvqv6amminwfpjpwzyrvrvhfryc0rwl90sdsnj";
+      url = "http://beta.quicklisp.org/archive/multiposter/2022-11-06/multiposter-20221106-git.tgz";
+      sha256 = "0c6ji1hg2i5gk60kijcyml2gvi23qyzr1byy08hjyvybajwwzza2";
       system = "multiposter-twitter";
       asd = "multiposter-twitter";
     });
@@ -49715,13 +50420,26 @@ in {
     systems = [ "multival-plist-test" ];
     lispLibs = [ (getAttr "multival-plist" pkgs) (getAttr "cl-test-more" pkgs) ];
   };
+  music-spelling = {
+    pname = "music-spelling";
+    version = "20221106-git";
+    asds = [ "music-spelling" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/music-spelling/2022-11-06/music-spelling-20221106-git.tgz";
+      sha256 = "1416np95bm2ikpcp17mlhdp9prw2skyznc6xcf0gh0yss59vigkl";
+      system = "music-spelling";
+      asd = "music-spelling";
+    });
+    systems = [ "music-spelling" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) ];
+  };
   mutility = {
     pname = "mutility";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2022-07-07/mutility-20220707-git.tgz";
-      sha256 = "1lcg39g6zr054qcn5k8qdx7w6c4n480h596xnqsgl6c8g8bzkigb";
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
       system = "mutility";
       asd = "mutility";
     });
@@ -49730,11 +50448,11 @@ in {
   };
   mutility_slash_files = {
     pname = "mutility_files";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2022-07-07/mutility-20220707-git.tgz";
-      sha256 = "1lcg39g6zr054qcn5k8qdx7w6c4n480h596xnqsgl6c8g8bzkigb";
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
       system = "mutility";
       asd = "mutility";
     });
@@ -49746,11 +50464,11 @@ in {
   };
   mutility_slash_loopy = {
     pname = "mutility_loopy";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2022-07-07/mutility-20220707-git.tgz";
-      sha256 = "1lcg39g6zr054qcn5k8qdx7w6c4n480h596xnqsgl6c8g8bzkigb";
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
       system = "mutility";
       asd = "mutility";
     });
@@ -49760,13 +50478,29 @@ in {
       broken = true;
     };
   };
-  mutility_slash_test-helpers = {
-    pname = "mutility_test-helpers";
-    version = "20220707-git";
+  mutility_slash_most = {
+    pname = "mutility_most";
+    version = "20221106-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2022-07-07/mutility-20220707-git.tgz";
-      sha256 = "1lcg39g6zr054qcn5k8qdx7w6c4n480h596xnqsgl6c8g8bzkigb";
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
+      system = "mutility";
+      asd = "mutility";
+    });
+    systems = [ "mutility/most" ];
+    lispLibs = [ (getAttr "mutility" pkgs) (getAttr "trivial-do" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  mutility_slash_test-helpers = {
+    pname = "mutility_test-helpers";
+    version = "20221106-git";
+    asds = [ "mutility" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
       system = "mutility";
       asd = "mutility";
     });
@@ -49778,16 +50512,16 @@ in {
   };
   mutility_slash_tests = {
     pname = "mutility_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2022-07-07/mutility-20220707-git.tgz";
-      sha256 = "1lcg39g6zr054qcn5k8qdx7w6c4n480h596xnqsgl6c8g8bzkigb";
+      url = "http://beta.quicklisp.org/archive/mutility/2022-11-06/mutility-20221106-git.tgz";
+      sha256 = "1kih8maw1wx97x9ciwy16bj0s392ninj4rdb22j4ad07sq0cv56k";
       system = "mutility";
       asd = "mutility";
     });
     systems = [ "mutility/tests" ];
-    lispLibs = [ (getAttr "fiveam" pkgs) (getAttr "mutility" pkgs) (getAttr "trivial-do" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-patterns" pkgs) (getAttr "fiveam" pkgs) (getAttr "mutility" pkgs) (getAttr "trivial-do" pkgs) ];
     meta = {
       broken = true;
     };
@@ -49911,11 +50645,11 @@ in {
   };
   myway = {
     pname = "myway";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "myway" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz";
-      sha256 = "0vs1z6krn8rrpqjsxfx1hp9x0qhbn8zr67f55b5pj0zg1cv258n1";
+      url = "http://beta.quicklisp.org/archive/myway/2022-11-06/myway-20221106-git.tgz";
+      sha256 = "0xac8xpbcvq457f2jzzkf46mh5ganf1k2ix8sg61hqqmld5z4dag";
       system = "myway";
       asd = "myway";
     });
@@ -49924,11 +50658,11 @@ in {
   };
   myway-test = {
     pname = "myway-test";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "myway-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz";
-      sha256 = "0vs1z6krn8rrpqjsxfx1hp9x0qhbn8zr67f55b5pj0zg1cv258n1";
+      url = "http://beta.quicklisp.org/archive/myway/2022-11-06/myway-20221106-git.tgz";
+      sha256 = "0xac8xpbcvq457f2jzzkf46mh5ganf1k2ix8sg61hqqmld5z4dag";
       system = "myway-test";
       asd = "myway-test";
     });
@@ -49947,6 +50681,19 @@ in {
     });
     systems = [ "myweb" ];
     lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl-log" pkgs) (getAttr "local-time" pkgs) (getAttr "trivial-utf-8" pkgs) (getAttr "usocket" pkgs) ];
+  };
+  nail = {
+    pname = "nail";
+    version = "20221106-git";
+    asds = [ "nail" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/nail/2022-11-06/nail-20221106-git.tgz";
+      sha256 = "0w6184qaaf6v8p55h088igr8b6snyfxn5hpynjhdbyh7sj8xdm9y";
+      system = "nail";
+      asd = "nail";
+    });
+    systems = [ "nail" ];
+    lispLibs = [ (getAttr "cl-ppcre" pkgs) (getAttr "cl-reexport" pkgs) (getAttr "eazy-gnuplot" pkgs) ];
   };
   named-closure = {
     pname = "named-closure";
@@ -50125,6 +50872,35 @@ in {
     });
     systems = [ "ncurses-clone-for-lem" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "lparallel" pkgs) (getAttr "application" pkgs) (getAttr "nsb-cga" pkgs) (getAttr "text-subsystem" pkgs) (getAttr "utility" pkgs) ];
+  };
+  ndebug = {
+    pname = "ndebug";
+    version = "20221106-git";
+    asds = [ "ndebug" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ndebug/2022-11-06/ndebug-20221106-git.tgz";
+      sha256 = "0xqy0spn4s7jryzhx0bjnha7bir71wr9vbns8v7dmmj83s3hm7js";
+      system = "ndebug";
+      asd = "ndebug";
+    });
+    systems = [ "ndebug" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "dissect" pkgs) (getAttr "trivial-custom-debugger" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+  };
+  ndebug_slash_tests = {
+    pname = "ndebug_tests";
+    version = "20221106-git";
+    asds = [ "ndebug" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ndebug/2022-11-06/ndebug-20221106-git.tgz";
+      sha256 = "0xqy0spn4s7jryzhx0bjnha7bir71wr9vbns8v7dmmj83s3hm7js";
+      system = "ndebug";
+      asd = "ndebug";
+    });
+    systems = [ "ndebug/tests" ];
+    lispLibs = [ (getAttr "lisp-unit2" pkgs) (getAttr "ndebug" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   ndfa = {
     pname = "ndfa";
@@ -50472,11 +51248,11 @@ in {
   };
   neural-classifier = {
     pname = "neural-classifier";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "neural-classifier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-07-07/neural-classifier-20220707-git.tgz";
-      sha256 = "0i92dhi0hvhavn8a09j67xsb3cp0sgz522x3g2vyn2lq4vi8h09i";
+      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-11-06/neural-classifier-20221106-git.tgz";
+      sha256 = "1d23q1k3i2kbjcrvp0qml2nmmdcr12lrmga3qdrgrvsbdcqarn3c";
       system = "neural-classifier";
       asd = "neural-classifier";
     });
@@ -50485,11 +51261,11 @@ in {
   };
   neural-classifier_slash_mnist = {
     pname = "neural-classifier_mnist";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "neural-classifier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-07-07/neural-classifier-20220707-git.tgz";
-      sha256 = "0i92dhi0hvhavn8a09j67xsb3cp0sgz522x3g2vyn2lq4vi8h09i";
+      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-11-06/neural-classifier-20221106-git.tgz";
+      sha256 = "1d23q1k3i2kbjcrvp0qml2nmmdcr12lrmga3qdrgrvsbdcqarn3c";
       system = "neural-classifier";
       asd = "neural-classifier";
     });
@@ -50501,11 +51277,11 @@ in {
   };
   neural-classifier_slash_tests = {
     pname = "neural-classifier_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "neural-classifier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-07-07/neural-classifier-20220707-git.tgz";
-      sha256 = "0i92dhi0hvhavn8a09j67xsb3cp0sgz522x3g2vyn2lq4vi8h09i";
+      url = "http://beta.quicklisp.org/archive/neural-classifier/2022-11-06/neural-classifier-20221106-git.tgz";
+      sha256 = "1d23q1k3i2kbjcrvp0qml2nmmdcr12lrmga3qdrgrvsbdcqarn3c";
       system = "neural-classifier";
       asd = "neural-classifier";
     });
@@ -50530,11 +51306,11 @@ in {
   };
   nfiles = {
     pname = "nfiles";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nfiles" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nfiles/2022-07-07/nfiles-20220707-git.tgz";
-      sha256 = "14j0759ar6i09f17gxy5wfvfdvkvsqgjv48s1jsm5dz0d8nz2d5y";
+      url = "http://beta.quicklisp.org/archive/nfiles/2022-11-06/nfiles-20221106-git.tgz";
+      sha256 = "088biha7554794vlz0n9h1b4xwfs6k2rfkh034km3lirn73z5vwp";
       system = "nfiles";
       asd = "nfiles";
     });
@@ -50543,11 +51319,11 @@ in {
   };
   nfiles_slash_tests = {
     pname = "nfiles_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nfiles" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nfiles/2022-07-07/nfiles-20220707-git.tgz";
-      sha256 = "14j0759ar6i09f17gxy5wfvfdvkvsqgjv48s1jsm5dz0d8nz2d5y";
+      url = "http://beta.quicklisp.org/archive/nfiles/2022-11-06/nfiles-20221106-git.tgz";
+      sha256 = "088biha7554794vlz0n9h1b4xwfs6k2rfkh034km3lirn73z5vwp";
       system = "nfiles";
       asd = "nfiles";
     });
@@ -50559,16 +51335,16 @@ in {
   };
   nhooks = {
     pname = "nhooks";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nhooks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nhooks/2022-07-07/nhooks-20220707-git.tgz";
-      sha256 = "090l1x6d61h7z527q5xkj3wp0m3py81s4frfwnyxwkv8bd7yalk8";
+      url = "http://beta.quicklisp.org/archive/nhooks/2022-11-06/nhooks-20221106-git.tgz";
+      sha256 = "0dy1jvsrifqck4zhw93s5nhl2ana5yinqr7sqgn0j9r9ic1pw5rj";
       system = "nhooks";
       asd = "nhooks";
     });
     systems = [ "nhooks" ];
-    lispLibs = [ (getAttr "serapeum" pkgs) ];
+    lispLibs = [ (getAttr "closer-mop" pkgs) (getAttr "serapeum" pkgs) ];
   };
   nibbles = {
     pname = "nibbles";
@@ -50669,11 +51445,11 @@ in {
   };
   nkeymaps = {
     pname = "nkeymaps";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nkeymaps" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nkeymaps/2022-07-07/nkeymaps-20220707-git.tgz";
-      sha256 = "1f7s9g5s9riyyrbj8lyvzlvymdbh9x9sknxmjzfrkbz3iqlpanc3";
+      url = "http://beta.quicklisp.org/archive/nkeymaps/2022-11-06/nkeymaps-20221106-git.tgz";
+      sha256 = "1drq8pdg850z9fmlwyhxxn0k5d438h0i758f5gxzl5xw3x03rb1k";
       system = "nkeymaps";
       asd = "nkeymaps";
     });
@@ -50682,11 +51458,11 @@ in {
   };
   nkeymaps_slash_tests = {
     pname = "nkeymaps_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nkeymaps" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nkeymaps/2022-07-07/nkeymaps-20220707-git.tgz";
-      sha256 = "1f7s9g5s9riyyrbj8lyvzlvymdbh9x9sknxmjzfrkbz3iqlpanc3";
+      url = "http://beta.quicklisp.org/archive/nkeymaps/2022-11-06/nkeymaps-20221106-git.tgz";
+      sha256 = "1drq8pdg850z9fmlwyhxxn0k5d438h0i758f5gxzl5xw3x03rb1k";
       system = "nkeymaps";
       asd = "nkeymaps";
     });
@@ -50711,11 +51487,11 @@ in {
   };
   nodgui = {
     pname = "nodgui";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nodgui" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nodgui/2022-07-07/nodgui-20220707-git.tgz";
-      sha256 = "1sbly3grhhxp3hfif9cqly5gwac7k4nbk9g4r7x8gmw5li5x6kd3";
+      url = "http://beta.quicklisp.org/archive/nodgui/2022-11-06/nodgui-20221106-git.tgz";
+      sha256 = "0h03w7jrf0zj9px9kgk2nqydb5w9qhdjirjgp978vc8v41hz8ciy";
       system = "nodgui";
       asd = "nodgui";
     });
@@ -50984,24 +51760,24 @@ in {
   };
   num-utils = {
     pname = "num-utils";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "num-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numerical-utilities/2021-12-09/numerical-utilities-20211209-git.tgz";
-      sha256 = "0csm9z6gady6810aw0mmifj6y3zkyi0khsd0hdmk66qdgdm4rb37";
+      url = "http://beta.quicklisp.org/archive/numerical-utilities/2022-11-06/numerical-utilities-20221106-git.tgz";
+      sha256 = "1dwz8zxhqzi31qp863zj1cn1lgljny14snycb9nk871qs121kmsd";
       system = "num-utils";
       asd = "num-utils";
     });
     systems = [ "num-utils" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "let-plus" pkgs) (getAttr "select" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "alexandria_plus" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "let-plus" pkgs) (getAttr "select" pkgs) ];
   };
   num-utils_slash_tests = {
     pname = "num-utils_tests";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "num-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numerical-utilities/2021-12-09/numerical-utilities-20211209-git.tgz";
-      sha256 = "0csm9z6gady6810aw0mmifj6y3zkyi0khsd0hdmk66qdgdm4rb37";
+      url = "http://beta.quicklisp.org/archive/numerical-utilities/2022-11-06/numerical-utilities-20221106-git.tgz";
+      sha256 = "1dwz8zxhqzi31qp863zj1cn1lgljny14snycb9nk871qs121kmsd";
       system = "num-utils";
       asd = "num-utils";
     });
@@ -51013,11 +51789,11 @@ in {
   };
   numcl = {
     pname = "numcl";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "numcl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numcl/2021-12-09/numcl-20211209-git.tgz";
-      sha256 = "15m4spbgayawnw5jjz04zfp0jnk9g6hgq5fmr648hzjzj50j1d78";
+      url = "http://beta.quicklisp.org/archive/numcl/2022-11-06/numcl-20221106-git.tgz";
+      sha256 = "1x0j4vx5w3rn18pssfwys3ghfxr2lkkrv37y47144kr890jrcad9";
       system = "numcl";
       asd = "numcl";
     });
@@ -51026,16 +51802,58 @@ in {
   };
   numcl_dot_test = {
     pname = "numcl.test";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "numcl.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numcl/2021-12-09/numcl-20211209-git.tgz";
-      sha256 = "15m4spbgayawnw5jjz04zfp0jnk9g6hgq5fmr648hzjzj50j1d78";
+      url = "http://beta.quicklisp.org/archive/numcl/2022-11-06/numcl-20221106-git.tgz";
+      sha256 = "1x0j4vx5w3rn18pssfwys3ghfxr2lkkrv37y47144kr890jrcad9";
       system = "numcl.test";
       asd = "numcl.test";
     });
     systems = [ "numcl.test" ];
     lispLibs = [ (getAttr "fiveam" pkgs) (getAttr "numcl" pkgs) ];
+  };
+  numericals = {
+    pname = "numericals";
+    version = "2022.09.0";
+    asds = [ "numericals" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/numericals/2022-11-06/numericals-2022.09.0.tgz";
+      sha256 = "0hfyd045yq7pr4sh9xgqag67yrvnfia1h8ycnxss244zrziabyci";
+      system = "numericals";
+      asd = "numericals";
+    });
+    systems = [ "numericals" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "bmas" pkgs) (getAttr "cl-form-types" pkgs) (getAttr "compiler-macro-notes" pkgs) (getAttr "ctype" pkgs) (getAttr "fiveam" pkgs) (getAttr "introspect-environment" pkgs) (getAttr "iterate" pkgs) (getAttr "lparallel" pkgs) (getAttr "magicl" pkgs) (getAttr "numericals_dot_common" pkgs) (getAttr "policy-cond" pkgs) (getAttr "polymorphic-functions" pkgs) (getAttr "swank" pkgs) (getAttr "specialized-function" pkgs) (getAttr "trivial-coerce" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) (getAttr "trivial-types" pkgs) ];
+  };
+  numericals_dot_common = {
+    pname = "numericals.common";
+    version = "2022.09.0";
+    asds = [ "numericals.common" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/numericals/2022-11-06/numericals-2022.09.0.tgz";
+      sha256 = "0hfyd045yq7pr4sh9xgqag67yrvnfia1h8ycnxss244zrziabyci";
+      system = "numericals.common";
+      asd = "numericals.common";
+    });
+    systems = [ "numericals.common" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "fiveam" pkgs) ];
+  };
+  numericals_slash_benchmarks = {
+    pname = "numericals_benchmarks";
+    version = "2022.09.0";
+    asds = [ "numericals" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/numericals/2022-11-06/numericals-2022.09.0.tgz";
+      sha256 = "0hfyd045yq7pr4sh9xgqag67yrvnfia1h8ycnxss244zrziabyci";
+      system = "numericals";
+      asd = "numericals";
+    });
+    systems = [ "numericals/benchmarks" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-ascii-table" pkgs) (getAttr "fiveam" pkgs) (getAttr "jsown-utils" pkgs) (getAttr "numericals" pkgs) (getAttr "py4cl2" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   numpy-file-format = {
     pname = "numpy-file-format";
@@ -51123,24 +51941,24 @@ in {
   };
   nyxt = {
     pname = "nyxt";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
     systems = [ "nyxt" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-base64" pkgs) (getAttr "cl-containers" pkgs) (getAttr "cl-css" pkgs) (getAttr "cl-custom-hash-table" pkgs) (getAttr "enchant" pkgs) (getAttr "cl-gopher" pkgs) (getAttr "cl-html-diff" pkgs) (getAttr "cl-json" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-ppcre-unicode" pkgs) (getAttr "cl-prevalence" pkgs) (getAttr "cl-qrencode" pkgs) (getAttr "str" pkgs) (getAttr "cl-tld" pkgs) (getAttr "closer-mop" pkgs) (getAttr "clss" pkgs) (getAttr "cluffer" pkgs) (getAttr "dexador" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "iolib" pkgs) (getAttr "local-time" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "moptilities" pkgs) (getAttr "named-readtables" pkgs) (getAttr "nfiles" pkgs) (getAttr "nhooks" pkgs) (getAttr "nkeymaps" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "parenscript" pkgs) (getAttr "phos" pkgs) (getAttr "plump" pkgs) (getAttr "quri" pkgs) (getAttr "serapeum" pkgs) (getAttr "swank" pkgs) (getAttr "spinneret" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-clipboard" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) (getAttr "trivial-types" pkgs) (getAttr "uiop" pkgs) (getAttr "unix-opts" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-base64" pkgs) (getAttr "cl-containers" pkgs) (getAttr "cl-css" pkgs) (getAttr "cl-custom-hash-table" pkgs) (getAttr "enchant" pkgs) (getAttr "cl-gopher" pkgs) (getAttr "cl-html-diff" pkgs) (getAttr "cl-json" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-ppcre-unicode" pkgs) (getAttr "cl-prevalence" pkgs) (getAttr "cl-qrencode" pkgs) (getAttr "str" pkgs) (getAttr "cl-tld" pkgs) (getAttr "closer-mop" pkgs) (getAttr "clss" pkgs) (getAttr "cluffer" pkgs) (getAttr "dexador" pkgs) (getAttr "dissect" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "iolib" pkgs) (getAttr "local-time" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "moptilities" pkgs) (getAttr "ndebug" pkgs) (getAttr "nfiles" pkgs) (getAttr "nhooks" pkgs) (getAttr "nkeymaps" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "ospm" pkgs) (getAttr "parenscript" pkgs) (getAttr "phos" pkgs) (getAttr "plump" pkgs) (getAttr "py-configparser" pkgs) (getAttr "quri" pkgs) (getAttr "serapeum" pkgs) (getAttr "swank" pkgs) (getAttr "slynk" pkgs) (getAttr "spinneret" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-clipboard" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) (getAttr "trivial-types" pkgs) (getAttr "uiop" pkgs) (getAttr "unix-opts" pkgs) ];
   };
   nyxt-asdf = {
     pname = "nyxt-asdf";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt-asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt-asdf";
       asd = "nyxt-asdf";
     });
@@ -51149,11 +51967,11 @@ in {
   };
   nyxt-ubuntu-package = {
     pname = "nyxt-ubuntu-package";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt-ubuntu-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt-ubuntu-package";
       asd = "nyxt-ubuntu-package";
     });
@@ -51162,11 +51980,11 @@ in {
   };
   nyxt_slash_analysis = {
     pname = "nyxt_analysis";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51176,13 +51994,45 @@ in {
       broken = true;
     };
   };
-  nyxt_slash_benchmark = {
-    pname = "nyxt_benchmark";
-    version = "20220707-git";
+  nyxt_slash_analysis_slash_tests = {
+    pname = "nyxt_analysis_tests";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
+      system = "nyxt";
+      asd = "nyxt";
+    });
+    systems = [ "nyxt/analysis/tests" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "str" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "serapeum" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  nyxt_slash_application_slash_tests = {
+    pname = "nyxt_application_tests";
+    version = "20221106-git";
+    asds = [ "nyxt" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
+      system = "nyxt";
+      asd = "nyxt";
+    });
+    systems = [ "nyxt/application/tests" ];
+    lispLibs = [ (getAttr "nyxt" pkgs) (getAttr "nyxt-asdf" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  nyxt_slash_benchmark = {
+    pname = "nyxt_benchmark";
+    version = "20221106-git";
+    asds = [ "nyxt" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51194,11 +52044,11 @@ in {
   };
   nyxt_slash_class-star = {
     pname = "nyxt_class-star";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51208,29 +52058,13 @@ in {
       broken = true;
     };
   };
-  nyxt_slash_class-star_slash_tests = {
-    pname = "nyxt_class-star_tests";
-    version = "20220707-git";
-    asds = [ "nyxt" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
-      system = "nyxt";
-      asd = "nyxt";
-    });
-    systems = [ "nyxt/class-star/tests" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
   nyxt_slash_clean-fasls = {
     pname = "nyxt_clean-fasls";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51242,11 +52076,11 @@ in {
   };
   nyxt_slash_documentation = {
     pname = "nyxt_documentation";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51258,11 +52092,11 @@ in {
   };
   nyxt_slash_download-manager = {
     pname = "nyxt_download-manager";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51272,29 +52106,13 @@ in {
       broken = true;
     };
   };
-  nyxt_slash_download-manager_slash_tests = {
-    pname = "nyxt_download-manager_tests";
-    version = "20220707-git";
-    asds = [ "nyxt" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
-      system = "nyxt";
-      asd = "nyxt";
-    });
-    systems = [ "nyxt/download-manager/tests" ];
-    lispLibs = [ (getAttr "calispel" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "str" pkgs) (getAttr "dexador" pkgs) (getAttr "log4cl" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) (getAttr "quri" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
   nyxt_slash_gi-gtk = {
     pname = "nyxt_gi-gtk";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51306,11 +52124,11 @@ in {
   };
   nyxt_slash_gi-gtk-application = {
     pname = "nyxt_gi-gtk-application";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51320,13 +52138,29 @@ in {
       broken = true;
     };
   };
-  nyxt_slash_gtk = {
-    pname = "nyxt_gtk";
-    version = "20220707-git";
+  nyxt_slash_gi-gtk_slash_tests = {
+    pname = "nyxt_gi-gtk_tests";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
+      system = "nyxt";
+      asd = "nyxt";
+    });
+    systems = [ "nyxt/gi-gtk/tests" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "cl-cffi-gtk" pkgs) (getAttr "cl-gobject-introspection" pkgs) (getAttr "cl-webkit2" pkgs) (getAttr "nyxt" pkgs) (getAttr "nyxt-asdf" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  nyxt_slash_gtk = {
+    pname = "nyxt_gtk";
+    version = "20221106-git";
+    asds = [ "nyxt" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51338,11 +52172,11 @@ in {
   };
   nyxt_slash_gtk-application = {
     pname = "nyxt_gtk-application";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51354,11 +52188,11 @@ in {
   };
   nyxt_slash_history-tree = {
     pname = "nyxt_history-tree";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51370,59 +52204,27 @@ in {
   };
   nyxt_slash_history-tree_slash_tests = {
     pname = "nyxt_history-tree_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
     systems = [ "nyxt/history-tree/tests" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-custom-hash-table" pkgs) (getAttr "str" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "local-time" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
-  nyxt_slash_ospm = {
-    pname = "nyxt_ospm";
-    version = "20220707-git";
-    asds = [ "nyxt" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
-      system = "nyxt";
-      asd = "nyxt";
-    });
-    systems = [ "nyxt/ospm" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "str" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "local-time" pkgs) (getAttr "moptilities" pkgs) (getAttr "named-readtables" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivia" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
-  nyxt_slash_ospm_slash_tests = {
-    pname = "nyxt_ospm_tests";
-    version = "20220707-git";
-    asds = [ "nyxt" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
-      system = "nyxt";
-      asd = "nyxt";
-    });
-    systems = [ "nyxt/ospm/tests" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "str" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "local-time" pkgs) (getAttr "moptilities" pkgs) (getAttr "named-readtables" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivia" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-custom-hash-table" pkgs) (getAttr "str" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "local-time" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) ];
     meta = {
       broken = true;
     };
   };
   nyxt_slash_password-manager = {
     pname = "nyxt_password-manager";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51434,11 +52236,11 @@ in {
   };
   nyxt_slash_prompter = {
     pname = "nyxt_prompter";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51450,27 +52252,27 @@ in {
   };
   nyxt_slash_prompter_slash_tests = {
     pname = "nyxt_prompter_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
     systems = [ "nyxt/prompter/tests" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-containers" pkgs) (getAttr "str" pkgs) (getAttr "closer-mop" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "lparallel" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "calispel" pkgs) (getAttr "cl-containers" pkgs) (getAttr "str" pkgs) (getAttr "closer-mop" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "lparallel" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivial-package-local-nicknames" pkgs) ];
     meta = {
       broken = true;
     };
   };
   nyxt_slash_submodules = {
     pname = "nyxt_submodules";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51482,27 +52284,27 @@ in {
   };
   nyxt_slash_tests = {
     pname = "nyxt_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
     systems = [ "nyxt/tests" ];
-    lispLibs = [ (getAttr "nyxt" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) ];
+    lispLibs = [ (getAttr "nyxt" pkgs) (getAttr "nyxt-asdf" pkgs) ];
     meta = {
       broken = true;
     };
   };
   nyxt_slash_text-buffer = {
     pname = "nyxt_text-buffer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51514,11 +52316,11 @@ in {
   };
   nyxt_slash_theme = {
     pname = "nyxt_theme";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51530,43 +52332,27 @@ in {
   };
   nyxt_slash_theme_slash_tests = {
     pname = "nyxt_theme_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
     systems = [ "nyxt/theme/tests" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-css" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "prove" pkgs) (getAttr "serapeum" pkgs) ];
-    meta = {
-      broken = true;
-    };
-  };
-  nyxt_slash_user = {
-    pname = "nyxt_user";
-    version = "20220707-git";
-    asds = [ "nyxt" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
-      system = "nyxt";
-      asd = "nyxt";
-    });
-    systems = [ "nyxt/user" ];
-    lispLibs = [ (getAttr "nyxt-asdf" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-css" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "moptilities" pkgs) (getAttr "nyxt-asdf" pkgs) (getAttr "serapeum" pkgs) ];
     meta = {
       broken = true;
     };
   };
   nyxt_slash_user-interface = {
     pname = "nyxt_user-interface";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51578,11 +52364,11 @@ in {
   };
   nyxt_slash_version = {
     pname = "nyxt_version";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "nyxt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nyxt/2022-07-07/nyxt-20220707-git.tgz";
-      sha256 = "1rwra88d39fc9xd1444gpr4i4qamgjg776mnh2y9q74kcy4hrzlz";
+      url = "http://beta.quicklisp.org/archive/nyxt/2022-11-06/nyxt-20221106-git.tgz";
+      sha256 = "1rxj8gp4a30r0yfcqgysnrnamwzkp25lyqmkjmp1lyzp1jg2kzar";
       system = "nyxt";
       asd = "nyxt";
     });
@@ -51945,11 +52731,11 @@ in {
   };
   omg = {
     pname = "omg";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "omg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/omglib/2022-07-07/omglib-20220707-git.tgz";
-      sha256 = "1gixvxbb39d48ajcz8lsdvym91p09az7cg7w5i32wh339x5ym508";
+      url = "http://beta.quicklisp.org/archive/omglib/2022-11-06/omglib-20221106-git.tgz";
+      sha256 = "0bdzs6ba5bk50512116af4dglfaw1sylcixay2b4f9iw9wddhb7f";
       system = "omg";
       asd = "omg";
     });
@@ -51958,11 +52744,11 @@ in {
   };
   one-more-re-nightmare = {
     pname = "one-more-re-nightmare";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "one-more-re-nightmare" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-07-07/one-more-re-nightmare-20220707-git.tgz";
-      sha256 = "15nb0ys8as28ngqmps709gx869bzwiv5xivms0fch22wgpm68jdw";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
+      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
       system = "one-more-re-nightmare";
       asd = "one-more-re-nightmare";
     });
@@ -51971,11 +52757,11 @@ in {
   };
   one-more-re-nightmare-simd = {
     pname = "one-more-re-nightmare-simd";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "one-more-re-nightmare-simd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-07-07/one-more-re-nightmare-20220707-git.tgz";
-      sha256 = "15nb0ys8as28ngqmps709gx869bzwiv5xivms0fch22wgpm68jdw";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
+      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
       system = "one-more-re-nightmare-simd";
       asd = "one-more-re-nightmare-simd";
     });
@@ -51984,11 +52770,11 @@ in {
   };
   one-more-re-nightmare-tests = {
     pname = "one-more-re-nightmare-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "one-more-re-nightmare-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-07-07/one-more-re-nightmare-20220707-git.tgz";
-      sha256 = "15nb0ys8as28ngqmps709gx869bzwiv5xivms0fch22wgpm68jdw";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
+      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
       system = "one-more-re-nightmare-tests";
       asd = "one-more-re-nightmare-tests";
     });
@@ -52364,11 +53150,11 @@ in {
   };
   org_dot_melusina_dot_confidence = {
     pname = "org.melusina.confidence";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.melusina.confidence" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-confidence/2022-07-07/cl-confidence-20220707-git.tgz";
-      sha256 = "0kh2pyrpv160wfp01ci30zngm5i03rqpgh255z0qjv9hnfacni5l";
+      url = "http://beta.quicklisp.org/archive/cl-confidence/2022-11-06/cl-confidence-20221106-git.tgz";
+      sha256 = "17xb8k53ncpp7h8b5g9y56cg5imrczxx8zpr5xkslrvlsb551i1q";
       system = "org.melusina.confidence";
       asd = "org.melusina.confidence";
     });
@@ -52377,11 +53163,11 @@ in {
   };
   org_dot_melusina_dot_confidence_slash_testsuite = {
     pname = "org.melusina.confidence_testsuite";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.melusina.confidence" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-confidence/2022-07-07/cl-confidence-20220707-git.tgz";
-      sha256 = "0kh2pyrpv160wfp01ci30zngm5i03rqpgh255z0qjv9hnfacni5l";
+      url = "http://beta.quicklisp.org/archive/cl-confidence/2022-11-06/cl-confidence-20221106-git.tgz";
+      sha256 = "17xb8k53ncpp7h8b5g9y56cg5imrczxx8zpr5xkslrvlsb551i1q";
       system = "org.melusina.confidence";
       asd = "org.melusina.confidence";
     });
@@ -52422,24 +53208,69 @@ in {
   };
   org_dot_tfeb_dot_conduit-packages = {
     pname = "org.tfeb.conduit-packages";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.conduit-packages" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/conduit-packages/2022-03-31/conduit-packages-20220331-git.tgz";
-      sha256 = "15i0gaks6s7w68n78xxcipgfj81f06i91jrajgc7iwjarr423lpz";
+      url = "http://beta.quicklisp.org/archive/conduit-packages/2022-11-06/conduit-packages-20221106-git.tgz";
+      sha256 = "16mqbwwgpx4k462cnh59j184530dcsr1cbps0jjh0v0yfamyvnqk";
       system = "org.tfeb.conduit-packages";
       asd = "org.tfeb.conduit-packages";
     });
     systems = [ "org.tfeb.conduit-packages" ];
     lispLibs = [  ];
   };
+  org_dot_tfeb_dot_dsm = {
+    pname = "org.tfeb.dsm";
+    version = "20221106-git";
+    asds = [ "org.tfeb.dsm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/dsm/2022-11-06/dsm-20221106-git.tgz";
+      sha256 = "0xxlv8l7fa5mp8qfvh94ndjm4rz89xjs0xj4sni30f2vnzqsyfij";
+      system = "org.tfeb.dsm";
+      asd = "org.tfeb.dsm";
+    });
+    systems = [ "org.tfeb.dsm" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_collecting" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_iterate" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_simple-loops" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_spam" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_utilities" pkgs) (getAttr "org_dot_tfeb_dot_tools_dot_require-module" pkgs) ];
+  };
+  org_dot_tfeb_dot_dsm_slash_bench = {
+    pname = "org.tfeb.dsm_bench";
+    version = "20221106-git";
+    asds = [ "org.tfeb.dsm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/dsm/2022-11-06/dsm-20221106-git.tgz";
+      sha256 = "0xxlv8l7fa5mp8qfvh94ndjm4rz89xjs0xj4sni30f2vnzqsyfij";
+      system = "org.tfeb.dsm";
+      asd = "org.tfeb.dsm";
+    });
+    systems = [ "org.tfeb.dsm/bench" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_dsm" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  org_dot_tfeb_dot_dsm_slash_test = {
+    pname = "org.tfeb.dsm_test";
+    version = "20221106-git";
+    asds = [ "org.tfeb.dsm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/dsm/2022-11-06/dsm-20221106-git.tgz";
+      sha256 = "0xxlv8l7fa5mp8qfvh94ndjm4rz89xjs0xj4sni30f2vnzqsyfij";
+      system = "org.tfeb.dsm";
+      asd = "org.tfeb.dsm";
+    });
+    systems = [ "org.tfeb.dsm/test" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_dsm" pkgs) (getAttr "parachute" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   org_dot_tfeb_dot_hax = {
     pname = "org.tfeb.hax";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax";
       asd = "org.tfeb.hax";
     });
@@ -52448,11 +53279,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_abstract-classes = {
     pname = "org.tfeb.hax.abstract-classes";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.abstract-classes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.abstract-classes";
       asd = "org.tfeb.hax.abstract-classes";
     });
@@ -52461,11 +53292,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_binding = {
     pname = "org.tfeb.hax.binding";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.binding" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.binding";
       asd = "org.tfeb.hax.binding";
     });
@@ -52474,11 +53305,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_collecting = {
     pname = "org.tfeb.hax.collecting";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.collecting" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.collecting";
       asd = "org.tfeb.hax.collecting";
     });
@@ -52487,11 +53318,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_comment-form = {
     pname = "org.tfeb.hax.comment-form";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.comment-form" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.comment-form";
       asd = "org.tfeb.hax.comment-form";
     });
@@ -52500,11 +53331,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_cs-forms = {
     pname = "org.tfeb.hax.cs-forms";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.cs-forms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.cs-forms";
       asd = "org.tfeb.hax.cs-forms";
     });
@@ -52513,11 +53344,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_define-functions = {
     pname = "org.tfeb.hax.define-functions";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.define-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.define-functions";
       asd = "org.tfeb.hax.define-functions";
     });
@@ -52526,11 +53357,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_dynamic-state = {
     pname = "org.tfeb.hax.dynamic-state";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.dynamic-state" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.dynamic-state";
       asd = "org.tfeb.hax.dynamic-state";
     });
@@ -52539,11 +53370,11 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_iterate = {
     pname = "org.tfeb.hax.iterate";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.iterate" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.iterate";
       asd = "org.tfeb.hax.iterate";
     });
@@ -52552,24 +53383,37 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_memoize = {
     pname = "org.tfeb.hax.memoize";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.memoize" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.memoize";
       asd = "org.tfeb.hax.memoize";
     });
     systems = [ "org.tfeb.hax.memoize" ];
     lispLibs = [  ];
   };
+  org_dot_tfeb_dot_hax_dot_metatronic = {
+    pname = "org.tfeb.hax.metatronic";
+    version = "20221106-git";
+    asds = [ "org.tfeb.hax.metatronic" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
+      system = "org.tfeb.hax.metatronic";
+      asd = "org.tfeb.hax.metatronic";
+    });
+    systems = [ "org.tfeb.hax.metatronic" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_utilities" pkgs) ];
+  };
   org_dot_tfeb_dot_hax_dot_object-accessors = {
     pname = "org.tfeb.hax.object-accessors";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.object-accessors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.object-accessors";
       asd = "org.tfeb.hax.object-accessors";
     });
@@ -52578,37 +53422,76 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_read-package = {
     pname = "org.tfeb.hax.read-package";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.read-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.read-package";
       asd = "org.tfeb.hax.read-package";
     });
     systems = [ "org.tfeb.hax.read-package" ];
     lispLibs = [  ];
   };
+  org_dot_tfeb_dot_hax_dot_simple-loops = {
+    pname = "org.tfeb.hax.simple-loops";
+    version = "20221106-git";
+    asds = [ "org.tfeb.hax.simple-loops" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
+      system = "org.tfeb.hax.simple-loops";
+      asd = "org.tfeb.hax.simple-loops";
+    });
+    systems = [ "org.tfeb.hax.simple-loops" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_collecting" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_iterate" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_utilities" pkgs) ];
+  };
   org_dot_tfeb_dot_hax_dot_singleton-classes = {
     pname = "org.tfeb.hax.singleton-classes";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.singleton-classes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.singleton-classes";
       asd = "org.tfeb.hax.singleton-classes";
     });
     systems = [ "org.tfeb.hax.singleton-classes" ];
     lispLibs = [ (getAttr "closer-mop" pkgs) ];
   };
+  org_dot_tfeb_dot_hax_dot_slog = {
+    pname = "org.tfeb.hax.slog";
+    version = "20221106-git";
+    asds = [ "org.tfeb.hax.slog" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
+      system = "org.tfeb.hax.slog";
+      asd = "org.tfeb.hax.slog";
+    });
+    systems = [ "org.tfeb.hax.slog" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_collecting" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_metatronic" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_simple-loops" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_spam" pkgs) ];
+  };
+  org_dot_tfeb_dot_hax_dot_spam = {
+    pname = "org.tfeb.hax.spam";
+    version = "20221106-git";
+    asds = [ "org.tfeb.hax.spam" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
+      system = "org.tfeb.hax.spam";
+      asd = "org.tfeb.hax.spam";
+    });
+    systems = [ "org.tfeb.hax.spam" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_simple-loops" pkgs) ];
+  };
   org_dot_tfeb_dot_hax_dot_stringtable = {
     pname = "org.tfeb.hax.stringtable";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.stringtable" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.stringtable";
       asd = "org.tfeb.hax.stringtable";
     });
@@ -52617,24 +53500,37 @@ in {
   };
   org_dot_tfeb_dot_hax_dot_trace-macroexpand = {
     pname = "org.tfeb.hax.trace-macroexpand";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.trace-macroexpand" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.trace-macroexpand";
       asd = "org.tfeb.hax.trace-macroexpand";
     });
     systems = [ "org.tfeb.hax.trace-macroexpand" ];
     lispLibs = [  ];
   };
+  org_dot_tfeb_dot_hax_dot_utilities = {
+    pname = "org.tfeb.hax.utilities";
+    version = "20221106-git";
+    asds = [ "org.tfeb.hax.utilities" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
+      system = "org.tfeb.hax.utilities";
+      asd = "org.tfeb.hax.utilities";
+    });
+    systems = [ "org.tfeb.hax.utilities" ];
+    lispLibs = [ (getAttr "org_dot_tfeb_dot_hax_dot_collecting" pkgs) (getAttr "org_dot_tfeb_dot_hax_dot_iterate" pkgs) ];
+  };
   org_dot_tfeb_dot_hax_dot_wrapping-standard = {
     pname = "org.tfeb.hax.wrapping-standard";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax.wrapping-standard" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax.wrapping-standard";
       asd = "org.tfeb.hax.wrapping-standard";
     });
@@ -52643,11 +53539,11 @@ in {
   };
   org_dot_tfeb_dot_hax_slash_test = {
     pname = "org.tfeb.hax_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.hax" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-07-07/tfeb-lisp-hax-20220707-git.tgz";
-      sha256 = "08pgxndsyz9y43g0k0081ic19ravvv55p79zpar46pzzkb3wmqba";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2022-11-06/tfeb-lisp-hax-20221106-git.tgz";
+      sha256 = "0l36jlril1ypx1866dmsk7czlc61rj2i9yn97qaapwxbqhf7ypxp";
       system = "org.tfeb.hax";
       asd = "org.tfeb.hax";
     });
@@ -52659,11 +53555,11 @@ in {
   };
   org_dot_tfeb_dot_tools = {
     pname = "org.tfeb.tools";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools";
       asd = "org.tfeb.tools";
     });
@@ -52672,11 +53568,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_asdf-module-sysdcls = {
     pname = "org.tfeb.tools.asdf-module-sysdcls";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.asdf-module-sysdcls" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.asdf-module-sysdcls";
       asd = "org.tfeb.tools.asdf-module-sysdcls";
     });
@@ -52685,11 +53581,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_build-modules = {
     pname = "org.tfeb.tools.build-modules";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.build-modules" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.build-modules";
       asd = "org.tfeb.tools.build-modules";
     });
@@ -52698,11 +53594,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_deprecations = {
     pname = "org.tfeb.tools.deprecations";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.deprecations" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.deprecations";
       asd = "org.tfeb.tools.deprecations";
     });
@@ -52711,11 +53607,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_feature-expressions = {
     pname = "org.tfeb.tools.feature-expressions";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.feature-expressions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.feature-expressions";
       asd = "org.tfeb.tools.feature-expressions";
     });
@@ -52724,11 +53620,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_install-providers = {
     pname = "org.tfeb.tools.install-providers";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.install-providers" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.install-providers";
       asd = "org.tfeb.tools.install-providers";
     });
@@ -52737,11 +53633,11 @@ in {
   };
   org_dot_tfeb_dot_tools_dot_require-module = {
     pname = "org.tfeb.tools.require-module";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "org.tfeb.tools.require-module" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-07-07/tfeb-lisp-tools-20220707-git.tgz";
-      sha256 = "0b5wh5csbpmxifg7p5838dwid9878zwpl8pdi76py7k8dnj1y3sj";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
+      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
       system = "org.tfeb.tools.require-module";
       asd = "org.tfeb.tools.require-module";
     });
@@ -52789,24 +53685,24 @@ in {
   };
   osc = {
     pname = "osc";
-    version = "20190521-git";
+    version = "20221106-git";
     asds = [ "osc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/osc/2019-05-21/osc-20190521-git.tgz";
-      sha256 = "1808w72d2bbnc7n75aap1lhyai8lp0100h80a2lhjcx6wl0z1lvl";
+      url = "http://beta.quicklisp.org/archive/osc/2022-11-06/osc-20221106-git.tgz";
+      sha256 = "05whbssv32f25vy2krklgg73k8yw9ck99pdha436kpkimr2rpqrf";
       system = "osc";
       asd = "osc";
     });
     systems = [ "osc" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "usocket" pkgs) ];
   };
   osicat = {
     pname = "osicat";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "osicat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/osicat/2022-02-20/osicat-20220220-git.tgz";
-      sha256 = "1ilag0b0xn97acc0m1q93vwp2y3md9a586858zfx04d8wpbvk8sz";
+      url = "http://beta.quicklisp.org/archive/osicat/2022-11-06/osicat-20221106-git.tgz";
+      sha256 = "1gxjy11g6k78m3kx3l06v8pqcjdjq51x713f8dapm7hi1c00nzvg";
       system = "osicat";
       asd = "osicat";
     });
@@ -52815,11 +53711,11 @@ in {
   };
   osicat_slash_tests = {
     pname = "osicat_tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "osicat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/osicat/2022-02-20/osicat-20220220-git.tgz";
-      sha256 = "1ilag0b0xn97acc0m1q93vwp2y3md9a586858zfx04d8wpbvk8sz";
+      url = "http://beta.quicklisp.org/archive/osicat/2022-11-06/osicat-20221106-git.tgz";
+      sha256 = "1gxjy11g6k78m3kx3l06v8pqcjdjq51x713f8dapm7hi1c00nzvg";
       system = "osicat";
       asd = "osicat";
     });
@@ -52842,13 +53738,42 @@ in {
     systems = [ "osmpbf" ];
     lispLibs = [ (getAttr "chipz" pkgs) (getAttr "com_dot_google_dot_base" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "nibbles" pkgs) (getAttr "protobuf" pkgs) ];
   };
+  ospm = {
+    pname = "ospm";
+    version = "20221106-git";
+    asds = [ "ospm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ospm/2022-11-06/ospm-20221106-git.tgz";
+      sha256 = "0ixx6y20q4kcvm60lp3wca5q1nhnpakdw5avz4mlj6mm8m4z526g";
+      system = "ospm";
+      asd = "ospm";
+    });
+    systems = [ "ospm" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "calispel" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star" pkgs) (getAttr "local-time" pkgs) (getAttr "moptilities" pkgs) (getAttr "named-readtables" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivia" pkgs) ];
+  };
+  ospm_slash_tests = {
+    pname = "ospm_tests";
+    version = "20221106-git";
+    asds = [ "ospm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ospm/2022-11-06/ospm-20221106-git.tgz";
+      sha256 = "0ixx6y20q4kcvm60lp3wca5q1nhnpakdw5avz4mlj6mm8m4z526g";
+      system = "ospm";
+      asd = "ospm";
+    });
+    systems = [ "ospm/tests" ];
+    lispLibs = [ (getAttr "lisp-unit2" pkgs) (getAttr "ospm" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
   overlord = {
     pname = "overlord";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "overlord" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/overlord/2022-03-31/overlord-20220331-git.tgz";
-      sha256 = "1vv3srjzjnrpifpfcvy2yra231fww6dmdglzm26cj0kv34g534vw";
+      url = "http://beta.quicklisp.org/archive/overlord/2022-11-06/overlord-20221106-git.tgz";
+      sha256 = "02f3nhqg42z5i1fqz998vcn31vn27z3gvwqhh8m5cxkj1c5l4zxz";
       system = "overlord";
       asd = "overlord";
     });
@@ -53042,11 +53967,11 @@ in {
   };
   papyrus = {
     pname = "papyrus";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "papyrus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/papyrus/2022-02-20/papyrus-20220220-git.tgz";
-      sha256 = "1zq316gwq48ns1rkv2qqia01cnhf8syav9f7d6g3wyw2g17jg04p";
+      url = "http://beta.quicklisp.org/archive/papyrus/2022-11-06/papyrus-20221106-git.tgz";
+      sha256 = "0swpsxir553cs2pj6xz8cgyr3y9fh88hiv527ssa8cm7qkxcbbg9";
       system = "papyrus";
       asd = "papyrus";
     });
@@ -53055,24 +53980,24 @@ in {
   };
   parachute = {
     pname = "parachute";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "parachute" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2021-10-20/parachute-20211020-git.tgz";
-      sha256 = "026crl465xqh3fnskfd4c1sxa9c33dfy702cf3l5apbjyj1dg20n";
+      url = "http://beta.quicklisp.org/archive/parachute/2022-11-06/parachute-20221106-git.tgz";
+      sha256 = "0cppp1sp9xqkgxgkwidhqzlsj03ywnar7z9mzwcliww8y0kv5555";
       system = "parachute";
       asd = "parachute";
     });
     systems = [ "parachute" ];
-    lispLibs = [ (getAttr "documentation-utils" pkgs) (getAttr "form-fiddle" pkgs) ];
+    lispLibs = [ (getAttr "documentation-utils" pkgs) (getAttr "form-fiddle" pkgs) (getAttr "trivial-custom-debugger" pkgs) ];
   };
   parachute-fiveam = {
     pname = "parachute-fiveam";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "parachute-fiveam" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2021-10-20/parachute-20211020-git.tgz";
-      sha256 = "026crl465xqh3fnskfd4c1sxa9c33dfy702cf3l5apbjyj1dg20n";
+      url = "http://beta.quicklisp.org/archive/parachute/2022-11-06/parachute-20221106-git.tgz";
+      sha256 = "0cppp1sp9xqkgxgkwidhqzlsj03ywnar7z9mzwcliww8y0kv5555";
       system = "parachute-fiveam";
       asd = "parachute-fiveam";
     });
@@ -53081,11 +54006,11 @@ in {
   };
   parachute-lisp-unit = {
     pname = "parachute-lisp-unit";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "parachute-lisp-unit" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2021-10-20/parachute-20211020-git.tgz";
-      sha256 = "026crl465xqh3fnskfd4c1sxa9c33dfy702cf3l5apbjyj1dg20n";
+      url = "http://beta.quicklisp.org/archive/parachute/2022-11-06/parachute-20221106-git.tgz";
+      sha256 = "0cppp1sp9xqkgxgkwidhqzlsj03ywnar7z9mzwcliww8y0kv5555";
       system = "parachute-lisp-unit";
       asd = "parachute-lisp-unit";
     });
@@ -53094,11 +54019,11 @@ in {
   };
   parachute-prove = {
     pname = "parachute-prove";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "parachute-prove" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2021-10-20/parachute-20211020-git.tgz";
-      sha256 = "026crl465xqh3fnskfd4c1sxa9c33dfy702cf3l5apbjyj1dg20n";
+      url = "http://beta.quicklisp.org/archive/parachute/2022-11-06/parachute-20221106-git.tgz";
+      sha256 = "0cppp1sp9xqkgxgkwidhqzlsj03ywnar7z9mzwcliww8y0kv5555";
       system = "parachute-prove";
       asd = "parachute-prove";
     });
@@ -53674,24 +54599,24 @@ in {
   };
   pathname-utils = {
     pname = "pathname-utils";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "pathname-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pathname-utils/2022-07-07/pathname-utils-20220707-git.tgz";
-      sha256 = "0s99nzz7p1v3rsipiz1aiy1v7mpcl8x4bizsngbmfpnv4pc041f8";
+      url = "http://beta.quicklisp.org/archive/pathname-utils/2022-11-06/pathname-utils-20221106-git.tgz";
+      sha256 = "1c1g2piiw01gcawgxlp7c4jaqls3kcjh9q8smwrvnvnr2g3hbn98";
       system = "pathname-utils";
       asd = "pathname-utils";
     });
     systems = [ "pathname-utils" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "trivial-features" pkgs) ];
   };
   pathname-utils-test = {
     pname = "pathname-utils-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "pathname-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pathname-utils/2022-07-07/pathname-utils-20220707-git.tgz";
-      sha256 = "0s99nzz7p1v3rsipiz1aiy1v7mpcl8x4bizsngbmfpnv4pc041f8";
+      url = "http://beta.quicklisp.org/archive/pathname-utils/2022-11-06/pathname-utils-20221106-git.tgz";
+      sha256 = "1c1g2piiw01gcawgxlp7c4jaqls3kcjh9q8smwrvnvnr2g3hbn98";
       system = "pathname-utils-test";
       asd = "pathname-utils-test";
     });
@@ -54002,11 +54927,11 @@ in {
   };
   periods = {
     pname = "periods";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "periods" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/periods/2021-02-28/periods-20210228-git.tgz";
-      sha256 = "1ym2j4an9ig2hl210jg91gpf7xfnp6mlhkw3n9kkdnwiji3ipqlk";
+      url = "http://beta.quicklisp.org/archive/periods/2022-11-06/periods-20221106-git.tgz";
+      sha256 = "0ynhdmlzb499mlm7c7zy6vgw8vglkkf14zr0v40jcl1sgq3236ry";
       system = "periods";
       asd = "periods";
     });
@@ -54015,11 +54940,11 @@ in {
   };
   periods-series = {
     pname = "periods-series";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "periods-series" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/periods/2021-02-28/periods-20210228-git.tgz";
-      sha256 = "1ym2j4an9ig2hl210jg91gpf7xfnp6mlhkw3n9kkdnwiji3ipqlk";
+      url = "http://beta.quicklisp.org/archive/periods/2022-11-06/periods-20221106-git.tgz";
+      sha256 = "0ynhdmlzb499mlm7c7zy6vgw8vglkkf14zr0v40jcl1sgq3236ry";
       system = "periods-series";
       asd = "periods-series";
     });
@@ -54039,13 +54964,26 @@ in {
     systems = [ "perlre" ];
     lispLibs = [ (getAttr "cl-interpol" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "let-over-lambda" pkgs) (getAttr "prove" pkgs) (getAttr "trivia" pkgs) (getAttr "trivia_dot_ppcre" pkgs) ];
   };
+  pero = {
+    pname = "pero";
+    version = "20221106-git";
+    asds = [ "pero" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/pero/2022-11-06/pero-20221106-git.tgz";
+      sha256 = "0hpv2vn42210niw6hs4z17w0c565nzln2xzapw7jhm1xjl633vbc";
+      system = "pero";
+      asd = "pero";
+    });
+    systems = [ "pero" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "local-time" pkgs) ];
+  };
   persistent = {
     pname = "persistent";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "persistent" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "persistent";
       asd = "persistent";
     });
@@ -54093,11 +55031,11 @@ in {
   };
   petalisp = {
     pname = "petalisp";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp";
       asd = "petalisp";
     });
@@ -54106,24 +55044,24 @@ in {
   };
   petalisp_dot_api = {
     pname = "petalisp.api";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.api" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.api";
       asd = "petalisp.api";
     });
     systems = [ "petalisp.api" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_multicore-backend" pkgs) (getAttr "petalisp_dot_native-backend" pkgs) (getAttr "petalisp_dot_utilities" pkgs) (getAttr "petalisp_dot_xmas-backend" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-macroexpand-all" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_utilities" pkgs) (getAttr "petalisp_dot_xmas-backend" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-macroexpand-all" pkgs) ];
   };
   petalisp_dot_core = {
     pname = "petalisp.core";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.core";
       asd = "petalisp.core";
     });
@@ -54132,11 +55070,11 @@ in {
   };
   petalisp_dot_examples = {
     pname = "petalisp.examples";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.examples";
       asd = "petalisp.examples";
     });
@@ -54145,11 +55083,11 @@ in {
   };
   petalisp_dot_graphviz = {
     pname = "petalisp.graphviz";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.graphviz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.graphviz";
       asd = "petalisp.graphviz";
     });
@@ -54158,63 +55096,24 @@ in {
   };
   petalisp_dot_ir = {
     pname = "petalisp.ir";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.ir" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.ir";
       asd = "petalisp.ir";
     });
     systems = [ "petalisp.ir" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_utilities" pkgs) (getAttr "priority-queue" pkgs) (getAttr "split-sequence" pkgs) (getAttr "ucons" pkgs) ];
   };
-  petalisp_dot_multicore-backend = {
-    pname = "petalisp.multicore-backend";
-    version = "20220707-git";
-    asds = [ "petalisp.multicore-backend" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
-      system = "petalisp.multicore-backend";
-      asd = "petalisp.multicore-backend";
-    });
-    systems = [ "petalisp.multicore-backend" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "atomics" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_ir" pkgs) (getAttr "petalisp_dot_utilities" pkgs) (getAttr "trivia" pkgs) ];
-  };
-  petalisp_dot_native-backend = {
-    pname = "petalisp.native-backend";
-    version = "20220707-git";
-    asds = [ "petalisp.native-backend" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
-      system = "petalisp.native-backend";
-      asd = "petalisp.native-backend";
-    });
-    systems = [ "petalisp.native-backend" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "lparallel" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_ir" pkgs) (getAttr "petalisp_dot_scheduler" pkgs) (getAttr "petalisp_dot_utilities" pkgs) (getAttr "trivia" pkgs) ];
-  };
-  petalisp_dot_scheduler = {
-    pname = "petalisp.scheduler";
-    version = "20220707-git";
-    asds = [ "petalisp.scheduler" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
-      system = "petalisp.scheduler";
-      asd = "petalisp.scheduler";
-    });
-    systems = [ "petalisp.scheduler" ];
-    lispLibs = [ (getAttr "atomics" pkgs) (getAttr "petalisp_dot_core" pkgs) (getAttr "petalisp_dot_ir" pkgs) ];
-  };
   petalisp_dot_test-suite = {
     pname = "petalisp.test-suite";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.test-suite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.test-suite";
       asd = "petalisp.test-suite";
     });
@@ -54223,11 +55122,11 @@ in {
   };
   petalisp_dot_type-inference = {
     pname = "petalisp.type-inference";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.type-inference" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.type-inference";
       asd = "petalisp.type-inference";
     });
@@ -54236,11 +55135,11 @@ in {
   };
   petalisp_dot_utilities = {
     pname = "petalisp.utilities";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.utilities" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.utilities";
       asd = "petalisp.utilities";
     });
@@ -54249,11 +55148,11 @@ in {
   };
   petalisp_dot_xmas-backend = {
     pname = "petalisp.xmas-backend";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "petalisp.xmas-backend" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2022-07-07/petalisp-20220707-git.tgz";
-      sha256 = "02vxlmwf2ycazvvjq3fv1zjxnx8v1kgv87vsxxvlx9m0a7xf4px3";
+      url = "http://beta.quicklisp.org/archive/petalisp/2022-11-06/petalisp-20221106-git.tgz";
+      sha256 = "0wd9p8rdalil1qqzpagx920jwrr3i6c8bf9svah88i6vdvh21x63";
       system = "petalisp.xmas-backend";
       asd = "petalisp.xmas-backend";
     });
@@ -54440,16 +55339,16 @@ in {
   };
   pgloader = {
     pname = "pgloader";
-    version = "v3.6.6";
+    version = "v3.6.9";
     asds = [ "pgloader" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pgloader/2022-07-07/pgloader-v3.6.6.tgz";
-      sha256 = "17gisq42cn54jkfi60zyyv3mbiv9ysgckbqdb051xdy8pvdb1hfp";
+      url = "http://beta.quicklisp.org/archive/pgloader/2022-11-06/pgloader-v3.6.9.tgz";
+      sha256 = "03kp3ms2sjz4gwb94xs404mi63fnv1bq00hyqxyvc9csmicxzawn";
       system = "pgloader";
       asd = "pgloader";
     });
     systems = [ "pgloader" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "abnf" pkgs) (getAttr "cl-base64" pkgs) (getAttr "cl-csv" pkgs) (getAttr "db3" pkgs) (getAttr "cl-fad" pkgs) (getAttr "ixf" pkgs) (getAttr "cl-log" pkgs) (getAttr "cl-markdown" pkgs) (getAttr "mssql" pkgs) (getAttr "cl-mustache" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "sqlite" pkgs) (getAttr "closer-mop" pkgs) (getAttr "command-line-arguments" pkgs) (getAttr "drakma" pkgs) (getAttr "esrap" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "local-time" pkgs) (getAttr "lparallel" pkgs) (getAttr "metabang-bind" pkgs) (getAttr "cl-postgres" pkgs) (getAttr "postmodern" pkgs) (getAttr "simple-date" pkgs) (getAttr "py-configparser" pkgs) (getAttr "qmynd" pkgs) (getAttr "quri" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivial-backtrace" pkgs) (getAttr "uiop" pkgs) (getAttr "usocket" pkgs) (getAttr "uuid" pkgs) (getAttr "yason" pkgs) (getAttr "zs3" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-base64" pkgs) (getAttr "cl-csv" pkgs) (getAttr "db3" pkgs) (getAttr "cl-fad" pkgs) (getAttr "ixf" pkgs) (getAttr "cl-log" pkgs) (getAttr "cl-markdown" pkgs) (getAttr "mssql" pkgs) (getAttr "cl-mustache" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "sqlite" pkgs) (getAttr "closer-mop" pkgs) (getAttr "command-line-arguments" pkgs) (getAttr "drakma" pkgs) (getAttr "esrap" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "local-time" pkgs) (getAttr "lparallel" pkgs) (getAttr "metabang-bind" pkgs) (getAttr "cl-postgres" pkgs) (getAttr "postmodern" pkgs) (getAttr "simple-date" pkgs) (getAttr "py-configparser" pkgs) (getAttr "qmynd" pkgs) (getAttr "quri" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivial-backtrace" pkgs) (getAttr "uiop" pkgs) (getAttr "usocket" pkgs) (getAttr "uuid" pkgs) (getAttr "yason" pkgs) (getAttr "zs3" pkgs) ];
   };
   phoe-toolbox = {
     pname = "phoe-toolbox";
@@ -54695,11 +55594,11 @@ in {
   };
   piping = {
     pname = "piping";
-    version = "20190710-git";
+    version = "20221106-git";
     asds = [ "piping" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/piping/2019-07-10/piping-20190710-git.tgz";
-      sha256 = "0in84qnfkynm36d4n4d6v87vprpi27xrydnga462wfhplji6klv5";
+      url = "http://beta.quicklisp.org/archive/piping/2022-11-06/piping-20221106-git.tgz";
+      sha256 = "0kmjpa3wjinsfiik50n2c9b5g9n39qf7p2piy4237xddx2a0300r";
       system = "piping";
       asd = "piping";
     });
@@ -54744,6 +55643,19 @@ in {
     });
     systems = [ "pjlink" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "ip-interfaces" pkgs) (getAttr "md5" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "usocket" pkgs) ];
+  };
+  pk-serialize = {
+    pname = "pk-serialize";
+    version = "20221106-git";
+    asds = [ "pk-serialize" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/pk-serialize/2022-11-06/pk-serialize-20221106-git.tgz";
+      sha256 = "1fi9xxdlg2z9dnqb2sc7wg37aqzqjz43h2l1wxa5zvk73qqzapyn";
+      system = "pk-serialize";
+      asd = "pk-serialize";
+    });
+    systems = [ "pk-serialize" ];
+    lispLibs = [ (getAttr "closer-mop" pkgs) ];
   };
   pkg-doc = {
     pname = "pkg-doc";
@@ -54825,24 +55737,24 @@ in {
   };
   plot = {
     pname = "plot";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "plot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plot/2022-03-31/plot-20220331-git.tgz";
-      sha256 = "1gcv0rrwi3n286xhkvyaxv630zksnx6ha3vmqwap7mmzgqpd688i";
+      url = "http://beta.quicklisp.org/archive/plot/2022-11-06/plot-20221106-git.tgz";
+      sha256 = "1fwp31jn9a0hla9yv44havgldmjf3hi2dgpm3j3h770d8wypy5vv";
       system = "plot";
       asd = "plot";
     });
     systems = [ "plot" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-who" pkgs) (getAttr "lass" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "alexandria_plus" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "data-frame" pkgs) ];
   };
   plot_slash_text = {
     pname = "plot_text";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "plot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plot/2022-03-31/plot-20220331-git.tgz";
-      sha256 = "1gcv0rrwi3n286xhkvyaxv630zksnx6ha3vmqwap7mmzgqpd688i";
+      url = "http://beta.quicklisp.org/archive/plot/2022-11-06/plot-20221106-git.tgz";
+      sha256 = "1fwp31jn9a0hla9yv44havgldmjf3hi2dgpm3j3h770d8wypy5vv";
       system = "plot";
       asd = "plot";
     });
@@ -54852,18 +55764,18 @@ in {
       broken = true;
     };
   };
-  plot_slash_vglt = {
-    pname = "plot_vglt";
-    version = "20220331-git";
+  plot_slash_vega = {
+    pname = "plot_vega";
+    version = "20221106-git";
     asds = [ "plot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plot/2022-03-31/plot-20220331-git.tgz";
-      sha256 = "1gcv0rrwi3n286xhkvyaxv630zksnx6ha3vmqwap7mmzgqpd688i";
+      url = "http://beta.quicklisp.org/archive/plot/2022-11-06/plot-20221106-git.tgz";
+      sha256 = "1fwp31jn9a0hla9yv44havgldmjf3hi2dgpm3j3h770d8wypy5vv";
       system = "plot";
       asd = "plot";
     });
-    systems = [ "plot/vglt" ];
-    lispLibs = [ (getAttr "dfio" pkgs) (getAttr "let-plus" pkgs) (getAttr "plot" pkgs) (getAttr "yason" pkgs) ];
+    systems = [ "plot/vega" ];
+    lispLibs = [ (getAttr "cl-who" pkgs) (getAttr "dfio" pkgs) (getAttr "duologue" pkgs) (getAttr "lass" pkgs) (getAttr "let-plus" pkgs) (getAttr "lisp-stat" pkgs) (getAttr "local-time" pkgs) (getAttr "parenscript" pkgs) (getAttr "plot" pkgs) (getAttr "quri" pkgs) (getAttr "yason" pkgs) ];
     meta = {
       broken = true;
     };
@@ -54896,11 +55808,11 @@ in {
   };
   plump = {
     pname = "plump";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "plump" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2022-07-07/plump-20220707-git.tgz";
-      sha256 = "0ihx57vysggfrnjz31zhgdmgxqmg93s3gckmjpxmvmzwc00rjdqn";
+      url = "http://beta.quicklisp.org/archive/plump/2022-11-06/plump-20221106-git.tgz";
+      sha256 = "1ndj8bs690fpwpz1xjkgfj9kdlrpvbv2qid4h7viynlpldqgbqnq";
       system = "plump";
       asd = "plump";
     });
@@ -54922,11 +55834,11 @@ in {
   };
   plump-dom = {
     pname = "plump-dom";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "plump-dom" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2022-07-07/plump-20220707-git.tgz";
-      sha256 = "0ihx57vysggfrnjz31zhgdmgxqmg93s3gckmjpxmvmzwc00rjdqn";
+      url = "http://beta.quicklisp.org/archive/plump/2022-11-06/plump-20221106-git.tgz";
+      sha256 = "1ndj8bs690fpwpz1xjkgfj9kdlrpvbv2qid4h7viynlpldqgbqnq";
       system = "plump-dom";
       asd = "plump-dom";
     });
@@ -54935,11 +55847,11 @@ in {
   };
   plump-lexer = {
     pname = "plump-lexer";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "plump-lexer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2022-07-07/plump-20220707-git.tgz";
-      sha256 = "0ihx57vysggfrnjz31zhgdmgxqmg93s3gckmjpxmvmzwc00rjdqn";
+      url = "http://beta.quicklisp.org/archive/plump/2022-11-06/plump-20221106-git.tgz";
+      sha256 = "1ndj8bs690fpwpz1xjkgfj9kdlrpvbv2qid4h7viynlpldqgbqnq";
       system = "plump-lexer";
       asd = "plump-lexer";
     });
@@ -54948,11 +55860,11 @@ in {
   };
   plump-parser = {
     pname = "plump-parser";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "plump-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2022-07-07/plump-20220707-git.tgz";
-      sha256 = "0ihx57vysggfrnjz31zhgdmgxqmg93s3gckmjpxmvmzwc00rjdqn";
+      url = "http://beta.quicklisp.org/archive/plump/2022-11-06/plump-20221106-git.tgz";
+      sha256 = "1ndj8bs690fpwpz1xjkgfj9kdlrpvbv2qid4h7viynlpldqgbqnq";
       system = "plump-parser";
       asd = "plump-parser";
     });
@@ -55130,24 +56042,24 @@ in {
   };
   polymorphic-functions = {
     pname = "polymorphic-functions";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "polymorphic-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/polymorphic-functions/2022-07-07/polymorphic-functions-20220707-git.tgz";
-      sha256 = "0ml7bj3fn3lr88jr263aljr86f61c1sqr9mavnc2v302dp7xgp8l";
+      url = "http://beta.quicklisp.org/archive/polymorphic-functions/2022-11-06/polymorphic-functions-20221106-git.tgz";
+      sha256 = "04bb7iiwq16hkn78r2qrfqwxldqrkdspfdfyvymcbp9w5jy67nlw";
       system = "polymorphic-functions";
       asd = "polymorphic-functions";
     });
     systems = [ "polymorphic-functions" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-form-types" pkgs) (getAttr "closer-mop" pkgs) (getAttr "compiler-macro-notes" pkgs) (getAttr "ctype" pkgs) (getAttr "fiveam" pkgs) (getAttr "introspect-environment" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-form-types" pkgs) (getAttr "closer-mop" pkgs) (getAttr "compiler-macro-notes" pkgs) (getAttr "ctype" pkgs) (getAttr "fiveam" pkgs) (getAttr "introspect-environment" pkgs) (getAttr "optima" pkgs) (getAttr "split-sequence" pkgs) (getAttr "trivial-garbage" pkgs) ];
   };
   polymorphic-functions_slash_swank = {
     pname = "polymorphic-functions_swank";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "polymorphic-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/polymorphic-functions/2022-07-07/polymorphic-functions-20220707-git.tgz";
-      sha256 = "0ml7bj3fn3lr88jr263aljr86f61c1sqr9mavnc2v302dp7xgp8l";
+      url = "http://beta.quicklisp.org/archive/polymorphic-functions/2022-11-06/polymorphic-functions-20221106-git.tgz";
+      sha256 = "04bb7iiwq16hkn78r2qrfqwxldqrkdspfdfyvymcbp9w5jy67nlw";
       system = "polymorphic-functions";
       asd = "polymorphic-functions";
     });
@@ -55311,40 +56223,56 @@ in {
   };
   posix-shm = {
     pname = "posix-shm";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "posix-shm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/posix-shm/2022-03-31/posix-shm-20220331-git.tgz";
-      sha256 = "0m2qv6s2601sz5fy3f5d4mkdln4yfj4ks2gskhr311bixlvhymil";
+      url = "http://beta.quicklisp.org/archive/posix-shm/2022-11-06/posix-shm-20221106-git.tgz";
+      sha256 = "057qm9db502a86q60rsp5g7f8n4a997iwsfcid41gqadyd9rcjjz";
       system = "posix-shm";
       asd = "posix-shm";
     });
     systems = [ "posix-shm" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-autowrap" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) ];
+  };
+  posix-shm_slash_ffi = {
+    pname = "posix-shm_ffi";
+    version = "20221106-git";
+    asds = [ "posix-shm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/posix-shm/2022-11-06/posix-shm-20221106-git.tgz";
+      sha256 = "057qm9db502a86q60rsp5g7f8n4a997iwsfcid41gqadyd9rcjjz";
+      system = "posix-shm";
+      asd = "posix-shm";
+    });
+    systems = [ "posix-shm/ffi" ];
+    lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   posix-shm_slash_test = {
     pname = "posix-shm_test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "posix-shm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/posix-shm/2022-03-31/posix-shm-20220331-git.tgz";
-      sha256 = "0m2qv6s2601sz5fy3f5d4mkdln4yfj4ks2gskhr311bixlvhymil";
+      url = "http://beta.quicklisp.org/archive/posix-shm/2022-11-06/posix-shm-20221106-git.tgz";
+      sha256 = "057qm9db502a86q60rsp5g7f8n4a997iwsfcid41gqadyd9rcjjz";
       system = "posix-shm";
       asd = "posix-shm";
     });
     systems = [ "posix-shm/test" ];
-    lispLibs = [ (getAttr "parachute" pkgs) (getAttr "posix-shm" pkgs) ];
+    lispLibs = [ (getAttr "osicat" pkgs) (getAttr "parachute" pkgs) (getAttr "posix-shm" pkgs) ];
     meta = {
       broken = true;
     };
   };
   postmodern = {
     pname = "postmodern";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "postmodern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "postmodern";
       asd = "postmodern";
     });
@@ -55366,11 +56294,11 @@ in {
   };
   postmodern_slash_tests = {
     pname = "postmodern_tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "postmodern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "postmodern";
       asd = "postmodern";
     });
@@ -55421,11 +56349,11 @@ in {
   };
   pp-toml = {
     pname = "pp-toml";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "pp-toml" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pp-toml/2021-12-09/pp-toml-20211209-git.tgz";
-      sha256 = "0kh5xpbmih7rgh53hli2ybcxjl41q54z0ncxhiy4ycm4bv6yc9mi";
+      url = "http://beta.quicklisp.org/archive/pp-toml/2022-11-06/pp-toml-20221106-git.tgz";
+      sha256 = "136d7jzz7l2ck9wwld0ac46jmpm94lvja6m50sy73s232slka2hg";
       system = "pp-toml";
       asd = "pp-toml";
     });
@@ -55434,11 +56362,11 @@ in {
   };
   pp-toml-tests = {
     pname = "pp-toml-tests";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "pp-toml-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pp-toml/2021-12-09/pp-toml-20211209-git.tgz";
-      sha256 = "0kh5xpbmih7rgh53hli2ybcxjl41q54z0ncxhiy4ycm4bv6yc9mi";
+      url = "http://beta.quicklisp.org/archive/pp-toml/2022-11-06/pp-toml-20221106-git.tgz";
+      sha256 = "136d7jzz7l2ck9wwld0ac46jmpm94lvja6m50sy73s232slka2hg";
       system = "pp-toml-tests";
       asd = "pp-toml-tests";
     });
@@ -55590,11 +56518,11 @@ in {
   };
   priority-queue-benchmark = {
     pname = "priority-queue-benchmark";
-    version = "20210531-git";
+    version = "20221106-git";
     asds = [ "priority-queue-benchmark" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2021-05-31/damn-fast-priority-queue-20210531-git.tgz";
-      sha256 = "1zcgswjh5crr02l8mdkl20kaxpa8biny8n9ggz1nx69qfgbrs1xd";
+      url = "http://beta.quicklisp.org/archive/damn-fast-priority-queue/2022-11-06/damn-fast-priority-queue-20221106-git.tgz";
+      sha256 = "14917b1z7ag3a7f88p4fk4649iy07kn9vpq6bszdxcp1irnc5a13";
       system = "priority-queue-benchmark";
       asd = "priority-queue-benchmark";
     });
@@ -57698,11 +58626,11 @@ in {
   };
   query-fs = {
     pname = "query-fs";
-    version = "20200610-git";
+    version = "20221106-git";
     asds = [ "query-fs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/query-fs/2020-06-10/query-fs-20200610-git.tgz";
-      sha256 = "1qqvgkfkbrh8rj21sngq7f807r758r4flcwhw6l5nw8f7hf1qrwz";
+      url = "http://beta.quicklisp.org/archive/query-fs/2022-11-06/query-fs-20221106-git.tgz";
+      sha256 = "010ljk1p8r5rm6b5fpznk9m241362fwy3qk8xdx836ncs8pzzyqf";
       system = "query-fs";
       asd = "query-fs";
     });
@@ -57802,11 +58730,11 @@ in {
   };
   quick-patch = {
     pname = "quick-patch";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "quick-patch" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quick-patch/2021-10-20/quick-patch-20211020-git.tgz";
-      sha256 = "02yql87pjkc79rg63kdvdxn3hlv545ni3r4qhls26dzm55xwccdx";
+      url = "http://beta.quicklisp.org/archive/quick-patch/2022-11-06/quick-patch-20221106-git.tgz";
+      sha256 = "1v56f630ld1kkfx9f20hqbqfxyv7cpqrs2zp324m2h6rnfs5xl19";
       system = "quick-patch";
       asd = "quick-patch";
     });
@@ -57815,11 +58743,11 @@ in {
   };
   quick-patch_slash_tests = {
     pname = "quick-patch_tests";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "quick-patch" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quick-patch/2021-10-20/quick-patch-20211020-git.tgz";
-      sha256 = "02yql87pjkc79rg63kdvdxn3hlv545ni3r4qhls26dzm55xwccdx";
+      url = "http://beta.quicklisp.org/archive/quick-patch/2022-11-06/quick-patch-20221106-git.tgz";
+      sha256 = "1v56f630ld1kkfx9f20hqbqfxyv7cpqrs2zp324m2h6rnfs5xl19";
       system = "quick-patch";
       asd = "quick-patch";
     });
@@ -58013,11 +58941,11 @@ in {
   };
   quri = {
     pname = "quri";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "quri" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quri/2022-07-07/quri-20220707-git.tgz";
-      sha256 = "1wrrhbj3r4lph5y3hhfbv4g2pvg24hbgl06irq9lyiycy3bgai4w";
+      url = "http://beta.quicklisp.org/archive/quri/2022-11-06/quri-20221106-git.tgz";
+      sha256 = "1crzgavvzsjp3xsddp4a5kd3ay0bn4scs839f0hk2yp482mg9jcx";
       system = "quri";
       asd = "quri";
     });
@@ -58026,11 +58954,11 @@ in {
   };
   quri-test = {
     pname = "quri-test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "quri-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quri/2022-07-07/quri-20220707-git.tgz";
-      sha256 = "1wrrhbj3r4lph5y3hhfbv4g2pvg24hbgl06irq9lyiycy3bgai4w";
+      url = "http://beta.quicklisp.org/archive/quri/2022-11-06/quri-20221106-git.tgz";
+      sha256 = "1crzgavvzsjp3xsddp4a5kd3ay0bn4scs839f0hk2yp482mg9jcx";
       system = "quri-test";
       asd = "quri-test";
     });
@@ -58260,11 +59188,11 @@ in {
   };
   random-state = {
     pname = "random-state";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "random-state" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/random-state/2022-02-20/random-state-20220220-git.tgz";
-      sha256 = "0z9wzb5wzdjd2bxwsiazirchkwxhl7717a6i2qpdy85hnvl760xz";
+      url = "http://beta.quicklisp.org/archive/random-state/2022-11-06/random-state-20221106-git.tgz";
+      sha256 = "07qmlzkn0s7qrz06ycsr1idj58w0mjhr30mjwsj7wblmmczilq69";
       system = "random-state";
       asd = "random-state";
     });
@@ -58273,11 +59201,11 @@ in {
   };
   random-state-viewer = {
     pname = "random-state-viewer";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "random-state-viewer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/random-state/2022-02-20/random-state-20220220-git.tgz";
-      sha256 = "0z9wzb5wzdjd2bxwsiazirchkwxhl7717a6i2qpdy85hnvl760xz";
+      url = "http://beta.quicklisp.org/archive/random-state/2022-11-06/random-state-20221106-git.tgz";
+      sha256 = "07qmlzkn0s7qrz06ycsr1idj58w0mjhr30mjwsj7wblmmczilq69";
       system = "random-state-viewer";
       asd = "random-state-viewer";
     });
@@ -58695,11 +59623,11 @@ in {
   };
   replic = {
     pname = "replic";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "replic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/replic/2021-06-30/replic-20210630-git.tgz";
-      sha256 = "0i21hrfhvkqggibbivlcsnk5mlk5x3bim50g9bwz1glqn7cm6mfi";
+      url = "http://beta.quicklisp.org/archive/replic/2022-11-06/replic-20221106-git.tgz";
+      sha256 = "02i4h06b1jb461k1bdb3qbmpbxvj4g4yi664p15dcwr9pjqjpg2w";
       system = "replic";
       asd = "replic";
     });
@@ -58708,11 +59636,11 @@ in {
   };
   replic-test = {
     pname = "replic-test";
-    version = "20210630-git";
+    version = "20221106-git";
     asds = [ "replic-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/replic/2021-06-30/replic-20210630-git.tgz";
-      sha256 = "0i21hrfhvkqggibbivlcsnk5mlk5x3bim50g9bwz1glqn7cm6mfi";
+      url = "http://beta.quicklisp.org/archive/replic/2022-11-06/replic-20221106-git.tgz";
+      sha256 = "02i4h06b1jb461k1bdb3qbmpbxvj4g4yi664p15dcwr9pjqjpg2w";
       system = "replic-test";
       asd = "replic-test";
     });
@@ -59056,6 +59984,19 @@ in {
     systems = [ "rock-web" ];
     lispLibs = [ (getAttr "_3bmd" pkgs) (getAttr "_3bmd-ext-code-blocks" pkgs) (getAttr "_3bmd-ext-definition-lists" pkgs) (getAttr "cl-markup" pkgs) (getAttr "lass" pkgs) (getAttr "rock" pkgs) ];
   };
+  rollback = {
+    pname = "rollback";
+    version = "20221106-git";
+    asds = [ "rollback" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-rollback/2022-11-06/cl-rollback-20221106-git.tgz";
+      sha256 = "12dpxsbm2al633y87i8p784k2dn4bbskz6sl40v9f5ljjmjqjzxf";
+      system = "rollback";
+      asd = "rollback";
+    });
+    systems = [ "rollback" ];
+    lispLibs = [  ];
+  };
   romreader = {
     pname = "romreader";
     version = "20140713-git";
@@ -59110,11 +60051,11 @@ in {
   };
   rovers-problem-translator = {
     pname = "rovers-problem-translator";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "rovers-problem-translator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "rovers-problem-translator";
       asd = "rovers-problem-translator";
     });
@@ -59435,11 +60376,11 @@ in {
   };
   rutils = {
     pname = "rutils";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "rutils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/rutils/2021-02-28/rutils-20210228-git.tgz";
-      sha256 = "1d2whscknh1zga2vdqvfqri8wx0gnml3sfqz62igq0ppap6q07y3";
+      url = "http://beta.quicklisp.org/archive/rutils/2022-11-06/rutils-20221106-git.tgz";
+      sha256 = "108l64k7qhbhmgp0wa4krm23wakyfc41wzyl2fgc9k59gf47axhq";
       system = "rutils";
       asd = "rutils";
     });
@@ -59448,11 +60389,11 @@ in {
   };
   rutils-test = {
     pname = "rutils-test";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "rutils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/rutils/2021-02-28/rutils-20210228-git.tgz";
-      sha256 = "1d2whscknh1zga2vdqvfqri8wx0gnml3sfqz62igq0ppap6q07y3";
+      url = "http://beta.quicklisp.org/archive/rutils/2022-11-06/rutils-20221106-git.tgz";
+      sha256 = "108l64k7qhbhmgp0wa4krm23wakyfc41wzyl2fgc9k59gf47axhq";
       system = "rutils-test";
       asd = "rutils-test";
     });
@@ -59461,11 +60402,11 @@ in {
   };
   rutilsx = {
     pname = "rutilsx";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "rutilsx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/rutils/2021-02-28/rutils-20210228-git.tgz";
-      sha256 = "1d2whscknh1zga2vdqvfqri8wx0gnml3sfqz62igq0ppap6q07y3";
+      url = "http://beta.quicklisp.org/archive/rutils/2022-11-06/rutils-20221106-git.tgz";
+      sha256 = "108l64k7qhbhmgp0wa4krm23wakyfc41wzyl2fgc9k59gf47axhq";
       system = "rutilsx";
       asd = "rutilsx";
     });
@@ -59568,11 +60509,11 @@ in {
   };
   s-sql = {
     pname = "s-sql";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "s-sql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "s-sql";
       asd = "s-sql";
     });
@@ -59581,11 +60522,11 @@ in {
   };
   s-sql_slash_tests = {
     pname = "s-sql_tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "s-sql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "s-sql";
       asd = "s-sql";
     });
@@ -59921,11 +60862,11 @@ in {
   };
   sc-osc = {
     pname = "sc-osc";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "sc-osc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-collider/2022-07-07/cl-collider-20220707-git.tgz";
-      sha256 = "1dk6pfnm8vxk8f3wfxv46rsblkpbsmdnj3kdq37cijsbvybarzkq";
+      url = "http://beta.quicklisp.org/archive/cl-collider/2022-11-06/cl-collider-20221106-git.tgz";
+      sha256 = "03z11hcjvbawkli0bw90h4za7vvpm9pk7rh9gi6m2k7wwq2rsxk5";
       system = "sc-osc";
       asd = "sc-osc";
     });
@@ -59989,11 +60930,11 @@ in {
   };
   scigraph = {
     pname = "scigraph";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "scigraph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "scigraph";
       asd = "scigraph";
     });
@@ -60002,11 +60943,11 @@ in {
   };
   scigraph_slash_dwim = {
     pname = "scigraph_dwim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "scigraph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "scigraph";
       asd = "scigraph";
     });
@@ -60378,11 +61319,11 @@ in {
   };
   select = {
     pname = "select";
-    version = "20210411-git";
+    version = "20221106-git";
     asds = [ "select" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/select/2021-04-11/select-20210411-git.tgz";
-      sha256 = "1kplgpn79av1p2icyk7h93cy00gshyan96vxlinvwxibhsrhxsj2";
+      url = "http://beta.quicklisp.org/archive/select/2022-11-06/select-20221106-git.tgz";
+      sha256 = "0bhpvfqp7n33pia4y62qi31bx86gjl2nxjy529rfawac57c9rxv3";
       system = "select";
       asd = "select";
     });
@@ -60404,11 +61345,11 @@ in {
   };
   select_slash_tests = {
     pname = "select_tests";
-    version = "20210411-git";
+    version = "20221106-git";
     asds = [ "select" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/select/2021-04-11/select-20210411-git.tgz";
-      sha256 = "1kplgpn79av1p2icyk7h93cy00gshyan96vxlinvwxibhsrhxsj2";
+      url = "http://beta.quicklisp.org/archive/select/2022-11-06/select-20221106-git.tgz";
+      sha256 = "0bhpvfqp7n33pia4y62qi31bx86gjl2nxjy529rfawac57c9rxv3";
       system = "select";
       asd = "select";
     });
@@ -60446,16 +61387,100 @@ in {
   };
   sendgrid = {
     pname = "sendgrid";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "sendgrid" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-sendgrid/2022-07-07/cl-sendgrid-20220707-git.tgz";
-      sha256 = "11icf9k1sx36iglqq26fsa892k0fns4db85ph84v0fw6dxl81gvm";
+      url = "http://beta.quicklisp.org/archive/cl-sendgrid/2022-11-06/cl-sendgrid-20221106-git.tgz";
+      sha256 = "0safsw9if83mv76y8fiaaa3a6akn7icqc6fmmacfypy3vkykr8i9";
       system = "sendgrid";
       asd = "sendgrid";
     });
     systems = [ "sendgrid" ];
     lispLibs = [ (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) ];
+  };
+  sento = {
+    pname = "sento";
+    version = "20221106-git";
+    asds = [ "sento" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-11-06/cl-gserver-20221106-git.tgz";
+      sha256 = "1a6bx0bmkli6nddd1pxqzjqjvkz2nkf7v3pn4d9bjv42xkch5hqc";
+      system = "sento";
+      asd = "sento";
+    });
+    systems = [ "sento" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "atomics" pkgs) (getAttr "binding-arrows" pkgs) (getAttr "blackbird" pkgs) (getAttr "bordeaux-threads" pkgs) (getAttr "cl-speedy-queue" pkgs) (getAttr "str" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "timer-wheel" pkgs) ];
+  };
+  sento_slash_docs = {
+    pname = "sento_docs";
+    version = "20221106-git";
+    asds = [ "sento" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-11-06/cl-gserver-20221106-git.tgz";
+      sha256 = "1a6bx0bmkli6nddd1pxqzjqjvkz2nkf7v3pn4d9bjv42xkch5hqc";
+      system = "sento";
+      asd = "sento";
+    });
+    systems = [ "sento/docs" ];
+    lispLibs = [ (getAttr "sento" pkgs) (getAttr "mgl-pax" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  sento_slash_tests = {
+    pname = "sento_tests";
+    version = "20221106-git";
+    asds = [ "sento" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-gserver/2022-11-06/cl-gserver-20221106-git.tgz";
+      sha256 = "1a6bx0bmkli6nddd1pxqzjqjvkz2nkf7v3pn4d9bjv42xkch5hqc";
+      system = "sento";
+      asd = "sento";
+    });
+    systems = [ "sento/tests" ];
+    lispLibs = [ (getAttr "sento" pkgs) (getAttr "cl-mock" pkgs) (getAttr "fiveam" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  sentry-client = {
+    pname = "sentry-client";
+    version = "20221106-git";
+    asds = [ "sentry-client" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-sentry-client/2022-11-06/cl-sentry-client-20221106-git.tgz";
+      sha256 = "10zynv31xhyknl991w85r0g1vyyghxg6bg7rd9bhny84p006fb38";
+      system = "sentry-client";
+      asd = "sentry-client";
+    });
+    systems = [ "sentry-client" ];
+    lispLibs = [ (getAttr "cl-json" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "drakma" pkgs) (getAttr "local-time" pkgs) (getAttr "trivial-backtrace" pkgs) (getAttr "uuid" pkgs) ];
+  };
+  sentry-client_dot_async = {
+    pname = "sentry-client.async";
+    version = "20221106-git";
+    asds = [ "sentry-client.async" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-sentry-client/2022-11-06/cl-sentry-client-20221106-git.tgz";
+      sha256 = "10zynv31xhyknl991w85r0g1vyyghxg6bg7rd9bhny84p006fb38";
+      system = "sentry-client.async";
+      asd = "sentry-client.async";
+    });
+    systems = [ "sentry-client.async" ];
+    lispLibs = [ (getAttr "sentry-client" pkgs) (getAttr "simple-tasks" pkgs) ];
+  };
+  sentry-client_dot_hunchentoot = {
+    pname = "sentry-client.hunchentoot";
+    version = "20221106-git";
+    asds = [ "sentry-client.hunchentoot" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-sentry-client/2022-11-06/cl-sentry-client-20221106-git.tgz";
+      sha256 = "10zynv31xhyknl991w85r0g1vyyghxg6bg7rd9bhny84p006fb38";
+      system = "sentry-client.hunchentoot";
+      asd = "sentry-client.hunchentoot";
+    });
+    systems = [ "sentry-client.hunchentoot" ];
+    lispLibs = [ (getAttr "sentry-client" pkgs) (getAttr "hunchentoot" pkgs) ];
   };
   sequence-iterators = {
     pname = "sequence-iterators";
@@ -60485,11 +61510,11 @@ in {
   };
   serapeum = {
     pname = "serapeum";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "serapeum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/serapeum/2022-07-07/serapeum-20220707-git.tgz";
-      sha256 = "0nwqigargpryg91gzjg95hgvp81qnjlnc9wbgffcf8xiwgv4lxd7";
+      url = "http://beta.quicklisp.org/archive/serapeum/2022-11-06/serapeum-20221106-git.tgz";
+      sha256 = "0gz70hwlsyawmm7j85yjg449hpy57w5jdd7rkal6lhmmfnl0nsbp";
       system = "serapeum";
       asd = "serapeum";
     });
@@ -60498,11 +61523,11 @@ in {
   };
   serapeum_slash_docs = {
     pname = "serapeum_docs";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "serapeum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/serapeum/2022-07-07/serapeum-20220707-git.tgz";
-      sha256 = "0nwqigargpryg91gzjg95hgvp81qnjlnc9wbgffcf8xiwgv4lxd7";
+      url = "http://beta.quicklisp.org/archive/serapeum/2022-11-06/serapeum-20221106-git.tgz";
+      sha256 = "0gz70hwlsyawmm7j85yjg449hpy57w5jdd7rkal6lhmmfnl0nsbp";
       system = "serapeum";
       asd = "serapeum";
     });
@@ -60696,11 +61721,11 @@ in {
   };
   shasht = {
     pname = "shasht";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shasht" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shasht/2022-07-07/shasht-20220707-git.tgz";
-      sha256 = "1a5r6hi1v64l0cll1lyz2g2v44x2incg2xw16d2wh6ryx3f40bg6";
+      url = "http://beta.quicklisp.org/archive/shasht/2022-11-06/shasht-20221106-git.tgz";
+      sha256 = "1xpspksfkhk95wjirrqfrqm7sc1wyr2pjw7z25i0qz02rg479hlg";
       system = "shasht";
       asd = "shasht";
     });
@@ -60709,11 +61734,11 @@ in {
   };
   shasht_slash_test = {
     pname = "shasht_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shasht" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shasht/2022-07-07/shasht-20220707-git.tgz";
-      sha256 = "1a5r6hi1v64l0cll1lyz2g2v44x2incg2xw16d2wh6ryx3f40bg6";
+      url = "http://beta.quicklisp.org/archive/shasht/2022-11-06/shasht-20221106-git.tgz";
+      sha256 = "1xpspksfkhk95wjirrqfrqm7sc1wyr2pjw7z25i0qz02rg479hlg";
       system = "shasht";
       asd = "shasht";
     });
@@ -60819,11 +61844,11 @@ in {
   };
   shop3 = {
     pname = "shop3";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60832,11 +61857,11 @@ in {
   };
   shop3-thmpr-api = {
     pname = "shop3-thmpr-api";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3-thmpr-api" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3-thmpr-api";
       asd = "shop3-thmpr-api";
     });
@@ -60845,11 +61870,11 @@ in {
   };
   shop3_slash_common = {
     pname = "shop3_common";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60861,11 +61886,11 @@ in {
   };
   shop3_slash_openstacks = {
     pname = "shop3_openstacks";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60877,11 +61902,11 @@ in {
   };
   shop3_slash_plan-grapher = {
     pname = "shop3_plan-grapher";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60893,11 +61918,11 @@ in {
   };
   shop3_slash_rovers = {
     pname = "shop3_rovers";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60909,11 +61934,11 @@ in {
   };
   shop3_slash_test-unifier = {
     pname = "shop3_test-unifier";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60925,11 +61950,11 @@ in {
   };
   shop3_slash_theorem-prover = {
     pname = "shop3_theorem-prover";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -60941,11 +61966,11 @@ in {
   };
   shop3_slash_unifier = {
     pname = "shop3_unifier";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2022-07-07/shop3-20220707-git.tgz";
-      sha256 = "1kyn2k1h1cxgm6aagwzifrlwj6yslia6lfv7yjlzf3igixs3cfzd";
+      url = "http://beta.quicklisp.org/archive/shop3/2022-11-06/shop3-20221106-git.tgz";
+      sha256 = "18fqx41qyd74q0y1niav05wsrjd6wcn6sa6imx0ykyw6libq33z3";
       system = "shop3";
       asd = "shop3";
     });
@@ -61061,11 +62086,11 @@ in {
   };
   simple-date = {
     pname = "simple-date";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "simple-date" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "simple-date";
       asd = "simple-date";
     });
@@ -61087,11 +62112,11 @@ in {
   };
   simple-date_slash_postgres-glue = {
     pname = "simple-date_postgres-glue";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "simple-date" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "simple-date";
       asd = "simple-date";
     });
@@ -61103,11 +62128,11 @@ in {
   };
   simple-date_slash_tests = {
     pname = "simple-date_tests";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "simple-date" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2022-02-20/postmodern-20220220-git.tgz";
-      sha256 = "0kgjgpcyfzhpca8g0d5bgi1kkla7i4j4czarys4np0rp9gsp4pdv";
+      url = "http://beta.quicklisp.org/archive/postmodern/2022-11-06/postmodern-20221106-git.tgz";
+      sha256 = "012ipwi4m5x6jhl7pd9gwvdga5hgp1l08vqdgd28rzy34s2mfv74";
       system = "simple-date";
       asd = "simple-date";
     });
@@ -61184,11 +62209,11 @@ in {
   };
   simple-neural-network = {
     pname = "simple-neural-network";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "simple-neural-network" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/simple-neural-network/2020-12-20/simple-neural-network-20201220-git.tgz";
-      sha256 = "1qdsmhj9pxgbf4yc7ipq780dk7isq98znr54w0yhbrk3s7shz05a";
+      url = "http://beta.quicklisp.org/archive/simple-neural-network/2022-11-06/simple-neural-network-20221106-git.tgz";
+      sha256 = "14bxgxqmn6n9yyv3xnh1km47b5l85brhddks43zsxhc8i0q3qgqg";
       system = "simple-neural-network";
       asd = "simple-neural-network";
     });
@@ -61197,11 +62222,11 @@ in {
   };
   simple-neural-network_slash_test = {
     pname = "simple-neural-network_test";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "simple-neural-network" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/simple-neural-network/2020-12-20/simple-neural-network-20201220-git.tgz";
-      sha256 = "1qdsmhj9pxgbf4yc7ipq780dk7isq98znr54w0yhbrk3s7shz05a";
+      url = "http://beta.quicklisp.org/archive/simple-neural-network/2022-11-06/simple-neural-network-20221106-git.tgz";
+      sha256 = "14bxgxqmn6n9yyv3xnh1km47b5l85brhddks43zsxhc8i0q3qgqg";
       system = "simple-neural-network";
       asd = "simple-neural-network";
     });
@@ -61495,11 +62520,11 @@ in {
   };
   sketch = {
     pname = "sketch";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "sketch" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sketch/2021-10-20/sketch-20211020-git.tgz";
-      sha256 = "1qrnma8yvmxps9rz3pvlzsir37namppsldijdlr4110pcwi9j9h6";
+      url = "http://beta.quicklisp.org/archive/sketch/2022-11-06/sketch-20221106-git.tgz";
+      sha256 = "0vlnfl2gbcraw2kdwmlj55j5pnz8cskaq4ygw0p6dwy20x25264b";
       system = "sketch";
       asd = "sketch";
     });
@@ -61508,11 +62533,11 @@ in {
   };
   sketch-examples = {
     pname = "sketch-examples";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "sketch-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sketch/2021-10-20/sketch-20211020-git.tgz";
-      sha256 = "1qrnma8yvmxps9rz3pvlzsir37namppsldijdlr4110pcwi9j9h6";
+      url = "http://beta.quicklisp.org/archive/sketch/2022-11-06/sketch-20221106-git.tgz";
+      sha256 = "0vlnfl2gbcraw2kdwmlj55j5pnz8cskaq4ygw0p6dwy20x25264b";
       system = "sketch-examples";
       asd = "sketch-examples";
     });
@@ -61534,11 +62559,11 @@ in {
   };
   skippy-renderer = {
     pname = "skippy-renderer";
-    version = "20200427-git";
+    version = "20221106-git";
     asds = [ "skippy-renderer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/skippy-renderer/2020-04-27/skippy-renderer-20200427-git.tgz";
-      sha256 = "0saqg4jpwa7kh6p77wna5ww02gjizs9g1aywq6y5flm3biwn4xp1";
+      url = "http://beta.quicklisp.org/archive/skippy-renderer/2022-11-06/skippy-renderer-20221106-git.tgz";
+      sha256 = "0x9zv8zchxn48axl5rwfnywg9kb9m0pz3gwjk7gpg9m574jw8x0c";
       system = "skippy-renderer";
       asd = "skippy-renderer";
     });
@@ -61612,11 +62637,11 @@ in {
   };
   slim = {
     pname = "slim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2022-07-07/mcclim-20220707-git.tgz";
-      sha256 = "0aq4zcxl59ygkdf6n7swg26xvfjz3c7biiayzjnmwkqm7chpjbvg";
+      url = "http://beta.quicklisp.org/archive/mcclim/2022-11-06/mcclim-20221106-git.tgz";
+      sha256 = "0hz6vz4c0xv8bjx02hf3rbnp66c7ifx2ld4y6nxdz6i70wyhwbdf";
       system = "slim";
       asd = "slim";
     });
@@ -61625,24 +62650,40 @@ in {
   };
   slite = {
     pname = "slite";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/slite/2022-07-07/slite-20220707-git.tgz";
-      sha256 = "1p71cwli6m5afr94krv0gd314bi3abg7c6a43b4yg4kyg0m7jz96";
+      url = "http://beta.quicklisp.org/archive/slite/2022-11-06/slite-20221106-git.tgz";
+      sha256 = "1l9b3dvmi0hf38ir3sx6005hpaqm1dc3x02hcprn4x6fik5l0zdk";
       system = "slite";
       asd = "slite";
     });
     systems = [ "slite" ];
     lispLibs = [ (getAttr "str" pkgs) (getAttr "fiveam" pkgs) ];
   };
-  slite_slash_parachute = {
-    pname = "slite_parachute";
-    version = "20220707-git";
+  slite_slash_lisp-unit2 = {
+    pname = "slite_lisp-unit2";
+    version = "20221106-git";
     asds = [ "slite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/slite/2022-07-07/slite-20220707-git.tgz";
-      sha256 = "1p71cwli6m5afr94krv0gd314bi3abg7c6a43b4yg4kyg0m7jz96";
+      url = "http://beta.quicklisp.org/archive/slite/2022-11-06/slite-20221106-git.tgz";
+      sha256 = "1l9b3dvmi0hf38ir3sx6005hpaqm1dc3x02hcprn4x6fik5l0zdk";
+      system = "slite";
+      asd = "slite";
+    });
+    systems = [ "slite/lisp-unit2" ];
+    lispLibs = [ (getAttr "lisp-unit2" pkgs) (getAttr "slite" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  slite_slash_parachute = {
+    pname = "slite_parachute";
+    version = "20221106-git";
+    asds = [ "slite" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/slite/2022-11-06/slite-20221106-git.tgz";
+      sha256 = "1l9b3dvmi0hf38ir3sx6005hpaqm1dc3x02hcprn4x6fik5l0zdk";
       system = "slite";
       asd = "slite";
     });
@@ -61654,16 +62695,16 @@ in {
   };
   slite_slash_tests = {
     pname = "slite_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/slite/2022-07-07/slite-20220707-git.tgz";
-      sha256 = "1p71cwli6m5afr94krv0gd314bi3abg7c6a43b4yg4kyg0m7jz96";
+      url = "http://beta.quicklisp.org/archive/slite/2022-11-06/slite-20221106-git.tgz";
+      sha256 = "1l9b3dvmi0hf38ir3sx6005hpaqm1dc3x02hcprn4x6fik5l0zdk";
       system = "slite";
       asd = "slite";
     });
     systems = [ "slite/tests" ];
-    lispLibs = [ (getAttr "parachute" pkgs) (getAttr "slite" pkgs) ];
+    lispLibs = [ (getAttr "lisp-unit2" pkgs) (getAttr "parachute" pkgs) (getAttr "slite" pkgs) ];
     meta = {
       broken = true;
     };
@@ -61709,11 +62750,11 @@ in {
   };
   slynk = {
     pname = "slynk";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61722,11 +62763,11 @@ in {
   };
   slynk_slash_arglists = {
     pname = "slynk_arglists";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61738,11 +62779,11 @@ in {
   };
   slynk_slash_fancy-inspector = {
     pname = "slynk_fancy-inspector";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61754,11 +62795,11 @@ in {
   };
   slynk_slash_indentation = {
     pname = "slynk_indentation";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61770,11 +62811,11 @@ in {
   };
   slynk_slash_mrepl = {
     pname = "slynk_mrepl";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61786,11 +62827,11 @@ in {
   };
   slynk_slash_package-fu = {
     pname = "slynk_package-fu";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61802,11 +62843,11 @@ in {
   };
   slynk_slash_profiler = {
     pname = "slynk_profiler";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61818,11 +62859,11 @@ in {
   };
   slynk_slash_retro = {
     pname = "slynk_retro";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61834,11 +62875,11 @@ in {
   };
   slynk_slash_stickers = {
     pname = "slynk_stickers";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61850,11 +62891,11 @@ in {
   };
   slynk_slash_trace-dialog = {
     pname = "slynk_trace-dialog";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2022-07-07/sly-20220707-git.tgz";
-      sha256 = "1naj8cm0rd4pimrncmv6dka73l22avypclhr00dmpnh174vizpnp";
+      url = "http://beta.quicklisp.org/archive/sly/2022-11-06/sly-20221106-git.tgz";
+      sha256 = "081rpyvzxma5ms2am9mpkwbigbhqbgkxgrclj1fhccv5xpp163wp";
       system = "slynk";
       asd = "slynk";
     });
@@ -61944,11 +62985,11 @@ in {
   };
   snakes = {
     pname = "snakes";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "snakes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/snakes/2022-03-31/snakes-20220331-git.tgz";
-      sha256 = "18kjy5ccq179s6ravam17ldmr469mgvzvrbli3k7yrph5igc6siy";
+      url = "http://beta.quicklisp.org/archive/snakes/2022-11-06/snakes-20221106-git.tgz";
+      sha256 = "17fqkw256c2iacy5g37sv9h0mbrmb3fg2s9sd83gj9clrg5r4wkl";
       system = "snakes";
       asd = "snakes";
     });
@@ -62285,11 +63326,11 @@ in {
   };
   software-evolution-library = {
     pname = "software-evolution-library";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62298,11 +63339,11 @@ in {
   };
   software-evolution-library_slash_deploy-tree-sitter-interface = {
     pname = "software-evolution-library_deploy-tree-sitter-interface";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62314,11 +63355,11 @@ in {
   };
   software-evolution-library_slash_run-dump-store = {
     pname = "software-evolution-library_run-dump-store";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62330,11 +63371,11 @@ in {
   };
   software-evolution-library_slash_run-rest-server = {
     pname = "software-evolution-library_run-rest-server";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62346,11 +63387,11 @@ in {
   };
   software-evolution-library_slash_run-test-parse = {
     pname = "software-evolution-library_run-test-parse";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62362,11 +63403,11 @@ in {
   };
   software-evolution-library_slash_run-tree-sitter-interface = {
     pname = "software-evolution-library_run-tree-sitter-interface";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62378,11 +63419,11 @@ in {
   };
   software-evolution-library_slash_run-tree-sitter-py-generator = {
     pname = "software-evolution-library_run-tree-sitter-py-generator";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62394,11 +63435,11 @@ in {
   };
   software-evolution-library_slash_terminal = {
     pname = "software-evolution-library_terminal";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62410,11 +63451,11 @@ in {
   };
   software-evolution-library_slash_utility_slash_fare-qq = {
     pname = "software-evolution-library_utility_fare-qq";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2022-07-07/sel-20220707-git.tgz";
-      sha256 = "0x8brwq95zlp2gw397cvhyfr9m2y8jc1cb14m6x6rb096w986ldn";
+      url = "http://beta.quicklisp.org/archive/sel/2022-11-06/sel-20221106-git.tgz";
+      sha256 = "10bb8xb9zq0nbigc2119vhp5spa7y3r180h46qzf13jrnwy5qaj7";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -62530,24 +63571,24 @@ in {
   };
   special-functions = {
     pname = "special-functions";
-    version = "20210807-git";
+    version = "20221106-git";
     asds = [ "special-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/special-functions/2021-08-07/special-functions-20210807-git.tgz";
-      sha256 = "0prc01m0kndlh1bggh1as1fbcdcfrm1mr5y5vdxxa4s26g20yjf8";
+      url = "http://beta.quicklisp.org/archive/special-functions/2022-11-06/special-functions-20221106-git.tgz";
+      sha256 = "092szffy7zfxgrvfck11wnj8l0mgcym13yiafj01ad02lbj1fnnv";
       system = "special-functions";
       asd = "special-functions";
     });
     systems = [ "special-functions" ];
-    lispLibs = [ (getAttr "float-features" pkgs) (getAttr "num-utils" pkgs) ];
+    lispLibs = [ (getAttr "alexandria_plus" pkgs) (getAttr "float-features" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) ];
   };
   special-functions_slash_tests = {
     pname = "special-functions_tests";
-    version = "20210807-git";
+    version = "20221106-git";
     asds = [ "special-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/special-functions/2021-08-07/special-functions-20210807-git.tgz";
-      sha256 = "0prc01m0kndlh1bggh1as1fbcdcfrm1mr5y5vdxxa4s26g20yjf8";
+      url = "http://beta.quicklisp.org/archive/special-functions/2022-11-06/special-functions-20221106-git.tgz";
+      sha256 = "092szffy7zfxgrvfck11wnj8l0mgcym13yiafj01ad02lbj1fnnv";
       system = "special-functions";
       asd = "special-functions";
     });
@@ -62624,11 +63665,11 @@ in {
   };
   speechless = {
     pname = "speechless";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "speechless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/speechless/2022-07-07/speechless-20220707-git.tgz";
-      sha256 = "0d47mbr562zvrymdzd6snzx8qffj1s1vrmb7n02g564lxb7zskl2";
+      url = "http://beta.quicklisp.org/archive/speechless/2022-11-06/speechless-20221106-git.tgz";
+      sha256 = "1mq4q0caxvbjj2vs024z2mcsm7r0wd7kw0j2fd6ak9a96cz23jai";
       system = "speechless";
       asd = "speechless";
     });
@@ -62692,24 +63733,24 @@ in {
   };
   spinneret = {
     pname = "spinneret";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "spinneret" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/spinneret/2022-03-31/spinneret-20220331-git.tgz";
-      sha256 = "07hqrjamyq6p3kw0al1f5xdqap1b3pp2v7zcg067nj3xhjqg6j52";
+      url = "http://beta.quicklisp.org/archive/spinneret/2022-11-06/spinneret-20221106-git.tgz";
+      sha256 = "0v3rqv0ka97zmhpvwiqixb0sxn7fp5b2jancvhffp846mqbskn6k";
       system = "spinneret";
       asd = "spinneret";
     });
     systems = [ "spinneret" ];
-    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "global-vars" pkgs) (getAttr "parenscript" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "global-vars" pkgs) (getAttr "parenscript" pkgs) (getAttr "serapeum" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
   };
   spinneret_slash_cl-markdown = {
     pname = "spinneret_cl-markdown";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "spinneret" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/spinneret/2022-03-31/spinneret-20220331-git.tgz";
-      sha256 = "07hqrjamyq6p3kw0al1f5xdqap1b3pp2v7zcg067nj3xhjqg6j52";
+      url = "http://beta.quicklisp.org/archive/spinneret/2022-11-06/spinneret-20221106-git.tgz";
+      sha256 = "0v3rqv0ka97zmhpvwiqixb0sxn7fp5b2jancvhffp846mqbskn6k";
       system = "spinneret";
       asd = "spinneret";
     });
@@ -62721,11 +63762,11 @@ in {
   };
   spinneret_slash_ps = {
     pname = "spinneret_ps";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "spinneret" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/spinneret/2022-03-31/spinneret-20220331-git.tgz";
-      sha256 = "07hqrjamyq6p3kw0al1f5xdqap1b3pp2v7zcg067nj3xhjqg6j52";
+      url = "http://beta.quicklisp.org/archive/spinneret/2022-11-06/spinneret-20221106-git.tgz";
+      sha256 = "0v3rqv0ka97zmhpvwiqixb0sxn7fp5b2jancvhffp846mqbskn6k";
       system = "spinneret";
       asd = "spinneret";
     });
@@ -62737,11 +63778,11 @@ in {
   };
   spinneret_slash_tests = {
     pname = "spinneret_tests";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "spinneret" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/spinneret/2022-03-31/spinneret-20220331-git.tgz";
-      sha256 = "07hqrjamyq6p3kw0al1f5xdqap1b3pp2v7zcg067nj3xhjqg6j52";
+      url = "http://beta.quicklisp.org/archive/spinneret/2022-11-06/spinneret-20221106-git.tgz";
+      sha256 = "0v3rqv0ka97zmhpvwiqixb0sxn7fp5b2jancvhffp846mqbskn6k";
       system = "spinneret";
       asd = "spinneret";
     });
@@ -62964,11 +64005,11 @@ in {
   };
   staple = {
     pname = "staple";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple";
       asd = "staple";
     });
@@ -62977,11 +64018,11 @@ in {
   };
   staple-code-parser = {
     pname = "staple-code-parser";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-code-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-code-parser";
       asd = "staple-code-parser";
     });
@@ -62990,11 +64031,11 @@ in {
   };
   staple-markdown = {
     pname = "staple-markdown";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-markdown" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-markdown";
       asd = "staple-markdown";
     });
@@ -63003,11 +64044,11 @@ in {
   };
   staple-markless = {
     pname = "staple-markless";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-markless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-markless";
       asd = "staple-markless";
     });
@@ -63016,11 +64057,11 @@ in {
   };
   staple-package-recording = {
     pname = "staple-package-recording";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-package-recording" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-package-recording";
       asd = "staple-package-recording";
     });
@@ -63029,11 +64070,11 @@ in {
   };
   staple-restructured-text = {
     pname = "staple-restructured-text";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-restructured-text" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-restructured-text";
       asd = "staple-restructured-text";
     });
@@ -63042,11 +64083,11 @@ in {
   };
   staple-server = {
     pname = "staple-server";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "staple-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2021-10-20/staple-20211020-git.tgz";
-      sha256 = "0dynmx1pslr8d7d8gnydhrcnl2jycg0v5k99im2aq66wd68al0d2";
+      url = "http://beta.quicklisp.org/archive/staple/2022-11-06/staple-20221106-git.tgz";
+      sha256 = "0igs9dfc3bkzzz3bkhr5pijy6bf13lhhi4vl12gydjmyhckirkkk";
       system = "staple-server";
       asd = "staple-server";
     });
@@ -63120,6 +64161,51 @@ in {
     });
     systems = [ "static-vectors/test" ];
     lispLibs = [ (getAttr "fiveam" pkgs) (getAttr "static-vectors" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  statistics = {
+    pname = "statistics";
+    version = "20221106-git";
+    asds = [ "statistics" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/statistics/2022-11-06/statistics-20221106-git.tgz";
+      sha256 = "135dk9fr1bny0hfpkg0g9s7f67gjf9f8ipx01q2is5iqmz24hy94";
+      system = "statistics";
+      asd = "statistics";
+    });
+    systems = [ "statistics" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "org_dot_tfeb_dot_conduit-packages" pkgs) (getAttr "distributions" pkgs) (getAttr "let-plus" pkgs) (getAttr "num-utils" pkgs) ];
+  };
+  statistics_slash_lh = {
+    pname = "statistics_lh";
+    version = "20221106-git";
+    asds = [ "statistics" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/statistics/2022-11-06/statistics-20221106-git.tgz";
+      sha256 = "135dk9fr1bny0hfpkg0g9s7f67gjf9f8ipx01q2is5iqmz24hy94";
+      system = "statistics";
+      asd = "statistics";
+    });
+    systems = [ "statistics/lh" ];
+    lispLibs = [  ];
+    meta = {
+      broken = true;
+    };
+  };
+  statistics_slash_tests = {
+    pname = "statistics_tests";
+    version = "20221106-git";
+    asds = [ "statistics" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/statistics/2022-11-06/statistics-20221106-git.tgz";
+      sha256 = "135dk9fr1bny0hfpkg0g9s7f67gjf9f8ipx01q2is5iqmz24hy94";
+      system = "statistics";
+      asd = "statistics";
+    });
+    systems = [ "statistics/tests" ];
+    lispLibs = [ (getAttr "clunit2" pkgs) (getAttr "num-utils" pkgs) (getAttr "statistics" pkgs) ];
     meta = {
       broken = true;
     };
@@ -63202,6 +64288,19 @@ in {
     systems = [ "stem" ];
     lispLibs = [  ];
   };
+  stepster = {
+    pname = "stepster";
+    version = "20221106-git";
+    asds = [ "stepster" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/stepster/2022-11-06/stepster-20221106-git.tgz";
+      sha256 = "1891b5n4b5pnms90q7d3iaaxdw11fzd4b97mgawx2mh5kmwjvl47";
+      system = "stepster";
+      asd = "stepster";
+    });
+    systems = [ "stepster" ];
+    lispLibs = [ (getAttr "babel" pkgs) (getAttr "cl-ppcre" pkgs) (getAttr "cl-reexport" pkgs) (getAttr "clss" pkgs) (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) (getAttr "plump" pkgs) ];
+  };
   stl = {
     pname = "stl";
     version = "20171019-git";
@@ -63243,11 +64342,11 @@ in {
   };
   str = {
     pname = "str";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "str" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-str/2022-07-07/cl-str-20220707-git.tgz";
-      sha256 = "07l86pl7dly4c0q41j2ikggzl28ilc763j8cs3iwimmacdivjywv";
+      url = "http://beta.quicklisp.org/archive/cl-str/2022-11-06/cl-str-20221106-git.tgz";
+      sha256 = "072im185fmm01ddkfx920g1nm8z2ndw24drf808kn32dw51wjjda";
       system = "str";
       asd = "str";
     });
@@ -63256,11 +64355,11 @@ in {
   };
   str_dot_test = {
     pname = "str.test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "str.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-str/2022-07-07/cl-str-20220707-git.tgz";
-      sha256 = "07l86pl7dly4c0q41j2ikggzl28ilc763j8cs3iwimmacdivjywv";
+      url = "http://beta.quicklisp.org/archive/cl-str/2022-11-06/cl-str-20221106-git.tgz";
+      sha256 = "072im185fmm01ddkfx920g1nm8z2ndw24drf808kn32dw51wjjda";
       system = "str.test";
       asd = "str.test";
     });
@@ -63337,11 +64436,11 @@ in {
   };
   stripe-against-the-modern-world = {
     pname = "stripe-against-the-modern-world";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "stripe-against-the-modern-world" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stripe-against-the-modern-world/2022-02-20/stripe-against-the-modern-world-20220220-git.tgz";
-      sha256 = "0jnm3k39by8y0jzwjjwdv60998i7j8csaxj7rs31ay2b16w2nzmz";
+      url = "http://beta.quicklisp.org/archive/stripe-against-the-modern-world/2022-11-06/stripe-against-the-modern-world-20221106-git.tgz";
+      sha256 = "1qp714y7b7vfdafirlphk02gixa4jffs0xgcy96fncxs6r2zq3q9";
       system = "stripe-against-the-modern-world";
       asd = "stripe-against-the-modern-world";
     });
@@ -63467,11 +64566,11 @@ in {
   };
   stumpwm = {
     pname = "stumpwm";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "stumpwm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2022-07-07/stumpwm-20220707-git.tgz";
-      sha256 = "058j8jpdpjyrkxadn8vmjady59dkfyxb0xdq5mx3lys63m9nwvnf";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2022-11-06/stumpwm-20221106-git.tgz";
+      sha256 = "0gvr136fv5zs61017gns3kbkz00837n0b52fif9vany5fslx3aj2";
       system = "stumpwm";
       asd = "stumpwm";
     });
@@ -63480,11 +64579,11 @@ in {
   };
   stumpwm-dynamic-float = {
     pname = "stumpwm-dynamic-float";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "stumpwm-dynamic-float" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm-dynamic-float/2022-02-20/stumpwm-dynamic-float-20220220-git.tgz";
-      sha256 = "1d0xnnpzcc5fd5dyiipi09hblh9h8qm1hmlgaqxmygp7g240biy1";
+      url = "http://beta.quicklisp.org/archive/stumpwm-dynamic-float/2022-11-06/stumpwm-dynamic-float-20221106-git.tgz";
+      sha256 = "13m9864vfj4b5b0hlvp7jrb96368rxr5ydjsdqldky10yad7icxf";
       system = "stumpwm-dynamic-float";
       asd = "stumpwm-dynamic-float";
     });
@@ -63506,11 +64605,11 @@ in {
   };
   stumpwm-tests = {
     pname = "stumpwm-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "stumpwm-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2022-07-07/stumpwm-20220707-git.tgz";
-      sha256 = "058j8jpdpjyrkxadn8vmjady59dkfyxb0xdq5mx3lys63m9nwvnf";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2022-11-06/stumpwm-20221106-git.tgz";
+      sha256 = "0gvr136fv5zs61017gns3kbkz00837n0b52fif9vany5fslx3aj2";
       system = "stumpwm-tests";
       asd = "stumpwm-tests";
     });
@@ -63519,11 +64618,11 @@ in {
   };
   stumpwm_slash_build = {
     pname = "stumpwm_build";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "stumpwm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2022-07-07/stumpwm-20220707-git.tgz";
-      sha256 = "058j8jpdpjyrkxadn8vmjady59dkfyxb0xdq5mx3lys63m9nwvnf";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2022-11-06/stumpwm-20221106-git.tgz";
+      sha256 = "0gvr136fv5zs61017gns3kbkz00837n0b52fif9vany5fslx3aj2";
       system = "stumpwm";
       asd = "stumpwm";
     });
@@ -63872,11 +64971,11 @@ in {
   };
   t-clack-handler-fcgi = {
     pname = "t-clack-handler-fcgi";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "t-clack-handler-fcgi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "t-clack-handler-fcgi";
       asd = "t-clack-handler-fcgi";
     });
@@ -63885,11 +64984,11 @@ in {
   };
   t-clack-handler-hunchentoot = {
     pname = "t-clack-handler-hunchentoot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "t-clack-handler-hunchentoot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "t-clack-handler-hunchentoot";
       asd = "t-clack-handler-hunchentoot";
     });
@@ -63898,11 +64997,11 @@ in {
   };
   t-clack-handler-toot = {
     pname = "t-clack-handler-toot";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "t-clack-handler-toot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "t-clack-handler-toot";
       asd = "t-clack-handler-toot";
     });
@@ -63911,11 +65010,11 @@ in {
   };
   t-clack-handler-wookie = {
     pname = "t-clack-handler-wookie";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "t-clack-handler-wookie" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2022-07-07/clack-20220707-git.tgz";
-      sha256 = "0bp8yp1dfmvncaapa3mki9wawgz07rl2kxfn4flyg5gn7yh07ffm";
+      url = "http://beta.quicklisp.org/archive/clack/2022-11-06/clack-20221106-git.tgz";
+      sha256 = "1vg61xfgch7lqm15kz8yr5qhqz2507qg88iqpa52mddwg91yamny";
       system = "t-clack-handler-wookie";
       asd = "t-clack-handler-wookie";
     });
@@ -63924,11 +65023,11 @@ in {
   };
   t-lack = {
     pname = "t-lack";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack";
       asd = "t-lack";
     });
@@ -63937,11 +65036,11 @@ in {
   };
   t-lack-component = {
     pname = "t-lack-component";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-component" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-component";
       asd = "t-lack-component";
     });
@@ -63950,11 +65049,11 @@ in {
   };
   t-lack-middleware-accesslog = {
     pname = "t-lack-middleware-accesslog";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-accesslog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-accesslog";
       asd = "t-lack-middleware-accesslog";
     });
@@ -63963,11 +65062,11 @@ in {
   };
   t-lack-middleware-auth-basic = {
     pname = "t-lack-middleware-auth-basic";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-auth-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-auth-basic";
       asd = "t-lack-middleware-auth-basic";
     });
@@ -63976,11 +65075,11 @@ in {
   };
   t-lack-middleware-backtrace = {
     pname = "t-lack-middleware-backtrace";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-backtrace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-backtrace";
       asd = "t-lack-middleware-backtrace";
     });
@@ -63989,11 +65088,11 @@ in {
   };
   t-lack-middleware-csrf = {
     pname = "t-lack-middleware-csrf";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-csrf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-csrf";
       asd = "t-lack-middleware-csrf";
     });
@@ -64002,11 +65101,11 @@ in {
   };
   t-lack-middleware-mount = {
     pname = "t-lack-middleware-mount";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-mount" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-mount";
       asd = "t-lack-middleware-mount";
     });
@@ -64015,11 +65114,11 @@ in {
   };
   t-lack-middleware-session = {
     pname = "t-lack-middleware-session";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-session" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-session";
       asd = "t-lack-middleware-session";
     });
@@ -64028,11 +65127,11 @@ in {
   };
   t-lack-middleware-static = {
     pname = "t-lack-middleware-static";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-middleware-static" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-middleware-static";
       asd = "t-lack-middleware-static";
     });
@@ -64041,11 +65140,11 @@ in {
   };
   t-lack-request = {
     pname = "t-lack-request";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-request" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-request";
       asd = "t-lack-request";
     });
@@ -64054,11 +65153,11 @@ in {
   };
   t-lack-session-store-dbi = {
     pname = "t-lack-session-store-dbi";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-session-store-dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-session-store-dbi";
       asd = "t-lack-session-store-dbi";
     });
@@ -64067,11 +65166,11 @@ in {
   };
   t-lack-session-store-redis = {
     pname = "t-lack-session-store-redis";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-session-store-redis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-session-store-redis";
       asd = "t-lack-session-store-redis";
     });
@@ -64080,11 +65179,11 @@ in {
   };
   t-lack-util = {
     pname = "t-lack-util";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "t-lack-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2022-02-20/lack-20220220-git.tgz";
-      sha256 = "0qsj2p0fkr2qfac7ggcs5ik6003vaqlfimnp8yn57k9h06n2mm5r";
+      url = "http://beta.quicklisp.org/archive/lack/2022-11-06/lack-20221106-git.tgz";
+      sha256 = "0yx5z4xr1pcd2g36f1jhyyaisr2p1ys1a9d7hxyigj31lq1dl9jw";
       system = "t-lack-util";
       asd = "t-lack-util";
     });
@@ -64784,6 +65883,19 @@ in {
     systems = [ "testbild-test" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-heredoc" pkgs) (getAttr "testbild" pkgs) (getAttr "trivial-gray-streams" pkgs) ];
   };
+  testiere = {
+    pname = "testiere";
+    version = "20221106-git";
+    asds = [ "testiere" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/testiere/2022-11-06/testiere-20221106-git.tgz";
+      sha256 = "0q9kw18fkj9sskijy348rxfnri2pcfwxkw3mjsqkp9i2ih285hgp";
+      system = "testiere";
+      asd = "testiere";
+    });
+    systems = [ "testiere" ];
+    lispLibs = [ (getAttr "trivia" pkgs) ];
+  };
   texp = {
     pname = "texp";
     version = "20151218-git";
@@ -65256,24 +66368,24 @@ in {
   };
   torrents = {
     pname = "torrents";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "torrents" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-03-31/cl-torrents-20220331-git.tgz";
-      sha256 = "166nj64mjyr3v1x16hm0hd298cqi0slbmw7avqqkr7zpdy3pi73p";
+      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-11-06/cl-torrents-20221106-git.tgz";
+      sha256 = "1icz98icnisz8cz669adin5x68y3ybcajy69yrma1djgd3v7inl5";
       system = "torrents";
       asd = "torrents";
     });
     systems = [ "torrents" ];
-    lispLibs = [ (getAttr "access" pkgs) (getAttr "cl-ansi-text" pkgs) (getAttr "cl-readline" pkgs) (getAttr "str" pkgs) (getAttr "cl-transmission" pkgs) (getAttr "clache" pkgs) (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "lquery" pkgs) (getAttr "mockingbird" pkgs) (getAttr "parse-float" pkgs) (getAttr "plump" pkgs) (getAttr "py-configparser" pkgs) (getAttr "replic" pkgs) (getAttr "unix-opts" pkgs) ];
+    lispLibs = [ (getAttr "access" pkgs) (getAttr "cl-ansi-text" pkgs) (getAttr "cl-readline" pkgs) (getAttr "str" pkgs) (getAttr "cl-transmission" pkgs) (getAttr "clache" pkgs) (getAttr "dexador" pkgs) (getAttr "jonathan" pkgs) (getAttr "log4cl" pkgs) (getAttr "lparallel" pkgs) (getAttr "lquery" pkgs) (getAttr "mockingbird" pkgs) (getAttr "parse-float" pkgs) (getAttr "plump" pkgs) (getAttr "py-configparser" pkgs) (getAttr "replic" pkgs) (getAttr "unix-opts" pkgs) (getAttr "x_dot_let-star" pkgs) ];
   };
   torrents-test = {
     pname = "torrents-test";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "torrents-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-03-31/cl-torrents-20220331-git.tgz";
-      sha256 = "166nj64mjyr3v1x16hm0hd298cqi0slbmw7avqqkr7zpdy3pi73p";
+      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-11-06/cl-torrents-20221106-git.tgz";
+      sha256 = "1icz98icnisz8cz669adin5x68y3ybcajy69yrma1djgd3v7inl5";
       system = "torrents-test";
       asd = "torrents-test";
     });
@@ -65282,11 +66394,11 @@ in {
   };
   torrents_slash_tk = {
     pname = "torrents_tk";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "torrents" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-03-31/cl-torrents-20220331-git.tgz";
-      sha256 = "166nj64mjyr3v1x16hm0hd298cqi0slbmw7avqqkr7zpdy3pi73p";
+      url = "http://beta.quicklisp.org/archive/cl-torrents/2022-11-06/cl-torrents-20221106-git.tgz";
+      sha256 = "1icz98icnisz8cz669adin5x68y3ybcajy69yrma1djgd3v7inl5";
       system = "torrents";
       asd = "torrents";
     });
@@ -65311,11 +66423,11 @@ in {
   };
   trace-db = {
     pname = "trace-db";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "trace-db" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trace-db/2022-03-31/trace-db-20220331-git.tgz";
-      sha256 = "1ijll1knwk3sig7xx8bbz5fr4sac6y24hfbjpvr6d8fn762hqv18";
+      url = "http://beta.quicklisp.org/archive/trace-db/2022-11-06/trace-db-20221106-git.tgz";
+      sha256 = "0263y0nks377hkm6cx9017hyyw9vd4mvmnhpdfi724knljm6pllk";
       system = "trace-db";
       asd = "trace-db";
     });
@@ -65882,11 +66994,11 @@ in {
   };
   trivial-clipboard = {
     pname = "trivial-clipboard";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "trivial-clipboard" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2021-02-28/trivial-clipboard-20210228-git.tgz";
-      sha256 = "0apkgqrscylw3hhm5x2vs0z3hz6h7zd7dl5y3wr2zl8qjpvpc80k";
+      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2022-11-06/trivial-clipboard-20221106-git.tgz";
+      sha256 = "0l198m1gg2ixc43lqjq1ffd80s1sjxhqf1w83qqa1cn51rra2jp8";
       system = "trivial-clipboard";
       asd = "trivial-clipboard";
     });
@@ -65895,11 +67007,11 @@ in {
   };
   trivial-clipboard-test = {
     pname = "trivial-clipboard-test";
-    version = "20210228-git";
+    version = "20221106-git";
     asds = [ "trivial-clipboard-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2021-02-28/trivial-clipboard-20210228-git.tgz";
-      sha256 = "0apkgqrscylw3hhm5x2vs0z3hz6h7zd7dl5y3wr2zl8qjpvpc80k";
+      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2022-11-06/trivial-clipboard-20221106-git.tgz";
+      sha256 = "0l198m1gg2ixc43lqjq1ffd80s1sjxhqf1w83qqa1cn51rra2jp8";
       system = "trivial-clipboard-test";
       asd = "trivial-clipboard-test";
     });
@@ -66206,11 +67318,11 @@ in {
   };
   trivial-extensible-sequences = {
     pname = "trivial-extensible-sequences";
-    version = "20220220-git";
+    version = "20221106-git";
     asds = [ "trivial-extensible-sequences" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-extensible-sequences/2022-02-20/trivial-extensible-sequences-20220220-git.tgz";
-      sha256 = "1fg9gwrhd9zndcf8gf6rq5qbdbpg9s1ckkbk8bjgr1nvwhhwpygx";
+      url = "http://beta.quicklisp.org/archive/trivial-extensible-sequences/2022-11-06/trivial-extensible-sequences-20221106-git.tgz";
+      sha256 = "0352psdd8j0phjycr6ldckwspyal4jcf0f2fizi6fwdp7nvadng7";
       system = "trivial-extensible-sequences";
       asd = "trivial-extensible-sequences";
     });
@@ -66271,11 +67383,11 @@ in {
   };
   trivial-file-size = {
     pname = "trivial-file-size";
-    version = "20200427-git";
+    version = "20221106-git";
     asds = [ "trivial-file-size" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-file-size/2020-04-27/trivial-file-size-20200427-git.tgz";
-      sha256 = "1b9d0bfl5s48i43m14frkhd5jhjvqlr4m4cgjh26f2kbqxnibhi3";
+      url = "http://beta.quicklisp.org/archive/trivial-file-size/2022-11-06/trivial-file-size-20221106-git.tgz";
+      sha256 = "0ji5j3zgshmfgxwg2yh599r47zaivzky646zk12jg48sb3i7q8fw";
       system = "trivial-file-size";
       asd = "trivial-file-size";
     });
@@ -66284,11 +67396,11 @@ in {
   };
   trivial-file-size_slash_tests = {
     pname = "trivial-file-size_tests";
-    version = "20200427-git";
+    version = "20221106-git";
     asds = [ "trivial-file-size" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-file-size/2020-04-27/trivial-file-size-20200427-git.tgz";
-      sha256 = "1b9d0bfl5s48i43m14frkhd5jhjvqlr4m4cgjh26f2kbqxnibhi3";
+      url = "http://beta.quicklisp.org/archive/trivial-file-size/2022-11-06/trivial-file-size-20221106-git.tgz";
+      sha256 = "0ji5j3zgshmfgxwg2yh599r47zaivzky646zk12jg48sb3i7q8fw";
       system = "trivial-file-size";
       asd = "trivial-file-size";
     });
@@ -66576,11 +67688,11 @@ in {
   };
   trivial-mimes = {
     pname = "trivial-mimes";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "trivial-mimes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-mimes/2022-07-07/trivial-mimes-20220707-git.tgz";
-      sha256 = "0km9l07bnwgc9yi6gg8f6b3fb3jffflg183b4p2q7g1nlgy1vz0w";
+      url = "http://beta.quicklisp.org/archive/trivial-mimes/2022-11-06/trivial-mimes-20221106-git.tgz";
+      sha256 = "0dv76zsf701wapm0sw0hj074v8wjiynn700ri2sgkf5zbdwrza7h";
       system = "trivial-mimes";
       asd = "trivial-mimes";
     });
@@ -66882,6 +67994,32 @@ in {
     systems = [ "trivial-rfc-1123" ];
     lispLibs = [ (getAttr "cl-ppcre" pkgs) ];
   };
+  trivial-sanitize = {
+    pname = "trivial-sanitize";
+    version = "20221106-git";
+    asds = [ "trivial-sanitize" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2022-11-06/trivial-sanitize-20221106-git.tgz";
+      sha256 = "1pv36ywkqcck1vrxdwhlwjw80qkzbr6aqwyrghfng6qfc90r05f6";
+      system = "trivial-sanitize";
+      asd = "trivial-sanitize";
+    });
+    systems = [ "trivial-sanitize" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cl-html5-parser" pkgs) (getAttr "cl-ppcre-unicode" pkgs) (getAttr "uiop" pkgs) ];
+  };
+  trivial-sanitize-tests = {
+    pname = "trivial-sanitize-tests";
+    version = "20221106-git";
+    asds = [ "trivial-sanitize-tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2022-11-06/trivial-sanitize-20221106-git.tgz";
+      sha256 = "1pv36ywkqcck1vrxdwhlwjw80qkzbr6aqwyrghfng6qfc90r05f6";
+      system = "trivial-sanitize-tests";
+      asd = "trivial-sanitize-tests";
+    });
+    systems = [ "trivial-sanitize-tests" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "clunit2" pkgs) (getAttr "trivial-sanitize" pkgs) (getAttr "uiop" pkgs) ];
+  };
   trivial-shell = {
     pname = "trivial-shell";
     version = "20180228-git";
@@ -67079,19 +68217,6 @@ in {
     meta = {
       broken = true;
     };
-  };
-  trivial-timers = {
-    pname = "trivial-timers";
-    version = "20101006-http";
-    asds = [ "trivial-timers" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-timers/2010-10-06/trivial-timers-20101006-http.tgz";
-      sha256 = "0nxr0wb9n2jh6k3cj9ddx2hvgvr4bqb8k587cmj6pjsaa62344mb";
-      system = "trivial-timers";
-      asd = "trivial-timers";
-    });
-    systems = [ "trivial-timers" ];
-    lispLibs = [  ];
   };
   trivial-types = {
     pname = "trivial-types";
@@ -67485,6 +68610,19 @@ in {
       broken = true;
     };
   };
+  tsqueue = {
+    pname = "tsqueue";
+    version = "20221106-git";
+    asds = [ "tsqueue" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tsqueue/2022-11-06/tsqueue-20221106-git.tgz";
+      sha256 = "1ifq53b95a1sdpgx1hlz31pjbh0z6izh3wrgsiqvzgkbiyxq513q";
+      system = "tsqueue";
+      asd = "tsqueue";
+    });
+    systems = [ "tsqueue" ];
+    lispLibs = [ (getAttr "bordeaux-threads" pkgs) ];
+  };
   ttt = {
     pname = "ttt";
     version = "20220707-git";
@@ -67592,6 +68730,32 @@ in {
     systems = [ "type-r.test" ];
     lispLibs = [ (getAttr "fiveam" pkgs) (getAttr "type-r" pkgs) ];
   };
+  typo = {
+    pname = "typo";
+    version = "20221106-git";
+    asds = [ "typo" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/typo/2022-11-06/typo-20221106-git.tgz";
+      sha256 = "08cmkjl3f77rfhxbjyd6f3kinhzak30mdfphnpf73sh1vw4v0vym";
+      system = "typo";
+      asd = "typo";
+    });
+    systems = [ "typo" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "closer-mop" pkgs) (getAttr "introspect-environment" pkgs) (getAttr "trivia" pkgs) (getAttr "trivial-arguments" pkgs) (getAttr "trivial-garbage" pkgs) ];
+  };
+  typo_dot_test-suite = {
+    pname = "typo.test-suite";
+    version = "20221106-git";
+    asds = [ "typo.test-suite" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/typo/2022-11-06/typo-20221106-git.tgz";
+      sha256 = "08cmkjl3f77rfhxbjyd6f3kinhzak30mdfphnpf73sh1vw4v0vym";
+      system = "typo.test-suite";
+      asd = "typo.test-suite";
+    });
+    systems = [ "typo.test-suite" ];
+    lispLibs = [ (getAttr "closer-mop" pkgs) (getAttr "typo" pkgs) ];
+  };
   uax-14 = {
     pname = "uax-14";
     version = "20200925-git";
@@ -67620,11 +68784,11 @@ in {
   };
   uax-15 = {
     pname = "uax-15";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "uax-15" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-15/2021-12-09/uax-15-20211209-git.tgz";
-      sha256 = "0ci52l55qazy1azqib11mlzybhy14rrinwmcvzj7pr097wdxxihh";
+      url = "http://beta.quicklisp.org/archive/uax-15/2022-11-06/uax-15-20221106-git.tgz";
+      sha256 = "0kkr3sw3hqsb8ciyn8dzb1cfz260fk1y39vydc98gsfrn6nqh3vw";
       system = "uax-15";
       asd = "uax-15";
     });
@@ -67633,11 +68797,11 @@ in {
   };
   uax-15_slash_tests = {
     pname = "uax-15_tests";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "uax-15" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-15/2021-12-09/uax-15-20211209-git.tgz";
-      sha256 = "0ci52l55qazy1azqib11mlzybhy14rrinwmcvzj7pr097wdxxihh";
+      url = "http://beta.quicklisp.org/archive/uax-15/2022-11-06/uax-15-20221106-git.tgz";
+      sha256 = "0kkr3sw3hqsb8ciyn8dzb1cfz260fk1y39vydc98gsfrn6nqh3vw";
       system = "uax-15";
       asd = "uax-15";
     });
@@ -67685,6 +68849,9 @@ in {
     });
     systems = [ "ubiquitous" ];
     lispLibs = [  ];
+    meta = {
+      broken = true;
+    };
   };
   ubiquitous-concurrent = {
     pname = "ubiquitous-concurrent";
@@ -67857,11 +69024,11 @@ in {
   };
   uiop = {
     pname = "uiop";
-    version = "3.3.5";
+    version = "3.3.6";
     asds = [ "uiop" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz";
-      sha256 = "19d8jzhvvyi40wn0fj8496wzfwkjs1z2qjm6byw0693wgrm23yj0";
+      url = "http://beta.quicklisp.org/archive/uiop/2022-11-06/uiop-3.3.6.tgz";
+      sha256 = "080lcdw90j30gg2vv9bnwj21aq08mp1kk4nax3ffkjssnrnjwhmr";
       system = "uiop";
       asd = "uiop";
     });
@@ -68068,11 +69235,11 @@ in {
   };
   unix-sockets = {
     pname = "unix-sockets";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "unix-sockets" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-unix-sockets/2020-12-20/cl-unix-sockets-20201220-git.tgz";
-      sha256 = "0m37hhgdn74m1zkw7pf1v3z9zwk64pbjjv6cw2rc4nqjb6n4w4wi";
+      url = "http://beta.quicklisp.org/archive/cl-unix-sockets/2022-11-06/cl-unix-sockets-20221106-git.tgz";
+      sha256 = "1kbayll54228mmikw22isqv1p99i3bznvy0l661rjjhq2r2al8cb";
       system = "unix-sockets";
       asd = "unix-sockets";
     });
@@ -68081,11 +69248,11 @@ in {
   };
   unix-sockets_dot_tests = {
     pname = "unix-sockets.tests";
-    version = "20201220-git";
+    version = "20221106-git";
     asds = [ "unix-sockets.tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-unix-sockets/2020-12-20/cl-unix-sockets-20201220-git.tgz";
-      sha256 = "0m37hhgdn74m1zkw7pf1v3z9zwk64pbjjv6cw2rc4nqjb6n4w4wi";
+      url = "http://beta.quicklisp.org/archive/cl-unix-sockets/2022-11-06/cl-unix-sockets-20221106-git.tgz";
+      sha256 = "1kbayll54228mmikw22isqv1p99i3bznvy0l661rjjhq2r2al8cb";
       system = "unix-sockets.tests";
       asd = "unix-sockets.tests";
     });
@@ -68159,11 +69326,11 @@ in {
   };
   usocket = {
     pname = "usocket";
-    version = "0.8.4";
+    version = "0.8.5";
     asds = [ "usocket" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/usocket/2022-03-31/usocket-0.8.4.tgz";
-      sha256 = "0l5alk6nph6kxgd84pxq8d56pz3ywnpp0kpnlg4cadaics3hycg7";
+      url = "http://beta.quicklisp.org/archive/usocket/2022-11-06/usocket-0.8.5.tgz";
+      sha256 = "1pn5mf4d9g3b7h0vfx0mh7rlrydfbk8q35pg4ip6prf4zyg70wba";
       system = "usocket";
       asd = "usocket";
     });
@@ -68172,11 +69339,11 @@ in {
   };
   usocket-server = {
     pname = "usocket-server";
-    version = "0.8.4";
+    version = "0.8.5";
     asds = [ "usocket-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/usocket/2022-03-31/usocket-0.8.4.tgz";
-      sha256 = "0l5alk6nph6kxgd84pxq8d56pz3ywnpp0kpnlg4cadaics3hycg7";
+      url = "http://beta.quicklisp.org/archive/usocket/2022-11-06/usocket-0.8.5.tgz";
+      sha256 = "1pn5mf4d9g3b7h0vfx0mh7rlrydfbk8q35pg4ip6prf4zyg70wba";
       system = "usocket-server";
       asd = "usocket-server";
     });
@@ -68185,11 +69352,11 @@ in {
   };
   usocket-test = {
     pname = "usocket-test";
-    version = "0.8.4";
+    version = "0.8.5";
     asds = [ "usocket-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/usocket/2022-03-31/usocket-0.8.4.tgz";
-      sha256 = "0l5alk6nph6kxgd84pxq8d56pz3ywnpp0kpnlg4cadaics3hycg7";
+      url = "http://beta.quicklisp.org/archive/usocket/2022-11-06/usocket-0.8.5.tgz";
+      sha256 = "1pn5mf4d9g3b7h0vfx0mh7rlrydfbk8q35pg4ip6prf4zyg70wba";
       system = "usocket-test";
       asd = "usocket-test";
     });
@@ -68227,11 +69394,11 @@ in {
   };
   utilities_dot_print-items = {
     pname = "utilities.print-items";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "utilities.print-items" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/utilities.print-items/2022-07-07/utilities.print-items-20220707-git.tgz";
-      sha256 = "1p7hncjbazl5gz1m2gj2dzvgknc8y2441yfv4jch3h9v0zipx2cj";
+      url = "http://beta.quicklisp.org/archive/utilities.print-items/2022-11-06/utilities.print-items-20221106-git.tgz";
+      sha256 = "0qn0w7cyl76c3ssipqsx4ngb1641ajfkaihnb31w374zrzbns8wi";
       system = "utilities.print-items";
       asd = "utilities.print-items";
     });
@@ -68240,11 +69407,11 @@ in {
   };
   utilities_dot_print-items_slash_test = {
     pname = "utilities.print-items_test";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "utilities.print-items" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/utilities.print-items/2022-07-07/utilities.print-items-20220707-git.tgz";
-      sha256 = "1p7hncjbazl5gz1m2gj2dzvgknc8y2441yfv4jch3h9v0zipx2cj";
+      url = "http://beta.quicklisp.org/archive/utilities.print-items/2022-11-06/utilities.print-items-20221106-git.tgz";
+      sha256 = "0qn0w7cyl76c3ssipqsx4ngb1641ajfkaihnb31w374zrzbns8wi";
       system = "utilities.print-items";
       asd = "utilities.print-items";
     });
@@ -68256,11 +69423,11 @@ in {
   };
   utilities_dot_print-tree = {
     pname = "utilities.print-tree";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "utilities.print-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/utilities.print-tree/2020-03-25/utilities.print-tree-20200325-git.tgz";
-      sha256 = "1ij955455w27jx2ihic0i2ppl3rqn25q0mvsmk5whkhkbrk4ylg1";
+      url = "http://beta.quicklisp.org/archive/utilities.print-tree/2022-11-06/utilities.print-tree-20221106-git.tgz";
+      sha256 = "0i7371qvlnwjcybh3c2ac88xz39vjdynhgxwz4acjbcnsw0jqsls";
       system = "utilities.print-tree";
       asd = "utilities.print-tree";
     });
@@ -68269,11 +69436,11 @@ in {
   };
   utilities_dot_print-tree_slash_test = {
     pname = "utilities.print-tree_test";
-    version = "20200325-git";
+    version = "20221106-git";
     asds = [ "utilities.print-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/utilities.print-tree/2020-03-25/utilities.print-tree-20200325-git.tgz";
-      sha256 = "1ij955455w27jx2ihic0i2ppl3rqn25q0mvsmk5whkhkbrk4ylg1";
+      url = "http://beta.quicklisp.org/archive/utilities.print-tree/2022-11-06/utilities.print-tree-20221106-git.tgz";
+      sha256 = "0i7371qvlnwjcybh3c2ac88xz39vjdynhgxwz4acjbcnsw0jqsls";
       system = "utilities.print-tree";
       asd = "utilities.print-tree";
     });
@@ -68541,11 +69708,11 @@ in {
   };
   vellum = {
     pname = "vellum";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "vellum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum/2022-07-07/vellum-20220707-git.tgz";
-      sha256 = "0jjzq8rngdjwcmgsy1kbrhha847ppbd8fi6zzdam92pyxp49d4zh";
+      url = "http://beta.quicklisp.org/archive/vellum/2022-11-06/vellum-20221106-git.tgz";
+      sha256 = "0yp47awrfgk148fd6hpgwicm2r9673is655j9xaiiasfx42m3fir";
       system = "vellum";
       asd = "vellum";
     });
@@ -68554,11 +69721,11 @@ in {
   };
   vellum-binary = {
     pname = "vellum-binary";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "vellum-binary" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum-binary/2022-07-07/vellum-binary-20220707-git.tgz";
-      sha256 = "1zl0r115mzzzp6am6wpx9pbjv3j1md5mydcxkxwi4rnbfvw8fysq";
+      url = "http://beta.quicklisp.org/archive/vellum-binary/2022-11-06/vellum-binary-20221106-git.tgz";
+      sha256 = "1981mrzcfgda81j14xkqx8n2rir1kk01r7px1s9yjf1f2g2d4zdg";
       system = "vellum-binary";
       asd = "vellum-binary";
     });
@@ -68606,11 +69773,11 @@ in {
   };
   vellum-postmodern = {
     pname = "vellum-postmodern";
-    version = "20211209-git";
+    version = "20221106-git";
     asds = [ "vellum-postmodern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum-postmodern/2021-12-09/vellum-postmodern-20211209-git.tgz";
-      sha256 = "1b35bxdsvrv67zn9idvwc7sd3g606sysiiwhmxllb7s8xynr1h78";
+      url = "http://beta.quicklisp.org/archive/vellum-postmodern/2022-11-06/vellum-postmodern-20221106-git.tgz";
+      sha256 = "0nw2lwk32n16vfvzrihb7683fb38qq01aiacaw00402vzgjiskx6";
       system = "vellum-postmodern";
       asd = "vellum-postmodern";
     });
@@ -68619,11 +69786,11 @@ in {
   };
   vellum-tests = {
     pname = "vellum-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "vellum-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum/2022-07-07/vellum-20220707-git.tgz";
-      sha256 = "0jjzq8rngdjwcmgsy1kbrhha847ppbd8fi6zzdam92pyxp49d4zh";
+      url = "http://beta.quicklisp.org/archive/vellum/2022-11-06/vellum-20221106-git.tgz";
+      sha256 = "0yp47awrfgk148fd6hpgwicm2r9673is655j9xaiiasfx42m3fir";
       system = "vellum-tests";
       asd = "vellum-tests";
     });
@@ -68976,11 +70143,11 @@ in {
   };
   vk = {
     pname = "vk";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "vk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vk/2022-07-07/vk-20220707-git.tgz";
-      sha256 = "1fdj0jjfggd81rb173aacf26w3s9rgmf0bpachrqgmj358bgsakd";
+      url = "http://beta.quicklisp.org/archive/vk/2022-11-06/vk-20221106-git.tgz";
+      sha256 = "1a0bx15gjjzhgfp0y3lxp13binfvw4qm6pfwig45ii8lrwjwnlql";
       system = "vk";
       asd = "vk";
     });
@@ -68989,11 +70156,11 @@ in {
   };
   vk_slash_tests = {
     pname = "vk_tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "vk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vk/2022-07-07/vk-20220707-git.tgz";
-      sha256 = "1fdj0jjfggd81rb173aacf26w3s9rgmf0bpachrqgmj358bgsakd";
+      url = "http://beta.quicklisp.org/archive/vk/2022-11-06/vk-20221106-git.tgz";
+      sha256 = "1a0bx15gjjzhgfp0y3lxp13binfvw4qm6pfwig45ii8lrwjwnlql";
       system = "vk";
       asd = "vk";
     });
@@ -69154,6 +70321,80 @@ in {
     });
     systems = [ "water" ];
     lispLibs = [ (getAttr "parenscript" pkgs) ];
+  };
+  wayflan = {
+    pname = "wayflan";
+    version = "20221106-git";
+    asds = [ "wayflan" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/wayflan/2022-11-06/wayflan-20221106-git.tgz";
+      sha256 = "0d5m3w7312h9c9drrcilvf1k9cwrsksgrp1lggwiiyx810pw4jfj";
+      system = "wayflan";
+      asd = "wayflan";
+    });
+    systems = [ "wayflan" ];
+    lispLibs = [ (getAttr "cffi-grovel" pkgs) (getAttr "wayflan-client" pkgs) ];
+  };
+  wayflan-client = {
+    pname = "wayflan-client";
+    version = "20221106-git";
+    asds = [ "wayflan-client" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/wayflan/2022-11-06/wayflan-20221106-git.tgz";
+      sha256 = "0d5m3w7312h9c9drrcilvf1k9cwrsksgrp1lggwiiyx810pw4jfj";
+      system = "wayflan-client";
+      asd = "wayflan-client";
+    });
+    systems = [ "wayflan-client" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "babel" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "closer-mop" pkgs) (getAttr "plump" pkgs) ];
+  };
+  wayflan-client_slash_examples = {
+    pname = "wayflan-client_examples";
+    version = "20221106-git";
+    asds = [ "wayflan-client" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/wayflan/2022-11-06/wayflan-20221106-git.tgz";
+      sha256 = "0d5m3w7312h9c9drrcilvf1k9cwrsksgrp1lggwiiyx810pw4jfj";
+      system = "wayflan-client";
+      asd = "wayflan-client";
+    });
+    systems = [ "wayflan-client/examples" ];
+    lispLibs = [ (getAttr "cl-cairo2" pkgs) (getAttr "cl-colors" pkgs) (getAttr "cl-pango" pkgs) (getAttr "cl-xkb" pkgs) (getAttr "input-event-codes" pkgs) (getAttr "posix-shm" pkgs) (getAttr "wayflan-client" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  wayflan_slash_common = {
+    pname = "wayflan_common";
+    version = "20221106-git";
+    asds = [ "wayflan" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/wayflan/2022-11-06/wayflan-20221106-git.tgz";
+      sha256 = "0d5m3w7312h9c9drrcilvf1k9cwrsksgrp1lggwiiyx810pw4jfj";
+      system = "wayflan";
+      asd = "wayflan";
+    });
+    systems = [ "wayflan/common" ];
+    lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "babel" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "plump" pkgs) ];
+    meta = {
+      broken = true;
+    };
+  };
+  wayflan_slash_test = {
+    pname = "wayflan_test";
+    version = "20221106-git";
+    asds = [ "wayflan" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/wayflan/2022-11-06/wayflan-20221106-git.tgz";
+      sha256 = "0d5m3w7312h9c9drrcilvf1k9cwrsksgrp1lggwiiyx810pw4jfj";
+      system = "wayflan";
+      asd = "wayflan";
+    });
+    systems = [ "wayflan/test" ];
+    lispLibs = [ (getAttr "parachute" pkgs) (getAttr "wayflan" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   webactions = {
     pname = "webactions";
@@ -69614,11 +70855,11 @@ in {
   };
   with-c-syntax = {
     pname = "with-c-syntax";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "with-c-syntax" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/with-c-syntax/2021-10-20/with-c-syntax-20211020-git.tgz";
-      sha256 = "18xpjp3vn1dr0pmvkvdligwc1h3rvpixyzx6r80r4b74cnk28c35";
+      url = "http://beta.quicklisp.org/archive/with-c-syntax/2022-11-06/with-c-syntax-20221106-git.tgz";
+      sha256 = "12gdwdyxyl9xm8n04qvmvyc1s06dkckb87i6hdysal5lsf1gwc41";
       system = "with-c-syntax";
       asd = "with-c-syntax";
     });
@@ -69627,11 +70868,11 @@ in {
   };
   with-c-syntax-test = {
     pname = "with-c-syntax-test";
-    version = "20211020-git";
+    version = "20221106-git";
     asds = [ "with-c-syntax-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/with-c-syntax/2021-10-20/with-c-syntax-20211020-git.tgz";
-      sha256 = "18xpjp3vn1dr0pmvkvdligwc1h3rvpixyzx6r80r4b74cnk28c35";
+      url = "http://beta.quicklisp.org/archive/with-c-syntax/2022-11-06/with-c-syntax-20221106-git.tgz";
+      sha256 = "12gdwdyxyl9xm8n04qvmvyc1s06dkckb87i6hdysal5lsf1gwc41";
       system = "with-c-syntax-test";
       asd = "with-c-syntax-test";
     });
@@ -69851,11 +71092,11 @@ in {
   };
   wuwei = {
     pname = "wuwei";
-    version = "20190202-git";
+    version = "20221106-git";
     asds = [ "wuwei" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/wuwei/2019-02-02/wuwei-20190202-git.tgz";
-      sha256 = "0c7bx80kfsn0qv0cbxs87yqh448161iyg2r22s9z0qnqlgc6jqnm";
+      url = "http://beta.quicklisp.org/archive/wuwei/2022-11-06/wuwei-20221106-git.tgz";
+      sha256 = "1k5yhxdqcx250kd56qgbch5z0hvjpjwch38c3949nf790pmrhl8f";
       system = "wuwei";
       asd = "wuwei";
     });
@@ -69864,11 +71105,11 @@ in {
   };
   wuwei-examples = {
     pname = "wuwei-examples";
-    version = "20190202-git";
+    version = "20221106-git";
     asds = [ "wuwei-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/wuwei/2019-02-02/wuwei-20190202-git.tgz";
-      sha256 = "0c7bx80kfsn0qv0cbxs87yqh448161iyg2r22s9z0qnqlgc6jqnm";
+      url = "http://beta.quicklisp.org/archive/wuwei/2022-11-06/wuwei-20221106-git.tgz";
+      sha256 = "1k5yhxdqcx250kd56qgbch5z0hvjpjwch38c3949nf790pmrhl8f";
       system = "wuwei-examples";
       asd = "wuwei";
     });
@@ -70085,11 +71326,11 @@ in {
   };
   xml-emitter = {
     pname = "xml-emitter";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "xml-emitter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/xml-emitter/2020-02-18/xml-emitter-20200218-git.tgz";
-      sha256 = "1w9yx8gc4imimvjqkhq8yzpg3kjrp2y37rjix5c1lnz4s7bxvhk9";
+      url = "http://beta.quicklisp.org/archive/xml-emitter/2022-11-06/xml-emitter-20221106-git.tgz";
+      sha256 = "0yvcrzqz14kx90i6sm7kpi8l8hy61a1yjj0a8wvgryjbgp6abqvc";
       system = "xml-emitter";
       asd = "xml-emitter";
     });
@@ -70098,11 +71339,11 @@ in {
   };
   xml-emitter_slash_tests = {
     pname = "xml-emitter_tests";
-    version = "20200218-git";
+    version = "20221106-git";
     asds = [ "xml-emitter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/xml-emitter/2020-02-18/xml-emitter-20200218-git.tgz";
-      sha256 = "1w9yx8gc4imimvjqkhq8yzpg3kjrp2y37rjix5c1lnz4s7bxvhk9";
+      url = "http://beta.quicklisp.org/archive/xml-emitter/2022-11-06/xml-emitter-20221106-git.tgz";
+      sha256 = "0yvcrzqz14kx90i6sm7kpi8l8hy61a1yjj0a8wvgryjbgp6abqvc";
       system = "xml-emitter";
       asd = "xml-emitter";
     });
@@ -70390,13 +71631,26 @@ in {
     systems = [ "yadd" ];
     lispLibs = [ (getAttr "cl-html-parse" pkgs) (getAttr "gwl-graphics" pkgs) ];
   };
+  yah = {
+    pname = "yah";
+    version = "20221106-git";
+    asds = [ "yah" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/yah/2022-11-06/yah-20221106-git.tgz";
+      sha256 = "1bxz8b7fb15yzipkpkaxgqr8yj4kqnbrzjf52zx0s3z1h7fg1vfd";
+      system = "yah";
+      asd = "yah";
+    });
+    systems = [ "yah" ];
+    lispLibs = [ (getAttr "mgl-pax" pkgs) ];
+  };
   yason = {
     pname = "yason";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "yason" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/yason/2022-07-07/yason-20220707-git.tgz";
-      sha256 = "158a799h7g0pgw2xb6gf9i2371v2zjmqjs93f3jcwgwr3y8z5xlj";
+      url = "http://beta.quicklisp.org/archive/yason/2022-11-06/yason-20221106-git.tgz";
+      sha256 = "04h4jhk1z1r9q0vmhwc93x8gbikmsk1jblvpbghwvgrjbvns0vbc";
       system = "yason";
       asd = "yason";
     });
@@ -70418,16 +71672,16 @@ in {
   };
   yxorp = {
     pname = "yxorp";
-    version = "20220331-git";
+    version = "20221106-git";
     asds = [ "yxorp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-yxorp/2022-03-31/cl-yxorp-20220331-git.tgz";
-      sha256 = "0w72mwc4xbz97gqrp3prr1c5zdgh8m8fva0blqr4sd3p91zkkcq7";
+      url = "http://beta.quicklisp.org/archive/cl-yxorp/2022-11-06/cl-yxorp-20221106-git.tgz";
+      sha256 = "0k93xmfpp5j1hr7jwvrxhi7v1h759y5b8kfxfygs0dv2p2801k6y";
       system = "yxorp";
       asd = "yxorp";
     });
     systems = [ "yxorp" ];
-    lispLibs = [ (getAttr "binding-arrows" pkgs) (getAttr "chipz" pkgs) (getAttr "chunga" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "str" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "rutils" pkgs) (getAttr "salza2" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "usocket" pkgs) (getAttr "usocket-server" pkgs) ];
+    lispLibs = [ (getAttr "binding-arrows" pkgs) (getAttr "chipz" pkgs) (getAttr "chunga" pkgs) (getAttr "cl_plus_ssl" pkgs) (getAttr "str" pkgs) (getAttr "flexi-streams" pkgs) (getAttr "rutils" pkgs) (getAttr "salza2" pkgs) (getAttr "smart-buffer" pkgs) (getAttr "trivial-garbage" pkgs) (getAttr "usocket" pkgs) (getAttr "usocket-server" pkgs) ];
   };
   zacl = {
     pname = "zacl";
@@ -70574,11 +71828,11 @@ in {
   };
   zippy = {
     pname = "zippy";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "zippy" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/zippy/2022-07-07/zippy-20220707-git.tgz";
-      sha256 = "0gf1zi20k7kcaq935sp3qghjvapj14hxbxqlq305i65krlgzl1bd";
+      url = "http://beta.quicklisp.org/archive/zippy/2022-11-06/zippy-20221106-git.tgz";
+      sha256 = "16v2h95cqnp9gnbr4llicydsf47r5gwchf4slh9gq2flvq78p0x1";
       system = "zippy";
       asd = "zippy";
     });
@@ -70587,11 +71841,11 @@ in {
   };
   zippy-dwim = {
     pname = "zippy-dwim";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "zippy-dwim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/zippy/2022-07-07/zippy-20220707-git.tgz";
-      sha256 = "0gf1zi20k7kcaq935sp3qghjvapj14hxbxqlq305i65krlgzl1bd";
+      url = "http://beta.quicklisp.org/archive/zippy/2022-11-06/zippy-20221106-git.tgz";
+      sha256 = "16v2h95cqnp9gnbr4llicydsf47r5gwchf4slh9gq2flvq78p0x1";
       system = "zippy-dwim";
       asd = "zippy-dwim";
     });
@@ -70730,11 +71984,11 @@ in {
   };
   zstd = {
     pname = "zstd";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "zstd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-zstd/2022-07-07/cl-zstd-20220707-git.tgz";
-      sha256 = "1iqpi5v6fdm6xxc9l8zhk6kcgl8hgxiwk1ki2yx2j3j4kfvqv8j9";
+      url = "http://beta.quicklisp.org/archive/cl-zstd/2022-11-06/cl-zstd-20221106-git.tgz";
+      sha256 = "1wg8r1fhvhlm9kmqisivs2zjdwx235qr0l4d7n0qjpz4fj75aj07";
       system = "zstd";
       asd = "zstd";
     });
@@ -70743,11 +71997,11 @@ in {
   };
   zstd-tests = {
     pname = "zstd-tests";
-    version = "20220707-git";
+    version = "20221106-git";
     asds = [ "zstd-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-zstd/2022-07-07/cl-zstd-20220707-git.tgz";
-      sha256 = "1iqpi5v6fdm6xxc9l8zhk6kcgl8hgxiwk1ki2yx2j3j4kfvqv8j9";
+      url = "http://beta.quicklisp.org/archive/cl-zstd/2022-11-06/cl-zstd-20221106-git.tgz";
+      sha256 = "1wg8r1fhvhlm9kmqisivs2zjdwx235qr0l4d7n0qjpz4fj75aj07";
       system = "zstd-tests";
       asd = "zstd-tests";
     });

@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     nasm
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];
@@ -39,6 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     export CHIPSEC_BUILD_LIB=$(mktemp -d)
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=dangling-pointer"
+  ];
 
   preInstall = lib.optionalString withDriver ''
     mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux

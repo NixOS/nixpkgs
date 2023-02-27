@@ -26,15 +26,11 @@ buildPythonPackage rec {
     siosocks
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytest-asyncio
     pytestCheckHook
     trustme
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

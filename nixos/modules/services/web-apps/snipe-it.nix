@@ -54,11 +54,8 @@ in {
 
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "snipe-it.example.com";
       description = lib.mdDoc ''
         The hostname to serve Snipe-IT on.
@@ -384,7 +381,7 @@ in {
     };
 
     systemd.services.snipe-it-setup = {
-      description = "Preperation tasks for snipe-it";
+      description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -457,8 +454,9 @@ in {
 
           # A placeholder file for invalid barcodes
           invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"
-          [ ! -e "$invalid_barcode_location" ] \
-              && cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          if [ ! -e "$invalid_barcode_location" ]; then
+              cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          fi
         '';
     };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       project is to create a vendor independent API for retrieving the ink
       level of a printer connected to a Linux or FreeBSD box.
     '';
-    homepage = "http://libinklevel.sourceforge.net/";
+    homepage = "https://libinklevel.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ samb96 ];

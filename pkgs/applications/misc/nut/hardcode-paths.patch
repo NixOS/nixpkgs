@@ -1,0 +1,13 @@
+--- a/tools/nut-scanner/nutscan-init.c
++++ b/tools/nut-scanner/nutscan-init.c
+@@ -44,6 +44,10 @@ int nutscan_load_upsclient_library(const char *libname_path);
+ 
+ /* FIXME: would be good to get more from /etc/ld.so.conf[.d] */
+ char * search_paths[] = {
++	"@avahi@",
++	"@freeipmi@",
++	"@libusb@",
++	"@neon@",
+ 	LIBDIR,
+ 	"/usr/lib64",
+ 	"/lib64",

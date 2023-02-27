@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six charset-normalizer ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     jinja2
     Mako

@@ -47,5 +47,7 @@ stdenv.mkDerivation rec {
     license = licenses.epl10;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aanderse ];
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

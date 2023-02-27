@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiolookin";
-  version = "0.1.1";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,15 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ANMalko";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-xFxkhKM/lX/kSg709wID7HlkfNKDlOcL3STUZOrHZJ8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G3/lUgV60CMLskUo83TlvLLIfJtu5DEz+94mdVI4OrI=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     faker
     pytest-aiohttp
     pytest-mock
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for interacting with LOOKin devices";
     homepage = "https://github.com/ANMalko/aiolookin";
+    changelog = "https://github.com/ANMalko/aiolookin/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

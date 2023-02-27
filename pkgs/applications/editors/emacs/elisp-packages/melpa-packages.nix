@@ -194,6 +194,13 @@ let
           stripDebugList = [ "share" ];
         });
 
+        epkg = super.epkg.overrideAttrs (old: {
+          postPatch = ''
+            substituteInPlace lisp/epkg.el \
+              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+          '';
+        });
+
         erlang = super.erlang.overrideAttrs (attrs: {
           buildInputs = attrs.buildInputs ++ [
             pkgs.perl
@@ -259,7 +266,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';
@@ -505,6 +512,16 @@ let
         # missing dependencies
         evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
           packageRequires = with self; [ evil highlight ];
+        });
+
+        hamlet-mode = super.hamlet-mode.overrideAttrs (attrs: {
+          patches = [
+            # Fix build; maintainer email fails to parse
+            (pkgs.fetchpatch {
+              url = "https://github.com/lightquake/hamlet-mode/commit/253495d1330d6ec88d97fac136c78f57c650aae0.patch";
+              sha256 = "dSxS5yuXzCW96CUyvJWwjkhf1FMGBfiKKoBxeDVdz9Y=";
+            })
+          ];
         });
 
         helm-rtags = fix-rtags super.helm-rtags;

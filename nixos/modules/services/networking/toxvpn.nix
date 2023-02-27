@@ -14,7 +14,7 @@ with lib;
       };
 
       port = mkOption {
-        type        = types.int;
+        type        = types.port;
         default     = 33445;
         description = lib.mdDoc "udp port for toxcore, port-forward to help with connectivity if you run many nodes behind one NAT";
       };

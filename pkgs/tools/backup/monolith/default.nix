@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E+2D/oidqxRqKR70LN4uR1QkBa4oFfLiS8SoJkrgwtI=";
+    sha256 = "sha256-pljMWAfmDQUxQEyFGVhXqLjRq6P7D+YUB/e1h66WnDE=";
   };
 
-  cargoSha256 = "sha256-Acmo0p+WihRg3dU3ptaFw6uf9OQegvPUCQ63b5Ucdmk=";
+  cargoSha256 = "sha256-kFDyjiupjN1cuhzE16v6JP/yyXdtwL3srZVtSimnahA=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]

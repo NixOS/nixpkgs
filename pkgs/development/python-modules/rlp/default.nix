@@ -26,7 +26,7 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

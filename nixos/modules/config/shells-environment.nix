@@ -42,8 +42,8 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      type = with types; attrsOf (oneOf [ (listOf str) str path ]);
+      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else "${v}");
     };
 
     environment.profiles = mkOption {

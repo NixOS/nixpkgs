@@ -1,14 +1,15 @@
 { stdenv, lib, fetchurl, ncurses, perl, help2man
-, apparmorRulesFromClosure, fetchpatch
+, apparmorRulesFromClosure
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-CwG7COKWI8TjuUDyM8lhRR2a+MUGYwGt12pSqV1Rdyw=";
+    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
   };
 
   outputs = ["out" "apparmor"];
@@ -16,15 +17,11 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-    (fetchpatch {
-      name = "CVE-2022-39028.patch";
-      url = "https://sources.debian.org/data/main/i/inetutils/2%3A2.3-5/debian/patches/inetutils-telnetd-EC_EL_null_deref.patch";
-      sha256 = "sha256-NYNDbEk3q3EhQdJaR12JBbnjJIRRpOcKLBF/EJJPiGU=";
-    })
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ ];
+  buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html

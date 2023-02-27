@@ -24,21 +24,20 @@
 
 mkDerivation rec {
   pname = "maliit-framework";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = version;
-    sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
 
-  # in master post 2.2.1, see https://github.com/maliit/framework/issues/106
   patches = [
+    # FIXME: backport GCC 12 build fix, remove for next release
     (fetchpatch {
-      name = "fix-pkg-config.patch";
-      url = "https://github.com/maliit/framework/commit/1e20a4a5113f1c092295f5a5f04ab6e584f6fcff.patch";
-      sha256 = "0h7jfqnqvjka626wx2z2g150rch4air7q3zbq59gcb12g7x6gfyn";
+      url = "https://github.com/maliit/framework/commit/86e55980e3025678882cb9c4c78614f86cdc1f04.diff";
+      hash = "sha256-5R+sCI05vJX5epu6hcDSWWzlZ8ns1wKEJ+u8xC6d8Xo=";
     })
   ];
 

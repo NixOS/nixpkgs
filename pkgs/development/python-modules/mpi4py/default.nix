@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ mpi ];
 
-  checkInputs = [ openssh ];
+  nativeCheckInputs = [ openssh ];
 
   meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";

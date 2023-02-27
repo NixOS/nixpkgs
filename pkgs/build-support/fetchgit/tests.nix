@@ -12,10 +12,10 @@
     name = "nix-source";
     url = "https://github.com/NixOS/nix";
     rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-    sparseCheckout = ''
-      src
-      tests
-    '';
+    sparseCheckout = [
+      "src"
+      "tests"
+    ];
     sha256 = "sha256-g1PHGTWgAcd/+sXHo1o6AjVWCvC6HiocOfMbMh873LQ=";
   };
 
@@ -23,10 +23,10 @@
     name = "nix-source";
     url = "https://github.com/NixOS/nix";
     rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-    sparseCheckout = ''
-      src
-      tests
-    '';
+    sparseCheckout = [
+      "src"
+      "tests"
+    ];
     nonConeMode = true;
     sha256 = "sha256-FknO6C/PSnMPfhUqObD4vsW4PhkwdmPa9blNzcNvJQ4=";
   };

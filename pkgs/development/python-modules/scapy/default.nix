@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchFromGitHub, stdenv, lib, isPyPy
 , pycrypto, ecdsa # TODO
-, tox, mock, coverage, can, brotli
+, mock, can, brotli
 , withOptionalDeps ? true, tcpdump, ipython
 , withCryptography ? true, cryptography
 , withVoipSupport ? true, sox
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.5";
+  version = "2.5.0";
 
   disabled = isPyPy;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "0nxci1v32h5517gl9ic6zjq8gc8drwr0n5pz04c91yl97xznnw94";
+    sha256 = "sha256-xJlovcxUQOQHfOU0Jgin/ayd2T5fOyeN4Jg0DbLHoeU=";
   };
 
   patches = [
@@ -52,8 +52,9 @@ buildPythonPackage rec {
 
   # Running the tests seems too complicated:
   doCheck = false;
-  checkInputs = [ tox mock coverage can brotli ];
+  nativeCheckInputs = [ mock can brotli ];
   checkPhase = ''
+    # TODO: be more specific about files
     patchShebangs .
     .config/ci/test.sh
   '';

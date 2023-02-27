@@ -7,7 +7,6 @@
 , vulkan-headers
 , vulkan-loader
 , shaderc
-, glslang
 , lcms2
 , libepoxy
 , libGL
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     shaderc
-    glslang
     lcms2
     libepoxy
     libGL
@@ -50,6 +48,7 @@ stdenv.mkDerivation rec {
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
     "-Ddemos=false" # Don't build and install the demo programs
     "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
+    "-Dglslang=disabled" # rely on shaderc for GLSL compilation instead
   ] ++ lib.optionals stdenv.isDarwin [
     "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
   ];

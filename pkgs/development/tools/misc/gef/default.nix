@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
       ]}
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb
     file
     ps

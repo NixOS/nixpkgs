@@ -21,6 +21,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "nbconvert>=6.2.0,<7.0.0" "nbconvert>=6.2.0"
     substituteInPlace mkdocs_jupyter/tests/test_base_usage.py \
           --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
   '';
@@ -36,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_jupyter" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cov
     pytestCheckHook
   ];

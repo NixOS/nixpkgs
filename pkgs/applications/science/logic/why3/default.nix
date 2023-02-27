@@ -10,8 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages;  [
+    ocaml findlib menhir
+    # Coq Support
+    coqPackages.coq
+  ];
+
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
+    ocamlgraph zarith
     # Emacs compilation of why3.el
     emacs
     # Documentation
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A platform for deductive program verification";
-    homepage    = "http://why3.lri.fr/";
+    homepage    = "https://why3.lri.fr/";
     license     = licenses.lgpl21;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vbgl ];

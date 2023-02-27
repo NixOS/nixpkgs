@@ -22,7 +22,9 @@ buildDunePackage {
   inherit (paf)
     version
     src
-  ;
+    ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
@@ -44,6 +46,8 @@ buildDunePackage {
     lwt
     astring
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = paf.meta // {
     description = "A CoHTTP client with its HTTP/AF implementation";

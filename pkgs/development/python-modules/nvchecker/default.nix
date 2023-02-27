@@ -48,7 +48,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-asyncio
     pytest-httpbin

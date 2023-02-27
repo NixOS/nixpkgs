@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , click
 , click-default-group
 , docformatter
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.9";
+  version = "22.12";
 
   disabled = pythonOlder "3.7";
 
@@ -22,8 +23,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xi1QArTeWbrKTE6p7f3Aj7d1lxPsIROaruv/IMw+fPw=";
+    hash = "sha256-o9Xxt7b/+MkW94Jcg26ihaTn0/OpTcu+0OY7oV3JRGY=";
   };
+
+  patches = [
+    # https://github.com/tefra/xsdata/pull/741
+    (fetchpatch {
+      name = "use-docformatter-1.5.1.patch";
+      url = "https://github.com/tefra/xsdata/commit/040692db47e6e51028fd959c793e757858c392d7.patch";
+      excludes = [ "setup.cfg" ];
+      hash = "sha256-ncecMJLJUiUb4lB8ys+nyiGU/UmayK++o89h3sAwREQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -46,7 +57,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.cli
     ++ passthru.optional-dependencies.lxml
@@ -74,6 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python XML Binding";
     homepage = "https://github.com/tefra/xsdata";
+    changelog = "https://github.com/tefra/xsdata/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

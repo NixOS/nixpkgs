@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, xlibsWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU  }:
 
 stdenv.mkDerivation rec {
   pname = "glbinding";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "cginternals";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1avd7ssms11xx7h0cm8h4pfpk55f07f1j1ybykxfgsym2chb2z08";
+    sha256 = "sha256-xmEXZ1ssXzrElqd6D1zooFxLEyspsF4Dau3d9+1/2yw=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU xlibsWrapper ];
+  buildInputs = [ libGLU ];
 
   meta = with lib; {
     homepage = "https://github.com/cginternals/glbinding/";

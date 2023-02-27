@@ -38,9 +38,14 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      name = "billiard-4.0-comat.patch";
+      name = "billiard-4.0-compat.patch";
       url = "https://github.com/celery/celery/commit/b260860988469ef8ad74f2d4225839c2fa91d590.patch";
       hash = "sha256-NWB/UB0fE7A/vgMRYz6QGmqLmyN1ninAMyL4V2tpzto=";
+    })
+    (fetchpatch  {
+      name = "billiard-4.1-compat.patch";
+      url = "https://github.com/celery/celery/pull/7781/commits/879af6341974c3778077d8212d78f093b2d77a4f.patch";
+      hash = "sha256-+m8/YkeAPPjwm0WF7dw5XZzf7MImVBLXT0/FS+fk0FE=";
     })
   ];
 
@@ -60,7 +65,7 @@ buildPythonPackage rec {
     vine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     case
     dnspython

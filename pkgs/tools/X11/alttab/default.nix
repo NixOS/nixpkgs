@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     coreutils
     procps
     python3Packages.xvfbwrapper

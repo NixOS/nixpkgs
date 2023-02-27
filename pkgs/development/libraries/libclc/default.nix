@@ -7,13 +7,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libclc";
-  version = "12.0.1";
+  version = "15.0.7";
 
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
     rev = "llvmorg-${version}";
-    sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
+    sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
   };
   sourceRoot = "source/libclc";
 

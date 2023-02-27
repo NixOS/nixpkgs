@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library to read and write Paradox files";
-    homepage = "http://pxlib.sourceforge.net/";
+    homepage = "https://pxlib.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.winpat ];

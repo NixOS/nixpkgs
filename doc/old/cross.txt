@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = "http://ftp.nluug.nl/gnu/binutils/binutils-2.16.1.tar.bz2";
-    sha256 = "1ian3kwh2vg6hr3ymrv48s04gijs539vzrq62xr76bxbhbwnz2np";
+    hash = "sha256-14pv+YKrL3NyFwbnv9MoWsZHgEZk5+pHhuZtAfkcVsU=";
   };
   inherit noSysDirs;
   configureFlags = [ "--target=arm-linux" ];
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = "http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.1.tar.bz2";
-    sha256 = "12qxmc827fjhaz53kjy7vyrzsaqcg78amiqsb3qm20z26w705lma";
+    hash = "sha256-qtICDjfiA1HxWBrHqtB5DCv9s9/HyznKV1C6IxCrHYs=";
   };
 }
 ---
@@ -151,8 +151,8 @@ stdenv.mkDerivation {
   name = "gcc-4.0.2-arm";
   builder = ./builder.sh;
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.0.2/gcc-core-4.0.2.tar.bz2;
-    sha256 = "02fxh0asflm8825w23l2jq1wvs7hbnam0jayrivg7zdv2ifnc0rc";
+    url = "ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.0.2/gcc-core-4.0.2.tar.bz2";
+    hash = "sha256-LANmXRS7/fN2zF5JUJVd8OjNA5aCDsGLQKhSpxWA3Qk=";
   };
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch ./gcc-inhibit.patch];
@@ -303,7 +303,7 @@ One of the compiler flags that GCC uses for this compiler is called X_CFLAGS.
 This is used by the Nix build process to set the dynamic linker, glibc
 in the case of i686-linux using the default Nix packages collection.
 
-Obiously, since we need to compile libstc++ for arm-linux with uClibc linking
+Obviously, since we need to compile libstc++ for arm-linux with uClibc linking
 will not be done correctly: you can't link object files built for arm-linux
 with a glibc built for i686-linux.
 

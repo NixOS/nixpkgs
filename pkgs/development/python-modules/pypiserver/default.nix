@@ -28,7 +28,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     passlib
     pytestCheckHook
     twine

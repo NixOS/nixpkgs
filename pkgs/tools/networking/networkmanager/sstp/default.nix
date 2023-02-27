@@ -20,7 +20,7 @@
 stdenv.mkDerivation rec {
   pname = "NetworkManager-sstp";
   version = "1.3.1";
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

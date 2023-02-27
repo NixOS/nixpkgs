@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libmodbus";
-  version = "3.1.7";
+  version = "3.1.10";
 
-  src = fetchurl {
-    url = "http://libmodbus.org/releases/libmodbus-${version}.tar.gz";
-    sha256 = "sha256-ff6VhDHQVwsnHhpbMpt2pljonGFM8RnrWq23Jch/j70=";
+  src = fetchFromGitHub {
+    owner = "stephane";
+    repo = "libmodbus";
+    rev = "v${version}";
+    hash = "sha256-e2lB5D41a5MOmz9M90ZXfIltSOxNDOrQUpRNU2yYd1k=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     # when cross-compiling we assume that the host system will return a valid
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Library to send/receive data according to the Modbus protocol";
     homepage = "https://libmodbus.org/";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
+    # darwin special-casing just causes trouble
+    substituteInPlace ./m4macros/ax_crypto.m4 --replace 'apple-darwin' 'nope'
   '';
 
   outputs = [

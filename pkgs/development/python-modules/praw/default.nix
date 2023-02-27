@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.6.0";
+  version = "7.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-y2eynMsjF4wZd31YoLdtk8F+ga7Z3R+IQkQK0x0RAGA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-reJW1M1yDSQ1SvZJeOc0jwHj6ydl1AmMl5VZqRHxXZA=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     betamax-serializers
     betamax-matchers
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
+    changelog = "https://github.com/praw-dev/praw/blob/v${version}/CHANGES.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };

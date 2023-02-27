@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-1nbeZhV61q+Z/9lOD1Tonfw1sPtyUurS7QrS3KQxvdA=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "py.test";
 
   meta = with lib; {

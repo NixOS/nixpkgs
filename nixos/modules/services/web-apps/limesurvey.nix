@@ -32,7 +32,7 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption (lib.mdDoc "Limesurvey web application.");
+    enable = mkEnableOption (lib.mdDoc "Limesurvey web application");
 
     database = {
       type = mkOption {
@@ -49,7 +49,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
         description = lib.mdDoc "Database host port.";

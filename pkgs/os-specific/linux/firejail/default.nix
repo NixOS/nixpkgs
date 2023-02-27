@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.70";
+  version = "0.9.72";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "sha256-x1txt0uER66bZN6BD6c/31Zu6fPPwC9kl/3bxEE6Ce8=";
+    sha256 = "sha256-XAlb6SSyY2S1iWDaulIlghQ16OGvT/wBCog95/nxkog=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
     substituteInPlace src/include/common.h \
       --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
+
+    # Workaround for regression introduced in 0.9.72 preventing usage of
+    # end-of-options indicator "--"
+    # See https://github.com/netblue30/firejail/issues/5659
+    substituteInPlace src/firejail/sandbox.c \
+      --replace " && !arg_doubledash" ""
   '';
 
   preConfigure = ''

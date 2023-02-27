@@ -26,7 +26,7 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
@@ -34,6 +34,8 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_multiprocessing"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "asgiref" ];
 

@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , makeWrapper
+, wrapGAppsHook
 , pkg-config
 , python3
 , gettext
@@ -52,30 +53,21 @@
 , libpng
 , libjpeg
 , AppKit
-, AudioToolbox
-, AudioUnit
-, Carbon
-, CoreAudio
 , CoreAudioKit
-, CoreServices
 }:
 
 # TODO
 # 1. detach sbsms
 
-let
-  inherit (lib) optionals;
-  pname = "audacity";
-  version = "3.2.1";
-in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "audacity";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-7rfttp9LnfM2LBT5seupPyDckS7LEzWDZoqtLsGgqgI=";
+    hash = "sha256-gz2o0Rj4364nJAvJmMQzwIQycoQmqz2/43DBvd3qbho=";
   };
 
   postPatch = ''
@@ -91,7 +83,8 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-  ] ++ optionals stdenv.isLinux [
+    wrapGAppsHook
+  ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
@@ -100,6 +93,9 @@ stdenv.mkDerivation rec {
     ffmpeg_4
     file
     flac
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+  ] ++ [
     gtk3
     lame
     libid3tag
@@ -125,7 +121,7 @@ stdenv.mkDerivation rec {
     portaudio
     wavpack
     wxGTK32
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -138,10 +134,8 @@ stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-  ] ++ optionals stdenv.isDarwin [
-    AppKit
-    CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];
@@ -197,7 +191,5 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # error: unknown type name 'NSAppearanceName'
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

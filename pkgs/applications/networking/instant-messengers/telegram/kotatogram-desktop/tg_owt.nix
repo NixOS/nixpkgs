@@ -6,7 +6,7 @@
 , ninja
 , yasm
 , libjpeg
-, openssl
+, openssl_1_1
 , libopus
 , ffmpeg_4
 , protobuf
@@ -57,8 +57,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # let it build with nixpkgs 10.12 sdk
-    ./tg_owt-10.12-sdk.patch
+    ./tg_owt.patch
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -75,7 +74,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     libjpeg
-    openssl
+    openssl_1_1
     libopus
     ffmpeg_4
     protobuf
@@ -114,9 +113,6 @@ stdenv.mkDerivation {
     CoreFoundation
     ApplicationServices
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/130963
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
 

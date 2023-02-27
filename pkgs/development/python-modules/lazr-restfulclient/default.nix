@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   # E   ModuleNotFoundError: No module named 'lazr.uri'
   doCheck = false;
-  checkInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
+  nativeCheckInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
 
   pythonImportsCheck = [ "lazr.restfulclient" ];
 

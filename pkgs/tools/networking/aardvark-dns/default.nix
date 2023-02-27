@@ -1,20 +1,23 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aardvark-dns";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pIbhrYiZOZ0GoynnHvp+h5E4O4syiwVhQeczAv1zjTo=";
+    hash = "sha256-N439ubEayoyfGrzkXE7+TeJQkddy8PZn5Lhmc/X5VxU=";
   };
 
-  cargoHash = "sha256-2aFvFP64vy0FK0k0Uq6sPVi42E5easxOUlkcZjrjoMs=";
+  cargoHash = "sha256-cIHz672jd8NKLyLvwsZInLerdA9MXRgWdpJFgMSgs9Q=";
+
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "Authoritative dns server for A/AAAA container records";

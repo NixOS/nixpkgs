@@ -29,7 +29,7 @@ buildPythonPackage rec {
     backports-cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyte
     pytestCheckHook
   ];

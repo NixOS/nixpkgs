@@ -16,14 +16,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.6.0";
+  version = "2.7.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-yREdWrGiH8Bb2bIxvlg4okGbkIM5XqC039Fj0rrsJos=";
+    sha256 = "sha256-j4s1xH0vO+/NNafQf1Jei7fgebSQ53WJKA+kYxuG2zQ=";
   };
 
   patches = [
@@ -32,6 +32,11 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    substituteInPlace CMakeLists.txt \
+      --replace " -Werror " " "
+
     # 'cvise --command=...' generates a script with hardcoded shebang.
     substituteInPlace cvise.py \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
@@ -60,7 +65,7 @@ buildPythonApplication rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     unifdef
   ];

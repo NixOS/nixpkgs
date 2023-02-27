@@ -65,7 +65,7 @@ let
   manylinux1Libs = getLibOutputs(manylinux2010Libs // (with pkgs; {
     "libpanelw.so.5" = ncurses5;
     "libncursesw.so.5" = ncurses5;
-    "libcrypt.so.1" = glibc;
+    "libcrypt.so.1" = libxcrypt;
     }));
 
 in {

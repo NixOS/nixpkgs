@@ -24,7 +24,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "appstream-glib";
-  version = "0.8.1";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = "${lib.replaceStrings ["-"] ["_"] pname}_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "Qf0z9YTfjTiEr9OlK2BgOpVDtM2ozsiyjzO04O81zas=";
+    sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 
   nativeBuildInputs = [

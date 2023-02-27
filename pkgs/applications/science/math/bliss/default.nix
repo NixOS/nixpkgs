@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "An open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = licenses.lgpl3;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

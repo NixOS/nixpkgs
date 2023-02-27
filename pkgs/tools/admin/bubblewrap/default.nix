@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bubblewrap";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
     rev = "v${version}";
-    hash = "sha256-J+VFla3sWO+DfB2IxxrKzbiG+KWFJr9caf8sTHyWXY4=";
+    hash = "sha256-ddxEtBw6JcSsZCN5uKyuBMVkWwSoThfxrcvHZGZzFr4=";
   };
 
   postPatch = ''
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
+    mainProgram = "bwrap";
   };
 }

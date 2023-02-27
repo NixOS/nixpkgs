@@ -4,7 +4,7 @@
 , fetchFromGitHub
   #, hatchling
 , ruamel-yaml
-, poetry
+, poetry-core
 , pytest
 , pytest-asyncio
 , pytestCheckHook
@@ -27,13 +27,19 @@ buildPythonPackage rec {
     hash = "sha256-l5fXWDK6gWJc3dkYFTokI9tWvawMRnF0td/lSwqkYXE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry>=0.12" poetry-core \
+      --replace poetry.masonry.api poetry.core.masonry.api
+  '';
+
   pythonRelaxDeps = [
     "testfixtures"
   ];
 
   nativeBuildInputs = [
     # hatchling used for > 0.2.2
-    poetry
+    poetry-core
     pythonRelaxDepsHook
   ];
 
@@ -47,7 +53,7 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

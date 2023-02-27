@@ -42,8 +42,8 @@ let
     owner = "diasurgical";
     repo = "libzt";
     fetchSubmodules = true;
-    rev = "a34ba7f1cc2e41b05badd25d1b01fdc5fd2f4e02";
-    sha256 = "sha256-tyIPt+7OTi5W+5X/ixQP1puOKdhrqRZtpwXlWFBFpc8=";
+    rev = "37a2efb0b925df632299ef07dc78c0af5f6b4756";
+    sha256 = "sha256-+o4ZTVqh4MDZES9m7mkfkMRlRDMBytDBuA0QIlnp73U=";
   };
 
   # missing pkg-config and/or cmake file
@@ -55,21 +55,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "sha256-uuIPTdgGpHA8j1M8b+kfnBuiJ5mdS9rckvEfn2h7lmo=";
+    sha256 = "sha256-l0BhL+DXtkG2PdFqmkL0KJv41zl3N/AcuLmzw2j3jXY=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/diasurgical/devilutionX/commit/03b22352fc9e1ecb88b20a053c90c04a50717267.patch";
-      sha256 = "sha256-5aAwi1NV8P+nLLbEEnlwLGNQCQBb0nQkIVe5tR5Shsw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Source/init.cpp --replace "/usr/share/diasurgical/devilutionx/" "${placeholder "out"}/share/diasurgical/devilutionx/"

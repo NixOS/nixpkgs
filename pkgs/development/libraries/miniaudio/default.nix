@@ -4,13 +4,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "miniaudio";
-  version = "unstable-2020-04-20";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    rev = "4d813cfe23c28db165cce6785419fee9d2399766";
-    sha256 = "sha256-efZLZTmkLtvcysd25olDE/QqunU5YTYwSVmUZXPKGIY=";
+    rev = "a0dc1037f99a643ff5fad7272cd3d6461f2d63fa";
+    # upstream does not maintain tags:
+    # https://github.com/mackron/miniaudio/issues/273#issuecomment-783861269
+    hash = "sha256-jOvDZk76hDvZ1RQ9O34kVeW0n95BT9+BE6fNhdekI5s=";
   };
 
   installPhase = ''
@@ -19,9 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Single header audio playback and capture library written in C.";
+    description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
-    license = licenses.unlicense;
+    changelog = "https://github.com/mackron/miniaudio/blob/${src.rev}/CHANGES.md";
+    license = with licenses; [ unlicense /* or */ mit0 ];
     maintainers = [ maintainers.jansol ];
     platforms = platforms.all;
   };

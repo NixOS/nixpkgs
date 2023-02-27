@@ -10,11 +10,11 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen ffmpeg ];
-  fixupPhase = if stdenv.isDarwin then ''
+  fixupPhase = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
-  '' else "";
+  '';
 
   meta = with lib; {
     homepage = "https://www.musly.org";

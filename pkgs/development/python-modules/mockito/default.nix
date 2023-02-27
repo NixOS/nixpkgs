@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = lib.optionals (!isPy3k) [ funcsigs ];
-  checkInputs = [ pytest numpy ];
+  nativeCheckInputs = [ pytest numpy ];
 
   # tests are no longer packaged in pypi tarball
   doCheck = false;

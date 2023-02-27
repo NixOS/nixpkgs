@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "19ynsldb21r539fiwz1f43apsdnx7hj2a2d9qr9wg2hva9y2qrwb";
   };
 
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
 
   propagatedBuildInputs = [ gettext fileutils ];
 

@@ -25,6 +25,7 @@ let
     ENCRYPTION_KEY=
     ENCRYPTION_CIPHER=AES-256
     SETUP_COMPLETED=false
+    REMOVE_INDEXPHP=true
   '';
 
   extraConfig = hostName: cfg: pkgs.writeText "extraConfig.php" ''
@@ -73,7 +74,7 @@ let
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
           description = lib.mdDoc ''
-            This directory is used for uploads of attachements and cache.
+            This directory is used for uploads of attachments and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
           '';
@@ -326,15 +327,15 @@ in
     )) eachSite;
 
     systemd.services =
-      (mapAttrs' (hostName: cfg: (
+      mapAttrs' (hostName: cfg: (
         nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
           serviceConfig = {
             Type = "oneshot";
             User = user;
-            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/index.php/invoices/cron/recur/${cfg.cron.key}";
+            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
           };
         })
-    )) eachSite);
+    )) eachSite;
 
   }
 
@@ -344,9 +345,8 @@ in
       virtualHosts = mapAttrs' (hostName: cfg: (
         nameValuePair "http://${hostName}" {
           extraConfig = ''
-            root    * ${pkg hostName cfg}
+            root * ${pkg hostName cfg}
             file_server
-
             php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
           '';
         }

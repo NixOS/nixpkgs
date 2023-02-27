@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.18.0";
+  version = "0.19.0.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LfQESmKxSJ4tWlp3EZTBajOxZC3IEOUtJmX8A5ROpmU=";
+    sha256 = "sha256-UBhUCpRXyd5gLxaf38wBURo2DIoUgMmROogGF3bwWJk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sksurv" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298

@@ -33,7 +33,7 @@ assert withMPI -> trilinos.withMPI;
 
 stdenv.mkDerivation rec {
   pname = "xyce";
-  version = "7.4.0";
+  version = "7.6.0";
 
   srcs = [
     # useing fetchurl or fetchFromGitHub doesn't include the manuals
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     (fetchgit {
       url = "https://github.com/Xyce/Xyce.git";
       rev = "Release-${version}";
-      sha256 = "sha256-sOHjQEo4FqlDseTtxFVdLa0SI/VAf2OkwQV7QSL7SNM=";
+      sha256 = "sha256-HYIzmODMWXBuVRZhcC7LntTysuyXN5A9lb2DeCQQtVw=";
     })
     (fetchFromGitHub {
       owner = "Xyce";
       repo = "Xyce_Regression";
       rev = "Release-${version}";
-      sha256 = "sha256-kSGUaFarOHDNJ8kA/TAGkmzicm9O7cfJ7mGFZcbqCZM=";
+      sha256 = "sha256-uEoiKpYyHmdK7LZ1UNm2d3Jk8+sCwBwB0TCoHilIh74=";
     })
   ];
 
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     perl
     (python3.withPackages (ps: with ps; [ numpy scipy ]))

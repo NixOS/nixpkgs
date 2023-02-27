@@ -1,25 +1,24 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, makeWrapper }:
+{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, chromium, makeWrapper }:
 
 buildGoModule rec {
   pname = "vhs";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wcOLUA/U+xRwo7slnACCURQO7D0F3pFP2/SHDfEHeTA=";
+    hash = "sha256-62FS/FBhQNpj3dAfKfIUKY+IJeeaONzqRu7mG49li+o";
   };
 
-  vendorHash = "sha256-f8EHDxu+NWAFJx9ujzsiDhNymdEzExmdreP11gV56AI=";
+  vendorHash = "sha256-+BLZ+Ni2dqboqlOEjFNF6oB/vNDlNRCb6AiDH1uSsLw";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ttyd ffmpeg ];
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath [ ffmpeg ttyd ]}
+    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath [ chromium ffmpeg ttyd ]}
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \
@@ -33,6 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    maintainers = with maintainers; [ maaslalani penguwin ];
   };
 }

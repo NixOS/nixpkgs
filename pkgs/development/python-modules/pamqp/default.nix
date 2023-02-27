@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.1";
   pname = "pamqp";
 
   disabled = pythonOlder "3.7";
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = "pamqp";
     rev = version;
-    hash = "sha256-qiYfQsyYvG6pyRFDt3pyYKNNWNP88maj+VAeGD68OmY=";
+    hash = "sha256-zvvRoGMNP4NMy3Etjif5MYUPdRqmQXATbFgxaPp1TaM=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

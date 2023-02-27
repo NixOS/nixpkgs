@@ -3,24 +3,38 @@
 , fetchFromGitHub
 , protobuf
 , stdenv
+, pkg-config
+, openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "0.9.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-rOIWiSpAqIUf2V9BMMTZqF/urz754pZV4yHav26dxqY=";
+    sha256 = "sha256-AVglZr3J9fEWgE2g5UHt1j6YQud/viGp0IvuR9XRntE=";
   };
 
-  cargoSha256 = "sha256-ovHxtOYlzVsALw/4bhL9EcFXaKr6Bg/D0w6OPMCLZoQ=";
+  cargoSha256 = "sha256-4hzixh1/nVIMRsBSoldmbtpcpBMmvxik3lV/h4FPOrk=";
 
-  nativeBuildInputs = [ protobuf rustPlatform.bindgenHook ];
+  prePatch = lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace .cargo/config.toml \
+      --replace "[target.aarch64-unknown-linux-gnu]" "" \
+      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
+  '';
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-faligned-allocation";
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   meta = with lib; {
     description = "Vector Search Engine for the next generation of AI applications";

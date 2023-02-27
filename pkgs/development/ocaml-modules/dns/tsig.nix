@@ -4,6 +4,7 @@ buildDunePackage {
   pname = "dns-tsig";
 
   inherit (dns) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     mirage-crypto

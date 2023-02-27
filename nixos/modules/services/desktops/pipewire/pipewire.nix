@@ -42,7 +42,7 @@ let
 in {
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = teams.freedesktop.members ++ [ lib.maintainers.k900 ];
     # uses attributes of the linked package
     buildDocsInSandbox = false;
   };

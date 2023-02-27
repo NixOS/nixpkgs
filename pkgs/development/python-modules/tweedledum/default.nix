@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tweedledum" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "python/test" ];
 
   meta = with lib; {

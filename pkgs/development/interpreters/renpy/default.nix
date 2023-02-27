@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg.out freetype glew.dev libGLU libGL fribidi zlib
+    SDL2 SDL2.dev libpng ffmpeg.lib freetype glew.dev libGLU libGL fribidi zlib
   ]);
 
   enableParallelBuilding = true;
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
 
   meta = with lib; {
     description = "Visual Novel Engine";

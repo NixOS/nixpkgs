@@ -1,0 +1,178 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "indexstore-db",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/indexstore-db.git",
+          "name": "IndexStoreDB"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "9305648b0a8700434fa2e55eeacf7c7f4402a0d5"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "indexstore-db"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser.git",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "e394bf350e38cb100b6bc4172834770ede1b7232",
+            "version": "1.0.3"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-collections",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-collections.git",
+          "name": "swift-collections"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+            "version": "1.0.4"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-collections"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-crypto",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-crypto.git",
+          "name": "swift-crypto"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
+            "version": "1.1.7"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-crypto"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-driver",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-driver.git",
+          "name": "swift-driver"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "82b274af66cfbb8f3131677676517b34d01e30fd"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-driver"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-llbuild",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-llbuild.git",
+          "name": "llbuild"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "564424db5fdb62dcb5d863bdf7212500ef03a87b"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-llbuild"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-package-manager",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-package-manager.git",
+          "name": "SwiftPM"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "c6e40adbfc78acc60ca464ae482b56442f9f34f4"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-package-manager"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-system",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-system.git",
+          "name": "swift-system"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "836bc4557b74fe6d2660218d56e3ce96aff76574",
+            "version": "1.1.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-system"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-tools-support-core",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-tools-support-core.git",
+          "name": "swift-tools-support-core"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.7",
+            "revision": "286b48b1d73388e1d49b2bb33aabf995838104e3"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-tools-support-core"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "yams",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/jpsim/Yams.git",
+          "name": "Yams"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "9ff1cc9327586db4e0c8f46f064b6a82ec1566fa",
+            "version": "4.0.6"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Yams"
+      }
+    ]
+  },
+  "version": 5
+}

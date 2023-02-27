@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-trio
     pytestCheckHook
     trustme

@@ -1,4 +1,4 @@
-{ callPackage, lib, stdenv, fetchpatch }:
+{ callPackage }:
 let
   src = callPackage ./src.nix { };
 in
@@ -6,13 +6,7 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  extraPatches = lib.optionals stdenv.isAarch64 [
-    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1791275
-      name = "no-sysctl-aarch64.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/0efaf5a00aaceeed679885e4cd393bd9a5fcd0ff";
-      hash = "sha256-wS/KufeLFxCexQalGGNg8+vnQhzDiL79OLt8FtL/JJ8=";
-    })
-  ];
+  extraPatches = [ ];
 
   extraConfigureFlags = [
     "--with-app-name=librewolf"

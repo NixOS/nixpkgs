@@ -13,6 +13,7 @@
 , qqc2-desktop-style
 
 , kirigami2
+, kirigami-addons
 , kdbusaddons
 , ki18n
 , kcalendarcore
@@ -35,6 +36,10 @@
 , akonadi-contacts
 , akonadi-calendar-tools
 , kdepim-runtime
+, gpgme
+, pimcommon
+, mailcommon
+, messagelib
 }:
 
 mkDerivation rec {
@@ -55,6 +60,7 @@ mkDerivation rec {
     qqc2-desktop-style
 
     kirigami2
+    kirigami-addons
     kdbusaddons
     ki18n
     kcalendarcore
@@ -76,6 +82,11 @@ mkDerivation rec {
     akonadi-contacts
     akonadi-calendar-tools
     kdepim-runtime
+
+    gpgme
+    pimcommon
+    mailcommon
+    messagelib
   ];
 
   propagatedUserEnvPkgs = [ akonadi kdepim-runtime akonadi-search ];
@@ -88,7 +99,7 @@ mkDerivation rec {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
     homepage = "https://apps.kde.org/kalendar/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.linux;
   };
 }

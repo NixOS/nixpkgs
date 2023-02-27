@@ -28,7 +28,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mockito
     pytestCheckHook
   ];

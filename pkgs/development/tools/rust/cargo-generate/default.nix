@@ -5,29 +5,33 @@
 , libgit2
 , openssl
 , stdenv
-, Security
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.16.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-qL5ZbLimpsi/7yuhubHF3/tAouE/5zCWRx4nZG841cU=";
+    sha256 = "sha256-0o7kemIxKCf+oNCl2ryKT02w49LQUuKaFIQUDt5mIw4=";
   };
 
-  # patch Cargo.toml to not vendor libgit2 and openssl
-  cargoPatches = [ ./no-vendor.patch ];
-
-  cargoSha256 = "sha256-OB3rjJNxkUKRQPsWRvCniNPfYBgLFV4yXO7dnVvL7wo=";
+  cargoSha256 = "sha256-DnPf75MEIbX4UQ6XeGLRE4giu+DxgWWmKJY34jrPwpc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  # disable vendored libgit2 and openssl
+  buildNoDefaultFeatures = true;
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -39,14 +43,13 @@ rustPlatform.buildRustPackage rec {
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
   checkFlags = [
-      "--skip favorites::favorites_default_to_git_if_not_defined"
-      # Probably git 2.38.1 releated failure
-      # Upstream issue https://github.com/cargo-generate/cargo-generate/issues/777
-      "--skip basics::it_loads_a_submodule"
-    ] ++ lib.optionals stdenv.isDarwin [ "--skip git::utils::should_canonicalize" ];
+    "--skip=favorites::favorites_default_to_git_if_not_defined"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=git::utils::should_canonicalize"
+  ];
 
   meta = with lib; {
-    description = "cargo, make me a project";
+    description = "A tool to generaet a new Rust project by leveraging a pre-existing git repository as a template";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

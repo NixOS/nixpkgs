@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ lightdm gtk3 glib ];
 
-  postUnpack = if conf != "" then ''
+  postUnpack = lib.optionalString (conf != "") ''
     cp ${builtins.toFile "config.h" conf} source/config.h
-  '' else "";
+  '';
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/xgreeters

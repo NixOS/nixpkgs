@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version=${version}"
   ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   passthru.tests.version = testers.testVersion {
     package = linuxkit;

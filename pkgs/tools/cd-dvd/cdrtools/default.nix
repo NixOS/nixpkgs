@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
   meta = with lib; {
-    homepage = "http://cdrtools.sourceforge.net/private/cdrecord.html";
+    homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ cddl gpl2 lgpl21 ];
     platforms = with platforms; linux ++ darwin;

@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = pname;
@@ -30,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cherrypy
     mock
     pytestCheckHook

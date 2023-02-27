@@ -18,7 +18,7 @@ in
   ];
 
   options.services.zigbee2mqtt = {
-    enable = mkEnableOption (lib.mdDoc "enable zigbee2mqtt service");
+    enable = mkEnableOption (lib.mdDoc "zigbee2mqtt service");
 
     package = mkOption {
       description = lib.mdDoc "Zigbee2mqtt package to use";
@@ -119,9 +119,8 @@ in
         ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
+          "@system-service @pkey"
+          "~@privileged @resources"
         ];
         UMask = "0077";
       };

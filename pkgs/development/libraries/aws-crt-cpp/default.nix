@@ -12,6 +12,7 @@
 , aws-checksums
 , cmake
 , s2n-tls
+, nix
 }:
 
 stdenv.mkDerivation rec {
@@ -64,6 +65,10 @@ stdenv.mkDerivation rec {
     # Prevent dependency cycle.
     moveToOutput lib/aws-crt-cpp/cmake "$dev"
   '';
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C++ wrapper around the aws-c-* libraries";

@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mastodon-archive";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "kensanata";
     repo = "mastodon-backup";
     rev = "v${version}";
-    sha256 = "1dlrkygywxwm6xbn0pnfwd3f7641wnvxdyb5qihbsf62w1w08x8r";
+    hash = "sha256-b4bYQshz7mwxEfpRYV7ze4C8hz58R9cVp58wHvGFb0A=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

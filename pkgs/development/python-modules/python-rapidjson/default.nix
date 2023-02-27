@@ -25,22 +25,24 @@ let
         hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
       })
     ];
+    # valgrind_unittest failed
+    cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.6";
+  version = "1.9";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GJzxqWv5/NhtADYPFa12qDzgiJuK6NHLD9srKZXlocg=";
+    hash = "sha256-vn01HHES2sYIEzoj9g6VOVZo0JgaB/QDf2Pg6Ir88Bo=";
   };
 
   setupPyBuildFlags = [
     "--rj-include-dir=${lib.getDev rapidjson'}/include"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];

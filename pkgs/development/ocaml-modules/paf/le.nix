@@ -1,6 +1,7 @@
 { lib
 , buildDunePackage
 , paf
+, dns-client
 , duration
 , emile
 , httpaf
@@ -19,8 +20,11 @@ buildDunePackage {
     src
   ;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     paf
+    dns-client
     duration
     emile
     httpaf

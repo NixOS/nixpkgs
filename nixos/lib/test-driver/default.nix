@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     ++ extraPythonPackages python3Packages;
 
   doCheck = true;
-  checkInputs = with python3Packages; [ mypy pylint black ];
+  nativeCheckInputs = with python3Packages; [ mypy pylint black ];
   checkPhase = ''
     mypy --disallow-untyped-defs \
           --no-implicit-optional \

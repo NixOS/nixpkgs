@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = false; #NoClassDefFoundError: org/apache/logging/log4j/Level for tests
 
-  checkInputs = [ coreutils ];
+  nativeCheckInputs = [ coreutils ];
 
   installCheckPhase = ''
     $out/bin/jmeter --version 2>&1 | grep -q "${version}"

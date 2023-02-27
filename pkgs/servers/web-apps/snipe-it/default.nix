@@ -1,4 +1,10 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/snipe-it", mariadb }:
+{ lib
+, pkgs
+, stdenv
+, fetchFromGitHub
+, dataDir ? "/var/lib/snipe-it"
+, mariadb
+}:
 
 let
   package = (import ./composition.nix {
@@ -27,17 +33,17 @@ let
 
 in package.override rec {
   pname = "snipe-it";
-  version = "6.0.13";
+  version = "6.0.14";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QwPl3JXB8gZS1/VyPBCc3PIQa+qtUNpuANSx4+oxWYg=";
+    hash = "sha256-c2hzuNOpvVl+ZriCo3TRl/GHY+LCrIb2GO2U894S2yk=";
   };
 
   meta = with lib; {
-    description = "A free open source IT asset/license management system ";
+    description = "A free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
       who has which laptop, when it was purchased, which software licenses and accessories
@@ -45,6 +51,7 @@ in package.override rec {
       Details for snipe-it can be found on the official website at https://snipeitapp.com/.
     '';
     homepage = "https://snipeitapp.com/";
+    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yayayayaka ];
     platforms = platforms.linux;

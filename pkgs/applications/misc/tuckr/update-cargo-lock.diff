@@ -1,0 +1,49 @@
+diff --git i/Cargo.lock w/Cargo.lock
+index 5f5dd43..d7c8370 100644
+--- i/Cargo.lock
++++ w/Cargo.lock
+@@ -107,9 +107,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "clap"
+-version = "4.1.4"
++version = "4.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f13b9c79b5d1dd500d20ef541215a6423c75829ef43117e1b4d17fd8af0b5d76"
++checksum = "ec0b0588d44d4d63a87dbd75c136c166bbfd9a86a31cb89e09906521c7d3f5e3"
+ dependencies = [
+  "bitflags",
+  "clap_derive",
+@@ -248,9 +248,9 @@ checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
+ 
+ [[package]]
+ name = "hermit-abi"
+-version = "0.3.0"
++version = "0.3.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "856b5cb0902c2b6d65d5fd97dfa30f9b70c7538e770b98eab5ed52d8db923e01"
++checksum = "fed44880c466736ef9a5c5b5facefb5ed0785676d0c02d612db14e54f0d84286"
+ 
+ [[package]]
+ name = "inout"
+@@ -319,9 +319,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "once_cell"
+-version = "1.17.0"
++version = "1.17.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6f61fba1741ea2b3d6a1e3178721804bb716a68a6aeba1149b5d52e3d464ea66"
++checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
+ 
+ [[package]]
+ name = "opaque-debug"
+@@ -597,7 +597,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "tuckr"
+-version = "0.6.1"
++version = "0.7.0"
+ dependencies = [
+  "chacha20poly1305",
+  "clap",

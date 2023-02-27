@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.17.1";
+  version = "0.19.1";
 
-  src = fetchFromGitHub {
-    owner = "out-of-cheese-error";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Imo1CUk2H4/K9w/FnIBEkKFXd7OIAuApejcNY+rs7JU=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-d4ws5EsYVaxjfDbzoMO3kcJsrk/Htw3Ath3z3UGW7rk=";
   };
+
+  cargoSha256 = "sha256-6zphQRhh32iophXSuzbQC5BOuKM92sLS5vXndwF+spg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin  [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+  ];
 
-  cargoSha256 = "sha256-3ZiNRXrb3gpXXOxztf0eimJE16PpQTD/OWFmeTDIr2w=";
-  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=copy" ];
-  dontUseCargoParallelTests = true;
+  useNextest = true;
 
   postInstall = ''
     $out/bin/the-way config default tmp.toml
@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal code snippets manager";
     homepage = "https://github.com/out-of-cheese-error/the-way";
+    changelog = "https://github.com/out-of-cheese-error/the-way/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ numkem ];
+    maintainers = with maintainers; [ figsoda numkem ];
   };
 }

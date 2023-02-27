@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eventstat";
-  version = "0.04.13";
+  version = "0.05.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-psamt9omhakiO3Kx2EzofPL2VAsva7XKQTZmn6zKefA=";
+    hash = "sha256-yGEFegUpWNBsrGZJjWud3aOsRJgXsOJmXkgpXcsPHo0=";
   };
 
   buildInputs = [ ncurses ];

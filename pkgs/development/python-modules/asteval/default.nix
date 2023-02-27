@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.27";
+  version = "0.9.29";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
-    rev = version;
-    hash = "sha256-FxWs4l9bqZoqdyhpVRys8Mo9Wdtn1fm5XonisPscWEs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cJIrb0lo/FmeyZd8L6nlCEt6MP7Fdv3rr5C6xvplN6c=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
