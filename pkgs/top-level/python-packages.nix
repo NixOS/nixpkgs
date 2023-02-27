@@ -11226,8 +11226,6 @@ self: super: with self; {
 
   survey = callPackage ../development/python-modules/survey { };
 
-  suseapi = callPackage ../development/python-modules/suseapi { };
-
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
   svglib = callPackage ../development/python-modules/svglib { };
