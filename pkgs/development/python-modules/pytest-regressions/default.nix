@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.4.1";
+  version = "2.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Jk0j6BMt7rV0Qc9Ga3tdtEV5fzRucrZyyVt/UqR78Bs=";
+    sha256 = "sha256-6riee6SqM5vf4HsxBH6OanCx54RudKi7/DGliNAecwM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
