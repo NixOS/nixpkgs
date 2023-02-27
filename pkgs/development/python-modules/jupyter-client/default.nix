@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "7.4.8";
+  version = "8.0.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EJo8M7YqnPZaqDJYUKCZmnlfrBVdneT3VVrvXzEO41o=";
+    sha256 = "sha256-7WVJi+pth2752No+DbPdM8XRKfWyZF9WrgOZN4KWa9A=";
   };
 
   nativeBuildInputs = [
