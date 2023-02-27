@@ -108,17 +108,17 @@ let
 
   toExtensionJsonEntry = ext: rec {
     identifier = {
-      id = ext.vscodeExtUniqueId;
+      id = ext.vscodeExtUniqueId or (lib.head (lib.attrNames (builtins.readDir "${ext}/share/vscode/extensions")));
       uuid = "";
     };
 
-    version = ext.version;
+    version = ext.version or (lib.getversion ext.name);
 
     relativeLocation = ext.vscodeExtUniqueId;
 
     location = {
       "$mid" = 1;
-      fsPath = ext.outPath + "/share/vscode/extensions/${ext.vscodeExtUniqueId}";
+      fsPath = "${ext.outPath}/share/vscode/extensions/${identifier.id}";
       path = location.fsPath;
       scheme = "file";
     };
@@ -126,7 +126,7 @@ let
     metadata = {
       id = "";
       publisherId = "";
-      publisherDisplayName = ext.vscodeExtPublisher;
+      publisherDisplayName = ext.vscodeExtPublisher or (lib.head (lib.splitString ''\.'' identifier.id));
       targetPlatform = "undefined";
       isApplicationScoped = false;
       updated = false;
