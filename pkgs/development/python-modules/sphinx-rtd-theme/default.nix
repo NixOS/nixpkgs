@@ -4,7 +4,7 @@
 , docutils
 , sphinx
 , readthedocs-sphinx-ext
-, sphinx-jquery
+, sphinxcontrib-jquery
 , pytestCheckHook
 , pythonRelaxDepsHook
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     sphinx
-    sphinx-jquery
+    sphinxcontrib-jquery
   ];
 
   nativeCheckInputs = [
