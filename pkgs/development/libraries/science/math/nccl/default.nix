@@ -10,7 +10,7 @@ with cudaPackages;
 
 let
   # Output looks like "-gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86"
-  gencode = lib.concatStringsSep " " cudaFlags.cudaGencode;
+  gencode = lib.concatStringsSep " " cudaFlags.gencode;
 in
 backendStdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudaPackages.cudaMajorVersion}";

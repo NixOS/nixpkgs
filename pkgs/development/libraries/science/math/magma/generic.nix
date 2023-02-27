@@ -37,13 +37,13 @@ let
   #   lists.subtractLists a b = b - a
 
   # For CUDA
-  supportedCudaSmArches = lists.intersectLists cudaFlags.cudaRealArches supportedGpuTargets;
+  supportedCudaSmArches = lists.intersectLists cudaFlags.realArches supportedGpuTargets;
   # Subtract the supported SM architectures from the real SM architectures to get the unsupported
   # SM architectures.
-  unsupportedCudaSmArches = lists.subtractLists supportedCudaSmArches cudaFlags.cudaRealArches;
+  unsupportedCudaSmArches = lists.subtractLists supportedCudaSmArches cudaFlags.realArches;
 
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.cudaRealArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
   rocmArches = lists.map (x: strings.removePrefix "gfx" x) hip.gpuTargets;
