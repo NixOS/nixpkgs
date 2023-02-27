@@ -1300,6 +1300,21 @@ let
         (assertInt "StrictBands")
         (assertRange "StrictBands" 1 16)
       ];
+
+      sectionGenericRandomEarlyDetection = checkUnitConfig "GenericRandomEarlyDetection" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "VirtualQueues"
+          "DefaultVirtualQueue"
+          "GenericRIO"
+        ])
+        (assertInt "VirtualQueues")
+        (assertRange "VirtualQueues" 1 16)
+        (assertInt "DefaultVirtualQueue")
+        (assertRange "DefaultVirtualQueue" 1 16)
+        (assertValueOneOf "GenericRIO" boolValues)
+      ];
     };
   };
 
@@ -2144,6 +2159,17 @@ let
       '';
     };
 
+    genericRandomEarlyDetectionConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; VirtualQueues = 5; DefaultVirtualQueue = 3; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionGenericRandomEarlyDetection;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[GenericRandomEarlyDetection]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2638,6 +2664,10 @@ let
         + optionalString (def.enhancedTransmissionSelectionConfig != { }) ''
           [EnhancedTransmissionSelection]
           ${attrsToSection def.enhancedTransmissionSelectionConfig}
+        ''
+        + optionalString (def.genericRandomEarlyDetectionConfig != { }) ''
+          [GenericRandomEarlyDetection]
+          ${attrsToSection def.genericRandomEarlyDetectionConfig}
         ''
         + def.extraConfig;
     };
