@@ -12399,6 +12399,8 @@ self: super: with self; {
 
   wagtail-factories = callPackage ../development/python-modules/wagtail-factories { };
 
+  wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
+
   waitress = callPackage ../development/python-modules/waitress { };
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
