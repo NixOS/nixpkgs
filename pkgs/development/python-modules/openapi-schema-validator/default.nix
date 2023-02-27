@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.3.4";
+  version = "0.4.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-0nKAeqZCfzYFsV18BDsSws/54FmRoy7lQSHguI6m3Sc=";
+    sha256 = "sha256-rp0Oq5WWPpna5rHrq/lfRNxjK5/FLgPZ5uzVfDT/YiI=";
   };
 
   nativeBuildInputs = [
