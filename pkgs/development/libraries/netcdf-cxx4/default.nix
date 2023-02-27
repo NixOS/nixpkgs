@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   # Setting Filter....Caught unexpected exception.
   doCheck = false;
   enableParallelChecking = false;
+  preCheck = ''
+    export HDF5_PLUGIN_PATH=${netcdf}/lib/hdf5-plugins
+  '';
 
   meta = {
     description = "C++ API to manipulate netcdf files";
