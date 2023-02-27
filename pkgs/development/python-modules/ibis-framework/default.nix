@@ -64,7 +64,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "ibis";
     owner = "ibis-project";
-    rev = version;
-    hash = "sha256-G3kMd6Jyib7ZXHFP6t2CEPlDD5n5zHE2jq/0he3U4Nk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ipnMymf+BOpG9iGWO47no47m4nLIBbqLdbzlevuxeBw=";
   };
 
   nativeBuildInputs = [
