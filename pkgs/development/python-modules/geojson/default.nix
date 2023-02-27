@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "geojson";
-  version = "2.5.0";
+  version = "3.0.1";
 
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "1filqm050ixy53kdv81bd4n80vjvfapnmzizy7jg8a6pilv17gfc";
+    sha256 = "sha256-5J35grIE7UgeTBI2xX9Yet9xU3MBz4+vcSCrJ9c8dWg=";
   };
 
   LC_ALL = "en_US.UTF-8";
