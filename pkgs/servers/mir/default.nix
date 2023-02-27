@@ -49,30 +49,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mir";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${version}";
-    hash = "sha256-HQmcYnmzeJCsgMoM/y70PCF+3umZh0xJS5S0wFODlmo=";
+    hash = "sha256-c9lFlzoxj45Xx5FYd0O/arVCV9ilArzj5GrPuJigJ4E=";
   };
 
   patches = [
     # Fixes various path concatenation problems and missing GNUInstallDirs variable uses that affect
     # install locations and generated pkg-config files
-    # Remove when a version > 2.12.0 has the fixes
+    # Remove when a version > 2.12.1 has the fixes
     (fetchpatch {
       name = "0001-mir-Better-install-path-concatenations-and-more-GNUInstallDirs-variables.patch";
       url = "https://github.com/MirServer/mir/commit/58c4ca628748278b1eb7a3721ad9a0c3590e28f2.patch";
       hash = "sha256-+FNVlApaVzA94cy4awulLwTtggD07xACbvjII/RxyRM=";
-    })
-    # Fixes doc building
-    # Remove when a version > 2.12.0 has the fix
-    (fetchpatch {
-      name = "0002-mir-better-removal-of-existing-docs.patch";
-      url = "https://github.com/MirServer/mir/commit/04892531c988201f0219ce140f27d7ff60eeebd5.patch";
-      hash = "sha256-LyGgaIoe6mk4IQxBo6Xk5SmIBtTXOXAOA1xAgsdhcLY=";
     })
   ];
 
