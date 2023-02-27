@@ -3,15 +3,15 @@
 
 buildPythonPackage rec {
   pname = "measurement";
-  version = "3.2.0";
+  version = "3.2.2";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "coddingtonbear";
     repo = "python-measurement";
-    rev = version;
-    sha256 = "1mk9qg1q4cnnipr6xa72i17qvwwhz2hd8p4vlsa9gdzrcv4vr8h9";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-ULId0W10FaAtSgVY5ctQL3FPETVr+oq6TKWd/W53viM=";
   };
 
   postPatch = ''
