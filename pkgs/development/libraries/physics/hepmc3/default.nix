@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
     root_py
@@ -50,11 +51,7 @@ stdenv.mkDerivation rec {
       --replace 'readlink' '${coreutils}/bin/readlink'
   '';
 
-  doInstallCheck = withPython;
-  # prevent nix from trying to dereference a null python
-  installCheckPhase = lib.optionalString withPython ''
-    PYTHONPATH=${placeholder "out"}/${python.sitePackages} python -c 'import pyHepMC3'
-  '';
+  pythonImportsCheck = [ "pyHepMC3" ];
 
   meta = with lib; {
     description = "The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
