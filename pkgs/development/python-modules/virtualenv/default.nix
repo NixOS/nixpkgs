@@ -8,6 +8,8 @@
 , fetchPypi
 , filelock
 , flaky
+, hatch-vcs
+, hatchling
 , importlib-metadata
 , importlib-resources
 , pathlib2
@@ -16,23 +18,23 @@
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.17.1";
-  format = "setuptools";
+  version = "20.19.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+LknaE78bxzCBsnbKXpXCrmtDlHBb6nkVIfTbRkFwFg=";
+    hash = "sha256-N6ZAuoLtQLImWZxSLUEeS+XtszmgwN4DDA3HtkbWFZA=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
