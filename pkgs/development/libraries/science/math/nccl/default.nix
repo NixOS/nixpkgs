@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, which, cudaPackages, addOpenGLRunpath }:
+{ lib
+, backendStdenv
+, fetchFromGitHub
+, which
+, cudaPackages ? { }
+, addOpenGLRunpath
+}:
 
 with cudaPackages;
 
-stdenv.mkDerivation rec {
+let
+  # Output looks like "-gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86"
+  gencode = lib.concatStringsSep " " cudaFlags.cudaGencode;
+in
+backendStdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudaPackages.cudaMajorVersion}";
   version = "2.16.5-1";
 
@@ -27,17 +37,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs src/collectives/device/gen_rules.sh
-  ''
-  # We need NVCC to use a compatible backend compiler (we maintain a link to
-  # that in `cudatoolkit.cc`). We ship NVCC with a setup-hook that *prepends*
-  # the correct -ccbin to nvcc flags. NCCL's Makefile, however, appends another
-  # -ccbin, which points at the host platform's compiler, coming from the
-  # `stdenv`. Confer
-  # https://github.com/NVIDIA/nccl/blob/f3d51667838f7542df8ea32ea4e144d812b3ed7c/makefiles/common.mk#L65
-  # Since NVCC will use the last -ccbin on the command-line, we append the correct path again.
-  # We hope it's a temporary solution
-  + ''
-    export NVCC_APPEND_FLAGS+=' --compiler-bindir=${cudatoolkit.cc}/bin'
+    makeFlagsArray+=(
+      "NVCC_GENCODE=${gencode}"
+    )
   '';
 
   makeFlags = [
