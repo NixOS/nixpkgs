@@ -67,7 +67,7 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libllvm-polly = callPackage ./llvm {
       inherit llvm_meta;
@@ -80,7 +80,7 @@ let
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     clang-polly-unwrapped = callPackage ./clang {
       inherit llvm_meta;
