@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "4.0.0";
+  version = "5.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4by2TlZJIKElGgaof1w555ik2hUNbg16YekSWwICGmg=";
+    sha256 = "sha256-s6gS1rVcbg7hcE63hGdPhJCcgS4N4d58MpSrECAfe0U=";
   };
 
   disabled = pythonOlder "3.9";
