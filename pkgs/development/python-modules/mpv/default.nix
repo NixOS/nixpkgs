@@ -23,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   # tests impure, will error if it can't load libmpv.so
-  checkPhase = "${python.interpreter} -c 'import mpv'";
+  doCheck = false;
+  pythonImportsCheck = [ "mpv" ];
 
   meta = with lib; {
     description = "A python interface to the mpv media player";
