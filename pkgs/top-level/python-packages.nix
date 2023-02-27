@@ -12397,6 +12397,8 @@ self: super: with self; {
 
   wadllib = callPackage ../development/python-modules/wadllib { };
 
+  wagtail = callPackage ../development/python-modules/wagtail { };
+
   wagtail-factories = callPackage ../development/python-modules/wagtail-factories { };
 
   wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
