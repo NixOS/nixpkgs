@@ -120,8 +120,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_13 = common {
-    version = "2.13.2";
-    sha256 = "sha256-MtVatZVsV+dtjdD4AC4bztrnDFas+WZYHzQMt41FwzU=";
+    version = "2.13.3";
+    sha256 = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
   };
 
   stable = self.nix_2_13;
