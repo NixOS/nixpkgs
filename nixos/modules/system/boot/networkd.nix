@@ -1143,6 +1143,16 @@ let
         (assertInt "PacketLimit")
         (assertRange "PacketLimit" 1 4294967294)
       ];
+
+      sectionFlowQueuePIE = checkUnitConfig "FlowQueuePIE" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "PacketLimit"
+        ])
+        (assertInt "PacketLimit")
+        (assertRange "PacketLimit" 1 4294967294)
+      ];
     };
   };
 
@@ -1855,6 +1865,17 @@ let
       '';
     };
 
+    flowQueuePIEConfig = mkOption {
+      default = {};
+      example = { Parent = "ingress"; PacketLimit = "3847"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionFlowQueuePIE;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[FlowQueuePIE]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2301,6 +2322,10 @@ let
         + optionalString (def.pieConfig != { }) ''
           [PIE]
           ${attrsToSection def.pieConfig}
+        ''
+        + optionalString (def.flowQueuePIEConfig != { }) ''
+          [FlowQueuePIE]
+          ${attrsToSection def.flowQueuePIEConfig}
         ''
         + def.extraConfig;
     };
