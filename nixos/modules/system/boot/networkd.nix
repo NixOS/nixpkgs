@@ -303,6 +303,48 @@ let
 
       sectionTap = checkUnitConfig "Tap" tunChecks;
 
+      sectionL2TP = checkUnitConfig "L2TP" [
+        (assertOnlyFields [
+          "TunnelId"
+          "PeerTunnelId"
+          "Remote"
+          "Local"
+          "EncapsulationType"
+          "UDPSourcePort"
+          "UDPDestinationPort"
+          "UDPChecksum"
+          "UDP6ZeroChecksumTx"
+          "UDP6ZeroChecksumRx"
+        ])
+        (assertInt "TunnelId")
+        (assertRange "TunnelId" 1 4294967295)
+        (assertInt "PeerTunnelId")
+        (assertRange "PeerTunnelId" 1 4294967295)
+        (assertValueOneOf "EncapsulationType" [ "ip" "udp" ])
+        (assertPort "UDPSourcePort")
+        (assertPort "UDPDestinationPort")
+        (assertValueOneOf "UDPChecksum" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+      ];
+
+      sectionL2TPSession = checkUnitConfig "L2TPSession" [
+        (assertOnlyFields [
+          "Name"
+          "SessionId"
+          "PeerSessionId"
+          "Layer2SpecificHeader"
+        ])
+        (assertHasField "Name")
+        (assertHasField "SessionId")
+        (assertInt "SessionId")
+        (assertRange "SessionId" 1 4294967295)
+        (assertHasField "PeerSessionId")
+        (assertInt "PeerSessionId")
+        (assertRange "PeerSessionId" 1 4294967295)
+        (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
+      ];
+
       # NOTE The PrivateKey directive is missing on purpose here, please
       # do not add it to this list. The nix store is world-readable let's
       # refrain ourselves from providing a footgun.
@@ -1012,6 +1054,21 @@ let
 
   };
 
+
+  l2tpSessionOptions = {
+    options = {
+      l2tpSessionConfig = mkOption {
+        default = {};
+        type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TPSession;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[L2TPSession]` section of the unit.  See
+          {manpage}`systemd.netdev(5)` for details.
+        '';
+      };
+    };
+  };
+
   wireguardPeerOptions = {
     options = {
       wireguardPeerConfig = mkOption {
@@ -1121,6 +1178,38 @@ let
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
         `[Tap]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    l2tpConfig = mkOption {
+      default = {};
+      example = {
+        TunnelId = 10;
+        PeerTunnelId = 12;
+        Local = "static";
+        Remote = "192.168.30.101";
+        EncapsulationType = "ip";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[L2TP]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    l2tpSessions = mkOption {
+      default = [];
+      example = [ { l2tpSessionConfig={
+        SessionId = 25;
+        PeerSessionId = 26;
+        Name = "l2tp-sess";
+      };}];
+      type = with types; listOf (submodule l2tpSessionOptions);
+      description = lib.mdDoc ''
+        Each item in this array specifies an option in the
+        `[L2TPSession]` section of the unit. See
         {manpage}`systemd.netdev(5)` for details.
       '';
     };
@@ -1705,6 +1794,14 @@ let
           [Tap]
           ${attrsToSection def.tapConfig}
         ''
+        + optionalString (def.l2tpConfig != { }) ''
+          [L2TP]
+          ${attrsToSection def.l2tpConfig}
+        ''
+        + flip concatMapStrings def.l2tpSessions (x: ''
+          [L2TPSession]
+          ${attrsToSection x.l2tpSessionConfig}
+        '')
         + optionalString (def.wireguardConfig != { }) ''
           [WireGuard]
           ${attrsToSection def.wireguardConfig}
