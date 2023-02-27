@@ -1013,6 +1013,16 @@ let
         (assertRange "VNI" 1 16777215)
         (assertValueOneOf "AssociatedWith" [ "use" "self" "master" "router" ])
       ];
+
+      sectionBridgeMDB = checkUnitConfig "BridgeMDB" [
+        (assertOnlyFields [
+          "MulticastGroupAddress"
+          "VLANId"
+        ])
+        (assertHasField "MulticastGroupAddress")
+        (assertInt "VLANId")
+        (assertRange "VLANId" 0 4094)
+      ];
     };
   };
 
@@ -1463,6 +1473,21 @@ let
     };
   };
 
+  bridgeMDBOptions = {
+    options = {
+      bridgeMDBConfig = mkOption {
+        default = {};
+        example = { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeMDB;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[BridgeMDB]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
   networkOptions = commonNetworkOptions // {
 
     linkConfig = mkOption {
@@ -1619,6 +1644,16 @@ let
       type = with types; listOf (submodule bridgeFDBOptions);
       description = lib.mdDoc ''
         A list of BridgeFDB sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    bridgeMDBs = mkOption {
+      default = [];
+      example = [ { bridgeMDBConfig = { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; } ; } ];
+      type = with types; listOf (submodule bridgeMDBOptions);
+      description = lib.mdDoc ''
+        A list of BridgeMDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -2037,6 +2072,10 @@ let
         + flip concatMapStrings def.bridgeFDBs (x: ''
           [BridgeFDB]
           ${attrsToSection x.bridgeFDBConfig}
+        '')
+        + flip concatMapStrings def.bridgeMDBs (x: ''
+          [BridgeMDB]
+          ${attrsToSection x.bridgeMDBConfig}
         '')
         + def.extraConfig;
     };
