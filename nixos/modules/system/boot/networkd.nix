@@ -1353,6 +1353,14 @@ let
         (assertInt "OrphanMask")
         (assertValueOneOf "Pacing" boolValues)
       ];
+
+      sectionTrivialLinkEqualizer = checkUnitConfig "TrivialLinkEqualizer" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "Id"
+        ])
+      ];
     };
   };
 
@@ -2230,6 +2238,17 @@ let
       '';
     };
 
+    trivialLinkEqualizerConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; Id = 0; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionTrivialLinkEqualizer;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[TrivialLinkEqualizer]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2736,6 +2755,10 @@ let
         + optionalString (def.fairQueueingConfig != { }) ''
           [FairQueueing]
           ${attrsToSection def.fairQueueingConfig}
+        ''
+        + optionalString (def.trivialLinkEqualizerConfig != { }) ''
+          [TrivialLinkEqualizer]
+          ${attrsToSection def.trivialLinkEqualizerConfig}
         ''
         + def.extraConfig;
     };
