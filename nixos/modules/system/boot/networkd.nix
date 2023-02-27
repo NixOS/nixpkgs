@@ -1403,6 +1403,17 @@ let
           "Handle"
         ])
       ];
+
+      sectionQuickFairQueueingClass = checkUnitConfig "QuickFairQueueingClass" [
+        (assertOnlyFields [
+          "Parent"
+          "ClassId"
+          "Weight"
+          "MaxPacketBytes"
+        ])
+        (assertInt "Weight")
+        (assertRange "Weight" 1 1023)
+      ];
     };
   };
 
@@ -2335,6 +2346,17 @@ let
       '';
     };
 
+    quickFairQueueingConfigClass = mkOption {
+      default = {};
+      example = { Parent = "root"; Weight = 133; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionQuickFairQueueingClass;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[QuickFairQueueingClass]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2861,6 +2883,10 @@ let
         + optionalString (def.quickFairQueueingConfig != { }) ''
           [QuickFairQueueing]
           ${attrsToSection def.quickFairQueueingConfig}
+        ''
+        + optionalString (def.quickFairQueueingConfigClass != { }) ''
+          [QuickFairQueueingClass]
+          ${attrsToSection def.quickFairQueueingConfigClass}
         ''
         + def.extraConfig;
     };
