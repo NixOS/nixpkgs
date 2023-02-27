@@ -7,6 +7,7 @@
 , pytest-django
 , pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     django
     funcy
     redis
+    six
   ];
 
   nativeCheckInputs = [
