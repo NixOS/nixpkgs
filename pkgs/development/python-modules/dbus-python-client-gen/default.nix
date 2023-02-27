@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "dbus-python-client-gen";
-  version = "0.8";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-nSzxT65WHBVct5pGHmIAHJXftd0tKZeK/argN+V9xcs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RYgS4RNLLCtp+5gS/LlzdH7rlub48TSSSKhykkkBcuo=";
   };
 
   propagatedBuildInputs = [
