@@ -1,6 +1,6 @@
 { config
 , lib
-, cudatoolkit
+, cudaVersion
 }:
 
 # Type aliases
@@ -13,7 +13,6 @@
 
 let
   inherit (lib) attrsets lists strings trivial versions;
-  cudaVersion = cudatoolkit.version;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
   # from improved performance, reduced file size, or greater hardware suppport by
