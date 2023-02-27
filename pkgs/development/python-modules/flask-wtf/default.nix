@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "flask-wtf";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchPypi {
     pname = "Flask-WTF";
     inherit version;
-    sha256 = "34fe5c6fee0f69b50e30f81a3b7ea16aa1492a771fe9ad0974d164610c09a6c9";
+    sha256 = "sha256-QcQkTprmJtY77UKuR4W5Bme4hbFTXVpAleH2MGDRKqk=";
   };
 
  patches = [
