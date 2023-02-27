@@ -1277,6 +1277,14 @@ let
           "Handle"
         ])
       ];
+
+      sectionDeficitRoundRobinSchedulerClass = checkUnitConfig "DeficitRoundRobinSchedulerClass" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "QuantumBytes"
+        ])
+      ];
     };
   };
 
@@ -2099,6 +2107,17 @@ let
       '';
     };
 
+    deficitRoundRobinSchedulerClassConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; QuantumBytes = "300k"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDeficitRoundRobinSchedulerClass;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[DeficitRoundRobinSchedulerClass]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2585,6 +2604,10 @@ let
         + optionalString (def.deficitRoundRobinSchedulerConfig != { }) ''
           [DeficitRoundRobinScheduler]
           ${attrsToSection def.deficitRoundRobinSchedulerConfig}
+        ''
+        + optionalString (def.deficitRoundRobinSchedulerClassConfig != { }) ''
+          [DeficitRoundRobinSchedulerClass]
+          ${attrsToSection def.deficitRoundRobinSchedulerClassConfig}
         ''
         + def.extraConfig;
     };
