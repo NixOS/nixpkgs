@@ -1371,6 +1371,21 @@ let
         ])
         (assertInt "RateToQuantum")
       ];
+
+      sectionHierarchyTokenBucketClass = checkUnitConfig "HierarchyTokenBucketClass" [
+        (assertOnlyFields [
+          "Parent"
+          "ClassId"
+          "Priority"
+          "QuantumBytes"
+          "MTUBytes"
+          "OverheadBytes"
+          "Rate"
+          "CeilRate"
+          "BufferBytes"
+          "CeilBufferBytes"
+        ])
+      ];
     };
   };
 
@@ -2270,6 +2285,17 @@ let
       '';
     };
 
+    hierarchyTokenBucketClassConfig = mkOption {
+      default = {};
+      example = { Parent = "root"; Rate = "10M"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionHierarchyTokenBucketClass;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[HierarchyTokenBucketClass]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2784,6 +2810,10 @@ let
         + optionalString (def.hierarchyTokenBucketConfig != { }) ''
           [HierarchyTokenBucket]
           ${attrsToSection def.hierarchyTokenBucketConfig}
+        ''
+        + optionalString (def.hierarchyTokenBucketClassConfig != { }) ''
+          [HierarchyTokenBucketClass]
+          ${attrsToSection def.hierarchyTokenBucketClassConfig}
         ''
         + def.extraConfig;
     };
