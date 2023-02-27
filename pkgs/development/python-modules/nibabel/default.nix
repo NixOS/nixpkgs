@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "4.0.2";
+  version = "5.0.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RcSbU0k1G0X2wEWpGqArTw02dob/MoRjLvlaxluTB4Y=";
+    sha256 = "sha256-SvZQFbTMmZQEyvA04cFcGrZ1h5XCXWkH/3T127/p9D4=";
   };
 
   propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
