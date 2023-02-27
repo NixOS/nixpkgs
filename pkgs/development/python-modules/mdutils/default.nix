@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "mdutils";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "didix21";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-regIrMWbGmW574dfojxZFJoivpaqOpN1I6YsqLEp8BM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bWPzOSvBV0jYJnj98vxuqj55LqX+Ifi6IQDMx9w+i9o=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];
