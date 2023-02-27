@@ -1088,6 +1088,15 @@ let
         (assertValueOneOf "PresumeAck" boolValues)
         (assertValueOneOf "ClassicDataLengthCode" boolValues)
       ];
+
+      sectionIPoIB = checkUnitConfig "IPoIB" [
+        (assertOnlyFields [
+          "Mode"
+          "IgnoreUserspaceMulticastGroup"
+        ])
+        (assertValueOneOf "Mode" [ "datagram" "connected" ])
+        (assertValueOneOf "IgnoreUserspaceMulticastGroup" boolValues)
+      ];
     };
   };
 
@@ -1745,6 +1754,17 @@ let
       '';
     };
 
+    ipoIBConfig = mkOption {
+      default = {};
+      example = { };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPoIB;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[IPoIB]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2171,6 +2191,10 @@ let
         + optionalString (def.canConfig != { }) ''
           [CAN]
           ${attrsToSection def.canConfig}
+        ''
+        + optionalString (def.ipoIBConfig != { }) ''
+          [IPoIB]
+          ${attrsToSection def.ipoIBConfig}
         ''
         + def.extraConfig;
     };
