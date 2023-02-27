@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UNMOLbZeSdvTuDgveQ/vRC+PlAdVo1bGnpMz3g1seY8=";
+    hash = "sha256-coZU3cufQgSCid10zEvmHG7ddLbZhnrvl9ffw4Y6h74=";
   };
 
   format = "make";

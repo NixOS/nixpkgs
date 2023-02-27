@@ -110,9 +110,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1raxkzdcd9mixg30ifv22lzf10j47n79n05yqbf6mjagrgj0rr7f",
-    "url": "https://github.com/nextcloud/notify_push/releases/download/v0.5.0/notify_push.tar.gz",
-    "version": "0.5.0",
+    "sha256": "1vfa68spnyfivcx0vp49mimf5xg7hsxnifd06imd1c0mw3nlfm4p",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.0/notify_push-v0.6.0.tar.gz",
+    "version": "0.6.0",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
