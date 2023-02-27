@@ -1,18 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
+{ lib
+, buildPythonPackage
+, substituteAll
+, fetchPypi
+, hatch-vcs
+, hatchling
+}:
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "1.1.1";
+  version = "2.0.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32";
+    hash = "sha256-LZHhNb9y0xpBCxfBbaYQqCy1X2sEd9GpAhNLJKRVuLM=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  patches = [
+    # Cannot use hatch-vcs, due to an inifinite recursion
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
+  pythonImportsCheck = [
+    "iniconfig"
+  ];
 
   doCheck = false; # avoid circular import with pytest
-  pythonImportsCheck = [ "iniconfig" ];
 
   meta = with lib; {
     description = "brain-dead simple parsing of ini files";
