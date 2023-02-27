@@ -16,14 +16,14 @@
 
 let self = buildPythonPackage rec {
   pname = "jupyter-server-terminals";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_server_terminals";
     rev = "refs/tags/v${version}";
-    hash = "sha256-swFMuKP/JIHJJ0zr3Dqv71Ne4WaP7GbzeNQ2tzEBpRU=";
+    hash = "sha256-F1lpg4ASw3ImvhC8XA8Ya4qpcbGY6fg8PYJt8sJj4cs=";
   };
 
   nativeBuildInputs = [
