@@ -16,7 +16,7 @@
 , Security
 , nghttp2
 , libgit2
-, withExtraFeatures ? true
+, withDataFrame ? true
 , testers
 , nushell
 , nix-update-script
@@ -39,15 +39,15 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./zstd-pkg-config.patch ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ]
+    ++ lib.optionals (withDataFrame && stdenv.isLinux) [ python3 ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Libsystem Security ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withDataFrame && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDataFrame && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  buildFeatures = lib.optional withExtraFeatures "extra";
+  buildFeatures = lib.optional withDataFrame "dataframe";
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
