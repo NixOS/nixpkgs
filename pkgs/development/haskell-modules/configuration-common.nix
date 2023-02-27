@@ -2235,6 +2235,16 @@ self: super: {
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
+  # Temporarily upgrade haskell-gi until our hackage pin advances
+  # Fixes build of gi-harfbuzz with harfbuzz >= 7.0
+  # https://github.com/haskell-gi/haskell-gi/issues/396#issuecomment-1445181362
+  haskell-gi =
+    assert super.haskell-gi.version == "0.26.2";
+    overrideCabal {
+      version = "0.26.3";
+      sha256 = "sha256-jsAb3JCSHCmi2dp9bpi/J3NRO/EQFB8ar4GpxAuBGOo=";
+    } super.haskell-gi;
+
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
