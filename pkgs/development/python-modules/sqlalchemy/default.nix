@@ -39,12 +39,12 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.46";
+  version = "2.0.4";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+    hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
   };
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
