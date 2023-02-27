@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    CoreFoundation SystemConfiguration
+    CoreFoundation
+    SystemConfiguration
   ];
 
   depositContractSpec = fetchurl {

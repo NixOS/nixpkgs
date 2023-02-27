@@ -32,7 +32,7 @@ lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
-lpeglabel,,,,,,
+lpeglabel,,,,1.6.0,,
 lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
