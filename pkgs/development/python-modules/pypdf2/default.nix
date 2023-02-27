@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "PyPDF2";
-  version = "2.11.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PHut1RLCFxHrF4nC6tv5YnkonA+URS7lSoZHO/vv1zI=";
+    sha256 = "sha256-p0QI9pumJx9xuTUu9O0D3FOjGqQE0ptdMfU7/s/uFEA=";
   };
 
   LC_ALL = "en_US.UTF-8";
