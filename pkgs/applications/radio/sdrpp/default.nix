@@ -8,7 +8,7 @@
 , hackrf_source ? true, hackrf
 , limesdr_source ? false, limesuite
 , sddc_source ? false
-, rtl_sdr_source ? true, librtlsdr, libusb1
+, rtl_sdr_source ? true, rtl-sdr, libusb1
 , rtl_tcp_source ? true
 , sdrplay_source ? false, sdrplay
 , soapy_source ? true, soapysdr
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional bladerf_source libbladeRF
     ++ lib.optional hackrf_source hackrf
     ++ lib.optional limesdr_source limesuite
-    ++ lib.optionals rtl_sdr_source [ librtlsdr libusb1 ]
+    ++ lib.optionals rtl_sdr_source [ rtl-sdr libusb1 ]
     ++ lib.optional sdrplay_source sdrplay
     ++ lib.optional soapy_source soapysdr
     ++ lib.optionals plutosdr_source [ libiio libad9361 ]
