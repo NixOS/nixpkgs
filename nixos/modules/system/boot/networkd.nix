@@ -1207,6 +1207,56 @@ let
           "Handle"
         ])
       ];
+
+      sectionCAKE = checkUnitConfig "CAKE" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+          "Bandwidth"
+          "AutoRateIngress"
+          "OverheadBytes"
+          "MPUBytes"
+          "CompensationMode"
+          "UseRawPacketSize"
+          "FlowIsolationMode"
+          "NAT"
+          "PriorityQueueingPreset"
+          "FirewallMark"
+          "Wash"
+          "SplitGSO"
+        ])
+        (assertValueOneOf "AutoRateIngress" boolValues)
+        (assertInt "OverheadBytes")
+        (assertRange "OverheadBytes" (-64) 256)
+        (assertInt "MPUBytes")
+        (assertRange "MPUBytes" 1 256)
+        (assertValueOneOf "CompensationMode" [ "none" "atm" "ptm" ])
+        (assertValueOneOf "UseRawPacketSize" boolValues)
+        (assertValueOneOf "FlowIsolationMode"
+          [
+            "none"
+            "src-host"
+            "dst-host"
+            "hosts"
+            "flows"
+            "dual-src-host"
+            "dual-dst-host"
+            "triple"
+          ])
+        (assertValueOneOf "NAT" boolValues)
+        (assertValueOneOf "PriorityQueueingPreset"
+          [
+            "besteffort"
+            "precedence"
+            "diffserv8"
+            "diffserv4"
+            "diffserv3"
+          ])
+        (assertInt "FirewallMark")
+        (assertRange "FirewallMark" 1 4294967295)
+        (assertValueOneOf "Wash" boolValues)
+        (assertValueOneOf "SplitGSO" boolValues)
+      ];
     };
   };
 
@@ -1996,6 +2046,17 @@ let
       '';
     };
 
+    cakeConfig = mkOption {
+      default = {};
+      example = { Bandwidth = "40M"; OverheadBytes = 8; CompensationMode = "ptm"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionCAKE;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[CAKE]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -2470,6 +2531,10 @@ let
         + optionalString (def.pfifoFastConfig != { }) ''
           [PFIFOFast]
           ${attrsToSection def.pfifoFastConfig}
+        ''
+        + optionalString (def.cakeConfig != { }) ''
+          [CAKE]
+          ${attrsToSection def.cakeConfig}
         ''
         + def.extraConfig;
     };
