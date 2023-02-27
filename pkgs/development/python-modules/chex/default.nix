@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.5";
+  version = "0.1.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FYB0IhokM74HBY2wOJYE6xJrHxHHWhDSAZpWFs6HFu0=";
+    hash = "sha256-VolRlLLgKga9S17ByVrYya9VPtu9yiOnvt/WmlE1DOc=";
   };
 
   propagatedBuildInputs = [
