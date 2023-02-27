@@ -13490,6 +13490,8 @@ self: super: with self; {
     libsoxr = pkgs.soxr;
   };
 
+  sox = callPackage ../development/python-modules/sox { };
+
   spacy = callPackage ../development/python-modules/spacy { };
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
