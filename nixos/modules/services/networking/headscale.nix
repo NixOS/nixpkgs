@@ -299,16 +299,50 @@ in {
                 '';
               };
 
-              domain_map = mkOption {
-                type = types.attrsOf types.str;
-                default = {};
+              scope = mkOption {
+                type = types.listOf types.str;
+                default = ["openid" "profile" "email"];
                 description = lib.mdDoc ''
-                  Domain map is used to map incomming users (by their email) to
-                  a namespace. The key can be a string, or regex.
+                  Scopes used in the OIDC flow.
+                '';
+              };
+
+              extra_params = mkOption {
+                type = types.attrsOf types.str;
+                default = { };
+                description = lib.mdDoc ''
+                  Custom query parameters to send with the Authorize Endpoint request.
                 '';
                 example = {
-                  ".*" = "default-namespace";
+                  domain_hint = "example.com";
                 };
+              };
+
+              allowed_domains = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = lib.mdDoc ''
+                  Allowed principal domains. if an authenticated user's domain
+                  is not in this list authentication request will be rejected.
+                '';
+                example = [ "example.com" ];
+              };
+
+              allowed_users = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = lib.mdDoc ''
+                  Users allowed to authenticate even if not in allowedDomains.
+                '';
+                example = [ "alice@example.com" ];
+              };
+
+              strip_email_domain = mkOption {
+                type = types.bool;
+                default = true;
+                description = lib.mdDoc ''
+                  Whether the domain part of the email address should be removed when generating namespaces.
+                '';
               };
             };
 
@@ -392,13 +426,16 @@ in {
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "issuer"] ["services" "headscale" "settings" "oidc" "issuer"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientId"] ["services" "headscale" "settings" "oidc" "client_id"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientSecretFile"] ["services" "headscale" "settings" "oidc" "client_secret_file"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "domainMap"] ["services" "headscale" "settings" "oidc" "domain_map"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "hostname"] ["services" "headscale" "settings" "tls_letsencrypt_hostname"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "challengeType"] ["services" "headscale" "settings" "tls_letsencrypt_challenge_type"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "httpListen"] ["services" "headscale" "settings" "tls_letsencrypt_listen"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "certFile"] ["services" "headscale" "settings" "tls_cert_path"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "keyFile"] ["services" "headscale" "settings" "tls_key_path"])
     (mkRenamedOptionModule ["services" "headscale" "aclPolicyFile"] ["services" "headscale" "settings" "acl_policy_path"])
+
+    (mkRemovedOptionModule ["services" "headscale" "openIdConnect" "domainMap"] ''
+      Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
+    '')
   ];
 
   config = mkIf cfg.enable {

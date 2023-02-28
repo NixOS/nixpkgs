@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "trufflehog";
-  version = "3.28.1";
+  version = "3.28.2";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
