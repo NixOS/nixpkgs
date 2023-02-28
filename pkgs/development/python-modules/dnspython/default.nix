@@ -64,10 +64,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-  ] ++ passthru.optional-dependencies.DNSSEC
-  ++ lib.optionals stdenv.isDarwin [
     cacert
-  ];
+  ] ++ passthru.optional-dependencies.DNSSEC;
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
