@@ -47,8 +47,7 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
-      #./0001-configs-rpi-allow-for-bigger-kernels.patch
-
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
       # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
       # See also: https://github.com/NixOS/nixpkgs/issues/135828
       # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
