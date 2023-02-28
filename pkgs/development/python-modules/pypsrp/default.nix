@@ -70,6 +70,13 @@ buildPythonPackage rec {
     "pypsrp"
   ];
 
+  disabledTests = [
+    # TypeError: Backend.load_rsa_private_numbers() missing 1 required...
+    "test_psrp_pshost_ui_mocked_methods"
+    "test_psrp_key_exchange_timeout"
+    "test_psrp_multiple_commands"
+  ];
+
   meta = with lib; {
     description = "PowerShell Remoting Protocol Client library";
     homepage = "https://github.com/jborean93/pypsrp";
