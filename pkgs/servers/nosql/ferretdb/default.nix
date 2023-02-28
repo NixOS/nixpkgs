@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ferretdb";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    sha256 = "sha256-iqoz7axU5U6MdRl8I2vS3Nh37XZZPI4bRb3oFxpQs6M=";
+    sha256 = "sha256-lJlj5GNgrllcaEednxVCmMPHG2aU4z3mKkm9t0cO5Tk=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorSha256 = "sha256-qtxR1vk/EZZmCRP1Z+EFObfMbQXKiRaSiI1Dsv268b8=";
+  vendorSha256 = "sha256-I5ucq3K0lRsokG9lahmBUH9mIYa5tgHnL+vxKSzW1hw=";
 
   CGO_ENABLED = 0;
 
@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "A truly Open Source MongoDB alternative";
     homepage = "https://www.ferretdb.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya noisersup ];
+    maintainers = with maintainers; [ dit7ya noisersup julienmalka ];
   };
 }

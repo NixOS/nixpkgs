@@ -1,34 +1,26 @@
-{ lib, fetchFromGitHub, fetchpatch, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LkC2mD3klMQRF3z5QuVPcRHzz33VJP+UcN6LxsQXq7Q=";
+    hash = "sha256-DGWdVsKA8Y1r+/n+vPkRmFt1EAwPYDmFiUcyWZrXeRM=";
   };
 
-  cargoHash = "sha256-GZikXM3AvhC2gtwE2wYbGV+aRV+QKothWQG17Vzi2Lc=";
+  cargoHash = "sha256-H0rkY3hQaOBP8Cai22ppQpZJS1vyFx5uo4k9Paa2yS0=";
 
   passthru = {
     test_client = rustPlatform.buildRustPackage {
       pname = "${pname}-test_client";
       inherit src version;
 
-      cargoPatches = [
-        # fix test client not being able to connect
-        (fetchpatch {
-          url = "https://github.com/nextcloud/notify_push/commit/03aa38d917bfcba4d07f72b6aedac6a5057cad81.patch";
-          hash = "sha256-dcN62tA05HH1RTvG0puonJjKMQn1EouA8iuz82vh2aU=";
-        })
-      ];
-
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-RALqjI6DlWmfgKvyaH4RiSyqWsIqUyY9f709hOi2ldc=";
+      cargoHash = "sha256-a8KcWnHr1bCS255ChOC6piXfVo/nJy/yVHNLCuHXoq4=";
     };
   };
 

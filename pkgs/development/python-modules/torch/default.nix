@@ -51,7 +51,7 @@ assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
 
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
-assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
+assert !cudaSupport || magma.cudaPackages.cudatoolkit == cudatoolkit;
 
 let
   setBool = v: if v then "1" else "0";
@@ -219,7 +219,7 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
-    ${python.interpreter} setup.py build --cmake-only
+    ${python.pythonForBuild.interpreter} setup.py build --cmake-only
     ${cmake}/bin/cmake build
   '';
 

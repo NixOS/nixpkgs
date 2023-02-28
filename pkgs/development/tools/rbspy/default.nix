@@ -4,19 +4,22 @@
 , fetchFromGitHub
 , ruby
 , which
+, runCommand
+, darwin
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-e6ZCRIJVKl3xbJym+h+ah/J4c+s7wf1laF7p63ubE4A=";
+    hash = "sha256-yM3bE79flvFSZvpkHXhhEh1MJrSSJzqZcX9aVRmz1ew=";
   };
 
-  cargoHash = "sha256-yhZ0QM9vZxyFCjTShbV7+Rn8w4lkPW7E7zKhrK4qa1E=";
+  cargoHash = "sha256-qvx5zPEIwvh2AIFCGNbVMNIRFtVjSLR9+exbSeQ9oXI=";
   doCheck = true;
 
   # The current implementation of rbspy fails to detect the version of ruby
@@ -25,16 +28,27 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/core/process.rs \
       --replace /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
-      --replace /usr/bin/which '${which}/bin/which' \
-      --replace 'fn test_sample_single_process_with_time_limit(' '#[ignore] fn test_sample_single_process_with_time_limit(' \
-      --replace 'fn test_sample_single_process(' '#[ignore] fn test_sample_single_process(' \
-      --replace 'fn test_sample_subprocesses(' '#[ignore] fn test_sample_subprocesses('
-    substituteInPlace src/core/ruby_spy.rs \
-      --replace 'fn test_get_trace(' '#[ignore] fn test_get_trace(' \
-      --replace 'fn test_get_trace_when_process_has_exited(' '#[ignore] fn test_get_trace_when_process_has_exited('
+      --replace /usr/bin/which '${which}/bin/which'
   '';
 
+  checkFlags = [
+    "--skip=test_get_trace"
+    "--skip=test_get_trace_when_process_has_exited"
+    "--skip=test_sample_single_process"
+    "--skip=test_sample_single_process_with_time_limit"
+    "--skip=test_sample_subprocesses"
+  ];
+
   nativeBuildInputs = [ ruby which ];
+
+  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Pull a header that contains a definition of proc_pid_rusage().
+    (runCommand "${pname}_headers" { } ''
+      install -Dm444 ${lib.getDev darwin.apple_sdk.sdk}/include/libproc.h $out/include/libproc.h
+    '')
+  ];
+
+  LIBCLANG_PATH = lib.optionalString stdenv.isDarwin "${stdenv.cc.cc.lib}/lib";
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);

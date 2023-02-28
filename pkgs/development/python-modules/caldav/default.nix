@@ -4,32 +4,32 @@
 , icalendar
 , lxml
 , pytestCheckHook
+, pythonOlder
 , pytz
 , recurring-ical-events
 , requests
-, six
 , tzlocal
 , vobject
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.1.3";
+  version = "1.2.0";
 
   format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZilsCYr1M2WKSz/g5JV41JVsuHopPerxOevoG7FrEjQ=";
+    hash = "sha256-ibizwN4pxqzmVozVjrAPNSrmM1+8+/Qu6UnfRerrwUk=";
   };
 
   propagatedBuildInputs = [
     vobject
     lxml
     requests
-    six
     icalendar
     recurring-ical-events
   ];
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
+    changelog = "https://github.com/python-caldav/caldav/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz dotlambda ];
   };

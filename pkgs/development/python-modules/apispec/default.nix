@@ -4,6 +4,7 @@
 , marshmallow
 , mock
 , openapi-spec-validator
+, packaging
 , prance
 , pytestCheckHook
 , pythonOlder
@@ -23,16 +24,26 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pyyaml
-    prance
+    packaging
   ];
 
+  passthru.optional-dependencies = {
+    marshmallow = [
+      marshmallow
+    ];
+    yaml = [
+      pyyaml
+    ];
+    validation = [
+      openapi-spec-validator
+      prance
+    ];
+  };
+
   nativeCheckInputs = [
-    openapi-spec-validator
-    marshmallow
     mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "apispec"

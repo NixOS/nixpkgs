@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.23.7";
+  version = "4.24.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "life4";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-RWbMitgrU8VUsOgarBKYDNPIa/AwifvBURUytiGzeVo=";
+    hash = "sha256-5gd46SMucH0rek9talMJ74TMRRvUm5Up6pCusUIHDjE=";
   };
 
   postPatch = ''
