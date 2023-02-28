@@ -6,15 +6,15 @@
 
 let
   pname = "wtfis";
-  version = "0.5.1";
+  version = "0.6.1";
 in python3.pkgs.buildPythonApplication {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
-    rev = "v${version}";
-    hash = "sha256-XoQ/iJTdZoekA5guxI8POG4NEhN8Up3OuIz344G75ao=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bHgv5+HoM1hFhpkqml+HxqiMDvKbMqsTH+zYtDrV7Ko=";
   };
 
   patches = [
