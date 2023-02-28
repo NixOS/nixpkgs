@@ -9,15 +9,6 @@ let
       poetry = self.callPackage ./unwrapped.nix { };
 
       # version overrides required by poetry and its plugins
-      dulwich = super.dulwich.overridePythonAttrs (old: rec {
-        version = "0.21.3";
-        src = self.fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-fKO0U9dn64Oz7Fjwz83JNIdaNBzf2w3FXBQxyWYIz4M=";
-        };
-      });
-
       platformdirs = super.platformdirs.overridePythonAttrs (old: rec {
         version = "2.6.2";
         src = fetchFromGitHub {
