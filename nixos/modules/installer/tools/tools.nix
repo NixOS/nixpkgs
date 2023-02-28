@@ -180,7 +180,7 @@ in
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         #   packages = with pkgs; [
         #     firefox
-        #     thunderbird
+        #     tree
         #   ];
         # };
 
