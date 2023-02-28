@@ -2569,6 +2569,8 @@ self: super: with self; {
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
+  django-compression-middleware = callPackage ../development/python-modules/django-compression-middleware { };
+
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
