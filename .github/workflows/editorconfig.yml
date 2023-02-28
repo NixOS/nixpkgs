@@ -31,8 +31,8 @@ jobs:
     - uses: cachix/install-nix-action@v19
       with:
         # nixpkgs commit is pinned so that it doesn't break
-        # editorconfig-checker 2.4.0
-        nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
+        # editorconfig-checker 2.7.0
+        nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/3b02c3754fd88f0a9bcf289943159cac244e5745.tar.gz
     - name: install editorconfig-checker
       run: nix-env -iA editorconfig-checker -f '<nixpkgs>'
     - name: Checking EditorConfig
