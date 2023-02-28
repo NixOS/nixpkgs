@@ -11365,7 +11365,9 @@ with pkgs;
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
-  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
+  qownnotes = darwin.apple_sdk_11_0.callPackage ../applications/office/qownnotes {
+    inherit (libsForQt5) qmake qtbase qtdeclarative qtsvg qttools qtwayland qtwebsockets qtx11extras qtxmlpatterns wrapQtAppsHook;
+  };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
@@ -32665,7 +32667,9 @@ with pkgs;
 
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
-  quassel = libsForQt5.callPackage ../applications/networking/irc/quassel { };
+  quassel = darwin.apple_sdk_11_0.callPackage ../applications/networking/irc/quassel {
+    inherit (libsForQt5) kconfigwidgets kcoreaddons knotifications knotifyconfig ktextwidgets kwidgetsaddons kxmlgui phonon qtbase qtscript mkDerivation qca-qt5;
+  };
 
   quasselClient = quassel.override {
     monolithic = false;
