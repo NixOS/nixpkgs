@@ -24,7 +24,7 @@
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   || stdenv.isAarch32 # broken for the armv7l builder
 )
-, enablePolly ? false
+, enablePolly ? true
 } @args:
 
 let
@@ -44,7 +44,8 @@ in stdenv.mkDerivation (rec {
     cp -r ${monorepoSrc}/${pname} "$out"
     cp -r ${monorepoSrc}/third-party "$out"
   '' + lib.optionalString enablePolly ''
-    cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+    chmod u+w "$out/${pname}/tools"
+    cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
   '');
 
   sourceRoot = "${src.name}/${pname}";
