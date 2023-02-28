@@ -66,7 +66,7 @@
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
 , speexSupport       ? true,           speex
-, swiftSupport       ? stdenv.isDarwin, swift
+, swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
 , theoraSupport      ? true,           libtheora
 , vaapiSupport       ? stdenv.isLinux, libva
 , vapoursynthSupport ? false,          vapoursynth
