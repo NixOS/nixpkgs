@@ -1585,6 +1585,8 @@ with pkgs;
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
+  speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
+
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
 
   supermin = callPackage ../tools/virtualization/supermin { };
