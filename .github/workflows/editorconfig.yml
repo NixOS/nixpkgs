@@ -30,10 +30,10 @@ jobs:
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
     - uses: cachix/install-nix-action@v19
       # nixpkgs commit is pinned so that it doesn't break
-      # editorconfig-checker 2.4.0
+      # editorconfig-checker 2.7.0
     - name: Checking EditorConfig
       run: |
-        nix shell github:nixos/nixpkgs/c473cc8714710179df205b153f4e9fa007107ff9#editorconfig-checker \
+        nix shell github:nixos/nixpkgs/3b02c3754fd88f0a9bcf289943159cac244e5745#editorconfig-checker \
           -c xargs -r editorconfig-checker -disable-indent-size < "$HOME/changed_files"
     - if: ${{ failure() }}
       run: |
