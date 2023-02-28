@@ -90,8 +90,8 @@ in
 
       mesaPackage = mkOption {
         type = types.package;
-        default = pkgs.mesa;
-        defaultText = literalExpression "pkgs.mesa";
+        default = pkgs.mesa_22;
+        defaultText = literalExpression "pkgs.mesa_22";
         example = literalExpression "pkgs.mesa_23";
         description = lib.mdDoc ''
           The Mesa driver package used for rendering support on the system.
@@ -103,8 +103,8 @@ in
       };
       mesaPackage32 = mkOption {
         type = types.package;
-        default = pkgs.pkgsi686Linux.mesa;
-        defaultText = literalExpression "pkgs.pkgsi686Linux.mesa";
+        default = pkgs.pkgsi686Linux.mesa_22;
+        defaultText = literalExpression "pkgs.pkgsi686Linux.mesa_22";
         example = literalExpression "pkgs.pkgsi686Linux.mesa_23";
         description = lib.mdDoc ''
           Same as {option}`mesaPackage` but for the 32-bit Mesa on 64-bit
