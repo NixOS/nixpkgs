@@ -2,21 +2,20 @@
 
 buildGoModule rec {
   pname = "eks-node-viewer";
-  version = "6a915ff6c89b00d5e8ff90e3fe0ce65dd12eca17";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
-    rev = "${version}";
-    sha256 = "sha256-+MQMChTNlphldzg05Pbi4HpT4SsI/bhTsC2GZK70dgs";
+    rev = "v${version}";
+    sha256 = "sha256-PqZVVfq/cUtkmpruJfxphCeQWMXKEmE2AgulgUX9310";
   };
 
-  vendorSha256 = "sha256-fuZIPRZdG7jbyMbnk6ocHL8LNEfNQtc2R361QMFTswQ";
+  vendorSha256 = "sha256-PJ6TakF2yN8eB/SV5Dx164lDZDi4Hr4N2ZW8dzz8jcg";
 
   meta = with lib; {
-    description = "EKS Node Viewer";
+    description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${version}";
     license = licenses.afl20;
     maintainers = [ maintainers.ivankovnatsky ];
   };
