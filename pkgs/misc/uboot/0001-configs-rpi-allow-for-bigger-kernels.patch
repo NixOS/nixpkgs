@@ -3,7 +3,7 @@ Author: takov751 <takov751@tutanota.com>
 Date:   Tue Feb 28 12:38:06 2023 +0000
 
     patch kernel size
-
+---
 diff --git a/include/configs/rpi.h b/include/configs/rpi.h
 index 4da982f735..a187d25e81 100644
 --- a/include/configs/rpi.h
@@ -36,3 +36,4 @@ index 4da982f735..a187d25e81 100644
  
  #if IS_ENABLED(CONFIG_CMD_MMC)
         #define BOOT_TARGET_MMC(func) \
+---
