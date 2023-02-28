@@ -69,6 +69,9 @@ buildPythonPackage rec {
     "test_docutils_roles"
     # sphinx 6.0 expectation mismatches
     "test_sphinx_directives"
+    # sphinx 5.3 expectation mismatches
+    "test_render"
+    "test_includes"
   ];
 
   meta = with lib; {
