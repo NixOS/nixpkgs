@@ -84,9 +84,9 @@ stdenv.mkDerivation (removeAttrs ({
   inherit (fetched) version src;
 
   nativeBuildInputs = args.overrideNativeBuildInputs
-    or ([ which coq.ocamlPackages.findlib ]
+    or ([ which ]
         ++ optional useDune coq.ocamlPackages.dune_3
-        ++ optional (useDune || mlPlugin) coq.ocamlPackages.ocaml
+        ++ optionals (useDune || mlPlugin) [ coq.ocamlPackages.ocaml coq.ocamlPackages.findlib ]
         ++ (args.nativeBuildInputs or []) ++ extraNativeBuildInputs);
   buildInputs = args.overrideBuildInputs
     or ([ coq ] ++ (args.buildInputs or []) ++ extraBuildInputs);
