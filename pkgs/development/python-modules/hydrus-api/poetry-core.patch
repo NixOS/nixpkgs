@@ -1,0 +1,10 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 95a716b..4cd0914 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,4 +33,4 @@ line_length = 120
+ 
+ [build-system]
+ requires = ["poetry>=0.12"]
+-build-backend = "poetry.masonry.api"
++build-backend = "poetry.core.masonry.api"
