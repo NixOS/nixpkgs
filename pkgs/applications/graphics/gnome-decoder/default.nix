@@ -65,6 +65,12 @@ clangStdenv.mkDerivation rec {
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
 
+  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  preBuild = ''
+    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS -DPW_ENABLE_DEPRECATED"
+  '';
+
   meta = with lib; {
     description = "Scan and Generate QR Codes";
     homepage = "https://gitlab.gnome.org/World/decoder";
