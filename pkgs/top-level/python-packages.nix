@@ -5266,6 +5266,8 @@ self: super: with self; {
 
   lazy = callPackage ../development/python-modules/lazy { };
 
+  lazyarray = callPackage ../development/python-modules/lazyarray { };
+
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
