@@ -1420,6 +1420,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon # dependency missing in job https://hydra.nixos.org/build/210848638 at 2023-02-28
   - exp-cache
   - exp-extended
   - explain
@@ -4290,6 +4291,7 @@ broken-packages:
   - quickbooks
   - quickcheck-arbitrary-template
   - quickcheck-groups
+  - quickcheck-lockstep # dependency missing in job https://hydra.nixos.org/build/210845914 at 2023-02-28
   - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
@@ -4913,8 +4915,8 @@ broken-packages:
   - snaplet-typed-sessions
   - snap-loader-dynamic
   - snap-predicates
-  - snappy-iteratee
   - snappy-conduit
+  - snappy-iteratee
   - snap-routes
   - snap-stream
   - snap-testing
