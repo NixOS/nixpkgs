@@ -2845,6 +2845,13 @@
     githubId = 6608071;
     name = "Charles Huyghues-Despointes";
   };
+  chayleaf = {
+    email = "chayleaf-nix@pavluk.org";
+    github = "chayleaf";
+    githubId = 9590981;
+    matrix = "@chayleaf:matrix.pavluk.org";
+    name = "Anna Pavlyuk";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
