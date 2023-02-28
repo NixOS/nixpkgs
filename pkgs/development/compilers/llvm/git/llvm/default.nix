@@ -18,6 +18,8 @@
 , which
 , buildLlvmTools
 , debugVersion ? false
+, doCheck ? stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl)
+  && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? !(stdenv.isDarwin
@@ -33,6 +35,29 @@ let
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
+
+  # Ordinarily we would just the `doCheck` and `checkDeps` functionality
+  # `mkDerivation` gives us to manage our test dependencies (instead of breaking
+  # out `doCheck` as a package level attribute).
+  #
+  # Unfortunately `lit` does not forward `$PYTHONPATH` to children processes, in
+  # particular the children it uses to do feature detection.
+  #
+  # This means that python deps we add to `checkDeps` (which the python
+  # interpreter is made aware of via `$PYTHONPATH` – populated by the python
+  # setup hook) are not picked up by `lit` which causes it to skip tests.
+  #
+  # Adding `python3.withPackages (ps: [ ... ])` to `checkDeps` also doesn't work
+  # because this package is shadowed in `$PATH` by the regular `python3`
+  # package.
+  #
+  # So, we "manually" assemble one python derivation for the package to depend
+  # on, taking into account whether checks are enabled or not:
+  python = if doCheck then
+    let
+      checkDeps = ps: with ps; [ psutil ];
+    in python3.withPackages checkDeps
+  else python3;
 
 in stdenv.mkDerivation (rec {
   pname = "llvm";
@@ -52,7 +77,7 @@ in stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake ninja python3 ]
+  nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
@@ -217,8 +242,7 @@ in stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl)
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+  inherit doCheck;
 
   checkTarget = "check-all";
 
