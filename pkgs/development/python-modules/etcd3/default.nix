@@ -1,10 +1,13 @@
 { lib
 , buildPythonPackage
+, etcd
 , fetchFromGitHub
-
-# propagates
 , grpcio
+, hypothesis
+, mock
+, pifpaf
 , protobuf
+, pytestCheckHook
 , six
 , tenacity
 }:
@@ -28,11 +31,24 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  # various failures and incompatible with newer hypothesis versions
+  doCheck = false;
+
+  nativeCheckInputs = [
+    etcd
+    hypothesis
+    mock
+    pifpaf
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    pifpaf -e PYTHON run etcd --cluster
+  '';
+
   pythonImportsCheck = [
     "etcd3"
   ];
-
-  doCheck = false; # requires running etcd instance
 
   meta = with lib; {
     description = "Python client for the etcd API v3";
