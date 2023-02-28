@@ -3,6 +3,7 @@
 , cryptography
 , fetchFromGitHub
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , xmldiff
 }:
@@ -30,10 +31,16 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-
   pythonImportsCheck = [
     "psrpcore"
   ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/jborean93/psrpcore/issues/22
+    "test_remote_stream_options"
+    "test_ps_flags"
+  ];
+
 
   meta = with lib; {
     description = "Library for the PowerShell Remoting Protocol (PSRP)";
