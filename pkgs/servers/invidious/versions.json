@@ -4,15 +4,15 @@
     "sha256": "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A="
   },
   "invidious": {
-    "rev": "7993784701686c057b85c57704537135e6326de9",
-    "sha256": "sha256-LKoUm38gUXucOdXmiJGaKt7ckeb7JBd5I/AxDRDnq30=",
-    "version": "unstable-2023-02-13"
+    "rev": "0995e0447c2b54d80b55231830b847d41c19b404",
+    "sha256": "sha256-hXF836jxMriMJ/qcBJIF5cRvQG719PStKqTZQcIRqlw=",
+    "version": "unstable-2023-02-22"
   },
   "lsquic": {
     "sha256": "sha256-hG8cUvhbCNeMOsKkaJlgGpzUrIx47E/WhmPIdI5F3qM=",
     "version": "2.18.1"
   },
   "videojs": {
-    "sha256": "0m09pc9acpzhfwwvc9dayl60nn28skmmglgvmlp48dlkqgfbgc27"
+    "sha256": "0zj8fgxdg6jsllaxn795xipa6yxh4yf08hb8x0idyg74q37gfh4c"
   }
 }
