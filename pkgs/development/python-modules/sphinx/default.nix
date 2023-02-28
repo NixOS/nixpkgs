@@ -112,6 +112,11 @@ buildPythonPackage rec {
     "test_viewcode"
     "test_additional_targets_should_be_translated"
     "test_additional_targets_should_not_be_translated"
+
+    # sphinx.errors.VersionRequirementError: The alabaster extension
+    # used by this project needs at least Sphinx v1.6; it therefore
+    # cannot be built with this version.
+    "test_needs_sphinx"
   ] ++ lib.optionals stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
