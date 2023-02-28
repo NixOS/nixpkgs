@@ -120,6 +120,8 @@ with pkgs;
 
   ### Nixpkgs maintainer tools
 
+  simple-pkg = callPackage ../applications/misc/simple-pkg { };
+
   nixpkgsUpdater = callPackage ../nixpkgs-updater/default.nix { };
 
   srcFromJSON = callPackage ../nixpkgs-updater/src-from-json.nix { };
