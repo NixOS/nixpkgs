@@ -12,7 +12,7 @@
 , callPackage
 , spdx-license-list-data
 }:
-
+  
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
   version = "0.1.1";
