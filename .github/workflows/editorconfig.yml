@@ -4,9 +4,10 @@ permissions: read-all
 
 on:
   # avoids approving first time contributors
-  pull_request_target:
-    branches-ignore:
-      - 'release-**'
+  # pull_request_target:
+  #   branches-ignore:
+  #     - 'release-**'
+  pull_request:
 
 jobs:
   tests:
