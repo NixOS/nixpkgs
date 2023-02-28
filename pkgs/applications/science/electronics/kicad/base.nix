@@ -22,7 +22,6 @@
 , libXdmcp
 , lndir
 , unixODBC
-, fetchpatch
 
 , util-linux
 , libselinux
@@ -72,19 +71,6 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
-  ]
-  ++ optionals (stable) # the 2 wxGTK ones should in the next stable point release
-  [
-    (fetchpatch { # for wxGTK 3.2.2.1's .1 field
-      name = "support wxWidgets subrelease field";
-      url = "https://gitlab.com/kicad/code/kicad/-/commit/b536580119c59fde78e38d8d6388f2540ecb6cf9.diff";
-      hash = "sha256-F+J5oZO0BsT1VWKpx0KGA7ecn5/PBgCw8uiScihM+54=";
-    })
-    (fetchpatch { # for wxGTK 3.2.2.1's .1 field, but for wxPython
-      name = "relax wxPython check to just major.minor";
-      url = "https://gitlab.com/kicad/code/kicad/-/commit/1e8cc6855d6a8fc1f9dfc933224c3a10fb759f9c.diff";
-      hash = "sha256-CGNgxZ7QiVLkaauNl7Pmcl152lwyDZqA/HSyFdOswwU=";
-    })
   ];
 
   # tagged releases don't have "unknown"
