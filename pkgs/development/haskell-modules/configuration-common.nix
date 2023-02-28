@@ -1470,6 +1470,13 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
+    # Allow hls-call-hierarchy >= 1.2 which requires only a bound adjustment
+    (appendPatch (fetchpatch {
+      name = "hls-allow-hls-call-hierarchy-1.2.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/05b248dfacc307c3397b334635cb38298aee9563.patch";
+      includes = [ "haskell-language-server.cabal" ];
+      sha256 = "1v0zi1lv92p6xq54yw9swzaf24dxsi9lpk10sngg3ka654ikm7j5";
+    }))
   ]).overrideScope (lself: lsuper: {
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
