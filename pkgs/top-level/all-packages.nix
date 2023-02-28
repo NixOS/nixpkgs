@@ -512,7 +512,9 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
-  enumer = callPackage ../tools/misc/enumer { };
+  enumer = callPackage ../tools/misc/enumer {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   evans = callPackage ../development/tools/evans { };
 
@@ -1541,7 +1543,9 @@ with pkgs;
 
   mnc = callPackage ../tools/misc/mnc { };
 
-  mgmt = callPackage ../applications/system/mgmt {};
+  mgmt = callPackage ../applications/system/mgmt {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   mprocs = callPackage ../tools/misc/mprocs { };
 
@@ -3006,7 +3010,9 @@ with pkgs;
 
   botamusique = callPackage ../tools/audio/botamusique { };
 
-  boulder = callPackage ../tools/admin/boulder { };
+  boulder = callPackage ../tools/admin/boulder {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -3456,7 +3462,9 @@ with pkgs;
 
   gospider = callPackage ../tools/security/gospider { };
 
-  browserpass = callPackage ../tools/security/browserpass { };
+  browserpass = callPackage ../tools/security/browserpass {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   passff-host = callPackage ../tools/security/passff-host { };
 
@@ -4073,7 +4081,9 @@ with pkgs;
 
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
-  cloudflared = callPackage ../applications/networking/cloudflared { };
+  cloudflared = callPackage ../applications/networking/cloudflared {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
@@ -4910,7 +4920,9 @@ with pkgs;
 
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
 
-  gsctl = callPackage ../applications/misc/gsctl { };
+  gsctl = callPackage ../applications/misc/gsctl {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   gsocket = callPackage ../tools/networking/gsocket { };
 
@@ -5405,7 +5417,9 @@ with pkgs;
 
   pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
 
-  pcp = callPackage ../tools/misc/pcp { };
+  pcp = callPackage ../tools/misc/pcp {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   persepolis = python3Packages.callPackage ../tools/networking/persepolis {
     wrapQtAppsHook = qt5.wrapQtAppsHook;
@@ -6092,7 +6106,9 @@ with pkgs;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  unparam = callPackage ../tools/misc/unparam { };
+  unparam = callPackage ../tools/misc/unparam {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   inherit (nodePackages) uppy-companion;
 
@@ -6568,7 +6584,9 @@ with pkgs;
 
   dnspeep = callPackage ../tools/security/dnspeep { };
 
-  dnsproxy = callPackage ../tools/networking/dnsproxy { };
+  dnsproxy = callPackage ../tools/networking/dnsproxy {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
@@ -7095,7 +7113,9 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
-  eris-go = callPackage ../servers/eris-go { };
+  eris-go = callPackage ../servers/eris-go {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   ericw-tools = callPackage ../applications/misc/ericw-tools { stdenv = gcc10StdenvCompat; };
 
@@ -7893,7 +7913,9 @@ with pkgs;
 
   goreplay = callPackage ../tools/networking/goreplay { };
 
-  gost = callPackage ../tools/networking/gost { };
+  gost = callPackage ../tools/networking/gost {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -8543,7 +8565,9 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
@@ -8903,7 +8927,9 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  kube-router = callPackage ../applications/networking/cluster/kube-router { };
+  kube-router = callPackage ../applications/networking/cluster/kube-router {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   kubepug = callPackage ../development/tools/kubepug { };
 
@@ -8911,7 +8937,9 @@ with pkgs;
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
-  kubo = callPackage ../applications/networking/kubo { };
+  kubo = callPackage ../applications/networking/kubo {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
   kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
@@ -10474,7 +10502,9 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
-  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli { };
+  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
@@ -16166,6 +16196,9 @@ with pkgs;
     llvmPackages = llvmPackages_14;
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     wasi-libc = pkgsCross.wasi32.wasilibc;
+    # go 1.20 build failure
+    go = go_1_19;
+    buildGoModule = buildGo119Module;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
@@ -17830,7 +17863,9 @@ with pkgs;
 
   emma = callPackage ../development/tools/analysis/emma { };
 
-  ent-go = callPackage ../development/tools/ent { };
+  ent-go = callPackage ../development/tools/ent {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   epm = callPackage ../development/tools/misc/epm { };
 
@@ -22162,7 +22197,9 @@ with pkgs;
 
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
 
-  ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
+  ligolo-ng = callPackage ../tools/networking/ligolo-ng {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   linenoise = callPackage ../development/libraries/linenoise { };
 
@@ -24605,9 +24642,13 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {};
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
+    buildGoModule = buildGo119Module; # nixosTests.grafana-agent go 1.20 failure
+  };
 
-  grafana-loki = callPackage ../servers/monitoring/loki { };
+  grafana-loki = callPackage ../servers/monitoring/loki {
+    buildGoModule = buildGo119Module; # nixosTests.loki go 1.20 failure
+  };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   mimir = callPackage ../servers/monitoring/mimir { };
@@ -24857,7 +24898,9 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
-  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
+  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   unit = callPackage ../servers/http/unit { };
 
@@ -25547,7 +25590,9 @@ with pkgs;
 
   vouch-proxy = callPackage ../servers/vouch-proxy { };
 
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+  victoriametrics = callPackage ../servers/nosql/victoriametrics {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
@@ -25953,7 +25998,9 @@ with pkgs;
 
   gomp = callPackage ../applications/version-management/gomp { };
 
-  gomplate = callPackage ../development/tools/gomplate { };
+  gomplate = callPackage ../development/tools/gomplate {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   gpm = callPackage ../servers/gpm {
     withNcurses = false; # Keep curses disabled for lack of value
@@ -29193,7 +29240,9 @@ with pkgs;
 
   edlin = callPackage ../applications/editors/edlin { };
 
-  o = callPackage ../applications/editors/o { };
+  o = callPackage ../applications/editors/o {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   oed = callPackage ../applications/editors/oed { };
 
@@ -30327,7 +30376,9 @@ with pkgs;
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
-  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
+  hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
@@ -31811,7 +31862,9 @@ with pkgs;
 
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
-  open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+  open-policy-agent = callPackage ../development/tools/open-policy-agent {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   openmm = callPackage ../development/libraries/science/chemistry/openmm {
     stdenv = gcc11Stdenv;
@@ -32539,7 +32592,9 @@ with pkgs;
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
-  protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
+  protonmail-bridge = callPackage ../applications/networking/protonmail-bridge {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
@@ -33314,7 +33369,9 @@ with pkgs;
 
   syncterm = callPackage ../applications/terminal-emulators/syncterm { };
 
-  inherit (callPackages ../applications/networking/syncthing { })
+  inherit (callPackages ../applications/networking/syncthing {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+   })
     syncthing
     syncthing-discovery
     syncthing-relay;
@@ -33598,7 +33655,9 @@ with pkgs;
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
-  toxiproxy = callPackage ../development/tools/toxiproxy { };
+  toxiproxy = callPackage ../development/tools/toxiproxy {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   tqsl = callPackage ../applications/radio/tqsl {
     openssl = openssl_1_1;
@@ -34711,7 +34770,9 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon { };
+  erigon = callPackage ../applications/blockchains/erigon {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
