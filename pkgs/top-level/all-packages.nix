@@ -31800,8 +31800,8 @@ with pkgs;
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openmm = callPackage ../development/libraries/science/chemistry/openmm {
-    stdenv = if stdenv.targetPlatform.isAarch64 then gcc9Stdenv else gcc11Stdenv;
-    gfortran = if stdenv.targetPlatform.isAarch64 then gfortran9 else gfortran11;
+    stdenv = gcc11Stdenv;
+    gfortran = gfortran11;
   };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
