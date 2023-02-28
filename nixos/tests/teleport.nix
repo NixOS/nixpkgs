@@ -80,7 +80,7 @@ lib.concatMapAttrs
     "minimal_${name}" = makeTest {
       # minimal setup should always work
       name = "teleport-minimal-setup";
-      meta.maintainers = with pkgs.lib.maintainers; [ ymatsiuk ];
+      meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
       nodes.minimal = minimal package;
 
       testScript = ''
@@ -93,7 +93,7 @@ lib.concatMapAttrs
     "basic_${name}" = makeTest {
       # basic server and client test
       name = "teleport-server-client";
-      meta.maintainers = with pkgs.lib.maintainers; [ ymatsiuk ];
+      meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
       nodes = {
         server = server package;
         client = client package;
