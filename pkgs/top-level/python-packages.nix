@@ -7287,6 +7287,8 @@ self: super: with self; {
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };
 
+  pynn = callPackage ../development/python-modules/pynn { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
