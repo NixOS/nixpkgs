@@ -49,10 +49,10 @@ with localPython.pkgs; buildPythonApplication rec {
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
       --replace "requests>=2.20.1,<=2.26" "requests<3" \
       --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<2" \
-      --replace "pathspec==0.9.0" "pathspec>=0.10.0,<0.11.0" \
+      --replace "pathspec==0.9.0" "pathspec>=0.10.0,<1" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
       --replace "future>=0.16.0,<0.17.0" "future" \
-      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<2.2.0"
+      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
   '';
 
   buildInputs = [
