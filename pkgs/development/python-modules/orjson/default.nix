@@ -16,23 +16,23 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.8.4";
+  version = "3.8.6";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
-    rev = version;
-    hash = "sha256-XQBiE8hmLC/AIRt0eJri/ilPHUEYiOxd0onRBQsx+pM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LwLuMcnAubO7U1/KSe6tHaSP9+bi6gDfvGobixzL2gM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-O2W9zO7qHWG+78T+uECICAmecaSIbTTJPktJIPZYElE=";
+    hash = "sha256-8T//q6nQoZhh8oJWDCeQf3gYRew58dXAaxkYELY4CJM=";
   };
-
-  format = "pyproject";
 
   nativeBuildInputs = [
     cffi
@@ -41,7 +41,9 @@ buildPythonPackage rec {
     maturinBuildHook
   ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -52,7 +54,9 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [
+    "orjson"
+  ];
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
