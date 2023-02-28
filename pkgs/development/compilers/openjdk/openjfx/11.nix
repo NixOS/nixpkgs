@@ -1,8 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu71
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, writeText
+, gradle_7
+, pkg-config
+, perl
+, cmake
+, gperf
+, gtk2
+, gtk3
+, libXtst
+, libXxf86vm
+, glib
+, alsa-lib
+, ffmpeg_4-headless
+, python3
+, ruby
+, icu71
 , openjdk11-bootstrap
+, strace
+, lurk
 , withMedia ? true
-, withWebKit ? false }:
+, withWebKit ? false
+}:
 
 let
   major = "11";
@@ -12,6 +33,11 @@ let
   gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
+
+  icuBinLZip = fetchurl {
+    sha256 = "sha256-46DjI123Hkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
+    url = "https://github.com/unicode-org/icu/releases/download/release-71-1/icu4c-71_1-data-bin-l.zip";
+  };
 
   NIX_CFLAGS_COMPILE = [
     # avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
@@ -54,7 +80,8 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      #${lurk}/bin/lurk -f -o lurk.json gradle --no-daemon $gradleFlags sdk
+      ${strace}/bin/strace -f -o strace.txt gradle --no-daemon $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -79,7 +106,8 @@ let
     outputHash = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa9=";
   };
 
-in makePackage {
+in
+makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
