@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jonringer/c-ares/commit/9806a8a2f999a8a3efa3c893f2854dce6919d5bb.patch";
       sha256 = "sha256-nh/ZKdan2/FTrouApRQA7O8KGZrLEUuWhxGOktiiGwU=";
     })
+    ./CVE-2022-4904.patch
   ];
 
   nativeBuildInputs = lib.optionals withCMake [ cmake ];

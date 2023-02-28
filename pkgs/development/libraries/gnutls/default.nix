@@ -1,4 +1,5 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
+, fetchpatch
 , perl, gmp, autoconf, automake, libidn2, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
@@ -48,6 +49,13 @@ stdenv.mkDerivation rec {
   outputDoc  = "devdoc";
 
   patches = [ ./nix-ssl-cert-file.patch ]
+    ++ [(fetchpatch {
+      # http://www.gnutls.org/security-new.html#GNUTLS-SA-2020-07-14
+      # https://gitlab.com/gnutls/gnutls/-/merge_requests/1698
+      name = "cve-2023-0361.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/80a6ce8ddb02477cd724cd5b2944791aaddb702a.diff";
+      sha256 = "sha256-vHpP3EPwOsFuiOmL4yGjhA/x3ytKzZniRdUFENsoM3E=";
+    })]
     # Disable native add_system_trust.
     # FIXME: apparently it's not enough to drop the framework anymore; maybe related to
     # https://gitlab.com/gnutls/gnutls/-/commit/c19cb93d492e45141bfef9b926dfeba36003261c
