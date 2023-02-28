@@ -8162,6 +8162,7 @@ self: super: with self; {
 
   pygame = callPackage ../development/python-modules/pygame {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+    SDL2 = pkgs.SDL2_2_24;
     SDL2_image = pkgs.SDL2_image_2_0_5;
   };
 
