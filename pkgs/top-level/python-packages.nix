@@ -2569,6 +2569,8 @@ self: super: with self; {
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
+  django-compression-middleware = callPackage ../development/python-modules/django-compression-middleware { };
+
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
@@ -10098,6 +10100,8 @@ self: super: with self; {
 
   rich = callPackage ../development/python-modules/rich { };
 
+  rich-argparse-plus = callPackage ../development/python-modules/rich-argparse-plus { };
+
   rich-click = callPackage ../development/python-modules/rich-click { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
@@ -11199,8 +11203,6 @@ self: super: with self; {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
-  suds-jurko = callPackage ../development/python-modules/suds-jurko { };
-
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
@@ -11224,8 +11226,6 @@ self: super: with self; {
   surt = callPackage ../development/python-modules/surt { };
 
   survey = callPackage ../development/python-modules/survey { };
-
-  suseapi = callPackage ../development/python-modules/suseapi { };
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
@@ -11706,8 +11706,6 @@ self: super: with self; {
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
-
-  transip = callPackage ../development/python-modules/transip { };
 
   transitions = callPackage ../development/python-modules/transitions { };
 

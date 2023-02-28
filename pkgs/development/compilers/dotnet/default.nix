@@ -30,6 +30,7 @@ let
   dotnet_3_1 = import ./versions/3.1.nix (buildAttrs // { icu = icu70; });
   dotnet_6_0 = import ./versions/6.0.nix (buildAttrs // { inherit icu; });
   dotnet_7_0 = import ./versions/7.0.nix (buildAttrs // { inherit icu; });
+  dotnet_8_0 = import ./versions/8.0.nix (buildAttrs // { inherit icu; });
 in
 rec {
   inherit systemToDotnetRid;
@@ -41,4 +42,4 @@ rec {
   sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
-} // dotnet_3_1 // dotnet_6_0 // dotnet_7_0
+} // dotnet_3_1 // dotnet_6_0 // dotnet_7_0 // dotnet_8_0
