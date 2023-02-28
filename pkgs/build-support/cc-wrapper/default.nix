@@ -51,6 +51,8 @@
 
 # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
+, fortify-headers ? null
+, includeFortifyHeaders ? null
 }:
 
 with lib;
@@ -64,6 +66,10 @@ assert (noLibc || nativeLibc) == (libc == null);
 let
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
+
+  includeFortifyHeaders' = if includeFortifyHeaders != null
+    then includeFortifyHeaders
+    else targetPlatform.libc == "musl";
 
   # Prefix for binaries. Customarily ends with a dash separator.
   #
@@ -164,6 +170,8 @@ let
   darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
     stdenv.targetPlatform.darwinMinVersionVariable;
 in
+
+assert includeFortifyHeaders' -> fortify-headers != null;
 
 # Ensure bintools matches
 assert libc_bin == bintools.libc_bin;
@@ -414,6 +422,16 @@ stdenv.mkDerivation {
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+    ''
+    # fortify-headers is a set of wrapper headers that augment libc
+    # and use #include_next to pass through to libc's true
+    # implementations, so must appear before them in search order.
+    # in theory a correctly placed -idirafter could be used, but in
+    # practice the compiler may have been built with a --with-headers
+    # like option that forces the libc headers before all -idirafter,
+    # hence -isystem here.
+    + optionalString includeFortifyHeaders' ''
+      echo "-isystem ${fortify-headers}/include" >> $out/nix-support/libc-cflags
     '')
 
     ##
