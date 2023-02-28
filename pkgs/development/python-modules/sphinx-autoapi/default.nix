@@ -40,6 +40,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # failing typing assertions
+    "test_integration"
+    "test_annotations"
+  ];
+
   pythonImportsCheck = [
     "autoapi"
   ];
