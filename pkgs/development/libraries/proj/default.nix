@@ -12,6 +12,7 @@
 , gtest
 , nlohmann_json
 , python3
+, cacert
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  nativeCheckInputs = [ gtest ];
+  nativeCheckInputs = [ cacert gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
