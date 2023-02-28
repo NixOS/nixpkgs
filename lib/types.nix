@@ -696,6 +696,7 @@ rec {
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       , description ? null
+      , nameArgument ? "name"
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -724,7 +725,7 @@ rec {
             # &gt; and &lt; wouldn't be encoded correctly so the encoded values
             # would be used, and use of `<` and `>` would break the XML document.
             # It shouldn't cause an issue since this is cosmetic for the manual.
-            _module.args.name = lib.mkOptionDefault "‹name›";
+            _module.args.${nameArgument} = lib.mkOptionDefault "‹name›";
           }] ++ modules;
         };
 
@@ -741,7 +742,7 @@ rec {
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (base.extendModules {
-            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+            modules = [ { _module.args.${nameArgument} = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
