@@ -3116,6 +3116,8 @@ self: super: with self; {
 
   etcd = callPackage ../development/python-modules/etcd { };
 
+  etcd3 = callPackage ../development/python-modules/etcd3 { };
+
   ete3 = callPackage ../development/python-modules/ete3 { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
