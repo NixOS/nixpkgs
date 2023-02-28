@@ -10029,6 +10029,8 @@ with pkgs;
 
   matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot { };
 
+  maubot = with python3Packages; toPythonApplication maubot;
+
   mautrix-discord = callPackage ../servers/mautrix-discord { };
 
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
