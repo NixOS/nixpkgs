@@ -31450,8 +31450,7 @@ with pkgs;
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    inherit (darwin) libobjc;
-    wxGTK = wxGTK32.override {
+    wxGTK32 = wxGTK32.override {
       withWebKit = true;
     };
   };
