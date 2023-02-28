@@ -22332,7 +22332,7 @@ with pkgs;
 
   mtxclient = callPackage ../development/libraries/mtxclient {
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   mu = callPackage ../tools/networking/mu {
