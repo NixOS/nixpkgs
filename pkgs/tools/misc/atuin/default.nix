@@ -6,6 +6,7 @@
 , libiconv
 , Security
 , SystemConfiguration
+, xvfb-run
 , nixosTests
 }:
 
@@ -31,6 +32,16 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
       --zsh <($out/bin/atuin gen-completions -s zsh)
+  '';
+
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run cargo test
+    runHook postCheck
   '';
 
   passthru.tests = {
