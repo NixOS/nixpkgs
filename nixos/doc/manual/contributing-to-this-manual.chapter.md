@@ -6,7 +6,6 @@ You can quickly check your edits with the following:
 
 ```ShellSession
 $ cd /path/to/nixpkgs
-$ ./nixos/doc/manual/md-to-db.sh
 $ nix-build nixos/release.nix -A manual.x86_64-linux
 ```
 

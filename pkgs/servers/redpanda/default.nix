@@ -1,48 +1,52 @@
-{ lib, stdenv, fetchzip }:
-
+{ buildGoModule
+, callPackage
+, doCheck ? !stdenv.isDarwin # Can't start localhost test server in MacOS sandbox.
+, fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+}:
 let
-  version = "22.3.5";
-  platform = if stdenv.isLinux then "linux" else "darwin";
-  arch = if stdenv.isAarch64 then "arm" else "amd";
-  sha256s = {
-    darwin.amd = "sha256-AXk3aP1SGiHTfHTCBRTagX0DAVmdcVVIkxWaTnZxB8g=";
-    darwin.arm = "sha256-pvOVvNc8lZ2d2fVZVYWvumVWYpnLORNY/3o1t4BN2N4=";
-    linux.amd = "sha256-wsUuSCstYucjMpFsqssPGEhm3zCrAdE9Mldtkypbthg=";
-    linux.arm = "sha256-WHjYAbytiu747jFqN0KZ/CkIwAVI7fb32ywtRiQOBm8=";
+  version = "22.3.13";
+  src = fetchFromGitHub {
+    owner = "redpanda-data";
+    repo = "redpanda";
+    rev = "v${version}";
+    sha256 = "sha256-cUQFDXWnQYSLcfKFYg6BLrxF77iX+Yx3hcul4tMxdoc=";
   };
-in stdenv.mkDerivation rec {
-  pname = "redpanda";
-  inherit version;
+  server = callPackage ./server.nix { inherit src version; };
+in
+buildGoModule rec {
+  pname = "redpanda-rpk";
+  inherit doCheck src version;
+  modRoot = "./src/go/rpk";
+  runVend = false;
+  vendorSha256 = "sha256-JVZuHRh3gavIGArxDkqUQsL5oBjz35EKGsC75Sy+cMo=";
 
-  src = fetchzip {
-    url = "https://github.com/redpanda-data/redpanda/releases/download/v${version}/rpk-${platform}-${arch}64.zip";
-    sha256 = sha256s.${platform}.${arch};
-  };
+  ldflags = [
+    ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.version=${version}"''
+    ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.rev=v${version}"''
+    ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/container/common.tag=v${version}"''
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installShellFiles ];
 
-    mkdir -p $out/bin
-    cp rpk $out/bin
-
-    ${lib.optionalString stdenv.isLinux ''
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          $out/bin/rpk
-    ''}
-
-    runHook postInstall
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/rpk generate shell-completion $shell > rpk.$shell
+      installShellCompletion rpk.$shell
+    done
   '';
 
-  # stripping somehow completely breaks it
-  dontStrip = true;
+  passthru = {
+    inherit server;
+  };
 
   meta = with lib; {
-    description = "Redpanda is a streaming data platform for developers. Kafka API compatible. 10x faster. No ZooKeeper. No JVM! ";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsl11;
+    description = "Redpanda client";
     homepage = "https://redpanda.com/";
-    maintainers = with maintainers; [ happysalada ];
+    license = licenses.bsl11;
+    maintainers = with maintainers; [ avakhrenev happysalada ];
     platforms = platforms.all;
   };
 }

@@ -28,7 +28,7 @@ buildGoModule rec {
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
-  checkInputs = [ python3 curl jq p7zip ];
+  nativeCheckInputs = [ python3 curl jq p7zip ];
 
   preCheck = ''
     substituteInPlace scripts/test.py \

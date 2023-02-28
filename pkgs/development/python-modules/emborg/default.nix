@@ -40,7 +40,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nestedtext
     parametrize-from-file
     pytestCheckHook

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sed -i '/addopts/d' tox.ini
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

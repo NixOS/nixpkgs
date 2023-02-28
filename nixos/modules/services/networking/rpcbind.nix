@@ -14,7 +14,7 @@ with lib;
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to enable `rpcbind', an ONC RPC directory service
+          Whether to enable `rpcbind`, an ONC RPC directory service
           notably used by NFS and NIS, and which can be queried
           using the rpcinfo(1) command. `rpcbind` is a replacement for
           `portmap`.

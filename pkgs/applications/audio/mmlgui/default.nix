@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cppunit
   ];
 

@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.4.3";
+  version = "5.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Yrhjxe5s7UAyr+lI88FITzdVUJldO4SYFFI3/ijlRsI=";
+    hash = "sha256-uJNQDbD+Az5XDDrclWr27vxX4oACa9LYb9U9qfHllNc=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

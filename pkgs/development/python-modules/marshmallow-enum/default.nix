@@ -26,7 +26,7 @@ buildPythonPackage rec {
     marshmallow
   ] ++ lib.optionals isPy27 [ enum34 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

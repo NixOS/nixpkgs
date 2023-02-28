@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   # for the current basic test suite. Tibanna and Tes require extra
   # setup.
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pandas
     pytestCheckHook
     requests-mock

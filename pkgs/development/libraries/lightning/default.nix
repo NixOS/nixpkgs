@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TjmE/xzPC6MKmFIR1A/FwGsl8BTr3z2A0P49DIDdfA4=";
   };
 
-  checkInputs = [ libopcodes ];
+  nativeCheckInputs = [ libopcodes ];
 
   doCheck = true;
 

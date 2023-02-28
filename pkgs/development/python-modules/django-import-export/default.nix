@@ -30,7 +30,7 @@ buildPythonPackage rec {
     tablib
   ] ++ (with tablib.optional-dependencies; html ++ ods ++ xls ++ xlsx ++ yaml);
 
-  checkInputs = [
+  nativeCheckInputs = [
     chardet
     pytz
   ];

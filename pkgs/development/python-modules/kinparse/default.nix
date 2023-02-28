@@ -20,7 +20,7 @@ buildPythonPackage {
   doCheck = true;
   pythonImportsCheck = [ "kinparse" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

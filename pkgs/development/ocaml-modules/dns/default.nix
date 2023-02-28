@@ -1,5 +1,17 @@
-{ lib, buildDunePackage, fetchurl, alcotest
-, cstruct, domain-name, duration, gmap, ipaddr, logs, lru, metrics, ptime, fmt
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, cstruct
+, domain-name
+, duration
+, gmap
+, ipaddr
+, logs
+, lru
+, metrics
+, ptime
+, fmt
 , base64
 }:
 

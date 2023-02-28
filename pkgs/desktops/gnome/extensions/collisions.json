@@ -118,6 +118,10 @@
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "floating-panel": [
+      "floating-panel@aylur",
+      "floating-panel-usedbymyself@wpism"
     ]
   },
   "41": {
@@ -164,6 +168,10 @@
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "floating-panel": [
+      "floating-panel@aylur",
+      "floating-panel-usedbymyself@wpism"
     ]
   },
   "42": {
@@ -178,6 +186,10 @@
     "lock-keys": [
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
+    ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
     ],
     "noannoyance": [
       "noannoyance@sindex.com",
@@ -198,6 +210,10 @@
     "auto-activities": [
       "auto-activities@acedron.github.io",
       "auto-activities@CleoMenezesJr.github.io"
+    ],
+    "floating-panel": [
+      "floating-panel@aylur",
+      "floating-panel-usedbymyself@wpism"
     ]
   },
   "43": {
@@ -209,9 +225,25 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
+    ],
+    "keep-awake": [
+      "KeepAwake@jepfa.de",
+      "awake@vixalien.com"
+    ],
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
+    ],
+    "floating-panel": [
+      "floating-panel@aylur",
+      "floating-panel-usedbymyself@wpism"
     ]
   }
 }

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     requests-file
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses

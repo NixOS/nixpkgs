@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
     substituteInPlace setup.ml --replace js_of_ocaml.ocamlbuild js_of_ocaml-ocamlbuild
   '';
 
-  buildInputs = [ which ] ++ (with ocamlPackages; [
-    ocaml findlib ocamlbuild menhir js_of_ocaml js_of_ocaml-ocamlbuild
+  strictDeps = true;
+
+  nativeBuildInputs = [ which ] ++ (with ocamlPackages; [
+    ocaml findlib ocamlbuild menhir
   ]);
+
+  buildInputs = with ocamlPackages; [ js_of_ocaml js_of_ocaml-ocamlbuild ];
 
   doCheck = true;
   checkTarget = "test";

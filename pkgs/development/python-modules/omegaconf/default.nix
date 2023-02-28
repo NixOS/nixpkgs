@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pydevd
     pytest-mock
     pytestCheckHook

@@ -6,17 +6,28 @@ let
   cfg = config.services.envoy;
   format = pkgs.formats.json { };
   conf = format.generate "envoy.json" cfg.settings;
-  validateConfig = file:
+  validateConfig = required: file:
     pkgs.runCommand "validate-envoy-conf" { } ''
-      ${pkgs.envoy}/bin/envoy --log-level error --mode validate -c "${file}"
+      ${cfg.package}/bin/envoy --log-level error --mode validate -c "${file}" ${lib.optionalString (!required) "|| true"}
       cp "${file}" "$out"
     '';
-
 in
 
 {
   options.services.envoy = {
     enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
+
+    package = mkPackageOptionMD pkgs "envoy" { };
+
+    requireValidConfig = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Whether a failure during config validation at build time is fatal.
+        When the config can't be checked during build time, for example when it includes
+        other files, disable this option.
+      '';
+    };
 
     settings = mkOption {
       type = format.type;
@@ -46,38 +57,44 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.envoy ];
+    environment.systemPackages = [ cfg.package ];
     systemd.services.envoy = {
       description = "Envoy reverse proxy";
       after = [ "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.envoy}/bin/envoy -c ${validateConfig conf}";
-        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/envoy -c ${validateConfig cfg.requireValidConfig conf}";
+        CacheDirectory = [ "envoy" ];
+        LogsDirectory = [ "envoy" ];
         Restart = "no";
-        CacheDirectory = "envoy";
-        LogsDirectory = "envoy";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK AF_XDP";
-        SystemCallArchitectures = "native";
+        # Hardening
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
+        DynamicUser = true;
         LockPersonality = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        PrivateUsers = false;  # breaks CAP_NET_BIND_SERVICE
+        MemoryDenyWriteExecute = false; # at least wasmr needs WX permission
         PrivateDevices = true;
+        PrivateUsers = false; # breaks CAP_NET_BIND_SERVICE
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
+        ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "ptraceable";
-        ProtectHostname = true;
         ProtectSystem = "strict";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_XDP" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0066";
-        SystemCallFilter = "~@clock @module @mount @reboot @swap @obsolete @cpu-emulation";
       };
     };
   };

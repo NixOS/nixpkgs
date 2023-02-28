@@ -78,50 +78,44 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
         in ''
-          <listitem>
-            <para>
-              <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
-                <literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name}</literal>
-              </link>
-            </para>
-            ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
-          </listitem>
+          - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
+              https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+            )${
+              lib.optionalString (args ? comment) "\n\n  ${args.comment}"
+            }
         '';
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
-      --format asciidoc \
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options asciidoc \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > $out
+      $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {} ''
-    ${pkgs.python3Minimal}/bin/python ${./generateDoc.py} \
-      --format commonmark \
+  optionsCommonMark = pkgs.runCommand "options.md" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      > $out
+      $out
   '';
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
       nativeBuildInputs = [
         pkgs.brotli
-        (let
-          # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
-          # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
-          # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
-          python = if pkgs.stdenv.isDarwin then pkgs.python3 else pkgs.python3Minimal;
-          self = (python.override {
-            inherit self;
-            includeSiteCustomize = true;
-           });
-         in self.withPackages (p: [ p.mistune ]))
+        pkgs.python3Minimal
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
@@ -131,18 +125,16 @@ in rec {
         if baseOptionsJSON == null
         then builtins.toFile "base.json" "{}"
         else baseOptionsJSON;
-
-      MANPAGE_URLS = pkgs.path + "/doc/manpage-urls.json";
     }
     ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
+      TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-        ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
-        ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
         $baseJSON $options \
         > $dst/options.json
 
@@ -153,21 +145,30 @@ in rec {
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
 
-  # Convert options.json into an XML file.
-  # The actual generation of the xml file is done in nix purely for the convenience
-  # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {} ''
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_STATE_DIR=$TMPDIR/state
-    ${pkgs.nix}/bin/nix-instantiate \
-      --eval --xml --strict ${./optionsJSONtoXML.nix} \
-      --argstr file ${optionsJSON}/share/doc/nixos/options.json \
-      > "$out"
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
   '';
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
-    optionsXML=${optionsXML}
-    if grep /nixpkgs/nixos/modules $optionsXML; then
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" {
+    nativeBuildInputs = [
+      pkgs.nixos-render-docs
+    ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
+      ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      options.xml
+
+    if grep /nixpkgs/nixos/modules options.xml; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
       echo "since this prevents sharing via the NixOS channel.  This is typically"
       echo "caused by an option default that refers to a relative path (see above"
@@ -175,14 +176,7 @@ in rec {
       exit 1
     fi
 
-    ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
-      --stringparam documentType '${documentType}' \
-      --stringparam revision '${revision}' \
-      --stringparam variablelistId '${variablelistId}' \
-      --stringparam optionIdPrefix '${optionIdPrefix}' \
-      -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
-    ${pkgs.libxslt.bin}/bin/xsltproc \
-      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
+      -o "$out" ${./postprocess-option-descriptions.xsl} options.xml
   '';
 }

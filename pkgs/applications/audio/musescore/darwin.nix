@@ -1,22 +1,21 @@
 { stdenv, lib, fetchurl, undmg }:
 
 let
-  versionComponents = [ "3" "6" "2" "548020600" ];
+  versionComponents = [ "4" "0" "1" ];
   appName = "MuseScore ${builtins.head versionComponents}";
+  ref = "230121751";
 in
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "musescore-darwin";
-  version = concatStringsSep "." versionComponents;
+  version = lib.concatStringsSep "." versionComponents;
 
   # The disk image contains the .app and a symlink to /Applications.
   sourceRoot = "${appName}.app";
 
   src = fetchurl {
-    url =  "https://github.com/musescore/MuseScore/releases/download/v${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
-    sha256 = "sha256-lHckfhTTrDzaGwlbnZ5w0O1gMPbRmrmgATIGMY517l0=";
+    url =  "https://github.com/musescore/MuseScore/releases/download/v${version}/MuseScore-${version}.${ref}.dmg";
+    hash = "sha256-tkIEV+tCS0SYh2TlC70/zEBUEOSg//EaSKDGA7kH/vo=";
   };
 
   buildInputs = [ undmg ];

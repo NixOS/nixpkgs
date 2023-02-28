@@ -188,10 +188,12 @@ final: prev: {
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
     nativeBuildInputs = [ pkgs.installShellFiles ];
+    # 'gt completion' auto-detects zshell from environment variables:
+    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
       installShellCompletion --cmd gt \
         --bash <($out/bin/gt completion) \
-        --zsh <($out/bin/gt completion)
+        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
   };
 
@@ -268,11 +270,7 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${
-        if stdenv.isLinux
-          then "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
-          else ""
-      }
+      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
 
@@ -361,10 +359,6 @@ final: prev: {
     '';
   };
 
-  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
-    meta.broken = true; # use the top-level package instead
-  };
-
   pnpm = prev.pnpm.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 
@@ -410,7 +404,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-DWIhxvxt8f4h6MDd35mz7BJff+fu7HItW3WPDIEpCR3RzcOWyiHBbLQW5/DOgmf+pRLTjwXQob7kuTZVYUAw5w==";
+      sha512 = "sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \

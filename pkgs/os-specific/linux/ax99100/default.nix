@@ -1,14 +1,34 @@
-{ kernel, stdenv, kmod, lib, fetchzip }:
+{ kernel, stdenv, kmod, lib, fetchzip, fetchpatch, dos2unix }:
 stdenv.mkDerivation
 {
   pname = "ax99100";
   version = "1.8.0";
-  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
+
+  nativeBuildInputs = [ dos2unix kmod ] ++ kernel.moduleBuildDependencies;
+
   src = fetchzip {
     url = "https://www.asix.com.tw/en/support/download/file/1229";
     sha256 = "1rbp1m01qr6b3nbr72vpbw89pjh8mddc60im78z2yjd951xkbcjh";
     extension = "tar.bz2";
   };
+
+  prePatch = ''
+    # The sources come with Windows file endings and that makes
+    # applying patches hard without first fixing the line endings.
+    dos2unix *.c *.h
+  '';
+
+  # The patches are adapted from: https://aur.archlinux.org/packages/asix-ax99100
+  #
+  # We included them here instead of fetching them, because of line
+  # ending issues that are easier to fix manually. Also the
+  # set_termios patch needs to be applied for 6.1 not for 6.0.
+  patches = [
+    ./kernel-5.18-pci_free_consistent-pci_alloc_consistent.patch
+    ./kernel-6.1-set_termios-const-ktermios.patch
+  ];
+
+  patchFlags = [ "-p0" ];
 
   makeFlags = [ "KDIR='${kernel.dev}/lib/modules/${kernel.modDirVersion}/build'" ];
 
@@ -18,12 +38,13 @@ stdenv.mkDerivation
   '';
 
   meta = {
-    description = "ASIX AX99100 Serial and Parralel Port driver";
+    description = "ASIX AX99100 Serial and Parallel Port driver";
     homepage = "https://www.asix.com.tw/en/product/Interface/PCIe_Bridge/AX99100";
     # According to the source code in the tarball, the license is gpl2.
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    # currently, the build fails with kernels newer than 5.17
-    broken = lib.versionAtLeast kernel.version "5.18.0";
+
+    # Older Linux versions need more patches to work.
+    broken = lib.versionOlder kernel.version "5.4.0";
   };
 }

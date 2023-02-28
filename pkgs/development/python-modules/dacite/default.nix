@@ -2,13 +2,12 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dacite";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,15 +16,24 @@ buildPythonPackage rec {
     owner = "konradhalas";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+yWvlJcOmqDkHl3JZfPnIV3C4ieSo4FiBvoUZ0+J4N0=";
+    hash = "sha256-aQwQHFWaXwTaA6GQgDcWT6ivE9YtWtHCTOtxDi503+M=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--benchmark-autosave --benchmark-json=benchmark.json" ""
+  '';
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "dacite"
+  ];
+
+  disabledTestPaths = [
+    "tests/performance"
   ];
 
   meta = with lib; {

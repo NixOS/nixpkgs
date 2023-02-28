@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ oauthlib requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     requests-mock

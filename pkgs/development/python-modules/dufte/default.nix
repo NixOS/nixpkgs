@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

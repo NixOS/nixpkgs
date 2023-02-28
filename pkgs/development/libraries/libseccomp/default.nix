@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  checkInputs = [ util-linuxMinimal which ];
+  nativeCheckInputs = [ util-linuxMinimal which ];
   doCheck = true;
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.

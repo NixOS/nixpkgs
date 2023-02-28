@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xnotify";
-  version = "unstable-2022-02-18";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "phillbush";

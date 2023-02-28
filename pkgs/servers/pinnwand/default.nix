@@ -32,7 +32,7 @@ with python3.pkgs; buildPythonApplication rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

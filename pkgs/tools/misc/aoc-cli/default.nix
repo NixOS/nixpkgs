@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aoc-cli";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "scarvalhojr";
     repo = pname;
     rev = version;
-    hash = "sha256-oUvEZEnhYeAAZyLn2/isDZKT0+mhS5fnCvYGsR94uk0=";
+    hash = "sha256-UdeCKhEWr1BjQ6OMLP19OLWPlvvP7FGAO+mi+bQUPQA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  cargoHash = "sha256-/76yzWPKGp4MEmFuvFJOMCxGKEdpohfzBAhRwvdEx8w=";
+  cargoHash = "sha256-EluP4N3UBQeEKVdHTs4O0THXji+nAyE52nGKsxA3AA4=";
 
   meta = with lib; {
     description = "Advent of code command line tool";

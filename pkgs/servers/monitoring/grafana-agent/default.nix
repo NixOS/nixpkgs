@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, systemd, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd, nixosTests }:
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.30.1";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-QunB14B3HRzB5UL5OZaFsm4WGIOMnByYKblTogVOeHE=";
+    sha256 = "sha256-yexCK4GBA997CShtuQQTs1GBsXoknUnWWO0Uotb9EG8=";
   };
 
-  vendorSha256 = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
+  vendorHash = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev systemd}/include" ];
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
   # tries to access /sys: https://github.com/grafana/agent/issues/333
   preBuild = ''
@@ -48,7 +48,7 @@ buildGoModule rec {
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
       $out/bin/agent
@@ -61,6 +61,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
     maintainers = with maintainers; [ flokli ];
-    platforms = platforms.linux;
   };
 }

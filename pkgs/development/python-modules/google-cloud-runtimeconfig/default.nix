@@ -25,7 +25,7 @@ buildPythonPackage rec {
     google-cloud-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

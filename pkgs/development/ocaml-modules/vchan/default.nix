@@ -15,11 +15,8 @@ buildDunePackage rec {
     sha256 = "sha256-5E7dITMVirYoxUkp8ZamRAolyhA6avXGJNAioxeBuV0=";
   };
 
-  nativeBuildInputs = [
-    ppx_cstruct
-  ];
-
   propagatedBuildInputs = [
+    ppx_cstruct
     ppx_sexp_conv
     lwt
     cstruct

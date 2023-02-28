@@ -5,29 +5,33 @@
 , libgit2
 , openssl
 , stdenv
-, Security
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.17.4";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-3dJ16G1PCLAV1sxtDt+eru+Chg7SWt+K/crJgXMO++k=";
+    sha256 = "sha256-0o7kemIxKCf+oNCl2ryKT02w49LQUuKaFIQUDt5mIw4=";
   };
 
-  # patch Cargo.toml to not vendor libgit2 and openssl
-  cargoPatches = [ ./no-vendor.patch ];
-
-  cargoSha256 = "sha256-eLPLBBytzjKfJk0pbPBC0kJrxkelfDrAj5kaM6g9z9w=";
+  cargoSha256 = "sha256-DnPf75MEIbX4UQ6XeGLRE4giu+DxgWWmKJY34jrPwpc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  # disable vendored libgit2 and openssl
+  buildNoDefaultFeatures = true;
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld

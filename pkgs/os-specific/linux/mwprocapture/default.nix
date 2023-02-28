@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
+  patches = [ ./pci.patch ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
+
   postInstall = ''
     cd ../
     mkdir -p $out/bin
@@ -56,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     broken = kernel.kernelAtLeast "5.16";
-    homepage = "http://www.magewell.com/";
+    homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ MP2E ];

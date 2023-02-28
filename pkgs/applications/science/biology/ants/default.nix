@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, itk, vtk_8, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, itk, vtk, Cocoa }:
 
 stdenv.mkDerivation rec {
-  pname    = "ANTs";
+  pname = "ANTs";
   version = "2.4.3";
 
   src = fetchFromGitHub {
     owner  = "ANTsX";
     repo   = "ANTs";
-    rev    = "v${version}";
+    rev    = "refs/tags/v${version}";
     sha256 = "sha256-S4HYhsqof27UXEYjKvbod8N7PkZDmwLdwcEAvJD0W5g=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ itk vtk_8 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ itk vtk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mV69KXCjHUfBAKqsECEvR+K/EuKwZTbTiIPJUf807vE=";
+    hash = "sha256-ZL1+ximQIVh4gi6LJWnRg1BU9WzfU2AN3+mSfjHztI0=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pyemd
     pytestCheckHook
@@ -56,5 +56,8 @@ buildPythonPackage rec {
     homepage = "https://radimrehurek.com/gensim/";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ jyp ];
+    # python310 errors as: No matching distribution found for FuzzyTM>=0.4.0
+    # python311 errors as: longintrepr.h: No such file or directory
+    broken = true; # At 2023-02-05
   };
 }

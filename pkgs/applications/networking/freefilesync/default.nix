@@ -14,13 +14,13 @@
 
 gcc12Stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "11.29";
+  version = "12.1";
 
   src = fetchFromGitHub {
     owner = "hkneptune";
     repo = "FreeFileSync";
     rev = "v${version}";
-    sha256 = "sha256-UQ+CWqtcTwMGUTn6t3N+BkXs4qxddZtxDjcq7nz5F6U=";
+    hash = "sha256-KA3Bn8skJ2gMmihmwlUmN6jXZmfoYY/f4vqbKwvxwgw=";
   };
 
   # Patches from ROSA Linux
@@ -57,7 +57,7 @@ gcc12Stdenv.mkDerivation rec {
     wxGTK32
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Undef g_object_ref on GLib 2.56+
     "-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_54"
     "-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_54"

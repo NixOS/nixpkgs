@@ -1,21 +1,22 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "atkinson-hyperlegible";
   version = "unstable-2021-04-29";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "googlefonts";
-  repo = "atkinson-hyperlegible";
-  rev = "1cb311624b2ddf88e9e37873999d165a8cd28b46";
-  sha256 = "sha256-urSTqC3rfDRM8IMG+edwKEe7NPiTuDZph3heGHzLDks=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "atkinson-hyperlegible";
+    rev = "1cb311624b2ddf88e9e37873999d165a8cd28b46";
+    hash = "sha256-RN4m5gyY2OiPzRXgFVQ3pq6JdkPcMxV4fRlX2EK+gOM=";
+  };
 
-  postFetch = ''
-    install -Dm644 -t $out/share/fonts/opentype $out/fonts/otf/*
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 -t $out/share/fonts/opentype fonts/otf/*
+
+    runHook postInstall
   '';
 
   meta = with lib; {

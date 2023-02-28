@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.2.0";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SZQxkx57cY+8q4Mg880jT8TlYcfwLz4KEpHiyOb2Ujc=";
+    hash = "sha256-G7v09CA1pJ2OSL7gBzYvfRGrjPjQElxnyeUvP2vpFJQ=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-asyncio

@@ -1,14 +1,22 @@
-{ lib, fetchzip }:
-fetchzip rec {
+{ lib, stdenvNoCC, fetchzip }:
+
+stdenvNoCC.mkDerivation rec {
   pname = "capitaine-cursors-themed";
   version = "5";
-  stripRoot = false;
-  url = "https://github.com/sainnhe/capitaine-cursors/releases/download/r${version}/Linux.zip";
-  sha256 = "jQNAXuR/OtvohWziGYgb5Ni2/tEIGaY9HIyUUW793EY=";
 
-  postFetch = ''
+  src = fetchzip {
+    url = "https://github.com/sainnhe/capitaine-cursors/releases/download/r${version}/Linux.zip";
+    stripRoot = false;
+    hash = "sha256-ipPpmZKU/xLA45fdOvxVbtFDCUsCYIvzeps/DjhFkNg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     cp -r ./ $out/share/icons
+
+    runHook postInstall
   '';
 
   meta = with lib; {

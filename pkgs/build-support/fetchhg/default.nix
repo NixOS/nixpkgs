@@ -12,13 +12,13 @@ if md5 != null then
 else
 # TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenvNoCC.mkDerivation {
-  name = "hg-archive" + (if name != null then "-${name}" else "");
+  name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
   builder = ./builder.sh;
   nativeBuildInputs = [mercurial];
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-  subrepoClause = if fetchSubrepos then "S" else "";
+  subrepoClause = lib.optionalString fetchSubrepos "S";
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

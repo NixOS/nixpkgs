@@ -23,19 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.12";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-wrx8+18jVDIhYhxD8VgU8wlRDLoUwMWIBOzSUozjUII=";
+    hash = "sha256-55hB8UyK+EPJ6/Yj5yNK6endNU9Ux/kZmQNjcrYq6KU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-t0nmfM6Z30c+n0iANjMBVifOhYMXdBqgjxYdhOPOhYQ=";
+    hash = "sha256-NPRImc0nVhYgq9JfGoSM1mT1Z6KQjVWgoLIagOUCM5M=";
   };
 
   nativeBuildInputs = [

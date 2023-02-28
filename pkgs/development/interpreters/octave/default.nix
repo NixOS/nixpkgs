@@ -186,7 +186,7 @@ let
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
     # See https://savannah.gnu.org/bugs/?50339
-    F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
+    F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
 
     configureFlags = [
       "--with-blas=blas"

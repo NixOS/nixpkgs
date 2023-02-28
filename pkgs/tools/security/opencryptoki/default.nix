@@ -1,18 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, openssl, trousers, autoreconfHook, libtool, bison, flex }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, openldap
+, openssl
+, trousers
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencryptoki";
-  version = "3.8.2";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
     rev = "v${version}";
-    sha256 = "1rf7cmibmx636vzv7p54g212478a8wim2lfjf2861hfd0m96nv4l";
+    hash = "sha256-ym13I34H3d1JuVBnItkceUbqpjYFhD+mPgWYHPetF7Y=";
   };
 
-  nativeBuildInputs = [ autoreconfHook libtool bison flex ];
-  buildInputs = [ openssl trousers ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+  ];
+
+  buildInputs = [
+    openldap
+    openssl
+    trousers
+  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
@@ -20,18 +38,22 @@ stdenv.mkDerivation rec {
       --replace "groupadd" "true" \
       --replace "chmod" "true" \
       --replace "chgrp" "true"
-    substituteInPlace usr/lib/Makefile.am --replace "DESTDIR" "out"
   '';
 
   configureFlags = [
-    "--prefix=$(out)"
+    "--prefix="
     "--disable-ccatok"
     "--disable-icatok"
   ];
 
   enableParallelBuilding = true;
 
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+  ];
+
   meta = with lib; {
+    changelog   = "https://github.com/opencryptoki/opencryptoki/blob/${src.rev}/ChangeLog";
     description = "PKCS#11 implementation for Linux";
     homepage    = "https://github.com/opencryptoki/opencryptoki";
     license     = licenses.cpl10;

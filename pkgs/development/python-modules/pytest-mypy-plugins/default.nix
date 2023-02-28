@@ -37,7 +37,7 @@ buildPythonPackage rec {
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mypy
     pytestCheckHook
   ];

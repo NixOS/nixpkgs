@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
@@ -24,7 +24,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
     '';
   in
   {
-    name = "k3s";
+    name = "${k3s.name}-single-node";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ euank ];
     };
@@ -38,7 +38,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 
       services.k3s.enable = true;
       services.k3s.role = "server";
-      services.k3s.package = pkgs.k3s;
+      services.k3s.package = k3s;
       # Slightly reduce resource usage
       services.k3s.extraFlags = builtins.toString [
         "--disable" "coredns"
@@ -76,6 +76,9 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
       machine.succeed("k3s kubectl apply -f ${testPodYaml}")
       machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
       machine.succeed("k3s kubectl delete -f ${testPodYaml}")
+
+      # regression test for #176445
+      machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
 
       machine.shutdown()
     '';

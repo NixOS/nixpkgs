@@ -6,38 +6,37 @@
 , python3
 , python3Packages
 , wafHook
-, boost175
+, boost
 , openssl
 , sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "ndn-cxx";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
     rev = "${pname}-${version}";
-    sha256 = "sha256-oTSc/lh0fDdk7dQeDhYKX5+gFl2t2Xlu1KkNmw7DitE=";
+    sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
   };
 
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
 
-  buildInputs = [ boost175 openssl sqlite ];
+  buildInputs = [ boost openssl sqlite ];
 
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
-    "--boost-includes=${boost175.dev}/include"
-    "--boost-libs=${boost175.out}/lib"
-    # "--with-tests" # disabled since upstream tests fail (Net/TestFaceUri/ParseDev Bug #3896)
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+    "--with-tests"
   ];
 
-
-  doCheck = false; # disabled since upstream tests fail (Net/TestFaceUri/ParseDev Bug #3896)
+  doCheck = false; # some tests fail in upstream, some fail because of the sandbox environment
   checkPhase = ''
     runHook preCheck
-    LD_PRELOAD=build/ndn-cxx.so build/unit-tests
+    LD_PRELOAD=build/libndn-cxx.so build/unit-tests
     runHook postCheck
   '';
 

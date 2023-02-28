@@ -8,10 +8,8 @@
 
 assert withQt  -> qt5  != null;
 
-with lib;
-
 let
-  version = "4.0.1";
+  version = "4.0.3";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -21,7 +19,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "sha256-s7AC+Z0Tu/R/ntO+frNyywwkVL0PrqKadWgZzgGf/cI=";
+    sha256 = "sha256-bFHhW8wK+5NzTmhtv/NU/9FZ9XC9KQS8u61vP+t+lRE=";
   };
 
   cmakeFlags = [
@@ -36,20 +34,20 @@ in stdenv.mkDerivation {
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
   nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config python3 perl ]
-    ++ optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
+    ++ lib.optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     gettext pcre2 libpcap lua5 libssh nghttp2 openssl libgcrypt
     libgpg-error gnutls geoip c-ares glib zlib
-  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
-    ++ optionals stdenv.isLinux  [ libcap libnl ]
-    ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
-    ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+  ] ++ lib.optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+    ++ lib.optionals stdenv.isLinux  [ libcap libnl ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
+    ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
 
   strictDeps = true;
 
@@ -72,7 +70,7 @@ in stdenv.mkDerivation {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-  '' else optionalString withQt ''
+  '' else lib.optionalString withQt ''
     pwd
     install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
 

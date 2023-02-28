@@ -213,7 +213,14 @@ rec {
             outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
-          };
+          } //
+            # TODO: give the derivation control over the outputs.
+            #       `overrideAttrs` may not be the only attribute that needs
+            #       updating when switching outputs.
+            lib.optionalAttrs (passthru?overrideAttrs) {
+              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
+            };
         };
 
       outputsList = map outputToAttrListElement outputs;
@@ -252,7 +259,8 @@ rec {
       outputsList = map makeOutput outputs;
 
       drv' = (lib.head outputsList).value;
-    in lib.deepSeq drv' drv';
+    in if drv == null then null else
+      lib.deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage` will be evaluated with the same

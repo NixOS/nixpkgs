@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -29,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.2.1";
+  version = "6.2.2";
 
   outputs = [ "out" "dev" ];
 
@@ -37,17 +36,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-pJFeMG2aGaMkS00fSoRlMR2YSg5YzwqwaQT8G7Gk5S4=";
+    sha256 = "sha256-YV7fcRaLaDwa0m6zbdhayCAqeON5nqEdQ1IUtDKu5AY=";
   };
-
-  patches = [
-    # Ensure special user directory icon used for bookmark
-    # https://github.com/elementary/files/pull/2106
-    (fetchpatch {
-      url = "https://github.com/elementary/files/commit/00b1c2a975aeab378ed6eb1d90c8988f82596add.patch";
-      sha256 = "sha256-F/Vk7dg57uBBMO4WOJ/7kKbRNMZuWZ3QfrBfEIBozbw=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils

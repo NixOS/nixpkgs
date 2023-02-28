@@ -3,8 +3,11 @@ stdenv.mkDerivation rec {
   pname = "satallax";
   version = "2.7";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml zlib which eprover coq ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml which eprover coq ];
+  buildInputs = [ zlib ];
+
   src = fetchurl {
     url = "https://www.ps.uni-saarland.de/~cebrown/satallax/downloads/${pname}-${version}.tar.gz";
     sha256 = "1kvxn8mc35igk4vigi5cp7w3wpxk2z3bgwllfm4n3h2jfs0vkpib";
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   # error: invalid suffix on literal; C++11 requires a space between literal and identifier
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-reserved-user-defined-literal";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-reserved-user-defined-literal";
 
   installPhase = ''
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"

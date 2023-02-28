@@ -94,6 +94,11 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
   postUnpack = ''
     cp -r ${objects-src}         $sourceRoot/data/object
     cp -r ${title-sequences-src} $sourceRoot/data/sequence

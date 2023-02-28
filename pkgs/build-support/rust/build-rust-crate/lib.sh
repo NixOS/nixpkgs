@@ -78,6 +78,10 @@ build_bin_test() {
 build_bin_test_file() {
     local file="$1"
     local derived_crate_name="${file//\//_}"
+    # Make sure to strip the top level `tests` directory: see #204051. Note that
+    # a forward slash has now become an underscore due to the substitution
+    # above.
+    derived_crate_name=${derived_crate_name#"tests_"}
     derived_crate_name="${derived_crate_name%.rs}"
     build_bin_test "$derived_crate_name" "$file"
 }

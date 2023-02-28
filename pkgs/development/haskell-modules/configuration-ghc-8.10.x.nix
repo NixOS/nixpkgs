@@ -48,36 +48,24 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs most recent versions of Cabal and Cabal-syntax
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-    # Prevent dependency on doctest which causes an inconsistent dependency
-    # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
-    vector = dontCheck super.vector;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
 
-  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
   monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.

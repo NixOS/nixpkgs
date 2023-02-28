@@ -10,7 +10,7 @@ buildGoModule rec {
     hash = "sha256-9tzDNwWM4uzxC+xqM603l8EIqYrGUUvZgSe6r1EyHi8=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   excludedPackages = "tests";
 

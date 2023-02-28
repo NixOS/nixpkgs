@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "5.4.0";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-nkidiDNNU6MGhne9EbYClkODJZw/zZu3LWzlniJKyJE=";
   };
+
+  postPatch = ''
+    sed '1i#include <cstring>' -i src/rocm_smi{,_gpu_metrics}.cc # since gcc12 probably
+  '';
 
   nativeBuildInputs = [ cmake wrapPython ];
 
@@ -37,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = [ "x86_64-linux" ];
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

@@ -35,7 +35,7 @@ buildPythonApplication rec {
     wcwidth
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pexpect
   ];

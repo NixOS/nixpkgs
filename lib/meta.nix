@@ -76,7 +76,9 @@ rec {
 
        1. (legacy) a system string.
 
-       2. (modern) a pattern for the platform `parsed` field.
+       2. (modern) a pattern for the entire platform structure (see `lib.systems.inspect.platformPatterns`).
+
+       3. (modern) a pattern for the platform `parsed` field (see `lib.systems.inspect.patterns`).
 
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
@@ -85,6 +87,8 @@ rec {
       pattern =
         if builtins.isString elem
         then { system = elem; }
+        else if elem?parsed
+        then elem
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
 

@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , freezegun
 , tzdata
+, py
 , pyparsing
 , pydantic
 , pytest-asyncio
@@ -36,8 +37,9 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
+    py
     pytest-asyncio
     pytest-benchmark
     pytest-golden

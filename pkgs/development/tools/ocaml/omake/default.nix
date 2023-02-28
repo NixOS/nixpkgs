@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VOFq2KLBbmZCRgHzfpD7p0iyF8yU1tTbyvTiOcpm98Q=";
   };
 
-  buildInputs = [ ocaml ncurses ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
+  buildInputs = [ ncurses ];
 
   meta = {
     description = "A build system designed for scalability and portability";

@@ -17,6 +17,7 @@
 , libsodium
 , postgresql
 , gmp
+, gobject-introspection
 , foundationdb
 , capnproto
 , nettle
@@ -28,10 +29,12 @@
 , cmake
 , glib
 , freetype
+, fontconfig
 , rdkafka
 , udev
 , libevdev
 , alsa-lib
+, graphene
 , ...
 }:
 
@@ -81,6 +84,7 @@ in
   };
 
   evdev-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libevdev ];
   };
 
@@ -169,6 +173,11 @@ in
     buildInputs = [ udev ];
   };
 
+  graphene-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ graphene gobject-introspection ];
+  };
+
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
@@ -253,7 +262,7 @@ in
 
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ freetype ];
+    buildInputs = [ freetype fontconfig ];
   };
 
   thrussh-libsodium = attrs: {

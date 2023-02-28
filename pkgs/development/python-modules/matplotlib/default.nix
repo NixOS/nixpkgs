@@ -1,7 +1,7 @@
 { lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
 , which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
-, certifi, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
+, certifi, contourpy, pillow, fonttools, setuptools-scm, setuptools-scm-git-archive, packaging
 , enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
@@ -17,7 +17,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.5.3";
+  version = "3.6.2";
   pname = "matplotlib";
   format = "setuptools";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-M5ysSLgN28i/0F2q4KOnNBRlGoWWkEwqiBz9Httl8mw=";
+    sha256 = "sha256-sD/RChcJ0BAcBUiDtVD3xMXpdPdR4mgDGHWa8AWWSZA=";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -45,8 +45,14 @@ buildPythonPackage rec {
     Cocoa
   ];
 
+  # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "strictoverflow"
+  ];
+
   propagatedBuildInputs = [
     certifi
+    contourpy
     cycler
     fonttools
     freetype

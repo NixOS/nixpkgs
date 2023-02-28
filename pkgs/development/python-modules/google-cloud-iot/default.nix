@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.7.0";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vV5emuGcFwUctnPNRW1NSFej599Lc6rFSKAlaaCatZw=";
+    hash = "sha256-Rh23HbHv1FVmiZtyofv0bktv7tZWN3IS5jQawzbFfRk=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

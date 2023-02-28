@@ -95,6 +95,27 @@ installPhase() {
 genericBuild
 ```
 
+### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
+
+To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), use
+
+```bash
+nix-shell '<nixpkgs>' -A some_package
+eval ${unpackPhase:-unpackPhase}
+cd $sourceRoot
+eval ${patchPhase:-patchPhase}
+eval ${configurePhase:-configurePhase}
+eval ${buildPhase:-buildPhase}
+```
+
+To modify a [phase](#sec-stdenv-phases), first print it with
+
+```bash
+type buildPhase
+```
+
+then change it in a text editor, and paste it back to the terminal.
+
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
 
 The standard environment provides the following packages:
@@ -115,6 +136,82 @@ The standard environment provides the following packages:
 On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
+
+Build systems often require more dependencies than just what `stdenv` provides. This section describes attributes accepted by `stdenv.mkDerivation` that can be used to make these dependencies available to the build system.
+
+### Overview {#ssec-stdenv-dependencies-overview}
+
+A full reference of the different kinds of dependencies is provided in [](#ssec-stdenv-dependencies-reference), but here is an overview of the most common ones.
+It should cover most use cases.
+
+Add dependencies to `nativeBuildInputs` if they are executed during the build:
+- those which are needed on `$PATH` during the build, for example `cmake` and `pkg-config`
+- [setup hooks](#ssec-setup-hooks), for example [`makeWrapper`](#fun-makeWrapper)
+- interpreters needed by [`patchShebangs`](#patch-shebangs.sh) for build scripts (with the `--build` flag), which can be the case for e.g. `perl`
+
+Add dependencies to `buildInputs` if they will end up copied or linked into the final output or otherwise used at runtime:
+- libraries used by compilers, for example `zlib`,
+- interpreters needed by [`patchShebangs`](#patch-shebangs.sh) for scripts which are installed, which can be the case for e.g. `perl`
+
+::: {.note}
+These criteria are independent.
+
+For example, software using Wayland usually needs the `wayland` library at runtime, so `wayland` should be added to `buildInputs`.
+But it also executes the `wayland-scanner` program as part of the build to generate code, so `wayland` should also be added to `nativeBuildInputs`.
+:::
+
+Dependencies needed only to run tests are similarly classified between native (executed during build) and non-native (executed at runtime):
+- `nativeCheckInputs` for test tools needed on `$PATH` (such as `ctest`) and [setup hooks](#ssec-setup-hooks) (for example [`pytestCheckHook`](#python))
+- `checkInputs` for libraries linked into test executables (for example the `qcheck` OCaml package)
+
+These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is set to `true`.
+
+#### Example {#ssec-stdenv-dependencies-overview-example}
+
+Consider for example this simplified derivation for `solo5`, a sandboxing tool:
+```nix
+stdenv.mkDerivation rec {
+  pname = "solo5";
+  version = "0.7.5";
+
+  src = fetchurl {
+    url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
+    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
+  };
+
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ libseccomp ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/solo5-virtio-mkimage \
+      --replace "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
+      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux" \
+      --replace "cp " "cp --no-preserve=mode "
+
+    wrapProgram $out/bin/solo5-virtio-mkimage \
+      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+  '';
+
+  doCheck = true;
+  nativeCheckInputs = [ util-linux qemu ];
+  checkPhase = '' [elided] '';
+}
+```
+
+- `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.
+  It is thus executed during the build and must be added to `nativeBuildInputs`.
+- `pkg-config` is a build tool which the configure script of `solo5` expects to be on `$PATH` during the build:
+  therefore, it must be added to `nativeBuildInputs`.
+- `libseccomp` is a library linked into `$out/bin/solo5-elftool`.
+  As it is used at runtime, it must be added to `buildInputs`.
+- Tests need `qemu` and `getopt` (from `util-linux`) on `$PATH`, these must be added to `nativeCheckInputs`.
+- Some dependencies are injected directly in the shell code of phases: `syslinux`, `dosfstools`, `mtools`, and `parted`.
+In this specific case, they will end up in the output of the derivation (`$out` here).
+As Nix marks dependencies whose absolute path is present in the output as runtime dependencies, adding them to `buildInputs` is not required.
+
+For more complex cases, like libraries linked into an executable which is then executed as part of the build system, see [](#ssec-stdenv-dependencies-reference).
+
+### Reference {#ssec-stdenv-dependencies-reference}
 
 As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
 
@@ -187,21 +284,21 @@ Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In
 
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
-### Variables specifying dependencies {#variables-specifying-dependencies}
+#### Variables specifying dependencies {#variables-specifying-dependencies}
 
-#### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
+##### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
 A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
 
 Since these packages are able to be run at build-time, they are always added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
-#### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
+##### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
 A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
-#### `depsBuildTarget` {#var-stdenv-depsBuildTarget}
+##### `depsBuildTarget` {#var-stdenv-depsBuildTarget}
 
 A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s target platform. These are programs used at build time that produce code to run with code produced by the depending package. Most commonly, these are tools used to build the runtime or standard library that the currently-being-built compiler will inject into any code it compiles. In many cases, the currently-being-built-compiler is itself employed for that task, but when that compiler won’t run (i.e. its build and host platform differ) this is not possible. Other times, the compiler relies on some other tool, like binutils, that is always built separately so that the dependency is unconditional.
 
@@ -209,41 +306,41 @@ This is a somewhat confusing concept to wrap one’s head around, and for good r
 
 Since these packages are able to run at build time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
-#### `depsHostHost` {#var-stdenv-depsHostHost}
+##### `depsHostHost` {#var-stdenv-depsHostHost}
 
 A list of dependencies whose host and target platforms match the new derivation’s host platform. In practice, this would usually be tools used by compilers for macros or a metaprogramming system, or libraries used by the macros or metaprogramming code itself. It’s always preferable to use a `depsBuildBuild` dependency in the derivation being built over a `depsHostHost` on the tool doing the building for this purpose.
 
-#### `buildInputs` {#var-stdenv-buildInputs}
+##### `buildInputs` {#var-stdenv-buildInputs}
 
 A list of dependencies whose host platform and target platform match the new derivation’s. This would be called `depsHostTarget` but for historical continuity. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild`.
 
 These are often programs and libraries used by the new derivation at *run*-time, but that isn’t always the case. For example, the machine code in a statically-linked library is only used at run-time, but the derivation containing the library is only needed at build-time. Even in the dynamic case, the library may also be needed at build-time to appease the linker.
 
-#### `depsTargetTarget` {#var-stdenv-depsTargetTarget}
+##### `depsTargetTarget` {#var-stdenv-depsTargetTarget}
 
 A list of dependencies whose host platform matches the new derivation’s target platform. These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about. It’s poor form in almost all cases for a package to depend on another from a future stage \[future stage corresponding to positive offset\]. Do not use this attribute unless you are packaging a compiler and are sure it is needed.
 
-#### `depsBuildBuildPropagated` {#var-stdenv-depsBuildBuildPropagated}
+##### `depsBuildBuildPropagated` {#var-stdenv-depsBuildBuildPropagated}
 
 The propagated equivalent of `depsBuildBuild`. This perhaps never ought to be used, but it is included for consistency \[see below for the others\].
 
-#### `propagatedNativeBuildInputs` {#var-stdenv-propagatedNativeBuildInputs}
+##### `propagatedNativeBuildInputs` {#var-stdenv-propagatedNativeBuildInputs}
 
 The propagated equivalent of `nativeBuildInputs`. This would be called `depsBuildHostPropagated` but for historical continuity. For example, if package `Y` has `propagatedNativeBuildInputs = [X]`, and package `Z` has `buildInputs = [Y]`, then package `Z` will be built as if it included package `X` in its `nativeBuildInputs`. If instead, package `Z` has `nativeBuildInputs = [Y]`, then `Z` will be built as if it included `X` in the `depsBuildBuild` of package `Z`, because of the sum of the two `-1` host offsets.
 
-#### `depsBuildTargetPropagated` {#var-stdenv-depsBuildTargetPropagated}
+##### `depsBuildTargetPropagated` {#var-stdenv-depsBuildTargetPropagated}
 
 The propagated equivalent of `depsBuildTarget`. This is prefixed for the same reason of alerting potential users.
 
-#### `depsHostHostPropagated` {#var-stdenv-depsHostHostPropagated}
+##### `depsHostHostPropagated` {#var-stdenv-depsHostHostPropagated}
 
 The propagated equivalent of `depsHostHost`.
 
-#### `propagatedBuildInputs` {#var-stdenv-propagatedBuildInputs}
+##### `propagatedBuildInputs` {#var-stdenv-propagatedBuildInputs}
 
 The propagated equivalent of `buildInputs`. This would be called `depsHostTargetPropagated` but for historical continuity.
 
-#### `depsTargetTargetPropagated` {#var-stdenv-depsTargetTargetPropagated}
+##### `depsTargetTargetPropagated` {#var-stdenv-depsTargetTargetPropagated}
 
 The propagated equivalent of `depsTargetTarget`. This is prefixed for the same reason of alerting potential users.
 
@@ -253,7 +350,7 @@ The propagated equivalent of `depsTargetTarget`. This is prefixed for the same r
 
 #### `NIX_DEBUG` {#var-stdenv-NIX_DEBUG}
 
-A natural number indicating how much information to log. If set to 1 or higher, `stdenv` will print moderate debugging information during the build. In particular, the `gcc` and `ld` wrapper scripts will print out the complete command line passed to the wrapped tools. If set to 6 or higher, the `stdenv` setup script will be run with `set -x` tracing. If set to 7 or higher, the `gcc` and `ld` wrapper scripts will also be run with `set -x` tracing.
+A number between 0 and 7 indicating how much information to log. If set to 1 or higher, `stdenv` will print moderate debugging information during the build. In particular, the `gcc` and `ld` wrapper scripts will print out the complete command line passed to the wrapped tools. If set to 6 or higher, the `stdenv` setup script will be run with `set -x` tracing. If set to 7 or higher, the `gcc` and `ld` wrapper scripts will also be run with `set -x` tracing.
 
 ### Attributes affecting build properties {#attributes-affecting-build-properties}
 
@@ -626,7 +723,7 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 ### The check phase {#ssec-check-phase}
 
-The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make check`, but only if the `doCheck` variable is enabled.
+The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](#var-stdenv-doCheck) is enabled.
 
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
@@ -646,7 +743,8 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 
 ##### `checkTarget` {#var-stdenv-checkTarget}
 
-The make target that runs the tests. Defaults to `check`.
+The `make` target that runs the tests.
+If unset, use `check` if it exists, otherwise `test`; if neither is found, do nothing.
 
 ##### `checkFlags` / `checkFlagsArray` {#var-stdenv-checkFlags}
 
@@ -654,7 +752,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `checkInputs` {#var-stdenv-checkInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doCheck` is set.
+
+##### `nativeCheckInputs` {#var-stdenv-nativeCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doCheck` is set.
 
 ##### `preCheck` {#var-stdenv-preCheck}
 
@@ -821,7 +923,11 @@ A list of strings passed as additional flags to `make`. Like `makeFlags` and `ma
 
 ##### `installCheckInputs` {#var-stdenv-installCheckInputs}
 
-A list of dependencies used by the phase. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
+A list of host dependencies used by the phase, usually libraries linked into executables built during tests. This gets included in `buildInputs` when `doInstallCheck` is set.
+
+##### `nativeInstallCheckInputs` {#var-stdenv-nativeInstallCheckInputs}
+
+A list of native dependencies used by the phase, notably tools needed on `$PATH`. This gets included in `nativeBuildInputs` when `doInstallCheck` is set.
 
 ##### `preInstallCheck` {#var-stdenv-preInstallCheck}
 
@@ -993,6 +1099,32 @@ someVar=$(stripHash $name)
 Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
+
+### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
+
+Prepend elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-dependency-tracking --enable-foo --disable-static
+```
+
+### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
+
+Append elements to a variable.
+
+Example:
+
+```shellSession
+$ configureFlags="--disable-static"
+$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-static --disable-dependency-tracking --enable-foo
+```
 
 ## Package setup hooks {#ssec-setup-hooks}
 
@@ -1197,7 +1329,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 
 Adds the `-O2 -D_FORTIFY_SOURCE=2` compiler options. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain `%n` are blocked. If an application depends on such a format string, it will need to be worked around.
 
-Additionally, some warnings are enabled which might trigger build failures if compiler warnings are treated as errors in the package build. In this case, set `NIX_CFLAGS_COMPILE` to `-Wno-error=warning-type`.
+Additionally, some warnings are enabled which might trigger build failures if compiler warnings are treated as errors in the package build. In this case, set `env.NIX_CFLAGS_COMPILE` to `-Wno-error=warning-type`.
 
 This needs to be turned off or fixed for errors similar to:
 

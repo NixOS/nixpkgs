@@ -2,7 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, jupyter_server
+, jupyter-server
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
   ];
   # tests require network
   doCheck = false;

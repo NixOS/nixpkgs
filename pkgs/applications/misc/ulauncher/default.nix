@@ -55,14 +55,14 @@ python3Packages.buildPythonApplication rec {
     dbus-python
     pygobject3
     pyinotify
-    python-Levenshtein
+    levenshtein
     pyxdg
     pycairo
     requests
     websocket-client
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest
     pytest-mock

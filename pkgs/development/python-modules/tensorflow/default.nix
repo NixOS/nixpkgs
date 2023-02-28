@@ -6,7 +6,7 @@
 , numpy, tensorboard, absl-py
 , packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator-bin
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
@@ -18,7 +18,7 @@
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , cudaSupport ? false, cudaPackages ? {}
-, mklSupport ? false, mkl ? null
+, mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
@@ -38,8 +38,6 @@ assert cudaSupport -> cudatoolkit != null
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
-
-assert mklSupport -> mkl != null;
 
 let
   withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
@@ -74,8 +72,8 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.1";
-  variant = if cudaSupport then "-gpu" else "";
+  version = "2.11.0";
+  variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
@@ -98,7 +96,7 @@ let
       six
       tblib
       tensorboard
-      tensorflow-estimator
+      tensorflow-estimator-bin
       termcolor
       typing-extensions
       wheel
@@ -187,8 +185,8 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
-      rev = "v${version}";
-      hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-OYh61/83yv+ycivylfdS8yFUIUAk8euAPvmfjPzldGs=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -303,7 +301,7 @@ let
     TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
     GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArchs;
+    TF_CUDA_COMPUTE_CAPABILITIES = builtins.concatStringsSep "," cudaFlags.cudaRealArches;
 
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
@@ -319,7 +317,7 @@ let
     '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
-    NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
 
     preConfigure = let
       opt_flags = []
@@ -372,11 +370,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-Q6a/Q4fr5cmqqkIoL8ZBJOKfF4NXnrhqFi2VgUpHC3E="
-        else "sha256-RBrmxWBn5Yj5fIHlPYXuWOFMTqDGbgk+IvUXk7kIXHM=";
-      aarch64-linux = "sha256-MEkn2DplUW1R95q+A6uuIKNtMEBv08jU8kvTbMgIKJU=";
-      x86_64-darwin = "sha256-bqZTu0AABeg6M2IVwlkUPuF8EMsbQXurcmjWZY0EN9E=";
-      aarch64-darwin = "sha256-q1PfVqyZ3KG65aKw6l9vhxCfPoxH6Nb5y1Eh9P8Ovqk=";
+        then "sha256-/wB9EpaDPg3TrD9qggdA4vPgzvmaKc6dDnLjoYTJC5o="
+        else "sha256-QgOaUaq0V5HG9BOv9nEw8OTSlzINNFvbnyP8Vx+r9Xw=";
+      aarch64-linux = "sha256-zjnRtTG1j9cZTbP0Xnk2o/zWTNsP8T0n4Ai8IiAT3PE=";
+      x86_64-darwin = "sha256-RBLox9rzBKcZMm4NwnT7vQ/EjapWQJkqxuQ0LIdaM1E=";
+      aarch64-darwin = "sha256-BRzh79lYvMHsUMk8BEYDLHTpnmeZ9+0lrDtj4XI1YY4=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -419,6 +417,7 @@ let
     };
 
     meta = with lib; {
+      changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
@@ -438,11 +437,13 @@ in buildPythonPackage {
   src = bazel-build.python;
 
   # Adjust dependency requirements:
+  # - Drop tensorflow-io dependency until we get it to build
   # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
+      -e '/tensorflow-io-gcs-filesystem/,+1d' \
       -e "s/'flatbuffers[^']*',/'flatbuffers',/" \
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
@@ -476,7 +477,7 @@ in buildPythonPackage {
     packaging
     protobuf-python
     six
-    tensorflow-estimator
+    tensorflow-estimator-bin
     termcolor
     typing-extensions
     wrapt
@@ -499,7 +500,7 @@ in buildPythonPackage {
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
   # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     keras
     portpicker

@@ -1,0 +1,29 @@
+diff -Naur source-old/pyproject.toml source-new/pyproject.toml
+--- source-old/pyproject.toml	1980-01-02 00:00:00.000000000 -0300
++++ source-new/pyproject.toml	2023-02-04 10:09:48.087418202 -0300
+@@ -29,11 +29,11 @@
+     "Topic :: Security",
+ ]
+ dependencies = [
+-    "pydantic~=1.10.2",
+-    "python-dotenv~=0.21.0",
+-    "requests~=2.28.1",
+-    "rich~=12.6.0",
+-    "shodan~=1.28.0",
++    "pydantic",
++    "python-dotenv",
++    "requests",
++    "rich",
++    "shodan",
+ ]
+ dynamic = ["version"]
+ 
+@@ -63,7 +63,7 @@
+     "mypy",
+     "pytest",
+     "pytest-cov",
+-    "types-requests~=2.28.1",
++    "types-requests",
+ ]
+ [tool.hatch.envs.default.scripts]
+ typecheck = "mypy -p {args:wtfis}"

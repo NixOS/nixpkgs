@@ -34,7 +34,7 @@ buildPythonPackage rec {
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     deepmerge
     pytest-asyncio

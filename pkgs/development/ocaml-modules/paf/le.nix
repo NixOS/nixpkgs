@@ -1,6 +1,7 @@
 { lib
 , buildDunePackage
 , paf
+, dns-client
 , duration
 , emile
 , httpaf
@@ -23,6 +24,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     paf
+    dns-client
     duration
     emile
     httpaf

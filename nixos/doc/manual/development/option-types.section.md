@@ -36,9 +36,8 @@ merging is handled.
     together. This type is recommended when the option type is unknown.
 
     ::: {#ex-types-anything .example}
-    ::: {.title}
     **Example: `types.anything` Example**
-    :::
+
     Two definitions of this type like
 
     ```nix
@@ -357,9 +356,7 @@ you will still need to provide a default value (e.g. an empty attribute set)
 if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
-::: {.title}
 **Example: Directly defined submodule**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -378,9 +375,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-reference .example}
-::: {.title}
 **Example: Submodule defined as a reference**
-:::
 ```nix
 let
   modOptions = {
@@ -408,9 +403,7 @@ multiple definitions of the submodule option set
 ([Example: Definition of a list of submodules](#ex-submodule-listof-definition)).
 
 ::: {#ex-submodule-listof-declaration .example}
-::: {.title}
 **Example: Declaration of a list of submodules**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -429,9 +422,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-listof-definition .example}
-::: {.title}
 **Example: Definition of a list of submodules**
-:::
 ```nix
 config.mod = [
   { foo = 1; bar = "one"; }
@@ -446,9 +437,7 @@ multiple named definitions of the submodule option set
 ([Example: Definition of attribute sets of submodules](#ex-submodule-attrsof-definition)).
 
 ::: {#ex-submodule-attrsof-declaration .example}
-::: {.title}
 **Example: Declaration of attribute sets of submodules**
-:::
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -467,9 +456,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
-::: {.title}
 **Example: Definition of attribute sets of submodules**
-:::
 ```nix
 config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };
@@ -489,9 +476,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
     ::: {#ex-extending-type-check-1 .example}
-    ::: {.title}
     **Example: Adding a type check**
-    :::
+
     ```nix
     byte = mkOption {
       description = "An integer between 0 and 255.";
@@ -501,9 +487,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     :::
 
     ::: {#ex-extending-type-check-2 .example}
-    ::: {.title}
     **Example: Overriding a type check**
-    :::
+
     ```nix
     nixThings = mkOption {
       description = "words that start with 'nix'";

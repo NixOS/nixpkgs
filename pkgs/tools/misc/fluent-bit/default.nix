@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-kgjLjGloudigDTP6K4W8Tv42uK/dHyH1W2aI9+uh/ws=";
+    sha256 = "sha256-jHbxROO21cgbhEiWv9wQJyHWGGK14nGQuk9Fc9ufHqg=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" "-DFLB_OUT_PGSQL=ON"  ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-O" ]
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-O" ]
     # Workaround build failure on -fno-common toolchains:
     #   ld: /monkey/mk_tls.h:81: multiple definition of `mk_tls_server_timeout';
     #     flb_config.c.o:include/monkey/mk_tls.h:81: first defined here
     # TODO: drop when upstream gets a fix for it:
     #   https://github.com/fluent/fluent-bit/issues/5537
-    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
 
   outputs = [ "out" "dev" ];
 

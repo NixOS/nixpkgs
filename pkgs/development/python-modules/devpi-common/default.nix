@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O015TOlvFcN7hxwV4SgGmo6vanMuWb+i9KZOYhYZLJM=";
+    sha256 = "sha256-kHiYknmteenBgce63EpzhGBEUYcQHrDLreZ1k01eRkQ=";
   };
 
   postPatch = ''
@@ -25,7 +25,8 @@ buildPythonPackage rec {
     lazy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
   ];
 

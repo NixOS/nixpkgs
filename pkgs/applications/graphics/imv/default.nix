@@ -11,7 +11,7 @@
 , icu
 , pango
 , inih
-, withWindowSystem ? "all"
+, withWindowSystem ? null
 , xorg
 , libxkbcommon
 , libGLU
@@ -27,6 +27,12 @@
 }:
 
 let
+  # default value of withWindowSystem
+  withWindowSystem' =
+         if withWindowSystem != null then withWindowSystem
+    else if stdenv.isLinux then "all"
+    else "x11";
+
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [ libGLU xorg.libxcb xorg.libX11 ];
@@ -47,7 +53,7 @@ let
 in
 
 # check that given window system is valid
-assert lib.assertOneOf "withWindowSystem" withWindowSystem
+assert lib.assertOneOf "withWindowSystem" withWindowSystem'
   (builtins.attrNames windowSystems);
 # check that every given backend is valid
 assert builtins.all
@@ -56,18 +62,18 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.3.1";
+  version = "4.4.0";
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~exec64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "sha256-gMAd8skst72QT4jGFH7aRdWeAd4tf/uQgXhGaM/Dpgc=";
+    sha256 = "sha256-LLEEbriHzZhAOQivqHqdr6g7lh4uj++ytlme8AfRjf4=";
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
+    "-Dwindows=${withWindowSystem'}"
     "-Dtest=enabled"
     "-Dman=enabled"
   ] ++ backendFlags;
@@ -87,7 +93,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
     inih
-  ] ++ windowSystems."${withWindowSystem}"
+  ] ++ windowSystems."${withWindowSystem'}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''
@@ -96,7 +102,7 @@ stdenv.mkDerivation rec {
     install -Dm644 ../files/imv.desktop $out/share/applications/
   '';
 
-  postFixup = lib.optionalString (withWindowSystem == "all") ''
+  postFixup = lib.optionalString (withWindowSystem' == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
@@ -109,9 +115,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line image viewer for tiling window managers";
-    homepage = "https://github.com/eXeC64/imv";
+    homepage = "https://sr.ht/~exec64/imv/";
     license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
     platforms = platforms.all;
+    badPlatforms = platforms.darwin;
   };
 }

@@ -73,7 +73,7 @@ buildPythonPackage rec {
     quimb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     freezegun

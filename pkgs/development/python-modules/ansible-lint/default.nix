@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.10.2";
+  version = "6.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4ihEmsLxDRwW3zXEdpKCtSmsH+K1B2czP60chaYt9nE=";
+    hash = "sha256-Q1wStP2I2oFa9oIfO/iwTrtlGBHaiaEcnRkLr/Ibrao=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-xdist
     pytestCheckHook

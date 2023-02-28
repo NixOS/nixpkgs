@@ -17,8 +17,6 @@
 , libdrm
 , libjpeg_turbo
 , libopus
-, withLibsoup2 ? false
-, libsoup
 , libsoup_3
 , libusb1
 , lz4
@@ -27,7 +25,6 @@
 , ninja
 , openssl
 , perl
-, phodav_2_0
 , phodav
 , pixman
 , pkg-config
@@ -120,11 +117,11 @@ stdenv.mkDerivation rec {
     libcacard
     libjpeg_turbo
     libopus
-    (if withLibsoup2 then libsoup else libsoup_3)
+    libsoup_3
     libusb1
     lz4
     openssl
-    (if withLibsoup2 then phodav_2_0 else phodav)
+    phodav
     pixman
     spice-protocol
     usbredir

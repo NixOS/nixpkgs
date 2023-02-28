@@ -11,7 +11,7 @@
 , perl
 , luajit
 , darwin
-, python37
+, python3
 }:
 
 let
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python37
+    gettext ncurses cscope luajit ruby tcl perl python3
   ];
 
   patches = [ ./macvim.patch ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
       "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-python3-command=${python37}/bin/python3"
+      "--with-python3-command=${python3}/bin/python3"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
@@ -159,7 +159,7 @@ stdenv.mkDerivation {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python37}/lib $exe
+    install_name_tool -add_rpath ${python3}/lib $exe
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 

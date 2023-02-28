@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pysmbc";
-  version = "1.0.24";
+  version = "1.0.25.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zq3o1hHmPXKnXSYrNCptyDa2+AqzjqX9WtRD4ve+LO0=";
+    hash = "sha256-IvFxXfglif2cxCU/6rOQtO8Lq/FPZFE82NB7N4mWMiY=";
   };
 
   nativeBuildInputs = [

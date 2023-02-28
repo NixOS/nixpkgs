@@ -34,7 +34,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
   ];

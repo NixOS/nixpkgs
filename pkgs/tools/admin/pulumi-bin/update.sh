@@ -3,8 +3,8 @@
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
-if [ -z "${GITHUB_TOKEN}" ]; then
-  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh"
+if [ -z "${GITHUB_TOKEN}" ] || [ $# -ne 1 ]; then
+  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh pulumi-version"
   exit 1
 fi
 
@@ -12,7 +12,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.49.0"
+VERSION=$1
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.

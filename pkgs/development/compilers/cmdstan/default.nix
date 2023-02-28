@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_BOOST_LGAMMA";
 

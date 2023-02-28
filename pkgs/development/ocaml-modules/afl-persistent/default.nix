@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "06yyds2vcwlfr2nd3gvyrazlijjcrd1abnvkfpkaadgwdw3qam1i";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ ocaml findlib ];
 
   # don't run tests in buildPhase

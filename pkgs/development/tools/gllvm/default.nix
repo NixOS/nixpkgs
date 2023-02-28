@@ -11,9 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-CoreqnMRuPuv+Ci1uyF3HJCJFwK2jwB79okynv6AHTA=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
-  checkInputs = with llvmPackages; [
+  nativeCheckInputs = with llvmPackages; [
     clang
     llvm
   ] ++ lib.optionals stdenv.isDarwin [ getconf ];

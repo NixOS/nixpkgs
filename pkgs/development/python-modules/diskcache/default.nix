@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytest-xdist
     pytestCheckHook

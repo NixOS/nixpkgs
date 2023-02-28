@@ -58,7 +58,7 @@ with a nix-shell that has `numpy` and `toolz` in Python 3.9; then we will create
 a re-usable environment in a single-file Python script; then we will create a
 full Python environment for development with this same environment.
 
-Philosphically, this should be familiar to users who are used to a `venv` style
+Philosophically, this should be familiar to users who are used to a `venv` style
 of development: individual projects create their own Python environments without
 impacting the global environment or each other.
 
@@ -436,7 +436,7 @@ arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
 something is exclusively a build-time dependency, then the dependency should be
 included in `buildInputs`, but if it is (also) a runtime dependency, then it
 should be added to `propagatedBuildInputs`. Test dependencies are considered
-build-time dependencies and passed to `checkInputs`.
+build-time dependencies and passed to `nativeCheckInputs`.
 
 The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -453,7 +453,7 @@ buildPythonPackage rec {
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
 
   meta = with lib; {
@@ -466,7 +466,7 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have one `checkInputs`, i.e. `pytest`. `pytest` is a
+`python-dateutil`. Furthermore, we have one `nativeCheckInputs`, i.e. `pytest`. `pytest` is a
 test runner and is only used during the `checkPhase` and is therefore not added
 to `propagatedBuildInputs`.
 
@@ -569,7 +569,7 @@ Pytest is the most common test runner for python repositories. A trivial
 test run would be:
 
 ```
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     runHook preCheck
 
@@ -585,7 +585,7 @@ sandbox, and will generally need many tests to be disabled.
 To filter tests using pytest, one can do the following:
 
 ```
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   # avoid tests which need additional data or touch network
   checkPhase = ''
     runHook preCheck
@@ -618,7 +618,7 @@ when a package may need many items disabled to run the test suite.
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # requires additional data
   pytestFlagsArray = [ "tests/" "--ignore=tests/integration" ];
@@ -744,17 +744,17 @@ work in any of the formats supported by `buildPythonPackage` currently,
 with the exception of `other` (see `format` in
 [`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
 
-### Using unittestCheckHook {#using-unittestcheckhook}
+#### Using unittestCheckHook {#using-unittestcheckhook}
 
 `unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
 
 ```
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlags = [ "-s" "tests" "-v" ];
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
 ```
 
-##### Using sphinxHook {#using-sphinxhook}
+#### Using sphinxHook {#using-sphinxhook}
 
 The `sphinxHook` is a helpful tool to build documentation and manpages
 using the popular Sphinx documentation generator.
@@ -1006,7 +1006,7 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  checkInputs = [ hypothesis ];
+  nativeCheckInputs = [ hypothesis ];
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
@@ -1019,7 +1019,7 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
@@ -1028,7 +1028,7 @@ The `buildPythonPackage` mainly does four things:
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
-e.g. the test runner, should be added to `checkInputs`.
+e.g. the test runner, should be added to `nativeCheckInputs`.
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
@@ -1082,7 +1082,7 @@ because their behaviour is different:
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
-* `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
+* `nativeCheckInputs ? []`: Dependencies needed for running the `checkPhase`. These
   are added to `nativeBuildInputs` when `doCheck = true`. Items listed in
   `tests_require` go here.
 * `propagatedBuildInputs ? []`: Aside from propagating dependencies,
@@ -1416,7 +1416,7 @@ example of such a situation is when `py.test` is used.
   buildPythonPackage {
     # ...
     # assumes the tests are located in tests
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     checkPhase = ''
       runHook preCheck
 
@@ -1546,7 +1546,7 @@ of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 
 ```shell
-${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+${python.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data\_files/d' setup.py
 ```
 
@@ -1768,7 +1768,7 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 * `setup_requires` corresponds to `nativeBuildInputs`
 * `install_requires` corresponds to `propagatedBuildInputs`
-* `tests_require` corresponds to `checkInputs`
+* `tests_require` corresponds to `nativeCheckInputs`
 
 ## Contributing {#contributing}
 
@@ -1820,6 +1820,11 @@ hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 
 Updating packages in bulk leads to lots of breakages, which is why a
 stabilization period on the `python-unstable` branch is required.
+
+If a package is fragile and often breaks during these bulks updates, it
+may be reasonable to set `passthru.skipBulkUpdate = true` in the
+derivation. This decision should not be made on a whim and should
+always be supported by a qualifying comment.
 
 Once the branch is sufficiently stable it should normally be merged
 into the `staging` branch.

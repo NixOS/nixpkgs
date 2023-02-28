@@ -1,5 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonApplication, qt5
-, legendary-gl, pypresence, pyqt5, python, qtawesome, requests, typing-extensions }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, qt5
+, legendary-gl
+, pypresence
+, pyqt5
+, python
+, qtawesome
+, requests
+, typing-extensions
+}:
 
 buildPythonApplication rec {
   pname = "rare";
@@ -25,7 +35,11 @@ buildPythonApplication rec {
     typing-extensions
   ];
 
-  patches = [ ./fix-instance.patch ];
+  patches = [
+    ./fix-instance.patch
+    # Not able to run pythonRelaxDepsHook because of https://github.com/NixOS/nixpkgs/issues/198342
+    ./legendary-gl-version.patch
+  ];
 
   dontWrapQtApps = true;
 

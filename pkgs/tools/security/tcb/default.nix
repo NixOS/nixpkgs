@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
       --replace "PREFIX = /usr" "PREFIX = $out" \
       --replace "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
       --replace "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
+
+    # Override default 'CC=gcc'
+    makeFlagsArray+=("CC=$CC")
   '';
 
   meta = with lib; {
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openwall.com/tcb/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = systems.inspect.patterns.isGnu;
     maintainers = with maintainers; [ izorkin ];
   };
 }

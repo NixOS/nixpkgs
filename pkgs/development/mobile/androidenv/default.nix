@@ -19,4 +19,6 @@ rec {
     platformVersions = [ "28" ];
     abiVersions = [ "x86" "x86_64"];
   };
+
+  test-suite = pkgs.callPackage ./test-suite.nix {};
 }

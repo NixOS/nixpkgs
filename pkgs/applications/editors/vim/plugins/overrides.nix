@@ -68,6 +68,9 @@
   # nvim-treesitter dependencies
 , callPackage
 
+  # sg.nvim dependencies
+, darwin
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -113,7 +116,7 @@
 
 self: super: {
 
-  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+  barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
       description = "A VS Code like winbar for Neovim";
@@ -484,8 +487,8 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
+  harpoon = super.harpoon.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
@@ -504,6 +507,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = lib.licenses.mit;
     };
+  });
+
+  jellybeans-nvim = super.jellybeans-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   LanguageClient-neovim =
@@ -697,6 +704,10 @@ self: super: {
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
 
+  nvim-ufo = super.nvim-ufo.overrideAttrs (old: {
+    dependencies = with self; [ promise-async ];
+  });
+
   octo-nvim = super.octo-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   });
@@ -743,6 +754,34 @@ self: super: {
       (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
     ];
   });
+
+  sg-nvim = super.sg-nvim.overrideAttrs (old:
+    let
+      sg-nvim-rust = rustPlatform.buildRustPackage {
+        pname = "sg-nvim-rust";
+        inherit (old) version src;
+
+        cargoHash = "sha256-nm9muH4RC92HdUiytmcW0WNyMQJcIH6dgwjUrwcqq4I=";
+
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
+
+        cargoBuildFlags = [ "--workspace" ];
+
+        # tests are broken
+        doCheck = false;
+      };
+    in
+    {
+      dependencies = with self; [ plenary-nvim ];
+      postInstall = ''
+        mkdir -p $out/target/debug
+        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
+      '';
+    });
 
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
@@ -910,6 +949,10 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-undo-nvim = super.telescope-undo-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+  });
+
   telescope-z-nvim = super.telescope-z-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
   });
@@ -959,6 +1002,11 @@ self: super: {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
     });
+
+  unison = super.unison.overrideAttrs (old: {
+    # Editor stuff isn't at top level
+    postPatch = "cd editor-support/vim";
+  });
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
@@ -1052,7 +1100,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-5hez6snn0neQEE3W8PbwUoGeSj8Bvu23Ftxz5T0iPAw=";
+          cargoSha256 = "sha256-MR9n2+B2TUNnWxZhBbXZCBereLxYntBxLfx9g14vDUw=";
         };
       in
       ''
@@ -1162,7 +1210,7 @@ self: super: {
         hexokinase = buildGoModule {
           name = "hexokinase";
           src = old.src + "/hexokinase";
-          vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+          vendorSha256 = null;
         };
       in
       ''
@@ -1302,6 +1350,15 @@ self: super: {
 
   vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = with self; [ vimproc-vim ];
+  });
+
+  vim-trailing-whitespace = super.vim-trailing-whitespace.overrideAttrs (old: {
+    patches = [(fetchpatch {
+      # https://github.com/bronson/vim-trailing-whitespace/pull/30
+      name = "fix-add-dynamic-TerminalOpen-for-both-vim-and-nvim.patch";
+      url = "https://github.com/bronson/vim-trailing-whitespace/commit/99ef803ebdc01d62b418a3e9386d5f10797bfac3.patch";
+      hash = "sha256-cyanHUKxhbY8c6EkAbpUq7QcEBQABCwZ6NoEUOpd2F8=";
+    })];
   });
 
   vim-zettel = super.vim-zettel.overrideAttrs (old: {

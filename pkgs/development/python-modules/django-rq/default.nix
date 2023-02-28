@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "django-rq";
-  version = "2.5.1";
+  version = "2.7.0";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4oc3zco/j4lnAiooW87rU6xkzGSGCj3fIyikjiKQNZk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MUIwgG8GKL+V5GgiC7gZXn5tlSVrmTj/IFiP+hVB7Ks=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";
+    changelog = "https://github.com/rq/django-rq/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

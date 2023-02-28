@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ] ++ passthru.optional-dependencies.grpc;

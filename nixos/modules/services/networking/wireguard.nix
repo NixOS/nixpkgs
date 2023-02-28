@@ -176,7 +176,7 @@ let
 
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-        type = types.str;
+        type = types.singleLineStr;
         description = lib.mdDoc "The base64 public key of the peer.";
       };
 

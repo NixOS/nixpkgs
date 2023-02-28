@@ -12,6 +12,7 @@
 , "mail"
 , "news"
 , "notes"
+, "notify_push"
 , "onlyoffice"
 , "polls"
 , "registration"

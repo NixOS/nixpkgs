@@ -31,7 +31,7 @@ buildGoModule rec {
     make man
   '';
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     unset subPackages

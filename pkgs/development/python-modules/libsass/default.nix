@@ -26,7 +26,7 @@ buildPythonPackage rec {
     export SYSTEM_SASS=true;
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     werkzeug
   ];

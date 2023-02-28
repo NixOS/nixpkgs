@@ -23,7 +23,7 @@ buildPythonPackage {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     hacking
     jsonschema

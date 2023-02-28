@@ -20,7 +20,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cppy" ];
 

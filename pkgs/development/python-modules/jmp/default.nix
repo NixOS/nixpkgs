@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "jmp"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     pytestCheckHook
   ];

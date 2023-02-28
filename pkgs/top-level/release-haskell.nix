@@ -39,9 +39,7 @@ let
       attrs:
         if lib.isDerivation attrs
         then [ attrs ]
-        else if lib.isAttrs attrs
-        then accumulateDerivations (lib.attrValues attrs)
-        else []
+        else lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
     ) jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
@@ -54,6 +52,7 @@ let
     ghc902
     ghc924
     ghc925
+    ghc926
     ghc944
   ];
 
@@ -333,8 +332,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc924 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc924)
+            haskell.packages.native-bignum.ghc926 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc926)
                 hello
                 lens
                 random
@@ -387,11 +386,20 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+      ghc-tags = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc944
+      ];
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc924
         compilerNames.ghc925
+        compilerNames.ghc926
       ];
     })
     {
@@ -461,11 +469,13 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc902
           jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
+          jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -481,7 +491,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc924
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc926
         ];
       };
     }

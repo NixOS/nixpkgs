@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xchm";
-  version = "1.33";
+  version = "1.35";
 
   src = fetchFromGitHub {
     owner = "rzvncj";
     repo = "xCHM";
     rev = version;
-    sha256 = "sha256-8HQaXxZQwfBaWc22GivKri1vZEnZ23anSfriCvmLHHw=";
+    sha256 = "sha256-ZJvlllhF7KPz+v6KEVPyJjiz+4LHM2Br/oqI54a2Ews=";
   };
 
   nativeBuildInputs = [

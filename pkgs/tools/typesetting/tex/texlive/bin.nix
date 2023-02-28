@@ -53,7 +53,8 @@ let
     '';
   };
 
-  withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit);
+  # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
+  withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
 in rec { # un-indented
 
 inherit (common) cleanBrokenLinks;
@@ -238,7 +239,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     "xetex"
   ];
   postInstall = ''
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
       mkdir -p "''${!output}/bin"
     done
 

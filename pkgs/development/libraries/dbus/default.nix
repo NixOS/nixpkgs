@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , audit
 , libapparmor

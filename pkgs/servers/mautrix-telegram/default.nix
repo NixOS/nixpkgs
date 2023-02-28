@@ -2,34 +2,36 @@
 , python3
 , fetchFromGitHub
 , withE2BE ? true
-, withHQthumbnails ? false
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.27.0a1";
+        version = "1.28.0a1";
         pname = "tulir-telethon";
         src = super.fetchPypi {
           inherit pname version;
-          sha256 = "sha256-tABAY4UlTyMK1ZafIFawegjBAtcnq3HMNbE1L6WaT3E=";
+          hash = "sha256-Kf7S5nSvedhA5RYt5rbTxBiQq6DGwHJ5uEYxd9AsYIc=";
         };
         doCheck = false;
       });
     };
   };
-in python.pkgs.buildPythonPackage rec {
+in
+python.pkgs.buildPythonPackage {
   pname = "mautrix-telegram";
-  version = "0.12.2";
+  version = "unstable-2023-02-16";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    rev = "v${version}";
-    sha256 = "sha256-htCk0VLr6GfXbpYWF/2bmpko7gSVlkH6HwDjOMhW8is=";
+    rev = "354b49d9e5f91f913b5fdf9288bc631a9a34d142";
+    hash = "sha256-zdK/0jgw++YwSzP8qs1BqInQlFOoM63TeI1jF1AqDnk=";
   };
+
+  format = "setuptools";
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
 
@@ -43,19 +45,21 @@ in python.pkgs.buildPythonPackage rec {
     tulir-telethon
     asyncpg
     Mako
-    # optional
+    # speedups
     cryptg
-    cchardet
     aiodns
     brotli
+    # qr_login
     pillow
     qrcode
+    # formattednumbers
     phonenumbers
+    # metrics
     prometheus-client
+    # sqlite
     aiosqlite
-  ] ++ lib.optionals withHQthumbnails [
-    moviepy
   ] ++ lib.optionals withE2BE [
+    # e2be
     python-olm
     pycryptodome
     unpaddedbase64

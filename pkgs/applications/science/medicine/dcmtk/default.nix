@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   # This is only needed until https://github.com/DCMTK/dcmtk/pull/75/files is merged
   patches = [ ./0001-Fix-cmake.patch ];
 
+  doCheck = true;
+
   meta = {
     description =
       "Collection of libraries and applications implementing large parts of the DICOM standard";

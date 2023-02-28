@@ -31,7 +31,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     requests-mock

@@ -14,6 +14,7 @@
 , pcre2
 , libxml2
 , librsvg
+, libgee
 , callPackage
 , python3
 , gtk3
@@ -26,14 +27,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "0.12.2";
+  version = "0.13.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
     rev = "v${version}";
-    sha256 = "sha256-4/rtviBv5KXheLLExxOvaF0wU87eRKMNxlYCVxuIQgU=";
+    hash = "sha256-WeR7zdYdRWBR+kmxLjRFE6QII9RdBig7wrbVoCPA5go=";
   };
 
   postPatch = ''
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     pcre2
     libxml2
     librsvg
+    libgee
   ];
 
   meta = with lib; {

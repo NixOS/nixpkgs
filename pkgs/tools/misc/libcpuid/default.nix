@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
-    homepage = "http://libcpuid.sourceforge.net/";
+    homepage = "https://libcpuid.sourceforge.net/";
     description = "A small C library for x86 CPU detection and feature extraction";
     changelog = "https://raw.githubusercontent.com/anrieff/libcpuid/master/ChangeLog";
     license = licenses.bsd2;

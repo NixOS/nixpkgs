@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     rsync
   ] ++ (with python3.pkgs; [
     boto

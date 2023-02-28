@@ -1,0 +1,259 @@
+diff --git ruma-appservice-api/Cargo.toml ruma-appservice-api/Cargo.toml
+index b48852c8..8641bc42 100644
+--- ruma-appservice-api/Cargo.toml
++++ ruma-appservice-api/Cargo.toml
+@@ -23,11 +23,11 @@ unstable-msc2409 = []
+ unstable-msc3202 = []
+ 
+ [dependencies]
+-js_int = { workspace = true, features = ["serde"] }
++js_int = { version = "0.2.2", features = ["serde"] }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["api", "events"] }
+-serde = { workspace = true }
+-serde_json = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87" }
+ 
+ [dev-dependencies]
+-assert_matches = { workspace = true }
++assert_matches = { version = "1.5.0" }
+ serde_yaml = "0.9.14"
+diff --git ruma-client-api/Cargo.toml ruma-client-api/Cargo.toml
+index ddd2e44b..5756c055 100644
+--- ruma-client-api/Cargo.toml
++++ ruma-client-api/Cargo.toml
+@@ -31,16 +31,16 @@ client = []
+ server = []
+ 
+ [dependencies]
+-assign = { workspace = true }
++assign = { version = "1.1.1" }
+ bytes = "1.0.1"
+-http = { workspace = true }
+-js_int = { workspace = true, features = ["serde"] }
++http = { version = "0.2.8" }
++js_int = { version = "0.2.2", features = ["serde"] }
+ js_option = "0.1.1"
+-maplit = { workspace = true }
++maplit = { version = "1.0.2" }
+ percent-encoding = "2.1.0"
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["api", "events"] }
+-serde = { workspace = true }
+-serde_json = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87" }
+ 
+ [dev-dependencies]
+-assert_matches = { workspace = true }
++assert_matches = { version = "1.5.0" }
+diff --git ruma-common/Cargo.toml ruma-common/Cargo.toml
+index 83f22461..4ba11cfb 100644
+--- ruma-common/Cargo.toml
++++ ruma-common/Cargo.toml
+@@ -48,15 +48,15 @@ unstable-sanitize = ["dep:html5ever", "dep:phf"]
+ unstable-unspecified = []
+ 
+ [dependencies]
+-base64 = { workspace = true }
++base64 = { version = "0.20.0" }
+ bytes = "1.0.1"
+ form_urlencoded = "1.0.0"
+ getrandom = { version = "0.2.6", optional = true }
+ html5ever = { version = "0.25.2", optional = true }
+-http = { workspace = true, optional = true }
++http = { version = "0.2.8", optional = true }
+ indexmap = { version = "1.9.1", features = ["serde"] }
+ itoa = "1.0.1"
+-js_int = { workspace = true, features = ["serde"] }
++js_int = { version = "0.2.2", features = ["serde"] }
+ js_option = "0.1.0"
+ konst = { version = "0.2.19", features = ["rust_1_64", "alloc"] }
+ percent-encoding = "2.1.0"
+@@ -66,25 +66,25 @@ rand = { version = "0.8.3", optional = true }
+ regex = { version = "1.5.6", default-features = false, features = ["std", "perf"] }
+ ruma-identifiers-validation = { version = "0.9.0", path = "../ruma-identifiers-validation", default-features = false }
+ ruma-macros = { version = "0.10.5", path = "../ruma-macros" }
+-serde = { workspace = true }
+-serde_json = { workspace = true, features = ["raw_value"] }
+-thiserror = { workspace = true }
+-tracing = { workspace = true, features = ["attributes"] }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87", features = ["raw_value"] }
++thiserror = { version = "1.0.37" }
++tracing = { version = "0.1.37", default-features = false, features = ["std", "attributes"] }
+ url = "2.2.2"
+ uuid = { version = "1.0.0", optional = true, features = ["v4"] }
+ wildmatch = "2.0.0"
+ 
+ # dev-dependencies can't be optional, so this is a regular dependency
+-criterion = { workspace = true, optional = true }
++criterion = { version = "0.4.0", optional = true }
+ 
+ [target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+ js-sys = { version = "0.3", optional = true }
+ 
+ [dev-dependencies]
+-assert_matches = { workspace = true }
+-assign = { workspace = true }
+-http = { workspace = true }
+-maplit = { workspace = true }
++assert_matches = { version = "1.5.0" }
++assign = { version = "1.1.1" }
++http = { version = "0.2.8" }
++maplit = { version = "1.0.2" }
+ trybuild = "1.0.71"
+ 
+ [[bench]]
+diff --git ruma-federation-api/Cargo.toml ruma-federation-api/Cargo.toml
+index 380d1ed3..a4508a80 100644
+--- ruma-federation-api/Cargo.toml
++++ ruma-federation-api/Cargo.toml
+@@ -26,11 +26,11 @@ unstable-msc3723 = []
+ unstable-unspecified = []
+ 
+ [dependencies]
+-js_int = { workspace = true, features = ["serde"] }
++js_int = { version = "0.2.2", features = ["serde"] }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["api", "events"] }
+-serde = { workspace = true }
+-serde_json = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87" }
+ 
+ [dev-dependencies]
+-assert_matches = { workspace = true }
+-http = { workspace = true }
++assert_matches = { version = "1.5.0" }
++http = { version = "0.2.8" }
+diff --git ruma-identifiers-validation/Cargo.toml ruma-identifiers-validation/Cargo.toml
+index cd79ba78..28a9cd9e 100644
+--- ruma-identifiers-validation/Cargo.toml
++++ ruma-identifiers-validation/Cargo.toml
+@@ -15,5 +15,5 @@ all-features = true
+ compat = []
+ 
+ [dependencies]
+-js_int = { workspace = true }
+-thiserror = { workspace = true }
++js_int = { version = "0.2.2" }
++thiserror = { version = "1.0.37" }
+diff --git ruma-identity-service-api/Cargo.toml ruma-identity-service-api/Cargo.toml
+index 9dd4bc14..6edf1170 100644
+--- ruma-identity-service-api/Cargo.toml
++++ ruma-identity-service-api/Cargo.toml
+@@ -19,9 +19,9 @@ client = []
+ server = []
+ 
+ [dependencies]
+-js_int = { workspace = true, features = ["serde"] }
++js_int = { version = "0.2.2", features = ["serde"] }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["api"] }
+-serde = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
+ 
+ [dev-dependencies]
+-serde_json = { workspace = true }
++serde_json = { version = "1.0.87" }
+diff --git ruma-macros/Cargo.toml ruma-macros/Cargo.toml
+index 70a6a7a6..e86c0631 100644
+--- ruma-macros/Cargo.toml
++++ ruma-macros/Cargo.toml
+@@ -23,6 +23,6 @@ proc-macro-crate = "1.0.0"
+ proc-macro2 = "1.0.24"
+ quote = "1.0.8"
+ ruma-identifiers-validation = { version = "0.9.0", path = "../ruma-identifiers-validation", default-features = false }
+-serde = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
+ syn = { version = "1.0.57", features = ["extra-traits", "full", "visit"] }
+ toml = "0.5.9"
+diff --git ruma-push-gateway-api/Cargo.toml ruma-push-gateway-api/Cargo.toml
+index 5d589828..e08144ce 100644
+--- ruma-push-gateway-api/Cargo.toml
++++ ruma-push-gateway-api/Cargo.toml
+@@ -20,7 +20,7 @@ client = []
+ server = []
+ 
+ [dependencies]
+-js_int = { workspace = true, features = ["serde"] }
++js_int = { version = "0.2.2", features = ["serde"] }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["api", "events"] }
+-serde = { workspace = true }
+-serde_json = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87" }
+diff --git ruma-signatures/Cargo.toml ruma-signatures/Cargo.toml
+index dd1c9951..d06bffd9 100644
+--- ruma-signatures/Cargo.toml
++++ ruma-signatures/Cargo.toml
+@@ -18,16 +18,16 @@ ring-compat = ["dep:subslice"]
+ unstable-exhaustive-types = []
+ 
+ [dependencies]
+-base64 = { workspace = true }
++base64 = { version = "0.20.0" }
+ ed25519-dalek = "1.0.1"
+ pkcs8 = { version = "0.9.0", features = ["alloc"] }
+ # because dalek uses an older version of rand_core
+ rand = { version = "0.7", features = ["getrandom"] }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["canonical-json"] }
+-serde_json = { workspace = true }
++serde_json = { version = "1.0.87" }
+ sha2 = "0.9.5"
+ subslice = { version = "0.2.3", optional = true }
+-thiserror = { workspace = true }
++thiserror = { version = "1.0.37" }
+ 
+ [dev-dependencies]
+-assert_matches = { workspace = true }
++assert_matches = { version = "1.5.0" }
+diff --git ruma-state-res/Cargo.toml ruma-state-res/Cargo.toml
+index d23556f1..ec6088bc 100644
+--- ruma-state-res/Cargo.toml
++++ ruma-state-res/Cargo.toml
+@@ -19,18 +19,18 @@ unstable-exhaustive-types = []
+ 
+ [dependencies]
+ itertools = "0.10.0"
+-js_int = { workspace = true }
++js_int = { version = "0.2.2" }
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["events"] }
+-serde = { workspace = true }
+-serde_json = { workspace = true }
+-thiserror = { workspace = true }
+-tracing = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }
++serde_json = { version = "1.0.87" }
++thiserror = { version = "1.0.37" }
++tracing = { version = "0.1.37", default-features = false, features = ["std"] }
+ 
+ # dev-dependencies can't be optional, so this is a regular dependency
+-criterion = { workspace = true, optional = true }
++criterion = { version = "0.4.0", optional = true }
+ 
+ [dev-dependencies]
+-maplit = { workspace = true }
++maplit = { version = "1.0.2" }
+ rand = "0.8.3"
+ ruma-common = { version = "0.10.5", path = "../ruma-common", features = ["unstable-pdu"] }
+ tracing-subscriber = "0.3.16"
+diff --git ruma/Cargo.toml ruma/Cargo.toml
+index 0b62cff1..05ce9990 100644
+--- ruma/Cargo.toml
++++ ruma/Cargo.toml
+@@ -191,8 +191,8 @@ __ci = [
+ ]
+ 
+ [dependencies]
+-assign = { workspace = true }
+-js_int = { workspace = true }
++assign = { version = "1.1.1" }
++js_int = { version = "0.2.2" }
+ js_option = "0.1.1"
+ 
+ ruma-common = { version = "0.10.5", path = "../ruma-common" }
+@@ -208,4 +208,4 @@ ruma-identity-service-api = { version = "0.6.0", path = "../ruma-identity-servic
+ ruma-push-gateway-api = { version = "0.6.0", path = "../ruma-push-gateway-api", optional = true }
+ 
+ [dev-dependencies]
+-serde = { workspace = true }
++serde = { version = "1.0.147", features = ["derive"] }

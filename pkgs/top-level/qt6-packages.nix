@@ -7,6 +7,7 @@
 { lib
 , pkgs
 , qt6
+, stdenv
 }:
 
 (lib.makeScope pkgs.newScope ( self:
@@ -24,6 +25,8 @@ let
 in
 
 (qt6 // {
+  inherit stdenv;
+
   # LIBRARIES
 
   inherit (kdeFrameworks) kcoreaddons;

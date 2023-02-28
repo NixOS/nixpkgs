@@ -31,7 +31,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   doCheck = torch.cudaSupport;
 
   pythonImportsCheck = [

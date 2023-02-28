@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "3c0cd45212ad5a25b35445964e2517efa000a118a1bfc3437dae828892eaf1e1";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tap" ];
 

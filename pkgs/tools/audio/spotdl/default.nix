@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.0.6";
+  version = "4.0.7";
 
   format = "pyproject";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oZyEh76nNKMeEenz0dNLQ5Hd9jRaot6He8toxDSZZ/8=";
+    hash = "sha256-+hkdrPi3INs16SeAl+iXOE9KFDzG/TYXB3CDd8Tigwk=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -39,9 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     pydantic
     fastapi
     platformdirs
+    pykakasi
+    syncedlyrics
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-mock
     pytest-vcr
@@ -87,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
+    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

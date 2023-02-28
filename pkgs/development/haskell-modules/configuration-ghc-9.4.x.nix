@@ -104,16 +104,17 @@ in {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
-
+  shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
+  libmpd = doJailbreak super.libmpd;
   base-orphans = dontCheck super.base-orphans;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
   # since those are used for the internal dependencies between the versioned
   # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_8;
-  hspec-core = self.hspec-core_2_10_8;
+  hspec = self.hspec_2_10_9;
+  hspec-core = self.hspec-core_2_10_9;
   hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_8;
+  hspec-discover = self.hspec-discover_2_10_9;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -183,22 +184,34 @@ in {
   })
     self.ghc-exactprint_1_6_1_1;
 
-  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # 2023-02-01: plugins disabled for hls 1.9.0.0 based on
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
   haskell-language-server = super.haskell-language-server.override {
-    hls-refactor-plugin = null;
     hls-eval-plugin = null;
-    hls-floskell-plugin = null;
-    hls-ormolu-plugin = null;
-    hls-rename-plugin = null;
+    hls-ormolu-plugin = null;     # This plugin is supposed to work, but fails to compile.
+    hls-floskell-plugin = null;   # This plugin is supposed to work, but fails to compile.
+    hls-rename-plugin = null;     # This plugin is supposed to work, but fails to compile.
     hls-stylish-haskell-plugin = null;
   };
 
   # https://github.com/tweag/ormolu/issues/941
-  ormolu = overrideCabal (drv: {
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.ormolu);
+  ormolu = doDistribute self.ormolu_0_5_2_0;
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
+
+  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
+  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
+  # the GHC 9.6 configuration may need similar overrides eventually.
+  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
+  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
+  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
+  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
+  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
+
+  # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
+  # recent versions of Cabal require. This leads to builds like cairo and glib
+  # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
+  gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
+
 }

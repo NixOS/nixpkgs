@@ -1,19 +1,12 @@
-{ lib, stdenv, fetchurl }:
+{ lib, trivialBuild, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "control-lock";
+trivialBuild {
+  pname = "control-lock";
 
   src = fetchurl {
-    url = "https://github.com/emacsmirror/emacswiki.org/blob/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/control-lock.el";
-    sha256 = "1b5xcgq2r565pr1c14dwrmn1fl05p56infapa5pqvajv2kpfla7h";
+    url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/control-lock.el";
+    hash = "sha256-JCrmS3FSGDHSR+eAR0X/uO0nAgd3TUmFxwEVH5+KV+4=";
   };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    install -d $out/share/emacs/site-lisp
-    install $src $out/share/emacs/site-lisp/control-lock.el
-  '';
 
   meta = {
     description = "Like caps-lock, but for your control key.  Give your pinky a rest!";

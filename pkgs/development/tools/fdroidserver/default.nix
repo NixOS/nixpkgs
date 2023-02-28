@@ -21,7 +21,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python.interpreter} setup.py compile_catalog
+    ${python.pythonForBuild.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''

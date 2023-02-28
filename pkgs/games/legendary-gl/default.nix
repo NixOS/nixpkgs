@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "legendary-gl"; # Name in pypi
-  version = "0.20.31";
+  version = "0.20.32";
 
   src = fetchFromGitHub {
     owner = "derrod";
     repo = "legendary";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-XxCYL41xhtJ2z1Ps2ANTbzi4/PZu7lo78cRbr6R4iTM=";
+    sha256 = "sha256-MsvhVS3lqhgBJ+S/cjXFP70I3rM5WBYT7TyVlRWhNWw=";
   };
 
   propagatedBuildInputs = [ requests ];

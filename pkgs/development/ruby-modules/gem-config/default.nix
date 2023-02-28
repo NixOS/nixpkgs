@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 }@args:
 
 let
@@ -203,7 +203,12 @@ in
   };
 
   eventmachine = attrs: {
+    dontBuild = false;
     buildInputs = [ openssl ];
+    postPatch = ''
+      substituteInPlace ext/em.cpp \
+        --replace 'if (bind (' 'if (::bind ('
+    '';
   };
 
   exif = attrs: {
@@ -224,6 +229,7 @@ in
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
+    nativeBuildInputs = [ pkg-config ];
     buildFlags = [ "--use-system-libraries" ];
   };
 
@@ -318,7 +324,7 @@ in
     nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=stringop-overflow"
       "-Wno-error=implicit-fallthrough"
       "-Wno-error=sizeof-pointer-memaccess"
@@ -370,7 +376,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python3 ];
+    buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     # The gem includes broken symlinks which are ignored during unpacking, but
@@ -384,6 +390,9 @@ in
         --replace "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
+    meta.broken = true; # At 2023-01-20, errors as:
+                        #   "Failed to build gem native extension."
+                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -539,6 +548,10 @@ in
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  psych = attrs: {
+    buildInputs = [ libyaml ];
   };
 
   puma = attrs: {

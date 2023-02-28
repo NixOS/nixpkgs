@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   sconsFlags = [ "sdl2=1" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-format-nonliteral"
     "-Wno-format-truncation"
   ];

@@ -40,14 +40,21 @@ rec {
   # a superior CPU has all the features of an inferior and is able to build and test code for it
   inferiors = {
     # x86_64 Intel
+    # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
     default        = [ ];
     westmere       = [ ];
-    sandybridge    = [ "westmere"    ] ++ inferiors.westmere;
-    ivybridge      = [ "sandybridge" ] ++ inferiors.sandybridge;
-    haswell        = [ "ivybridge"   ] ++ inferiors.ivybridge;
-    broadwell      = [ "haswell"     ] ++ inferiors.haswell;
-    skylake        = [ "broadwell"   ] ++ inferiors.broadwell;
-    skylake-avx512 = [ "skylake"     ] ++ inferiors.skylake;
+    sandybridge    = [ "westmere"       ] ++ inferiors.westmere;
+    ivybridge      = [ "sandybridge"    ] ++ inferiors.sandybridge;
+    haswell        = [ "ivybridge"      ] ++ inferiors.ivybridge;
+    broadwell      = [ "haswell"        ] ++ inferiors.haswell;
+    skylake        = [ "broadwell"      ] ++ inferiors.broadwell;
+    skylake-avx512 = [ "skylake"        ] ++ inferiors.skylake;
+    cannonlake     = [ "skylake-avx512" ] ++ inferiors.skylake-avx512;
+    icelake-client = [ "cannonlake"     ] ++ inferiors.cannonlake;
+    icelake-server = [ "icelake-client" ] ++ inferiors.icelake-client;
+    cascadelake    = [ "skylake-avx512" ] ++ inferiors.cannonlake;
+    cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
+    tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
 
     # x86_64 AMD
     # TODO: fill this (need testing)

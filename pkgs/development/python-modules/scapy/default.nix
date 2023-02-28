@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   # Running the tests seems too complicated:
   doCheck = false;
-  checkInputs = [ mock can brotli ];
+  nativeCheckInputs = [ mock can brotli ];
   checkPhase = ''
     # TODO: be more specific about files
     patchShebangs .

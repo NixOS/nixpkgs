@@ -7,7 +7,7 @@
 , pcre-cpp
 , snappy
 , zlib
-, libyamlcpp
+, yaml-cpp
 , sasl
 , openssl
 , libpcap
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     curl
     gperftools
     libpcap
-    libyamlcpp
+    yaml-cpp
     openssl
     pcre-cpp
     variants.python
@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [

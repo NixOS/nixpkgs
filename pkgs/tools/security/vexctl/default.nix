@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "vexctl";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "vex";
     rev = "v${version}";
-    sha256 = "sha256-rDq62vkrZ8/76LERchxijmQCgo58KXlAIfv4SwI7egY=";
+    sha256 = "sha256-f5UVX6x4DwjlcgMAv0GuKBH9UUzFhQ8pW8l+9pc7RQ4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +24,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-7hhiJowtQv4JPqvpMiukL2JVgNeB5gi5X4p+AVGp4S0=";
+  vendorHash = "sha256-GZIssLLPg2dF7xsvsYn2MKYunMCpGbNA+6qCYBW++vk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

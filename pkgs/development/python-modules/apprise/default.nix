@@ -42,7 +42,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     babel
     gntp
     paho-mqtt

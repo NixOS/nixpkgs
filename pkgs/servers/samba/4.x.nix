@@ -20,9 +20,12 @@
 , gnutls
 , systemd
 , samba
+, talloc
 , jansson
+, ldb
 , libtasn1
 , tdb
+, tevent
 , libxcrypt
 , cmocka
 , rpcsvc-proto
@@ -48,11 +51,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.17.4";
+  version = "4.17.5";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-wFEgedtMrHB8zqTBiuu9ay6zrPbpBzXn9kWjJr4fRTc=";
+    hash = "sha256-67eIDUdP/AnXO1/He8vWV/YjWRAzczGpwk1/acoRRCs=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -100,8 +103,11 @@ stdenv.mkDerivation rec {
     libarchive
     zlib
     gnutls
+    ldb
+    talloc
     libtasn1
     tdb
+    tevent
     libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals stdenv.isDarwin [ libiconv ]
@@ -143,6 +149,7 @@ stdenv.mkDerivation rec {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
+    "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
   ] ++ optional enableLibunwind "--with-libunwind"
     ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"

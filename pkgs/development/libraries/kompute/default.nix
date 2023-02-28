@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/KomputeProject/kompute/commit/9a791b161dd58ca927fe090f65fa2b0e5e85e7ca.diff";
       sha256 = "OtFTN8sgPlyiMmVzUnqzCkVMKj6DWxbCXtYwkRdEprY=";
     })
+    (fetchpatch {
+      name = "enum-class-fix-for-fmt-8-x.patch";
+      url = "https://github.com/KomputeProject/kompute/commit/f731f2e55c7aaaa804111106c3e469f9a642d4eb.patch";
+      sha256 = "sha256-scTCYqkgKQnH27xzuY4FVbiwRuwBvChmLPPU7ZUrrL0=";
+    })
   ];
 
   cmakeFlags = [

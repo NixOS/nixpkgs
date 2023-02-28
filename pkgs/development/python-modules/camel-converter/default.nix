@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.pydantic;
 

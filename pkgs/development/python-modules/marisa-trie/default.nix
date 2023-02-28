@@ -20,7 +20,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     readme_renderer
     hypothesis

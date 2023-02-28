@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.16.0";
+  version = "3.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hkuW9c5ORUuN0kbQJ2MG/GezORvqL0w51a7Ca9AdHkU=";
+    hash = "sha256-BW+zYDmK9CPmzePAgQWXRQ8JrQNgEulPGtQgUdnrY4I=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytest-asyncio

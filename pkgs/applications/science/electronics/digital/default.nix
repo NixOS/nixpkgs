@@ -4,8 +4,8 @@
 
 let
   pkgDescription = "A digital logic designer and circuit simulator.";
-  version = "0.29";
-  buildDate = "2022-02-11T18:10:34+01:00"; # v0.29 commit date
+  version = "0.30";
+  buildDate = "2023-02-03T08:00:56+01:00"; # v0.30 commit date
 
   desktopItem = makeDesktopItem {
     type = "Application";
@@ -24,7 +24,8 @@ let
   # inspect the .git folder to find the version number we are building, we then
   # provide that version number manually as a property.
   # (see https://github.com/hneemann/Digital/issues/289#issuecomment-513721481)
-  mvnOptions = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate}";
+  # Also use the commit date as a build and output timestamp.
+  mvnOptions = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
 in
 stdenv.mkDerivation rec {
   pname = "digital";
@@ -33,20 +34,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hneemann";
     repo = "Digital";
-    rev = "287dd939d6f2d4d02c0d883c6178c3425c28d39c";
-    sha256 = "o5gaExUTTbk6WgQVw7/IeXhpNkj1BLkwD752snQqjIg=";
+    rev = "932791eb6486d04f2ea938d83bcdb71b56d3a3f6";
+    sha256 = "cDykYlcFvDLFBy9UnX07iCR2LCq28SNU+h9vRT/AoJM=";
   };
-
-  # Use fixed dates in the pom.xml and upgrade the jar and assembly plugins to
-  # a version where they support reproducible builds
-  patches = [ ./pom.xml.patch ];
 
   # Fetching maven dependencies from "central" needs the network at build phase,
   # we do that in this extra derivation that explicitely specifies its
   # outputHash to ensure determinism.
   mavenDeps = stdenv.mkDerivation {
     name = "${pname}-${version}-maven-deps";
-    inherit src nativeBuildInputs version patches postPatch;
+    inherit src nativeBuildInputs version;
     dontFixup = true;
     buildPhase = ''
       mvn package ${mvnOptions} -Dmaven.repo.local=$out
@@ -62,14 +59,10 @@ stdenv.mkDerivation rec {
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "X5ppGUVwNQrMnjzD4Kin1Xmt4O3x+qr7jK4jr6E8tCI=";
+    outputHash = "1Cgw+5V2E/RENMRMm368+2yvY7y6v9gTlo+LRgrCXcE=";
   };
 
   nativeBuildInputs = [ copyDesktopItems maven makeWrapper ];
-
-  postPatch = ''
-    substituteInPlace pom.xml --subst-var-by buildDate "${buildDate}"
-  '';
 
   buildPhase = ''
     mvn package --offline ${mvnOptions} -Dmaven.repo.local=${mavenDeps}

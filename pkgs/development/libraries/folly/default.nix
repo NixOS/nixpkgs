@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , boost
 , cmake
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.11.28.00";
+  version = "2023.02.13.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-TI3uMlkssKtTvxqj9Et12aAjbHoV9FVBvrZr7oCFlIo=";
+    sha256 = "sha256-YKS+UIlgDhMefovkkR/GlJcZtAjGLC9e8uhqfniH1eY=";
   };
 
   nativeBuildInputs = [
@@ -56,8 +57,14 @@ stdenv.mkDerivation rec {
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
 
-  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
+  ];
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/libfolly.pc \

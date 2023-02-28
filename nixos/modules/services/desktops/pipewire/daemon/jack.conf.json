@@ -58,6 +58,18 @@
           "node.passive": true
         }
       }
+    },
+    {
+      "matches": [
+        {
+          "client.name": "Mixxx"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "jack.merge-monitor": false
+        }
+      }
     }
   ]
 }

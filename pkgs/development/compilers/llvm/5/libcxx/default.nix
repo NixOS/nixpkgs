@@ -1,4 +1,9 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, llvm_meta, fetch, cmake, python3, fixDarwinDylibNames, version
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
+}:
+
+assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
 
 stdenv.mkDerivation {
   pname = "libcxx";
@@ -33,13 +38,13 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isMusl python3
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ libcxxabi ];
+  buildInputs = [ cxxabi ];
 
   cmakeFlags = [
-    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
-    "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
+    "-DLIBCXX_CXX_ABI=${cxxabi.pname}"
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
+    ++ lib.optional (cxxabi.pname == "libcxxabi") "-DLIBCXX_LIBCXXABI_LIB_PATH=${cxxabi}/lib";
 
   preInstall = lib.optionalString (stdenv.isDarwin) ''
     for file in lib/*.dylib; do
@@ -50,13 +55,14 @@ stdenv.mkDerivation {
       abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
 
       for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${libcxxabi}/lib/$abiName $file
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
       done
     done
   '';
 
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {

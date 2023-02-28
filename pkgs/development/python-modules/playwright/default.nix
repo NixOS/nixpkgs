@@ -223,5 +223,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick yrd SuperSandro2000 ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

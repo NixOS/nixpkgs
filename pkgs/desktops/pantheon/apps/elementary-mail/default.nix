@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     # build: support webkit2gtk-4.1
     # https://github.com/elementary/mail/pull/794
     (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
-      sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
+      url = "https://github.com/elementary/mail/commit/9e6eb73a8420c9bf327e59c25e7e6d8fa87d480a.patch";
+      sha256 = "sha256-idkVymePLa7vgfuou0HIrbWRCaWAgZliDcp4HyZBArs=";
     })
   ];
 

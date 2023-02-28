@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.14.0";
+  version = "2.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q4OD37ryZqg40L89BNZdLCNeC1QPwVhUaT4S5tO88Jk=";
+    hash = "sha256-3XFvKnaK1nUCz9mbmSXFH/1uFr6TtBCr7v/arBkL/oE=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

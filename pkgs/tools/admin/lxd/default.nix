@@ -32,14 +32,14 @@
 
 buildGoModule rec {
   pname = "lxd";
-  version = "5.9";
+  version = "5.11";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    sha256 = "sha256-okz3++PlUno03tp+jpLxfAWlFJhyOCH2mxRtHo5YEX8=";
+    hash = "sha256-6z6C1nWmnHLdLtLf7l1f4riGhuP2J2mt8mVWZIiege0=";
   };
 
   vendorSha256 = null;
@@ -104,7 +104,7 @@ buildGoModule rec {
     homepage = "https://linuxcontainers.org/lxd/";
     changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
   };
 }

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # and shouldn't be used in production code
   propagatedBuildInputs = [ (callPackage ./infix.nix { }) ];
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/danielhones/pycategories";

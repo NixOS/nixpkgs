@@ -87,7 +87,7 @@ buildPythonPackage rec {
     sly
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     voluptuous
   ];

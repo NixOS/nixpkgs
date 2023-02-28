@@ -15,10 +15,8 @@ buildDunePackage rec {
   };
 
   buildInputs = [ lwt ];
-  checkInputs = [ ounit2 fileutils ];
 
-  # Otherwise checkInputs can't be found
-  strictDeps = false;
+  checkInputs = [ ounit2 fileutils ];
 
   doCheck = true;
 

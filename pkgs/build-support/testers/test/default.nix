@@ -12,6 +12,8 @@ let
 
 in
 lib.recurseIntoAttrs {
+  hasPkgConfigModule = pkgs.callPackage ../hasPkgConfigModule/tests.nix { };
+
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
   nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, pkgs, figlet, ... }: {
@@ -58,9 +60,10 @@ lib.recurseIntoAttrs {
       inherit hello;
     } ''
       echo "Checking $failed/testBuildFailure.log"
-      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log
+      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log >/dev/null
       [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
       touch $out
+      echo 'All good.'
     '';
 
     multiOutput = runCommand "testBuildFailure-multiOutput" {

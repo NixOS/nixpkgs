@@ -59,7 +59,7 @@ buildPythonPackage rec {
     "bluetooth_adapters"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

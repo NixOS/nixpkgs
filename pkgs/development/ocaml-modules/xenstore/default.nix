@@ -13,7 +13,7 @@ buildDunePackage rec {
     hash = "sha256-1Mnqtt5zHeRdYJHvhdQNjN8d4yxUEKD2cpwtoc7DGC0=";
   };
 
-  nativeBuildInputs = [ ppx_cstruct ];
+  buildInputs = [ ppx_cstruct ];
   propagatedBuildInputs = [ cstruct lwt ];
 
   doCheck = true;

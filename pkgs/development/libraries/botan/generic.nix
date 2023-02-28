@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"}
   '';
 
   enableParallelBuilding = true;

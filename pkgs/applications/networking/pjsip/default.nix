@@ -4,8 +4,11 @@
 , fetchpatch
 , openssl
 , libsamplerate
+, swig
 , alsa-lib
 , AppKit
+, python3
+, pythonSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +36,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs =
+    lib.optionals pythonSupport [ swig python3 ];
+
   buildInputs = [ openssl libsamplerate ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
@@ -41,11 +47,24 @@ stdenv.mkDerivation rec {
     export LD=$CC
   '';
 
+  postBuild = lib.optionalString pythonSupport ''
+    make -C pjsip-apps/src/swig/python
+  '';
+
+  outputs = [ "out" ]
+    ++ lib.optional pythonSupport "py";
+
+  configureFlags = [ "--enable-shared" ];
+
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
     mkdir -p $out/share/${pname}-${version}/samples
     cp pjsip-apps/bin/samples/*/* $out/share/${pname}-${version}/samples
+  '' + lib.optionalString pythonSupport ''
+    (cd pjsip-apps/src/swig/python && \
+      python setup.py install --prefix=$py
+    )
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)

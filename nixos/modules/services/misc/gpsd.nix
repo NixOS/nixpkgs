@@ -22,7 +22,7 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to enable `gpsd', a GPS service daemon.
+          Whether to enable `gpsd`, a GPS service daemon.
         '';
       };
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.1.0";
+  version = "23.2.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2ca+VGylu4Km7M2Oz76ljbhSIDehVfviwVXnV+pXFRE=";
+    hash = "sha256-sXCBuN6H5/7cyOW7LuP5cJ5NixN3KWHJyJudT24rpYg=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];

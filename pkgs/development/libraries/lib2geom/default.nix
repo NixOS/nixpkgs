@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     double-conversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

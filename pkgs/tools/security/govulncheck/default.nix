@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "unstable-2022-09-02";
+  version = "unstable-2023-02-17";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "27dd78d2ca392c1738e54efe513a2ecb7bf46000";
-    sha256 = "sha256-G35y1V4W1nLZ+QGvIQwER9whBIBDFUVptrHx78orcI0=";
+    rev = "b91abcc5ae3c412965b4c8131c4373040c69e1b7";
+    sha256 = "sha256-DYeG7SbjoH7rLD+Q0/5VC85bT2x7YxB4tAj1wmHkI4A=";
   };
 
-  vendorSha256 = "sha256-9FH9nq5cEyhMxrrvfQAOWZ4aThMsU0HwlI+0W0uVHZ4=";
+  vendorSha256 = "sha256-+luU71QHNs7xxXQOLtd+Ka8+ETv5sA+gv+4g7Ogm5TI=";
 
   subPackages = [ "cmd/govulncheck" ];
 
@@ -30,12 +30,14 @@ buildGoModule rec {
     rm vulncheck/binary_test.go
     # - just have resolution issues
     rm vulncheck/{source,vulncheck}_test.go
+    rm internal/govulncheck/callstacks_test.go
   '';
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
+    downloadPage = "https://github.com/golang/vuln";
     description = "The database client and tools for the Go vulnerability database, also known as vuln";
     longDescription = ''
       Govulncheck reports known vulnerabilities that affect Go code. It uses

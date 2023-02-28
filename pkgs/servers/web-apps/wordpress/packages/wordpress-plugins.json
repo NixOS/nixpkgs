@@ -1,5 +1,6 @@
 [
   "add-widget-after-content"
+, "akismet"
 , "antispam-bee"
 , "async-javascript"
 , "breeze"
@@ -8,6 +9,7 @@
 , "co-authors-plus"
 , "disable-xml-rpc"
 , "gutenberg"
+, "hello-dolly"
 , "hkdev-maintenance-mode"
 , "jetpack"
 , "jetpack-lite"

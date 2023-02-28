@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "cchardet"
   ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # on non x86-64 some charsets are identified as their superset, so we skip these tests (last checked with version 2.1.7)
   preCheck = ''

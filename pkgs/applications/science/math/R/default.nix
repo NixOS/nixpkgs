@@ -8,15 +8,18 @@
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, testers
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "R";
   version = "4.2.2";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-D/YrQuxRr6VxPK7nxP3noMRZQLo5vvjFyUh/7wyVPfU=";
   };
@@ -97,6 +100,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
@@ -121,8 +126,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
 
     maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
-}
+})

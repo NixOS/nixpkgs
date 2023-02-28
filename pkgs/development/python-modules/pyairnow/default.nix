@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-aiohttp

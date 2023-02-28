@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
     keybinder3
     libnotify
     python3

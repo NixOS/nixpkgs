@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/mysql/libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
-  installCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
     lxml

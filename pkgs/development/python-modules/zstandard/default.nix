@@ -26,7 +26,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
   ];
 

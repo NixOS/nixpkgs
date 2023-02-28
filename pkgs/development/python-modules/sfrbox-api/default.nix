@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.2";
+  version = "0.0.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kXM+Y7ZKKczVdKTXqmbgSxlFfHx3hAvT9nkF3Ex7ChY=";
+    hash = "sha256-1Jn785e4aLd83EHjkgB90sWi9No8wqCjUEn4ecyVl4o=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     respx

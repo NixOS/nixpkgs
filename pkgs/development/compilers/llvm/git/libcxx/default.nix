@@ -1,7 +1,8 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
 , cmake, python3, fixDarwinDylibNames, version
-, libcxxabi
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -15,6 +16,8 @@
 let
   basename = "libcxx";
 in
+
+assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
 
 stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
@@ -59,12 +62,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
+  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}libcxxabi"
-  ] ++ lib.optional (!headersOnly) "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${libcxxabi.dev}/include/c++/v1"
+    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}${cxxabi.pname}"
+  ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -85,13 +88,14 @@ stdenv.mkDerivation rec {
       abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
 
       for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${libcxxabi}/lib/$abiName $file
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
       done
     done
   '';
 
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {

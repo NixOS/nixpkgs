@@ -1,27 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , azure-common
 , azure-mgmt-core
 , msrest
-, msrestazure
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "10.0.0";
   pname = "azure-mgmt-containerregistry";
-  disabled = isPy27;
+  version = "10.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HjejK28Em5AeoQ20o4fucnXTlAwADF/SEpVfHn9anZk=";
+    hash = "sha256-VrX9YfYNvlA8+eNqHCp35BAeQZzQKakZs7ZZKwT8oYc=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common azure-mgmt-core msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.containerregistry" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.containerregistry"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Container Registry Client Library for Python";

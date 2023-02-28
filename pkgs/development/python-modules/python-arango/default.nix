@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     arangodb
     mock
     pytestCheckHook

@@ -9,6 +9,9 @@
 , pygments
 , pyserial
 , pyserial-asyncio
+, pytest-asyncio
+, pytest-rerunfailures
+, pytest-xdist
 , pytestCheckHook
 , redis
 , sqlalchemy
@@ -18,13 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "2.5.3";
+  version = "3.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "riptideio";
+    owner = "pymodbus-dev";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GHyDlt046v4KP9KQRnXH6F+3ikoCjbhVHEQuSdm99a8=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
@@ -38,13 +42,20 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     mock
+    pytest-asyncio
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     redis
     sqlalchemy
     twisted
+  ];
+
+  pytestFlagsArray = [
+    "--reruns" "3" # Racy socket tests
   ];
 
   pythonImportsCheck = [ "pymodbus" ];
@@ -57,7 +68,8 @@ buildPythonPackage rec {
       also be used without any third party dependencies if a more
       lightweight project is needed.
     '';
-    homepage = "https://github.com/riptideio/pymodbus";
+    homepage = "https://github.com/pymodbus-dev/pymodbus";
+    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

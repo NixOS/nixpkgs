@@ -26,12 +26,11 @@
 , openvdb
 , pcre
 , qhull
-, systemd
 , tbb
 , wxGTK31
 , xorg
 , fetchpatch
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 let
   wxGTK-prusa = wxGTK31.overrideAttrs (old: rec {
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ checkInputs;
+  ] ++ nativeCheckInputs;
 
   patches = [
     # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
@@ -103,7 +102,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   separateDebugInfo = true;
 
@@ -116,7 +115,7 @@ stdenv.mkDerivation rec {
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
   # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
+  env.NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";

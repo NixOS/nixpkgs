@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.6.15";
+  version = "1.6.18";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-Vlftq//mLYZPoT2R/lHJA6wLnqiuC+Cpy4lGQC8jCPA=";
+    hash = "sha256-ApQKdd+S02YFNDVrrSKVHZmR1ZQwcU1KoQRfhOP9VHQ=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 

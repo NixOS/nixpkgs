@@ -11,11 +11,9 @@
 , python3
 , xorg
 , libiconv
+, Libsystem
 , AppKit
-, Foundation
 , Security
-# darwin.apple_sdk.sdk
-, sdk
 , nghttp2
 , libgit2
 , withExtraFeatures ? true
@@ -26,16 +24,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.74.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-KFCsZmD83FqnB553Tbub95I7s8QGBMZ3rviKAQNcKqA=";
+    sha256 = "sha256-u8/SvuR/RpJaBX4Dr3Onrk0AVpIAeVb+399+NUpgkfI=";
   };
 
-  cargoSha256 = "sha256-DpPyvNr1gh7w9HesmkH6N3ZGOmoZx/BDOQ0fQk84bE8=";
+  cargoSha256 = "sha256-hnSumfZd9ylEx3dkTGW2s4VSv107MHOn21ytOcimhPw=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
@@ -45,22 +43,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    Foundation
-    (
-      # Pull a header that contains a definition of proc_pid_rusage().
-      # (We pick just that one because using the other headers from `sdk` is not
-      # compatible with our C++ standard library. This header is already in
-      # the standard library on aarch64)
-      # See also:
-      # https://github.com/shanesveller/nixpkgs/tree/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/development/libraries/webkitgtk/default.nix
-      # https://github.com/shanesveller/nixpkgs/blob/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/tools/system/btop/default.nix#L32-L38
-      runCommand "${pname}_headers" { } ''
-        install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-      ''
-    )
-  ] ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Libsystem Security ]
+    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   buildFeatures = lib.optional withExtraFeatures "extra";

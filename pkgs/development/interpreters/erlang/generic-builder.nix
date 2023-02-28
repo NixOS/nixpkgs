@@ -21,7 +21,7 @@
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, systemdSupport ? stdenv.isLinux # systemd support in epmd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts

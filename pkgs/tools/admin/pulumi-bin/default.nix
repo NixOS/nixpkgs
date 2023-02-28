@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles }:
 
-with lib;
-
 let
   data = import ./data.nix {};
 in stdenv.mkDerivation {
@@ -16,7 +14,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     install -D -t $out/bin/ *
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '' + ''
     installShellCompletion --cmd pulumi \
@@ -25,9 +23,9 @@ in stdenv.mkDerivation {
       --zsh  <($out/bin/pulumi completion zsh)
   '';
 
-  nativeBuildInputs = [ installShellFiles ] ++ optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.25.3";
+  version = "0.25.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-t36uWIREn01/+dIYP5HYlkSPPjgoZoYbJYnFo3Y6qSw=";
+    hash = "sha256-0+n5v93ERcQDKNtXxSZYfCUMTRzcbtQEXl023KSxfrE=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];

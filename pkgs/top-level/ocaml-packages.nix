@@ -357,7 +357,12 @@ let
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
-    dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
+    dune_3 =
+      if lib.versionAtLeast ocaml.version "4.08"
+      then callPackage ../development/tools/ocaml/dune/3.nix { }
+      else if lib.versionAtLeast ocaml.version "4.02"
+      then pkgs.dune_3
+      else throw "dune_3 is not available for OCaml ${ocaml.version}";
 
     dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
@@ -738,6 +743,8 @@ let
 
     lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
+    lem = callPackage ../development/ocaml-modules/lem { };
+
     lens = callPackage ../development/ocaml-modules/lens { };
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
@@ -751,6 +758,8 @@ let
     };
 
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
+
+    linksem = callPackage ../development/ocaml-modules/linksem { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
       libllvm = pkgs.llvmPackages_10.libllvm;
@@ -1233,6 +1242,10 @@ let
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
+    rusage = callPackage ../development/ocaml-modules/rusage { };
+
+    sail = callPackage ../development/ocaml-modules/sail { };
+
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
@@ -1246,6 +1259,8 @@ let
     shine = callPackage ../development/ocaml-modules/shine {
       inherit (pkgs) shine;
     };
+
+    simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
 
@@ -1477,7 +1492,9 @@ let
 
     trie = callPackage ../development/ocaml-modules/trie { };
 
-    tsdl = callPackage ../development/ocaml-modules/tsdl { };
+    tsdl = callPackage ../development/ocaml-modules/tsdl {
+      inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback;
+    };
 
     tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
 
@@ -1597,7 +1614,7 @@ let
     if lib.versionOlder "4.10.2" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.15.nix {
       inherit self;
-      inherit (pkgs) bash fetchpatch lib openssl zstd;
+      inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
     }
     else if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
@@ -1632,8 +1649,6 @@ let
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
-    omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
-
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
@@ -1642,6 +1657,7 @@ let
 
 in let inherit (pkgs) callPackage; in rec
 {
+  inherit mkOcamlPackages;
 
   ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { });
 

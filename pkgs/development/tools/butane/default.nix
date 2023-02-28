@@ -1,7 +1,5 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
-with lib;
-
 buildGoModule rec {
   pname = "butane";
   version = "0.17.0";
@@ -27,7 +25,7 @@ buildGoModule rec {
     mv $out/bin/{internal,butane}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Translates human-readable Butane configs into machine-readable Ignition configs";
     license = licenses.asl20;
     homepage = "https://github.com/coreos/butane";

@@ -21,8 +21,6 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
-  strictDeps = true;
-
   buildInputs = [
     duration
     ipaddr

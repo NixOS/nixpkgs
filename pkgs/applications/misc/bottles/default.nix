@@ -26,15 +26,16 @@
 , vkbasalt-cli
 , vmtouch
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "2022.12.14.1";
+  version = "51.5";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-hoWyXCP7/0m8akUGBJyuF2yQcRKR8C7MDBLUdPdtBgE=";
+    sha256 = "sha256-8VF/CD0Wu2eV6wOpj/M6peKDthFWlcg+1NzzTSIH4S8=";
   };
 
   patches = [ ./vulkan_icd.patch ];
@@ -59,6 +60,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pathvalidate
     pycurl
     pyyaml
     requests
@@ -71,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     chardet
     certifi
     idna
-    pillow
     orjson
     icoextract
   ] ++ [

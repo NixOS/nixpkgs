@@ -28,51 +28,10 @@ let
 
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
-  inherit (pkgs) writeText;
   inherit (lib)
     getBin optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
-
-  ini = pkgs.formats.ini { };
-
-  gtkrc2 = writeText "gtkrc-2.0" ''
-    # Default GTK+ 2 config for NixOS Plasma 5
-    include "/run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc"
-    style "user-font"
-    {
-      font_name="Sans Serif Regular"
-    }
-    widget_class "*" style "user-font"
-    gtk-font-name="Sans Serif Regular 10"
-    gtk-theme-name="Breeze"
-    gtk-icon-theme-name="breeze"
-    gtk-fallback-icon-theme="hicolor"
-    gtk-cursor-theme-name="breeze_cursors"
-    gtk-toolbar-style=GTK_TOOLBAR_ICONS
-    gtk-menu-images=1
-    gtk-button-images=1
-  '';
-
-  gtk3_settings = ini.generate "settings.ini" {
-    Settings = {
-      gtk-font-name = "Sans Serif Regular 10";
-      gtk-theme-name = "Breeze";
-      gtk-icon-theme-name = "breeze";
-      gtk-fallback-icon-theme = "hicolor";
-      gtk-cursor-theme-name = "breeze_cursors";
-      gtk-toolbar-style = "GTK_TOOLBAR_ICONS";
-      gtk-menu-images = 1;
-      gtk-button-images = 1;
-    };
-  };
-
-  kcminputrc = ini.generate "kcminputrc" {
-    Mouse = {
-      cursorTheme = "breeze_cursors";
-      cursorSize = 0;
-    };
-  };
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -119,37 +78,6 @@ let
     XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
-  startplasma = ''
-    ${set_XDG_CONFIG_HOME}
-    mkdir -p "''${XDG_CONFIG_HOME}"
-  '' + optionalString config.hardware.pulseaudio.enable ''
-    # Load PulseAudio module for routing support.
-    # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-      ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
-  '' + ''
-    ${activationScript}
-
-    # Create default configurations if Plasma has never been started.
-    kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
-    if ! [ -f "$kdeglobals" ]; then
-      kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
-      if ! [ -f "$kcminputrc" ]; then
-          cat ${kcminputrc} >"$kcminputrc"
-      fi
-
-      gtkrc2="$HOME/.gtkrc-2.0"
-      if ! [ -f "$gtkrc2" ]; then
-          cat ${gtkrc2} >"$gtkrc2"
-      fi
-
-      gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
-      if ! [ -f "$gtk3_settings" ]; then
-          mkdir -p "$(dirname "$gtk3_settings")"
-          cat ${gtk3_settings} >"$gtk3_settings"
-      fi
-    fi
-  '';
-
 in
 
 {
@@ -162,8 +90,8 @@ in
 
     phononBackend = mkOption {
       type = types.enum [ "gstreamer" "vlc" ];
-      default = "gstreamer";
-      example = "vlc";
+      default = "vlc";
+      example = "gstreamer";
       description = lib.mdDoc "Phonon audio backend to install.";
     };
 
@@ -365,6 +293,7 @@ in
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ];
           optionalPackages = [
+            pkgs.aha # needed by kinfocenter for fwupd support
             plasma-browser-integration
             konsole
             oxygen
@@ -387,7 +316,8 @@ in
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
+        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet
+        ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
       # Extra services for D-Bus activation
       services.dbus.packages = [
@@ -401,7 +331,18 @@ in
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
 
-      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+      environment.sessionVariables = {
+        PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
+
+        # Needed for things that depend on other store.kde.org packages to install correctly,
+        # notably Plasma look-and-feel packages (a.k.a. Global Themes)
+        #
+        # FIXME: this is annoyingly impure and should really be fixed at source level somehow,
+        # but kpackage is a library so we can't just wrap the one thing invoking it and be done.
+        # This also means things won't work for people not on Plasma, but at least this way it
+        # works for SOME people.
+        KPACKAGE_DEP_RESOLVERS_PATH = "${pkgs.plasma5Packages.frameworkintegration.out}/libexec/kf5/kpackagehandlers";
+      };
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
@@ -438,12 +379,7 @@ in
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      # Doing these one by one seems silly, but we currently lack a better
-      # construct for handling common pam configs.
-      security.pam.services.gdm.enableKwallet = true;
-      security.pam.services.kdm.enableKwallet = true;
-      security.pam.services.lightdm.enableKwallet = true;
-      security.pam.services.sddm.enableKwallet = true;
+      security.pam.services.login.enableKwallet = true;
 
       systemd.user.services = {
         plasma-early-setup = mkIf cfg.runUsingSystemd {
@@ -462,7 +398,6 @@ in
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
-      services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })
@@ -509,6 +444,7 @@ in
             dolphin-plugins
             ffmpegthumbs
             kdegraphics-thumbnailers
+            pkgs.kio-admin
             kio-extras
           ];
           optionalPackages = [

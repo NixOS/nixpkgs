@@ -73,7 +73,7 @@ buildPythonApplication rec {
     XlsxWriter
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

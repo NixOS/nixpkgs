@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Also macOS tests are broken on python38
   doCheck = !(isPy27 || (stdenv.isDarwin && pythonAtLeast "3.8"));
 
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
   propagatedBuildInputs = [ nose colorama termstyle ];
 
   meta = with lib; {

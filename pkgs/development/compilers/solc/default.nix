@@ -84,7 +84,7 @@ let
     buildInputs = [ boost ]
       ++ lib.optionals z3Support [ z3 ]
       ++ lib.optionals cvc4Support [ cvc4 cln gmp ];
-    checkInputs = [ ncurses python3 ];
+    nativeCheckInputs = [ ncurses python3 ];
 
     # tests take 60+ minutes to complete, only run as part of passthru tests
     doCheck = false;
@@ -96,7 +96,7 @@ let
       for i in ./scripts/*.sh ./scripts/*.py ./test/*.sh ./test/*.py; do
         patchShebangs "$i"
       done
-      TERM=xterm ./scripts/tests.sh ${if z3Support then "--no-smt" else ""}
+      TERM=xterm ./scripts/tests.sh ${lib.optionalString z3Support "--no-smt"}
       popd
     '';
 

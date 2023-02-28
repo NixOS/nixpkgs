@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  certs = config.security.acme.certs;
+  inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
@@ -27,7 +27,7 @@ let
                               else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
-  enableIPv6 = config.networking.enableIPv6;
+  inherit (config.networking) enableIPv6;
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
@@ -117,7 +117,7 @@ let
       # used by most other Linux distributions by default.
       include ${pkgs.mailcap}/etc/nginx/mime.types;
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
-      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
       types_hash_max_size 4096;
 
@@ -149,7 +149,7 @@ let
       ''}
       ${upstreamConfig}
 
-      ${optionalString (cfg.recommendedOptimisation) ''
+      ${optionalString cfg.recommendedOptimisation ''
         # optimisation
         sendfile on;
         tcp_nopush on;
@@ -161,7 +161,7 @@ let
       ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ${optionalString (cfg.recommendedTlsSettings) ''
+      ${optionalString cfg.recommendedTlsSettings ''
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
         ssl_session_timeout 1d;
@@ -177,40 +177,35 @@ let
         ssl_stapling_verify on;
       ''}
 
-      ${optionalString (cfg.recommendedBrotliSettings) ''
+      ${optionalString cfg.recommendedBrotliSettings ''
         brotli on;
         brotli_static on;
         brotli_comp_level 5;
         brotli_window 512k;
         brotli_min_length 256;
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
-        brotli_buffers 32 8k;
       ''}
 
-      ${optionalString (cfg.recommendedGzipSettings) ''
+      # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ${optionalString cfg.recommendedGzipSettings ''
         gzip on;
-        gzip_proxied any;
-        gzip_comp_level 5;
-        gzip_types
-          application/atom+xml
-          application/javascript
-          application/json
-          application/xml
-          application/xml+rss
-          image/svg+xml
-          text/css
-          text/javascript
-          text/plain
-          text/xml;
+        gzip_static on;
         gzip_vary on;
+        gzip_comp_level 5;
+        gzip_min_length 256;
+        gzip_proxied expired no-cache no-store private auth;
+        gzip_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      ${optionalString (cfg.recommendedProxySettings) ''
+      ${optionalString cfg.recommendedProxySettings ''
         proxy_redirect          off;
         proxy_connect_timeout   ${cfg.proxyTimeout};
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
+        # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
+        # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
+        proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}
 
@@ -239,7 +234,7 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString (cfg.proxyCache.enable) ''
+      ${optionalString cfg.proxyCache.enable ''
         proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
                                           levels=${cfg.proxyCache.levels}
                                           use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
@@ -288,7 +283,7 @@ let
 
   configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
-    else finalConfigFile;
+    else configFile;
 
   execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
@@ -440,38 +435,6 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
-
-  snakeOilCert = pkgs.runCommand "nginx-config-validate-cert" { nativeBuildInputs = [ pkgs.openssl.bin ]; } ''
-    mkdir $out
-    openssl genrsa -des3 -passout pass:xxxxx -out server.pass.key 2048
-    openssl rsa -passin pass:xxxxx -in server.pass.key -out $out/server.key
-    openssl req -new -key $out/server.key -out server.csr \
-    -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
-    openssl x509 -req -days 1 -in server.csr -signkey $out/server.key -out $out/server.crt
-  '';
-  validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package ]; } ''
-    # nginx absolutely wants to read the certificates even when told to only validate config, so let's provide fake certs
-    sed ${configFile} \
-    -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_trusted_certificate .*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
-    > conf
-
-    LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so \
-      NIX_REDIRECTS="/etc/resolv.conf=/dev/null" \
-      nginx -t -c $(readlink -f ./conf) > out 2>&1 || true
-    if ! grep -q "syntax is ok" out; then
-      echo nginx config validation failed.
-      echo config was ${configFile}.
-      echo 'in case of false positive, set `services.nginx.validateConfig` to false.'
-      echo nginx output:
-      cat out
-      exit 1
-    fi
-    cp ${configFile} $out
-  '';
-
-  finalConfigFile = if cfg.validateConfig then validatedConfigFile else configFile;
 in
 
 {
@@ -577,17 +540,6 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
-        '';
-      };
-
-      validateConfig = mkOption {
-        # FIXME: re-enable if we can make of the configurations work.
-        #default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
-        default = false;
-        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
-        type = types.bool;
-        description = lib.mdDoc ''
-          Validate the generated nginx config at build time. The check is not very robust and can be disabled in case of false positives. This is notably the case when cross-compiling or when using `include` with files outside of the store.
         '';
       };
 
@@ -993,8 +945,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    # TODO: test user supplied config file pases syntax test
-
     warnings =
     let
       deprecatedSSL = name: config: optional config.enableSSL
@@ -1130,7 +1080,7 @@ in
     };
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = finalConfigFile;
+      source = configFile;
     };
 
     # This service waits for all certificates to be available
@@ -1142,14 +1092,14 @@ in
       sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
     in mkIf (cfg.enableReload || sslServices != []) {
-      wants = optionals (cfg.enableReload) [ "nginx.service" ];
+      wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ finalConfigFile ];
+      restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     py-multicodec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

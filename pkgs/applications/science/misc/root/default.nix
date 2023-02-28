@@ -157,9 +157,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Drpath=ON"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
     "-Dbuiltin_openui5=OFF"
@@ -174,6 +171,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
+    "-Dgnuinstall=ON"
     "-Dimt=ON"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
@@ -209,6 +207,7 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/201254
   NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.

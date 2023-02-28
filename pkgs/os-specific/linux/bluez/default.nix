@@ -130,6 +130,10 @@ in stdenv.mkDerivation rec {
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
 
+    # https://github.com/NixOS/nixpkgs/issues/204418
+    ln -s /etc/bluetooth/input.conf $out/etc/bluetooth/input.conf
+    ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
+
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
     for files in `find tools/ -type f -perm -755`; do
       filename=$(basename $files)

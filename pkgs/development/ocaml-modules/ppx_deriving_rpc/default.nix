@@ -3,9 +3,10 @@
 buildDunePackage rec {
   pname = "ppx_deriving_rpc";
 
-  inherit (rpclib) version useDune2 src;
+  inherit (rpclib) version src;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
 

@@ -5,19 +5,19 @@
 }:
 buildGoModule rec {
   pname = "coder";
-  version = "0.13.6";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F1nimZsOhm1TPFDC6oZjAE6BfPc85tWCsv6HQUXCd2c=";
+    hash = "sha256-FHBaefwSGZXwn1jdU7zK8WhwjarknvyeUJTlhmk/hPM=";
   };
 
   # integration tests require network access
   doCheck = false;
 
-  vendorHash = "sha256-vK4QfVCyxu7KOOfCpOnkXDlVQJo6kujP203K9VXr4YA=";
+  vendorHash = "sha256-+AvmJkZCFovE2+5Lg98tUvA7f2kBHUMzhl5IyrEGuy8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

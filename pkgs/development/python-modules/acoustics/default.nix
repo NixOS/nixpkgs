@@ -33,7 +33,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

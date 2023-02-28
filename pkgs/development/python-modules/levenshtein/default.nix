@@ -37,15 +37,15 @@ buildPythonPackage rec {
     rapidfuzz-cpp
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
     "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
-  ];
+  ]);
 
   propagatedBuildInputs = [
     rapidfuzz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
-    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
+    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${version}/HISTORY.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];
   };

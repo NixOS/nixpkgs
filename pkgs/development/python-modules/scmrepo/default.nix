@@ -11,11 +11,12 @@
 , pygtrie
 , pythonOlder
 , setuptools
+, shortuuid
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.1.6";
+  version = "0.1.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qSD8FsaJ0wZ8h0mO6qge3Q5fKIbMrONvJraprKVoNDE=";
+    hash = "sha256-2FUSIDueEleGj7BvIlyMB1ma7TW9kA5RUDBuDCvKLN0=";
   };
 
   postPatch = ''
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     pathspec
     pygit2
     pygtrie
+    shortuuid
   ];
 
   # Requires a running Docker instance

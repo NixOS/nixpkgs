@@ -25,11 +25,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchurl {
     url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    hash = "sha256-0i89N+91YT1dVztW/FHvCX8sDQsOQHkjcR9xwftykRs=";
+    hash = "sha256-TBN6IwNEjyWZODaDfe6uh/rF1NA68Rrejpvq2AYyhkU=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -53,9 +53,6 @@ in stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/postfix/raw/2f9d42453e67ebc43f786d98262a249037f80a77/f/postfix-3.6.2-glibc-234-build-fix.patch";
       sha256 = "sha256-xRUL5gaoIt6HagGlhsGwvwrAfYvzMgydsltYMWvl9BI=";
     })
-
-    # linux-6 compatibility
-    ./linux-6.patch
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -104,7 +101,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
-  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+  passthru = {
+    tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";

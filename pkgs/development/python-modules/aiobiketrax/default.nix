@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

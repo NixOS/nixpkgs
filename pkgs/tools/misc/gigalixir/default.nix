@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     stripe
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ] ++ (with python3.pkgs; [
     httpretty

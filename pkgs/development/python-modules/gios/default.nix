@@ -29,7 +29,7 @@ buildPythonPackage rec {
     dacite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips

@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f0fghvlbfryf5h3j4as7vcqrgfjb4c8abl5y0y5h069vs4kp5ii";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
 
   configurePhase = ''
     substituteInPlace src/ocamlify.ml --replace 'OCamlifyConfig.version' '"0.0.2"'

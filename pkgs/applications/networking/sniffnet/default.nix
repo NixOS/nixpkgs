@@ -1,9 +1,11 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , pkg-config
 , libpcap
 , stdenv
+, alsa-lib
+, expat
 , fontconfig
 , libGL
 , xorg
@@ -12,20 +14,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.0.1";
+  version = "1.1.1";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-8K774j04BOEuJjnFYjaSctPwBrKYYKqjFS2+PyxJ2FM=";
+  src = fetchFromGitHub {
+    owner = "gyulyvgc";
+    repo = "sniffnet";
+    rev = "v${version}";
+    hash = "sha256-o971F3JxZUfTCaLRPYxCsU5UZ2VcvZftVEl/sZAQwpA=";
   };
 
-  cargoSha256 = "sha256-096i4wDdoJCICd0L2QNY+7cKHQnijK22zj4XaQNuko8=";
+  cargoHash = "sha256-Otn5FvZZkzO0MHiopjU2/+redyusituDQb7DT5bdbPE=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libpcap
   ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    expat
     fontconfig
     libGL
     xorg.libX11
@@ -34,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXrandr
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    rustPlatform.bindgenHook
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''

@@ -41,7 +41,7 @@ mkDerivation rec {
     # Hence we use a C definition with NIX_CFLAGS_COMPILE
     ./use-nix-path-in-autostart.patch
   ];
-  NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
+  env.NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
 
   buildInputs = [
     qtbase

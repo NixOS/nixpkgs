@@ -3,6 +3,7 @@
 , AudioUnit
 , CoreAudio
 , CoreMIDI
+, portaudio
 , alsa-lib ? null
 , libpulseaudio ? null
 , libjack2 ? null
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
     ++ lib.optionals stdenv.isDarwin [
-      Accelerate AudioUnit CoreAudio CoreMIDI
+      Accelerate AudioUnit CoreAudio CoreMIDI portaudio
     ] ++ lib.optionals stdenv.isLinux (builtins.filter (optional: optional != null) [
       alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen

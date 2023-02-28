@@ -43,13 +43,14 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cargo
     dotnet-sdk
     git
     go
     nodejs
     pytest-env
+    pytest-forked
     pytest-xdist
     pytestCheckHook
     re-assert
@@ -60,7 +61,8 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  doCheck = true;
+  # i686-linux: dotnet-sdk not available
+  doCheck = stdenv.buildPlatform.system != "i686-linux";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
@@ -157,6 +159,9 @@ buildPythonPackage rec {
     "test_sub_staged"
     "test_submodule_does_not_discard_changes"
     "test_submodule_does_not_discard_changes_recurse"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # requires gcc bump
+    "test_rust_hook"
   ];
 
   pythonImportsCheck = [

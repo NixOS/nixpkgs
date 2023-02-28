@@ -1,9 +1,9 @@
-{stdenv, fossil, cacert}:
+{stdenv, lib, fossil, cacert}:
 
 {name ? null, url, rev, sha256}:
 
 stdenv.mkDerivation {
-  name = "fossil-archive" + (if name != null then "-${name}" else "");
+  name = "fossil-archive" + (lib.optionalString (name != null) "-${name}");
   builder = ./builder.sh;
   nativeBuildInputs = [fossil cacert];
 

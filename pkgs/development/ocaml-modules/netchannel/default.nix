@@ -19,16 +19,17 @@
 
 buildDunePackage rec {
   pname = "netchannel";
-  version = "2.1.1";
+  version = "2.1.2";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";
-    sha256 = "sha256-kYsAf6ntwWKUp26dMcp5BScdUOaGpM46050jVZe6gfs=";
+    hash = "sha256-lTmwcNKiaq5EdJdM4UaaAVdZ+hTCX5U9MPKY/r3i7fw=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     ppx_cstruct
   ];
 

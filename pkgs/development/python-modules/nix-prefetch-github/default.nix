@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "YobBihNPbqYYWhe3x0p+BIlEK8R62s/dDFWUzP7fCTI=";
   };
 
-  checkInputs = [ unittestCheckHook git which ];
+  nativeCheckInputs = [ unittestCheckHook git which ];
 
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";

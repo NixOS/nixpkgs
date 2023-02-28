@@ -202,7 +202,7 @@ let
           --run "$out/share/factorio/update-config.sh"               \
           --argv0 ""                                                 \
           --add-flags "-c \$HOME/.factorio/config.cfg"               \
-          ${if mods!=[] then "--add-flags --mod-directory=${modDir}" else ""}
+          ${lib.optionalString (mods!=[]) "--add-flags --mod-directory=${modDir}"}
 
           # TODO Currently, every time a mod is changed/added/removed using the
           # modlist, a new derivation will take up the entire footprint of the

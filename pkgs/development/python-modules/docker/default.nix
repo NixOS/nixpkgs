@@ -39,7 +39,7 @@ buildPythonPackage rec {
     paramiko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 

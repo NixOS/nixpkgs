@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.2.1";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,25 +20,26 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-AscfyYURP91aDoPo/ii3uEHQL82DAHpBHlGm1MjLx8c=";
+    hash = "sha256-twfFPtTR2LIAbd5YuOgTG/j/xktLkTD3/9fjo514eXI=";
   };
-
-  propagatedBuildInputs = [
-    aiohttp
-    ffmpeg-python
-    requests
-  ];
-
-  checkInputs = [
-    aiounittest
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Packages in nixpkgs is different than the module name
     substituteInPlace setup.py \
       --replace "ffmpeg" "ffmpeg-python"
   '';
+  propagatedBuildInputs = [
+    aiohttp
+    ffmpeg-python
+    requests
+  ];
+
+  doCheck = false; # all testse require a network device
+
+  nativeCheckInputs = [
+    aiounittest
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [
     "tests/test.py"
@@ -51,6 +52,9 @@ buildPythonPackage rec {
     "test3_images"
     "test4_properties"
     "test_succes"
+    "test_wrong_host"
+    "test_wrong_password"
+    "test_wrong_user"
   ];
 
   pythonImportsCheck = [

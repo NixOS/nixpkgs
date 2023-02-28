@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ perlPackages.TestPerlCritic perlPackages.TestPod perlPackages.TestPodCoverage ];
+  nativeCheckInputs = [ perlPackages.TestPerlCritic perlPackages.TestPod perlPackages.TestPodCoverage ];
   # Linting and formatting checks are of no interest for us.
   preCheck = ''
     rm -f t/93_pod_spell.t

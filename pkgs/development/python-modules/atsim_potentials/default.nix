@@ -40,7 +40,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytestCheckHook
   ];

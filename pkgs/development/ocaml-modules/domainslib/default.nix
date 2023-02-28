@@ -1,4 +1,6 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , lockfree
 , mirage-clock-unix
 }:

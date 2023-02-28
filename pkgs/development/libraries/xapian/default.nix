@@ -26,7 +26,7 @@ let
     nativeBuildInputs = [ autoreconfHook ];
 
     doCheck = true;
-    AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
+    env.AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
 
     patches = lib.optionals stdenv.isDarwin [ ./skip-flaky-darwin-test.patch ];
 

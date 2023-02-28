@@ -9,8 +9,6 @@
 let
   inherit (neovimUtils) makeNeovimConfig;
 
-  packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
-
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
@@ -46,13 +44,6 @@ let
   };
 
   nvimAutoDisableWrap = makeNeovimConfig { };
-
-  nvimConfDontWrap = makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
 
   wrapNeovim2 = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {

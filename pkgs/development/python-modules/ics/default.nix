@@ -25,7 +25,7 @@ buildPythonPackage rec {
     tatsu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-flakes
     pytestCheckHook
   ];

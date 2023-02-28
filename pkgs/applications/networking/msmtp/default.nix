@@ -17,7 +17,7 @@
 , Security
 , withKeyring ? true
 , libsecret
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 

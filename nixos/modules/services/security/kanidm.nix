@@ -55,7 +55,7 @@ in
   options.services.kanidm = {
     enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
     enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
-    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration.");
+    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {

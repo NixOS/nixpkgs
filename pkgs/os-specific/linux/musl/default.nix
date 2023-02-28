@@ -94,12 +94,11 @@ stdenv.mkDerivation rec {
   NIX_DONT_SET_RPATH = true;
 
   preBuild = ''
-    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
     "# the -x c flag is required since the file extension confuses gcc
     # that detect the file as a linker script.
     $CC -x c -c ${stack_chk_fail_local_c} -o __stack_chk_fail_local.o
     $AR r libssp_nonshared.a __stack_chk_fail_local.o"
-      else ""
     }
   '';
 

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     uritemplate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-rest-auth
     django-allauth
     django-filter

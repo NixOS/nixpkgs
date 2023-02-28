@@ -32,7 +32,7 @@ lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
-lpeglabel,,,,,,
+lpeglabel,,,,1.6.0,,
 lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
@@ -65,6 +65,7 @@ luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
 luafilesystem,,,,1.8.0-1,,flosse
+lualdap,,,,,,aanderse
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc

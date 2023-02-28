@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.7.0";
+  version = "1.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-biI1dbn7lpD1KUGkOV5NMLJlYxZTfH+zW6i65fbJWko=";
+    hash = "sha256-bwl1gWLux5LJMZIS/tJFMhHs1LcaDVCTgNrke6ASiBI=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook

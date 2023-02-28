@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usbimager";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "1j0g1anmdwc3pap3m4kfzqjfkn7q0vpmqniii2kcz7svs5h3ybga";
+    sha256 = "sha256-CEGUXJXqXmD8uT93T9dg49Lf5vTpAzQjdnhYmbR5zTI=";
   };
 
   sourceRoot = "source/src/";

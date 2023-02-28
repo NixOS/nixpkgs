@@ -11,15 +11,15 @@ assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm o
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.47.4";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "sha256-EHDSil077g/K8XCWQ9Pry/oyh0Bs3ckS/5Co1z/+Yes=";
+    hash = "sha256-//xwk5T477Ae61MqZCrj8VcG23mqrP04/VVuUwtxyio=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     getGoDirs() {
       go list ./... | grep -v -e e2e ${lib.optionalString stdenv.isDarwin "-e wasm"}
     }
-    '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     rm server/server_test.go
   '';

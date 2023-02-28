@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.90";
+  version = "0.0.93";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-SfzwS7M821uGfbOLR37iiw+gEebKDgu1H7f0fs3J9kw=";
+    hash = "sha256-ilPwzQV4vucLV3QAR/otsVIDIxRw8iWPGXM8CvgtFxg=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytestCheckHook
   ];

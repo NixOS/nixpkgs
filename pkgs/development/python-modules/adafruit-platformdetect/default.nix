@@ -7,16 +7,18 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.39.0";
-  format = "setuptools";
+  version = "3.40.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    hash = "sha256-l5upg3Jux+HHtiYM95+5qL05kzmVHrzPYrqIejbaVZY=";
+    hash = "sha256-phG9DEl4JlrIN3zil0SQRZ+DnktpunK094nxVQ9Cksw=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

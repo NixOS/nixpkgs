@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "django_prometheus"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

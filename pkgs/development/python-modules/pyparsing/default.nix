@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   # circular dependencies with pytest if enabled by default
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     railroad-diagrams

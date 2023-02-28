@@ -52,14 +52,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgcrypt
-    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
 
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test --print-errorlogs --timeout-multiplier 0
 
     runHook postCheck
   '';

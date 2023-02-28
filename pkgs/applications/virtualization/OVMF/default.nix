@@ -46,7 +46,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang "-Qunused-arguments";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Qunused-arguments";
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin

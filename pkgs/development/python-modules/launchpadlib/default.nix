@@ -34,7 +34,7 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

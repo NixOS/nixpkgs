@@ -32,7 +32,7 @@ buildPythonPackage rec {
     mkdocstrings
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mkdocs-material
     pytestCheckHook
   ];

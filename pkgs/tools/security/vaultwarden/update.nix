@@ -1,5 +1,7 @@
 { writeShellScript
 , lib
+, nix
+, nix-prefetch-git
 , nix-update
 , curl
 , git
@@ -9,7 +11,7 @@
 }:
 
 writeShellScript "update-vaultwarden" ''
-  PATH=${lib.makeBinPath [ curl git gnugrep gnused jq nix-update ]}
+  PATH=${lib.makeBinPath [ curl git gnugrep gnused jq nix nix-prefetch-git nix-update ]}
 
   set -euxo pipefail
 
@@ -17,6 +19,11 @@ writeShellScript "update-vaultwarden" ''
   nix-update "vaultwarden" --version "$VAULTWARDEN_VERSION"
 
   URL="https://raw.githubusercontent.com/dani-garcia/vaultwarden/''${VAULTWARDEN_VERSION}/docker/Dockerfile.j2"
-  WEBVAULT_VERSION=$(curl --silent "$URL" | grep "set vault_version" | sed -E "s/.*\"([^\"]+)\".*/\\1/")
+  WEBVAULT_VERSION=$(curl --silent "$URL" | grep "set vault_version" | sed -E "s/.*\"v([^\"]+)\".*/\\1/")
+  old_hash_bw=$(nix --extra-experimental-features nix-command eval -f default.nix --raw vaultwarden.webvault.src.outputHash)
+  old_hash_vw=$(nix --extra-experimental-features nix-command eval -f default.nix --raw vaultwarden.webvault.bw_web_builds.outputHash)
+  new_hash_bw=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-git https://github.com/bitwarden/clients.git --rev "web-v$WEBVAULT_VERSION" | jq --raw-output ".sha256"))
+  new_hash_vw=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-git https://github.com/dani-garcia/bw_web_builds.git --rev "v$WEBVAULT_VERSION" | jq --raw-output ".sha256"))
+  sed -e "s#$old_hash_bw#$new_hash_bw#" -e "s#$old_hash_vw#$new_hash_vw#" -i pkgs/tools/security/vaultwarden/webvault.nix
   nix-update "vaultwarden.webvault" --version "$WEBVAULT_VERSION"
 ''

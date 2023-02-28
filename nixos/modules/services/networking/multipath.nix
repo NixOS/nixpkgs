@@ -516,7 +516,6 @@ in {
         ${optionalString (!isNull defaults) ''
           defaults {
           ${indentLines 2 defaults}
-            multipath_dir ${cfg.package}/lib/multipath
           }
         ''}
         ${optionalString (!isNull blacklist) ''

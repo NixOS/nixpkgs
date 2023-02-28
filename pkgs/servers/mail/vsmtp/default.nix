@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vsmtp";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "viridIT";
     repo = "vsmtp";
     rev = "v${version}";
-    hash = "sha256-uyu2NpHFDqJDcfQukG6TdRH7KuZnrYTULvLiABdvAog=";
+    hash = "sha256-iyjtSeus1gctylYfXAEqpwZNPg/KU/lXv82Wi0h5mAM=";
   };
 
-  cargoHash = "sha256-A0Q6ciZJL13VzJgZIWZalrRElSNGHUN/9b8Csj4Tdak=";
+  cargoHash = "sha256-N4cxAFAFtYnd1/wdomm0VYosDY5uy+0z9pRGThSMbG4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # too many upstream failures
+  # tests do not run well in the nix sandbox
   doCheck = false;
 
   postInstall = ''

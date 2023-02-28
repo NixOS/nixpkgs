@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libobjc
   ];
 
-  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
     "-Wno-old-style-cast"
   ]);
 

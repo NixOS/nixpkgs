@@ -66,7 +66,7 @@ in
 {
 
   meta = {
-    doc = ./gnome.xml;
+    doc = ./gnome.md;
     maintainers = teams.gnome.members;
   };
 

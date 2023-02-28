@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "matrix-appservice-irc";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     rev = "refs/tags/${version}";
-    hash = "sha256-8/jLONqf+0JRAK/SLj3qlG6Dm0VRl4h6YWeZnz4pVXc=";
+    hash = "sha256-krF/eUyGHB4M3sQVaBh7+OaHnM/g9XVaBa8gizPkLKE=";
   };
 
-  npmDepsHash = "sha256-fGft7au5js9DRoXYccBPdJyaZ3zfsuCwUwWPOxwAodo=";
+  npmDepsHash = "sha256-VkVpFt3cwnBkN0AGDaE5Bd6xINGL6XugZ4TBsDONWCg=";
 
   nativeBuildInputs = [
     python3

@@ -3,22 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lsyncd";
-  version = "2.2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "axkibe";
     repo = "lsyncd";
     rev = "release-${version}";
-    sha256 = "1hbsih5hfq9lhgnxm0wb5mrj6xmlk2l0i9a79wzd5f6cnjil9l3x";
+    hash = "sha256-QBmvS1HGF3VWS+5aLgDr9AmUfEsuSz+DTFIeql2XHH4=";
   };
-
-  patches = [
-    (fetchpatch {
-      sha256 = "0b0h2qxh73l502p7phf6qgl8576nf6fvqqp2x5wy3nz7sc9qb1z8";
-      name = "fix-non-versioned-lua-not-search-in-cmake.patch";
-      url = "https://github.com/axkibe/lsyncd/pull/500/commits/0af99d8d5ba35118e8799684a2d4a8ea4b0c6957.patch";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace default-rsync.lua \

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-85gr6NnFPawSYYZAE/3sf4Ov0uQu3m9t0GnF4UnFQNU=";
   };
 
-  checkInputs = [ pytest pytest-cov pytest-mock freezegun ];
+  nativeCheckInputs = [ pytest pytest-cov pytest-mock freezegun ];
   propagatedBuildInputs = [
     binaryornot
     jinja2

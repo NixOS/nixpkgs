@@ -1,17 +1,16 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
-buildGoModule rec {
+{ lib, fetchFromGitHub, buildGo119Module }:
+buildGo119Module rec {
   pname = "netdata-go.d.plugin";
-  version = "0.32.3";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "go.d.plugin";
     rev = "v${version}";
-    sha256 = "sha256-SayFqr6n6OLLUXseYiR8iBIf2xeDEHXHD0qBrgHY6+o=";
+    sha256 = "5kDc6zszVuFTDkNMuHBRwrfDnH+AdD6ULzmywtvL8iA=";
   };
 
-  vendorSha256 = "sha256-tIuHWfAjvr5s2nJSnhnMZIjyy77BbobwgQoDOy4gdGI=";
+  vendorSha256 = "sha256-Wv6xqzpQxlZCrVnS+g9t1qiYCkm3NfXfW8XDYA9Txxs=";
 
   doCheck = false;
 

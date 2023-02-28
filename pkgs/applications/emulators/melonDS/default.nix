@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}" ];
 
   meta = with lib; {
-    homepage = "http://melonds.kuribo64.net/";
+    homepage = "https://melonds.kuribo64.net/";
     description = "Work in progress Nintendo DS emulator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ artemist benley shamilton xfix ];

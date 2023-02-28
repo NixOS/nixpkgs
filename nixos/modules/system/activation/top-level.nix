@@ -65,6 +65,7 @@ let
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
+      export distroId=${config.system.nixos.distroId};
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
       ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''

@@ -51,13 +51,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.87";
+  version = "1.0.88";
 
   src = let
     inherit (finalAttrs) version;
   in fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-0m7MXLtSuq8GdDFXzKeY86DIglgeQ6wyEtpOyB/thkc=";
+    hash = "sha256-mg1dzXREIhO9LsoCEauuBR9ESGHM3RvoFN+5vHU0HDA=";
   };
 
   patches = [

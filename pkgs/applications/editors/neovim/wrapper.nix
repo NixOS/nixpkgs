@@ -5,8 +5,6 @@
 , python3Packages
 , callPackage
 }:
-with lib;
-
 neovim:
 
 let
@@ -32,7 +30,7 @@ let
   }@args:
   let
 
-    wrapperArgsStr = if isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
+    wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -43,7 +41,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ;
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
@@ -57,22 +55,22 @@ let
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'Name=Neovim' 'Name=Neovim wrapper'
       ''
-      + optionalString withPython3 ''
+      + lib.optionalString withPython3 ''
         makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH
       ''
-      + optionalString (rubyEnv != null) ''
+      + lib.optionalString (rubyEnv != null) ''
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
-      + optionalString withNodeJs ''
+      + lib.optionalString withNodeJs ''
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
-      + optionalString vimAlias ''
+      + lib.optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
       ''
-      + optionalString viAlias ''
+      + lib.optionalString viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
       ''
-      + optionalString (manifestRc != null) (let
+      + lib.optionalString (manifestRc != null) (let
         manifestWrapperArgs =
           [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ];
       in ''

@@ -18,7 +18,7 @@
 let
   args' = if relative != null then {
     stripLen = 1 + lib.length (lib.splitString "/" relative) + stripLen;
-    extraPrefix = if extraPrefix != null then extraPrefix else "";
+    extraPrefix = lib.optionalString (extraPrefix != null) extraPrefix;
   } else {
     inherit stripLen extraPrefix;
   };

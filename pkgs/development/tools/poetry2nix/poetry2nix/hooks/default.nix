@@ -18,7 +18,7 @@ let
         makeSetupHook
           {
             name = "remove-path-dependencies.sh";
-            deps = [ ];
+            propagatedBuildInputs = [ ];
             substitutions = {
               # NOTE: We have to use a non-overlayed Python here because otherwise we run into an infinite recursion
               # because building of tomlkit and its dependencies also use these hooks.
@@ -50,7 +50,7 @@ in
       makeSetupHook
         {
           name = "pip-build-hook.sh";
-          deps = [ pip wheel ];
+          propagatedBuildInputs = [ pip wheel ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
           };
@@ -64,7 +64,7 @@ in
       makeSetupHook
         {
           name = "fixup-hook.sh";
-          deps = [ ];
+          propagatedBuildInputs = [ ];
           substitutions = {
             inherit pythonSitePackages;
             filenames = builtins.concatStringsSep " " [
@@ -84,7 +84,7 @@ in
       makeSetupHook
         {
           name = "wheel-unpack-hook.sh";
-          deps = [ ];
+          propagatedBuildInputs = [ ];
         } ./wheel-unpack-hook.sh
     )
     { };

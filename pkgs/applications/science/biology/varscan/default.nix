@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "varscan";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchurl {
     url = "https://github.com/dkoboldt/varscan/raw/master/VarScan.v${version}.jar";
-    sha256 = "sha256-+yO3KrZ2+1qJvQIJHCtsmv8hC5a+4E2d7mrvTYtygU0=";
+    sha256 = "sha256-q4jkkKTqXHiaAPRThqo82i43+B4NaHUUuMyefW6tgg0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

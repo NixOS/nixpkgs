@@ -74,7 +74,7 @@ buildPythonPackage rec {
       --replace "pytest-aiohttp~=0.3.0" "pytest-aiohttp~=1.0.3"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     certomancer
     freezegun

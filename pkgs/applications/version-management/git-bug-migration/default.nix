@@ -12,7 +12,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-X main.GitExactTag=${version}"

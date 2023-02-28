@@ -1,7 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-with lib;
-
 buildGoModule rec {
   pname = "flannel";
   version = "0.20.2";
@@ -23,7 +21,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) flannel; };
 
-  meta = {
+  meta = with lib; {
     description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
     homepage = "https://github.com/flannel-io/flannel";

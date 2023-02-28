@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "drone-runner-docker";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZpkVfzqeltZSYrKYB6dXtlVjl1uFpQdl2fa+c5ApiW4=";
+    sha256 = "sha256-ZoQeCuT5FRhxp/ikB0gkp3QVOQ6OS7ukkz4QanWT9G0=";
   };
 
-  vendorSha256 = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";
+  vendorHash = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";
 
   meta = with lib; {
     maintainers = with maintainers; [ endocrimes indeednotjames ];

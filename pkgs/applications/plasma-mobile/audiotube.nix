@@ -2,7 +2,7 @@
 , mkDerivation
 
 , extra-cmake-modules
-, gcc11
+, gcc12
 , wrapGAppsHook
 
 , gst_all_1
@@ -22,7 +22,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     wrapGAppsHook
-    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
+    gcc12 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
   ];

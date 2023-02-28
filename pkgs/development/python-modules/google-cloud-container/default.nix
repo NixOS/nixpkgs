@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.14.0";
+  version = "2.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r/AmdcXIChEqp3AvO2xU2lsM3pqmn/Tmv8/cQJ+kuCE=";
+    hash = "sha256-sYF6yV/VENn11V74vWU2p/pSkPAfYPtW2l1TdHTSR2g=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook

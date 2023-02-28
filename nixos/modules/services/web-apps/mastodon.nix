@@ -94,11 +94,14 @@ let
       ] else []
     ) env))));
 
-  mastodonTootctl = pkgs.writeShellScriptBin "mastodon-tootctl" ''
+  mastodonTootctl = let
+    sourceExtraEnv = lib.concatMapStrings (p: "source ${p}\n") cfg.extraEnvFiles;
+  in pkgs.writeShellScriptBin "mastodon-tootctl" ''
     set -a
     export RAILS_ROOT="${cfg.package}"
     source "${envFile}"
     source /var/lib/mastodon/.secrets_env
+    ${sourceExtraEnv}
 
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
@@ -427,6 +430,15 @@ in {
         '';
       };
 
+      extraEnvFiles = lib.mkOption {
+        type = with lib.types; listOf path;
+        default = [];
+        description = lib.mdDoc ''
+          Extra environment files to pass to all mastodon services. Useful for passing down environemntal secrets.
+        '';
+        example = [ "/etc/mastodon/s3config.env" ];
+      };
+
       automaticMigrations = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -579,7 +591,7 @@ in {
       };
       serviceConfig = {
         Type = "oneshot";
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
@@ -607,7 +619,7 @@ in {
         ExecStart = "${cfg.package}/run-streaming.sh";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-streaming";
@@ -634,7 +646,7 @@ in {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
@@ -662,7 +674,7 @@ in {
         ExecStart = "${cfg.package}/bin/sidekiq -c ${toString cfg.sidekiqThreads} -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
@@ -675,7 +687,7 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ];
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
       } // cfgService;
       script = let
         olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;

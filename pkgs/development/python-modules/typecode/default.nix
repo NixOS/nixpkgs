@@ -40,7 +40,7 @@ buildPythonPackage rec {
     typecode-libmagic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];

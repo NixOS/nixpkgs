@@ -152,7 +152,7 @@ services.akkoma.config.":pleroma".":media_preview_proxy" = {
 
 ## Frontend management {#modules-services-akkoma-frontend-management}
 
-Akkoma will be deployed with the `pleroma-fe` and `admin-fe` frontends by default. These can be
+Akkoma will be deployed with the `akkoma-fe` and `admin-fe` frontends by default. These can be
 modified by setting
 [{option}`services.akkoma.frontends`](options.html#opt-services.akkoma.frontends).
 
@@ -160,7 +160,7 @@ The following example overrides the primary frontend’s default configuration u
 derivation.
 
 ```nix
-services.akkoma.frontends.primary.package = pkgs.runCommand "pleroma-fe" {
+services.akkoma.frontends.primary.package = pkgs.runCommand "akkoma-fe" {
   config = builtins.toJSON {
     expertLevel = 1;
     collapseMessageWithSubject = false;
@@ -177,10 +177,10 @@ services.akkoma.frontends.primary.package = pkgs.runCommand "pleroma-fe" {
   passAsFile = [ "config" ];
 } ''
   mkdir $out
-  lndir ${pkgs.akkoma-frontends.pleroma-fe} $out
+  lndir ${pkgs.akkoma-frontends.akkoma-fe} $out
 
   rm $out/static/config.json
-  jq -s add ${pkgs.akkoma-frontends.pleroma-fe}/static/config.json ${config} \
+  jq -s add ${pkgs.akkoma-frontends.akkoma-fe}/static/config.json ${config} \
     >$out/static/config.json
 '';
 ```

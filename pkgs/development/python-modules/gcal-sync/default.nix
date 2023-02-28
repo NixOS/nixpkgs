@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-aiohttp
     pytest-asyncio

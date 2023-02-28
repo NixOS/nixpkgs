@@ -104,8 +104,8 @@ let
     ''
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
       export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-      ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
-      ${if system == "mipsel-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
+      ${lib.optionalString (system == "x86_64-linux") "NIX_LIB64_IN_SELF_RPATH=1"}
+      ${lib.optionalString (system == "mipsel-linux") "NIX_LIB32_IN_SELF_RPATH=1"}
     '';
 
 
@@ -296,7 +296,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage)
-        ccWrapperStdenv
+        ccWrapperStdenv gettext
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
@@ -312,7 +312,7 @@ in
         # Apparently iconv won't work with bootstrap glibc, but it will be used
         # with glibc built later where we keep *this* build of libunistring,
         # so we need to trick it into supporting libiconv.
-        am_cv_func_iconv_works = "yes";
+        env = attrs.env or {} // { am_cv_func_iconv_works = "yes"; };
       });
       libidn2 = super.libidn2.overrideAttrs (attrs: {
         postFixup = attrs.postFixup or "" + ''
@@ -332,7 +332,8 @@ in
         # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
-          inherit (prevStage.bintools.bintools) name;
+          pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
+          inherit (prevStage.bintools.bintools) version;
           enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
@@ -369,7 +370,7 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils coreutils gnugrep
+        binutils coreutils gnugrep gettext
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       gcc-unwrapped =

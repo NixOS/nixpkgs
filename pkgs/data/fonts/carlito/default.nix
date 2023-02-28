@@ -1,18 +1,18 @@
-{ lib, fetchzip, stdenvNoCC }:
+{ lib, fetchurl, stdenvNoCC }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "carlito";
   version = "20130920";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
-    sha256 = "sha256-OGDO5WoF7OmiRdLRRrIXMzg276Pgeq1L3Offcl0W2jg=";
+    sha256 = "sha256-S9ErbLwyHBzxbaduLFhcklzpVqCAZ65vbGTv9sz9r1o=";
   };
 
   installPhase = ''
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/fonts/truetype
-    cp -v $src/*.ttf $out/share/fonts/truetype
+    cp -v *.ttf $out/share/fonts/truetype
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
   '';
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `vista-fonts` package, then you probably will

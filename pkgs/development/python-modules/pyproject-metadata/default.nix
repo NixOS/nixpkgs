@@ -30,7 +30,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli

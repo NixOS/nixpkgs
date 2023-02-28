@@ -33,7 +33,7 @@ buildPythonPackage rec {
     orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips

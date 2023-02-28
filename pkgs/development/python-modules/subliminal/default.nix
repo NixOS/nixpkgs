@@ -38,7 +38,7 @@ buildPythonPackage rec {
     appdirs rarfile pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     sympy vcrpy pytest pytest-flakes
     pytest-cov pytest-runner
   ];

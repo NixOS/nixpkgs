@@ -28,7 +28,7 @@ buildPythonPackage rec {
     xmlsec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
   ];
 

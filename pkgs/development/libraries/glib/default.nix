@@ -19,6 +19,7 @@
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
+, testers
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -55,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.3";
+  version = "2.74.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
+    sha256 = "zrqDpZmc6zGkxPyZISB8uf//0qsdbsA8Fi0/YIpcFMg=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -174,9 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -239,7 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -263,7 +267,10 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
-    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+    tests = {
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
@@ -286,9 +293,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
+    homepage    = "https://wiki.gnome.org/Projects/GLib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    pkgConfigModules = [
+      "gio-2.0"
+      "gobject-2.0"
+      "gthread-2.0"
+    ];
     platforms   = platforms.unix;
 
     longDescription = ''

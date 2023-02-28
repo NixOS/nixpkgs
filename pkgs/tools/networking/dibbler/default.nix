@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: ./Port-linux/libLowLevel.a(libLowLevel_a-interface.o):(.bss+0x4): multiple definition of `interface_auto_up';
   #     ./Port-linux/libLowLevel.a(libLowLevel_a-lowlevel-linux-link-state.o):(.bss+0x74): first defined here
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1" + " -fcommon";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__APPLE_USE_RFC_2292=1" + " -fcommon";
 
   meta = with lib; {
     description = "Portable DHCPv6 implementation";

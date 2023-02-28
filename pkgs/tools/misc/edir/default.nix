@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "edir";
-  version = "2.7.3";
+  version = "2.16";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "06nsy9ikljc437368l38hsw75whacn3j6jwmdgg766q61pnifhkp";
+    sha256 = "ro1GZkJ6xDZcMRaWTAW/a2qhFbZAxsduvGO3C4sOI+A=";
   };
 
   meta = with lib; {

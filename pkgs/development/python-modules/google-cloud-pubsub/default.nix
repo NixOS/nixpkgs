@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.13.12";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/qa/3RKWC0SDgDeax/CwiZtSc9Nxm1cHJAKT6si2ecw=";
+    hash = "sha256-PKVX/A1AT3EqHahBLnGlXNY7aiZZdbCmvsQ/+KNV7UA=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     pytestCheckHook
     pytest-asyncio

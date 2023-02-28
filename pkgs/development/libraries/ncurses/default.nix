@@ -8,19 +8,16 @@
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
+, testers
 }:
 
-stdenv.mkDerivation rec {
-  ver = "6.3";
-  # We pick fresh intermediate release to get a fix for CVE-2022-29458
-  # which was fixed in 20220416 patchset.
-  patchver = "20220507";
-  version = "${ver}-p${patchver}";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.4";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
-    sha256 = "02y4n4my5qqhw3fdhdjv1zc9xpyglzlzmzjwq2zcwbwv738255ja";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -173,11 +170,20 @@ stdenv.mkDerivation rec {
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
     license = licenses.mit;
+    pkgConfigModules = let
+      base = [
+        "form"
+        "menu"
+        "ncurses"
+        "panel"
+      ] ++ lib.optional withCxx "ncurses++";
+    in base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
     platforms = platforms.all;
   };
 
   passthru = {
     ldflags = "-lncurses";
     inherit unicodeSupport abiVersion;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
-}
+})

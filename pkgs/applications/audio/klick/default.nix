@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
 
   meta = {
-    homepage = "http://das.nasophon.de/klick/";
+    homepage = "https://das.nasophon.de/klick/";
     description = "Advanced command-line metronome for JACK";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

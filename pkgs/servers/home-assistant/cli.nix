@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   #  $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
   #'';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
   ];

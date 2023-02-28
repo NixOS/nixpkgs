@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
     "-Dversion=${version}"
   ];
 
-  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # Needed with GCC 12
+    "-Wno-error=address"
+  ] ++ lib.optionals stdenv.isDarwin [
     "-Wno-sometimes-uninitialized"
     "-Wno-tautological-pointer-compare"
   ] ++ lib.optionals stdenv.isLinux [

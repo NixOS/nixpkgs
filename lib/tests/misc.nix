@@ -153,6 +153,11 @@ runTests {
     expected = "a,b,c";
   };
 
+  testConcatLines = {
+    expr = concatLines ["a" "b" "c"];
+    expected = "a\nb\nc\n";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -472,6 +477,11 @@ runTests {
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
+  };
+
+  testReplicate = {
+    expr = replicate 3 "a";
+    expected = ["a" "a" "a"];
   };
 
   testToIntShouldConvertStringToInt = {

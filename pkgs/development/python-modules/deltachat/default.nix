@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , pkg-config
 , pkgconfig
 , setuptools-scm
+, wheel
 , libdeltachat
 , cffi
 , imap-tools
@@ -18,12 +19,16 @@ buildPythonPackage rec {
   inherit (libdeltachat) version src;
   sourceRoot = "${src.name}/python";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   nativeBuildInputs = [
+    cffi
     pkg-config
     pkgconfig
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,10 +42,9 @@ buildPythonPackage rec {
     imap-tools
     pluggy
     requests
-    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

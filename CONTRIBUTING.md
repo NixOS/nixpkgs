@@ -128,14 +128,17 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Security critical applications (E.g. `firefox`)
 
 ## Generating 23.05 Release Notes
+<!--
+note: title unchanged even though we don't need regeneration because extant
+PRs will link here. definitely change the title for 23.11 though.
+-->
 
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
+Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
 
 Steps for updating 23.05 Release notes:
 
 1. Edit `nixos/doc/manual/release-notes/rl-2305.section.md` with the desired changes
-2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2305.section.xml`
-3. Include changes to `rl-2305.section.md` and `rl-2305.section.xml` in the same commit.
+2. Commit changes to `rl-2305.section.md`.
 
 ## Reviewing contributions
 

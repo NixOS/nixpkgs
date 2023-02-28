@@ -48,7 +48,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];

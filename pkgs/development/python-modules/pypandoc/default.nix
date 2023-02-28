@@ -30,7 +30,7 @@ buildPythonPackage rec {
     ./skip-tests.patch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     texlive.combined.scheme-small
     pandocfilters
   ];

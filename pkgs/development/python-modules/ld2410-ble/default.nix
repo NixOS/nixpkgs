@@ -33,7 +33,7 @@ buildPythonPackage rec {
     bleak-retry-connector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

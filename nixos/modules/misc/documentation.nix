@@ -357,6 +357,14 @@ in
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
+      system.activationScripts.check-manual-docbook = ''
+        if [[ $(cat ${manual.optionsUsedDocbook}) = 1 ]]; then
+          echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
+                  "Support for docbook is deprecated and will be removed after NixOS 23.05." \
+                  "See nix-store --read-log ${builtins.unsafeDiscardStringContext manual.optionsJSON.drvPath}"
+        fi
+      '';
+
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];

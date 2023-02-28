@@ -70,13 +70,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "sha256-I9xJWHoY8fZ5T9zca77gFciC+7JdD6fMwV16giiY4FU=";
+    sha256 = "sha256-4sq3LblFRWCBREudtzg+o9wjstm58gPzBq7QAwlWvEg=";
   };
 
   postPatch = ''
@@ -175,11 +175,11 @@ stdenv.mkDerivation rec {
     WITH_X11 = true;
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
-  ];
+  ]);
 
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
     "-framework AudioToolbox"

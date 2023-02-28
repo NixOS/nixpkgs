@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MOD playing library";
-    homepage    = "http://modplug-xmms.sourceforge.net/";
+    homepage    = "https://modplug-xmms.sourceforge.net/";
     license     = licenses.publicDomain;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ raskin ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     diskcache
     eventlet
     more-itertools

@@ -37,7 +37,7 @@ in
               - stderr
               - file:/path/to/file
               - syslog:FACILITY where FACILITY is any of "daemon", "local0",
-              etc.
+                etc.
           '';
       };
 
@@ -125,6 +125,7 @@ in
               lib.mdDoc ''
                 Way to disclose client IP to the proxy.
                   - "false": do not disclose
+
                 http-connect supports the following ways:
                   - "X-Forwarded-For": add header "X-Forwarded-For: IP"
                   - "Forwarded_ip": add header "Forwarded: for=IP" (see RFC7239)

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     bson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     bson
     pyyaml

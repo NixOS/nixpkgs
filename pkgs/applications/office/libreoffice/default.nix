@@ -96,7 +96,7 @@
 , gpgme
 , libwebp
 , abseil-cpp
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 , mkDerivation ? null
@@ -110,6 +110,7 @@
 , wrapQtAppsHook ? null
 , variant ? "fresh"
 , symlinkJoin
+, postgresql
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
@@ -175,7 +176,7 @@ in
 
   outputs = [ "out" "dev" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
@@ -404,6 +405,7 @@ in
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
+    "--with-system-postgresql"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -418,7 +420,6 @@ in
     # I imagine this helps. Copied from go-oo.
     # Modified on every upgrade, though
     "--disable-odk"
-    "--disable-postgresql-sdbc"
     "--disable-firebird-sdbc"
     "--without-fonts"
     "--without-doxygen"
@@ -546,6 +547,7 @@ in
     pam
     perl
     poppler
+    postgresql
     python3
     sane-backends
     unixODBC

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-runner
     requests-mock

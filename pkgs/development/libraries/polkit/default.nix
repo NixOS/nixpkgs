@@ -21,7 +21,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
-, useSystemd ? stdenv.isLinux
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , elogind
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     expat
     pam
     dbus
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
     glib # in .pc Requires
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 
@@ -167,7 +166,7 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}${system}"/* "$out"
     rm --recursive "${DESTDIR}${system}"/*
     rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done

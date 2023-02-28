@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, contextlib2
 , cython
 , fuse
 , pkg-config
@@ -29,8 +28,6 @@ buildPythonPackage rec {
 
   buildInputs = [ fuse ];
 
-  propagatedBuildInputs = [ contextlib2 ];
-
   preConfigure = ''
     substituteInPlace setup.py \
         --replace "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
@@ -42,7 +39,7 @@ buildPythonPackage rec {
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook which ];
+  nativeCheckInputs = [ pytestCheckHook which ];
 
   disabledTests = [
     "test_listdir" # accesses /usr/bin

@@ -247,6 +247,7 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
+ - LPFP
  - LPPaver
  - LambdaHack
  - LambdaINet
@@ -463,7 +464,9 @@ dont-distribute-packages:
  - algebra-sql
  - algebraic
  - algolia
+ - algorithmic-composition-basic
  - algorithmic-composition-frequency-shift
+ - algorithmic-composition-overtones
  - align-audio
  - alms
  - alpha
@@ -673,10 +676,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
- - ascii-superset_1_2_5_0
+ - ascii-superset_1_2_7_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_5_1_0
+ - ascii_1_5_4_0
  - asic
  - asil
  - assert4hs-hspec
@@ -811,6 +814,7 @@ dont-distribute-packages:
  - bitcoin-types
  - bitcoind-regtest
  - bitcoind-rpc
+ - bitfield
  - bitly-cli
  - bitmaps
  - bittorrent
@@ -874,7 +878,6 @@ dont-distribute-packages:
  - bv-sized
  - bv-sized-lens
  - bytable
- - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
@@ -1029,7 +1032,6 @@ dont-distribute-packages:
  - comark
  - comfort-array
  - comfort-array-shape
- - comfort-array_0_5_2
  - comfort-fftw
  - comfort-glpk
  - commsec
@@ -1118,7 +1120,6 @@ dont-distribute-packages:
  - crf-chain1-constrained
  - crf-chain2-generic
  - crf-chain2-tiers
- - criterion-compare
  - criu-rpc
  - crockford
  - cron-compat
@@ -1286,6 +1287,7 @@ dont-distribute-packages:
  - dobutokO3
  - dobutokO4
  - doc-review
+ - domaindriven
  - dormouse-client
  - dovetail
  - dovetail-aeson
@@ -1396,6 +1398,7 @@ dont-distribute-packages:
  - eventuo11y
  - eventuo11y-batteries
  - eventuo11y-json
+ - eventuo11y-otel
  - every-bit-counts
  - ewe
  - exference
@@ -1592,6 +1595,7 @@ dont-distribute-packages:
  - ghc-instances
  - ghc-mod
  - ghc-session
+ - ghc-tags-pipes
  - ghc-tags-plugin
  - ghci-pretty
  - ghcjs-dom-hello
@@ -1860,12 +1864,13 @@ dont-distribute-packages:
  - graph-visit
  - graphicsFormats
  - graphicstools
- - graphql-client
  - graphtype
  - greencard-lib
  - grenade
  - gridbounds
  - gridland
+ - grisette
+ - grisette-monad-coroutine
  - groot
  - gross
  - groundhog-converters
@@ -2203,8 +2208,6 @@ dont-distribute-packages:
  - hpaco-lib
  - hpage
  - hpaste
- - hpath-directory
- - hpath-io
  - hpc-tracer
  - hplayground
  - hpqtypes-effectful
@@ -2254,7 +2257,6 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
- - hslua-module-zip
  - hsndfile-storablevector
  - hspec-expectations-pretty
  - hspec-pg-transact
@@ -2300,6 +2302,9 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-aws-sqs-conduit
+ - hw-json
+ - hw-json-simple-cursor
+ - hw-json-standard-cursor
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -2371,6 +2376,7 @@ dont-distribute-packages:
  - instant-deepseq
  - instant-hashable
  - instant-zipper
+ - instrument-cloudwatch
  - integreat
  - intel-aes
  - interpolatedstring-qq
@@ -2545,6 +2551,7 @@ dont-distribute-packages:
  - lapack
  - lapack-comfort-array
  - lapack-hmatrix
+ - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2726,12 +2733,9 @@ dont-distribute-packages:
  - marvin
  - masakazu-bot
  - matchers
- - math-programming-glpk
- - math-programming-tests
  - mathblog
  - mathlink
  - matsuri
- - matterhorn
  - maxent
  - maxent-learner-hw-gui
  - maxsharing
@@ -2770,6 +2774,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmsyn6ukr
+ - mmsyn6ukr-array
  - mmsyn7h
  - mmsyn7s
  - mmsyn7ukr
@@ -3003,6 +3008,7 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
+ - pandoc-crossref_0_3_15_0
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3053,6 +3059,8 @@ dont-distribute-packages:
  - persistable-record
  - persistable-types-HDBC-pg
  - persistent-audit
+ - persistent-event-source
+ - persistent-eventsource
  - persistent-hssqlppp
  - persistent-map
  - persistent-mtl
@@ -3069,8 +3077,15 @@ dont-distribute-packages:
  - phonetic-languages-general
  - phonetic-languages-permutations
  - phonetic-languages-properties
+ - phonetic-languages-simplified-base
  - phonetic-languages-simplified-common
+ - phonetic-languages-simplified-examples-array
+ - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-array
+ - phonetic-languages-simplified-generalized-examples-common
+ - phonetic-languages-simplified-generalized-properties-array
  - phonetic-languages-simplified-lists-examples
+ - phonetic-languages-simplified-properties-array
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
@@ -3470,6 +3485,7 @@ dont-distribute-packages:
  - satchmo-funsat
  - satchmo-toysat
  - sauron
+ - sbv-program
  - sbvPlugin
  - sc2-lowlevel
  - sc2-support
@@ -3553,7 +3569,6 @@ dont-distribute-packages:
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
- - servant-streamly
  - servant-swagger-tags
  - servant-to-elm
  - servant-util
@@ -3632,7 +3647,6 @@ dont-distribute-packages:
  - smtlib2-quickcheck
  - smtlib2-timing
  - smtp2mta
- - snap-blaze-clay
  - snap-elm
  - snap-extras
  - snaplet-actionlog
@@ -3744,12 +3758,12 @@ dont-distribute-packages:
  - streamed
  - streaming-fft
  - streaming-process
- - streamly-posix
  - strelka
  - strelka-wai
  - strict-containers-lens
  - strict-containers-serialise
  - strict-data
+ - string-interpreter
  - string-typelits
  - stripe-haskell
  - stripe-http-client
@@ -3820,7 +3834,6 @@ dont-distribute-packages:
  - synthesizer
  - synthesizer-alsa
  - synthesizer-core
- - synthesizer-core_0_8_3
  - synthesizer-dimensional
  - synthesizer-filter
  - synthesizer-llvm
@@ -3887,7 +3900,6 @@ dont-distribute-packages:
  - theoremquest-client
  - thimk
  - threaded
- - threepenny-gui-flexbox
  - thumbnail-polish
  - tic-tac-toe
  - tickle
@@ -4131,7 +4143,6 @@ dont-distribute-packages:
  - weatherhs
  - web-inv-route
  - web-mongrel2
- - web-page
  - web-rep
  - web-routes-regular
  - web-routing

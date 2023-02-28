@@ -9,22 +9,22 @@
 }:
 
 let
-  # remove when upgrading to pjsip >2.12.1
+  # remove when upgrading to pjsip >2.13
   pjsip_patches = [
-    (fetchpatch {
-      name = "0150-CVE-2022-31031.patch";
-      url = "https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202.patch";
-      sha256 = "sha256-30kHrmB51UIw4x/J6/CD+vPKf/gBYDCcFoUpwEWkDMY=";
-    })
-    (fetchpatch {
-      name = "0151-CVE-2022-39244.patch";
-      url = "https://github.com/pjsip/pjproject/commit/c4d34984ec92b3d5252a7d5cddd85a1d3a8001ae.patch";
-      sha256 = "sha256-hTUMh6bYAizn6GF+sRV1vjKVxSf9pnI+eQdPOqsdJI4=";
-    })
     (fetchpatch {
       name = "0152-CVE-2022-39269.patch";
       url = "https://github.com/pjsip/pjproject/commit/d2acb9af4e27b5ba75d658690406cec9c274c5cc.patch";
       sha256 = "sha256-bKE/MrRAqN1FqD2ubhxIOOf5MgvZluHHeVXPjbR12iQ=";
+    })
+    (fetchpatch {
+      name = "pjsip-2.12.1-CVE-2022-23537.patch";
+      url = "https://raw.githubusercontent.com/NixOS/nixpkgs/ca2b44568eb0ffbd0b5a22eb70feb6dbdcda8e9c/pkgs/applications/networking/pjsip/1.12.1-CVE-2022-23537.patch";
+      sha256 = "sha256-KNSnHt0/o1qJk4r2z5bxbYxKAa7WBtzGOhRXkru3VK4=";
+    })
+    (fetchpatch {
+      name = "pjsip-2.12.1-CVE-2022-23547.patch";
+      url = "https://raw.githubusercontent.com/NixOS/nixpkgs/ca2b44568eb0ffbd0b5a22eb70feb6dbdcda8e9c/pkgs/applications/networking/pjsip/1.12.1-CVE-2022-23547.patch";
+      sha256 = "sha256-0iEr/Z4UQpWsTXYWVYzWWk7MQDOFnTQ1BBYpynGLTVQ=";
     })
   ];
   common = {version, sha256, externals}: stdenv.mkDerivation {

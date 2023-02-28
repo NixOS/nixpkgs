@@ -1,5 +1,10 @@
-diff --git a/SConstruct b/SConstruct
-index 32cb644..650333a 100644
+scons does not use os environment by default:
+  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
+
+nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
+to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
+
+While at it ported to python3-style print().
 --- a/SConstruct
 +++ b/SConstruct
 @@ -6,7 +6,7 @@
@@ -11,16 +16,15 @@ index 32cb644..650333a 100644
  
  MajorVersion = "0"
  MinorVersion = "19"
-@@ -225,13 +225,18 @@ if env['PLATFORM'] == 'posix':
-                     ["asound", "alsa/asoundlib.h"],
-                     ["openal", "AL/al.h"]]
+@@ -100,6 +100,7 @@ IncludePaths = [
+ paranoid = ' -W -Wcast-qual -Wwrite-strings -Wcast-align -Wpointer-arith -Wconversion -Wredundant-decls -Wunreachable-code -Winline -Wlarger-than-256'
  
-+env.Append(ENV={'PATH': ' ' + os.environ['PATH'], })
-+env.Append(LIBPATH=ARGUMENTS.get('LIBPATH', '').split(':'))
-+env.Append(CCFLAGS=' ' + os.environ.get('NIX_CFLAGS_COMPILE',''))
-+env.Append(CCFLAGS=' -DNULL=0')
-+
- ################################################################################
+ env = Environment(CCFLAGS = '-ggdb -pipe -Wall -O3 -ffast-math -Wno-unused -fPIC -pthread',
++                  ENV = os.environ,
+                   VERSION_NUM = FluxusVersion)
+ env.MergeFlags(ARGUMENTS.get('CCFLAGS', '').split())
+ env.MergeFlags(ARGUMENTS.get('LDFLAGS', '').split())
+@@ -229,9 +230,9 @@ if env['PLATFORM'] == 'posix':
  # Make sure we have these libraries availible
  
  if not GetOption('clean'):
@@ -33,7 +37,7 @@ index 32cb644..650333a 100644
          # detect ode precision
          if not GetOption('clean'):
            try:
-@@ -240,27 +245,27 @@ if not GetOption('clean'):
+@@ -240,27 +241,27 @@ if not GetOption('clean'):
              if isinstance(ode_str[0], str):
                env.MergeFlags(ode_str[0])
            except:
@@ -65,7 +69,7 @@ index 32cb644..650333a 100644
                          Exit(1)
  
          if not conf.CheckFunc("dInitODE2"):
-@@ -334,7 +339,7 @@ if not GetOption('clean'):
+@@ -334,7 +335,7 @@ if not GetOption('clean'):
  			])
  
  	if raco_status != 0:
@@ -74,7 +78,7 @@ index 32cb644..650333a 100644
  		Exit(1)
  
  
-@@ -377,8 +382,8 @@ if not GetOption('clean') and static_modules:
+@@ -377,8 +378,8 @@ if not GetOption('clean') and static_modules:
  
  		app_env['LIBS'].remove("pthread")
  		app_env['LIBS'].remove("dl")
@@ -85,7 +89,7 @@ index 32cb644..650333a 100644
  
  		# now go through the rest of the libs, removing them from
  		# the environment at the same time
-@@ -425,7 +430,7 @@ SConscript(dirs = build_dirs,
+@@ -425,7 +426,7 @@ SConscript(dirs = build_dirs,
  if not GetOption('clean'):
      helpmap_status = subprocess.call(["racket", "makehelpmap.scm"], cwd="docs/helpmap")
      if helpmap_status != 0:

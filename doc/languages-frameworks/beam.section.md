@@ -128,7 +128,7 @@ You will need to run the build process once to fix the hash to correspond to you
 
 ###### FOD {#fixed-output-derivation}
 
-A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir_ls.nix) for a usage example of FOD.
+A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir-ls/default.nix) for a usage example of FOD.
 
 Practical steps
 
@@ -171,6 +171,7 @@ let
     inherit src version;
     # nix will complain and tell you the right value to replace this with
     hash = lib.fakeHash;
+    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
     # if you have build time environment variables add them here
     MY_ENV_VAR="my_value";
   };

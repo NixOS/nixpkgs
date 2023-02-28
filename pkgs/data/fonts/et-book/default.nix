@@ -1,16 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";
-  name = "et-book-${builtins.substring 0 6 rev}";
-  owner = "edwardtufte";
-  repo = "et-book";
-  sha256 = "1bfb1l8k7fzgk2l8cikiyfn5x9m0fiwrnsbc1483p8w3qp58s5n2";
+stdenvNoCC.mkDerivation rec {
+  pname = "et-book";
+  version = "unstable-2015-10-05";
 
-  postFetch = ''
-    tar -xzf $downloadedFile
+  src = fetchFromGitHub {
+    owner = "edwardtufte";
+    repo = pname;
+    rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";
+    hash = "sha256-B6ryC9ibNop08TJC/w9LSHHwqV/81EezXsTUJFq8xpo=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    cp -t $out/share/fonts/truetype et-book-${rev}/source/4-ttf/*.ttf
+    cp -t $out/share/fonts/truetype source/4-ttf/*.ttf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

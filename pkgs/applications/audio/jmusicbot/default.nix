@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre }:
+{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp $src $out/lib/JMusicBot
 
-    makeWrapper ${jre}/bin/java $out/bin/JMusicBot \
+    makeWrapper ${jre_headless}/bin/java $out/bin/JMusicBot \
       --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.all;
+    inherit (jre_headless.meta) platforms;
   };
 }

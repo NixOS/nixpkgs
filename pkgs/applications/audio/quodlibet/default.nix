@@ -119,7 +119,7 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gdk-pixbuf
     glibcLocales

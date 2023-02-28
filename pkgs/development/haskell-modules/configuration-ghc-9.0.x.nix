@@ -49,18 +49,6 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs the latest/matching versions of Cabal-syntax and Cabal
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-
   # Jailbreaks & Version Updates
 
   # This `doJailbreak` can be removed once the following PR is released to Hackage:
@@ -120,6 +108,9 @@ self: super: {
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
     Cabal = lself.Cabal_3_6_3_0;
   }));
+
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`

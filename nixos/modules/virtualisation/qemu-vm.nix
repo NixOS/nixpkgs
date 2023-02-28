@@ -211,7 +211,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "120M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/efi-vars.fd
                 cp ${cfg.efi.variables} $efiVars
@@ -225,7 +225,7 @@ let
                       + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
-          # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
+          # Create a /boot EFI partition with 120M and arbitrary but fixed GUIDs for reproducibility
           ${pkgs.gptfdisk}/bin/sgdisk \
             --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
             --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
@@ -527,6 +527,20 @@ in
           :::
         '';
     };
+
+    virtualisation.restrictNetwork =
+      mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description =
+          lib.mdDoc ''
+            If this option is enabled, the guest will be isolated, i.e. it will
+            not be able to contact the host and no guest IP packets will be
+            routed over the host to the outside. This option does not affect
+            any explicitly set forwarding rules.
+          '';
+      };
 
     virtualisation.vlans =
       mkOption {
@@ -936,10 +950,11 @@ in
               else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
                    "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
           );
+        restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
       [
         "-net nic,netdev=user.0,model=virtio"
-        "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
+        "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
     # FIXME: Consolidate this one day.

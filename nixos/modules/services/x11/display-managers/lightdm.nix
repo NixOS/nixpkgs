@@ -32,7 +32,7 @@ let
   usersConf = writeText "users.conf"
     ''
       [UserList]
-      minimum-uid=500
+      minimum-uid=1000
       hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
       hidden-shells=/run/current-system/sw/bin/nologin
     '';

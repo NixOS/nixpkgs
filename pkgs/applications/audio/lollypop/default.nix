@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromGitLab
 , nix-update-script
 , meson
 , ninja
@@ -9,7 +9,7 @@
 , gst_all_1
 , libhandy
 , libsecret
-, libsoup
+, libsoup_3
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
@@ -25,16 +25,17 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.4.35";
+  version = "1.4.37";
 
   format = "other";
-  doCheck = false;
 
-  src = fetchgit {
-    url = "https://gitlab.gnome.org/World/lollypop";
-    rev = "refs/tags/${version}";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = pname;
+    rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Rdp0gZjdj2tXOWarsTpqgvSZVXAQsCLfk5oUyalE/ZA=";
+    sha256 = "sha256-3GPmGNbbSxvLq0t3F9q1x64BwNQCEvFQWLb0bSO9KUY=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ python3.pkgs.buildPythonApplication rec  {
     gstreamer
     gtk3
     libhandy
-    libsoup
+    libsoup_3
     pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
@@ -97,7 +98,6 @@ python3.pkgs.buildPythonApplication rec  {
   passthru = {
     updateScript = nix-update-script { };
   };
-
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";

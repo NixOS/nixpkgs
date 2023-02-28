@@ -5,7 +5,6 @@
 , openssl
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "btcdeb";
   version = "unstable-2022-04-03";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl ];
 
-  meta = {
+  meta = with lib; {
     description = "Bitcoin Script Debugger";
     homepage = "https://github.com/bitcoin-core/btcdeb";
     license = licenses.mit;

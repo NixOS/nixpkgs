@@ -4,7 +4,7 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk16-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -79,7 +79,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -138,12 +138,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort | uniq | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)

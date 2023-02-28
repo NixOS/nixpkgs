@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.13.1";
+  version = "1.13.2";
   pname = "h5utils";
 
   # fetchurl is used instead of fetchFromGitHub because the git repo version requires
   # additional tools to build compared to the tarball release; see the README for details.
   src = fetchurl {
     url = "https://github.com/stevengj/h5utils/releases/download/${version}/h5utils-${version}.tar.gz";
-    sha256 = "0rbx3m8p5am8z5m0f3sryryfc41541hjpkixb1jkxakd9l36z9y5";
+    sha256 = "sha256-7qeFWoI1+st8RU5hEDCY5VZY2g3fS23luCqZLl8CQ1E=";
   };
 
   # libdf is an alternative name for libhdf (hdf4)

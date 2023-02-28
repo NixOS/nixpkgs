@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , glib
@@ -28,6 +29,17 @@ mkDerivation rec {
     rev = version;
     sha256 = "WgrcHM4iJLZsJO2obqSkjHHMB+/kcadQArkcXC5FB24=";
   };
+
+  patches = [
+    # FIXME: backport Plasma 5.27 build fix, remove for next release
+    (fetchpatch {
+      url = "https://github.com/lxqt/lxqt-config/commit/6add4e4f0040693e7c4242fbae48c9d32007686c.diff";
+      hash = "sha256-Tir4KeGhBnD9dYmB1FAjuf4R4V+rn12MOxsRwTdE0Sc=";
+    })
+  ];
+
+  # FIXME: required to build with Plasma 5.27, which uses std::optional
+  cmakeFlags = ["-DCMAKE_CXX_STANDARD=17"];
 
   nativeBuildInputs = [
     cmake

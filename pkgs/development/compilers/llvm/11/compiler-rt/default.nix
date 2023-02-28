@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
      ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
