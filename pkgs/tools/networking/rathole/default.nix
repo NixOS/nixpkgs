@@ -32,6 +32,8 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  doCheck = false; # https://github.com/rapiz1/rathole/issues/222
+
   meta = with lib; {
     description = "Reverse proxy for NAT traversal";
     homepage = "https://github.com/rapiz1/rathole";
