@@ -14,13 +14,13 @@ let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.13.1-1";
+  version = "0.14.1-1";
 
   src = fetchFromGitHub {
     owner  = "maxbube";
     repo = "mydumper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oknivkyr3wOfjnDccEeFVt7D2l1CkeWgXahsQCtAc0I=";
+    hash = "sha256-I8COArsIO8+09SNa3DrgoGpvhLj08I8UvT2H9k9mJNQ=";
   };
 
   nativeBuildInputs = [
