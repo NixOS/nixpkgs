@@ -622,6 +622,8 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+  octosuite = callPackage ../tools/security/octosuite { };
+
   octosql = callPackage ../tools/misc/octosql { };
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
@@ -693,14 +695,17 @@ with pkgs;
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
+  dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
 
   dotnet-runtime_3 = dotnetCorePackages.runtime_3_1;
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
+  dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
 
   dotnet-aspnetcore_3 = dotnetCorePackages.aspnetcore_3_1;
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -31452,8 +31457,7 @@ with pkgs;
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    inherit (darwin) libobjc;
-    wxGTK = wxGTK32.override {
+    wxGTK32 = wxGTK32.override {
       withWebKit = true;
     };
   };
@@ -35508,7 +35512,7 @@ with pkgs;
 
   mari0 = callPackage ../games/mari0 { };
 
-  manaplus = callPackage ../games/manaplus { };
+  manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
 
   mars = callPackage ../games/mars { };
 
@@ -38860,6 +38864,8 @@ with pkgs;
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yaralyzer = callPackage ../tools/security/yaralyzer { };
 
   yarGen = callPackage ../tools/security/yarGen { };
 
