@@ -22237,14 +22237,23 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
-  mesa_22 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.nix {
+  # When a new patch is out, add a new mesa attribute with the exact patch version
+  # Remove old mesa attributes when they're unused. Try to keep the previous version around.
+  mesa_22_3_5 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.5.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  mesa_23 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.nix {
+  mesa_22_3_6 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.6.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
+  mesa_23_0_0 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.0.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+  };
+  # Bump this immediately on patches; wait a bit for minor versions
+  mesa_22 = mesa_22_3_6;
+  # Bump this when the next major version is reasonably stable
   mesa = mesa_22;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
