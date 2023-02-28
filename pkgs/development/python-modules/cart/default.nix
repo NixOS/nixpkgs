@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PsdDlNhX0FbuwS5ZXk9P98DjnzDGdigfnRwrdwYa4qY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PsdDlNhX0FbuwS5ZXk9P98DjnzDGdigfnRwrdwYa4qY=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the CaRT Neutering format";
     homepage = "https://github.com/CybercentreCanada/cart";
+    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
