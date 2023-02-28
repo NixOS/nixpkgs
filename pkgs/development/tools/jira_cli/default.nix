@@ -28,5 +28,10 @@ in
       homepage = "https://github.com/alisaifee/jira-cli";
       maintainers = with maintainers; [ nyarly ];
       license = licenses.mit;
+      # Project is unmaintained
+      # https://github.com/alisaifee/jira-cli#this-project-needs-a-new-owner
+      # Requires suds-jurko which was removed (due to the usage of use_2to3)
+      # Checked on 2023-02-27
+      broken = true;
     };
   }
