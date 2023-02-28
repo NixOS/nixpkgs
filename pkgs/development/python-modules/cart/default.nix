@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cart";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CybercentreCanada";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PsdDlNhX0FbuwS5ZXk9P98DjnzDGdigfnRwrdwYa4qY=";
+    hash = "sha256-0dHdXb4v92681xL21FsrIkNgNQ9R5ULV1lnSCITZzP8=";
   };
 
   propagatedBuildInputs = [
