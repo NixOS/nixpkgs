@@ -90,8 +90,10 @@ let
 
       ${cfg.displayManager.sessionCommands}
 
-      # Start systemd user services for graphical sessions
-      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+      ${optionalString (cfg.displayManager.job.startGraphicalSession) ''
+        # Start systemd user services for graphical sessions
+        /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+      ''}
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
@@ -305,6 +307,17 @@ in
       };
 
       job = {
+
+        startGraphicalSession = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc ''
+            Whether the display manager should start graphical-session.target automatically.
+            This might be useful to disable to let the window manager starting the session itself
+            rather than letting the display manager doing it before the window manager is actually started.
+            Setting this to false can fix issues with systemd services starting too early on Wayland.
+          '';
+        };
 
         preStart = mkOption {
           type = types.lines;
