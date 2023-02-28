@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , stdenvNoCC
 , fetchurl
 , makeWrapper
@@ -35,6 +36,7 @@ stdenvNoCC.mkDerivation rec {
 
     wrapProgram $out/bin/opensearch \
       --prefix PATH : "${lib.makeBinPath [ util-linux gnugrep coreutils ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/plugins/opensearch-knn/lib/" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"
