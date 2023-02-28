@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "etcd3"    
+    "etcd3"
   ];
 
   doCheck = false; # requires running etcd instance
