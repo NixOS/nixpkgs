@@ -73,7 +73,7 @@ buildPythonPackage rec {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };
 }
