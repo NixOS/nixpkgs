@@ -33,6 +33,7 @@ jobs:
         # nixpkgs commit is pinned so that it doesn't break
         # editorconfig-checker 2.4.0
         nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
+        install_url: https://releases.nixos.org/nix/nix-2.13.3/install
     - name: Checking EditorConfig
       run: |
         cat "$HOME/changed_files" | nix-shell -p editorconfig-checker --run 'xargs -r editorconfig-checker -disable-indent-size'
