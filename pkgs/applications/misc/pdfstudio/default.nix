@@ -9,10 +9,10 @@
 # - pname is either "pdfstudio${year}" or "pdfstudioviewer".
 
 { lib
+, stdenv
 , program ? "pdfstudio"
 , year ? "2022"
 , fetchurl
-, gcc
 , callPackage
 , jdk11
 , jdk17
@@ -50,7 +50,7 @@ in
       sha256 = "sha256-wQgVWz2kS+XkrqvCAUishizfDrCwGyVDAAU4Yzj4uYU=";
     };
     extraBuildInputs = [
-      (lib.getLib gcc)  # for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk11;
   };
@@ -63,7 +63,7 @@ in
       sha256 = "sha256-B3RrftuKsPWUWP9hwnq4i311hgZgwZLqG1pJLdilfQI=";
     };
     extraBuildInputs = [
-      (lib.getLib gcc)  # for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk17;
   };
