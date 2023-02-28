@@ -5,7 +5,7 @@
 , pythonImportsCheckHook
 , sphinx
 , sphinxHook
-, sphinxcontrib-autoapi
+, sphinx-autoapi
 , sphinx-rtd-theme
 , sphinx-tabs
 , sphinx-prompt
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pythonImportsCheckHook
     sphinxHook
-    sphinxcontrib-autoapi
+    sphinx-autoapi
     sphinx-rtd-theme
     sphinx-tabs
     sphinx-prompt

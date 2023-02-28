@@ -10,7 +10,7 @@
 , sphinx-rtd-theme
 , sphinx-tabs
 , sphinx-version-warning
-, sphinxcontrib-autoapi
+, sphinx-autoapi
 , sphinxcontrib-bibtex
 , sphinxemoji
 # runtime dependencies
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     sphinx-rtd-theme
     sphinx-tabs
     sphinx-version-warning
-    sphinxcontrib-autoapi
+    sphinx-autoapi
     sphinxcontrib-bibtex
     sphinxemoji
   ];
