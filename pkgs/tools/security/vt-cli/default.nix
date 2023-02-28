@@ -27,6 +27,7 @@ buildGoModule rec {
     homepage = "https://github.com/VirusTotal/vt-cli";
     changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${version}";
     license = licenses.asl20;
+    mainProgram = "vt";
     maintainers = with maintainers; [ dit7ya ];
   };
 }
