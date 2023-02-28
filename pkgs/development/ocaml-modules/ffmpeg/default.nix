@@ -14,7 +14,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src useDune2;
+  inherit (ffmpeg-base) version src duneVersion;
 
   propagatedBuildInputs = [
     ffmpeg-avutil

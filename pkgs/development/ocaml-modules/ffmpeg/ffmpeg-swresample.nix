@@ -10,7 +10,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src useDune2;
+  inherit (ffmpeg-base) version src duneVersion;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.isDarwin [ VideoToolbox ];
