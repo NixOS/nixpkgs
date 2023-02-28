@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Pwfc9e39sYPdcHN1cZtxxGEglEYzPp4yOYLD5/4SSiU=";
   };
 
@@ -73,6 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PowerShell Remoting Protocol Client library";
     homepage = "https://github.com/jborean93/pypsrp";
+    changelog = "https://github.com/jborean93/pypsrp/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
