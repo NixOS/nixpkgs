@@ -3663,6 +3663,12 @@
     github = "Dettorer";
     githubId = 2761682;
   };
+  developer-guy = {
+    name = "Batuhan Apaydın";
+    email = "developerguyn@gmail.com";
+    github = "developer-guy";
+    githubId = 16693043;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
@@ -10136,6 +10142,12 @@
     github = "mredaelli";
     githubId = 3073833;
     name = "Massimo Redaelli";
+  };
+  mrfreezeex = {
+    email = "arthur@cri.epita.fr";
+    github = "MrFreezeex";
+    name = "Arthur Outhenin-Chalandre";
+    githubId = 14573967;
   };
   mrityunjaygr8 = {
     email = "mrityunjaysaxena1996@gmail.com";

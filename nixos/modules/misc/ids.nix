@@ -392,7 +392,7 @@ in
       tape = 25;
       video = 26;
       dialout = 27;
-      polkituser = 28;
+      #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
@@ -510,7 +510,6 @@ in
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
-      systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;

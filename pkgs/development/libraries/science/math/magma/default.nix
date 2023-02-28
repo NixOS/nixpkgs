@@ -1,83 +1,53 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, ninja
-, gfortran
-, libpthreadstubs
-, lapack
-, blas
-, cudaPackages
-, hip
-, hipblas
-, hipsparse
-, openmp
-, useCUDA ? true
-, useROCM ? false
-, gpuTargets ? [ ]
+args@{ callPackage
+, lib
+, ...
 }:
 
+# Type aliases
+# Release = {
+#  version: String
+#  hash: String
+#  supportedGpuTargets: List String
+# }
+
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags;
-in stdenv.mkDerivation (finalAttrs: {
-  pname = "magma";
-  version = "2.6.2";
+  inherit (lib) lists strings trivial;
 
-  src = fetchurl {
-    name = "magma-${finalAttrs.version}.tar.gz";
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
+  computeName = version: "magma_${strings.replaceStrings [ "." ] [ "_" ] version}";
+
+  # buildMagmaPackage :: Release -> Derivation
+  buildMagmaPackage = magmaRelease: callPackage ./generic.nix (
+    (builtins.removeAttrs args [ "callPackage" ]) // {
+      inherit magmaRelease;
+    }
+  );
+
+  # Reverse the list to have the latest release first
+  # magmaReleases :: List Release
+  magmaReleases = lists.reverseList (builtins.import ./releases.nix);
+
+  # The latest release is the first element of the list and will be our default choice
+  # latestReleaseName :: String
+  latestReleaseName = computeName (builtins.head magmaReleases).version;
+
+  # Function to transform our releases into build attributes
+  # toBuildAttrs :: Release -> { name: String, value: Derivation }
+  toBuildAttrs = release: {
+    name = computeName release.version;
+    value = buildMagmaPackage release;
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    gfortran
-  ];
+  # Add all supported builds as attributes
+  # allBuilds :: AttrSet String Derivation
+  allBuilds = builtins.listToAttrs (lists.map toBuildAttrs magmaReleases);
 
-  buildInputs = [
-    libpthreadstubs
-    lapack
-    blas
-  ] ++ lib.optionals useCUDA [
-    cudatoolkit
-  ] ++ lib.optionals useROCM [
-    hip
-    hipblas
-    hipsparse
-    openmp
-  ];
+  # The latest release will be our default build
+  # defaultBuild :: AttrSet String Derivation
+  defaultBuild.magma = allBuilds.${latestReleaseName};
 
-  cmakeFlags = lib.optionals useCUDA [
-    "-DCMAKE_C_COMPILER=${cudatoolkit.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${cudatoolkit.cc}/bin/g++"
-    "-DMAGMA_ENABLE_CUDA=ON"
-    "-DGPU_TARGET=${builtins.concatStringsSep "," cudaFlags.cudaRealArches}"
-  ] ++ lib.optionals useROCM [
-    "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
-    "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
-    "-DMAGMA_ENABLE_HIP=ON"
-    "-DGPU_TARGET=${builtins.concatStringsSep "," (if gpuTargets == [ ] then hip.gpuTargets else gpuTargets)}"
-  ];
+  # builds :: AttrSet String Derivation
+  builds = allBuilds // defaultBuild;
+in
 
-  buildFlags = [
-    "magma"
-    "magma_sparse"
-  ];
+builds
 
-  doCheck = false;
-
-  passthru = {
-    inherit cudatoolkit;
-  };
-
-  meta = with lib; {
-    description = "Matrix Algebra on GPU and Multicore Architectures";
-    license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tbenst ];
-    # CUDA and ROCm are mutually exclusive
-    broken = useCUDA && useROCM || useCUDA && versionOlder cudatoolkit.version "9";
-  };
-})
