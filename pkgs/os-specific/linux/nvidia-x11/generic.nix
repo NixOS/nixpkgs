@@ -19,7 +19,7 @@
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+, kernel ? null, perl, nukeReferences, which, zstd
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -97,8 +97,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    buildInputs = [ which ];
-    nativeBuildInputs = [ perl nukeReferences ]
+    nativeBuildInputs = [ perl nukeReferences which zstd ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];

@@ -2,8 +2,25 @@ if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
+    compression=$($SHELL -r $src --info | sed -n 's/^.*Compression\s*:\s\(\S*\).*$/\1/p')
+    case $compression in
+        zstd)
+        extractCmd="zstd -d"
+        ;;
+        xz)
+        extractCmd="xz -d"
+        ;;
+        gzip)
+        extractCmd="gzip -d"
+        ;;
+        *)
+        echo "runfile uses unknown compression '$compression'"
+        return 1
+        ;;
+    esac
+
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | $extractCmd | tar xvf -
     sourceRoot=.
 }
 
