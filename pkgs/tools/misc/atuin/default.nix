@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy ];
+    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy _0x4A6F ];
   };
 }
