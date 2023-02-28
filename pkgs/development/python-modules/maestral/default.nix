@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gfATP9sOgowBeP9qRjzC4Ts64iOwM5i0Ym6YvvJ9TCY=";
+    hash = "sha256-WYLYDDXxO5ot30oSBkxgJszn8nyAQh5XtCyywBz56J4=";
   };
 
   propagatedBuildInputs = [
