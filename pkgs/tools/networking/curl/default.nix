@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-XW4Sh2G3EQlG0Sdq/28PJm8rcm9eYZ9+CgV6R0FV8wc=";
+    sha256 = "sha256-XW4Sh2G3EQlG0Sdq/28PJm8rcm9eYZ9+CgV6R0FV8wc=";
   };
 
   patches = [
