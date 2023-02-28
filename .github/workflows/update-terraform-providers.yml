@@ -20,6 +20,7 @@ jobs:
       - uses: cachix/install-nix-action@v19
         with:
           nix_path: nixpkgs=channel:nixpkgs-unstable
+          install_url: https://releases.nixos.org/nix/nix-2.13.3/install
       - name: setup
         id: setup
         run: |
