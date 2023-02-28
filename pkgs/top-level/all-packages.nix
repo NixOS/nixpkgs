@@ -8651,8 +8651,6 @@ with pkgs;
     jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  jira-cli = callPackage ../development/tools/jira_cli { };
-
   jira-cli-go = callPackage ../development/tools/jira-cli-go { };
 
   jirafeau = callPackage ../servers/web-apps/jirafeau { };
@@ -9676,7 +9674,7 @@ with pkgs;
 
   lzop = callPackage ../tools/compression/lzop { };
 
-  lzwolf = callPackage ../games/lzwolf { };
+  lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
@@ -23223,6 +23221,8 @@ with pkgs;
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
+  # SDL2_mixer_2_0 pinned for lzwolf
+  SDL2_mixer_2_0 = callPackage ../development/libraries/SDL2_mixer/2_0.nix { };
 
   SDL2_net = callPackage ../development/libraries/SDL2_net { };
 
@@ -29796,6 +29796,7 @@ with pkgs;
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
+    wmClass = "firefox-beta";
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
@@ -29808,6 +29809,7 @@ with pkgs;
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
+    wmClass = "firefox-devedition";
   };
 
   librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf {};

@@ -42,6 +42,9 @@ in
       inherit sha256;
     };
 
+    # We don't test vscode on CI, instead we test vscodium
+    tests = {};
+
     sourceRoot = "";
 
     updateScript = ./update-vscode.sh;
