@@ -35,8 +35,7 @@
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
-  binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
+  binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
