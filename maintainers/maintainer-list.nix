@@ -16088,6 +16088,12 @@
     github = "wr0belj";
     githubId = 40501814;
   };
+  wraithm = {
+    name = "Matthew Wraith";
+    email = "wraithm@gmail.com";
+    github = "wraithm";
+    githubId = 1512913;
+  };
   wrmilling = {
     name = "Winston R. Milling";
     email = "Winston@Milli.ng";
