@@ -285,7 +285,7 @@ let
     ];
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${spec.asdf}")
+      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
       (asdf:load-system :nyxt/gtk-application)
       (sb-ext:save-lisp-and-die "nyxt" :executable t
                                        #+sb-core-compression :compression
@@ -301,6 +301,7 @@ let
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \
+        --set WEBKIT_FORCE_SANDBOX 0 \
         --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
         --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
