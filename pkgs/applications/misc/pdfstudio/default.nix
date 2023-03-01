@@ -8,10 +8,11 @@
 # - year identifies the year portion of the version, defaults to most recent year.
 # - pname is either "pdfstudio${year}" or "pdfstudioviewer".
 
-{ program ? "pdfstudio"
+{ lib
+, stdenv
+, program ? "pdfstudio"
 , year ? "2022"
 , fetchurl
-, libgccjit
 , callPackage
 , jdk11
 , jdk17
@@ -49,7 +50,7 @@ in
       sha256 = "sha256-wQgVWz2kS+XkrqvCAUishizfDrCwGyVDAAU4Yzj4uYU=";
     };
     extraBuildInputs = [
-      libgccjit #for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk11;
   };
@@ -62,7 +63,7 @@ in
       sha256 = "sha256-B3RrftuKsPWUWP9hwnq4i311hgZgwZLqG1pJLdilfQI=";
     };
     extraBuildInputs = [
-      libgccjit #for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk17;
   };

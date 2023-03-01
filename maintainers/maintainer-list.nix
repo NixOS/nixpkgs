@@ -11677,6 +11677,12 @@
       fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E";
     }];
   };
+  pinkcreeper100 = {
+    email = "benmoreosm@gmail.com";
+    github = "pinkcreeper100";
+    githubId = 35699052;
+    name = "Oliver Samuel Morris";
+  };
   pinpox = {
     email = "mail@pablo.tools";
     github = "pinpox";
@@ -16087,6 +16093,12 @@
     email = "wrobel.jakub@protonmail.com";
     github = "wr0belj";
     githubId = 40501814;
+  };
+  wraithm = {
+    name = "Matthew Wraith";
+    email = "wraithm@gmail.com";
+    github = "wraithm";
+    githubId = 1512913;
   };
   wrmilling = {
     name = "Winston R. Milling";

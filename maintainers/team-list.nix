@@ -81,6 +81,7 @@ with lib.maintainers; {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       cdepillabout
+      wraithm
     ];
     scope = "Group registration for packages maintained by Bitnomial.";
     shortName = "Bitnomial employees";
