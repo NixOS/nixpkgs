@@ -2381,12 +2381,13 @@
       home-assistant-frontend
       ifaddr
       janus
+      mopeka-iot-ble
       pillow
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: mopeka_iot_ble
+    ];
     "motion_blinds" = ps: with ps; [
       aiohttp-cors
       fnvhash
@@ -4804,6 +4805,7 @@
     "modern_forms"
     "mold_indicator"
     "moon"
+    "mopeka"
     "motion_blinds"
     "motioneye"
     "mqtt"
