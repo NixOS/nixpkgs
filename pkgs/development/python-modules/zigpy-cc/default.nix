@@ -46,6 +46,9 @@ buildPythonPackage rec {
     "tests/test_application.py "
   ];
 
+  # AttributeError: module 'asyncio' has no attribute 'coroutine'
+  doCheck = pythonOlder "3.10";
+
   pythonImportsCheck = [
     "zigpy_cc"
   ];
