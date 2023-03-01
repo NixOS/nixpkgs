@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZqdV1fvLuIMfGpVoZ2MptbrILDeZW8ya/QSLZFn5+kg=";
+    hash = "sha256-ZqdV1fvLuIMfGpVoZ2MptbrILDeZW8ya/QSLZFn5+kg=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
+    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonringer mikefaille ];
   };
