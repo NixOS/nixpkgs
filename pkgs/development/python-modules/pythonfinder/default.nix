@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sarugaku/pythonfinder";
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
     description = "Cross Platform Search Tool for Finding Pythons";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
