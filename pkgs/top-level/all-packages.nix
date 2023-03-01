@@ -25567,8 +25567,7 @@ with pkgs;
   shiori = callPackage ../servers/web-apps/shiori { };
 
   inherit (callPackages ../servers/web-apps/matomo {})
-    matomo
-    matomo-beta;
+    matomo;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 

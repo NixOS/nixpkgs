@@ -3,19 +3,11 @@
 let
   versions = {
     matomo = {
-      version = "4.10.1";
-      sha256 = "sha256-TN2xy3YHhtuewmi7h9vtMKElRI8uWOvnYzG1RlIGT3U=";
-    };
-
-    matomo-beta = {
-      version = "4.11.0";
-      # `beta` examples: "b1", "rc1", null
-      # when updating: use null if stable version is >= latest beta or release candidate
-      beta = "rc2";
-      sha256 = "sha256-PYzv4OJYI4Zf7LMXQvX7fhvXryS6XPbmA0pTesF1vQ8=";
+      version = "4.13.3";
+      hash = "sha256-17y0xFy6aa/ZyEm9VUvIi4/GlxdpwfWv+ZdiO6wF4Kw=";
     };
   };
-  common = pname: { version, sha256, beta ? null }:
+  common = pname: { version, hash, beta ? null }:
     let
       fullVersion = version + lib.optionalString (beta != null) "-${toString beta}";
       name = "${pname}-${fullVersion}";
@@ -27,7 +19,7 @@ let
 
         src = fetchurl {
           url = "https://builds.matomo.org/matomo-${version}.tar.gz";
-          inherit sha256;
+          inherit hash;
         };
 
         nativeBuildInputs = [ makeWrapper ];
@@ -109,7 +101,7 @@ let
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
           platforms = platforms.all;
-          maintainers = with maintainers; [ florianjacob kiwi sebbel ];
+          maintainers = with maintainers; [ florianjacob kiwi sebbel twey ];
         };
       };
 in
