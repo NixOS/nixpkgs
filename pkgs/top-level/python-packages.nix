@@ -812,6 +812,8 @@ self: super: with self; {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autograd-gamma = callPackage ../development/python-modules/autograd-gamma { };
+
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
 
   autologging = callPackage ../development/python-modules/autologging { };
@@ -3615,6 +3617,8 @@ self: super: with self; {
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
+  formulaic = callPackage ../development/python-modules/formulaic { };
+
   foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
   foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
   foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
@@ -4710,6 +4714,8 @@ self: super: with self; {
 
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
+  interface-meta = callPackage ../development/python-modules/interface-meta { };
+
   internetarchive = callPackage ../development/python-modules/internetarchive { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
@@ -5485,6 +5491,8 @@ self: super: with self; {
   })).py;
 
   life360 = callPackage ../development/python-modules/life360 { };
+
+  lifelines = callPackage ../development/python-modules/lifelines { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
