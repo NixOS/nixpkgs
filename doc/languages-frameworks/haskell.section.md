@@ -71,8 +71,10 @@ $ nix-env -f '<nixpkgs>' -qaP -A haskell.compiler
 haskell.compiler.ghc810                  ghc-8.10.7
 haskell.compiler.ghc88                   ghc-8.8.4
 haskell.compiler.ghc90                   ghc-9.0.2
-haskell.compiler.ghc92                   ghc-9.2.4
+haskell.compiler.ghc924                  ghc-9.2.4
 haskell.compiler.ghc925                  ghc-9.2.5
+haskell.compiler.ghc926                  ghc-9.2.6
+haskell.compiler.ghc92                   ghc-9.2.7
 haskell.compiler.ghc942                  ghc-9.4.2
 haskell.compiler.ghc943                  ghc-9.4.3
 haskell.compiler.ghc94                   ghc-9.4.4
@@ -86,13 +88,15 @@ haskell.compiler.ghc924Binary            ghc-binary-9.2.4
 haskell.compiler.ghc924BinaryMinimal     ghc-binary-9.2.4
 haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
 haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7
-haskell.compiler.integer-simple.ghc884   ghc-integer-simple-8.8.4
 haskell.compiler.integer-simple.ghc88    ghc-integer-simple-8.8.4
+haskell.compiler.integer-simple.ghc884   ghc-integer-simple-8.8.4
 haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2
 haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.4
 haskell.compiler.native-bignum.ghc924    ghc-native-bignum-9.2.4
 haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5
+haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6
+haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.7
+haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7
 haskell.compiler.native-bignum.ghc942    ghc-native-bignum-9.4.2
 haskell.compiler.native-bignum.ghc943    ghc-native-bignum-9.4.3
 haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.4
@@ -105,15 +109,15 @@ Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.4 is `haskell.packages.ghc944`. In fact `haskellPackages` is just an alias
-for `haskell.packages.ghc924`:
+for `haskell.packages.ghc927`:
 
 ```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc924
-haskell.packages.ghc924.a50                                                         a50-0.5
-haskell.packages.ghc924.AAI                                                         AAI-0.2.0.1
-haskell.packages.ghc924.aasam                                                       aasam-0.2.0.0
-haskell.packages.ghc924.abacate                                                     abacate-0.0.0.0
-haskell.packages.ghc924.abc-puzzle                                                  abc-puzzle-0.2.1
+$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
+haskell.packages.ghc927.a50                                                         a50-0.5
+haskell.packages.ghc927.AAI                                                         AAI-0.2.0.1
+haskell.packages.ghc927.aasam                                                       aasam-0.2.0.0
+haskell.packages.ghc927.abacate                                                     abacate-0.0.0.0
+haskell.packages.ghc927.abc-puzzle                                                  abc-puzzle-0.2.1
 …
 ```
 
