@@ -1895,6 +1895,8 @@ self: super: with self; {
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
 
+  cmd2-ext-test = callPackage ../development/python-modules/cmd2-ext-test { };
+
   cmdline = callPackage ../development/python-modules/cmdline { };
 
   cmigemo = callPackage ../development/python-modules/cmigemo {
