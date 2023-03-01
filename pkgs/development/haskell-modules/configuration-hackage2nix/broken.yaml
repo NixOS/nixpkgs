@@ -512,7 +512,6 @@ broken-packages:
   - byline
   - by-other-names
   - bytearray-parsing
-  - bytepatch
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
@@ -1386,7 +1385,6 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
-  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding
@@ -1422,6 +1420,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon # dependency missing in job https://hydra.nixos.org/build/210848638 at 2023-02-28
   - exp-cache
   - exp-extended
   - explain
@@ -2423,7 +2422,6 @@ broken-packages:
   - hquantlib-time
   - hquery
   - hR
-  - h-raylib
   - hreq-core
   - hRESP
   - h-reversi
@@ -2999,7 +2997,6 @@ broken-packages:
   - language-sh
   - language-sqlite
   - language-sygus
-  - language-tl
   - language-typescript
   - language-webidl
   - laop
@@ -4294,6 +4291,7 @@ broken-packages:
   - quickbooks
   - quickcheck-arbitrary-template
   - quickcheck-groups
+  - quickcheck-lockstep # dependency missing in job https://hydra.nixos.org/build/210845914 at 2023-02-28
   - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
@@ -4917,7 +4915,8 @@ broken-packages:
   - snaplet-typed-sessions
   - snap-loader-dynamic
   - snap-predicates
-  - snappy
+  - snappy-conduit
+  - snappy-iteratee
   - snap-routes
   - snap-stream
   - snap-testing
@@ -5256,8 +5255,6 @@ broken-packages:
   - tempus
   - ten
   - tensor
-  - tensorflow
-  - tensorflow-opgen
   - tensor-safe
   - termbox-bindings
   - termination-combinators

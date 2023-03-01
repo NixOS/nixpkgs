@@ -31,7 +31,7 @@ self: super: {
           Cabal-syntax = cself.Cabal-syntax_3_8_1_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
           # GHC 9.2.5 starts shipping 1.6.16.0
-          process = cself.process_1_6_16_0;
+          process = cself.process_1_6_17_0;
         } // lib.optionalAttrs (lib.versions.majorMinor self.ghc.version == "8.10") {
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc-8.10.7 (with bundled process) vs. process 1.6.16.0
@@ -132,7 +132,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0f2nnszfiqwdgfky3190prkhcndp0mva3jk7a6cl461w8kp1jspa";
+      sha256 = "1g1m18l7cx2y5d43k0vy5bqn4znybq0p345399zf9nkwhwhb7s20";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -372,6 +372,19 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
+
+  # Group of libraries by same upstream maintainer for interacting with
+  # Telegram messenger. Bit-rotted a bit since 2020.
+  tdlib = appendPatch (fetchpatch {
+    # https://github.com/poscat0x04/tdlib/pull/3
+    url = "https://github.com/poscat0x04/tdlib/commit/8eb9ecbc98c65a715469fdb8b67793ab375eda31.patch";
+    hash = "sha256-vEI7fTsiafNGBBl4VUXVCClW6xKLi+iK53fjcubgkpc=";
+  }) (doJailbreak super.tdlib) ;
+  tdlib-types = doJailbreak super.tdlib-types;
+  tdlib-gen = doJailbreak super.tdlib-gen;
+  # https://github.com/poscat0x04/language-tl/pull/1
+  language-tl = doJailbreak super.language-tl;
+
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
@@ -446,7 +459,17 @@ self: super: {
   cmdtheline = dontCheck super.cmdtheline;
 
   # https://github.com/bos/snappy/issues/1
-  snappy = dontCheck super.snappy;
+  # https://github.com/bos/snappy/pull/10
+  snappy = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/bos/snappy/commit/8687802c0b85ed7fbbb1b1945a75f14fb9a9c886.patch";
+      sha256 = "sha256-p6rMzkjPAZVljsC1Ubj16/mNr4mq5JpxfP5xwT+Gt5M=";
+    })
+    (pkgs.fetchpatch {
+      url = "https://github.com/bos/snappy/commit/21c3250c1f3d273cdcf597e2b7909a22aeaa710f.patch";
+      sha256 = "sha256-qHEQ8FFagXGxvtblBvo7xivRARzXlaMLw8nt0068nt0=";
+    })
+  ] (dontCheck super.snappy);
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -1307,11 +1330,18 @@ self: super: {
   ] super.svgcairo;
 
   # Espial is waiting for a hackage release to be compatible with GHC 9.X.
-  espial = appendPatch (fetchpatch {
-    url = "https://github.com/jonschoning/espial/commit/70177f9efb9666c3616e8a474681d3eb763d0e84.patch";
-    sha256 = "sha256-aJtwZGp9DUpACBV0WYRL7k32m6qWf5vq6eKBFq/G23s=";
-    excludes = ["package.yaml" "stack.yaml" "stack.yaml.lock"];
-  }) super.espial;
+  # [This issue](https://github.com/jonschoning/espial/issues/49) can be followed
+  # to track the status of the new release.
+  espial =
+    let ghc9-compat = fetchpatch {
+          url = "https://github.com/jonschoning/espial/commit/70177f9efb9666c3616e8a474681d3eb763d0e84.patch";
+          sha256 = "sha256-aJtwZGp9DUpACBV0WYRL7k32m6qWf5vq6eKBFq/G23s=";
+          excludes = ["package.yaml" "stack.yaml" "stack.yaml.lock"];
+        };
+    in overrideCabal (drv: {
+      jailbreak = assert super.espial.version == "0.0.11"; true;
+      patches = [ ghc9-compat ];
+    }) super.espial;
 
   # Upstream PR: https://github.com/jkff/splot/pull/9
   splot = appendPatch (fetchpatch {
@@ -1440,6 +1470,13 @@ self: super: {
   haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
+    # Allow hls-call-hierarchy >= 1.2 which requires only a bound adjustment
+    (appendPatch (fetchpatch {
+      name = "hls-allow-hls-call-hierarchy-1.2.patch";
+      url = "https://github.com/haskell/haskell-language-server/commit/05b248dfacc307c3397b334635cb38298aee9563.patch";
+      includes = [ "haskell-language-server.cabal" ];
+      sha256 = "1v0zi1lv92p6xq54yw9swzaf24dxsi9lpk10sngg3ka654ikm7j5";
+    }))
   ]).overrideScope (lself: lsuper: {
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
@@ -1802,7 +1839,38 @@ self: super: {
   database-id-class = doJailbreak super.database-id-class;
 
   cabal2nix-unstable = overrideCabal {
-    passthru.updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
+    passthru = {
+      updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
+
+      # This is used by regenerate-hackage-packages.nix to supply the configuration
+      # values we can easily generate automatically without checking them in.
+      compilerConfig =
+        pkgs.runCommand
+          "hackage2nix-${self.ghc.haskellCompilerName}-config.yaml"
+          {
+            nativeBuildInputs = [
+              self.ghc
+            ];
+          }
+          ''
+            cat > "$out" << EOF
+            # generated by haskellPackages.cabal2nix-unstable.compilerConfig
+            compiler: ${self.ghc.haskellCompilerName}
+
+            core-packages:
+              # Hack: The following package is a core package of GHCJS. If we don't declare
+              # it, then hackage2nix will generate a Hackage database where all dependants
+              # of this library are marked as "broken".
+              - ghcjs-base-0
+
+            EOF
+
+            ghc-pkg list \
+              | tail -n '+2' \
+              | sed -e 's/[()]//g' -e 's/\s\+/  - /' \
+              >> "$out"
+          '';
+    };
   } super.cabal2nix-unstable;
 
   # Too strict version bounds on base
@@ -2173,6 +2241,16 @@ self: super: {
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
+
+  # Temporarily upgrade haskell-gi until our hackage pin advances
+  # Fixes build of gi-harfbuzz with harfbuzz >= 7.0
+  # https://github.com/haskell-gi/haskell-gi/issues/396#issuecomment-1445181362
+  haskell-gi =
+    assert super.haskell-gi.version == "0.26.2";
+    overrideCabal {
+      version = "0.26.3";
+      sha256 = "sha256-jsAb3JCSHCmi2dp9bpi/J3NRO/EQFB8ar4GpxAuBGOo=";
+    } super.haskell-gi;
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;

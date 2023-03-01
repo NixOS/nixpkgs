@@ -53,6 +53,7 @@ let
     ghc924
     ghc925
     ghc926
+    ghc927
     ghc944
   ];
 
@@ -345,12 +346,23 @@ let
             };
           };
 
-      pkgsCross.ghcjs.haskellPackages = {
-        inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-          ghc
-          hello
-        ;
-      };
+      # TODO(@sternenseemann): when GHC 9.6 comes out we need separate jobs for
+      # default GHC and ghcHEAD.
+      pkgsCross.ghcjs.haskellPackages =
+        removePlatforms
+          [
+            # Still unexplained build failure: https://github.com/NixOS/nixpkgs/issues/217127
+            "x86_64-darwin"
+
+            # Hydra output size of 3GB is exceeded
+            "aarch64-linux"
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+              ghc
+              hello
+            ;
+          };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -392,6 +404,7 @@ let
         compilerNames.ghc924
         compilerNames.ghc925
         compilerNames.ghc926
+        compilerNames.ghc927
         compilerNames.ghc944
       ];
       weeder = [
@@ -400,6 +413,7 @@ let
         compilerNames.ghc924
         compilerNames.ghc925
         compilerNames.ghc926
+        compilerNames.ghc927
       ];
     })
     {
@@ -470,12 +484,14 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
+          jobs.pkgsMusl.haskell.compiler.ghc927
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
