@@ -1,32 +1,49 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, keybinder3, gtk3 }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk3
+, pango
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "findex";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mdgaziur";
-    repo = pname;
+    repo = "Findex";
     rev = "v${version}";
-    hash = "sha256-KaT6lEbrUelv/f9bIBW4bSCuExFu4b7XI7hcrO4mD0M=";
+    hash = "sha256-XsLkQZq1uOJTCF2f8Ym4KZPZhlJZD261IAkkt68/Lbw=";
   };
 
-  cargoHash = "sha256-7A+EF88DJrgsKPOJt2xaBnWSMkyhpFImyZmnHcyp+Dw=";
+  cargoHash = "sha256-yHjP1+o8S6Eq2La0Ev3dK5xZxnAlGNy3zuX3IQoIX1M=";
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
     gtk3
-    keybinder3
+    pango
   ];
 
   meta = with lib; {
     description = "Highly customizable application finder written in Rust and uses Gtk3";
-    homepage = "https://github.com/mdgaziur/findex";
+    homepage = "https://github.com/mdgaziur/Findex";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.pinkcreeper100 ];
+    badPlatforms = [ "aarch64-darwin" "x86-64-darwin" ];
+    maintainers = with maintainers; [ pinkcreeper100 ];
   };
 }
