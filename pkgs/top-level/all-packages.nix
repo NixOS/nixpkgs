@@ -622,6 +622,8 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+  octosuite = callPackage ../tools/security/octosuite { };
+
   octosql = callPackage ../tools/misc/octosql { };
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
@@ -693,14 +695,17 @@ with pkgs;
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
+  dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
 
   dotnet-runtime_3 = dotnetCorePackages.runtime_3_1;
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
+  dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
 
   dotnet-aspnetcore_3 = dotnetCorePackages.aspnetcore_3_1;
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -1580,6 +1585,8 @@ with pkgs;
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
+  speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
+
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
 
   supermin = callPackage ../tools/virtualization/supermin { };
@@ -2304,7 +2311,7 @@ with pkgs;
     stdenv =
       if stdenv.isDarwin && stdenv.isAarch64 then llvmPackages_14.stdenv
       # https://github.com/NixOS/nixpkgs/issues/201254
-      else if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv
+      else if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv
       else stdenv;
   };
 
@@ -8646,8 +8653,6 @@ with pkgs;
     jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  jira-cli = callPackage ../development/tools/jira_cli { };
-
   jira-cli-go = callPackage ../development/tools/jira-cli-go { };
 
   jirafeau = callPackage ../servers/web-apps/jirafeau { };
@@ -8769,7 +8774,7 @@ with pkgs;
     # See comments on https://github.com/NixOS/nixpkgs/pull/198836
     # Remove below when stdenv for linux-aarch64 become recent enough.
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
@@ -9671,7 +9676,7 @@ with pkgs;
 
   lzop = callPackage ../tools/compression/lzop { };
 
-  lzwolf = callPackage ../games/lzwolf { };
+  lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
@@ -11074,8 +11079,7 @@ with pkgs;
 
   pocketbase = callPackage ../servers/pocketbase { };
 
-  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
-  podman-unwrapped = callPackage ../applications/virtualization/podman { };
+  podman = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -11366,7 +11370,9 @@ with pkgs;
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
-  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
+  qownnotes = darwin.apple_sdk_11_0.callPackage ../applications/office/qownnotes {
+    inherit (libsForQt5) qmake qtbase qtdeclarative qtsvg qttools qtwayland qtwebsockets qtx11extras qtxmlpatterns wrapQtAppsHook;
+  };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
@@ -11655,7 +11661,7 @@ with pkgs;
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
     gperf = gperf_3_0;
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   rpm2targz = callPackage ../tools/archivers/rpm2targz { };
@@ -19184,11 +19190,11 @@ with pkgs;
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
 
-  bobcat = callPackage ../development/libraries/bobcat
-    (lib.optionalAttrs (with stdenv.hostPlatform; isAarch64 && isLinux) {
-      # C++20 is required, aarch64-linux has gcc 9 by default
-      stdenv = gcc10Stdenv;
-    });
+  bobcat = callPackage ../development/libraries/bobcat {
+    # C++20 is required, aarch64-linux has gcc 9 by default
+    # https://github.com/NixOS/nixpkgs/issues/201254
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
+  };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
@@ -22372,7 +22378,7 @@ with pkgs;
 
   mtxclient = callPackage ../development/libraries/mtxclient {
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   mu = callPackage ../tools/networking/mu {
@@ -23217,6 +23223,8 @@ with pkgs;
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
+  # SDL2_mixer_2_0 pinned for lzwolf
+  SDL2_mixer_2_0 = callPackage ../development/libraries/SDL2_mixer/2_0.nix { };
 
   SDL2_net = callPackage ../development/libraries/SDL2_net { };
 
@@ -29790,6 +29798,7 @@ with pkgs;
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
+    wmClass = "firefox-beta";
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
@@ -29802,6 +29811,7 @@ with pkgs;
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
+    wmClass = "firefox-devedition";
   };
 
   librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf {};
@@ -31451,8 +31461,7 @@ with pkgs;
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    inherit (darwin) libobjc;
-    wxGTK = wxGTK32.override {
+    wxGTK32 = wxGTK32.override {
       withWebKit = true;
     };
   };
@@ -31801,8 +31810,8 @@ with pkgs;
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openmm = callPackage ../development/libraries/science/chemistry/openmm {
-    stdenv = if stdenv.targetPlatform.isAarch64 then gcc9Stdenv else gcc11Stdenv;
-    gfortran = if stdenv.targetPlatform.isAarch64 then gfortran9 else gfortran11;
+    stdenv = gcc11Stdenv;
+    gfortran = gfortran11;
   };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -32066,7 +32075,7 @@ with pkgs;
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko {
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
@@ -32666,7 +32675,9 @@ with pkgs;
 
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
-  quassel = libsForQt5.callPackage ../applications/networking/irc/quassel { };
+  quassel = darwin.apple_sdk_11_0.callPackage ../applications/networking/irc/quassel {
+    inherit (libsForQt5) kconfigwidgets kcoreaddons knotifications knotifyconfig ktextwidgets kwidgetsaddons kxmlgui phonon qtbase qtscript mkDerivation qca-qt5;
+  };
 
   quasselClient = quassel.override {
     monolithic = false;
@@ -35505,7 +35516,7 @@ with pkgs;
 
   mari0 = callPackage ../games/mari0 { };
 
-  manaplus = callPackage ../games/manaplus { };
+  manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
 
   mars = callPackage ../games/mars { };
 
@@ -37411,7 +37422,7 @@ with pkgs;
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
@@ -38857,6 +38868,8 @@ with pkgs;
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yaralyzer = callPackage ../tools/security/yaralyzer { };
 
   yarGen = callPackage ../tools/security/yarGen { };
 

@@ -1,9 +1,6 @@
-{ lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
 
-let
-  inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify qtpy;
-
-in buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-cola";
   version = "4.1.0";
 
@@ -14,11 +11,23 @@ in buildPythonApplication rec {
     hash = "sha256-s+acQo9b+ZQ31qXBf0m8ajXYuYEQzNybmX9nw+c0DQY=";
   };
 
-  buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt5 sip_4 pyinotify qtpy ];
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  # TODO: remove in the next release since upstream removed pytest-flake8
+  # https://github.com/git-cola/git-cola/commit/6c5c5c6c888ee1a095fc1ca5521af9a03b833205
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--flake8" ""
+  '';
 
-  doCheck = false;
+  propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook ];
+  nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];
+
+  disabledTestPaths = [
+    "qtpy/"
+    "contrib/win32"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "cola/inotify.py"
+  ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -28,7 +37,6 @@ in buildPythonApplication rec {
     homepage = "https://github.com/git-cola/git-cola";
     description = "A sleek and powerful Git GUI";
     license = licenses.gpl2;
-    platforms = platforms.linux;
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }

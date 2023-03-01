@@ -184,6 +184,7 @@ mapAliases ({
   pyroute2-nslink = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-protocols = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pysmart-smartx = pysmart; # added 2021-10-22
+  pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
@@ -233,12 +234,15 @@ mapAliases ({
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
+  suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
+  suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator = tensorflow-estimator-bin; # added 2023-01-17
   tensorflow-estimator_2 = tensorflow-estimator; # added 2021-11-25
   tensorflow-tensorboard = tensorboard; # added 2022-03-06
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
+  transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30

@@ -183,10 +183,6 @@ in
 
       systemd.packages = [ cfg.package ];
 
-      systemd.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
-
       systemd.services.podman-prune = {
         description = "Prune podman resources";
 
@@ -206,10 +202,6 @@ in
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
-
-      systemd.user.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
 
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 

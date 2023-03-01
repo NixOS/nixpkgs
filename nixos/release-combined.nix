@@ -131,8 +131,7 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
-        #(onFullSupported "nixos.tests.nfs3.simple")
+        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")

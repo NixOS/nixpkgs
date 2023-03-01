@@ -278,6 +278,8 @@ self: super: with self; {
 
   aioopenexchangerates = callPackage ../development/python-modules/aioopenexchangerates { };
 
+  aioopenssl = callPackage ../development/python-modules/aioopenssl { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
@@ -317,6 +319,8 @@ self: super: with self; {
   aioruuvigateway = callPackage ../development/python-modules/aioruuvigateway { };
 
   aiorwlock = callPackage ../development/python-modules/aiorwlock { };
+
+  aiosasl = callPackage ../development/python-modules/aiosasl { };
 
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
 
@@ -367,6 +371,8 @@ self: super: with self; {
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
+
+  aioxmpp = callPackage ../development/python-modules/aioxmpp { };
 
   aioymaps = callPackage ../development/python-modules/aioymaps { };
 
@@ -2562,6 +2568,8 @@ self: super: with self; {
   django_compat = callPackage ../development/python-modules/django-compat { };
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
+
+  django-compression-middleware = callPackage ../development/python-modules/django-compression-middleware { };
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
@@ -8923,8 +8931,6 @@ self: super: with self; {
 
   pyspark = callPackage ../development/python-modules/pyspark { };
 
-  pysparse = callPackage ../development/python-modules/pysparse { };
-
   pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
 
   pyspellchecker = callPackage ../development/python-modules/pyspellchecker { };
@@ -10093,6 +10099,8 @@ self: super: with self; {
 
   rich = callPackage ../development/python-modules/rich { };
 
+  rich-argparse-plus = callPackage ../development/python-modules/rich-argparse-plus { };
+
   rich-click = callPackage ../development/python-modules/rich-click { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
@@ -11194,8 +11202,6 @@ self: super: with self; {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
-  suds-jurko = callPackage ../development/python-modules/suds-jurko { };
-
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
@@ -11219,8 +11225,6 @@ self: super: with self; {
   surt = callPackage ../development/python-modules/surt { };
 
   survey = callPackage ../development/python-modules/survey { };
-
-  suseapi = callPackage ../development/python-modules/suseapi { };
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
@@ -11701,8 +11705,6 @@ self: super: with self; {
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
-
-  transip = callPackage ../development/python-modules/transip { };
 
   transitions = callPackage ../development/python-modules/transitions { };
 

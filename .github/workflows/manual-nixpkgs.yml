@@ -22,6 +22,7 @@ jobs:
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
+          install_url: https://releases.nixos.org/nix/nix-2.13.3/install
       - uses: cachix/cachix-action@v12
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
