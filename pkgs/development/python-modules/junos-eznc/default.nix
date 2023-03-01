@@ -1,27 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-
-# propagates
+, fetchpatch
 , jinja2
 , lxml
+, mock
 , ncclient
 , netaddr
+, nose
 , ntc-templates
 , paramiko
 , pyparsing
 , pyserial
+, pythonOlder
 , pyyaml
 , scp
 , six
 , transitions
 , yamlordereddictloader
-
-# tests
-, mock
-, nose
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -29,12 +25,20 @@ buildPythonPackage rec {
   version = "2.6.7";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
     rev = "refs/tags/${version}";
     hash = "sha256-+hGybznip5RpJm89MLg9JO4B/y50OIdgtmV2FIpZShU=";
   };
+
+  postPatch = ''
+    # https://github.com/Juniper/py-junos-eznc/issues/1236
+    substituteInPlace lib/jnpr/junos/utils/scp.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
+  '';
 
   propagatedBuildInputs = [
     jinja2
@@ -66,9 +70,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/Juniper/py-junos-eznc";
-    description = "Junos 'EZ' automation for non-programmers";
     changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
+    description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };
