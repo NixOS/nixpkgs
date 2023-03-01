@@ -33,6 +33,8 @@ backendStdenv.mkDerivation rec {
 
   buildInputs = [
     cuda_cudart
+  ] ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0.0") [
+    cuda_cccl
   ];
 
   preConfigure = ''
