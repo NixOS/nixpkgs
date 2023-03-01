@@ -15,8 +15,8 @@
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
-
+                    stdenv.hostPlatform.isx86_64
+, cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
@@ -40,6 +40,9 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
+  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+
   version = "3.4.18";
 
   src = fetchFromGitHub {
@@ -242,6 +245,8 @@ stdenv.mkDerivation {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
