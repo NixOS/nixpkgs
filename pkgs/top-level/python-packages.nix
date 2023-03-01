@@ -10357,8 +10357,6 @@ self: super: with self; {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
-  samplerate = callPackage ../development/python-modules/samplerate { };
-
   samsungctl = callPackage ../development/python-modules/samsungctl { };
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
@@ -10426,6 +10424,10 @@ self: super: with self; {
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
+
+  scikits-samplerate = callPackage ../development/python-modules/scikits-samplerate {
+    inherit (pkgs) libsamplerate;
+  };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
