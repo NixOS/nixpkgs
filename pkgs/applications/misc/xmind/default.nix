@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
       binaryBytecode
       binaryNativeCode
     ];
+    mainProgram = "XMind";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];
