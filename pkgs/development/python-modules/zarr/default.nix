@@ -1,13 +1,13 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
 , asciitree
-, numpy
+, buildPythonPackage
 , fasteners
+, fetchPypi
 , numcodecs
-, pytest
+, numpy
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aOxZuOvfxP7l4yvWwM4nP3L31O0BdFS0UyfGc8YJB7w=";
+    hash = "sha256-aOxZuOvfxP7l4yvWwM4nP3L31O0BdFS0UyfGc8YJB7w=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [
+    "zarr"
+  ];
 
   meta = with lib; {
     description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
