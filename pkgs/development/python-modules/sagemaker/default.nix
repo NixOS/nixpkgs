@@ -14,19 +14,25 @@
 , pathos
 , packaging
 , pythonOlder
+, schema
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.126.0";
+  version = "2.135.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wuU53FmrtAY8E08Q+W4OhBoBQ8kks3LjJiR7kxlbfAg=";
+    hash = "sha256:6688eef08ca8be1cc5f944d21ba81cd06dc78fbcfebbbb4ea780050e2644e02b";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "importlib-metadata>=1.4.0,<5.0" "importlib-metadata"
+  '';
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [
@@ -47,6 +53,7 @@ buildPythonPackage rec {
     protobuf3-to-dict
     smdebug-rulesconfig
     pandas
+    schema
   ];
 
   postFixup = ''
