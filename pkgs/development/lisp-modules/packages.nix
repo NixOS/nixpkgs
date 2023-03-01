@@ -311,6 +311,30 @@ let
 
   nyxt = self.nyxt-gtk;
 
+  stumpwm = super.stumpwm.overrideLispAttrs (o: rec {
+    version = "22.11";
+    src = pkgs.fetchFromGitHub {
+      owner = "stumpwm";
+      repo = "stumpwm";
+      rev = version;
+      hash = "sha256-zXj17ucgyFhv7P0qEr4cYSVRPGrL1KEIofXWN2trr/M=";
+    };
+    buildScript = pkgs.writeText "build-stumpwm.lisp" ''
+      (load "${super.stumpwm.asdfFasl}/asdf.${super.stumpwm.faslExt}")
+      (asdf:load-system 'stumpwm/build)
+      (sb-ext:save-lisp-and-die
+        "stumpwm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'stumpwm:main)
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp -v stumpwm $out/bin
+    '';
+  });
+
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
       url = "https://github.com/uthar/ltk/archive/f19162e76d6c7c2f51bd289b811d9ba20dd6555e.tar.gz";

@@ -33231,7 +33231,7 @@ with pkgs;
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
-  stumpwm = lispPackages.stumpwm;
+  stumpwm = sbclPackages.stumpwm;
 
   sublime = callPackage ../applications/editors/sublime/2 { };
 
