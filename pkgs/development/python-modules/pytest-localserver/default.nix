@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Plugin for the pytest testing framework to test server connections locally";
     homepage = "https://github.com/pytest-dev/pytest-localserver";
+    changelog = "https://github.com/pytest-dev/pytest-localserver/blob/v${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ siriobalmelli ];
   };
