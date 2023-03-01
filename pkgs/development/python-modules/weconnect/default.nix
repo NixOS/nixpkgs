@@ -48,7 +48,8 @@ buildPythonPackage rec {
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
     substituteInPlace image_extra_requirements.txt \
-      --replace "pillow~=9.4.0" "pillow"
+      --replace "pillow~=" "pillow>=" \
+      --replace "ascii_magic~=" "ascii_magic>="
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""
