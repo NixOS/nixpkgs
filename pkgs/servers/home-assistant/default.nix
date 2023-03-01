@@ -180,22 +180,6 @@ let
         doCheck = false;
       });
 
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.4";
-        src = super.fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
-        };
-        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
-          pytest-xdist
-        ]);
-        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
-
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -320,10 +304,12 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "ifaddr"
       "orjson"
+      "pip"
       "PyJWT"
       "pyOpenSSL"
       "requests"
       "typing-extensions"
+      "voluptuous-serialize"
       "yarl"
     ];
   in ''
