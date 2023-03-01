@@ -890,18 +890,18 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
+  libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpthreadstubs, libxcb, xtrans }: stdenv.mkDerivation {
     pname = "libX11";
-    version = "1.8.1";
+    version = "1.8.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.8.1.tar.xz";
-      sha256 = "1xyry8i7zqmlkvpbyyqwi18rrdw6ycczlvfp63rh2570pfhimi0v";
+      url = "mirror://xorg/individual/lib/libX11-1.8.3.tar.xz";
+      sha256 = "1gc5cnfys48m1y9y1cidph89fww5c209qff93phbidh68346a5g3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto libxcb xtrans ];
+    buildInputs = [ xorgproto libpthreadstubs libxcb xtrans ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
