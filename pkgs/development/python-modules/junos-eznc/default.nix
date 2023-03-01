@@ -61,11 +61,14 @@ buildPythonPackage rec {
     nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
 
-  pythonImportsCheck = [ "jnpr.junos" ];
+  pythonImportsCheck = [
+    "jnpr.junos"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };
