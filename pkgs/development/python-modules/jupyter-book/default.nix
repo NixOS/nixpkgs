@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.13.2";
+  version = "0.14.0";
 
   format = "flit";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wJWY0tBrlCkOFDfGZS4xWvv87sOlyrNl3fiGqgayqTs=";
+    sha256 = "sha256-BxrVrOsCqFRmx16l6YdkJplwdnU2XhRFMHd5DGy+dqE=";
   };
 
   nativeBuildInputs = [
@@ -65,8 +65,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docutils"
-    "myst-nb"
-    "sphinx"
+    "sphinx-book-theme"
   ];
 
   pythonImportsCheck = [
