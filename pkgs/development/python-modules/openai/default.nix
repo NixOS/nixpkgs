@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-pXttGvnApYuwkWU7kCDNjw0rjHD5AyUvujfvpDVjgxM=";
   };
 
@@ -91,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
+    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
   };
