@@ -43,18 +43,18 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    asciidoc
+    makeWrapper
     meson
     ninja
     pkg-config
-    asciidoc
-    makeWrapper
   ];
 
   buildInputs = [
-    jansson
-    jose
     cryptsetup
     curl
+    jansson
+    jose
     libpwquality
     luksmeta
     tpm2-tools
