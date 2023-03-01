@@ -358,6 +358,10 @@ let
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
     };
+    "tree-sitter-solidity" = {
+      orga = "JoranHonig";
+      repo = "tree-sitter-solidity";
+    };
   };
 
   allGrammars =
