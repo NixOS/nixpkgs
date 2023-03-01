@@ -161,6 +161,11 @@ let
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
 
+# Opt-in for those who want a clear separation between attributes that should
+# be used and those that are internal. Also expected to perform slightly better
+# when applied widely.
+, __cleanAttrs ? false
+
 , env ? { }
 
 , ... } @ attrs:
@@ -552,7 +557,7 @@ in
 lib.extendDerivation
   validity.handled
   (
-    lib.optionalAttrs (! attrs.__cleanAttrs or false) {
+    lib.optionalAttrs (! __cleanAttrs) {
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -594,7 +599,7 @@ lib.extendDerivation
    // passthru)
   (
       (
-        if attrs.__cleanAttrs or false
+        if __cleanAttrs
         then builtins.intersectAttrs { version = null; } drvAttrs
         else drvAttrs
       )
@@ -607,7 +612,7 @@ lib.extendDerivation
         inherit outputName outputs;
         inherit (strict) drvPath;
         inherit (drvAttrs) name;
-        ${if attrs.__cleanAttrs or false then null else "drvAttrs"} = drvAttrs;
+        ${if __cleanAttrs then null else "drvAttrs"} = drvAttrs;
         outPath = strict.${outputName};
       }
   );
