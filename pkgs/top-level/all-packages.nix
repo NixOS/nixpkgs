@@ -2402,6 +2402,8 @@ with pkgs;
 
   lf = callPackage ../applications/file-managers/lf { };
 
+  ctpv = callPackage ../applications/file-managers/lf/ctpv.nix { };
+
   llama = callPackage ../applications/file-managers/llama { };
 
   mc = callPackage ../applications/file-managers/mc {
