@@ -2614,7 +2614,9 @@ with pkgs;
 
   lilo = callPackage ../tools/misc/lilo { };
 
-  logseq = callPackage ../applications/misc/logseq { };
+  logseq = callPackage ../applications/misc/logseq {
+    electron = electron_20;
+  };
 
   natls = callPackage ../tools/misc/natls { };
 
