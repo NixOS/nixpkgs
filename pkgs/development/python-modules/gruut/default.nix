@@ -46,9 +46,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dateparser~=1.0.0" "dateparser" \
       --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines"
+      --replace "jsonlines~=1.2.0" "jsonlines" \
+      --replace "networkx>=2.5.0,<3.0.0" "networkx"
   '';
 
   propagatedBuildInputs = [
