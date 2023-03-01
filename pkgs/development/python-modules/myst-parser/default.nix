@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "0.18.1";
+  version = "0.19.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,14 +28,8 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wgRZwafAF05LtwjH6SVKzsY7bKeZ6lUlM3dB5PdOn1E=";
+    sha256 = "sha256-5l22iEteXNcgyW8Qq7MTZeHfN8CvledBPq7dZiytPkw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "docutils>=0.15,<0.19" "docutils>=0.15" \
-      --replace "sphinx>=4,<6" "sphinx"
-  '';
 
   nativeBuildInputs = [ flit-core ];
 
@@ -49,8 +43,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "myst_parser" ];
-
   nativeCheckInputs = [
     beautifulsoup4
     pytest-param-files
@@ -59,17 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError due to different files
-    "test_basic"
-    "test_footnotes"
-    "test_gettext_html"
-    "test_fieldlist_extension"
-    # docutils 0.19 expectation mismatches
-    "test_docutils_roles"
-    # sphinx 6.0 expectation mismatches
-    "test_sphinx_directives"
-  ];
+  pythonImportsCheck = [ "myst_parser" ];
 
   meta = with lib; {
     description = "Sphinx and Docutils extension to parse MyST";
