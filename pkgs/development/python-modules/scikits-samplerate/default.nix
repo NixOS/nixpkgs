@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , numpy
-, pkgs
+, libsamplerate
 , fetchFromGitHub
 }:
 
 buildPythonPackage {
-  pname = "scikits.samplerate";
+  pname = "scikits-samplerate";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cournape";
@@ -16,14 +17,19 @@ buildPythonPackage {
     sha256 = "sha256-7x03Q6VXfP9p8HCk15IDZ9HeqTyi5F1AlGX/otdh8VU=";
   };
 
-  buildInputs =  [ pkgs.libsamplerate ];
-  propagatedBuildInputs = [ numpy ];
+  buildInputs =  [
+    libsamplerate
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   preConfigure = ''
      cat > site.cfg << END
      [samplerate]
-     library_dirs=${pkgs.libsamplerate.out}/lib
-     include_dirs=${pkgs.libsamplerate.dev}/include
+     library_dirs=${libsamplerate.out}/lib
+     include_dirs=${lib.getDev libsamplerate}/include
      END
   '';
 
