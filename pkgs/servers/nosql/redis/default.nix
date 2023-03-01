@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.8";
+  version = "7.0.9";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-BqM55JEwZ4Pc9VuX8VpdvL3AHMvebcIwJ8R1yrc16RQ=";
+    hash = "sha256-93E1wqR8kVHUAov+o7NEcKtNMk0UhPeahMbzKjz7n2U=";
   };
 
   nativeBuildInputs = [ pkg-config ];
