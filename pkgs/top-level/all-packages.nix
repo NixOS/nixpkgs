@@ -30406,6 +30406,8 @@ with pkgs;
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
 
+  microdude = python3Packages.callPackage ../applications/audio/microdude { };
+
   musikcube = callPackage ../applications/audio/musikcube {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
   };
