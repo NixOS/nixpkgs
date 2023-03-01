@@ -23,6 +23,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # requires set up local server
+    "tests/test_dynamodb_cache.py"
+  ];
+
   pythonImportsCheck = [ "cachelib" ];
 
   meta = with lib; {
