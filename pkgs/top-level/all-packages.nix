@@ -3356,7 +3356,7 @@ with pkgs;
 
   bitwarden = callPackage ../tools/security/bitwarden { };
 
-  inherit (nodePackages) bitwarden-cli;
+  bitwarden-cli = callPackage ../tools/security/bitwarden/cli.nix { };
 
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
