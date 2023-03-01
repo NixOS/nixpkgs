@@ -315,9 +315,7 @@ else let
           else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
     }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
-      # NOTE: keep in sync with trivial-builders.nix#inputDerivation
       builder = attrs.realBuilder or stdenv.shell;
-      # NOTE: keep in sync with trivial-builders.nix#inputDerivation
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
 
@@ -555,7 +553,6 @@ lib.extendDerivation
   validity.handled
   (
     lib.optionalAttrs (! attrs.__cleanAttrs or false) {
-     # TODO: reuse pkgs.inputDerivation instead
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
