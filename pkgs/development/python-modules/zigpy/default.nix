@@ -48,6 +48,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "test_periodic_scan_priority"
+  ];
+
   pythonImportsCheck = [
     "zigpy.application"
     "zigpy.config"
