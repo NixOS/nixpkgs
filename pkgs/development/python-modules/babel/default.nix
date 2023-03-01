@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.11.0";
+  version = "2.12.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    sha256 = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+    sha256 = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  propagatedBuildInputs = lib.optional (pythonOlder "3.9") pytz;
 
   nativeCheckInputs = [ pytestCheckHook freezegun ];
 
