@@ -19574,6 +19574,10 @@ let
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
+    checkInputs = [ CGICompile FCGI FCGIProcManager LogLog4perl ModuleRefresh ];
+    postPatch = ''
+      patchShebangs t/Plack-Middleware/cgi-bin/cgi_dir.cgi
+    '';
     meta = {
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       homepage = "https://github.com/plack/Plack";
