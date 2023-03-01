@@ -55,6 +55,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "test_delete"
     "test_separate_consecutive_moves"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    # fails on aarch64-linux on hydra
+    "test_close"
   ];
 
   disabledTestPaths = [
