@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "latchset";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-m1UhyjD5ydSgCTBu6sECLlxFx0rnQxFnBA7frbdUqU8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m1UhyjD5ydSgCTBu6sECLlxFx0rnQxFnBA7frbdUqU8=";
   };
 
   patches = [
@@ -56,10 +56,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = {
+  meta = with lib; {
     description = "Automated Encryption Framework";
     homepage = "https://github.com/latchset/clevis";
-    maintainers = with lib.maintainers; [ ];
-    license = lib.licenses.gpl3Plus;
+    changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }
