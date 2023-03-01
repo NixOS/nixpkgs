@@ -4,7 +4,7 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata, libkrb5
+      , pkg-config, libxml2, tzdata, libkrb5, pam, openldap, llvmPackages_latest
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -23,6 +23,7 @@ let
     atLeast = lib.versionAtLeast version;
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
+    llvmEnabled = atLeast "13";
 
   in stdenv.mkDerivation rec {
     pname = "postgresql";
@@ -44,11 +45,14 @@ let
       openssl
       libxml2
       icu
+      pam
+      openldap
     ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
+      ++ lib.optionals llvmEnabled [ llvmPackages_latest.llvm llvmPackages_latest.clang ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [
@@ -68,17 +72,19 @@ let
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
 
     configureFlags = [
+      "--with-pam"
+      "--with-ldap"
       "--with-openssl"
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+      ++ lib.optionals llvmEnabled [ "--with-llvm" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
