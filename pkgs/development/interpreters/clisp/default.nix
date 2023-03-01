@@ -18,12 +18,19 @@
   ]
   ++ lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" "wildcard" ]
   ++ lib.optional x11Support "clx/new-clx"
+# For packages
+, asdf_3_3
+, commonLispPackagesFor
+, lispWithPackages
+, build-asdf-system
+, spec ? { faslExt = "fas"; program = "clisp"; flags = "-E UTF-8"; asdf = asdf_3_3; }
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
-stdenv.mkDerivation rec {
+let clisp = stdenv.mkDerivation rec {
   version = "2.49";
   pname = "clisp";
 
@@ -105,4 +112,14 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     license = lib.licenses.gpl2;
   };
-}
+
+  passthru = let
+    spec' = spec // { pkg = clisp; };
+    pkgs = (commonLispPackagesFor spec').overrideScope' packageOverrides;
+  in {
+    inherit pkgs;
+    withPackages = lispWithPackages pkgs;
+    buildASDFSystem = args: build-asdf-system (args // spec');
+  };
+
+}; in clisp
