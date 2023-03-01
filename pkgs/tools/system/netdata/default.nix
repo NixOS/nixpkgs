@@ -1,6 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
+, netdata-go-d-plugin
 , curl, jemalloc, libuv, zlib
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
@@ -14,9 +15,7 @@
 , withDebug ? false
 }:
 
-let
-  go-d-plugin = callPackage ./go.d.plugin.nix {};
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
   version = "1.38.1";
   pname = "netdata";
@@ -70,8 +69,8 @@ in stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
-    ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
-    ln -s ${go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
+    ln -s ${netdata-go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${netdata-go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
   '' + lib.optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
