@@ -1,4 +1,5 @@
 { lib
+, asgiref
 , blinker
 , buildPythonPackage
 , fetchPypi
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    asgiref
     blinker
     pytestCheckHook
     semantic-version
