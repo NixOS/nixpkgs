@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.6.18";
+  version = "1.6.19";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    hash = "sha256-ApQKdd+S02YFNDVrrSKVHZmR1ZQwcU1KoQRfhOP9VHQ=";
+    hash = "sha256-Us7NEv2BngV1Q/Bkuv4XOjVjpqThL0LnIH+yciPG3L8=";
   };
 
   vendorHash = null;
@@ -45,6 +45,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) docker; };
 
   meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
