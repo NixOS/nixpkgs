@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     lxqt.libqtxdg
+    librsvg
+    freeimage
   ];
 
   propagatedBuildInputs = [
     dtkcore
-    librsvg
     qtimageformats
-    freeimage
   ];
 
   cmakeFlags = [
