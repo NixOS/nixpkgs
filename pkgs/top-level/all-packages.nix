@@ -1985,6 +1985,8 @@ with pkgs;
 
   gitty = callPackage ../applications/version-management/gitty { };
 
+  gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
+
   gitui = callPackage ../applications/version-management/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
@@ -7354,6 +7356,8 @@ with pkgs;
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
   filet = callPackage ../applications/misc/filet { };
+
+  findex = callPackage ../applications/misc/findex { };
 
   findomain = callPackage ../tools/networking/findomain {
     inherit (darwin.apple_sdk.frameworks) Security;

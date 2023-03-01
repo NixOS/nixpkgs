@@ -17,6 +17,7 @@
 , ninja
 , xvfb-run
 , xkeyboard_config
+, libxcvt
 , libxkbfile
 , libXdamage
 , libxkbcommon
@@ -93,6 +94,7 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    libxcvt
     mesa # needed for gbm
     meson
     ninja
@@ -100,7 +102,7 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
-    xorgserver # for cvt command
+    xorgserver
   ];
 
   buildInputs = [
