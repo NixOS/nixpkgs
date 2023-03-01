@@ -1919,6 +1919,10 @@ with pkgs;
 
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
+  git-stack = callPackage ../applications/version-management/git-stack {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-standup = callPackage ../applications/version-management/git-standup { };
 
   git-stree = callPackage ../applications/version-management/git-stree { };
