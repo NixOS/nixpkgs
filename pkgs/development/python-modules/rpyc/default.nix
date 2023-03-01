@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
     homepage = "https://rpyc.readthedocs.org";
+    changelog = "https://github.com/tomerfiliba-org/rpyc/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
