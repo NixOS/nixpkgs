@@ -1,5 +1,3 @@
-# DO NOT port this expression to hadrian. It is not possible to build a GHC
-# cross compiler with 9.4.* and hadrian.
 { lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
@@ -177,12 +175,12 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.4.4";
+  version = "9.2.7";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "e8cef25a6ded1531cda7a90488d0cfb6d780657d16636daa59430be030cd67e2";
+    sha256 = "a253567a17b734a4c0dd0ffa296d33c2a5b5a54a77df988806a2a1e1ca7e88b8";
   };
 
   enableParallelBuilding = true;
@@ -190,6 +188,20 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
     # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
     # Can be removed if the Cabal library included with ghc backports the linked fix
     (fetchpatch {
@@ -233,10 +245,7 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
-
     echo -n "${buildMK}" > mk/build.mk
-
-    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + lib.optionalString (!stdenv.isDarwin) ''
@@ -264,13 +273,6 @@ stdenv.mkDerivation (rec {
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-  ''
-  # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
-  # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
-  + ''
-    substituteInPlace configure --replace \
-      'MinBootGhcVersion="9.0"' \
-      'MinBootGhcVersion="8.10"'
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
