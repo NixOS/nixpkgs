@@ -43,6 +43,9 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/pypa/readme_renderer/issues/221
     "test_GFM_"
+    # https://github.com/pypa/readme_renderer/issues/274
+    "test_CommonMark_008.md"
+    "test_rst_008.rst"
     # Relies on old distutils behaviour removed by setuptools (TypeError: dist must be a Distribution instance)
     "test_valid_rst"
     "test_invalid_rst"
