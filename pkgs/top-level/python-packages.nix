@@ -5283,6 +5283,8 @@ self: super: with self; {
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
+  lazy-loader = callPackage ../development/python-modules/lazy-loader { };
+
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
   lc7001 = callPackage ../development/python-modules/lc7001 { };
