@@ -221,6 +221,10 @@ in
     buildInputs = [ libffi ];
   };
 
+  fiddle = attrs: {
+    buildInputs = [ libffi ];
+  };
+
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];

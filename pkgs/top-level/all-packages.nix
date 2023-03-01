@@ -5241,9 +5241,7 @@ with pkgs;
 
   miniscript = callPackage ../applications/blockchains/miniscript { };
 
-  miniserve = callPackage ../tools/misc/miniserve {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  miniserve = callPackage ../tools/misc/miniserve { };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -16206,6 +16204,8 @@ with pkgs;
 
   bupc = callPackage ../development/compilers/bupc { };
 
+  ubports-click = python3Packages.callPackage ../development/tools/click { };
+
   uasm = callPackage ../development/compilers/uasm { };
 
   urn = callPackage ../development/compilers/urn { };
@@ -24658,6 +24658,8 @@ with pkgs;
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
+
+  grafana-dash-n-grab = callPackage ../servers/monitoring/grafana-dash-n-grab { };
 
   gerbera = callPackage ../servers/gerbera {};
 

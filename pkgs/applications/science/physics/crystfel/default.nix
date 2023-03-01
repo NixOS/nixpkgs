@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , lz4
 , bzip2
@@ -9,7 +10,6 @@
 , m4
 , hdf5
 , gsl
-, slurm
 , unzip
 , makeWrapper
 , meson
@@ -161,10 +161,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.10.1";
+  version = "0.10.2";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0i9d5ggalic7alj97dxjdys7010kxhm2cb4lwakvigl023j8ms79";
+    sha256 = "sha256-nCO9ndDKS54bVN9IhFBiCVNzqk7BsCljXFrOmlx+sP4=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook ];
@@ -186,12 +186,16 @@ stdenv.mkDerivation rec {
     argp-standalone
     memorymappingHook
   ]
-  # slurm is not available for Darwin; when it is, remove the condition
-  ++ lib.optionals (!stdenv.isDarwin) [ slurm ]
   # hdf5-external-filter-plugins doesn't link on Darwin
   ++ lib.optionals (withBitshuffle && !stdenv.isDarwin) [ hdf5-external-filter-plugins ];
 
-  patches = [ ./link-to-argp-standalone-if-needed.patch ];
+  patches = [
+    ./link-to-argp-standalone-if-needed.patch
+    (fetchpatch {
+      url = "https://gitlab.desy.de/thomas.white/crystfel/-/commit/3c54d59e1c13aaae716845fed2585770c3ca9d14.diff";
+      hash = "sha256-oaJNBQQn0c+z4p1pnW4osRJA2KdKiz4hWu7uzoKY7wc=";
+    })
+  ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
   # we'd have to do that for every CrystFEL executable (indexamajig, crystfel, partialator). Better to just
