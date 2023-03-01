@@ -57,6 +57,7 @@ let
     deepin-desktop-schemas = callPackage ./go-package/deepin-desktop-schemas { };
 
     #### TOOLS
+    dde-device-formatter = callPackage ./tools/dde-device-formatter { };
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
 
     #### ARTWORK
