@@ -1,6 +1,6 @@
-{ lib, buildDunePackage, fetchurl, extlib, lutils, rdbg, yaml }:
+{ lib, ocamlPackages, fetchurl }:
 
-buildDunePackage rec {
+ocamlPackages.buildDunePackage rec {
   pname = "lustre-v6";
   version = "6.107.3";
 
@@ -11,7 +11,7 @@ buildDunePackage rec {
     hash = "sha256-z3cljDyxtotCGUIdYEzYu7fQd04RC3hhWpROcMh6Zng=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with ocamlPackages; [
     extlib
     lutils
     rdbg

@@ -15411,6 +15411,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+  lustre-v6 = callPackage ../development/compilers/lustre-v6 { };
+
   manticore = callPackage ../development/compilers/manticore { };
 
   marst = callPackage ../development/compilers/marst { };
