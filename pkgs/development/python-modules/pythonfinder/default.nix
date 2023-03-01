@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-sfoAS3QpD78we8HcXpxjSyEIN1xLRVLExaM3oXe6tLU=";
+    hash = "sha256-sfoAS3QpD78we8HcXpxjSyEIN1xLRVLExaM3oXe6tLU=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,13 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "--no-cov" ];
+  pythonImportsCheck = [
+    "pythonfinder"
+  ];
+
+  pytestFlagsArray = [
+    "--no-cov"
+  ];
 
   # these tests invoke git in a subprocess and
   # for some reason git can't be found even if included in nativeCheckInputs
