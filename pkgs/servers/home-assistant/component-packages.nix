@@ -2381,12 +2381,13 @@
       home-assistant-frontend
       ifaddr
       janus
+      mopeka-iot-ble
       pillow
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: mopeka_iot_ble
+    ];
     "motion_blinds" = ps: with ps; [
       aiohttp-cors
       fnvhash
@@ -2593,7 +2594,8 @@
       aio-geojson-nsw-rfs-incidents
     ];
     "nuheat" = ps: with ps; [
-    ]; # missing inputs: nuheat
+      nuheat
+    ];
     "nuki" = ps: with ps; [
       pynuki
     ];
@@ -4804,6 +4806,7 @@
     "modern_forms"
     "mold_indicator"
     "moon"
+    "mopeka"
     "motion_blinds"
     "motioneye"
     "mqtt"
@@ -4839,6 +4842,7 @@
     "notify_events"
     "notion"
     "nsw_rural_fire_service_feed"
+    "nuheat"
     "nuki"
     "number"
     "nut"
