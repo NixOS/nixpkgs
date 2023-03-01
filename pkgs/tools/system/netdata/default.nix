@@ -2,7 +2,7 @@
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , netdata-go-d-plugin
-, curl, jemalloc, libuv, zlib
+, bash, curl, jemalloc, libuv, zlib
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, lz4
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl jemalloc libuv zlib ]
+  # bash is only used to rewrite shebangs
+  buildInputs = [ bash curl jemalloc libuv zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
