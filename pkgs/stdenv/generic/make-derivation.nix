@@ -612,7 +612,7 @@ lib.extendDerivation
         inherit outputName outputs;
         inherit (strict) drvPath;
         inherit (drvAttrs) name;
-        ${if __cleanAttrs then null else "drvAttrs"} = drvAttrs;
+        ${if __cleanAttrs then "internals" else "drvAttrs"} = drvAttrs;
         outPath = strict.${outputName};
       }
   );
