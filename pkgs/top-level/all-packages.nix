@@ -7355,6 +7355,8 @@ with pkgs;
 
   filet = callPackage ../applications/misc/filet { };
 
+  findex = callPackage ../applications/misc/findex { };
+
   findomain = callPackage ../tools/networking/findomain {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
