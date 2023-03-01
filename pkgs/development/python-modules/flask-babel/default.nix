@@ -32,6 +32,10 @@ buildPythonPackage rec {
     hash = "sha256-bHsB1f7dbZW4k8JteyZOwVCgWRDZMu21XdMcjM5NYjk=";
   };
 
+  patches = [
+    ./fix-tests-with-babel-12-2.diff
+  ];
+
   outputs = [
     "out"
     "doc"
