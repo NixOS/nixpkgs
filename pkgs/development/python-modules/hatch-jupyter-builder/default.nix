@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
-, hatch
 , pytest-mock
 , pytestCheckHook
 , tomli
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    hatch
     pytest-mock
     pytestCheckHook
     tomli
