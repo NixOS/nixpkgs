@@ -1,29 +1,30 @@
-{ lib, buildDunePackage, dns, lwt, mirage-clock, mirage-time
+{ lib, buildDunePackage, dns, dns-client, lwt, mirage-clock, mirage-time
 , mirage-random, mirage-crypto-rng, mtime, randomconv
 , cstruct, fmt, logs, rresult, domain-name, ipaddr, alcotest
 , ca-certs, ca-certs-nss
 , happy-eyeballs
 , tcpip
-, tls, tls-mirage
+, tls-lwt
 }:
 
 buildDunePackage {
-  pname = "dns-client";
+  pname = "dns-client-lwt";
   inherit (dns) src version;
   duneVersion = "3";
 
   propagatedBuildInputs = [
     dns
-    randomconv
-    domain-name
+    dns-client
+    ipaddr
+    lwt
+    ca-certs
+    happy-eyeballs
+    tls-lwt
     mtime
     mirage-crypto-rng
   ];
   checkInputs = [ alcotest ];
   doCheck = true;
 
-  meta = dns.meta // {
-    description = "Pure DNS resolver API";
-    mainProgram = "dns-client.unix";
-  };
+  meta = dns-client.meta;
 }
