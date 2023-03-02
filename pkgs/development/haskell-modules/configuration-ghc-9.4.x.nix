@@ -71,7 +71,7 @@ in {
 
   # Jailbreaks & Version Updates
 
-  aeson = self.aeson_2_1_1_0;
+  aeson = doDistribute self.aeson_2_1_2_1;
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
