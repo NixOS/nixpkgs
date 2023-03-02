@@ -492,9 +492,7 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dtv-scan-tables_linuxtv = callPackage ../data/misc/dtv-scan-tables/linuxtv.nix { };
-  dtv-scan-tables_tvheadend = callPackage ../data/misc/dtv-scan-tables/tvheadend.nix { };
-  dtv-scan-tables = dtv-scan-tables_linuxtv;
+  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -38660,9 +38658,7 @@ with pkgs;
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
-  tvheadend = callPackage ../servers/tvheadend {
-    dtv-scan-tables = dtv-scan-tables_tvheadend;
-  };
+  tvheadend = callPackage ../servers/tvheadend { };
 
   twiggy = callPackage ../development/tools/twiggy { };
 
