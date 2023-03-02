@@ -1,15 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "gomplate";
   version = "3.11.4";
-  owner = "hairyhenderson";
-  rev = "v${version}";
 
   src = fetchFromGitHub {
-    inherit owner rev;
+    owner = "hairyhenderson";
     repo = pname;
-    sha256 = "sha256-3WTscK2nmjd7+cUKGaAi9i+C3HFpuxb7eRCn0fOHFV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3WTscK2nmjd7+cUKGaAi9i+C3HFpuxb7eRCn0fOHFV4=";
   };
 
   vendorHash = "sha256-X3o00WATVlWoc1Axug5ErPtLDQ+BL3CtO/QyNtavIpg=";
@@ -32,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
+    "-X github.com/${src.owner}/${pname}/v3/version.Version=${version}"
   ];
 
   meta = with lib; {
