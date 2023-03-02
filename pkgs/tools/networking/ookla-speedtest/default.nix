@@ -13,6 +13,10 @@ let
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
       sha256 = "sha256-OVPSMdo3g+K/iQS23XJ2fFxuUz4WPTdC/QQ3r/pDG9M=";
     };
+    armv7l-linux = fetchurl {
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-armhf.tgz";
+      sha256 = "sha256-5F/N672KGFVTU1Uz3QMtaxC8jGTu5BObEUe5wJg10I0=";
+    };
     x86_64-darwin = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-macosx-universal.tgz";
       sha256 = "sha256-yfgZIUnryI+GmZmM7Ksc4UQUQEWQfs5vU89Qh39N5m8=";
