@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, callPackage }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, callPackage
+}:
 
 buildGoModule rec {
   pname = "cloudflared";
@@ -7,13 +12,18 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-qZ3h8KZLGSH+sqUs0wof5arKvcps1DdqBnT+coWEiys=";
   };
 
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs"
+  ];
 
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
