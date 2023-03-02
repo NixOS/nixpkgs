@@ -16,7 +16,6 @@ let
     hash = "sha256-5XoypuMd2AFBE2SJ6EdECuvq6D81HLLuu9UoA9kcKAM=";
   };
 in
-assert lib.versionAtLeast jdk.version minimalJavaVersion;
 stdenv.mkDerivation rec {
   pname = "tvbrowser";
   version = "4.2.7";
