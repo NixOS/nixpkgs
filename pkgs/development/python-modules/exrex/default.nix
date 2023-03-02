@@ -1,16 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "exrex";
-  version = "0.10.5";
+  version = "unstable-2021-04-22";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1wq8nyycdprxl9q9y1pfhkbca4rvysj45h1xn7waybl3v67v3f1z";
+  src = fetchFromGitHub {
+    owner = "asciimoo";
+    repo = "exrex";
+    rev = "9a66706e7582a9cf31c4121629c9035e329bbe21";
+    sha256 = "sha256-g31tHY+LzGxwBmUpSa0DV7ruLfYwmuDg+XyBxMZRa9U=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/asciimoo/exrex/pull/65
+      url = "https://github.com/asciimoo/exrex/commit/44712bfb1350a509581a5834d9fa8aebcd9434db.patch";
+      hash = "sha256-thKotSvdVdVjXaG/AhsXmW51FHLOYUeYTYw8SA/k2t4=";
+    })
+  ];
 
   # Projec thas no released tests
   doCheck = false;
