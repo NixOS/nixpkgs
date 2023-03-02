@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, chardet
 , faust-cchardet
 , pandas
 , regex
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    chardet
     faust-cchardet
     pandas
     regex
