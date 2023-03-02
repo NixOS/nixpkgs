@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
     changelog = "https://www.tvbrowser.org/index.php?id=news";
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
     license = licenses.gpl3Plus;
-    mainProgram = pname;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau yarny ];
     longDescription = ''
