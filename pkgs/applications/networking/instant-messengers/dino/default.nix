@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "sha256-FZ7MVeVxIzxzSQi5G9y+nn487pKLcXEZV1JK9mCY2MQ=";
+    sha256 = "sha256-1czey1/Zn96JneCUnhPMyffG9FVV4bA9aidNB7Ozkpo=";
   };
 
   postPatch = ''
