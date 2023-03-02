@@ -34,9 +34,10 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "csvkit" ];
 
   meta = with lib; {
+    changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
     description = "A suite of command-line tools for converting to and working with CSV";
-    maintainers = with maintainers; [ vrthra ];
-    license = licenses.mit;
     homepage = "https://github.com/wireservice/csvkit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vrthra ];
   };
 }
