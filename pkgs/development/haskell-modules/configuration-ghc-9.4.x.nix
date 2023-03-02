@@ -99,7 +99,8 @@ in {
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
-  primitive = dontCheck (doJailbreak self.primitive_0_7_4_0);
+  primitive = doDistribute self.primitive_0_8_0_0;
+  quickcheck-instances = doDistribute self.quickcheck-instances_0_3_29_1;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
