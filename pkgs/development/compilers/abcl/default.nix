@@ -4,7 +4,7 @@
 , commonLispPackagesFor
 , lispWithPackages
 , build-asdf-system
-, spec ? { faslExt = "abcl"; program = "abcl"; flags = ""; asdf = asdf_3_3; }
+, spec ? { faslExt = "abcl"; program = "abcl"; flags = []; asdf = asdf_3_3; }
 , packageOverrides ? (self: super: {})}:
 let abcl = stdenv.mkDerivation rec {
   pname = "abcl";

@@ -23,7 +23,7 @@
 , commonLispPackagesFor
 , lispWithPackages
 , build-asdf-system
-, spec ? { faslExt = "fas"; program = "clisp"; flags = "-E UTF-8"; asdf = asdf_3_3; }
+, spec ? { faslExt = "fas"; program = "clisp"; flags = ["-E" "UTF-8"]; asdf = asdf_3_3; }
 , packageOverrides ? (self: super: {})
 }:
 

@@ -80,7 +80,7 @@ let
       dontUnpack = true;
       buildPhase = ''
         cp -v ${asdf}/lib/common-lisp/asdf/build/asdf.lisp asdf.lisp
-        ${pkg}/bin/${program} ${flags} < <(echo '(compile-file "asdf.lisp")')
+        ${pkg}/bin/${program} ${toString flags} < <(echo '(compile-file "asdf.lisp")')
       '';
       installPhase = ''
         mkdir -p $out
@@ -116,7 +116,7 @@ let
       program ? pkg.pname,
 
       # General flags to the Lisp executable
-      flags ? "",
+      flags ? [],
 
       # Extension for implementation-dependent FASL files
       faslExt,
@@ -185,7 +185,7 @@ let
       buildPhase = optionalString (src != null) ''
         export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$src//
         export ASDF_OUTPUT_TRANSLATIONS="$src:$(pwd):${storeDir}:${storeDir}"
-        ${pkg}/bin/${program} ${flags} < $buildScript
+        ${pkg}/bin/${program} ${toString flags} < $buildScript
       '';
 
       # Copy compiled files to store
@@ -274,7 +274,7 @@ let
         makeWrapper \
           ${o.pkg}/bin/${o.program} \
           $out/bin/${o.program} \
-          --add-flags "${o.flags}" \
+          --add-flags "${toString o.flags}" \
           --set ASDF "${o.asdfFasl}/asdf.${o.faslExt}" \
           --prefix CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY" \
           --prefix ASDF_OUTPUT_TRANSLATIONS : "$(echo $CL_SOURCE_REGISTRY | sed s,//:,::,g):" \

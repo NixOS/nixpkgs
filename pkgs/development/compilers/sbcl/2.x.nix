@@ -15,7 +15,7 @@
 , commonLispPackagesFor
 , lispWithPackages
 , build-asdf-system
-, spec ? { faslExt = "fasl"; program = "sbcl"; flags = ""; asdf = asdf_3_3; }
+, spec ? { faslExt = "fasl"; program = "sbcl"; flags = []; asdf = asdf_3_3; }
 , packageOverrides ? (self: super: {})
 }:
 

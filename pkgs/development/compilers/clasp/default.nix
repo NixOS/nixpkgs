@@ -4,7 +4,7 @@
 , commonLispPackagesFor
 , lispWithPackages
 , build-asdf-system
-, spec ? { faslExt = "fasp"; program = "clasp"; flags = ""; asdf = asdf_3_3; }
+, spec ? { faslExt = "fasp"; program = "clasp"; flags = []; asdf = asdf_3_3; }
 , packageOverrides ? (self: super: {})
 , ...}:
 

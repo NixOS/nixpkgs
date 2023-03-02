@@ -29,7 +29,7 @@ let
             mkdir __fasls
             export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)/__fasls:${storeDir}:${storeDir}"
             export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
-            ${o.pkg}/bin/${o.program} ${o.flags or ""} < ${o.buildScript}
+            ${o.pkg}/bin/${o.program} ${toString (o.flags or [])} < ${o.buildScript}
           '';
           installPhase = ''
             mkdir -pv $out
