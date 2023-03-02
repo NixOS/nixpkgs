@@ -27,7 +27,12 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8";
   '';
 
-  buildInputs = [ glib curl id3lib libxml2 ];
+  buildInputs = [
+    glib
+    curl
+    id3lib
+    libxml2
+  ];
   nativeBuildInputs = [
     ronn
     # See comment on locale above
