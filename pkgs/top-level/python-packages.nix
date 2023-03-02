@@ -8077,6 +8077,8 @@ self: super: with self; {
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
+  pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
+
   pyezviz = callPackage ../development/python-modules/pyezviz { };
 
   pyface = callPackage ../development/python-modules/pyface { };
