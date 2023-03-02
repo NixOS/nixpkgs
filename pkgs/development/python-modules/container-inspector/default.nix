@@ -28,6 +28,12 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
+  postPatch = ''
+    # PEP440 support was removed in newer setuptools, https://github.com/nexB/container-inspector/pull/51
+    substituteInPlace setup.cfg \
+      --replace ">=3.7.*" ">=3.7"
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
   ];
