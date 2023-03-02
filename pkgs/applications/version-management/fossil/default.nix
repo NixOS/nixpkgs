@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.20";
+  version = "2.21";
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
-    sha256 = "1knff50rr8f39myxj50fprb9ya87cslmwz7zzfya56l33r7i7jh3";
+    hash = "sha256-wf7sp4ISTN52mSQHxw8s7//L4beLZtwkaJDYMVnvgIQ=";
   };
 
   # required for build time tool `./tools/translate.c`
