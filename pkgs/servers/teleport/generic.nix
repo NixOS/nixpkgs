@@ -20,6 +20,12 @@
 , nixosTests
 
 , withRdpClient ? true
+
+, version
+, hash
+, vendorHash
+, cargoHash
+, yarnHash
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -27,13 +33,13 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    hash = "sha256-jJfOgcwKkNFO/5XHxMoapZxM8Tb0kEgKVA7SrMU7uW4=";
+    inherit hash;
   };
-  version = "11.3.4";
+  inherit version;
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    cargoHash = "sha256-TSIwLCY01ygCWT73LR/Ch7NwPQA3a3r0PyL3hUzBNr4=";
+    inherit cargoHash;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -56,7 +62,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-MAGeWzA366yzpjdCY0+X6RV5MKcsHa/xD5CJu6ce1FU=";
+    hash = yarnHash;
   };
 
   webassets = stdenv.mkDerivation {
@@ -95,7 +101,7 @@ buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorHash = "sha256-NkiFLEHBNjxUOSuAlVugAV14yCCo3z6yhX7LZQFKhvA=";
+  inherit vendorHash;
   proxyVendor = true;
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];

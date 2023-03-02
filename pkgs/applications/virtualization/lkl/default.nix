@@ -6,15 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "lkl";
-  version = "2022-05-18";
+  version = "2023-01-27";
 
   outputs = [ "dev" "lib" "out" ];
 
   src = fetchFromGitHub {
     owner  = "lkl";
     repo   = "linux";
-    rev  = "10c7b5dee8c424cc2ab754e519ecb73350283ff9";
-    sha256 = "sha256-D3HQdKzhB172L62a+8884bNhcv7vm/c941wzbYtbf4I=";
+    rev  = "b00f0fbcd5ae24636a9315fea3af32f411cf93be";
+    sha256 = "sha256-GZpnTVdcnS5uAUHsVre539+0Qlv36Fui0WGjOPwvWrE=";
   };
 
   nativeBuildInputs = [ bc bison flex python3 ];

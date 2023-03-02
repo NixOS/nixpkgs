@@ -1,4 +1,4 @@
-{ lib, stdenv, perlPackages, fetchFromGitHub, shortenPerlShebang }:
+{ lib, stdenv, perlPackages, fetchFromGitHub, fetchpatch, shortenPerlShebang }:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
@@ -17,6 +17,14 @@ perlPackages.buildPerlPackage rec {
 
   # Avoid creating perllocal.pod, which contains a timestamp
   installTargets = [ "pure_install" ];
+
+  patches = [
+    # Fix an uninitialized variable error. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/darold/pgFormatter/commit/c2622c47d48cee47effecbf58a588c3cd3a7bf1a.patch";
+      sha256 = "sha256-WnQIOvfuzL2HrwtL0HaaYObrBxhXDu82jxGcqggQVhc=";
+    })
+  ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
   patchPhase = ''
