@@ -1329,20 +1329,6 @@ self: super: {
     })
   ] super.svgcairo;
 
-  # Espial is waiting for a hackage release to be compatible with GHC 9.X.
-  # [This issue](https://github.com/jonschoning/espial/issues/49) can be followed
-  # to track the status of the new release.
-  espial =
-    let ghc9-compat = fetchpatch {
-          url = "https://github.com/jonschoning/espial/commit/70177f9efb9666c3616e8a474681d3eb763d0e84.patch";
-          sha256 = "sha256-aJtwZGp9DUpACBV0WYRL7k32m6qWf5vq6eKBFq/G23s=";
-          excludes = ["package.yaml" "stack.yaml" "stack.yaml.lock"];
-        };
-    in overrideCabal (drv: {
-      jailbreak = assert super.espial.version == "0.0.11"; true;
-      patches = [ ghc9-compat ];
-    }) super.espial;
-
   # Upstream PR: https://github.com/jkff/splot/pull/9
   splot = appendPatch (fetchpatch {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
