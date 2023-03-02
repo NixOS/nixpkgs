@@ -2,7 +2,9 @@
   (:use :common-lisp
         :org.lispbuilds.nix/database/sqlite
         :org.lispbuilds.nix/repository/quicklisp
-        :org.lispbuilds.nix/api))
+        :org.lispbuilds.nix/api)
+  (:local-nicknames
+   (:http :dexador)))
 
 (in-package org.lispbuilds.nix/main)
 
@@ -18,12 +20,22 @@
    :init-file (resource "init" "sql")
    :url "packages.sqlite"))
 
-;; Check http://beta.quicklisp.org/dist/quicklisp.txt for updates
-(defvar *quicklisp*
-  (make-instance
-   'quicklisp-repository
-   :dist-url
-   "https://beta.quicklisp.org/dist/quicklisp/2023-02-15/"))
+(defvar *quicklisp* nil)
+
+(defun get-quicklisp-version ()
+  (let ((response (http:get "http://beta.quicklisp.org/dist/quicklisp.txt")))
+    (subseq
+     (second (uiop:split-string response :separator '(#\Newline)))
+     9)))
+
+(defun init-quicklisp ()
+  (setf *quicklisp*
+        (make-instance
+         'quicklisp-repository
+         :dist-url
+         (format nil
+                 "https://beta.quicklisp.org/dist/quicklisp/~a/"
+                 (get-quicklisp-version)))))
 
 (defun run-importers ()
   (ignore-errors (delete-file "packages.sqlite"))
@@ -38,5 +50,6 @@
 
 (defun main ()
   (format t "~%")
+  (init-quicklisp)
   (run-importers)
   (gen-nix-file))

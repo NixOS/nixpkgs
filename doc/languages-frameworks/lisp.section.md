@@ -81,16 +81,15 @@ nix-shell --run 'sbcl --script ql-import.lisp'
 
 The script will:
 
-1. Download the Quicklisp `systems.txt` and `releases.txt` files
+1. Download the latest Quicklisp `systems.txt` and `releases.txt` files
 2. Generate an SQLite database of all QL systems in `packages.sqlite`
 3. Generate an `imported.nix` file from the database
 
 The maintainer's job there is to:
 
-1. Update the `import/main.lisp` file for new QL releases
-2. Re-run the `ql-import.lisp` script
-3. Add missing native dependencies in `ql.nix`
-4. For packages that still don't build, package them manually in `packages.nix`
+1. Re-run the `ql-import.lisp` script
+2. Add missing native dependencies in `ql.nix`
+3. For packages that still don't build, package them manually in `packages.nix`
 
 Also, the `imported.nix` file **must not be edited manually**! It should only be
 generated as described in this section.
