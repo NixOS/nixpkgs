@@ -24,12 +24,18 @@ let
     extraFlags = mkOption {
       type = with types; listOf str;
       default = [];
+      example = literalExpression ''[ "--backup" ]'';
       description = mdDoc "Extra flags for the ${name} service.";
     };
 
     environment = mkOption {
       type = with types; attrsOf str;
       default = {};
+      example = literalExpression ''
+        {
+          HBASE_MASTER_OPTS = "-Dcom.sun.management.jmxremote.ssl=true";
+        }
+      '';
       description = mdDoc "Environment variables passed to ${name}.";
     };
   } // extraOpts;
@@ -107,6 +113,10 @@ in
       default = {};
       type = with types; attrsOf anything;
       example = literalExpression ''
+        {
+          "hbase.hregion.max.filesize" = 20*1024*1024*1024;
+          "hbase.table.normalization.enabled" = "true";
+        }
       '';
       description = mdDoc ''
         Additional options and overrides for hbase-site.xml
