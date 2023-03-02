@@ -40,27 +40,28 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/${pname}
-    cp -R runtime/tvbrowser_linux/* $out/share/${pname}
+    mkdir -p $out/share/tvbrowser
+    cp -R runtime/tvbrowser_linux/* $out/share/tvbrowser
 
     mkdir -p $out/share/applications
-    mv -t $out/share/applications $out/share/${pname}/${pname}.desktop
-    sed -e 's|=imgs/|='$out'/share/${pname}/imgs/|'  \
-        -e 's|=${pname}.sh|='$out'/bin/${pname}|'  \
-        -i $out/share/applications/${pname}.desktop
+    mv -t $out/share/applications $out/share/tvbrowser/tvbrowser.desktop
+    sed -e 's|=imgs/|='$out'/share/tvbrowser/imgs/|'  \
+        -e 's|=tvbrowser.sh|='$out'/bin/tvbrowser|'  \
+        -i $out/share/applications/tvbrowser.desktop
 
     for i in 16 32 48 128; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      ln -s $out/share/${pname}/imgs/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+      ln -s $out/share/tvbrowser/imgs/tvbrowser$i.png  \
+          $out/share/icons/hicolor/''${i}x''${i}/apps/tvbrowser.png
     done
 
     mkdir -p $out/bin
     makeWrapper  \
-        $out/share/${pname}/${pname}.sh  \
-        $out/bin/${pname}  \
+        $out/share/tvbrowser/tvbrowser.sh  \
+        $out/bin/tvbrowser  \
         --prefix PATH : ${jdk}/bin  \
         --prefix XDG_DATA_DIRS : $out/share  \
-        --set PROGRAM_DIR $out/share/${pname}
+        --set PROGRAM_DIR $out/share/tvbrowser
 
     runHook postInstall
   '';
