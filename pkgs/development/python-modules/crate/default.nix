@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.29.0";
+  version = "0.30.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SywW/b4DnVeSzzRiHbDaKTjcuwDnkwrK6vFfaQVIZhQ=";
+    sha256 = "sha256-8xraDCFZbpJZsh3sO5VlSHwnEfH4u4AJZkXA+L4TB60=";
   };
 
   propagatedBuildInputs = [
@@ -32,8 +32,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # network access
+    # the following tests require network access
     "test_layer_from_uri"
+    "test_additional_settings"
+    "test_basic"
+    "test_cluster"
+    "test_default_settings"
+    "test_dynamic_http_port"
+    "test_environment_variables"
+    "test_verbosity"
   ];
 
   disabledTestPaths = [
