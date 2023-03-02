@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-auVdBt8XT0qvEC9TfuROBbV/D6uQXBODZs/vrkJolwI=";
   };
 
@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to gather network ranges using ASN information";
     homepage = "https://github.com/projectdiscovery/asnmap";
+    changelog = "https://github.com/projectdiscovery/asnmap/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
