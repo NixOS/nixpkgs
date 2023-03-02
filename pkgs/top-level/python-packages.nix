@@ -5872,6 +5872,8 @@ self: super: with self; {
     python3Packages = self;
   });
 
+  merge3 = callPackage ../development/python-modules/merge3 { };
+
   mergedb = callPackage ../development/python-modules/mergedb { };
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
