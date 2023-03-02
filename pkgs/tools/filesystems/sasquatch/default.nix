@@ -1,76 +1,65 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
-, xz
+, lz4
 , lzo
+, which
+, xz
 , zlib
 , zstd
-, lz4
-, lz4Support ? false
+, bigEndian ? false
 }:
 
 let
-  patch = fetchFromGitHub
-    {
-      # NOTE: This uses my personal fork for now, until
-      # https://github.com/devttys0/sasquatch/pull/40 is merged.
-      # I, cole-h, will keep this fork available until that happens.
-      owner = "cole-h";
+  drv = stdenv.mkDerivation (finalAttrs: {
+    pname = "sasquatch";
+    version = "4.5.1-4";
+
+    src = fetchFromGitHub {
+      owner = "onekey-sec";
       repo = "sasquatch";
-      rev = "6edc54705454c6410469a9cb5bc58e412779731a";
-      sha256 = "x+PuPYGD4Pd0fcJtlLWByGy/nggsmZkxwSXxJfPvUgo=";
-    } + "/patches/patch0.txt";
+      rev = "sasquatch-v${finalAttrs.version}";
+      hash = "sha256-0itva+j5WMKvueiUaO253UQ1S6W29xgtFvV4i3yvMtU=";
+    };
+
+    patches = lib.optional stdenv.isDarwin ./darwin.patch;
+
+    strictDeps = true;
+    nativeBuildInputs = [ which ];
+    buildInputs = [ zlib xz zstd lz4 lzo ];
+
+    preBuild = ''
+      cd squashfs-tools
+    '';
+
+    installFlags = [
+      "INSTALL_DIR=${placeholder "out"}/bin"
+      "INSTALL_MANPAGES_DIR=${placeholder "out"}/share/man/man1"
+    ];
+
+    makeFlags = [
+      "GZIP_SUPPORT=1"
+      "LZ4_SUPPORT=1"
+      "LZMA_SUPPORT=1"
+      "LZO_SUPPORT=1"
+      "XZ_SUPPORT=1"
+      "ZSTD_SUPPORT=1"
+    ];
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString bigEndian "-DFIX_BE";
+
+    postInstall = lib.optionalString bigEndian ''
+      mv $out/bin/sasquatch{,-v4be}
+    '';
+
+    meta = {
+      homepage = "https://github.com/onekey-sec/sasquatch";
+      description = "Set of patches to the standard unsquashfs utility (part of squashfs-tools) that attempts to add support for as many hacked-up vendor-specific SquashFS implementations as possible";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ pamplemousse vlaci ];
+      platforms = lib.platforms.unix;
+      mainProgram = if bigEndian then "sasquatch-v4be" else "sasquatch";
+    };
+  });
 in
-stdenv.mkDerivation rec {
-  pname = "sasquatch";
-  version = "4.4";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/squashfs/squashfs${version}.tar.gz";
-    sha256 = "qYGz8/IFS1ouZYhRo8BqJGCtBKmopkXgr+Bjpj/bsH4=";
-  };
-
-  buildInputs = [
-    xz
-    lzo
-    zlib
-    zstd
-  ]
-  ++ lib.optionals lz4Support [ lz4 ];
-
-  patches = [ patch ];
-  patchFlags = [ "-p0" ];
-
-  postPatch = ''
-    # Drop blanket -Werror to avoid build failure on fresh toolchains
-    # like gcc-11.
-    substituteInPlace squashfs-tools/Makefile --replace ' -Werror' ' '
-    cd squashfs-tools
-  '';
-
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: unsquashfs_xattr.o:/build/squashfs4.4/squashfs-tools/error.h:34: multiple definition of
-  #     `verbose'; unsquashfs.o:/build/squashfs4.4/squashfs-tools/error.h:34: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-
-  installFlags = [ "INSTALL_DIR=\${out}/bin" ];
-
-  makeFlags = [
-    "XZ_SUPPORT=1"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "CXX=${stdenv.cc.targetPrefix}c++"
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ]
-    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
-
-  meta = with lib; {
-    homepage = "https://github.com/devttys0/sasquatch";
-    description = "Set of patches to the standard unsquashfs utility (part of squashfs-tools) that attempts to add support for as many hacked-up vendor-specific SquashFS implementations as possible";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pamplemousse ];
-    platforms = platforms.linux;
-    mainProgram = "sasquatch";
-  };
-}
+drv

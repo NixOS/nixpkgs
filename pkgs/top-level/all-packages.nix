@@ -12303,6 +12303,8 @@ with pkgs;
 
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
+  sasquatch-v4be = callPackage ../tools/filesystems/sasquatch { bigEndian = true; };
+
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
 
   sbs = callPackage ../tools/X11/sbs { };
