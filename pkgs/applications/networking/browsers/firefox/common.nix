@@ -471,9 +471,6 @@ buildStdenv.mkDerivation ({
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = if (with stdenv; isAarch64 && isLinux) then [ "-lgcc" ] else null;
-
   # tests were disabled in configureFlags
   doCheck = false;
 
