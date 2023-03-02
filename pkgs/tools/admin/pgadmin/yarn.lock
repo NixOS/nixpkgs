@@ -8609,6 +8609,13 @@ react-property@2.0.0:
   resolved "https://registry.yarnpkg.com/react-property/-/react-property-2.0.0.tgz#2156ba9d85fa4741faf1918b38efc1eae3c6a136"
   integrity sha512-kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==
 
+react-resize-detector@^8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-8.0.3.tgz#dab4470aae23bb07deb857230ccf945d000ef99b"
+  integrity sha512-c3eqm5BVcluVhxHsBQnhyPO/5uYB3XHIHz6D1ZOHzU2WcnZF0Cr3KLl5OIozRC2RSsdQlu5vn1PHEqrvKRnIYA==
+  dependencies:
+    lodash "^4.17.21"
+
 react-rnd@^10.3.5:
   version "10.3.7"
   resolved "https://registry.yarnpkg.com/react-rnd/-/react-rnd-10.3.7.tgz#037ce277e6c5e682989b51278e44a6ba299990af"
@@ -10084,9 +10091,9 @@ typescript@^3.2.2:
   integrity sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==
 
 ua-parser-js@^0.7.30:
-  version "0.7.32"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.32.tgz#cd8c639cdca949e30fa68c44b7813ef13e36d211"
-  integrity sha512-f9BESNVhzlhEFf2CHMSj40NWOjYPl1YKYbrvIr/hFTDEmLq7SRbWvm7FcdcpCYT95zrOhC7gZSxjdnnTpBcwVw==
+  version "0.7.33"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.33.tgz#1d04acb4ccef9293df6f70f2c3d22f3030d8b532"
+  integrity sha512-s8ax/CeZdK9R/56Sui0WM6y9OFREJarMRHqLB2EwkovemBxNQ+Bqu8GAsUnVcXKgphb++ghr/B2BZx4mahujPw==
 
 uglify-js@^3.1.4:
   version "3.17.4"
@@ -10191,6 +10198,16 @@ update-browserslist-db@^1.0.9:
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
+
+uplot-react@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/uplot-react/-/uplot-react-1.1.4.tgz#02b9918a199da9983fc0d375fb44e443749e2ac0"
+  integrity sha512-qO1UkQwjVKdj5vTm3O3yldvu1T6hwY4++rH4KznLhjqpnLdncq1zsRxq/zQz/HUHPVD0j7WBcEISbNM61JsuAQ==
+
+uplot@^1.6.24:
+  version "1.6.24"
+  resolved "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz#dfa213fa7da92763261920ea972ed1a5f9f6af12"
+  integrity sha512-WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==
 
 uri-js@^4.2.2:
   version "4.4.1"
