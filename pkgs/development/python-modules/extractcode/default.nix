@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
+  postPatch = ''
+    # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
+    substituteInPlace setup.cfg \
+      --replace ">=3.6.*" ">=3.6"
+  '';
+
   dontConfigure = true;
 
   nativeBuildInputs = [
