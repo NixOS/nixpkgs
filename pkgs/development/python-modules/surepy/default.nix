@@ -5,7 +5,7 @@
 , attrs
 , brotlipy
 , buildPythonPackage
-, cchardet
+, faust-cchardet
 , click
 , colorama
 , fetchFromGitHub
@@ -47,9 +47,9 @@ buildPythonPackage rec {
     async-timeout
     attrs
     brotlipy
-    cchardet
     click
     colorama
+    faust-cchardet
     halo
     requests
     rich

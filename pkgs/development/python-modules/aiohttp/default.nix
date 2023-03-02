@@ -14,7 +14,7 @@
 , aiosignal
 , aiodns
 , brotli
-, cchardet
+, faust-cchardet
 , asynctest
 , typing-extensions
 , idna-ssl
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     aiosignal
     aiodns
     brotli
-    cchardet
+    faust-cchardet
   ] ++ lib.optionals (pythonOlder "3.8") [
     asynctest
     typing-extensions

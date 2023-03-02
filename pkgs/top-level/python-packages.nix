@@ -1621,8 +1621,6 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { };
 
-  cchardet = callPackage ../development/python-modules/cchardet { };
-
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   celery = callPackage ../development/python-modules/celery { };

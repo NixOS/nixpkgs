@@ -3,7 +3,7 @@
 , aiodns
 , aiohttp
 , buildPythonPackage
-, cchardet
+, faust-cchardet
 , fetchFromGitHub
 , pyopenssl
 , pythonOlder
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     aenum
     aiodns
     aiohttp
-    cchardet
+    faust-cchardet
     pyopenssl
     pytz
     related

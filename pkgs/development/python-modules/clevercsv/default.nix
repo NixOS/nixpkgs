@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cchardet
-, chardet
+, faust-chardet
 , pandas
 , regex
 , tabview
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cchardet
-    chardet
+    faust-chardet
     pandas
     regex
     tabview
