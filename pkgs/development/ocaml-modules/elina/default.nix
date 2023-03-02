@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://elina.ethz.ch/";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    platforms = lib.intersectLists ocaml.meta.platforms lib.platforms.x86;
   };
 }
