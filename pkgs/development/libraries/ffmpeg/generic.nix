@@ -657,9 +657,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/libavcodec.so
-    addOpenGLRunpath $out/lib/libavutil.so
+  postFixup = optionalString (stdenv.isLinux && withLib) ''
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;
