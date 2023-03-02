@@ -21,6 +21,9 @@ with lib;
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
 
+  # BIOS booting
+  isoImage.makeBiosBootable = true;
+
   # EFI booting
   isoImage.makeEfiBootable = true;
 
