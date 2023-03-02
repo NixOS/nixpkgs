@@ -34,7 +34,8 @@ buildPythonPackage rec {
   # hardcode the path to gpgconf in the libagent library
   postPatch = ''
     substituteInPlace libagent/gpg/keyring.py \
-      --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'"
+      --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'" \
+      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
 
   propagatedBuildInputs = [
