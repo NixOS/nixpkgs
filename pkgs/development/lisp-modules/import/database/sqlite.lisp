@@ -94,8 +94,6 @@ in lib.makeScope pkgs.newScope (self: {")
    "mcclim-bezier"
    ;; Missing dependency on c2ffi cffi extension
    "hu.dwim.zlib"
-   ;; Missing libgvc.so native library
-   "hu.dwim.graphviz"
    ;; These require libRmath.so, but I don't know where to get it from
    "cl-random"
    "cl-random-tests"

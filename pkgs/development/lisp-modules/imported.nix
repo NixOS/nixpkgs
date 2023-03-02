@@ -32963,9 +32963,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "hu.dwim.graphviz" ];
     lispLibs = [ (getAttr "cffi" self) (getAttr "hu_dot_dwim_dot_asdf" self) (getAttr "metabang-bind" self) ];
-    meta = {
-      broken = true;
-    };
   });
   hu_dot_dwim_dot_graphviz_dot_documentation = (build-asdf-system {
     pname = "hu.dwim.graphviz.documentation";

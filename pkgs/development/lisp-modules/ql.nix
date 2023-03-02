@@ -196,6 +196,9 @@ let
     cl-sat_dot_minisat = super.cl-sat_dot_minisat.overrideLispAttrs (o: {
       propagatedBuildInputs = [ pkgs.minisat ];
     });
+    hu_dot_dwim_dot_graphviz = super.hu_dot_dwim_dot_graphviz.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.graphviz ];
+    });
   });
 
   qlpkgs =
