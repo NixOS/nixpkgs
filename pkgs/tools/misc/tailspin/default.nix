@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tailspin";
-  version = "0.1";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ReWgbAmEGpNOv6QArNT+eWaty88tChhH1nhH0vZe2/E=";
+    sha256 = "sha256-f9VfOcLOWJ4yr/CS0lqaqiaTfzOgdoI9CaS70AMNdsc=";
   };
 
-  vendorSha256 = "sha256-rZJO/TSGrYwrtIKQpKhZZqnXY6IHNyjS26vBDv/iQ34=";
+  vendorHash = "sha256-gn7/pFw7JEhkkd/PBP4jLUKb5NBaRE/rb049Ic/Bu7A=";
 
   CGO_ENABLED = 0;
 
