@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "maxima";
-  version = "5.45.1";
+  version = "5.46.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/pAWJ2lwvvIUoaJENIVYZEUU1/36pPyLnQ6Hr8u059w=";
+    sha256 = "sha256-c5Dwa0jaZckDPosvYpuXi5AFZFSlQCLbfecOIiWqiwc=";
   };
 
   nativeBuildInputs = [
