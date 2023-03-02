@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "gomplate";
-  version = "3.11.3";
+  version = "3.11.4";
   owner = "hairyhenderson";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit owner rev;
     repo = pname;
-    sha256 = "sha256-NvTwiGyBHhHiVHdWeXnJONNkHkrvsc1zmHPK8rSHaQw=";
+    sha256 = "sha256-3WTscK2nmjd7+cUKGaAi9i+C3HFpuxb7eRCn0fOHFV4=";
   };
 
-  vendorSha256 = "sha256-BIcOErtlcnE70Mo6fjmA/btvSpw95RaKLqNWsgyJgpc=";
+  vendorHash = "sha256-X3o00WATVlWoc1Axug5ErPtLDQ+BL3CtO/QyNtavIpg=";
 
   postPatch = ''
     # some tests require network access
