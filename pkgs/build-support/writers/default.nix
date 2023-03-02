@@ -1,4 +1,4 @@
-{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
+{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy, crossplane, jq }:
 
 let
   aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
@@ -225,11 +225,12 @@ let
   writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
-    nativeBuildInputs = [ gixy ];
+    nativeBuildInputs = [ gixy crossplane jq ];
   } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
     gixy $out
+    crossplane parse --single-file $out | jq '.status != "ok" and (.errors | map(.error) | join("\n") + "\n" | halt_error) // empty'
   '';
 
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
