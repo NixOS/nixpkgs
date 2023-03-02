@@ -86,25 +86,7 @@ stdenv.mkDerivation {
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
     ./armv7l.patch
-  ]
-    # The `compiler-rt` build inspects `ld` to figure out whether it needs to
-    # explicitly call `codesign`:
-    # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/Modules/AddCompilerRT.cmake#L409-L422
-    #
-    # In our case, despite (currently) having an `ld` version than 609, we don't
-    # need an explicit codesigning step because `postLinkSignHook` handles this
-    # for us.
-    #
-    # Unfortunately there isn't an easy way to override
-    # `NEED_EXPLICIT_ADHOC_CODESIGN`.
-    #
-    # Adding `codesign` as a build input also doesn't currently work because, as
-    # of this writing, `codesign` in nixpkgs doesn't support the `--sign` alias
-    # which the `compiler-rt` build uses. See here for context:
-    # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272116014
-    #
-    # So, for now, we patch `compiler-rt` to skip the explicit codesigning step.
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./skip-explicit-codesign.patch;
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

@@ -11414,7 +11414,9 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
+  qscintilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/qscintilla {
+    inherit (libsForQt5) qmake qtbase qtmacextras;
+  };
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
@@ -12570,9 +12572,13 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
-  teleport = callPackage ../servers/teleport {
+  teleport_11 = callPackage ../servers/teleport/11.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
+  teleport_12 = callPackage ../servers/teleport/12.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+  };
+  teleport = teleport_12;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -32305,8 +32311,6 @@ with pkgs;
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
-  vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
-
   libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
   libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
@@ -39411,4 +39415,6 @@ with pkgs;
   volantes-cursors = callPackage ../data/icons/volantes-cursors { };
 
   gnss-share = callPackage ../servers/gnss-share { };
+
+  ali = callPackage ../tools/networking/ali { };
 }
