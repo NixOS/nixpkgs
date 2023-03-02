@@ -1,10 +1,17 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , python3
 , ffmpeg
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override (lib.optionalAttrs stdenv.isDarwin {
+    packageOverrides = self: super: {
+      torch = super.torch-bin;
+    };
+  });
+in python.pkgs.buildPythonApplication rec {
   pname = "pianotrans";
   version = "1.0.1";
   format = "setuptools";
@@ -16,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-gRbyUQmPtGvx5QKAyrmeJl0stp7hwLBWwjSbJajihdE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     piano-transcription-inference
     torch
     tkinter
