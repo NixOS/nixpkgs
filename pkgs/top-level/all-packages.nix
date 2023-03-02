@@ -10229,6 +10229,8 @@ with pkgs;
 
   nb = callPackage ../tools/misc/nb { };
 
+  kb = callPackage ../tools/misc/kb { };
+
   notable = callPackage ../applications/misc/notable { };
 
   nth = with python3Packages; toPythonApplication name-that-hash;
@@ -11414,7 +11416,9 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
+  qscintilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/qscintilla {
+    inherit (libsForQt5) qmake qtbase qtmacextras;
+  };
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
@@ -32308,8 +32312,6 @@ with pkgs;
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
-
-  vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
   libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
