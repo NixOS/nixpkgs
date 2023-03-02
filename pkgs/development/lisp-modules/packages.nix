@@ -434,19 +434,47 @@ let
     patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
   };
 
+  cl-glib = build-asdf-system {
+    pname = "cl-glib";
+    version = "1.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "bohonghuang";
+      repo = "cl-glib";
+      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
+      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
+    };
+    lispLibs = with super; [
+      cl-gobject-introspection-wrapper
+      bordeaux-threads
+    ];
+  };
+
+  cl-glib_dot_gio = build-asdf-system {
+    pname = "cl-glib.gio";
+    version = "1.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "bohonghuang";
+      repo = "cl-glib";
+      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
+      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
+    };
+    lispLibs = with super; [
+      cl-gobject-introspection-wrapper
+    ];
+  };
+
   cl-gtk4 = build-asdf-system {
     pname = "cl-gtk4";
     version = "1.0.0";
     src = pkgs.fetchFromGitHub {
       owner = "bohonghuang";
       repo = "cl-gtk4";
-      rev = "6e11b0d92ccf7cacee5c7f03d50148d68fe8e04d";
-      hash = "sha256-d/DYV1aQAir4mszsw1wEotxxBW9jGiFjELB04/PRBQ4=";
+      rev = "e18f621b996fd986d9829d590203c690440dee64";
+      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
     };
     lispLibs = with super; [
       cl-gobject-introspection-wrapper
-      cl-glib_dot_gio
-    ];
+    ] ++ [ self.cl-glib self.cl-glib_dot_gio ];
     nativeBuildInputs = [
       pkgs.gobject-introspection
       pkgs.gtk4
@@ -462,8 +490,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "bohonghuang";
       repo = "cl-gtk4";
-      rev = "6e11b0d92ccf7cacee5c7f03d50148d68fe8e04d";
-      hash = "sha256-d/DYV1aQAir4mszsw1wEotxxBW9jGiFjELB04/PRBQ4=";
+      rev = "e18f621b996fd986d9829d590203c690440dee64";
+      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
     };
     lispLibs = with super; [
       cl-gobject-introspection-wrapper
@@ -482,8 +510,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "bohonghuang";
       repo = "cl-gtk4";
-      rev = "6e11b0d92ccf7cacee5c7f03d50148d68fe8e04d";
-      hash = "sha256-d/DYV1aQAir4mszsw1wEotxxBW9jGiFjELB04/PRBQ4=";
+      rev = "e18f621b996fd986d9829d590203c690440dee64";
+      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
     };
     lispLibs = with super; [
       cl-gobject-introspection-wrapper
