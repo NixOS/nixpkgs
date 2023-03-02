@@ -124,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.8.10";
+  version = "1.8.12";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
