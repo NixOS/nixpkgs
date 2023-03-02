@@ -63,6 +63,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
+    changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ anhduy ];
   };
