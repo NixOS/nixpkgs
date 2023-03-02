@@ -8,6 +8,7 @@
 , alsa-lib
 , libpulseaudio
 , fftw
+, fftwFloat
 , json_c
 , libjack2
 , jackSupport ? true
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     fftw
+    fftwFloat
     json_c
   ] ++ lib.optional jackSupport libjack2;
 
