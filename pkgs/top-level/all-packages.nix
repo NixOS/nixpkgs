@@ -39411,4 +39411,6 @@ with pkgs;
   volantes-cursors = callPackage ../data/icons/volantes-cursors { };
 
   gnss-share = callPackage ../servers/gnss-share { };
+
+  ali = callPackage ../tools/networking/ali { };
 }
