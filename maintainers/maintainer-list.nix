@@ -15970,6 +15970,15 @@
       fingerprint = "DA03 D6C6 3F58 E796 AD26  E99B 366A 2940 479A 06FC";
     }];
   };
+  williamvds = {
+    email = "nixpkgs@williamvds.me";
+    github = "williamvds";
+    githubId = 26379999;
+    name = "William Vigolo";
+    keys = [{
+      fingerprint = "9848 B216 BCBE 29BB 1C6A  E0D5 7A4D F5A8 CDBD 49C7";
+    }];
+  };
   willibutz = {
     email = "willibutz@posteo.de";
     github = "WilliButz";
