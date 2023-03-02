@@ -1338,7 +1338,7 @@ self: super: {
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
+  haskeline_0_8_2_1 = doDistribute (dontCheck super.haskeline_0_8_2_1);
 
   # Too strict upper bound on HTF
   # https://github.com/nikita-volkov/stm-containers/issues/29
@@ -1529,7 +1529,7 @@ self: super: {
   # 2022-03-19: strict upper bounds https://github.com/poscat0x04/hinit/issues/2
   hinit = doJailbreak
     (self.generateOptparseApplicativeCompletions [ "hi" ]
-      (super.hinit.override { haskeline = self.haskeline_0_8_2; }));
+      (super.hinit.override { haskeline = self.haskeline_0_8_2_1; }));
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
