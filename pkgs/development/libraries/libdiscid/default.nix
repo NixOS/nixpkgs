@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libdiscid";
-  version = "0.6.3";
+  version = "0.6.4";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/libdiscid/${pname}-${version}.tar.gz";
-    sha256 = "sha256-D578erZfJNpXZzVHMEsBQ+6J8zY4vq3MIKhAHgd7PCU=";
+    url = "http://ftp.musicbrainz.org/pub/musicbrainz/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-3V6PHJrq1ELiO3SanMkzY3LmLoitcHmitiiVsDkMsoI=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation -framework IOKit";
