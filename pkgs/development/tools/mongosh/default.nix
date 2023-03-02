@@ -7,6 +7,8 @@ let
   };
 in
 nodePackages.mongosh.override {
+  npmFlags = "--ignore-scripts";
+
   passthru.tests.version = testers.testVersion {
     package = mongosh;
   };

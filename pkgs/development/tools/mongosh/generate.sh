@@ -10,4 +10,4 @@ node2nix \
     --output packages.nix \
     --composition composition.nix \
     --strip-optional-dependencies \
-    --nodejs-16
+    --nodejs-18
