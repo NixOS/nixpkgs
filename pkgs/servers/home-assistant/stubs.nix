@@ -3,12 +3,15 @@
 , fetchFromGitHub
 , poetry-core
 , home-assistant
+, python
 }:
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
   version = "2023.3.0";
   format = "pyproject";
+
+  disabled = python.version != home-assistant.python.version;
 
   src = fetchFromGitHub {
     owner = "KapJI";
