@@ -30,12 +30,6 @@ mkDerivation rec {
     sha256 = "sha256-4VEIQj9/rSzXM5EQFt2I+cKKOM1URKlblf+6vlWEuO0=";
   };
 
-  patches = [
-    # Adaptation of previously used https://github.com/City-busz/vokoscreenNG/commit/0a3784095ecca582f7eb09551ceb34c309d83637 patch
-    # used for 3.0.5 but incompatible at least since 3.0.8. The issue is addressed here https://github.com/vkohaupt/vokoscreenNG/issues/139
-    /* ./linux-support-installation-target.patch */
-  ];
-
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
 
   nativeBuildInputs = [ qttools pkg-config qmake wrapQtAppsHook ];
