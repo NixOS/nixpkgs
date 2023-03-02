@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromGitHub
 , gnumake
 , gtk3
 , setproctitle
@@ -11,8 +11,9 @@ python3Packages.buildPythonApplication rec {
   pname = "microdude";
   version = "2.3";
 
-  src = fetchgit {
-    url = "https://github.com/dagargo/microdude";
+  src = fetchFromGitHub {
+    owner = "dagargo";
+    repo = "microdude";
     rev = "2.3";
     sha256 = "sha256-t3P6JMu//agRcLNtvcXki70kqlc4ed0P/oLYIL/2DcE=";
   };
@@ -32,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  postInstall = ''
+  installPhase = ''
     substituteInPlace Makefile \
       --replace "python3 setup.py install" "" \
       --replace gtk-update-icon-cache "gtk-update-icon-cache --ignore-theme-index" \
