@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Generate HTTP load and plot the results in real-time";
     homepage = "https://github.com/nakabonne/ali";
+    changelog = "https://github.com/nakabonne/ali/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ farcaller ];
