@@ -1,10 +1,15 @@
-{ alsa-lib
-, copyDesktopItems
+{ lib
+, stdenv
 , fetchFromGitHub
+, SDL2
+, SDL2_image
+, SDL2_net
+, alsa-lib
+, copyDesktopItems
 , fluidsynth
 , glib
 , gtest
-, lib
+, irr1
 , libGL
 , libGLU
 , libjack2
@@ -20,22 +25,17 @@
 , ninja
 , opusfile
 , pkg-config
-, irr1
-, SDL2
-, SDL2_image
-, SDL2_net
 , speexdsp
-, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "dosbox-staging";
   version = "0.80.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "dosbox-staging";
+    repo = "dosbox-staging";
+    rev = "v${self.version}";
     hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
 
@@ -91,17 +91,16 @@ stdenv.mkDerivation rec {
     # original dosbox. Doing it this way allows us to work with frontends and
     # launchers that expect the binary to be named dosbox, but get out of the
     # way of vanilla dosbox if the user desires to install that as well.
-    mv $out/bin/dosbox $out/bin/${pname}
+    mv $out/bin/dosbox $out/bin/dosbox-staging
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
 
-    # Create a symlink to dosbox manual instead of merely copying it
+    # Create a symlink to dosbox manual instead of copying it
     pushd $out/share/man/man1/
-    mv dosbox.1.gz ${pname}.1.gz
-    ln -s ${pname}.1.gz dosbox.1.gz
+    ln -s dosbox.1.gz dosbox-staging.1.gz
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dosbox-staging.github.io/";
     description = "A modernized DOS emulator";
     longDescription = ''
@@ -110,10 +109,10 @@ stdenv.mkDerivation rec {
       existing DOSBox codebase while leveraging modern development tools and
       practices.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ joshuafern AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ joshuafern AndersonTorres ];
+    platforms = lib.platforms.unix;
     priority = 101;
   };
-}
+})
 # TODO: report upstream about not finding SDL2_net
