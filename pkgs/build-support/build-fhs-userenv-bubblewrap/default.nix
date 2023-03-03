@@ -194,7 +194,7 @@ let
 
   bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
-  versionStr = lib.optionalString (! isNull version) ("-" + version);
+  versionStr = lib.optionalString (version != null) ("-" + version);
 
   nameAndVersion = name + versionStr;
 

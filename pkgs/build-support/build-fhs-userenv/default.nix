@@ -23,7 +23,7 @@ let
     exec ${run} "$@"
   '';
 
-  versionStr = lib.optionalString (! isNull version) ("-" + version);
+  versionStr = lib.optionalString (version != null) ("-" + version);
 
   nameAndVersion = name + versionStr;
 
