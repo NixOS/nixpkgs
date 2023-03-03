@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "hauntsaninja";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
+    hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [

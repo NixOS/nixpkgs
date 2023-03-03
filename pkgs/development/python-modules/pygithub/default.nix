@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DZmKF0C5zexTQ/kbDtTg0FLEocNU4dYMOFCJyvuiV98=";
+    hash = "sha256-DZmKF0C5zexTQ/kbDtTg0FLEocNU4dYMOFCJyvuiV98=";
   };
 
   propagatedBuildInputs = [

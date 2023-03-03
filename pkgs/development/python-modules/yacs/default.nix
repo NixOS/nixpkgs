@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "rbgirshick";
     repo = "yacs";
     rev = "v${version}";
-    sha256 = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
+    hash = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
   };
 
   propagatedBuildInputs = [ pyyaml ];

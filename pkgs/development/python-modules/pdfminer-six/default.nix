@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "sha256-OyEeQBuYfj4iEcRt2/daSaUfTOjCVSCyHW2qffal+Bk=";
+    hash = "sha256-OyEeQBuYfj4iEcRt2/daSaUfTOjCVSCyHW2qffal+Bk=";
   };
 
   propagatedBuildInputs = [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "etuples";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wEgam2IoI3z75bN45/R9o+0JmL3g0YmtsuJ4TnZjhi8=";
+    hash = "sha256-wEgam2IoI3z75bN45/R9o+0JmL3g0YmtsuJ4TnZjhi8=";
   };
 
   propagatedBuildInputs = [

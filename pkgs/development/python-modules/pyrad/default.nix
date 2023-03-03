@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pyradius";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    hash = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
   };
 
   patches = [

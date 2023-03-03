@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "sphinx-contrib";
     repo = "emojicodes";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TLhjpJpUIoDAe3RZ/7sjTgdW+5s7OpMEd1/w0NyCQ3A=";
+    hash = "sha256-TLhjpJpUIoDAe3RZ/7sjTgdW+5s7OpMEd1/w0NyCQ3A=";
   };
 
   propagatedBuildInputs = [

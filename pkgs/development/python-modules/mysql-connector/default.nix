@@ -34,7 +34,7 @@ buildPythonPackage rec {
     # Allow for clang to be used to build native extensions
     (fetchpatch {
       url = "https://github.com/mysql/mysql-connector-python/commit/fd24ce9dc8c60cc446a8e69458f7851d047c7831.patch";
-      sha256 = "sha256-WvU1iB53MavCsksKCjGvUl7R3Ww/38alxxMVzjpr5Xg=";
+      hash = "sha256-WvU1iB53MavCsksKCjGvUl7R3Ww/38alxxMVzjpr5Xg=";
     })
   ];
 

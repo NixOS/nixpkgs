@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Z/jbr9o0WKPjkAsfZzxuwAKKdwYV3rLGkUMlMgyC5s0=";
+    hash = "sha256-Z/jbr9o0WKPjkAsfZzxuwAKKdwYV3rLGkUMlMgyC5s0=";
     fetchSubmodules = true;
   };
 

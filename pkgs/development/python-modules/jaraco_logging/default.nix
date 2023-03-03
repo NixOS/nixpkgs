@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jaraco.logging";
     inherit version;
-    sha256 = "sha256-k6cLizdnd5rWx7Vu6YV5ztd7afFqu8rnSfYsLFnmeTE=";
+    hash = "sha256-k6cLizdnd5rWx7Vu6YV5ztd7afFqu8rnSfYsLFnmeTE=";
   };
 
   pythonNamespaces = [ "jaraco" ];

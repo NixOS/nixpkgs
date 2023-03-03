@@ -27,7 +27,7 @@ let
     src = fetchPypi {
       pname = "pymongo";
       inherit version;
-      sha256 = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
+      hash = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
     };
   });
 in buildPythonPackage rec {
@@ -41,7 +41,7 @@ in buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QHAbm6u5oH3O7MEVFE+sW98raquv89KJ8gonk3Yyu/0=";
+    hash = "sha256-QHAbm6u5oH3O7MEVFE+sW98raquv89KJ8gonk3Yyu/0=";
   };
 
   nativeBuildInputs = [

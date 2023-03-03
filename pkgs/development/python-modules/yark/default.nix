@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8O4EpHb1fP/O/t6hS1K1ylSXNKBuiipo7wvEnUJODSw=";
+    hash = "sha256-8O4EpHb1fP/O/t6hS1K1ylSXNKBuiipo7wvEnUJODSw=";
   };
 
   pythonRelaxDeps = [

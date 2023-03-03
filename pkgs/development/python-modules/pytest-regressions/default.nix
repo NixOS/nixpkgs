@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6riee6SqM5vf4HsxBH6OanCx54RudKi7/DGliNAecwM=";
+    hash = "sha256-6riee6SqM5vf4HsxBH6OanCx54RudKi7/DGliNAecwM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

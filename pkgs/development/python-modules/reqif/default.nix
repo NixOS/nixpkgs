@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "strictdoc-project";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-K+su1fhXf/fzL+AI/me2imCNI9aWMcv9Qo1dDRNypso=";
+    hash = "sha256-K+su1fhXf/fzL+AI/me2imCNI9aWMcv9Qo1dDRNypso=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = "google-i18n-address";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7t5sNpEVajdwcW8+xTNZQKZVgxhUzfbVbEVgn7JJ2MY=";
+    hash = "sha256-7t5sNpEVajdwcW8+xTNZQKZVgxhUzfbVbEVgn7JJ2MY=";
   };
 
   propagatedBuildInputs = [ requests ];

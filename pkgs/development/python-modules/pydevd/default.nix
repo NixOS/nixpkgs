@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-+yRngN10654trB09ZZa8QQsTPdM7VxVj7r6jh7OcgAA=";
+    hash = "sha256-+yRngN10654trB09ZZa8QQsTPdM7VxVj7r6jh7OcgAA=";
   };
 
   nativeCheckInputs = [

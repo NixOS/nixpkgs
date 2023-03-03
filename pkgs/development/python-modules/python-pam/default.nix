@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "FirefighterBlu3";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
+    hash = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
   postPatch = ''

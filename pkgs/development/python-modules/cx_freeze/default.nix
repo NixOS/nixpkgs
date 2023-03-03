@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_Freeze";
     inherit version;
-    sha256 = "sha256-ydox+o4B0t/dYD+nDiY5CmWupt1iMzyU2fA4tCqgVcg=";
+    hash = "sha256-ydox+o4B0t/dYD+nDiY5CmWupt1iMzyU2fA4tCqgVcg=";
   };
 
   disabled = pythonOlder "3.5";

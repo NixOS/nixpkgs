@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K8S4/fIhFaZddRyTFzKTImAsObfIaiicm3LSKNlg718=";
+    hash = "sha256-K8S4/fIhFaZddRyTFzKTImAsObfIaiicm3LSKNlg718=";
   };
 
   propagatedBuildInputs = [ grpcio googleapis-common-protos ];

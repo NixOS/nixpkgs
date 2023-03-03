@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "asymworks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-aab+3xrEiCjysa+DzXWelQwz8V2tr74y8v0NpDZiuTk=";
+    hash = "sha256-aab+3xrEiCjysa+DzXWelQwz8V2tr74y8v0NpDZiuTk=";
   };
 
   patches = [

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bmr9/iqlp5GghY6DOpFhBH3k69ErqR3DHx7iAu3m6f0=";
+    hash = "sha256-bmr9/iqlp5GghY6DOpFhBH3k69ErqR3DHx7iAu3m6f0=";
   };
 
   # Tiny sanity check to make sure r2pipe finds radare2 (since r2pipe doesn't

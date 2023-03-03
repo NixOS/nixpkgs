@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "QDarkStyle";
-    sha256 = "sha256-YAWE1iU0Pg3dEo3gg5PTw1Y3eGpJgn8XTSmqfKqCecE=";
+    hash = "sha256-YAWE1iU0Pg3dEo3gg5PTw1Y3eGpJgn8XTSmqfKqCecE=";
   };
 
   # No tests available

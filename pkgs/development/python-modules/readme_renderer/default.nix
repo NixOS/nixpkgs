@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    sha256 = "sha256-zWUxht/HMFVlbwkPIn9csioEbX9xqEHfowX1XJpRMnM=";
+    hash = "sha256-zWUxht/HMFVlbwkPIn9csioEbX9xqEHfowX1XJpRMnM=";
   };
 
   propagatedBuildInputs = [

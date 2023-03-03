@@ -38,7 +38,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "support-later-limiter.patch";
       url = "https://github.com/spyse-com/spyse-python/commit/ff68164c514dfb28ab77d8690b3a5153962dbe8c.patch";
-      sha256 = "sha256-PoWPJCK/Scsh4P7lr97u4JpVHXNlY0C9rJgY4TDYmv0=";
+      hash = "sha256-PoWPJCK/Scsh4P7lr97u4JpVHXNlY0C9rJgY4TDYmv0=";
     })
   ];
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zZGOCzFpCrzT0gKodCyvlRqy/hVz3nr3HDhFaEf5ICs=";
+    hash = "sha256-zZGOCzFpCrzT0gKodCyvlRqy/hVz3nr3HDhFaEf5ICs=";
   };
 
   buildInputs = [ pkgs.leveldb ] ++ lib.optional isPy3k pytest;

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-0W5FWGS4vu5+O6/C4El60QDsRNj+P4xGQ62NdkfJd5I=";
+    hash = "sha256-0W5FWGS4vu5+O6/C4El60QDsRNj+P4xGQ62NdkfJd5I=";
   };
 
   # qt bindings cannot be found during tests

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "systemdspawner";
     rev = "v${version}";
-    sha256 = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
+    hash = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
   };
 
   propagatedBuildInputs = [

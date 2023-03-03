@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-CNB5LrXllGxy99NjCrbjkUXUpJ72U3pUnWqrqkOiCG8=";
+    hash = "sha256-CNB5LrXllGxy99NjCrbjkUXUpJ72U3pUnWqrqkOiCG8=";
   };
 
   postPatch = ''

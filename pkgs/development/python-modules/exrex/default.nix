@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "asciimoo";
     repo = "exrex";
     rev = "9a66706e7582a9cf31c4121629c9035e329bbe21";
-    sha256 = "sha256-g31tHY+LzGxwBmUpSa0DV7ruLfYwmuDg+XyBxMZRa9U=";
+    hash = "sha256-g31tHY+LzGxwBmUpSa0DV7ruLfYwmuDg+XyBxMZRa9U=";
   };
 
   patches = [

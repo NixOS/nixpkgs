@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v+lgwa6QTnYkr51ArVubmVge2cT9CTScDQK3SG4dD4k=";
+    hash = "sha256-v+lgwa6QTnYkr51ArVubmVge2cT9CTScDQK3SG4dD4k=";
   };
 
   # only relevant to python < 3.4

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    sha256 = "sha256-BCgSCOnuIqjpROpEtkzkvIXK7dIO0dNYsPmQSwXfmTQ=";
+    hash = "sha256-BCgSCOnuIqjpROpEtkzkvIXK7dIO0dNYsPmQSwXfmTQ=";
   };
 
   propagatedBuildInputs = [ pygame python-i18n ];

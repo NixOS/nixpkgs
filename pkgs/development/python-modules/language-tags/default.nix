@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "OnroerendErfgoed";
     repo = "language-tags";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-T9K290seKhQLqW36EfA9kn3WveKCmyjN4Mx2j50qIEk=";
+    hash = "sha256-T9K290seKhQLqW36EfA9kn3WveKCmyjN4Mx2j50qIEk=";
   };
 
   nativeCheckInputs = [

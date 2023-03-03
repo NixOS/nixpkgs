@@ -14,7 +14,7 @@ buildPythonPackage rec {
     repo = "wsgiprox";
     # https://github.com/webrecorder/wsgiprox/issues/8
     rev = "004870a87959e68ff28ff4362e4f0df28ec22030";
-    sha256 = "sha256-EquddaNrVceyJHuQMCajKHGZX2Q7ebR0Zhvi2pl2WEw=";
+    hash = "sha256-EquddaNrVceyJHuQMCajKHGZX2Q7ebR0Zhvi2pl2WEw=";
   };
 
   propagatedBuildInputs = [

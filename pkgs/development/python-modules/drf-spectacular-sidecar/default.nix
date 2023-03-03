@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
     rev = version;
-    sha256 = "sha256-ztUdV+Bhi3zx5UiwnpiQM/RglUH1n9J48Beuq2GPWdg=";
+    hash = "sha256-ztUdV+Bhi3zx5UiwnpiQM/RglUH1n9J48Beuq2GPWdg=";
   };
 
   propagatedBuildInputs = [

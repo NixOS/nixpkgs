@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5l22iEteXNcgyW8Qq7MTZeHfN8CvledBPq7dZiytPkw=";
+    hash = "sha256-5l22iEteXNcgyW8Qq7MTZeHfN8CvledBPq7dZiytPkw=";
   };
 
   nativeBuildInputs = [ flit-core ];

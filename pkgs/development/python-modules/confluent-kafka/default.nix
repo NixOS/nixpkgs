@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OzQupCJu0QXKi8A1sId+TcLxFf/adOOjUPNjaDNWUVs=";
+    hash = "sha256-OzQupCJu0QXKi8A1sId+TcLxFf/adOOjUPNjaDNWUVs=";
   };
 
   buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;

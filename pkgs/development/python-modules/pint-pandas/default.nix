@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pint-Pandas";
     inherit version;
-    sha256 = "sha256-b2DS6ArBAuD5St25IG4PbMpe5C8Lf4kw2MeYAC5B+oc=";
+    hash = "sha256-b2DS6ArBAuD5St25IG4PbMpe5C8Lf4kw2MeYAC5B+oc=";
   };
 
   patches = [

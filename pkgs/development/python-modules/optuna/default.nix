@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "optuna";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dNS3LEWP/Ul1z60iZirFEX30Frc5ZFQLNTgUkT9vLNQ=";
+    hash = "sha256-dNS3LEWP/Ul1z60iZirFEX30Frc5ZFQLNTgUkT9vLNQ=";
   };
 
   nativeCheckInputs = [

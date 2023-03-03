@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "PySide";
     repo = "PySide";
     rev = version;
-    sha256 = "sha256-14XbihJRMk9WaeK6NUBV/4OMFZF8EBIJgEJEaCU8Ecg=";
+    hash = "sha256-14XbihJRMk9WaeK6NUBV/4OMFZF8EBIJgEJEaCU8Ecg=";
   };
 
   outputs = [ "out" "dev" ];

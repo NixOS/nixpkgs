@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "gabrielcnr";
     repo = "pytest-datadir";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-HyJ0rU1nHqRv8SHFS8m3GZ5409+JZIkoDgIVjy4ol54=";
+    hash = "sha256-HyJ0rU1nHqRv8SHFS8m3GZ5409+JZIkoDgIVjy4ol54=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MongoEngine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mPz9Nyoyke++e9vBWSKunc9VGHCP8pbmldgKty5HIMA=";
+    hash = "sha256-mPz9Nyoyke++e9vBWSKunc9VGHCP8pbmldgKty5HIMA=";
   };
 
   propagatedBuildInputs = [

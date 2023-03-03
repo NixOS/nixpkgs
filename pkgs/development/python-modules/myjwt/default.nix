@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "mBouamama";
     repo = "MyJWT";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-A9tsQ6L+y3doL5pJbau3yKnmQtX2IPXWyW/YCLhS7nc=";
+    hash = "sha256-A9tsQ6L+y3doL5pJbau3yKnmQtX2IPXWyW/YCLhS7nc=";
   };
 
   propagatedBuildInputs = [

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    sha256 = "sha256-oNi9Gi7VLgszjL4ZxLLu88XnoEh2l1PaxqnwWce2Qbg=";
+    hash = "sha256-oNi9Gi7VLgszjL4ZxLLu88XnoEh2l1PaxqnwWce2Qbg=";
   };
 
   preBuild = ''

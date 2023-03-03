@@ -17,7 +17,7 @@ let
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-tq0pf4kH3g+i/hzL0m/a84f19Hxydf7fjM6J+ZRGz5c=";
+      hash = "sha256-tq0pf4kH3g+i/hzL0m/a84f19Hxydf7fjM6J+ZRGz5c=";
     };
 
     nativeBuildInputs = [

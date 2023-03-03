@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QICn7Ugnac2nu7I4xDWyujvloCiz70XnqA7SJbopR5s=";
+    hash = "sha256-QICn7Ugnac2nu7I4xDWyujvloCiz70XnqA7SJbopR5s=";
   };
 
   propagatedBuildInputs = [

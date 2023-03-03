@@ -26,7 +26,7 @@ in buildPythonPackage rec {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-AxRgoXPiFFFHQSj5/jU55hwWzHtutfjmD2IKGxYwd0A=";
+    hash = "sha256-AxRgoXPiFFFHQSj5/jU55hwWzHtutfjmD2IKGxYwd0A=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-N4mf5ins0x+yUAIq+yyjSnUrHcaEhH/Jpid/QMhIjE0=";
+    hash = "sha256-N4mf5ins0x+yUAIq+yyjSnUrHcaEhH/Jpid/QMhIjE0=";
   };
 
   postPatch = ''

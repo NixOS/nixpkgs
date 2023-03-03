@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "romanz";
     repo = "trezor-agent";
     rev = "v${version}";
-    sha256 = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
+    hash = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
   };
 
   propagatedBuildInputs = [

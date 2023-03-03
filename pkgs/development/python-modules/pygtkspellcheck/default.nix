@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hIHf1LBmFhPWN138jaAAOpmx+frbe6XM22+jG+OWcvw=";
+    hash = "sha256-hIHf1LBmFhPWN138jaAAOpmx+frbe6XM22+jG+OWcvw=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];

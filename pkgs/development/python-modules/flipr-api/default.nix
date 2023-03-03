@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cnico";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LcxLJQ2MAif4yC+/SvO7IEa1lNOV67FgJU1UWT4ope4=";
+    hash = "sha256-LcxLJQ2MAif4yC+/SvO7IEa1lNOV67FgJU1UWT4ope4=";
   };
 
   nativeBuildInputs = [

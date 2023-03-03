@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1xRbTOeBHzLmf0FJwsrg/4+Z2Fs7uwbQwS2Tm41mNRk=";
+    hash = "sha256-1xRbTOeBHzLmf0FJwsrg/4+Z2Fs7uwbQwS2Tm41mNRk=";
   };
 
   PACKAGE_VERSION = version;

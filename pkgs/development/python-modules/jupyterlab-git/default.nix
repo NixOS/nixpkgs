@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    sha256 = "sha256-UXZ9qgAvCKfPCzchFOtwbv8vNPEtcLU0dwBGTmiHSD4=";
+    hash = "sha256-UXZ9qgAvCKfPCzchFOtwbv8vNPEtcLU0dwBGTmiHSD4=";
   };
 
   nativeBuildInputs = [

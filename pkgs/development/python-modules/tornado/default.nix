@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "tornadoweb";
     repo = "tornado";
     rev = "v${version}";
-    sha256 = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
+    hash = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
   };
 
   nativeCheckInputs = [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pradyunsg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IXznSrc/4LopgZDGFSC6cAOCbts+siKpdl5SvN1FFvA=";
+    hash = "sha256-IXznSrc/4LopgZDGFSC6cAOCbts+siKpdl5SvN1FFvA=";
   };
 
   nativeBuildInputs = [ flit-core ];

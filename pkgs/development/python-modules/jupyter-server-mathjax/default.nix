@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jupyter_server_mathjax";
-    sha256 = "sha256-ux5rbcBobB/jhqIrWIYWPbVIiTqZwoEMNjmenEyiOUM=";
+    hash = "sha256-ux5rbcBobB/jhqIrWIYWPbVIiTqZwoEMNjmenEyiOUM=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Rrt26sEdT3EM1KQHnHQogodj+7QwRJ05f8t7Tn679ZE=";
+    hash = "sha256-Rrt26sEdT3EM1KQHnHQogodj+7QwRJ05f8t7Tn679ZE=";
   };
 
   postPatch = ''
