@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt-builder";
     inherit version;
-    sha256 = "sha256-g7w+MAr/i0FAWAS2qcKRM4mrWcSK2fDLhYSm73O8pQI=";
+    hash = "sha256-g7w+MAr/i0FAWAS2qcKRM4mrWcSK2fDLhYSm73O8pQI=";
   };
 
   propagatedBuildInputs = [ packaging sip ];

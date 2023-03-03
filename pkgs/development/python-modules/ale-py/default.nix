@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "mgbellemare";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
+    hash = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
   };
 
   patches = [

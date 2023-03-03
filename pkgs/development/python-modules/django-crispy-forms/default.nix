@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "django-crispy-forms";
     repo = "django-crispy-forms";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-oxOW7gFpjUehWGeqZZjhPwptX0Gpgj5lP0lw0zkYGuE=";
+    hash = "sha256-oxOW7gFpjUehWGeqZZjhPwptX0Gpgj5lP0lw0zkYGuE=";
   };
 
   propagatedBuildInputs = [

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-3fyls1W2Vx0nDtp7mta/8QeKM6RRsAbw3dWOnH1/jk0=";
+    hash = "sha256-3fyls1W2Vx0nDtp7mta/8QeKM6RRsAbw3dWOnH1/jk0=";
   };
 
   patches = [

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     inherit version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-gJ/piHaC01wffR9U8PQPmLsfdxsUJltFPKBR4s5Y/Kc=";
+    hash = "sha256-gJ/piHaC01wffR9U8PQPmLsfdxsUJltFPKBR4s5Y/Kc=";
   };
 
   pythonImportsCheck = [ "tensorboard_data_server" ];

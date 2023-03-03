@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tIbLb4Jk3vR1hVcdUPuYJrse7BcfE4Z/dXShs/uBDBo=";
+    hash = "sha256-tIbLb4Jk3vR1hVcdUPuYJrse7BcfE4Z/dXShs/uBDBo=";
   };
 
   propagatedBuildInputs = [

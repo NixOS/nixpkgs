@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "localstack";
     repo = "localstack";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mfPlpB1CvYuhnfucDfJjZtNS+1Kz0/l3+3uUXxxGiF4=";
+    hash = "sha256-mfPlpB1CvYuhnfucDfJjZtNS+1Kz0/l3+3uUXxxGiF4=";
   };
 
   postPatch = ''

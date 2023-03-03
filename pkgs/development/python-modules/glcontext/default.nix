@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "moderngl";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-U/oP9nx7iTK6EYbUl90UD7fTOo5oDlh9ULPNjRibsXE=";
+    hash = "sha256-U/oP9nx7iTK6EYbUl90UD7fTOo5oDlh9ULPNjRibsXE=";
   };
 
   disabled = !isPy3k;

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "moderngl";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-jsASGYrsH9UNanswX2bZyWS3co/2Y1joaQ98virWcBE=";
+    hash = "sha256-jsASGYrsH9UNanswX2bZyWS3co/2Y1joaQ98virWcBE=";
   };
 
   propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];

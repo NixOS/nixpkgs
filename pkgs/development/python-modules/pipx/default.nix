@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6cKKVOgHIoKNfGqvDWK5cwBGBDkgfyRuBRDV6fruBoA=";
+    hash = "sha256-6cKKVOgHIoKNfGqvDWK5cwBGBDkgfyRuBRDV6fruBoA=";
   };
 
   nativeBuildInputs = [

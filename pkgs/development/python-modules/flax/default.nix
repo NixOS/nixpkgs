@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
+    hash = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
   };
 
   buildInputs = [ jaxlib ];

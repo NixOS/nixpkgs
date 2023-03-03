@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "nicoboss";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-It815Uxxs4T9BM9EypAfPuq4Oy8rgGLpKA79m2xM8N4=";
+    hash = "sha256-It815Uxxs4T9BM9EypAfPuq4Oy8rgGLpKA79m2xM8N4=";
   };
 
   propagatedBuildInputs = [pycryptodome enlighten zstandard ]

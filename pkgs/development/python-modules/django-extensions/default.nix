@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
+    hash = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
   };
 
   patches = [

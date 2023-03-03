@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
+    hash = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
   };
 
   patches = [

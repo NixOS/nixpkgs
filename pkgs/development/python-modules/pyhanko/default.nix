@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = version;
-    sha256 = "sha256-W60NTKEtCqJ/QdtNiieKUsrl2jIjIH86Wych68R3mBc=";
+    hash = "sha256-W60NTKEtCqJ/QdtNiieKUsrl2jIjIH86Wych68R3mBc=";
   };
 
   propagatedBuildInputs = [

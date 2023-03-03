@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-cloud";
     rev = version;
-    sha256 = "sha256-CS1zeQiWPnsGCWixCsN9sz08mPORW5sVqIpSFPh0Qt0=";
+    hash = "sha256-CS1zeQiWPnsGCWixCsN9sz08mPORW5sVqIpSFPh0Qt0=";
   };
 
   propagatedBuildInputs = [

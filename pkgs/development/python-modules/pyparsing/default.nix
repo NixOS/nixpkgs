@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pyparsing";
     repo = pname;
     rev = "pyparsing_${version}";
-    sha256 = "sha256-aCRyJQyLf8qQ6NO41q+HC856TjIHzIt0vyVBLV+3teE=";
+    hash = "sha256-aCRyJQyLf8qQ6NO41q+HC856TjIHzIt0vyVBLV+3teE=";
   };
 
   nativeBuildInputs = [

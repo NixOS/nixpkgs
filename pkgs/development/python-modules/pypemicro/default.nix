@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KE085u9yIPsuEr41GNWwHFm6KAHggvqGqP9ChGRoLE0=";
+    hash = "sha256-KE085u9yIPsuEr41GNWwHFm6KAHggvqGqP9ChGRoLE0=";
   };
 
   pythonImportsCheck = [ "pypemicro" ];

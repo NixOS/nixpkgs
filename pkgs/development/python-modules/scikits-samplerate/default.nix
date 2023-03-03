@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "cournape";
     repo = "samplerate";
     rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
-    sha256 = "sha256-7x03Q6VXfP9p8HCk15IDZ9HeqTyi5F1AlGX/otdh8VU=";
+    hash = "sha256-7x03Q6VXfP9p8HCk15IDZ9HeqTyi5F1AlGX/otdh8VU=";
   };
 
   buildInputs =  [

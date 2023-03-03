@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tomerfiliba";
     repo = "plumbum";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-5nRI9y2Y7itkqDdLRSX4qWfh96WmhqdP1Eo7HLoRHaQ=";
+    hash = "sha256-5nRI9y2Y7itkqDdLRSX4qWfh96WmhqdP1Eo7HLoRHaQ=";
   };
 
   postPatch = ''

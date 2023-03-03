@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "EZyRB";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZVmQnxqLHKr275Xx0lOID3BZZFTmn/PMHpYhBFSxT7I=";
+    hash = "sha256-ZVmQnxqLHKr275Xx0lOID3BZZFTmn/PMHpYhBFSxT7I=";
   };
 
   propagatedBuildInputs = [

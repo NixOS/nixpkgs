@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QMaTZRS9iOSuax706Es9WhkwU3vdcNb14dbiSt48aN0=";
+    hash = "sha256-QMaTZRS9iOSuax706Es9WhkwU3vdcNb14dbiSt48aN0=";
   };
 
   postPatch = ''

@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "mikitex70";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-cDijr9BX7Mqgml76TU5dNWLWeF6LYb/gUeIrIJtqqCo=";
+    hash = "sha256-cDijr9BX7Mqgml76TU5dNWLWeF6LYb/gUeIrIJtqqCo=";
   };
 
   propagatedBuildInputs = [

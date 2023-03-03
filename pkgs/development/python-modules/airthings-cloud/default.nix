@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyAirthings";
     rev = version;
-    sha256 = "sha256-sqHNK6biSWso4uOYimzU7PkEn0uP5sHAaPGsS2vSMNY=";
+    hash = "sha256-sqHNK6biSWso4uOYimzU7PkEn0uP5sHAaPGsS2vSMNY=";
   };
 
   propagatedBuildInputs = [

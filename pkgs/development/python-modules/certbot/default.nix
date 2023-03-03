@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-LhipH6kw/fKBy+nHrC5F7HtCdDbUWSjL85LiEC1bGT8=";
+    hash = "sha256-LhipH6kw/fKBy+nHrC5F7HtCdDbUWSjL85LiEC1bGT8=";
   };
 
   sourceRoot = "source/${pname}";

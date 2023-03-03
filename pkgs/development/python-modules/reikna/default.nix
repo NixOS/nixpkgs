@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
+    hash = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
   };
 
   nativeCheckInputs = [ sphinx pytest-cov pytest ];

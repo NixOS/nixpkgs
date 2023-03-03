@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-wkbFUrvKhdp2Hd4QkXAvhMiaqSXFD/fgIw03nLPaO5I=";
+    hash = "sha256-wkbFUrvKhdp2Hd4QkXAvhMiaqSXFD/fgIw03nLPaO5I=";
   };
 
   postPatch = ''

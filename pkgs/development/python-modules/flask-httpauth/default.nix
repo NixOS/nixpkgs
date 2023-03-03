@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
     version = version;
-    sha256 = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
+    hash = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

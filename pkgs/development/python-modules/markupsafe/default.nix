@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MarkupSafe";
     inherit version;
-    sha256 = "sha256-q8q8jCsmA21i1MdGOBpvfPYKr8xlMZitZ4MGmGsJRQ0=";
+    hash = "sha256-q8q8jCsmA21i1MdGOBpvfPYKr8xlMZitZ4MGmGsJRQ0=";
   };
 
   nativeCheckInputs = [

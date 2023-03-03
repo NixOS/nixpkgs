@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "JoelBender";
     repo = "bacpypes";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BHCHI36nTqBj2dkHB/Y5qkC4uJCmzbHGzSFWKNsIdbc=";
+    hash = "sha256-BHCHI36nTqBj2dkHB/Y5qkC4uJCmzbHGzSFWKNsIdbc=";
   };
 
   propagatedBuildInputs = [ wheel ];

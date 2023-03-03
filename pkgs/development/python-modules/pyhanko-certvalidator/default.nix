@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
     rev = version;
-    sha256 = "sha256-UxlBggKgqvbKioG98UaKvhW0YgEa6PqV913nqYvTx1I=";
+    hash = "sha256-UxlBggKgqvbKioG98UaKvhW0YgEa6PqV913nqYvTx1I=";
   };
 
   propagatedBuildInputs = [

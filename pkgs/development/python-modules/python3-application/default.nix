@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
+    hash = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
   };
 
   propagatedBuildInputs = [ zope_interface twisted ];

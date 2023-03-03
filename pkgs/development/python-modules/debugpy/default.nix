@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
+    hash = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
   };
 
   patches = [

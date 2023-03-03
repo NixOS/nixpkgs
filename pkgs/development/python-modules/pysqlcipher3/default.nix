@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PIAzgSZVlH6/KagJrFEGsrxpvgJ06szva1j0WAyNBsU=";
+    hash = "sha256-PIAzgSZVlH6/KagJrFEGsrxpvgJ06szva1j0WAyNBsU=";
   };
 
   buildInputs = [ sqlcipher ];

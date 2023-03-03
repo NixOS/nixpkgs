@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-2V2FvZC8jM84fZEdK9ShzFrjO8goOQsN6cnJTHDDL9E=";
+    hash = "sha256-2V2FvZC8jM84fZEdK9ShzFrjO8goOQsN6cnJTHDDL9E=";
   };
 
   nativeCheckInputs = [

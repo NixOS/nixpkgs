@@ -5,7 +5,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
 
-    sha256 = "sha256-2jM5rx3JpZTMqdycccclJysuMGYE5F0OBXXNE8X5XWg=";
+    hash = "sha256-2jM5rx3JpZTMqdycccclJysuMGYE5F0OBXXNE8X5XWg=";
   };
 
   propagatedBuildInputs = [ six mock ];

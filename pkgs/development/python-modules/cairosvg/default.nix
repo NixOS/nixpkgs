@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1eyT6QEBs7boKqJF0FRu6bAWz9oLY0RnUVmDDYU9XQQ=";
+    hash = "sha256-1eyT6QEBs7boKqJF0FRu6bAWz9oLY0RnUVmDDYU9XQQ=";
   };
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];

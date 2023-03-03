@@ -58,7 +58,7 @@ let
     owner = "ibis-project";
     repo = "testing-data";
     rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
-    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
+    hash = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
   };
 in
 

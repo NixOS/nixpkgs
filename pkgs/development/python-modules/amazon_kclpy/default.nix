@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "amazon-kinesis-client-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Z0MC4SbZS82beMA7UunEfs4KvrmhW5xAhFeb7WXA7DM=";
+    hash = "sha256-Z0MC4SbZS82beMA7UunEfs4KvrmhW5xAhFeb7WXA7DM=";
   };
 
   # argparse is just required for python2.6

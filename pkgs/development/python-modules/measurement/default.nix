@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "coddingtonbear";
     repo = "python-measurement";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ULId0W10FaAtSgVY5ctQL3FPETVr+oq6TKWd/W53viM=";
+    hash = "sha256-ULId0W10FaAtSgVY5ctQL3FPETVr+oq6TKWd/W53viM=";
   };
 
   postPatch = ''

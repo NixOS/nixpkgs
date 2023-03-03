@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-iWKOxXtOBmszDBgeSHNY4a74D00p/9Pf7h/n+ohpTqs=";
+    hash = "sha256-iWKOxXtOBmszDBgeSHNY4a74D00p/9Pf7h/n+ohpTqs=";
   };
 
   propagatedBuildInputs = [

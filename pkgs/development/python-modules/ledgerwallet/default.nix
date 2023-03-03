@@ -30,7 +30,7 @@ buildPythonPackage rec {
     (fetchpatch {
       # Fix removed function in construct library
       url = "https://github.com/LedgerHQ/ledgerctl/commit/fd23d0e14721b93789071e80632e6bd9e47c1256.patch";
-      sha256 = "sha256-YNlENguPQW5FNFT7mqED+ghF3TJiKao4H+56Eu+j+Eo=";
+      hash = "sha256-YNlENguPQW5FNFT7mqED+ghF3TJiKao4H+56Eu+j+Eo=";
       excludes = [ "setup.py" ];
     })
   ];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    sha256 = "sha256-SaLrE/eHxKnlm6BZYbcZZrbrUZMeHJ4eCcqMsFvyZ7I=";
+    hash = "sha256-SaLrE/eHxKnlm6BZYbcZZrbrUZMeHJ4eCcqMsFvyZ7I=";
   };
 
   nativeBuildInputs = [

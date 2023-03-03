@@ -30,7 +30,7 @@ buildPythonPackage rec {
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "sha256-iaDX40Bld5VVjg22v52PE5VCi6EYr5AjUV3ako5pRPA=";
+      hash = "sha256-iaDX40Bld5VVjg22v52PE5VCi6EYr5AjUV3ako5pRPA=";
     };
 
     patches = [

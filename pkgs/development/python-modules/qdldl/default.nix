@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-acCS9uH8I/t3moCmLm/N/i66BcklhgJIxNZ1T0c2k48=";
+    hash = "sha256-acCS9uH8I/t3moCmLm/N/i66BcklhgJIxNZ1T0c2k48=";
   };
 
   dontUseCmakeConfigure = true;

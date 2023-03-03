@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "heuer";
     repo = "segno";
     rev = version;
-    sha256 = "sha256-+OEXG5OvrZ5Ft7IO/7zodf+SgiRF+frwjltrBENNnHo=";
+    hash = "sha256-+OEXG5OvrZ5Ft7IO/7zodf+SgiRF+frwjltrBENNnHo=";
   };
 
   nativeCheckInputs = [

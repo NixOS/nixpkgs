@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-eGQOFTo/tg1aM/P1la3stE7RLxpACUdcJ7g1z3zSasc=";
+    hash = "sha256-eGQOFTo/tg1aM/P1la3stE7RLxpACUdcJ7g1z3zSasc=";
   };
 
   nativeBuildInputs = [

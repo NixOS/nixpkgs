@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "types-Pillow";
-    sha256 = "sha256-fw6HHS1G+7a8feyj4C3FUs+cHotJ3rlZVQlVG+OVTkk=";
+    hash = "sha256-fw6HHS1G+7a8feyj4C3FUs+cHotJ3rlZVQlVG+OVTkk=";
   };
 
   # Modules doesn't have tests

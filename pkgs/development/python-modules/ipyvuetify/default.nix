@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-viBWeFLGuKQKs9wXO3EULTNorrW25P2DFX1t5OmUcW0=";
+    hash = "sha256-viBWeFLGuKQKs9wXO3EULTNorrW25P2DFX1t5OmUcW0=";
   };
 
   propagatedBuildInputs = [ ipyvue ];

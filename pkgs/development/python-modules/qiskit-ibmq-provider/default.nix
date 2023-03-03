@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-BFiGMPiO9Xcl8EiTZYiwHCpo7z+tRaBkIb8GTo01rBA=";
+    hash = "sha256-BFiGMPiO9Xcl8EiTZYiwHCpo7z+tRaBkIb8GTo01rBA=";
   };
 
   propagatedBuildInputs = [

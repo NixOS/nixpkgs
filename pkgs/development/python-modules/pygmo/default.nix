@@ -24,7 +24,7 @@ toPythonModule (stdenv.mkDerivation rec {
     owner = "esa";
     repo = "pygmo2";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gjmZf66AcNaAMqyLerBgRu5RUzV6qrT7DigTNE39AwI=";
+    hash = "sha256-gjmZf66AcNaAMqyLerBgRu5RUzV6qrT7DigTNE39AwI=";
   };
 
   cmakeFlags = [

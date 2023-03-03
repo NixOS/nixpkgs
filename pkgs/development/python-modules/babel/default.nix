@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    sha256 = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
+    hash = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.9") pytz;

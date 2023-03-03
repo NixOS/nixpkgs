@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "dangass";
     repo = "plum";
     rev = version;
-    sha256 = "sha256-jCZUNT1HpSr0khHsjnxEzN2LCzcDV6W27PjVkwFJHUg=";
+    hash = "sha256-jCZUNT1HpSr0khHsjnxEzN2LCzcDV6W27PjVkwFJHUg=";
   };
 
   pythonImportsCheck = [ "plum" ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dogpile.cache";
     inherit version;
-    sha256 = "sha256-2ETou2OMxPVEpMiag039Nv6TVAC3GhbL10Tr37cg/U4=";
+    hash = "sha256-2ETou2OMxPVEpMiag039Nv6TVAC3GhbL10Tr37cg/U4=";
   };
 
   preCheck = ''

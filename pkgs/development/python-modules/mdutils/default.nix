@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "didix21";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-bWPzOSvBV0jYJnj98vxuqj55LqX+Ifi6IQDMx9w+i9o=";
+    hash = "sha256-bWPzOSvBV0jYJnj98vxuqj55LqX+Ifi6IQDMx9w+i9o=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "cs01";
     repo = "pygdbmi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
+    hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
 
   nativeCheckInputs = [ gdb ];

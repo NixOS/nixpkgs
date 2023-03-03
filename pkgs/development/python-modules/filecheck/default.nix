@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "mull-project";
     repo = "FileCheck.py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-R+e4Z1EX6Nk7INLar3gtkUpk+30xIJO7yiZbUvrhN74=";
+    hash = "sha256-R+e4Z1EX6Nk7INLar3gtkUpk+30xIJO7yiZbUvrhN74=";
   };
 
   postPatch = ''

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aequitas";
     repo = "python-rflink";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-BNKcXtsBB90KQe4HXmfJ7H3yepk1dEkozSEy5v8KSAA=";
+    hash = "sha256-BNKcXtsBB90KQe4HXmfJ7H3yepk1dEkozSEy5v8KSAA=";
   };
 
   patches = [

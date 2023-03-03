@@ -26,7 +26,7 @@ buildPythonPackage rec {
     repo = pname;
     # Currently it is not possible to fetch from version as there is a branch with the same name
     rev = "refs/tags/${version}";
-    sha256 = "sha256-MrzAsa0AZX3+0LN/Can3QBoPBRxb0a/F2jLBd8rD5H4=";
+    hash = "sha256-MrzAsa0AZX3+0LN/Can3QBoPBRxb0a/F2jLBd8rD5H4=";
   };
 
   propagatedBuildInputs = [

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "msiemens";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nKsTMakCOBVHDDp8AX/xDkvHpCMBoIb0pa24F4VX/14=";
+    hash = "sha256-nKsTMakCOBVHDDp8AX/xDkvHpCMBoIb0pa24F4VX/14=";
   };
 
   nativeBuildInputs = [

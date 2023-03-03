@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "kellyjonbrazil";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ktK/s9Tt1XNIiW/Ztn4znsPXIMrScB4KAS027YqxIVM=";
+    hash = "sha256-ktK/s9Tt1XNIiW/Ztn4znsPXIMrScB4KAS027YqxIVM=";
   };
 
   propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];

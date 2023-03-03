@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FcEb13XY+YCVt0W05lihfCXIbjtzJ1yuiWrByNUzyxg=";
+    hash = "sha256-FcEb13XY+YCVt0W05lihfCXIbjtzJ1yuiWrByNUzyxg=";
   };
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "rkm_codes";
     rev = "v${version}";
-    sha256 = "sha256-r4F72iHxH7BoPtgYm1RD6BeSZszKRrpeBQccmT4wzuw=";
+    hash = "sha256-r4F72iHxH7BoPtgYm1RD6BeSZszKRrpeBQccmT4wzuw=";
   };
 
   format = "pyproject";

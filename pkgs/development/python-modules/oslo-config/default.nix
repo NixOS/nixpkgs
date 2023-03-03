@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "oslo.config";
     inherit version;
-    sha256 = "sha256-sHZUtT2HeSro5zmWKtcpxSnJk4oRjYkezp7jHVlxa8k=";
+    hash = "sha256-sHZUtT2HeSro5zmWKtcpxSnJk4oRjYkezp7jHVlxa8k=";
   };
 
   postPatch = ''

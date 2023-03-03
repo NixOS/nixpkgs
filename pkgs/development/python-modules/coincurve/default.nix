@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ofek";
     repo = "coincurve";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Z5g6ten8wNICoFu7+aZc6r8ET+RDmFeb93ONjsTzcbw=";
+    hash = "sha256-Z5g6ten8wNICoFu7+aZc6r8ET+RDmFeb93ONjsTzcbw=";
   };
 
   postPatch = ''

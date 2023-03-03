@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = version;
-    sha256 = "sha256-ImEg+VEiASQPnMeZzbYMMb+ZgcsxagQcN9IDFGO05Vw=";
+    hash = "sha256-ImEg+VEiASQPnMeZzbYMMb+ZgcsxagQcN9IDFGO05Vw=";
   };
 
   propagatedBuildInputs = [

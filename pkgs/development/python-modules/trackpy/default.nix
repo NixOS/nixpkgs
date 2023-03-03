@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
+    hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
   };
 
   propagatedBuildInputs = [

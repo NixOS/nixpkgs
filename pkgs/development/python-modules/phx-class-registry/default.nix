@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "todofixthis";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-kSEHgzBgnAq5rMv2HbmGl+9CUzsmzUzPQWr+5q8mcsA=";
+    hash = "sha256-kSEHgzBgnAq5rMv2HbmGl+9CUzsmzUzPQWr+5q8mcsA=";
   };
 
   nativeCheckInputs = [

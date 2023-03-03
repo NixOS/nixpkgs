@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "argparse_addons";
     inherit version;
-    sha256 = "sha256-YyKg3NcGiH52MI0jE21bhtoOq3WigtxklnAdEhC0YK8=";
+    hash = "sha256-YyKg3NcGiH52MI0jE21bhtoOq3WigtxklnAdEhC0YK8=";
   };
 
   pythonImportsCheck = [ "argparse_addons" ];
