@@ -8,6 +8,11 @@
 { blas
 , cmake
 , cudaPackages
+  # FIXME: cuda being unfree means ofborg won't eval "magma".
+  # respecting config.cudaSupport -> false by default
+  # -> ofborg eval -> throws "no GPU targets specified".
+  # Probably should delete everything but "magma-cuda" and "magma-hip"
+  # from all-packages.nix
 , cudaSupport ? true
 , fetchurl
 , gfortran
