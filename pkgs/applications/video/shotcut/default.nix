@@ -14,26 +14,29 @@
 , qtwebsockets
 , qtquickcontrols2
 , qtgraphicaleffects
-, qmake
+, cmake
+, libsForQt5
 , qttools
 , gitUpdater
+, fftw
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "21.09.20";
+  version = "22.12.21";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    sha256 = "sha256-bUwKBWEtAzVSR5/ry24q8SMVnnMsRJEP+HbPrLm3kME=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
+    libsForQt5.qt5.qttools
     SDL2
     frei0r
     ladspaPlugins
@@ -45,14 +48,12 @@ mkDerivation rec {
     qtwebsockets
     qtquickcontrols2
     qtgraphicaleffects
+    fftw
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
-  qmakeFlags = [
-    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
-    "SHOTCUT_VERSION=${version}"
-    "DEFINES+=SHOTCUT_NOUPGRADE"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE=1";
+
+  cmakeFlags = [ "-DSHOTCUT_VERSION=${version}" ];
 
   prePatch = ''
     sed 's_shotcutPath, "melt[^"]*"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
@@ -68,11 +69,6 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
   ];
-
-  postInstall = ''
-    mkdir -p $out/share/shotcut
-    cp -r src/qml $out/share/shotcut/
-  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
