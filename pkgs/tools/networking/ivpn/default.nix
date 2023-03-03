@@ -6,13 +6,13 @@
 
 builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
   inherit pname;
-  version = "3.10.0";
+  version = "3.10.14";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     rev = "v${version}";
-    hash = "sha256-oX1PWIBPDcvBTxstEiN2WosiVUNXJoloppkpcABSi7Y=";
+    hash = "sha256-zHBjAEVHjnHMuUutwQQCCcZ7+Fz3C4GCAV3/jgZgwhM=";
   };
 
   ldflags = [
