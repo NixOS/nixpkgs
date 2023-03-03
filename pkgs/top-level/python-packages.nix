@@ -11985,6 +11985,8 @@ self: super: with self; {
 
   ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
 
+  ulid-transform = callPackage ../development/python-modules/ulid-transform { };
+
   ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
