@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, django
 , django-allauth
 , djangorestframework
 , djangorestframework-simplejwt
 , responses
 , unittest-xml-reporting
+, python
 }:
 
 buildPythonPackage rec {
@@ -25,16 +27,35 @@ buildPythonPackage rec {
       --replace "==" ">="
   '';
 
+  buildInputs = [
+    django
+  ];
+
   propagatedBuildInputs = [
     djangorestframework
   ];
 
-  nativeCheckInputs = [
+  passthru.optional-dependencies.with_social = [
     django-allauth
+  ];
+
+  nativeCheckInputs = [
     djangorestframework-simplejwt
     responses
     unittest-xml-reporting
-  ];
+  ] ++ passthru.optional-dependencies.with_social;
+
+  preCheck = ''
+    # connects to graph.facebook.com
+    substituteInPlace dj_rest_auth/tests/test_serializers.py \
+      --replace "def test_http_error" "def dont_test_http_error"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} runtests.py
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "dj_rest_auth" ];
 
