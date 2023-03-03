@@ -39114,6 +39114,8 @@ with pkgs;
 
   openring = callPackage ../applications/misc/openring { };
 
+  openrisk = callPackage ../tools/security/openrisk { };
+
   openvino = callPackage ../development/libraries/openvino {
     python = python3;
   };
