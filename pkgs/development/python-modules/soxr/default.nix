@@ -25,7 +25,8 @@ buildPythonPackage rec {
     owner = "dofuuz";
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kpw+KeXkkZlNLq8BMNMKtgBxe5Wb71jNaXZFmjjP34o=";
+    fetchSubmodules = true;
+    hash = "sha256-g8YS5YgK1uK1kKtR/wn8x5DAUVY/hYmuMIgjgJAC8pM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,11 +38,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  postPatch = ''
-    tar -xf ${libsoxr.src} -C libsoxr
-    mv libsoxr/soxr-*/* libsoxr/
-  '';
 
   pythonImportsCheck = [
     "soxr"
