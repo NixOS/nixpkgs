@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic task execution";
+    changelog = "https://github.com/pyinvoke/invoke/releases/tag/${version}";
+    downloadPage = "https://github.com/pyinvoke/invoke";
     homepage = "https://www.pyinvoke.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
