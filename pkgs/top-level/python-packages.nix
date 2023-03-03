@@ -9660,7 +9660,7 @@ self: super: with self; {
         version = "0.2.3";
         src = old.src.override {
           inherit version;
-          sha256 = "0x8a9h4mc2r2yz49s9arsbs4bn3h25mvmg4zbgksm9hcyi9536x5";
+          hash = "sha256-pZtRUvQMpqrnW5+8umsRcNhF9NJZJZ3I9yILVglMCnU=";
         };
       });
     };
