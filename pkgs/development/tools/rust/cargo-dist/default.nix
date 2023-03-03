@@ -3,20 +3,22 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, stdenv
+, rustup
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-I++dffdEXDg55WR66+Zl5P2KBvt19sp3aZkXA1GBb4A=";
+    hash = "sha256-7JbWcG5FDJaXvtEQKlOgbsFpFQQ3n02MVFD+lCFXtt0=";
   };
 
-  cargoHash = "sha256-fLHkW28V5MBQeQDd0VrtEjou5FYwArkNDtS/jXKo8G8=";
+  cargoHash = "sha256-TY1YRtre2rz0Hh+6ca22i+XCBMOEOS3QnSsf/rfY47g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -24,6 +26,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     bzip2
+  ];
+
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
+    rustup
   ];
 
   meta = with lib; {
