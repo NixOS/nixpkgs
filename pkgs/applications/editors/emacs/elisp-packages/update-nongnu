@@ -1,0 +1,4 @@
+#! /usr/bin/env nix-shell
+#! nix-shell --show-trace ./emacs2nix.nix -i bash
+
+exec nongnu-packages.sh --names $EMACS2NIX/names.nix -o nongnu-generated.nix

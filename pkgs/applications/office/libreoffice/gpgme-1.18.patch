@@ -1,0 +1,10 @@
+The way this check mixes C and C++ started to cause issues since gpgme 1.18.0
+But we can confidently skip the function check anyway.
+--- a/configure.ac
++++ b/configure.ac
+@@ -12302,4 +12302 @@
+-        # progress_callback is the only func with plain C linkage
+-        # checking for it also filters out older, KDE-dependent libgpgmepp versions
+-        AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
+-            [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
++        GPGMEPP_LIBS=-lgpgmepp

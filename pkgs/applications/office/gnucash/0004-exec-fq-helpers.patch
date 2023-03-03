@@ -1,0 +1,23 @@
+diff --git a/gnucash/price-quotes.scm b/gnucash/price-quotes.scm
+index 8e3ff255f..a6b805fa5 100644
+--- a/gnucash/price-quotes.scm
++++ b/gnucash/price-quotes.scm
+@@ -44,7 +44,7 @@
+     (define (start-program)
+       (set! program
+         (gnc-spawn-process-async
+-         (list "perl" "-w" gnc:*finance-quote-check*) #t)))
++         (list gnc:*finance-quote-check*) #t)))
+ 
+     (define (get-sources)
+       (when program
+@@ -119,7 +119,7 @@
+ 
+     (define (start-quoter)
+       (set! quoter
+-        (gnc-spawn-process-async (list "perl" "-w" gnc:*finance-quote-helper*) #t)))
++        (gnc-spawn-process-async (list gnc:*finance-quote-helper*) #t)))
+ 
+     (define (get-quotes)
+       (when quoter
+

@@ -1,0 +1,4 @@
+source "https://rubygems.org"
+
+gem "schleuder-cli", git: "https://0xacab.org/schleuder/schleuder-cli", tag: "schleuder-cli-0.1.0"
+

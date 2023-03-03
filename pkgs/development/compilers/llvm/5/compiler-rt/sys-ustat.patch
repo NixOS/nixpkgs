@@ -1,0 +1,58 @@
+From 521935db9de17ad08748fd050137ac83b7734835 Mon Sep 17 00:00:00 2001
+From: Craig Topper <craig.topper@intel.com>
+Date: Thu, 24 May 2018 17:59:47 +0000
+Subject: [PATCH] sanitizer: Use pre-computed size of struct ustat for Linux
+
+<sys/ustat.h> has been removed from glibc 2.28 by:
+
+commit cf2478d53ad7071e84c724a986b56fe17f4f4ca7
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date: Sun Mar 18 11:28:59 2018 +0800
+
+Deprecate ustat syscall interface
+This patch uses pre-computed size of struct ustat for Linux to fix
+
+https://bugs.llvm.org/show_bug.cgi?id=37418
+
+Patch by H.J. Lu.
+
+Differential Revision: https://reviews.llvm.org/D47281
+
+git-svn-id: https://llvm.org/svn/llvm-project/compiler-rt/trunk@333213 91177308-0d34-0410-b5e6-96231b3b80d8
+---
+ .../sanitizer_platform_limits_posix.cc            | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/lib/sanitizer_common/sanitizer_platform_limits_posix.cc b/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
+index 94b8f3f627..936d818673 100644
+--- a/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
++++ b/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
+@@ -159,7 +159,6 @@ typedef struct user_fpregs elf_fpregset_t;
+ # include <sys/procfs.h>
+ #endif
+ #include <sys/user.h>
+-#include <sys/ustat.h>
+ #include <linux/cyclades.h>
+ #include <linux/if_eql.h>
+ #include <linux/if_plip.h>
+@@ -253,7 +252,19 @@ namespace __sanitizer {
+ #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
+ 
+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
+-  unsigned struct_ustat_sz = sizeof(struct ustat);
++  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
++  // has been removed from glibc 2.28.
++#if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
++  || defined(__powerpc64__) || defined(__arch64__) || defined(__sparcv9) \
++  || defined(__x86_64__)
++#define SIZEOF_STRUCT_USTAT 32
++#elif defined(__arm__) || defined(__i386__) || defined(__mips__) \
++  || defined(__powerpc__) || defined(__s390__)
++#define SIZEOF_STRUCT_USTAT 20
++#else
++#error Unknown size of struct ustat
++#endif
++  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID

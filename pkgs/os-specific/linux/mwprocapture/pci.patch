@@ -1,0 +1,20 @@
+diff --git a/src/sources/avstream/capture.c b/src/sources/avstream/capture.c
+index f5d256d..a104f62 100644
+--- a/src/sources/avstream/capture.c
++++ b/src/sources/avstream/capture.c
+@@ -288,12 +288,12 @@ static int xi_cap_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+     }
+ 
+     if ((sizeof(dma_addr_t) > 4) &&
+-            !pci_set_dma_mask(pdev, DMA_BIT_MASK(64))) {
++            !dma_set_mask(&pdev->dev, DMA_BIT_MASK(64))) {
+         xi_debug(1, "dma 64 OK!\n");
+     } else {
+         xi_debug(1, "dma 64 not OK!\n");
+-        if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(64)) < 0) &&
+-                (pci_set_dma_mask(pdev, DMA_BIT_MASK(32))) < 0) {
++        if ((dma_set_mask(&pdev->dev, DMA_BIT_MASK(64)) < 0) &&
++                (dma_set_mask(&pdev->dev, DMA_BIT_MASK(32))) < 0) {
+             xi_debug(0, "DMA configuration failed\n");
+             goto disable_pci;
+         }

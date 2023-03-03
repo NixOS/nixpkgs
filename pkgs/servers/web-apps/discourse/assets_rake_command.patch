@@ -1,0 +1,13 @@
+diff --git a/lib/tasks/assets.rake b/lib/tasks/assets.rake
+index 68b5db61ac..d460b5753e 100644
+--- a/lib/tasks/assets.rake
++++ b/lib/tasks/assets.rake
+@@ -19,7 +19,7 @@ task 'assets:precompile:before' do
+ 
+     if only_assets_precompile_remaining
+       # Using exec to free up Rails app memory during ember build
+-      exec "#{compile_command} && EMBER_CLI_COMPILE_DONE=1 bin/rake assets:precompile"
++      exec "#{compile_command} && EMBER_CLI_COMPILE_DONE=1 bundle exec rake assets:precompile"
+     else
+       system compile_command
+     end

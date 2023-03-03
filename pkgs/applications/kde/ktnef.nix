@@ -1,0 +1,18 @@
+{
+  mkDerivation, lib, kdepimTeam,
+  extra-cmake-modules, kdoctools,
+  kcalendarcore, kcalutils, kcontacts
+}:
+
+mkDerivation {
+  pname = "ktnef";
+  meta = {
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
+    maintainers = kdepimTeam;
+  };
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  propagatedBuildInputs = [
+    kcalendarcore kcalutils kcontacts
+  ];
+  outputs = [ "out" "dev" ];
+}

@@ -1,0 +1,13 @@
+diff --git i/widgets/settings/settingsdialog.cpp w/widgets/settings/settingsdialog.cpp
+index 4deff1f..16845b5 100644
+--- i/widgets/settings/settingsdialog.cpp
++++ w/widgets/settings/settingsdialog.cpp
+@@ -802,7 +802,7 @@ bool setAutostartEnabled(bool enabled)
+         desktopFile.write("[Desktop Entry]\n"
+                           "Name=" APP_NAME "\n"
+                           "Exec=\"");
+-        desktopFile.write(qEnvironmentVariable("APPIMAGE", QCoreApplication::applicationFilePath()).toUtf8().data());
++        desktopFile.write(qEnvironmentVariable("APPIMAGE", EXEC_NIX_PATH).toUtf8().data());
+         desktopFile.write("\" qt-widgets-gui --single-instance\nComment=" APP_DESCRIPTION "\n"
+                           "Icon=" PROJECT_NAME "\n"
+                           "Type=Application\n"

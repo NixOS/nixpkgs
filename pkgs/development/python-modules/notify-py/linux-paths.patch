@@ -1,0 +1,22 @@
+diff --git a/notifypy/os_notifiers/linux.py b/notifypy/os_notifiers/linux.py
+index 5882481..e26eaaf 100644
+--- a/notifypy/os_notifiers/linux.py
++++ b/notifypy/os_notifiers/linux.py
+@@ -10,7 +10,7 @@ try:
+     from jeepney.io.blocking import open_dbus_connection
+     from shutil import which
+ 
+-    NOTIFY = which('notify-send') # alternatively: from ctypes.util import find_library 
++    NOTIFY = '@notifysend@' # alternatively: from ctypes.util import find_library 
+ 
+     if NOTIFY:
+         logger.info("libnotify found, using it for notifications")
+@@ -22,7 +22,7 @@ try:
+         else:
+             raise ImportError
+ 
+-    APLAY = which('aplay')
++    APLAY = '@aplay@'
+ 
+     if APLAY == None:
+         logger.debug("aplay binary not installed.. audio will not work!")
