@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Mako";
     inherit version;
-    sha256 = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
+    hash = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
   };
 
   propagatedBuildInputs = [

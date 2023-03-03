@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "extruct";
     rev = "v${version}";
-    sha256 = "sha256-hf6b/tZLggHzgFmZ6aldZIBd17Ni7vCTIIzhNlyjvxw=";
+    hash = "sha256-hf6b/tZLggHzgFmZ6aldZIBd17Ni7vCTIIzhNlyjvxw=";
   };
 
   nativeBuildInputs = [

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wbqJaibRZW7qiNyLArr7I/dzHprILHQpORtdHWkIfSE=";
+    hash = "sha256-wbqJaibRZW7qiNyLArr7I/dzHprILHQpORtdHWkIfSE=";
   };
 
   postPatch = ''

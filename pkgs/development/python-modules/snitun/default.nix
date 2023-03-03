@@ -7,17 +7,21 @@
 , fetchFromGitHub
 , pytest-aiohttp
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.31.0";
+  version = "0.33.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = pname;
-    rev = version;
-    hash = "sha256-Ehafb35H462Ffn6omGh/MDJKQX5qJJZeiIBO3n0IGlA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6aLvNw5/I5UvTRFzUK93YruKarM8S+gHIYd4hyTp/Qs=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snitun" ];
 
   meta = with lib; {
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
     homepage = "https://github.com/nabucasa/snitun";
     description = "SNI proxy with TCP multiplexer";
     license = licenses.gpl3Only;

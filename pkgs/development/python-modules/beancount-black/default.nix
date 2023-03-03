@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beancount-black";
     rev = version;
-    sha256 = "sha256-jhcPR+5+e8d9cbcXC//xuBwmZ14xtXNlYtmH5yNSU0E=";
+    hash = "sha256-jhcPR+5+e8d9cbcXC//xuBwmZ14xtXNlYtmH5yNSU0E=";
   };
 
   buildInputs = [

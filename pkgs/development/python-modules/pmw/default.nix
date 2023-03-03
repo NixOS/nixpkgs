@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pmw";
     inherit version;
-    sha256 = "sha256-lIQSRXz8zwx3XdCOCRP7APkIlqM8eXN9VxxzEq6vVcY=";
+    hash = "sha256-lIQSRXz8zwx3XdCOCRP7APkIlqM8eXN9VxxzEq6vVcY=";
   };
 
   propagatedBuildInputs = [ tkinter ];

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zOvXmSeBiwc0Z5mRMwMsHLU3A/iP7rpjXm0T0I2gUTk=";
+    hash = "sha256-zOvXmSeBiwc0Z5mRMwMsHLU3A/iP7rpjXm0T0I2gUTk=";
   };
 
   propagatedBuildInputs = [ bleach markdown ];

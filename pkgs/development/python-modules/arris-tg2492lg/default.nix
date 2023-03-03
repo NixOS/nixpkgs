@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vanbalken";
     repo = pname;
     rev = version;
-    sha256 = "sha256-C1o9HWWJ/G/7Pp6I0FbRmX2PQvUJx71L9wHRkUMtnL4=";
+    hash = "sha256-C1o9HWWJ/G/7Pp6I0FbRmX2PQvUJx71L9wHRkUMtnL4=";
   };
 
   propagatedBuildInputs = [

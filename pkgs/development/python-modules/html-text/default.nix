@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "TeamHG-Memex";
     repo = "html-text";
     rev = version;
-    sha256 = "sha256-jw/hpz0QfcgP5OEJcmre0h1OzOfpPtaROxHm+YUqces=";
+    hash = "sha256-jw/hpz0QfcgP5OEJcmre0h1OzOfpPtaROxHm+YUqces=";
   };
 
   propagatedBuildInputs = [

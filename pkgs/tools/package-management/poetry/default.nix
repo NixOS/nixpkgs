@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchFromGitHub
 }:
 
 let
@@ -9,12 +10,23 @@ let
 
       # version overrides required by poetry and its plugins
       dulwich = super.dulwich.overridePythonAttrs (old: rec {
-        version = "0.20.50";
+        version = "0.21.3";
         src = self.fetchPypi {
           inherit (old) pname;
           inherit version;
-          hash = "sha256-UKlBeWssZ1vjm+co1UDBa1t853654bP4VWUOzmgy0r4=";
+          hash = "sha256-fKO0U9dn64Oz7Fjwz83JNIdaNBzf2w3FXBQxyWYIz4M=";
         };
+      });
+
+      platformdirs = super.platformdirs.overridePythonAttrs (old: rec {
+        version = "2.6.2";
+        src = fetchFromGitHub {
+          owner = "platformdirs";
+          repo = "platformdirs";
+          rev = "refs/tags/${version}";
+          hash = "sha256-yGpDAwn8Kt6vF2K2zbAs8+fowhYQmvsm/87WJofuhME=";
+        };
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
       });
     };
   };
@@ -41,7 +53,7 @@ let
     '';
 
     passthru = rec {
-      inherit plugins withPlugins;
+      inherit plugins withPlugins python;
     };
   }));
 in withPlugins (ps: [ ])

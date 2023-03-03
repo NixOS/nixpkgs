@@ -50,7 +50,7 @@ in buildPythonPackage {
     matrix-nio
     aiohttp
     requests
-  ];
+  ] ++ matrix-nio.optional-dependencies.e2e;
 
   passthru.scripts = [ "matrix.py" ];
 

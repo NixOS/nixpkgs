@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dmvtRvVOF6lxeC+CC/dwkIs4VRDAZtlmblh9uaV+lW0=";
+    hash = "sha256-dmvtRvVOF6lxeC+CC/dwkIs4VRDAZtlmblh9uaV+lW0=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -51,7 +51,24 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "myst_parser" ];
+  pythonImportsCheck = [
+    "myst_parser"
+  ];
+
+  disabledTests = [
+    # AssertionError due to different files
+    "test_basic"
+    "test_footnotes"
+    "test_gettext_html"
+    "test_fieldlist_extension"
+    # docutils 0.19 expectation mismatches
+    "test_docutils_roles"
+    # sphinx 6.0 expectation mismatches
+    "test_sphinx_directives"
+    # sphinx 5.3 expectation mismatches
+    "test_render"
+    "test_includes"
+  ];
 
   meta = with lib; {
     description = "Sphinx and Docutils extension to parse MyST";

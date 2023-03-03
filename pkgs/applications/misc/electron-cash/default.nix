@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     cython
     trezor
     keepkey
-    btchip
+    btchip-python
     hidapi
     pyopenssl
     pyscard

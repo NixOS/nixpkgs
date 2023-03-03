@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "pyScss";
     owner = "Kronuz";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
+    hash = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

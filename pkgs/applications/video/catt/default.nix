@@ -21,7 +21,7 @@ let
         version = "7.1.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
       });
 
@@ -40,6 +40,7 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "catt";
   version = "0.12.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

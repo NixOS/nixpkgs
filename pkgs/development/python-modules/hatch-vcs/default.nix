@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hatch_vcs";
     inherit version;
-    sha256 = "sha256-zsUQfPzkgsZ/i8lvGLvDIMmqDQaBgOFK0xe77loVP+4=";
+    hash = "sha256-zsUQfPzkgsZ/i8lvGLvDIMmqDQaBgOFK0xe77loVP+4=";
   };
 
   nativeBuildInputs = [

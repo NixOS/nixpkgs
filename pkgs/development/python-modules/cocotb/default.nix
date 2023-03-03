@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cocotb";
     repo = "cocotb";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gLOYwljqnYkGsdbny7+f93QgroLBaLLnDBRpoCe8uEg=";
+    hash = "sha256-gLOYwljqnYkGsdbny7+f93QgroLBaLLnDBRpoCe8uEg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

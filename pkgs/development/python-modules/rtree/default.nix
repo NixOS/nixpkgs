@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Rtree";
     inherit version;
-    sha256 = "sha256-IiEhaZwwOmQGXYSb9wOLHsq8N7Zcf6NAvts47w6AVCk=";
+    hash = "sha256-IiEhaZwwOmQGXYSb9wOLHsq8N7Zcf6NAvts47w6AVCk=";
   };
 
   postPatch = ''

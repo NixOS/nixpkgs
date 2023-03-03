@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = "python3-eventlib";
     rev = version;
-    sha256 = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
+    hash = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
   };
 
   propagatedBuildInputs = [ zope_interface twisted greenlet ];

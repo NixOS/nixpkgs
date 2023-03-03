@@ -24,7 +24,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/inducer/pymbolic/commit/cb3d999e4788dad3edf053387b6064adf8b08e19.patch";
       excludes = [ ".github/workflows/ci.yml" ];
-      sha256 = "sha256-P0YjqAo0z0LZMIUTeokwMkfP8vxBXi3TcV4BSFaO1lU=";
+      hash = "sha256-P0YjqAo0z0LZMIUTeokwMkfP8vxBXi3TcV4BSFaO1lU=";
     })
   ];
 

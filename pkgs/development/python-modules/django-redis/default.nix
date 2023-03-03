@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "jazzband";
     repo = "django-redis";
     rev = version;
-    sha256 = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
+    hash = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
   };
 
   postPatch = ''

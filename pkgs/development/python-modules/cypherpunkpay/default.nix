@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
+    hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
   postPatch = ''

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     repo = "pycdcs";
     # https://github.com/usnistgov/pycdcs/issues/1
     rev = "0a770b752301c27e227ca40a4752f305b55dee20";
-    sha256 = "sha256-AUrVEFea4VtBJXWWgECqdBFCqKuHWAlh07Dljp+HBa0=";
+    hash = "sha256-AUrVEFea4VtBJXWWgECqdBFCqKuHWAlh07Dljp+HBa0=";
   };
 
   nativeBuildInputs = [

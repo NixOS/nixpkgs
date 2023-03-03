@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , python
 , pygments
 }:
@@ -15,7 +14,7 @@ buildPythonPackage rec {
     owner = "trentm";
     repo = "python-markdown2";
     rev = version;
-    sha256 = "sha256-0T3HcfjEApEEWtNZGZcta85dY9d/0mSyRBlrqBQEQwk=";
+    hash = "sha256-0T3HcfjEApEEWtNZGZcta85dY9d/0mSyRBlrqBQEQwk=";
   };
 
   nativeCheckInputs = [ pygments ];
@@ -31,6 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/trentm/python-markdown2/blob/${src.rev}/CHANGES.md";
     description = "A fast and complete Python implementation of Markdown";
     homepage =  "https://github.com/trentm/python-markdown2";
     license = licenses.mit;

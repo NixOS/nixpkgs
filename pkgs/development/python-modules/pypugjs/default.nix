@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "kakulukia";
     repo = "pypugjs";
     rev = "v${version}";
-    sha256 = "sha256-6tIhKCa8wg01gNFygCS6GdUHfbWBu7wOZeMkCExRR34=";
+    hash = "sha256-6tIhKCa8wg01gNFygCS6GdUHfbWBu7wOZeMkCExRR34=";
   };
 
   propagatedBuildInputs = [ six charset-normalizer ];

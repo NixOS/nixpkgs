@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = version;
-    sha256 = "sha256-WE+iOD3OjDByisHI9GgvjUUSpvOz+IYi/3Y8AmR7Eps=";
+    hash = "sha256-WE+iOD3OjDByisHI9GgvjUUSpvOz+IYi/3Y8AmR7Eps=";
   };
 
   propagatedBuildInputs = [

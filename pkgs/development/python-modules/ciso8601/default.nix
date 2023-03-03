@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "closeio";
     repo = "ciso8601";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qTpt91Wf3L6Jl7FU8sn9PvGMRd/cjhQ1mQvUaQeLFQU=";
+    hash = "sha256-qTpt91Wf3L6Jl7FU8sn9PvGMRd/cjhQ1mQvUaQeLFQU=";
   };
 
   nativeBuildInputs = [

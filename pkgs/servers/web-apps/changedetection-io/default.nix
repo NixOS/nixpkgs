@@ -10,7 +10,7 @@ let
         version = "2.1.3";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
+          hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
         };
       });
       flask-restful = prev.flask-restful.overridePythonAttrs (old: rec {
@@ -23,7 +23,7 @@ let
         version = "2.0.3";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+          hash = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
         };
       });
     };

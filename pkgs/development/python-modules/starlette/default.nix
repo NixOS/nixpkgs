@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.23.1";
+  version = "0.25.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LcFrdaRgFBqcdylCzNlewj/papsg/sZ1FMVxBDLvQWI=";
+    hash = "sha256-s0ADo/+lcH8Y31hf1iSLbfTsV3fZtlCuZf7BS0uQc9Y=";
   };
 
   nativeBuildInputs = [

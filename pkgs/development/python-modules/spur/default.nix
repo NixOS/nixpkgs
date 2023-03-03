@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = "spur.py";
     rev = version;
-    sha256 = "sha256-YlwezAE7V4ykFsp+bJ2nYRp6HG4I9Bk7Lhq6f1Inn0s=";
+    hash = "sha256-YlwezAE7V4ykFsp+bJ2nYRp6HG4I9Bk7Lhq6f1Inn0s=";
   };
 
   propagatedBuildInputs = [

@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "brandon-rhodes";
     repo = pname;
     rev = "bb62d1f7d51d798b05a88045fff3a2ff92c299c3";
-    sha256 = "sha256-FuAD74mFJ9F9AMgB3vPmODAlZKgPR7FQ4yn7HEBS5Rw=";
+    hash = "sha256-FuAD74mFJ9F9AMgB3vPmODAlZKgPR7FQ4yn7HEBS5Rw=";
   };
 
   pythonImportsCheck = [ "assay" ];

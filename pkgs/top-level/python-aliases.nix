@@ -47,9 +47,11 @@ mapAliases ({
   BlinkStick = blinkstick; # added 2023-02-19
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bsblan = python-bsblan; # added 2022-11-04
+  btchip = btchip-python; # added 2023-03-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
+  cchardet = faust-cchardet; # added 2023-03-02
   class-registry = phx-class-registry; # added 2021-10-05
   codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
@@ -255,7 +257,9 @@ mapAliases ({
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   SPARQLWrapper = sparqlwrapper;
+  sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
+  sphinxcontrib-autoapi = sphinx-autoapi; # added 2023-02=28
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23

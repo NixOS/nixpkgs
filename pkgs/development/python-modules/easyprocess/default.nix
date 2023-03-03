@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "EasyProcess";
     inherit version;
-    sha256 = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
+    hash = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
   };
 
   # No tests

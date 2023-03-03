@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "beda-software";
     repo = "drf-writable-nested";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/7MZAw0clzzlBdYchUVKldWT7WqtwdSe+016QAP0hqk=";
+    hash = "sha256-/7MZAw0clzzlBdYchUVKldWT7WqtwdSe+016QAP0hqk=";
   };
 
   propagatedBuildInputs = [

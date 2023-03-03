@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_widgets";
     inherit version;
-    sha256 = "sha256-7q7N6vbAOvyWDdriAc7YjVl5tMqcOJG8uPZjGvcF9e8=";
+    hash = "sha256-7q7N6vbAOvyWDdriAc7YjVl5tMqcOJG8uPZjGvcF9e8=";
   };
 
   nativeBuildInputs = [
