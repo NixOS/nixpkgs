@@ -2,12 +2,12 @@
 let
   docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
     inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
-  }).overridePythonAttrs "1.25.5" "1ijhg93zs3lswkljnm0rhww7gdy0g94psvsya2741prz2zcbcbks";
+  }).overridePythonAttrs "1.25.5" "sha256-ei622Bc/30COUF5vfUl6wLd3OIcZVCvp5JoO/Ud6UMY=";
 
-  changeVersion = overrideFunc: version: sha256: overrideFunc (oldAttrs: rec {
+  changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
     inherit version;
     src = oldAttrs.src.override {
-      inherit version sha256;
+      inherit version hash;
     };
   });
 
@@ -15,9 +15,9 @@ let
     {
       self = localPython;
       packageOverrides = self: super: {
-        cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
-        wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
-        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
+        cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
+        wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "sha256-7nOGKGKhVr93/5KwkDT8SCXdOvnPgbxbNgZo1CXzxfE=";
+        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "sha256-0sst4FWHYpNGebmhBOguynr0SMn0l00fPuzP9lHfilQ=";
         pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
           version = "5.4.1";
           checkPhase = ''
@@ -28,7 +28,7 @@ let
           src = localPython.pkgs.fetchPypi {
             pname = "PyYAML";
             inherit version;
-            sha256 = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
+            hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
           };
         });
       };
@@ -40,7 +40,7 @@ with localPython.pkgs; buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W3nUXPAXoicDQNXigktR1+b/9W6qvi90fujrXAekxTU=";
+    hash = "sha256-W3nUXPAXoicDQNXigktR1+b/9W6qvi90fujrXAekxTU=";
   };
 
 
