@@ -4986,9 +4986,7 @@ with pkgs;
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
-    stdenv = gcc12Stdenv;
-  };
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
