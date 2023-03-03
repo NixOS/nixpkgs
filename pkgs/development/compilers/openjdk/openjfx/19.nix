@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
-, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk3, libXtst
+, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
 , libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
 , withMedia ? true
 , withWebKit ? false
@@ -38,7 +38,7 @@ let
       })
     ];
 
-    buildInputs = [ gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
