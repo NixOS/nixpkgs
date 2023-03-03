@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , coverage
 , ipykernel
 , jupyter-client
@@ -16,6 +17,9 @@
 buildPythonPackage rec {
   pname = "nbval";
   version = "0.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,7 +36,6 @@ buildPythonPackage rec {
     jupyter-client
     nbformat
     pytest
-    six
   ];
 
   nativeCheckInputs = [
@@ -51,6 +54,8 @@ buildPythonPackage rec {
     "tests/test_timeouts.py"
     # No value for us
     "tests/test_coverage.py"
+    # nbdime marked broken
+    "tests/test_nbdime_reporter.py"
   ];
 
   # Some of the tests use localhost networking.
