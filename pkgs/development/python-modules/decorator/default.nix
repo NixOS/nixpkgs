@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,6 +13,18 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Y3mWIRA2tjhe+RQ15PriKYlHL51XH6uoknuoJTrLwzA=";
   };
+
+  pythonImportsCheck = [
+    "decorator"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "src/tests/test.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/micheles/decorator";
