@@ -46,10 +46,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "https://timetagger.app";
+    description = "Library to interact with TimeTagger";
+    homepage = "https://github.com/almarklein/timetagger";
+    changelog = "https://github.com/almarklein/timetagger/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    description = "Tag your time, get the insight";
     maintainers = with maintainers; [ matthiasbeyer ];
+    broken = stdenv.isDarwin;
   };
 }
