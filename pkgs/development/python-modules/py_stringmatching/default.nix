@@ -8,20 +8,26 @@
 }:
 
 buildPythonPackage rec {
-  pname = "py_stringmatching";
+  pname = "py-stringmatching";
   version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "py_stringmatching";
+    inherit version;
     sha256 = "sha256-khubsWOzEN80HDOCORMgT3sMqfajGfW0UUCDAL03je4=";
   };
 
-  nativeCheckInputs = [ nose ];
+  propagatedBuildInputs = [
+    numpy
+    six
+  ];
 
-  propagatedBuildInputs = [ numpy six ];
+  nativeCheckInputs = [
+    nose
+  ];
 
   pythonImportsCheck = [
     "py_stringmatching"
