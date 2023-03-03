@@ -115,6 +115,9 @@ buildPythonPackage rec {
     "test_chunksize_files"
     # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
     "test_set_index_string"
+    # numpy 1.24
+    # RuntimeWarning: invalid value encountered in cast
+    "test_setitem_extended_API_2d_mask"
   ];
 
   __darwinAllowLocalNetworking = true;
