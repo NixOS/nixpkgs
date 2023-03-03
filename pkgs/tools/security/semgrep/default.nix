@@ -17,15 +17,17 @@ buildPythonApplication rec {
   pname = "semgrep";
   inherit (common) src version;
 
-  postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList (
-    path: submodule: ''
-      # substitute ${path}
-      # remove git submodule placeholder
-      rm -r ${path}
-      # link submodule
-      ln -s ${submodule}/ ${path}
-    ''
-  ) common.submodules)) + ''
+  postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (
+      path: submodule: ''
+        # substitute ${path}
+        # remove git submodule placeholder
+        rm -r ${path}
+        # link submodule
+        ln -s ${submodule}/ ${path}
+      ''
+    )
+    common.submodules)) + ''
     cd cli
   '';
 
@@ -50,6 +52,7 @@ buildPythonApplication rec {
     click-option-group
     glom
     requests
+    rich
     ruamel-yaml
     tqdm
     packaging
