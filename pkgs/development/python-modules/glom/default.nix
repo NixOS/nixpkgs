@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-t0QjCeAT/rb+qyBhl6v4rsMoNexwnYqSqFFDIvZMDv8=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "face==20.1.1" "face"
+  '';
+
   propagatedBuildInputs = [
     boltons
     attrs
