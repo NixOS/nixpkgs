@@ -213,7 +213,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-shared"
     "-accessibility"
     "-optimized-qmake"
-    "-strip"
+    # for separateDebugInfo
+    "-no-strip"
     "-system-proxies"
     "-pkg-config"
 
