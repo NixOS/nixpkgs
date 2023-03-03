@@ -804,11 +804,12 @@
       esphome-dashboard-api
       fnvhash
       ifaddr
+      py-dormakaba-dkey
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: py-dormakaba-dkey
+    ];
     "dovado" = ps: with ps; [
     ]; # missing inputs: dovado
     "downloader" = ps: with ps; [
@@ -4453,6 +4454,7 @@
     "dlna_dms"
     "dnsip"
     "doorbird"
+    "dormakaba_dkey"
     "dsmr"
     "dsmr_reader"
     "dte_energy_bridge"
