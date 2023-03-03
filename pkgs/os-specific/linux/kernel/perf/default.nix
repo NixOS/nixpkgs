@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libtraceevent
 , openssl
 , systemtap
 , numactl
@@ -105,6 +106,7 @@ stdenv.mkDerivation {
     elfutils
     newt
     slang
+    libtraceevent
     libunwind
     zlib
     openssl
