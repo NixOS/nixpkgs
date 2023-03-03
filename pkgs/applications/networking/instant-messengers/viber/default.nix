@@ -1,7 +1,7 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
  alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {

@@ -8,18 +8,16 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "shell-genie";
-  version = "unstable-2023-01-27";
+  version = "0.2.6";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "dylanjcastillo";
-    repo = pname;
-    rev = "d6da42a4426e6058a0b5ae07837d8c003cd1239e";
-    hash = "sha256-MGhQaTcl3KjAJXorOmMRec07LxH02T81rNbV2mYEpRA=";
+  src = fetchPypi {
+    pname = "shell_genie";
+    inherit version;
+    hash = "sha256-MgQFHsBXrihfWBB/cz45ITf8oJG2gSenf1wzdbrAbjw=";
   };
 
   nativeBuildInputs = [
-    poetry
     poetry-core
   ];
 
@@ -35,9 +33,14 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
+  pythonImportsCheck = [
+    "shell_genie"
+  ];
+
   meta = with lib; {
     description = "Describe your shell commands in natural language";
     homepage = "https://github.com/dylanjcastillo/shell-genie";
+    # https://github.com/dylanjcastillo/shell-genie/issues/3
     license = licenses.unfree;
     maintainers = with maintainers; [ onny ];
   };
