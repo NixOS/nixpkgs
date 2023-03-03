@@ -183,6 +183,8 @@ stdenv.mkDerivation rec {
     "test_osr_ct_options_area_of_interest"
     # ZIP does not support timestamps before 1980
     " test_sentinel2_zipped"
+    # tries to call unwrapped executable
+    "test_SetPROJAuxDbPaths"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
