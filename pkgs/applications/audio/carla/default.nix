@@ -21,11 +21,8 @@
 , wrapQtAppsHook ? null
 }:
 
-assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
-assert withGtk2 -> gtk2 != null;
-assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
