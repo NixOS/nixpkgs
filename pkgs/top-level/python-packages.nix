@@ -7743,6 +7743,8 @@ self: super: with self; {
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
+  py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
+
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
