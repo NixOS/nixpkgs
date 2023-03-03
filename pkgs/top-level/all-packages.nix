@@ -8549,6 +8549,8 @@ with pkgs;
 
   iodine = callPackage ../tools/networking/iodine { };
 
+  ioc-scan = callPackage ../tools/security/ioc-scan { };
+
   ioccheck = callPackage ../tools/security/ioccheck { };
 
   ioping = callPackage ../tools/system/ioping { };
@@ -26919,6 +26921,8 @@ with pkgs;
 
   trust-dns = callPackage ../servers/dns/trust-dns { };
 
+  trustymail = callPackage ../tools/security/trustymail { };
+
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
@@ -30482,6 +30486,8 @@ with pkgs;
   slweb = callPackage ../applications/misc/slweb { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
+
+  sonobus = callPackage ../applications/audio/sonobus { };
 
   sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
 
@@ -39109,6 +39115,8 @@ with pkgs;
   opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
 
   openring = callPackage ../applications/misc/openring { };
+
+  openrisk = callPackage ../tools/security/openrisk { };
 
   openvino = callPackage ../development/libraries/openvino {
     python = python3;
