@@ -18,7 +18,7 @@ let
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-xHvdqVpNU9ZzTA6Xl2Bv044l6Tbvf4fjqyz4TmS9gmI=";
+    hash = "sha256-xHvdqVpNU9ZzTA6Xl2Bv044l6Tbvf4fjqyz4TmS9gmI=";
   };
 
   yarnDeps = mkYarnModules {
@@ -38,7 +38,7 @@ let
       version = "2.0.0";
       src = fetchPypi {
         inherit pname version;
-        sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+        hash = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
       };
       nativeBuildInputs = [ ];
       format = "setuptools";
@@ -50,7 +50,7 @@ let
       version = "2.1.3";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
+        hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
     # flask 2.1.3 is incompatible with flask-sqlalchemy > 3
