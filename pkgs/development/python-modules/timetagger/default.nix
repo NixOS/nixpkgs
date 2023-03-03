@@ -11,12 +11,16 @@
 , pyjwt
 , uvicorn
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "timetagger";
   version = "23.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "almarklein";
