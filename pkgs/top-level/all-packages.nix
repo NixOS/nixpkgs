@@ -4984,9 +4984,7 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
-    stdenv = gcc12Stdenv;
-  };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
     stdenv = gcc12Stdenv;
