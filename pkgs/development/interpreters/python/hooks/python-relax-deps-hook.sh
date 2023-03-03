@@ -78,7 +78,7 @@ pythonRelaxDepsHook() {
     pushd dist
 
     # See https://peps.python.org/pep-0491/#escaping-and-unicode
-    local -r pkg_name="${pname//[^[:alnum:].]/_}-$version"
+    local -r pkg_name="${pname//[^[:alnum:].]/_}-${version//[-]/_}"
     local -r unpack_dir="unpacked"
     local -r metadata_file="$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
 
