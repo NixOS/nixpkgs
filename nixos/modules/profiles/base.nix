@@ -1,5 +1,5 @@
 # This module defines the software packages included in the "minimal"
-# installation CD.  It might be useful elsewhere.
+# installation CD. It might be useful elsewhere.
 
 { config, lib, pkgs, ... }:
 
@@ -17,7 +17,6 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
-    pkgs.mkpasswd # for generating password files
 
     # Some text editors.
     (pkgs.vim.customize {
@@ -32,7 +31,6 @@
     pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
-    pkgs.rsync
     pkgs.socat
     pkgs.screen
     pkgs.tcpdump
