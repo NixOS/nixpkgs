@@ -2,7 +2,7 @@
 , bzrtp
 , cmake
 , fetchFromGitLab
-, ffmpeg
+, ffmpeg_4
 , glew
 , gsm
 , lib
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     bzrtp
     ortp
 
-    ffmpeg
+    ffmpeg_4
     glew
     libX11
     libXext
