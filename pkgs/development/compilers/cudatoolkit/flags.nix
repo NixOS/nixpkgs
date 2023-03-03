@@ -19,13 +19,14 @@ let
   # passing a configuration based on your specific GPU environment.
   #
   # config.cudaCapabilities :: List Capability
-  # List of hardware generations to build
-  # Last item is considered the optional forward-compatibility arch
+  # List of hardware generations to build.
   # E.g. [ "8.0" ]
+  # Currently, the last item is considered the optional forward-compatibility arch,
+  # but this may change in the future.
   #
   # config.cudaForwardCompat :: Bool
   # Whether to include the forward compatibility gencode (+PTX)
-  # to support future GPU generations:
+  # to support future GPU generations.
   # E.g. true
   #
   # Please see the accompanying documentation or https://github.com/NixOS/nixpkgs/pull/205351
@@ -91,17 +92,6 @@ let
   formatCapabilities = { cudaCapabilities, enableForwardCompat ? true }: rec {
     inherit cudaCapabilities enableForwardCompat;
 
-    # forwardCapability :: String
-    # Forward "compute" capability, a.k.a PTX
-    # E.g. "8.6+PTX"
-    forwardCapability = (lists.last cudaCapabilities) + "+PTX";
-
-    # capabilitiesAndForward :: List String
-    # The list of supported CUDA architectures, including the forward compatibility architecture.
-    # If forward compatibility is disabled, this will be the same as cudaCapabilities.
-    # E.g. [ "7.5" "8.6" "8.6+PTX" ]
-    capabilitiesAndForward = cudaCapabilities ++ lists.optionals enableForwardCompat [ forwardCapability ];
-
     # archNames :: List String
     # E.g. [ "Turing" "Ampere" ]
     archNames = lists.unique (builtins.map (cap: cudaComputeCapabilityToName.${cap}) cudaCapabilities);
@@ -140,9 +130,6 @@ in
 assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
   cudaCapabilities = [ "7.5" "8.6" ];
   enableForwardCompat = true;
-
-  capabilitiesAndForward = [ "7.5" "8.6" "8.6+PTX" ];
-  forwardCapability = "8.6+PTX";
 
   archNames = [ "Turing" "Ampere" ];
   realArches = [ "sm_75" "sm_86" ];
