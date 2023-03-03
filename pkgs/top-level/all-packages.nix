@@ -32055,6 +32055,8 @@ with pkgs;
 
   sc68 = callPackage ../applications/audio/sc68 { };
 
+  sdorfehs = callPackage ../applications/window-managers/sdorfehs { };
+
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
