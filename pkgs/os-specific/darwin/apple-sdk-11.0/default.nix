@@ -56,9 +56,32 @@ let
     '';
   };
 
+  mkStdenv = stdenv:
+    let
+      cc = stdenv.cc.override {
+        bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
+        libc = packages.Libsystem;
+      };
+    in
+    if stdenv.isAarch64 then stdenv
+    else
+      (overrideCC stdenv cc).override {
+        targetPlatform = stdenv.targetPlatform // {
+          darwinMinVersion = "10.12";
+          darwinSdkVersion = "11.0";
+        };
+      };
+
+  stdenvs = {
+    stdenv = mkStdenv stdenv;
+  } // builtins.listToAttrs (map
+    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
+    [ "12" "13" "14" "15" ]
+  );
+
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
 
-  packages = {
+  packages = stdenvs // {
     inherit (callPackage ./apple_sdk.nix {}) frameworks libs;
 
     # TODO: this is nice to be private. is it worth the callPackage above?
@@ -89,30 +112,14 @@ let
       inherit (pkgs) rustc cargo;
     };
 
-    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin rec {
-      inherit (pkgs.darwin.apple_sdk_11_0) stdenv xcodebuild rustPlatform;
+    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {
+      inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
         apple_sdk = prev.darwin.apple_sdk_11_0;
         CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
       });
       xcbuild = xcodebuild;
-    });
-
-    stdenv =
-      let
-        clang = stdenv.cc.override {
-          bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
-          libc = packages.Libsystem;
-        };
-      in
-      if stdenv.isAarch64 then stdenv
-      else
-        (overrideCC stdenv clang).override {
-          targetPlatform = stdenv.targetPlatform // {
-            darwinMinVersion = "10.12";
-            darwinSdkVersion = "11.0";
-          };
-        };
+    }));
   };
 in packages
