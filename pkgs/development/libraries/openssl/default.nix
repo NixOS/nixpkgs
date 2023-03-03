@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils
+{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+# Using c_rehash_shim, based on openssl rehash by default.
+# Setting this to true will use the original perl based c_rehash script.
+, withPerl ? false
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
@@ -20,6 +19,14 @@
 # files.
 
 let
+  # Think wrapper around `openssl rehash`, which has the same functionality
+  # and options as perl based c_rehash script.
+  c_rehash_shim = writeShellScript
+    "c_rehash_shim"
+    ''
+    exec /usr/bin/openssl rehash "''${@}"
+    ''
+  ;
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
@@ -171,7 +178,7 @@ let
 
       # 'etc' is a separate output on static builds only.
       etc=$out
-    '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
+    '') + lib.optionalString (!stdenv.hostPlatform.isWindows && withPerl)
       # Fix bin/c_rehash's perl interpreter line
       #
       # - openssl 1_0_2: embeds a reference to buildPackages.perl
@@ -184,6 +191,13 @@ let
       # "#!/usr/bin/env perl"
     ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
+    '' + lib.optionalString (!withPerl)
+    # Replace perl based c_rehash script with c_rehash_shim
+    ''
+      substitute \
+        ${c_rehash_shim} \
+        $out/bin/c_rehash \
+        --replace /usr/bin/openssl "${placeholder "bin"}/bin/openssl"
     '' + ''
       mkdir -p $bin
       mv $out/bin $bin/bin
