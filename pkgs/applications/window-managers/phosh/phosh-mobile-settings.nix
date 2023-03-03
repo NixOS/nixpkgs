@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.23.1";
+  version = "0.25.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "guidog";
     repo = "phosh-mobile-settings";
     rev = "v${version}";
-    sha256 = "sha256-D605efn25Dl3Bj92DZiagcx+MMcRz0GRaWxplBRcZhA=";
+    hash = "sha256-UuYCNRE//HbLmIio1tDvIbQfinIfiJu3b2qD9cilD4A=";
   };
 
   nativeBuildInputs = [
