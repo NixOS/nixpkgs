@@ -1,22 +1,31 @@
 { stdenv
 , lib
+, runCommand
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, gtk2
-, openssl
+, gtk3
+, openssl_1_1
 , pcsclite
+, unzip
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcsc-safenet";
-  version = "10.0.37-0";
+  version = "10.8.28";
 
-  # https://aur.archlinux.org/packages/sac-core/
-  src = fetchurl {
-    url = "https://storage.spidlas.cz/public/soft/safenet/SafenetAuthenticationClient-core-${version}_amd64.deb";
-    sha256 = "1r9739bhal7ramj1rpawaqvik45xbs1c756l1da96din638gzy5l";
-  };
+  # extract debian package from larger zip file
+  src = runCommand "sac.deb" {
+    zipSrc = let
+      versionWithUnderscores = builtins.replaceStrings ["."] ["_"] version;
+    in fetchurl {
+      url = "https://www.digicert.com/StaticFiles/SAC_${versionWithUnderscores}_GA_Build.zip";
+      hash = "sha256-bh+TB7ZGDMh9G4lcPtv7mc0XeGhmCfMMqrlqtyGIIaA=";
+    };
+    debName = "SAC ${version} GA Build/Installation/Standard/Ubuntu-2004/safenetauthenticationclient_${version}_amd64.deb";
+  } ''
+    ${unzip}/bin/unzip -p "$zipSrc" "$debName" >"$out"
+  '';
 
   dontBuild = true;
   dontConfigure = true;
@@ -26,13 +35,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    gtk2
-    openssl
+    gtk3
+    openssl_1_1
     pcsclite
   ];
 
   runtimeDependencies = [
-    openssl
+    openssl_1_1
   ];
 
   nativeBuildInputs = [
@@ -41,35 +50,34 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    # Set up for pcsc drivers
+    mv usr/* .
+
     mkdir -p pcsc/drivers
-    mv usr/share/eToken/drivers/* pcsc/drivers/
-    rm -r usr/share/eToken/drivers
+    mv -- lib/pkcs11/* pcsc/drivers/
+    rmdir lib/pkcs11
 
-    # Move binaries out
-    mv usr/bin bin
+    mkdir "$out"
+    cp -r ./* "$out/"
 
-    # Move UI to bin
-    mv usr/share/SAC/SACUIProcess bin/
-    rm -r usr/share/SAC
+    (
+      cd "$out/lib/" || exit
+      for f in *.so.*.*.*; do
+        ln -sf "$f" "''${f%.*}" || exit
+        ln -sf "$f" "''${f%.*.*}" || exit
+        ln -sf "$f" "''${f%.*.*.*}" || exit
+      done
+    ) || exit
 
-    mkdir $out
-    cp -r {bin,etc,lib,pcsc,usr,var} $out/
+    (
+      cd "$out/pcsc/drivers" || exit
+      for f in *; do
+        if [[ ! -e $f && -e ../../lib/$f ]]; then
+          ln -sf ../../lib/"$f" "$f" || exit
+        fi
+      done
+    ) || exit
 
-    cd "$out/lib/"
-    ln -sf libeToken.so.10.0.37 libeTPkcs11.so
-    ln -sf libeToken.so.10.0.37 libeToken.so.10.0
-    ln -sf libeToken.so.10.0.37 libeToken.so.10
-    ln -sf libeToken.so.10.0.37 libeToken.so
-    ln -sf libcardosTokenEngine.so.10.0.37 libcardosTokenEngine.so.10.0
-    ln -sf libcardosTokenEngine.so.10.0.37 libcardosTokenEngine.so.10
-    ln -sf libcardosTokenEngine.so.10.0.37 libcardosTokenEngine.so
-
-    cd $out/pcsc/drivers/aks-ifdh.bundle/Contents/Linux/
-    ln -sf libAksIfdh.so.10.0 libAksIfdh.so
-    ln -sf libAksIfdh.so.10.0 libAksIfdh.so.10
-
-    ln -sf ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+    ln -sf ${lib.getLib openssl_1_1}/lib/libcrypto.so $out/lib/libcrypto.so.1.1.0
   '';
 
   dontAutoPatchelf = true;
