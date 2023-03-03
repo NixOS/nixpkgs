@@ -11,7 +11,6 @@ args@
 , fetchurl
 , fontconfig
 , freetype
-, gcc # :: String
 , gdk-pixbuf
 , glib
 , glibc

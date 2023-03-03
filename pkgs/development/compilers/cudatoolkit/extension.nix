@@ -17,7 +17,12 @@ final: prev: let
   backendStdenv = prev.pkgs."${finalVersion.gcc}Stdenv";
 
   ### Add classic cudatoolkit package
-  cudatoolkit = buildCudaToolkitPackage (finalVersion // { inherit backendStdenv; });
+  cudatoolkit =
+    let
+      attrs = builtins.removeAttrs finalVersion [ "gcc" ];
+      attrs' = attrs // { inherit backendStdenv; };
+    in
+    buildCudaToolkitPackage attrs';
 
   cudaFlags = final.callPackage ./flags.nix {};
 
