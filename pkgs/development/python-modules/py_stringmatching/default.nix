@@ -23,6 +23,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy six ];
 
+  pythonImportsCheck = [
+    "py_stringmatching"
+  ];
+
   meta = with lib; {
     description = "Python string matching library including string tokenizers and string similarity measures";
     homepage = "https://github.com/anhaidgroup/py_stringmatching";
