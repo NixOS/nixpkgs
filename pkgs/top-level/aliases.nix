@@ -371,7 +371,6 @@ mapAliases ({
   digikam5 = throw "'digikam5' has been renamed to/replaced by 'digikam'"; # Converted to throw 2022-02-22
   dirmngr = throw "dirmngr has been removed: merged into gnupg"; # Added 2022-05-13
   disper = throw "disper has been removed: abandoned by upstream"; # Added 2022-03-18
-  displaycal = throw "displaycal has been removed from nixpkgs, as it hasn't migrated to python3"; # Added 2022-01-12
   dmtx = throw "'dmtx' has been renamed to/replaced by 'dmtx-utils'"; # Converted to throw 2022-02-22
   dnnl = oneDNN; # Added 2020-04-22
   docbook5_xsl = throw "'docbook5_xsl' has been renamed to/replaced by 'docbook_xsl_ns'"; # Converted to throw 2022-02-22
