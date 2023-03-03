@@ -39,5 +39,6 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 })
