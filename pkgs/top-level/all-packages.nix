@@ -8808,12 +8808,7 @@ with pkgs;
   wrapKakoune = kakoune: attrs: callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
   kakounePlugins = recurseIntoAttrs (callPackage ../applications/editors/kakoune/plugins { });
 
-  kakoune-unwrapped = callPackage ../applications/editors/kakoune {
-    # See comments on https://github.com/NixOS/nixpkgs/pull/198836
-    # Remove below when stdenv for linux-aarch64 become recent enough.
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
-  };
+  kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
   };
