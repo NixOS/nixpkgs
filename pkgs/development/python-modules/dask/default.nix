@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.1.0";
+  version = "2023.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-avyrKBAPyYZBNgItnkNCferqb6+4yeGpBAZhSkL/fFA=";
+    hash = "sha256-7cuTxJ5SxOEf0v+SvSiaz7x8YYTx/qIS+KktbtubiDU=";
   };
 
   propagatedBuildInputs = [
@@ -101,8 +101,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
