@@ -27,9 +27,17 @@ buildPythonPackage rec {
     rebulk
     babelfish
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.9") [
+   importlib-resources
+ ];
 
-  nativeCheckInputs = [ py pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
+  nativeCheckInputs = [
+    py
+    pytestCheckHook
+    pytest-mock
+    pytest-benchmark
+    pyyaml
+  ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
