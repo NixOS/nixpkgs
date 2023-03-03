@@ -1,0 +1,13 @@
+diff --git a/signalbackup/signalbackup.h b/signalbackup/signalbackup.h
+index e9fc3fb..a620571 100644
+--- a/signalbackup/signalbackup.h
++++ b/signalbackup/signalbackup.h
+@@ -148,7 +148,7 @@ class SignalBackup
+     std::string pre;
+     std::string replacement;
+     std::string post;
+-    bool operator<(Range const &other)
++    bool operator<(Range const &other) const
+     {
+       return (start < other.start) ||
+         (start == other.start && start + length < other.start + other.length) ||

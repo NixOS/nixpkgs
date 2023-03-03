@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
+{ lib, stdenv, clang14Stdenv, fetchFromGitHub, openssl, sqlite }:
 
-stdenv.mkDerivation rec {
+(if stdenv.isDarwin then clang14Stdenv else stdenv).mkDerivation rec {
   pname = "signalbackup-tools";
   version = "20230223-1";
 
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-tBjMg+aYXmIhS2tw+D5NkBieWKiWwEVBWs6LA3rFaQQ=";
   };
+
+  patches = [
+    ./fix-build-darwin-clang14.patch
+  ];
 
   postPatch = ''
     patchShebangs BUILDSCRIPT_MULTIPROC.bash44
@@ -36,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.malo ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
   };
 }
