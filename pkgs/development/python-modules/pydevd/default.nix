@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fabioz/PyDev.Debugger";
     license = licenses.epl10;
     maintainers = with maintainers; [ onny ];
+    broken = true;
   };
 }
