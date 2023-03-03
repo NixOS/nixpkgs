@@ -47,6 +47,7 @@ mapAliases ({
   BlinkStick = blinkstick; # added 2023-02-19
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bsblan = python-bsblan; # added 2022-11-04
+  btchip = btchip-python; # added 2023-03-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18

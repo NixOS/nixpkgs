@@ -1469,7 +1469,7 @@ self: super: with self; {
 
   bsuite = callPackage ../development/python-modules/bsuite { };
 
-  btchip = callPackage ../development/python-modules/btchip { };
+  btchip-python = callPackage ../development/python-modules/btchip-python { };
 
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
