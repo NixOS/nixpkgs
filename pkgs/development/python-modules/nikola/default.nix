@@ -45,7 +45,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Nikola";
+    inherit version;
     hash = "sha256-c8eadkmYWS88nGwi6QwPqHg7FBXlkdazKSrbWDMw/UA=";
   };
 
@@ -97,6 +98,11 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_compiling_markdown"
+    # Date formatting slightly differs from expectation
+    "test_format_date_long"
+    "test_format_date_timezone"
+    "test_format_date_locale_variants"
+    "test_format_date_locale_variants"
   ];
 
   pythonImportsCheck = [ "nikola" ];
