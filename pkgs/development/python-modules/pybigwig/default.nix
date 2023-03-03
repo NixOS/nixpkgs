@@ -7,11 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyBigWig";
+  pname = "pybigwig";
   version = "0.3.18";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyBigWig";
+    inherit version;
     sha256 = "4c2a8c571b4100ad7c4c318c142eb48558646be52aaab28215a70426f5be31bc";
   };
 
