@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchPypi
 , fetchpatch
 , python3
 , substituteAll
@@ -42,16 +43,6 @@ let
         };
       });
 
-      # https://github.com/postlund/pyatv/issues/1879
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiohttp";
-        version = "3.8.1";
-        src = self.fetchPypi {
-          inherit pname version;
-          hash = "sha256-/FRx4aVN4V73HBvG6+gNTcaB6mAOaL/Ry85AQn8LdXg=";
-        };
-      });
-
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -85,16 +76,6 @@ let
           repo = "dsmr_parser";
           rev = "refs/tags/v${version}";
           hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
-        };
-      });
-
-      gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.0";
-        src = fetchFromGitHub {
-          owner = "klaasnicolaas";
-          repo = "python-gridnet";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
         };
       });
 
@@ -199,6 +180,22 @@ let
         doCheck = false;
       });
 
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.4";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -266,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.2.5";
+  hassVersion = "2023.3.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,17 +276,29 @@ in python.pkgs.buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # PyPI tarball is missing tests/ directory
-  src = fetchFromGitHub {
+  # Primary source is the pypi sdist, because it contains translations
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-JxTvAUKZj59jL1czTBzPD7+6x1K7xGGGwZAO8f8dkzg=";
+  };
+
+  # Secondary source is git for tests
+  gitSrc = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-7rH4tEW5gQZ/dPkgGzygfT2PwdZGASuyiFrNyn3hfys=";
+    hash = "sha256-azH9CnHIY0iOLaF3Iqy+uJ6TuftUs1j4RcpXyRQrQws=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
   ];
+
+  # copy tests early, so patches apply as they would to the git repo
+  prePatch = ''
+    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
+    chmod u+x tests/auth/providers/test_command_line_cmd.sh
+  '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
@@ -378,6 +387,7 @@ in python.pkgs.buildPythonApplication rec {
     requests-mock
     respx
     stdlib-list
+    syrupy
     tomli
     # required through tests/auth/mfa_modules/test_otp.py
     pyotp

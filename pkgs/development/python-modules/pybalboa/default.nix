@@ -2,21 +2,26 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "0.13";
-  format = "setuptools";
+  version = "1.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "garbled1";
     repo = pname;
-    rev = version;
-    sha256 = "0aw5jxpsvzyx05y1mg8d63lxx1i607yb6x19n9jil5wfis95m8pd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-08FMNRArzmfmLH6y5Z8QPcRVZJIvU3VIOvdTry3iBGI=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   # Project has no tests
   doCheck = false;

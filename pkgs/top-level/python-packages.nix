@@ -3327,6 +3327,8 @@ self: super: with self; {
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
 
+  faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
@@ -6536,6 +6538,8 @@ self: super: with self; {
 
   nuitka = callPackage ../development/python-modules/nuitka { };
 
+  nuheat = callPackage ../development/python-modules/nuheat { };
+
   nulltype = callPackage ../development/python-modules/nulltype { };
 
   num2words = callPackage ../development/python-modules/num2words { };
@@ -7393,6 +7397,8 @@ self: super: with self; {
 
   python-memcached = callPackage ../development/python-modules/python-memcached { };
 
+  python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
+
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
@@ -7738,6 +7744,8 @@ self: super: with self; {
   py-bip39-bindings = callPackage ../development/python-modules/py-bip39-bindings { };
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
+
+  py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
