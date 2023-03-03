@@ -107,7 +107,10 @@ import ../make-test-python.nix (
       client = { pkgs, ... }: {
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "create_management_room_and_invite_mjolnir"
-            { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
+            { libraries = with pkgs.python3Packages; [
+                matrix-nio
+              ] ++ matrix-nio.optional-dependencies.e2e;
+            } ''
             import asyncio
 
             from nio import (
