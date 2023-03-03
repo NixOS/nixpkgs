@@ -216,6 +216,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
+  qtsystems = callPackage ../development/libraries/qtsystems { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qwt = callPackage ../development/libraries/qwt/default.nix { };
