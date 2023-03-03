@@ -66,6 +66,7 @@ buildEnv {
           --set IBUS_TABLE_DATA_DIR "$out/share" \
           --set IBUS_TABLE_LIB_LOCATION "$out/libexec" \
           --set IBUS_TABLE_LOCATION "$out/share/ibus-table" \
+          --set NIX_RIME_DATA_DIR "$out/share/rime-data" \
           --prefix PYTHONPATH : "$PYTHONPATH" \
           --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
           --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \

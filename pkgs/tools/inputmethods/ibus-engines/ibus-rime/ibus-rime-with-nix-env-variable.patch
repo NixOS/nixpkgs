@@ -1,0 +1,18 @@
+diff --git a/rime_main.c b/rime_main.c
+index c0e9229..c7cca93 100644
+--- a/rime_main.c
++++ b/rime_main.c
+@@ -56,7 +56,12 @@ static void notification_handler(void* context_object,
+ }
+ 
+ static void fill_traits(RimeTraits *traits) {
+-  traits->shared_data_dir = IBUS_RIME_SHARED_DATA_DIR;
++  const char* nix_rime_data_dir = getenv("NIX_RIME_DATA_DIR");
++  if (nix_rime_data_dir != NULL) {
++    traits->shared_data_dir = nix_rime_data_dir;
++  } else {
++    traits->shared_data_dir = IBUS_RIME_SHARED_DATA_DIR;
++  }
+   traits->distribution_name = DISTRIBUTION_NAME;
+   traits->distribution_code_name = DISTRIBUTION_CODE_NAME;
+   traits->distribution_version = DISTRIBUTION_VERSION;

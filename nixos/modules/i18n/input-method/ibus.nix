@@ -3,8 +3,11 @@
 with lib;
 
 let
-  cfg = config.i18n.inputMethod.ibus;
-  ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
+  im = config.i18n.inputMethod;
+  cfg = im.ibus;
+  rimeEnabled = any (p: p.pname == "ibus-rime") cfg.engines;
+  plugins = cfg.engines ++ (if rimeEnabled then im.rime.packages else []);
+  ibusPackage = pkgs.ibus-with-plugins.override { inherit plugins; };
   ibusEngine = types.package // {
     name  = "ibus-engine";
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
@@ -80,6 +83,10 @@ in
 
     xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
       ibusPackage
+    ];
+
+    i18n.inputMethod.rime.packages = lib.mkIf rimeEnabled [
+      pkgs.ibus-engines.rime # ibus-rime contains rime data ibus_rime.yaml
     ];
   };
 

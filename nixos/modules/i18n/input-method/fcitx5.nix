@@ -5,10 +5,11 @@ with lib;
 let
   im = config.i18n.inputMethod;
   cfg = im.fcitx5;
-  addons = cfg.addons ++ optional cfg.enableRimeData pkgs.rime-data;
+  rimeEnabled = any (p: p.pname == "fcitx5-rime") cfg.addons;
+  addons = cfg.addons ++ (if rimeEnabled then im.rime.packages else []);
   fcitx5Package = pkgs.fcitx5-with-addons.override { inherit addons; };
-  whetherRimeDataDir = any (p: p.pname == "fcitx5-rime") cfg.addons;
-in {
+in
+{
   options = {
     i18n.inputMethod.fcitx5 = {
       addons = mkOption {
@@ -19,30 +20,21 @@ in {
           Enabled Fcitx5 addons.
         '';
       };
-
-      enableRimeData = mkEnableOption (lib.mdDoc "default rime-data with fcitx5-rime");
     };
   };
 
   config = mkIf (im.enabled == "fcitx5") {
     i18n.inputMethod.package = fcitx5Package;
 
-    environment = mkMerge [{
-      variables = {
-        GTK_IM_MODULE = "fcitx";
-        QT_IM_MODULE = "fcitx";
-        XMODIFIERS = "@im=fcitx";
-        QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
-      };
-    }
-    (mkIf whetherRimeDataDir {
-      pathsToLink = [
-        "/share/rime-data"
-      ];
+    environment.variables = {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
+      XMODIFIERS = "@im=fcitx";
+      QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+    };
 
-      variables =  {
-        NIX_RIME_DATA_DIR = "/run/current-system/sw/share/rime-data";
-      };
-    })];
+    i18n.inputMethod.rime.packages = lib.mkIf rimeEnabled [
+      pkgs.fcitx5-rime # fcitx5-rime contains rime data fcitx5.yaml
+    ];
   };
 }

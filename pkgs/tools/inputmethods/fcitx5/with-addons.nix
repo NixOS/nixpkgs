@@ -11,6 +11,7 @@ symlinkJoin {
     wrapProgram $out/bin/fcitx5 \
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
+      --suffix NIX_RIME_DATA_DIR : "$out/share/rime-data" \
       --suffix PATH : "$out/bin" \
       --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or []) addons))}
 

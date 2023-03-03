@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gdxg6ia0i31jn3cvh1nrsjga1j31hf8a2zfgg8rzn25chrfr319";
   };
 
+  patches = [
+    ./ibus-rime-with-nix-env-variable.patch
+  ];
+
   buildInputs = [ gdk-pixbuf glib ibus libnotify librime rime-data ];
   nativeBuildInputs = [ cmake pkg-config ];
 
