@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
+    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
