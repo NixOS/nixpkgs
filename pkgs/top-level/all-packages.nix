@@ -33553,7 +33553,7 @@ with pkgs;
     tesseract3
     tesseract4
     tesseract5;
-  tesseract = tesseract3;
+  tesseract = tesseract5;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
