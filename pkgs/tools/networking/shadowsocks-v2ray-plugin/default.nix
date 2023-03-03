@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "shadowsocks-v2ray-plugin";
-  version = "1.3.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "v2ray-plugin";
     rev = "v${version}";
-    sha256 = "sha256-sGsGdJp20mXvJ6Ov1QjztbJxNpDaDEERcRAAyGgenVk=";
+    sha256 = "0aq445gnqk9dxs1hkw7rvk86wg0iyiy0h740lvyh6d9zsqhf61wb";
   };
 
-  vendorSha256 = "sha256-vW8790Z4BacbdqANWO41l5bH5ac/TSZIdVNvOFVTsZ8=";
+  vendorSha256 = "0vzd9v33p4a32f5ic9ir4g5ckis06wpdf07a649h9qalimxnvzfz";
 
   meta = with lib; {
     description = "Yet another SIP003 plugin for shadowsocks, based on v2ray";
