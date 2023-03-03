@@ -2,21 +2,19 @@
 
 buildGoModule rec {
   pname = "aviator";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "herrjulz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Oa4z8n+q7LKWMnwk+xj9UunzOa3ChaPBCTo828yYJGQ=";
+    hash = "sha256-jqAGwPqxxCkBpSMebikdUGh54hlSLeqAyf7BOBtjiNA=";
   };
 
-  patches = [
-    ./bump-golang-x-sys.patch
-  ];
-
   deleteVendor = true;
-  vendorSha256 = "sha256-AJyxCE4DdAXRS+2sY4Zzu8NTEFKJoV1bopfOqOFKZfI=";
+  vendorHash = "sha256-rYOphvI1ZE8X5UExfgxHnWBn697SDkNnmxeY7ihIZ1s=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Merge YAML/JSON files in a in a convenient fashion";
