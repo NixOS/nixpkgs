@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cli53";
-  version = "0.8.21";
+  version = "0.8.22";
 
   src = fetchFromGitHub {
     owner = "barnybug";
     repo = "cli53";
     rev = version;
-    sha256 = "sha256-N7FZfc3kxbMY2ooj+ztlj6xILF3gzT60Yb/puWg58V4=";
+    sha256 = "sha256-wfb3lK/WB/B8gd4BOqh+Ol10cNZdsoCoQ+hM33+goM8=";
   };
 
   vendorHash = "sha256-LKJXoXZS866UfJ+Edwf6AkAZmTV2Q1OI1mZfbsxHb3s=";

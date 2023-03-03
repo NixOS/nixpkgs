@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.2.5";
+  version = "2023.3.0";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -70,10 +70,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -200,10 +197,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -355,10 +349,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -378,9 +369,6 @@
       bluetooth-data-tools
       dbus-fast
       fnvhash
-      home-assistant-frontend
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -398,10 +386,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -420,10 +405,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -492,10 +474,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -811,6 +790,25 @@
     ];
     "dooya" = ps: with ps; [
     ];
+    "dormakaba_dkey" = ps: with ps; [
+      aioesphomeapi
+      aiohttp-cors
+      aioruuvigateway
+      aioshelly
+      bleak-retry-connector
+      bleak
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      esphome-dashboard-api
+      fnvhash
+      ifaddr
+      pyserial
+      pyudev
+      sqlalchemy
+      zeroconf
+    ]; # missing inputs: py-dormakaba-dkey
     "dovado" = ps: with ps; [
     ]; # missing inputs: dovado
     "downloader" = ps: with ps; [
@@ -843,6 +841,8 @@
     "eafm" = ps: with ps; [
       aioeafm
     ];
+    "easyenergy" = ps: with ps; [
+    ]; # missing inputs: easyenergy
     "ebox" = ps: with ps; [
     ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [
@@ -974,10 +974,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -997,10 +994,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1023,10 +1017,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1074,7 +1065,7 @@
       ha-ffmpeg
     ];
     "fibaro" = ps: with ps; [
-      fiblary3-fork
+      pyfibaro
     ];
     "fido" = ps: with ps; [
       pyfido
@@ -1127,10 +1118,7 @@
       esphome-dashboard-api
       fjaraskupan
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1376,10 +1364,7 @@
       esphome-dashboard-api
       fnvhash
       govee-ble
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1423,12 +1408,7 @@
     ];
     "hardkernel" = ps: with ps; [
       aiohttp-cors
-      fnvhash
-      home-assistant-frontend
-      janus
-      pillow
       psutil-home-assistant
-      sqlalchemy
     ];
     "hardware" = ps: with ps; [
       psutil-home-assistant
@@ -1441,11 +1421,6 @@
     ];
     "hassio" = ps: with ps; [
       aiohttp-cors
-      fnvhash
-      home-assistant-frontend
-      janus
-      pillow
-      sqlalchemy
     ];
     "havana_shade" = ps: with ps; [
     ];
@@ -1514,15 +1489,12 @@
       aiohttp-cors
       bellows
       fnvhash
-      home-assistant-frontend
-      ifaddr
       janus
       pillow
       pyserial-asyncio
       pyserial
       pyudev
       sqlalchemy
-      zeroconf
       zha-quirks
       zigpy-deconz
       zigpy-xbee
@@ -1534,8 +1506,6 @@
       aiohttp-cors
       bellows
       fnvhash
-      home-assistant-frontend
-      ifaddr
       janus
       pillow
       psutil-home-assistant
@@ -1543,7 +1513,6 @@
       pyserial
       pyudev
       sqlalchemy
-      zeroconf
       zha-quirks
       zigpy-deconz
       zigpy-xbee
@@ -1555,8 +1524,6 @@
       aiohttp-cors
       bellows
       fnvhash
-      home-assistant-frontend
-      ifaddr
       janus
       pillow
       psutil-home-assistant
@@ -1564,7 +1531,6 @@
       pyserial
       pyudev
       sqlalchemy
-      zeroconf
       zha-quirks
       zigpy-deconz
       zigpy-xbee
@@ -1598,11 +1564,10 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
+      pyroute2
       pyserial
+      python-otbr-api
       pyudev
       sqlalchemy
       zeroconf
@@ -1683,11 +1648,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ibeacon-ble
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1744,11 +1706,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
       inkbird-ble
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1877,11 +1836,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
       kegtron-ble
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1907,10 +1863,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -1930,6 +1883,8 @@
       pykmtronic
     ];
     "knx" = ps: with ps; [
+      aiohttp-cors
+      janus
       xknx
     ];
     "kodi" = ps: with ps; [
@@ -1999,10 +1954,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -2021,11 +1973,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
       led-ble
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -2233,10 +2182,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -2320,11 +2266,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
       moat-ble
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -2378,15 +2321,13 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
+      mopeka-iot-ble
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: mopeka_iot_ble
+    ];
     "motion_blinds" = ps: with ps; [
       aiohttp-cors
       fnvhash
@@ -2593,7 +2534,8 @@
       aio-geojson-nsw-rfs-incidents
     ];
     "nuheat" = ps: with ps; [
-    ]; # missing inputs: nuheat
+      nuheat
+    ];
     "nuki" = ps: with ps; [
       pynuki
     ];
@@ -2638,8 +2580,6 @@
     "onboarding" = ps: with ps; [
       aiohttp-cors
       fnvhash
-      home-assistant-frontend
-      janus
       pillow
       sqlalchemy
     ];
@@ -2725,11 +2665,8 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
       oralb-ble
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -2745,11 +2682,12 @@
     "otbr" = ps: with ps; [
       aiohttp-cors
       fnvhash
-      home-assistant-frontend
-      janus
-      pillow
+      ifaddr
+      pyroute2
+      python-otbr-api
       sqlalchemy
-    ]; # missing inputs: python-otbr-api
+      zeroconf
+    ];
     "otp" = ps: with ps; [
       pyotp
     ];
@@ -2940,10 +2878,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       qingping-ble
@@ -3004,12 +2939,7 @@
     ];
     "raspberry_pi" = ps: with ps; [
       aiohttp-cors
-      fnvhash
-      home-assistant-frontend
-      janus
-      pillow
       psutil-home-assistant
-      sqlalchemy
     ];
     "raspyrfm" = ps: with ps; [
     ]; # missing inputs: raspyrfm-client
@@ -3139,9 +3069,6 @@
       bluetooth-data-tools
       dbus-fast
       fnvhash
-      home-assistant-frontend
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3159,10 +3086,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       ruuvitag-ble
@@ -3260,10 +3184,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3288,10 +3209,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sensorpro-ble
@@ -3311,10 +3229,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sensorpush-ble
@@ -3362,9 +3277,6 @@
       bluetooth-data-tools
       dbus-fast
       fnvhash
-      home-assistant-frontend
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3490,10 +3402,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pysnooz
       pyudev
@@ -3673,10 +3582,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3798,10 +3704,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3823,10 +3726,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3845,6 +3745,13 @@
     "thomson" = ps: with ps; [
     ];
     "thread" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      ifaddr
+      pyroute2
+      python-otbr-api
+      sqlalchemy
+      zeroconf
     ];
     "threshold" = ps: with ps; [
     ];
@@ -3871,10 +3778,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -3924,6 +3828,9 @@
     ];
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
+    "tplink_omada" = ps: with ps; [
+      tplink-omada-client
+    ];
     "traccar" = ps: with ps; [
       aiohttp-cors
       pytraccar
@@ -4264,10 +4171,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -4303,10 +4207,7 @@
       dbus-fast
       esphome-dashboard-api
       fnvhash
-      home-assistant-frontend
       ifaddr
-      janus
-      pillow
       pyserial
       pyudev
       sqlalchemy
@@ -4382,15 +4283,12 @@
       aiohttp-cors
       bellows
       fnvhash
-      home-assistant-frontend
-      ifaddr
       janus
       pillow
       pyserial-asyncio
       pyserial
       pyudev
       sqlalchemy
-      zeroconf
       zha-quirks
       zigpy-deconz
       zigpy-xbee
@@ -4804,6 +4702,7 @@
     "modern_forms"
     "mold_indicator"
     "moon"
+    "mopeka"
     "motion_blinds"
     "motioneye"
     "mqtt"
@@ -4839,6 +4738,7 @@
     "notify_events"
     "notion"
     "nsw_rural_fire_service_feed"
+    "nuheat"
     "nuki"
     "number"
     "nut"
@@ -4863,6 +4763,7 @@
     "openweathermap"
     "opnsense"
     "oralb"
+    "otbr"
     "overkiz"
     "ovo_energy"
     "owntracks"
@@ -5053,6 +4954,7 @@
     "toon"
     "totalconnect"
     "tplink"
+    "tplink_omada"
     "traccar"
     "trace"
     "tractive"
