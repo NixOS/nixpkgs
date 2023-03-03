@@ -7983,6 +7983,8 @@ with pkgs;
     libdevil = libdevil-nox;
   };
 
+  grass-sass = callPackage ../tools/misc/grass-sass { };
+
   gridtracker = callPackage ../applications/radio/gridtracker { };
 
   grig = callPackage ../applications/radio/grig { };
