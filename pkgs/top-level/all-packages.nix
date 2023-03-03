@@ -32221,6 +32221,7 @@ with pkgs;
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix { };
     mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix { };
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix { };
+    seekTo = callPackage ../applications/video/mpv/scripts/seek-to.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix { };
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix { };
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
