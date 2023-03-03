@@ -12,6 +12,8 @@
 , Security
 , python3
 , pythonSupport ? true
+, pjsip
+, runCommand
 }:
 
 stdenv.mkDerivation rec {
@@ -80,6 +82,10 @@ stdenv.mkDerivation rec {
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
+
+  passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
+    ${python3.withPackages (pkgs: [ pkgs.pjsua2 ])}/bin/python -c "import pjsua2" > $out
+  '';
 
   meta = with lib; {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
