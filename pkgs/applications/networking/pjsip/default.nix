@@ -6,7 +6,6 @@
 , libsamplerate
 , swig
 , alsa-lib
-, fixDarwinDylibNames
 , AppKit
 , CoreFoundation
 , Security
@@ -42,14 +41,15 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    lib.optionals pythonSupport [ swig python3 ]
-    # Some of the .dylib files contain relative references. fixDarwinDylibNames
-    # fixes these.
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    lib.optionals pythonSupport [ swig python3 ];
 
   buildInputs = [ openssl libsamplerate ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
+
+
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
+                      "-headerpad_max_install_names";
 
   postBuild = lib.optionalString pythonSupport ''
     make -C pjsip-apps/src/swig/python
@@ -76,8 +76,38 @@ stdenv.mkDerivation rec {
     (cd pjsip-apps/src/swig/python && \
       python setup.py install --prefix=$py
     )
-  '' + lib.optionalString (stdenv.isDarwin && pythonSupport) ''
-    install_name_tool -change libpjsua2.dylib.2 $out/lib/libpjsua2.dylib.2 $py/${python3.sitePackages}/*.so
+  '' + lib.optionalString stdenv.isDarwin ''
+    # On MacOS relative paths are used to refer to libraries. All libraries use
+    # a relative path like ../lib/*.dylib or ../../lib/*.dylib. We need to
+    # rewrite these to use absolute ones.
+
+    # First, find all libraries (and their symlinks) in our outputs to define
+    # the install_name_tool -change arguments we should pass.
+    readarray -t libraries < <(
+      for outputName in $(getAllOutputNames)
+      do
+        find "''${!outputName}" \( -name '*.dylib*' -o -name '*.so*' \)
+      done
+    )
+
+    # Determine the install_name_tool -change arguments that are going to be
+    # applied to all libraries.
+    change_args=()
+    for lib in "''${libraries[@]}"
+    do
+      lib_name="$(basename $lib)"
+      change_args+=(-change ../lib/$lib_name $lib)
+      change_args+=(-change ../../lib/$lib_name $lib)
+    done
+
+    # Rewrite id and library refences for all non-symlinked libraries.
+    for lib in "''${libraries[@]}"
+    do
+      if [ -f "$lib" ]
+      then
+        install_name_tool -id $lib "''${change_args[@]}" $lib
+      fi
+    done
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
