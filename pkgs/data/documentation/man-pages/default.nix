@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "5.13";
+  version = "6.03";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YU2uPv59/UgJhnY6KiqBeSFQMqWkUmwL5eiZol8Ja4s=";
+    sha256 = "sha256-X38onTCylreBFqCOdwPfk3WqhGszK1fcpH3cu3gJ+70=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
