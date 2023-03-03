@@ -160,6 +160,9 @@ assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
 
   # cudaComputeCapabilityToName :: String => String
   inherit cudaComputeCapabilityToName;
+
+  # dropDot :: String -> String
+  inherit dropDot;
 } // formatCapabilities {
   cudaCapabilities = config.cudaCapabilities or supportedCapabilities;
   enableForwardCompat = config.cudaForwardCompat or true;
