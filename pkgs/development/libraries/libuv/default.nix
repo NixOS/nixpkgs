@@ -74,6 +74,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # separateDebugInfo breaks static build
+  # https://github.com/NixOS/nixpkgs/issues/219466
+  separateDebugInfo = !stdenv.hostPlatform.isStatic;
+
   doCheck = true;
 
   # Some of the tests use localhost networking.
