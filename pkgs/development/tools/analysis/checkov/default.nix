@@ -10,7 +10,7 @@ let
         version = "1.5.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "06rn91n2izw7czncgql71w7acsa8wwni51njw0c6s8w4xas1arj9";
+          hash = "sha256-SWYVtOqEI20Y4NKGEi3nSGmmDg+H4sfsZ4f/KGxINhs=";
         };
         doCheck = false;
       });
@@ -19,7 +19,7 @@ let
         version = "3.2.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
         };
         SETUPTOOLS_SCM_PRETEND_VERSION = version;
         doCheck = false;
