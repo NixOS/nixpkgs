@@ -1,14 +1,18 @@
 { lib
 , buildPythonPackage
-, numpy
-, six
-, nose
 , fetchPypi
+, nose
+, numpy
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "py_stringmatching";
   version = "0.4.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
