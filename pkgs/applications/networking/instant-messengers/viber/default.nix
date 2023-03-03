@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       libxslt
       nspr
       nss
-      openssl
+      openssl_1_1
       stdenv.cc.cc
       systemd
       wayland
