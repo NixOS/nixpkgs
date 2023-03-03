@@ -1,20 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, hidapi, pyscard, ecdsa }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hidapi
+, pyscard
+, ecdsa
+ }:
 
 buildPythonPackage rec {
   pname = "btchip-python";
   version = "0.1.32";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34f5e0c161c08f65dc0d070ba2ff4c315ed21c4b7e0faa32a46862d0dc1b8f55";
+    hash = "sha256-NPXgwWHAj2XcDQcLov9MMV7SHEt+D6oypGhi0Nwbj1U=";
   };
 
-  propagatedBuildInputs = [ hidapi pyscard ecdsa ];
+  postPatch = ''
+    # fix extra_requires validation
+    substituteInPlace setup.py \
+      --replace "python-pyscard>=1.6.12-4build1" "python-pyscard>=1.6.12"
+  '';
+
+  propagatedBuildInputs = [
+    hidapi
+    ecdsa
+  ];
+
+  passthru.optional-dependencies.smartcard = [
+    pyscard
+  ];
 
   # tests requires hardware
   doCheck = false;
 
-  pythonImportsCheck = [ "btchip.btchip" ];
+  pythonImportsCheck = [
+    "btchip.btchip"
+  ];
 
   meta = with lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
