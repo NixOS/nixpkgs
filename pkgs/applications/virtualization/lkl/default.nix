@@ -6,6 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lkl";
+
+  # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
+  # Please verify `nix build -f nixos/release-combined.nix nixos.ova` works
+  # before attempting to update again.
+  # ref: https://github.com/NixOS/nixpkgs/pull/219434
   version = "2022-08-08";
 
   outputs = [ "dev" "lib" "out" ];
