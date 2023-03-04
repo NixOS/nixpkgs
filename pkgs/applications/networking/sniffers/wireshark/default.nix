@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     gettext pcre2 libpcap lua5 libssh nghttp2 openssl libgcrypt
     libgpg-error gnutls geoip c-ares glib zlib
-  ] ++ lib.optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+  ] ++ lib.optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools qtwayland ])
     ++ lib.optionals stdenv.isLinux  [ libcap libnl ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
     ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);

@@ -29,6 +29,8 @@ buildPythonPackage rec {
     "test_error_in_generator_callback"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://bottlepy.org/";
     description = "A fast and simple micro-framework for small web-applications";
