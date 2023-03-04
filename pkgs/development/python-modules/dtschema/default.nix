@@ -12,6 +12,9 @@
 buildPythonPackage rec {
   pname = "dtschema";
   version = "2022.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
