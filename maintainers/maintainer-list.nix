@@ -10672,12 +10672,6 @@
       fingerprint = "7BC1 77D9 C222 B1DC FB2F  0484 C061 089E FEBF 7A35";
     }];
   };
-  nichtsfrei = {
-    email = "philipp.eder@posteo.net";
-    github = "nichtsfrei";
-    githubId = 1665818;
-    name = "Philipp Eder";
-  };
   nickcao = {
     name = "Nick Cao";
     email = "nickcao@nichi.co";
