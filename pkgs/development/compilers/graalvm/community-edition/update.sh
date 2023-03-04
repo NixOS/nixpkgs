@@ -54,12 +54,16 @@ declare -r -A products_urls=(
 readonly platforms=(
   "11-linux-aarch64"
   "17-linux-aarch64"
+  "19-linux-aarch64"
   "11-linux-amd64"
   "17-linux-amd64"
+  "19-linux-amd64"
   "11-darwin-aarch64"
   "17-darwin-aarch64"
+  "19-darwin-aarch64"
   "11-darwin-amd64"
   "17-darwin-amd64"
+  "19-darwin-amd64"
 )
 
 info "Generating '$hashes_nix' file for 'graalvm-ce' $new_version. This will take a while..."

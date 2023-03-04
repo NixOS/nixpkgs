@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
+  strictDeps = true;
   nativeBuildInputs = [ pkg-config ]
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = false;
-  nativeCheckInputs = lib.optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)

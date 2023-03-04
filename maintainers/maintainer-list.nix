@@ -3601,6 +3601,13 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  dennajort = {
+    email = "gosselinjb@gmail.com";
+    matrix = "@dennajort:matrix.org";
+    github = "dennajort";
+    githubId = 1536838;
+    name = "Jean-Baptiste Gosselin";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -8949,6 +8956,9 @@
     github = "Ma27";
     githubId = 6025220;
     name = "Maximilian Bosch";
+    keys = [{
+      fingerprint = "62B9 9C26 F046 721E 26B0  04F6 D006 A998 C6AB FDF1";
+    }];
   };
   ma9e = {
     email = "sean@lfo.team";
@@ -11938,6 +11948,12 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  PowerUser64 = {
+    email = "blakelysnorth@gmail.com";
+    github = "PowerUser64";
+    githubId = 24578572;
+    name = "Blake North";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
@@ -12883,6 +12899,7 @@
     email = "rrbutani+nix@gmail.com";
     github = "rrbutani";
     githubId = 7833358;
+    matrix = "@rbutani:matrix.org";
     keys = [{
       fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273";
     }];

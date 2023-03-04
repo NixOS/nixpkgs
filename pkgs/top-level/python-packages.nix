@@ -2144,6 +2144,8 @@ self: super: with self; {
 
   csvw = callPackage ../development/python-modules/csvw { };
 
+  ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
@@ -6645,6 +6647,8 @@ self: super: with self; {
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
 
+  okta = callPackage ../development/python-modules/okta { };
+
   olefile = callPackage ../development/python-modules/olefile { };
 
   oletools = callPackage ../development/python-modules/oletools { };
@@ -7691,6 +7695,8 @@ self: super: with self; {
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix { };
 
+  publicsuffixlist = callPackage ../development/python-modules/publicsuffixlist { };
+
   pubnub = callPackage ../development/python-modules/pubnub { };
 
   pubnubsub-handler = callPackage ../development/python-modules/pubnubsub-handler { };
@@ -7742,6 +7748,8 @@ self: super: with self; {
   py-bip39-bindings = callPackage ../development/python-modules/py-bip39-bindings { };
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
+
+  py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
@@ -8086,6 +8094,8 @@ self: super: with self; {
   pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
+  pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
   pyezviz = callPackage ../development/python-modules/pyezviz { };
 
@@ -9146,7 +9156,9 @@ self: super: with self; {
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
-  pytest-logdog = callPackage ../development/python-modules/pytest-logdog{ };
+  pytest-logdog = callPackage ../development/python-modules/pytest-logdog { };
+
+  pytest-md-report = callPackage ../development/python-modules/pytest-md-report { };
 
   pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
 
@@ -9187,6 +9199,8 @@ self: super: with self; {
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
+  pytest-recording = callPackage ../development/python-modules/pytest-recording { };
 
   pytest-regressions = callPackage ../development/python-modules/pytest-regressions { };
 

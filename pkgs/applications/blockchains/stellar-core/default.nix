@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       store historical records of the ledger and participate in consensus.
     '';
     homepage = "https://www.stellar.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
