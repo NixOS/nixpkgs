@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "44.beta";
+  version = "44.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Egfvkub0i3xayAddrZlqML0YW1Ub2EuIJy6jnUDWD/I=";
+    sha256 = "CnNLR1DrphUnVJF9bxdH90BmPotGi69OqegJtRKyOCY=";
   };
 
   patches = [
