@@ -1,6 +1,6 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from typing import Any, Callable, cast, get_args, Iterable, Literal, NoReturn, Optional
+from typing import Any, Callable, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
 
 import dataclasses
 import re
@@ -44,11 +44,11 @@ AttrBlockKind = Literal['admonition', 'example']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
-class Renderer(markdown_it.renderer.RendererProtocol):
+class Renderer:
     _admonitions: dict[AdmonitionKind, tuple[RenderFn, RenderFn]]
     _admonition_stack: list[AdmonitionKind]
 
-    def __init__(self, manpage_urls: Mapping[str, str], parser: Optional[markdown_it.MarkdownIt] = None):
+    def __init__(self, manpage_urls: Mapping[str, str]):
         self._manpage_urls = manpage_urls
         self.rules = {
             'text': self.text,
@@ -104,169 +104,120 @@ class Renderer(markdown_it.renderer.RendererProtocol):
     def _join_inline(self, ls: Iterable[str]) -> str:
         return "".join(ls)
 
-    def admonition_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def admonition_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         tag = token.meta['kind']
         self._admonition_stack.append(tag)
-        return self._admonitions[tag][0](token, tokens, i, options, env)
-    def admonition_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
-        return self._admonitions[self._admonition_stack.pop()][1](token, tokens, i, options, env)
+        return self._admonitions[tag][0](token, tokens, i)
+    def admonition_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._admonitions[self._admonition_stack.pop()][1](token, tokens, i)
 
-    def render(self, tokens: Sequence[Token], options: OptionsDict,
-               env: MutableMapping[str, Any]) -> str:
+    def render(self, tokens: Sequence[Token]) -> str:
         def do_one(i: int, token: Token) -> str:
             if token.type == "inline":
                 assert token.children is not None
-                return self.renderInline(token.children, options, env)
+                return self.renderInline(token.children)
             elif token.type in self.rules:
-                return self.rules[token.type](tokens[i], tokens, i, options, env)
+                return self.rules[token.type](tokens[i], tokens, i)
             else:
                 raise NotImplementedError("md token not supported yet", token)
         return self._join_block(map(lambda arg: do_one(*arg), enumerate(tokens)))
-    def renderInline(self, tokens: Sequence[Token], options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def renderInline(self, tokens: Sequence[Token]) -> str:
         def do_one(i: int, token: Token) -> str:
             if token.type in self.rules:
-                return self.rules[token.type](tokens[i], tokens, i, options, env)
+                return self.rules[token.type](tokens[i], tokens, i)
             else:
                 raise NotImplementedError("md token not supported yet", token)
         return self._join_inline(map(lambda arg: do_one(*arg), enumerate(tokens)))
 
-    def text(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-             env: MutableMapping[str, Any]) -> str:
+    def text(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def hardbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def hardbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def softbreak(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def softbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def code_inline(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                    env: MutableMapping[str, Any]) -> str:
+    def code_inline(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def code_block(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def code_block(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def link_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def link_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def link_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def list_item_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def list_item_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def list_item_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def list_item_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def bullet_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def em_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def em_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def em_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def em_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def strong_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                    env: MutableMapping[str, Any]) -> str:
+    def strong_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def strong_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def strong_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def fence(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-              env: MutableMapping[str, Any]) -> str:
+    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+    def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def note_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def note_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def note_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                   env: MutableMapping[str, Any]) -> str:
+    def note_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def caution_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def caution_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def caution_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def caution_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def important_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                       env: MutableMapping[str, Any]) -> str:
+    def important_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def important_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def important_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def tip_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def tip_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def tip_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def tip_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def warning_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def warning_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def warning_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def warning_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dl_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dl_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dl_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dl_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dt_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dt_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dt_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dt_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dd_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                env: MutableMapping[str, Any]) -> str:
+    def dd_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def dd_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                 env: MutableMapping[str, Any]) -> str:
+    def dd_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def myst_role(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                  env: MutableMapping[str, Any]) -> str:
+    def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def attr_span_end(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                           env: MutableMapping[str, Any]) -> str:
+    def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
-    def example_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
@@ -466,12 +417,26 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("block_attr", block_attr)
 
-class Converter(ABC):
-    __renderer__: Callable[[Mapping[str, str], markdown_it.MarkdownIt], Renderer]
+TR = TypeVar('TR', bound='Renderer')
 
-    def __init__(self, manpage_urls: Mapping[str, str]):
-        self._manpage_urls = manpage_urls
+class Converter(ABC, Generic[TR]):
+    # we explicitly disable markdown-it rendering support and use our own entirely.
+    # rendering is well separated from parsing and our renderers carry much more state than
+    # markdown-it easily acknowledges as 'good' (unless we used the untyped env args to
+    # shuttle that state around, which is very fragile)
+    class ForbiddenRenderer(markdown_it.renderer.RendererProtocol):
+        __output__ = "none"
 
+        def __init__(self, parser: Optional[markdown_it.MarkdownIt]):
+            pass
+
+        def render(self, tokens: Sequence[Token], options: OptionsDict,
+                   env: MutableMapping[str, Any]) -> str:
+            raise NotImplementedError("do not use Converter._md.renderer. 'tis a silly place")
+
+    _renderer: TR
+
+    def __init__(self) -> None:
         self._md = markdown_it.MarkdownIt(
             "commonmark",
             {
@@ -479,7 +444,7 @@ class Converter(ABC):
                 'html': False,       # not useful since we target many formats
                 'typographer': True, # required for smartquotes
             },
-            renderer_cls=lambda parser: self.__renderer__(self._manpage_urls, parser)
+            renderer_cls=self.ForbiddenRenderer
         )
         self._md.use(
             container_plugin,
@@ -496,10 +461,9 @@ class Converter(ABC):
         self._md.use(_block_attr)
         self._md.enable(["smartquotes", "replacements"])
 
-    def _parse(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> list[Token]:
-        return self._md.parse(src, env if env is not None else {})
+    def _parse(self, src: str) -> list[Token]:
+        return self._md.parse(src, {})
 
-    def _render(self, src: str, env: Optional[MutableMapping[str, Any]] = None) -> str:
-        env = {} if env is None else env
-        tokens = self._parse(src, env)
-        return self._md.renderer.render(tokens, self._md.options, env) # type: ignore[no-any-return]
+    def _render(self, src: str) -> str:
+        tokens = self._parse(src)
+        return self._renderer.render(tokens)
