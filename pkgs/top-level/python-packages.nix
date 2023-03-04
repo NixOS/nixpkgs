@@ -3192,6 +3192,8 @@ self: super: with self; {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  execnb = callPackage ../development/python-modules/execnb { };
+
   execnet = callPackage ../development/python-modules/execnet { };
 
   executing = callPackage ../development/python-modules/executing { };
@@ -3277,6 +3279,8 @@ self: super: with self; {
 
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
+  fastai = callPackage ../development/python-modules/fastai { };
+
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
@@ -3290,6 +3294,8 @@ self: super: with self; {
   fastcore = callPackage ../development/python-modules/fastcore { };
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
+
+  fastdownload = callPackage ../development/python-modules/fastdownload { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
@@ -6297,6 +6303,8 @@ self: super: with self; {
   nbconflux = callPackage ../development/python-modules/nbconflux { };
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
+
+  nbdev = callPackage ../development/python-modules/nbdev { };
 
   nbdime = callPackage ../development/python-modules/nbdime { };
 
