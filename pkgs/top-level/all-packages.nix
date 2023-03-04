@@ -1455,7 +1455,9 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
-  gamescope = callPackage ../applications/window-managers/gamescope { };
+  gamescope = callPackage ../applications/window-managers/gamescope {
+    wlroots = wlroots_0_16;
+  };
 
   gay = callPackage ../tools/misc/gay {  };
 
