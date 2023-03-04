@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdex";
-  version = "0.1.0";
+  version = "0.1.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libdex";
     rev = version;
-    sha256 = "1SluktcmEf1CirYronhan8xmgY227hfnKE4VTPa9ICw=";
+    sha256 = "wOGHbios95s2LSCN517/cF5MS9YQ+kNliMU4iHFYges=";
   };
 
   nativeBuildInputs = [
