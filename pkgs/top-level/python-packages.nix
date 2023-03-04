@@ -11496,6 +11496,10 @@ self: super: with self; {
 
   textacy = callPackage ../development/python-modules/textacy { };
 
+  textnets = callPackage ../development/python-modules/textnets {
+    en_core_web_sm = spacy_models.en_core_web_sm;
+  };
+
   texttable = callPackage ../development/python-modules/texttable { };
 
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
