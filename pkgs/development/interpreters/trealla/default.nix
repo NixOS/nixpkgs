@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xxd ];
   buildInputs = [ readline openssl libffi ];
-  checkInputs = [ valgrind ];
+  checkInputs = lib.optionals (!stdenv.isDarwin) [ valgrind ];
   enableParallelBuilding = true;
 
   installPhase = ''
