@@ -9,13 +9,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qsc4SrJbG/IcTAEt6bS/g5iUWhTJjJEVRbLqUKtVgBQ=";
+    sha256 = "sha256-qsc4SrJbG/IcTAEt6bS/g5iUWhTJjJEVRbLqUKtVgBQ=";
   };
 
   meta = with lib; {
     description = "Library to remove commented-out code from Python files";
     homepage = "https://github.com/myint/eradicate";
-    changelog = "https://github.com/wemake-services/eradicate/releases/tag/2.2.0";
+    changelog = "https://github.com/wemake-services/eradicate/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mmlb ];
   };
