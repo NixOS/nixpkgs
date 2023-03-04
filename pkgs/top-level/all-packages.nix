@@ -12289,6 +12289,8 @@ with pkgs;
 
   somebar = callPackage ../applications/misc/somebar { };
 
+  someblocks = callPackage ../applications/misc/someblocks { };
+
   spacebar = callPackage ../os-specific/darwin/spacebar {
     inherit (darwin.apple_sdk.frameworks)
       Carbon Cocoa ScriptingBridge SkyLight;
