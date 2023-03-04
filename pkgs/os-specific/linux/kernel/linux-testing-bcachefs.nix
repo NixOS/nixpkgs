@@ -2,9 +2,12 @@
 , stdenv
 , fetchpatch
 , kernel
-, commitDate ? "2023-02-01"
-, currentCommit ? "65960c284ad149cc4bfbd64f21e6889c1e3d1c5f"
-, diffHash ? "sha256-4wpY3aYZ93OXSU4wmQs9K62nPyIzjKu4RBQTwksmyyk="
+, commitDate ? "2023-05-02"
+# bcachefs-tools stores the expected-revision in:
+#   https://evilpiepirate.org/git/bcachefs-tools.git/tree/.bcachefs_revision
+# but this does not means that it'll be the latest-compatible revision
+, currentCommit ? "6a20aede294f72f3920146a352aa102a9fd3d0aa"
+, diffHash ? "sha256-IGOsZm3SdWUf6DNVQiDMRGoyKNIPvwSwN0jgktRTVbk="
 
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
