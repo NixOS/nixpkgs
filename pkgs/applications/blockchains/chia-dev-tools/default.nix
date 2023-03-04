@@ -7,13 +7,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "chia-dev-tools";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lE7FTSDqVS6AstcxZSMdQwgygMvcvh1fqYVTTSSNZpA=";
+    hash = "sha256-qWWLQ+SkoRu5cLytwwrslqsKORy+4ebO8brULEFGaF0=";
   };
 
   patches = [
