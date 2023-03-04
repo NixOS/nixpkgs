@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jboynyc";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-BBndY+3leJBxiImuyRL7gMD5eocE4i96+97I9hDEwec=";
   };
 
@@ -61,11 +61,14 @@ buildPythonPackage rec {
     en_core_web_sm
   ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [
+    "textnets"
+  ];
 
   meta = with lib; {
     description = "Text analysis with networks";
     homepage = "https://textnets.readthedocs.io";
+    changelog = "https://github.com/jboynyc/textnets/blob/v${version}/HISTORY.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jboy ];
   };
