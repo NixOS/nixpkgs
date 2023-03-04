@@ -1,33 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, git
-, ruamel-yaml
+, fetchFromGitHub
 , jsonschema
+, pythonOlder
 , rfc3987
-, setuptools
+, ruamel-yaml
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2022.1";
+  version = "2022.01";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-G5KzuaMbbkuLK+cNvzBld1UwvExS6ZGVW2e+GXQRFMU=";
+  src = fetchFromGitHub {
+    owner = "devicetree-org";
+    repo = "dt-schema";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wwlXIM/eO3dII/qQpkAGLT3/15rBLi7ZiNtqYFf7Li4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm git ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
-    setuptools
-    ruamel-yaml
     jsonschema
     rfc3987
+    ruamel-yaml
   ];
+
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "dtschema"
