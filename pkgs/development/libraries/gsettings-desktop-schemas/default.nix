@@ -3,6 +3,8 @@
 , pkg-config
 , glib
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , meson
 , ninja
 , python3
@@ -27,7 +29,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   postPatch = ''
