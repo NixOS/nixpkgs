@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.7.1";
+  version = "5.7.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "O0JUGWTbnC+lCpZY1Ihr33fQI/5OlsWxe85RyfWMSOY=";
+    sha256 = "v5JfEp3z+Kh9cfXh7194uOqdKMUzNum4OviYhFWO3o4=";
   };
 
   patches = [
