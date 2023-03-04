@@ -50,6 +50,9 @@ in
     systemd.packages = [ package ];
     systemd.timers.google-oslogin-cache.wantedBy = [ "timers.target" ];
 
+    # Without network this will fail to fetch users which causes sudo not to work.
+    systemd.services.google-oslogin-cache.after = [ "network.target" ];
+
     # enable the nss module, so user lookups etc. work
     system.nssModules = [ package ];
     system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
