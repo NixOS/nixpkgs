@@ -148,7 +148,7 @@ self = stdenv.mkDerivation {
       "get_option('datadir')" "'${placeholder "out"}/share'"
   '';
 
-  outputs = [ "out" "dev" "drivers" ]
+  outputs = [ "out" "dev" "drivers" "libgbm" ]
     ++ lib.optional enableOSMesa "osmesa"
     ++ lib.optional stdenv.isLinux "driversdev"
     ++ lib.optional enableOpenCL "opencl"
@@ -192,7 +192,7 @@ self = stdenv.mkDerivation {
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
-    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
+    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "libgbm"}/lib/gbm"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
 
@@ -242,7 +242,7 @@ self = stdenv.mkDerivation {
 
   postInstall = ''
     # Some installs don't have any drivers so this directory is never created.
-    mkdir -p $drivers $osmesa
+    mkdir -p $drivers $osmesa $libgbm
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
@@ -323,6 +323,11 @@ self = stdenv.mkDerivation {
         patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
       fi
     done
+
+    # Move all libgbm-related stuff to another output
+    moveToOutput 'include/gbm.h' $libgbm
+    moveToOutput 'lib/pkgconfig/gbm.pc' $libgbm
+    moveToOutput 'lib/libgbm*' $libgbm
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [

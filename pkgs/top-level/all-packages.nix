@@ -22255,6 +22255,8 @@ with pkgs;
   mesa_22 = mesa_22_3_6;
   # Bump this when the next major version is reasonably stable
   mesa = mesa_22;
+  # Only bump this on staging, lots of packages depend on it
+  libgbm = mesa_22_3_5.libgbm;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
