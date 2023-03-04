@@ -18037,6 +18037,8 @@ with pkgs;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
+  # openjdk-17 fails on 4.4.1. Provide 4.4 until we fix it.
+  gnumake44 = callPackage ../development/tools/build-managers/gnumake/4.4 { };
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
