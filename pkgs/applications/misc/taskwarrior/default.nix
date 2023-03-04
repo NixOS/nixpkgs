@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls, python3, xdg-utils }:
+{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls, python3, xdg-utils, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs = [ cmake libuuid gnutls python3 ];
+  nativeBuildInputs = [ cmake libuuid gnutls python3 installShellFiles ];
 
   doCheck = true;
   preCheck = ''
@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   postInstall = ''
-    mkdir -p "$out/share/bash-completion/completions"
-    ln -s "../../doc/task/scripts/bash/task.sh" "$out/share/bash-completion/completions/task.bash"
-    mkdir -p "$out/share/fish/vendor_completions.d"
-    ln -s "../../../share/doc/task/scripts/fish/task.fish" "$out/share/fish/vendor_completions.d/"
+    # ZSH is installed automatically from some reason, only bash and fish need
+    # manual installation
+    installShellCompletion --cmd task \
+      --bash $out/share/doc/task/scripts/bash/task.sh \
+      --fish $out/share/doc/task/scripts/fish/task.fish
+    rm -r $out/share/doc/task/scripts/bash
+    rm -r $out/share/doc/task/scripts/fish
   '';
 
   meta = with lib; {
