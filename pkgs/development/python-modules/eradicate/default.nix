@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "eradicate";
@@ -6,14 +9,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qsc4SrJbG/IcTAEt6bS/g5iUWhTJjJEVRbLqUKtVgBQ=";
+    hash = "sha256-qsc4SrJbG/IcTAEt6bS/g5iUWhTJjJEVRbLqUKtVgBQ=";
   };
 
   meta = with lib; {
-    description = "eradicate removes commented-out code from Python files.";
+    description = "Library to remove commented-out code from Python files";
     homepage = "https://github.com/myint/eradicate";
-    license = [ licenses.mit ];
-
-    maintainers = [ maintainers.mmlb ];
+    changelog = "https://github.com/wemake-services/eradicate/releases/tag/2.2.0";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ mmlb ];
   };
 }
