@@ -10,16 +10,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    sha256 = "sha256-7hDrHYxVKduQl3kpLUHEXDPKTz1B74GjxKC5XEPYEmc=";
+    hash = "sha256-qop6KjTFPQ5o1kPEVPP0AfDfr8w/JP3YmC+sb5OUbDY=";
   };
 
-  cargoSha256 = "sha256-JNpTt+Oar/090FyJbUo8MYBJuXKLOIfcm6kJIIgsKyo=";
+  cargoHash = "sha256-ZtoJO/R11qTFYAE6G7AVCpnYZ3JGrxtVSXvCm0W8DAA=";
+
+  postPatch = ''
+    # disabledTests (network, failing)
+    rm tests/test_noseyparker_github.rs
+    rm tests/test_noseyparker_scan.rs
+  '';
 
   nativeBuildInputs = [
     cmake
