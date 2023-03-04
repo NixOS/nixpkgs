@@ -34,6 +34,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit src version;
   pname = "paperwork";
+  format = "pyproject";
 
   sample_docs = sample_documents // {
     # a trick for the update script
@@ -43,21 +44,13 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/paperwork-gtk";
 
-  # Patch out a few paths that assume that we're using the FHS:
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace python-Levenshtein Levenshtein
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  postPatch = ''
     chmod a+w -R ..
     patchShebangs ../tools
 
     export HOME=$(mktemp -d)
-
-    cat - ../AUTHORS.py > src/paperwork_gtk/_version.py <<EOF
-    # -*- coding: utf-8 -*-
-    version = "${version}"
-    authors_code=""
-    EOF
   '';
 
   preBuild = ''
@@ -93,6 +86,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook
     gobject-introspection
+    python3Packages.setuptools-scm
     (lib.getBin gettext)
     which
     gdk-pixbuf # for the setup hook
