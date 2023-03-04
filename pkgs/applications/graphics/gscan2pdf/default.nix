@@ -10,16 +10,12 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.12.8";
+  version = "2.13.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-dmN2fMBDZqgvdHQryQgjmBHeH/h2dihRH8LkflFYzTk=";
+    hash = "sha256-NGz6DUa7TdChpgwmD9pcGdvYr3R+Ft3jPPSJpybCW4Q=";
   };
-
-  patches = [
-    ./ffmpeg5-compat.patch
-  ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
