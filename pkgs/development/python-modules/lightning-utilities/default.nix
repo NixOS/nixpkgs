@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.5.0";
+  version = "0.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J73sUmX1a7ww+rt1vwBt9P0Xbeoxag6jR0W63xEySCI=";
+    hash = "sha256-xjE5FsU1d/YcVHlfjtZE0T2LjGvsIOzbGJFU7PMDqdc=";
   };
 
   nativeBuildInputs = [

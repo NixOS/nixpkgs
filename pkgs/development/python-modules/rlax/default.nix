@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "rlax";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a4qyJ5W9fs4TSTQQZS/NptlcSr2Nhw0pvnk+sGEsbyY=";
+    hash = "sha256-GRqiGacyHZpVKUqfAteMjRV4EtdHkSgfFRj/H76bBVo=";
   };
 
   buildInputs = [

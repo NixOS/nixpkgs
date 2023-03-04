@@ -4,7 +4,7 @@
 , buildPythonPackage
 , cryptography
 , fetchPypi
-, GeoIP
+, geoip
 , idna
 , incremental
 , lsof
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     lsof
-    GeoIP
+    geoip
   ];
 
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);

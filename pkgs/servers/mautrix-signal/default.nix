@@ -26,10 +26,10 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
     aiohttp
     asyncpg
     attrs
+    commonmark
     mautrix
     phonenumbers
     pillow

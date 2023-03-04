@@ -10,8 +10,8 @@
 }:
 
 buildPythonPackage rec {
+  pname = "nuitka";
   version = "1.1.5";
-  pname = "Nuitka";
 
   # Latest version is not yet on PyPi
   src = fetchFromGitHub {

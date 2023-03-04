@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "0.8.0";
+  version = "0.10.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = pname;
-    rev = version;
-    hash = "sha256-NfKgQyD7PkPOTnkIua3fOfH7tHNGQEOVZ2HtvIg5HzA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/fFKotDibc+wcoGteloh5OEKbQdN/W1NdF+mWf8mSNw=";
   };
 
   propagatedBuildInputs = [

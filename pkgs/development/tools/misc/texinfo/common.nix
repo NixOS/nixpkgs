@@ -28,6 +28,10 @@ stdenv.mkDerivation {
 
   patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
+  postPatch = ''
+    patchShebangs tp/maintain
+  '';
+
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
   NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
@@ -58,7 +62,7 @@ stdenv.mkDerivation {
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
-  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl) [
+  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
@@ -72,8 +76,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
+    homepage = "https://www.gnu.org/software/texinfo/";
+    changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra oxij ];

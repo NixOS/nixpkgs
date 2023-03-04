@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "mvantellingen";
     repo = "python-zeep";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
+    hash = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
   };
 
   propagatedBuildInputs = [

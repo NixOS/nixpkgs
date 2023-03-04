@@ -40,17 +40,25 @@ buildPerlPackage rec {
 
   postBuild = ''
     patchShebangs ./bin
-  '' + lib.optionalString stdenv.isDarwin ''
-    shortenPerlShebang bin/strip-nondeterminism
   '';
 
   postInstall = ''
     # we don’t need the debhelper script
     rm $out/bin/dh_strip_nondeterminism
     rm $out/share/man/man1/dh_strip_nondeterminism.1
+  '' + lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
   '';
 
-  doCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    ($out/bin/strip-nondeterminism --help 2>&1 | grep -q "verbose") || (echo "'$out/bin/strip-nondeterminism --help' failed" && exit 1)
+    runHook postInstallCheck
+  '';
+
+  # running shortenPerlShebang in postBuild results in non-functioning binary 'exec format error'
+  doCheck = !stdenv.isDarwin;
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "A Perl module for stripping bits of non-deterministic information";

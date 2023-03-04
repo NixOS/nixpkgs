@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi rec {
     inherit pname version;
-    hash = "sha256-tfsJVDpkqRFl3+hXlnWfnkFe3Clr602zPR7PeGaoYr0=";
+    hash = "sha256-CpTxixCLmyHzomo9VB8FbDTtyxfchyoUShVhj+1672c=";
   };
 
   nativeBuildInputs = [

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , matplotlib
-, PyGithub
+, pygithub
 , pythonOlder
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     matplotlib
-    PyGithub
+    pygithub
   ];
 
   # Module has no tests

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "wbond";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
+    hash = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
   };
 
   propagatedBuildInputs = [ asn1crypto oscrypto ];

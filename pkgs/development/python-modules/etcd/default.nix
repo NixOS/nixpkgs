@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "dsoprea";
     repo = "PythonEtcdClient";
     rev = version;
-    sha256 = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
+    hash = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
   };
 
   patchPhase = ''

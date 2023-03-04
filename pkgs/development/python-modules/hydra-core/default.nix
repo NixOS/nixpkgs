@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hydra-core";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "facebookresearch";
     repo = "hydra";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4FOh1Jr+LM8ffh/xcAqMqKudKbXb2DZdxU+czq2xwxs=";
+    hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
   };
 
   patches = [

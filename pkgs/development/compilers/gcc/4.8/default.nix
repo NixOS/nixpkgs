@@ -297,7 +297,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
     isGNU = true;
-    hardeningUnsupportedFlags = [ "stackprotector" ];
+    hardeningUnsupportedFlags = [ "stackprotector" "fortify3" ];
   };
 
   enableParallelBuilding = true;

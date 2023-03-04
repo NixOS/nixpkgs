@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "2.3.0";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
-    hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7lOY8J42mRmIA18tQrmY3gNEQf6YqzbeULecrGhNwFc=";
   };
 
   propagatedBuildInputs = [

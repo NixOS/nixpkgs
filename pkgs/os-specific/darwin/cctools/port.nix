@@ -3,6 +3,7 @@
 , libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
+, fetchpatch
 }:
 
 let
@@ -42,6 +43,14 @@ stdenv.mkDerivation {
   patches = [
     ./ld-ignore-rpath-link.patch
     ./ld-rpath-nonfinal.patch
+    (fetchpatch {
+      url = "https://github.com/tpoechtrager/cctools-port/commit/4a734070cd2838e49658464003de5b92271d8b9e.patch";
+      hash = "sha256-72KaJyu7CHXxJJ1GNq/fz+kW1RslO3UaKI91LhBtiXA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/MercuryTechnologies/cctools-port/commit/025899b7b3593dedb0c681e689e57c0e7bbd9b80.patch";
+      hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
+    })
   ]
     ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
 

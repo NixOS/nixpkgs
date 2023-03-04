@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-EXYAiXqEfQVDTwc4MFTroLPEaTZ3QYTlUsuNQ72oHpA=";
+    hash = "sha256-EXYAiXqEfQVDTwc4MFTroLPEaTZ3QYTlUsuNQ72oHpA=";
   };
 
   postPatch = ''

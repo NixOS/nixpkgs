@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "uqfoundation";
     repo = pname;
     rev = "refs/tags/pathos-${version}";
-    sha256 = "sha256-Jc7pMVjOUSaZydRh87FsHivEAXpX9v6EbZNkHwPeq/Q=";
+    hash = "sha256-Jc7pMVjOUSaZydRh87FsHivEAXpX9v6EbZNkHwPeq/Q=";
   };
 
   propagatedBuildInputs = [

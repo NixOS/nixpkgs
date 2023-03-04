@@ -28,6 +28,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
 }:
 
 # Make sure we get GNU sed.
@@ -53,6 +54,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -145,6 +147,8 @@ let majorVersion = "12";
         buildPackages
         cloog
         crossStageStatic
+        disableBootstrap
+        disableGdbPlugin
         enableLTO
         enableMultilib
         enablePlugin

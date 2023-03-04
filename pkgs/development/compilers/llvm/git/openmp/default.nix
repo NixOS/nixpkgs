@@ -4,6 +4,7 @@
 , monorepoSrc
 , runCommand
 , cmake
+, ninja
 , llvm
 , lit
 , clang-unwrapped
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake perl pkg-config lit ];
+  nativeBuildInputs = [ cmake ninja perl pkg-config lit ];
   buildInputs = [ llvm ];
 
   # Unsup:Pass:XFail:Fail

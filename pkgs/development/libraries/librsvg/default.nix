@@ -20,7 +20,9 @@
 , python3Packages
 , gnome
 , vala
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, writeScript
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
 , _experimental-update-script-combinators
 , common-updater-scripts
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
+    vala # for share/vala/Makefile.vapigen
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Foundation
@@ -93,6 +96,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
+  GDK_PIXBUF_QUERYLOADERS = writeScript "gdk-pixbuf-loader-loaders-wrapped" ''
+    ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
+  '';
+
+  preConfigure = ''
+    PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
+    export PKG_CONFIG_VAPIGEN_VAPIGEN
+  '';
+
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
   # relevant loader.cache here.
@@ -114,10 +126,14 @@ stdenv.mkDerivation rec {
 
     # 'error: linker `cc` not found' when cross-compiling
     export RUSTFLAGS="-Clinker=$CC"
+  '' + lib.optionalString ((stdenv.buildPlatform != stdenv.hostPlatform) && (stdenv.hostPlatform.emulatorAvailable buildPackages)) ''
+    # the replacement is the native conditional
+    substituteInPlace gdk-pixbuf-loader/Makefile \
+      --replace 'RUN_QUERY_LOADER_TEST = false' 'RUN_QUERY_LOADER_TEST = test -z "$(DESTDIR)"' \
   '';
 
   # Not generated when cross compiling.
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
     # Merge gdkpixbuf and librsvg loaders
     cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache

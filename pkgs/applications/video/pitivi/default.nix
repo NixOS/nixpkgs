@@ -44,10 +44,10 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     python3
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libpeas
     librsvg
@@ -77,12 +77,6 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
-
-  # Fixes error
-  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {

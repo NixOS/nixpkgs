@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, PyStemmer, fetchPypi }:
+{ lib, buildPythonPackage, pystemmer, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "snowballstemmer";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [ PyStemmer ];
+  propagatedBuildInputs = [ pystemmer ];
 
   meta = with lib; {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";

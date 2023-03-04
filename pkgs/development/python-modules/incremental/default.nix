@@ -11,7 +11,7 @@ let incremental = buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kS/uteD34BiOb0IkHS9FAALhG7wJN8ZYZQRYVMJMC9A=";
+    hash = "sha256-kS/uteD34BiOb0IkHS9FAALhG7wJN8ZYZQRYVMJMC9A=";
   };
 
   propagatedBuildInputs = [

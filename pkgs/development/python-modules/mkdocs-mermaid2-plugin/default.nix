@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "fralau";
     repo = "mkdocs-mermaid2-plugin";
     rev = "v${version}";
-    sha256 = "sha256-Oe6wkVrsB0NWF+HHeifrEogjxdGPINRDJGkh9p+GoHs=";
+    hash = "sha256-Oe6wkVrsB0NWF+HHeifrEogjxdGPINRDJGkh9p+GoHs=";
   };
 
   propagatedBuildInputs = [

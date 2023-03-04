@@ -11,7 +11,7 @@
 , pythonOlder
 , rasterio
 , requests
-, Rtree
+, rtree
 , scikit-learn
 , scipy
 , shapely
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     numpy
     pandas
     requests
-    Rtree
+    rtree
     shapely
     folium
     scikit-learn

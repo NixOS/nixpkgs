@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3
-    python3.pkgs.Mako
+    python3.pkgs.mako
   ];
 
   doCheck = true;

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, EasyProcess
+, easyprocess
 , entrypoint2
 , jeepney
 , mss
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    EasyProcess
+    easyprocess
     entrypoint2
     pillow
   ] ++ lib.optionals (isPy3k) [

@@ -46,7 +46,7 @@ in python.pkgs.buildPythonApplication rec {
     numpy
     packaging
     pyqt4
-    Rtree
+    rtree
     scipy
     setuptools
     shapely

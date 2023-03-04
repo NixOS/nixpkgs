@@ -15,7 +15,7 @@ buildPythonPackage rec {
     # support for LDAPCompareRequest.
     (fetchpatch {
       url = "https://github.com/mayflower/privacyidea-ldap-proxy/commit/a13356717379b174f1a6abf767faa0dbd459f5dd.patch";
-      sha256 = "sha256-SBTj9ayQ8JFD8BoYIl77nxWVV3PXnHZ8JMlJnxd/nEk=";
+      hash = "sha256-SBTj9ayQ8JFD8BoYIl77nxWVV3PXnHZ8JMlJnxd/nEk=";
     })
   ];
 

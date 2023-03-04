@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    sha256 = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
+    hash = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
   };
 
   propagatedBuildInputs = [ cython ];

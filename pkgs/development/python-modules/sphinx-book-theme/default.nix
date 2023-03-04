@@ -20,7 +20,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    sha256 = "sha256-9rq6eIjVpjMoohDplgp6bpUeljLXTttvzkjJ1djCh2g=";
+    hash = "sha256-9rq6eIjVpjMoohDplgp6bpUeljLXTttvzkjJ1djCh2g=";
   };
 
   propagatedBuildInputs = [

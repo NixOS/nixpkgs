@@ -4,6 +4,7 @@
 , fetchPypi
 , flit-core
 , matplotlib
+, pytest-xdist
 , pytestCheckHook
 , numpy
 , pandas
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ux6x1R0wlzaMGHw+8InAKI7B/oqhxp+zJMaKodAt9ME=";
+    hash = "sha256-N0ZF82UJ0NyriVy6W0fa8Fhvd7/js2yXxgfbfaW+ATk=";
   };
 
   nativeBuildInputs = [
@@ -35,17 +36,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
   disabledTests = [
-    # incompatible with matplotlib 3.5
-    "TestKDEPlotBivariate"
-    "TestBoxPlotter"
-    "TestCatPlot"
-    "TestKDEPlotUnivariate"
-    "test_with_rug"
-    "test_bivariate_kde_norm"
+    # incompatible with matplotlib 3.7
+    # https://github.com/mwaskom/seaborn/issues/3288
+    "test_subplot_kws"
 
     # requires internet connection
     "test_load_dataset_string_error"

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TwGeLEfP69ZK/fkhS0sB6aPh8aDjg6Tri2mUUzk4jbk=";
+    hash = "sha256-TwGeLEfP69ZK/fkhS0sB6aPh8aDjg6Tri2mUUzk4jbk=";
   };
 
   nativeBuildInputs = [

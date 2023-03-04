@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "ta-lib";
+  pname = "ta-lib";
   version = "0.4.0";
   src = fetchFromGitHub {
     owner = "rafa-dot-el";

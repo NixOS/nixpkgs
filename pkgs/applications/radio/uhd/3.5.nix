@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
     ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
-  # Python + Mako are always required for the build itself but not necessary for runtime.
-  pythonEnv = python3.withPackages (ps: with ps; [ Mako ]
+  # Python + mako are always required for the build itself but not necessary for runtime.
+  pythonEnv = python3.withPackages (ps: with ps; [ mako ]
     ++ optionals (enableLibuhd_Python_api) [ numpy setuptools ]
     ++ optionals (enableUtils) [ requests six ]
   );

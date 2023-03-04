@@ -63,6 +63,11 @@ buildPythonPackage rec {
 
   SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
+  disabledTestPaths = [
+    # sqlalchemy 2 unsupported
+    "mautrix/client/state_store/tests/store_test.py"
+  ];
+
   pythonImportsCheck = [
     "mautrix"
   ];

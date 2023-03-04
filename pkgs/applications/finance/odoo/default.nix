@@ -130,7 +130,7 @@ in python.pkgs.buildPythonApplication rec {
     vobject
     werkzeug
     xlrd
-    XlsxWriter
+    xlsxwriter
     xlwt
     zeep
   ];

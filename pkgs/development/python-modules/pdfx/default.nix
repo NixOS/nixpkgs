@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "metachris";
     repo = "pdfx";
     rev = "v${version}";
-    sha256 = "sha256-POpP6XwcqwvImrtIiDjpnHoNE0MKapuPjxojo+ocBK0=";
+    hash = "sha256-POpP6XwcqwvImrtIiDjpnHoNE0MKapuPjxojo+ocBK0=";
   };
 
   postPatch = ''

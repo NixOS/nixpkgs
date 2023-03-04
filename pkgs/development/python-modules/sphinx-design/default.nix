@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_design";
-    sha256 = "sha256-cYP6H65Vs37wG9pRJaIe6EH1u8v1mjU4K+WYGAxM77o=";
+    hash = "sha256-cYP6H65Vs37wG9pRJaIe6EH1u8v1mjU4K+WYGAxM77o=";
   };
 
   nativeBuildInputs = [ flit-core ];

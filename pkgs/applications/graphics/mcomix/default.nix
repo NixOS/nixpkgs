@@ -25,16 +25,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Nok4oqTezO84q9IDZvgi33ZeKfRL+tpg7QEDmp2ZZpU=";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gdk-pixbuf ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 gdk-pixbuf ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   propagatedBuildInputs = (with python3.pkgs; [ pillow pygobject3 pycairo ]);
 
   # Tests are broken
   doCheck = false;
-
-  # Correct wrapper behavior, see https://github.com/NixOS/nixpkgs/issues/56943
-  # until https://github.com/NixOS/nixpkgs/pull/102613
-  strictDeps = false;
 
   # prevent double wrapping
   dontWrapGApps = true;

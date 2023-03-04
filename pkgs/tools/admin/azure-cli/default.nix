@@ -131,13 +131,13 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     colorama
     cryptography
     distro
-    Fabric
+    fabric
     jsmin
     knack
     mock
     paramiko
     pydocumentdb
-    PyGithub
+    pygithub
     pygments
     pynacl
     pyopenssl

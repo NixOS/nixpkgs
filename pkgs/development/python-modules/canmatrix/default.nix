@@ -11,7 +11,7 @@
 , lxml
 , xlwt
 , xlrd
-, XlsxWriter
+, xlsxwriter
 , pyyaml
 , pytestCheckHook
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     lxml
     xlwt
     xlrd
-    XlsxWriter
+    xlsxwriter
     pyyaml
   ] ++ lib.optional (pythonOlder "3.5") typing;
 

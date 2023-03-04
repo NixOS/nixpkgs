@@ -70,14 +70,10 @@ python3Packages.buildPythonApplication rec {
     requests
     semver
   ]
-  ++ lib.optional chromecastSupport PyChromecast
+  ++ lib.optional chromecastSupport pychromecast
   ++ lib.optional keyringSupport keyring
   ++ lib.optional serverSupport bottle
   ;
-
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   nativeCheckInputs = with python3Packages; [
     pytest

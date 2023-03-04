@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-venv";
-  version = "2.3.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jgosmann";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-x36OsTRzrN3NWrMpJ34ZHRsw4cQlo49AnJNr5kP8/aQ=";
+    hash = "sha256-GkUdIG+Mp2/POOPJZ/vtONYrd26GB44dxh9455aWZuU=";
   };
 
   nativeBuildInputs = [

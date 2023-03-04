@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-zusVOhZfJyUpftvrUSLZJl7mG5AEGMLGXMOojFnEsH0=";
+    hash = "sha256-zusVOhZfJyUpftvrUSLZJl7mG5AEGMLGXMOojFnEsH0=";
   };
 
   # Patch path to GLFW shared object

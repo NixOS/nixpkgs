@@ -48,10 +48,10 @@
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
+    commonmark
     yarl
     asyncpg
     ruamel-yaml
-    CommonMark
     python-magic
     protobuf3
     mautrix

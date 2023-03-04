@@ -1,21 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "decorator";
   version = "5.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330";
+    hash = "sha256-Y3mWIRA2tjhe+RQ15PriKYlHL51XH6uoknuoJTrLwzA=";
   };
 
+  pythonImportsCheck = [
+    "decorator"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "src/tests/test.py"
+  ];
+
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/decorator";
+    homepage = "https://github.com/micheles/decorator";
     description = "Better living through Python with decorators";
-    license = lib.licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ costrouc ];
   };
 }
