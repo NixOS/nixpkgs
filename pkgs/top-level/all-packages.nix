@@ -38336,6 +38336,8 @@ with pkgs;
 
   sticky = callPackage ../applications/misc/sticky { };
 
+  sticky-vixalien = callPackage ../applications/misc/sticky-vixalien { };
+
   stork = darwin.apple_sdk_11_0.callPackage ../applications/misc/stork {
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
