@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=${version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
   ];
 
   postInstall = ''
@@ -34,7 +34,10 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = sq; };
+    version = testers.testVersion {
+      package = sq;
+      version = "v${version}";
+    };
   };
 
   meta = with lib; {
