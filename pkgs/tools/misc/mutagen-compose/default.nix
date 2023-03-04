@@ -28,7 +28,6 @@ buildGoModule rec {
   tags = [ "mutagencompose" ] ++ lib.optional withSSPL "mutagensspl";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Compose with Mutagen integration";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen-compose/releases/tag/v${version}";
