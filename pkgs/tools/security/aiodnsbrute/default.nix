@@ -1,15 +1,12 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, aiodns
-, click
-, tqdm
-, uvloop
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "aiodnsbrute";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "blark";
@@ -18,19 +15,14 @@ buildPythonApplication rec {
     hash = "sha256-cEpk71VoQJZfKeAZummkk7yjtXKSMndgo0VleYiMlWE=";
   };
 
-  # https://github.com/blark/aiodnsbrute/pull/8
-  prePatch = ''
-    substituteInPlace setup.py --replace " 'asyncio', " ""
-  '';
-
-  propagatedBuildInputs = [
-     aiodns
-     click
-     tqdm
-     uvloop
+  propagatedBuildInputs = with python3.pkgs; [
+    aiodns
+    click
+    tqdm
+    uvloop
   ];
 
-  # no tests present
+  # Project no tests
   doCheck = false;
 
   pythonImportsCheck = [
