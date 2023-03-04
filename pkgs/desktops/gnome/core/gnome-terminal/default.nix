@@ -8,7 +8,7 @@
 , python3
 , libxml2
 , gnome
-, nix-update-script
+, gitUpdater
 , nautilus
 , glib
 , gtk4
@@ -91,7 +91,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      odd-unstable = true;
+    };
 
     tests = {
       test = nixosTests.terminal-emulators.gnome-terminal;
