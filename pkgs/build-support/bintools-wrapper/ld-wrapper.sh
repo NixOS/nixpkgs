@@ -232,8 +232,11 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
+#
+# Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
+# to SHA1.
 if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
-    extraAfter+=(--build-id)
+    extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 

@@ -171,7 +171,7 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
   # Turn a derivation into its outPath without a string context attached.
