@@ -1099,11 +1099,11 @@
     "vendorHash": "sha256-tltQNtTsPoT5CTrKM7vLDVkmmW2FTd6MBubfXZveGxI="
   },
   "tencentcloud": {
-    "hash": "sha256-aqi6lEGVj0PhIMwUfU/4lu5uGgbU4+R42UhINbHgMjY=",
+    "hash": "sha256-91efifPY9ErjqtNPzm3+XSy1Jy+eQs2znxYzez74J/0=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.79.12",
+    "rev": "v1.79.13",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
