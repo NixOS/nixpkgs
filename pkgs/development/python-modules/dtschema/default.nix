@@ -29,8 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
-    # all files have SPDX tags
-    license = with licenses; [ bsd2 gpl2 ];
+    license = with licenses; [ bsd2 /* or */ gpl2Only ];
     maintainers = with maintainers; [ sorki ];
   };
 }
