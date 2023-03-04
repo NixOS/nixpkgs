@@ -19349,9 +19349,7 @@ with pkgs;
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
-  ndn-tools = callPackage ../tools/networking/ndn-tools {
-    openssl = openssl_1_1;
-  };
+  ndn-tools = callPackage ../tools/networking/ndn-tools { };
 
   nfd = callPackage ../servers/nfd { };
 
