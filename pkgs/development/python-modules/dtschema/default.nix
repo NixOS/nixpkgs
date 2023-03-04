@@ -29,6 +29,10 @@ buildPythonPackage rec {
     rfc3987
   ];
 
+  pythonImportsCheck = [
+    "dtschema"
+  ];
+
   meta = with lib; {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
