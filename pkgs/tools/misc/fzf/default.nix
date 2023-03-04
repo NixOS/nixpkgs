@@ -67,11 +67,12 @@ buildGoModule rec {
 
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
 
-    # Install shell integrations
-    install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    # Install optional shell files that enable keybinds
+    install -D shell/key-bindings.* -t $out/share/fzf/
+
+    # Install shell completion files
+    installShellCompletion --bash --name fzf.bash shell/completion.bash
+    installShellCompletion --zsh --name _fzf shell/completion.zsh
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
