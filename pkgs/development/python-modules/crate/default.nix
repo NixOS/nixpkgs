@@ -3,7 +3,7 @@
 , buildPythonPackage
 , urllib3
 , geojson
-, isPy3k
+, pythonOlder
 , sqlalchemy
 , pytestCheckHook
 , pytz
@@ -13,7 +13,9 @@
 buildPythonPackage rec {
   pname = "crate";
   version = "0.30.0";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
