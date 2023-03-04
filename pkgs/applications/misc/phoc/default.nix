@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
     description = "Wayland compositor for mobile phones like the Librem 5";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }
