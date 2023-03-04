@@ -551,6 +551,11 @@ in
       # values.
       { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
         message = "This kernel does not support rpfilter"; }
+
+      {
+        assertion = cfg.autoLoadConntrackHelpers -> lib.versionOlder config.boot.kernelPackages.kernel.version "6";
+        message = "conntrack helper autoloading has been removed from kernel 6.0 and newer";
+      }
     ];
 
     systemd.services.firewall = {
