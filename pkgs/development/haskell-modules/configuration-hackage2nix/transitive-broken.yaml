@@ -1240,7 +1240,6 @@ dont-distribute-packages:
  - dingo-core
  - dingo-example
  - dingo-widgets
- - diohsc
  - diplomacy-server
  - direct-rocksdb
  - directory-contents
