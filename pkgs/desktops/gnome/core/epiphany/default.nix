@@ -31,25 +31,17 @@
 , libadwaita
 , buildPackages
 , withPantheon ? false
+, pantheon
 }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "44.beta";
+  version = "44.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "UccRkzgLjdoM7opWyLROzZLDi8fDStCGkP0rbXggApE=";
+    sha256 = "33X7U1yAQbzvhNZSWGfVEjw58MaIUDxGBhTNs3Tp+Sk=";
   };
-
-  patches = [
-    # Fix compatibility with latest WebKitGTK
-    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1281
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/epiphany/raw/a8965d48efad1cbd41f67f1468d6d10e4407cd57/f/webkitgtk-2.39.90.patch";
-      hash = "sha256-07eoyWL/z5MgbU+tlq5CJ8CdR+90qHM8EJPJIQ/5Y0M=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -89,11 +81,15 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk_6_0
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite7
   ];
 
   # Tests need an X display
   mesonFlags = [
     "-Dunit_tests=disabled"
+  ] ++ lib.optionals (!withPantheon) [
+    "-Dgranite=disabled"
   ];
 
   passthru = {
