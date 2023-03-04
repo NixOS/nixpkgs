@@ -25555,6 +25555,8 @@ with pkgs;
 
   tailscale = callPackage ../servers/tailscale { };
 
+  tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
+
   tailspin = callPackage ../tools/misc/tailspin { };
 
   thanos = callPackage ../servers/monitoring/thanos { };
