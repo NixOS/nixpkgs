@@ -1923,6 +1923,10 @@ with pkgs;
 
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
+  git-stack = callPackage ../applications/version-management/git-stack {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-standup = callPackage ../applications/version-management/git-standup { };
 
   git-stree = callPackage ../applications/version-management/git-stree { };
@@ -33549,7 +33553,7 @@ with pkgs;
     tesseract3
     tesseract4
     tesseract5;
-  tesseract = tesseract3;
+  tesseract = tesseract5;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
@@ -34907,9 +34911,7 @@ with pkgs;
 
   taro = callPackage ../applications/blockchains/taro { };
 
-  inherit (callPackages ../applications/blockchains/teos {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  })
+  inherit (callPackages ../applications/blockchains/teos { })
     teos
     teos-watchtower-plugin;
 
