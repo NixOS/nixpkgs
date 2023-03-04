@@ -22547,6 +22547,8 @@ with pkgs;
 
   marisa = callPackage ../development/libraries/marisa { };
 
+  mathgl = callPackage ../development/libraries/mathgl { };
+
   matio = callPackage ../development/libraries/matio { };
 
   matterhorn = haskell.lib.compose.justStaticExecutables haskellPackages.matterhorn;
