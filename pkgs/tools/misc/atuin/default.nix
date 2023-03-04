@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  nativeCheckInputs = [
+  nativeCheckInputs = lib.optionals xvfb-run.meta.available [
     xvfb-run
   ];
 
-  checkPhase = ''
+  checkPhase = lib.optionalString xvfb-run.meta.available ''
     runHook preCheck
     xvfb-run cargo test
     runHook postCheck

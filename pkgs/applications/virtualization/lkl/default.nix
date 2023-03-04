@@ -6,15 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lkl";
-  version = "2023-01-27";
+
+  # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
+  # Please verify `nix build -f nixos/release-combined.nix nixos.ova` works
+  # before attempting to update again.
+  # ref: https://github.com/NixOS/nixpkgs/pull/219434
+  version = "2022-08-08";
 
   outputs = [ "dev" "lib" "out" ];
 
   src = fetchFromGitHub {
     owner  = "lkl";
     repo   = "linux";
-    rev  = "b00f0fbcd5ae24636a9315fea3af32f411cf93be";
-    sha256 = "sha256-GZpnTVdcnS5uAUHsVre539+0Qlv36Fui0WGjOPwvWrE=";
+    rev  = "ffbb4aa67b3e0a64f6963f59385a200d08cb2d8b";
+    sha256 = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
   };
 
   nativeBuildInputs = [ bc bison flex python3 ];
@@ -72,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/lkl/linux/";
     platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin raitobezarius ];
   };
 }
