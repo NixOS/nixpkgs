@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g4FvkjBviI1m8zlc+GK/09dIqVkTQ2MqqK1Wkyu4qBc=";
+    sha256 = "sha256-jmVgrrbxkvzDkUYpNivz3jOOEEkr90iS5W4aY3L7Cug=";
   };
 
-  vendorSha256 = "sha256-l53MTxLY/uid+0U/eY96l0aBWKImST1gN2BARilh2K0=";
+  vendorHash = "sha256-8YmApeijOmWFfLu4UJTa1Ufn0RbaO4TKe7QHvjluMRg=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
@@ -63,6 +63,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
+    changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ anhduy ];
   };
