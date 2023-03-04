@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.14";
+  version = "2.5.16";
 
   disabled = pythonOlder "3.4";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ashishb";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GaPOYBQEGI40MutjjY8exABqGge2p/buk9v+NcZ5oJs=";
+    sha256 = "sha256-+CMXKg3LLxEXGcFQ9zSqy/1HPZS9MsQ1fZxClJ0Vrnw=";
   };
 
   propagatedBuildInputs = [
