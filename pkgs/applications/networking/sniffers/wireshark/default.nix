@@ -14,7 +14,18 @@
 , gnutls
 , libgcrypt
 , libgpg-error
-, geoip
+, libmaxminddb
+, libopus
+, bcg729
+, spandsp3
+, libkrb5
+, speexdsp
+, libsmi
+, lz4
+, snappy
+, zstd
+, minizip
+, sbc
 , openssl
 , lua5
 , python3
@@ -83,13 +94,23 @@ stdenv.mkDerivation {
     libgcrypt
     libgpg-error
     gnutls
-    geoip
+    libmaxminddb
+    libopus
+    bcg729
+    spandsp3
+    libkrb5
+    speexdsp
+    libsmi
+    lz4
+    snappy
+    zstd
+    minizip
     c-ares
     glib
     zlib
   ] ++ lib.optionals withQt (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
   ++ lib.optionals (withQt && stdenv.isLinux) [ qt5.qtwayland ]
-  ++ lib.optionals stdenv.isLinux [ libcap libnl ]
+  ++ lib.optionals stdenv.isLinux [ libcap libnl sbc ]
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
   ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
 
