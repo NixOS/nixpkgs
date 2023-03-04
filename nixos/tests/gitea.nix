@@ -1,6 +1,6 @@
 { system ? builtins.currentSystem,
   config ? {},
-  giteaPackage,
+  giteaPackage ? pkgs.gitea,
   pkgs ? import ../.. { inherit system config; }
 }:
 

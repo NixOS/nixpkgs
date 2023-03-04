@@ -118,7 +118,6 @@ in rec {
         "nixos.tests.ipv6"
         "nixos.tests.login"
         "nixos.tests.misc"
-        "nixos.tests.nat.firewall-conntrack"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
         "nixos.tests.nfs3.simple"

@@ -100,7 +100,6 @@ in rec {
         (onFullSupported "nixos.tests.login")
         (onFullSupported "nixos.tests.misc")
         (onFullSupported "nixos.tests.mutableUsers")
-        (onFullSupported "nixos.tests.nat.firewall-conntrack")
         (onFullSupported "nixos.tests.nat.firewall")
         (onFullSupported "nixos.tests.nat.standalone")
         (onFullSupported "nixos.tests.networking.scripted.bond")

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2022.0.0a9";
+  version = "2022.0.0a10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6XecPKuBhwtkmZrGozzO+VEryI5wwy9hlvWE1oV6ajk=";
+    hash = "sha256-IAFNEWpBRVAGcJNIV1bog9K2nANRw/qJfCJ9+Wu/yJc=";
   };
 
   nativeBuildInputs = [

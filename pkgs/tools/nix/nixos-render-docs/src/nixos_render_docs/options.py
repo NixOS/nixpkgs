@@ -1,23 +1,26 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
+import xml.sax.saxutils as xml
 
 from abc import abstractmethod
-from collections.abc import Mapping, MutableMapping, Sequence
-from markdown_it.utils import OptionsDict
+from collections.abc import Mapping, Sequence
 from markdown_it.token import Token
-from typing import Any, Optional
+from typing import Any, Generic, Optional
 from urllib.parse import quote
-from xml.sax.saxutils import escape, quoteattr
 
 import markdown_it
 
+from . import md
 from . import parallel
 from .asciidoc import AsciiDocRenderer, asciidoc_escape
 from .commonmark import CommonMarkRenderer
 from .docbook import DocBookRenderer, make_xml_id
+from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
+from .manual_structure import XrefTarget
 from .md import Converter, md_escape, md_make_code
 from .types import OptionLoc, Option, RenderedOption
 
@@ -30,15 +33,13 @@ def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
         return None
     return option[key] # type: ignore[return-value]
 
-class BaseConverter(Converter):
+class BaseConverter(Converter[md.TR], Generic[md.TR]):
     __option_block_separator__: str
 
     _options: dict[str, RenderedOption]
 
-    def __init__(self, manpage_urls: Mapping[str, str],
-                 revision: str,
-                 markdown_by_default: bool):
-        super().__init__(manpage_urls)
+    def __init__(self, revision: str, markdown_by_default: bool):
+        super().__init__()
         self._options = {}
         self._revision = revision
         self._markdown_by_default = markdown_by_default
@@ -153,7 +154,7 @@ class BaseConverter(Converter):
     # since it's good enough so far.
     @classmethod
     @abstractmethod
-    def _parallel_render_init_worker(cls, a: Any) -> BaseConverter: raise NotImplementedError()
+    def _parallel_render_init_worker(cls, a: Any) -> BaseConverter[md.TR]: raise NotImplementedError()
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         try:
@@ -162,7 +163,7 @@ class BaseConverter(Converter):
             raise Exception(f"Failed to render option {name}") from e
 
     @classmethod
-    def _parallel_render_step(cls, s: BaseConverter, a: Any) -> RenderedOption:
+    def _parallel_render_step(cls, s: BaseConverter[md.TR], a: Any) -> RenderedOption:
         return s._render_option(*a)
 
     def add_options(self, options: dict[str, Any]) -> None:
@@ -175,32 +176,25 @@ class BaseConverter(Converter):
     def finalize(self) -> str: raise NotImplementedError()
 
 class OptionDocsRestrictions:
-    def heading_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def heading_close(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                      env: MutableMapping[str, Any]) -> str:
+    def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                        env: MutableMapping[str, Any]) -> str:
+    def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
-    def example_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                     env: MutableMapping[str, Any]) -> str:
+    def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
 
 class OptionsDocBookRenderer(OptionDocsRestrictions, DocBookRenderer):
     # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
-    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                          env: MutableMapping[str, Any]) -> str:
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         token.meta['compact'] = False
-        return super().ordered_list_open(token, tokens, i, options, env)
-    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int, options: OptionsDict,
-                         env: MutableMapping[str, Any]) -> str:
+        return super().ordered_list_open(token, tokens, i)
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         token.meta['compact'] = False
-        return super().bullet_list_open(token, tokens, i, options, env)
+        return super().bullet_list_open(token, tokens, i)
 
-class DocBookConverter(BaseConverter):
-    __renderer__ = OptionsDocBookRenderer
+class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
     __option_block_separator__ = ""
 
     def __init__(self, manpage_urls: Mapping[str, str],
@@ -209,13 +203,14 @@ class DocBookConverter(BaseConverter):
                  document_type: str,
                  varlist_id: str,
                  id_prefix: str):
-        super().__init__(manpage_urls, revision, markdown_by_default)
+        super().__init__(revision, markdown_by_default)
+        self._renderer = OptionsDocBookRenderer(manpage_urls)
         self._document_type = document_type
         self._varlist_id = varlist_id
         self._id_prefix = id_prefix
 
     def _parallel_render_prepare(self) -> Any:
-        return (self._manpage_urls, self._revision, self._markdown_by_default, self._document_type,
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default, self._document_type,
                 self._varlist_id, self._id_prefix)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> DocBookConverter:
@@ -248,10 +243,10 @@ class DocBookConverter(BaseConverter):
 
     def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
         if href is not None:
-            href = " xlink:href=" + quoteattr(href)
+            href = " xlink:href=" + xml.quoteattr(href)
         return [
             f"<member><filename{href}>",
-            escape(name),
+            xml.escape(name),
             "</filename></member>"
         ]
 
@@ -281,8 +276,8 @@ class DocBookConverter(BaseConverter):
             result += [
                 "<varlistentry>",
                 # NOTE adding extra spaces here introduces spaces into xref link expansions
-                (f"<term xlink:href={quoteattr('#' + id)} xml:id={quoteattr(id)}>" +
-                 f"<option>{escape(name)}</option></term>"),
+                (f"<term xlink:href={xml.quoteattr('#' + id)} xml:id={xml.quoteattr(id)}>" +
+                 f"<option>{xml.escape(name)}</option></term>"),
                 "<listitem>"
             ]
             result += opt.lines
@@ -300,11 +295,7 @@ class DocBookConverter(BaseConverter):
 class OptionsManpageRenderer(OptionDocsRestrictions, ManpageRenderer):
     pass
 
-class ManpageConverter(BaseConverter):
-    def __renderer__(self, manpage_urls: Mapping[str, str],
-                     parser: Optional[markdown_it.MarkdownIt] = None) -> OptionsManpageRenderer:
-        return OptionsManpageRenderer(manpage_urls, self._options_by_id, parser)
-
+class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     __option_block_separator__ = ".sp"
 
     _options_by_id: dict[str, str]
@@ -314,8 +305,9 @@ class ManpageConverter(BaseConverter):
                  *,
                  # only for parallel rendering
                  _options_by_id: Optional[dict[str, str]] = None):
+        super().__init__(revision, markdown_by_default)
         self._options_by_id = _options_by_id or {}
-        super().__init__({}, revision, markdown_by_default)
+        self._renderer = OptionsManpageRenderer({}, self._options_by_id)
 
     def _parallel_render_prepare(self) -> Any:
         return ((self._revision, self._markdown_by_default), { '_options_by_id': self._options_by_id })
@@ -324,10 +316,9 @@ class ManpageConverter(BaseConverter):
         return cls(*a[0], **a[1])
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
-        assert isinstance(self._md.renderer, OptionsManpageRenderer)
-        links = self._md.renderer.link_footnotes = []
+        links = self._renderer.link_footnotes = []
         result = super()._render_option(name, option)
-        self._md.renderer.link_footnotes = None
+        self._renderer.link_footnotes = None
         return result._replace(links=links)
 
     def add_options(self, options: dict[str, Any]) -> None:
@@ -339,12 +330,11 @@ class ManpageConverter(BaseConverter):
         if lit := option_is(option, key, 'literalDocBook'):
             raise RuntimeError("can't render manpages in the presence of docbook")
         else:
-            assert isinstance(self._md.renderer, OptionsManpageRenderer)
             try:
-                self._md.renderer.inline_code_is_quoted = False
+                self._renderer.inline_code_is_quoted = False
                 return super()._render_code(option, key)
             finally:
-                self._md.renderer.inline_code_is_quoted = True
+                self._renderer.inline_code_is_quoted = True
 
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         if isinstance(desc, str) and not self._markdown_by_default:
@@ -428,12 +418,15 @@ class ManpageConverter(BaseConverter):
 class OptionsCommonMarkRenderer(OptionDocsRestrictions, CommonMarkRenderer):
     pass
 
-class CommonMarkConverter(BaseConverter):
-    __renderer__ = OptionsCommonMarkRenderer
+class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     __option_block_separator__ = ""
 
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool):
+        super().__init__(revision, markdown_by_default)
+        self._renderer = OptionsCommonMarkRenderer(manpage_urls)
+
     def _parallel_render_prepare(self) -> Any:
-        return (self._manpage_urls, self._revision, self._markdown_by_default)
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> CommonMarkConverter:
         return cls(*a)
@@ -481,12 +474,15 @@ class CommonMarkConverter(BaseConverter):
 class OptionsAsciiDocRenderer(OptionDocsRestrictions, AsciiDocRenderer):
     pass
 
-class AsciiDocConverter(BaseConverter):
-    __renderer__ = AsciiDocRenderer
+class AsciiDocConverter(BaseConverter[OptionsAsciiDocRenderer]):
     __option_block_separator__ = ""
 
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool):
+        super().__init__(revision, markdown_by_default)
+        self._renderer = OptionsAsciiDocRenderer(manpage_urls)
+
     def _parallel_render_prepare(self) -> Any:
-        return (self._manpage_urls, self._revision, self._markdown_by_default)
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> AsciiDocConverter:
         return cls(*a)
@@ -528,6 +524,109 @@ class AsciiDocConverter(BaseConverter):
             result.append(f"== {asciidoc_escape(name)}\n")
             result += opt.lines
             result.append("\n\n")
+
+        return "\n".join(result)
+
+class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
+    # TODO docbook compat. must be removed together with the matching docbook handlers.
+    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        token.meta['compact'] = False
+        return super().ordered_list_open(token, tokens, i)
+    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        token.meta['compact'] = False
+        return super().bullet_list_open(token, tokens, i)
+    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # TODO use token.info. docbook doesn't so we can't yet.
+        return f'<pre class="programlisting">{html.escape(token.content)}</pre>'
+
+class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
+    __option_block_separator__ = ""
+
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool,
+                 varlist_id: str, id_prefix: str, xref_targets: Mapping[str, XrefTarget]):
+        super().__init__(revision, markdown_by_default)
+        self._xref_targets = xref_targets
+        self._varlist_id = varlist_id
+        self._id_prefix = id_prefix
+        self._renderer = OptionsHTMLRenderer(manpage_urls, self._xref_targets)
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default,
+                self._varlist_id, self._id_prefix, self._xref_targets)
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> HTMLConverter:
+        return cls(*a)
+
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_description(desc)
+
+    def _related_packages_header(self) -> list[str]:
+        return [
+            '<p><span class="emphasis"><em>Related packages:</em></span></p>',
+        ]
+
+    def _decl_def_header(self, header: str) -> list[str]:
+        return [
+            f'<p><span class="emphasis"><em>{header}:</em></span></p>',
+            '<table border="0" summary="Simple list" class="simplelist">'
+        ]
+
+    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
+        if href is not None:
+            href = f' href="{html.escape(href, True)}"'
+        return [
+            "<tr><td>",
+            f'<code class="filename"><a class="filename" {href} target="_top">',
+            f'{html.escape(name)}',
+            '</a></code>',
+            "</td></tr>"
+        ]
+
+    def _decl_def_footer(self) -> list[str]:
+        return [ "</table>" ]
+
+    def finalize(self) -> str:
+        result = []
+
+        result += [
+            '<div class="variablelist">',
+            f'<a id="{html.escape(self._varlist_id, True)}"></a>',
+            ' <dl class="variablelist">',
+        ]
+
+        for (name, opt) in self._sorted_options():
+            id = make_xml_id(self._id_prefix + name)
+            target = self._xref_targets[id]
+            result += [
+                '<dt>',
+                ' <span class="term">',
+                # docbook compat, these could be one tag
+                f' <a id="{html.escape(id, True)}"></a><a class="term" href="{target.href()}">'
+                # no spaces here (and string merging) for docbook output compat
+                f'<code class="option">{html.escape(name)}</code>',
+                '  </a>',
+                ' </span>',
+                '</dt>',
+                '<dd>',
+            ]
+            result += opt.lines
+            result += [
+                "</dd>",
+            ]
+
+        result += [
+            " </dl>",
+            "</div>"
+        ]
 
         return "\n".join(result)
 

@@ -34,6 +34,8 @@ rec {
     unsafeDiscardStringContext
     ;
 
+  asciiTable = import ./ascii-table.nix;
+
   /* Concatenate a list of strings.
 
     Type: concatStrings :: [string] -> string
@@ -327,9 +329,7 @@ rec {
        => 40
 
   */
-  charToInt = let
-    table = import ./ascii-table.nix;
-  in c: builtins.getAttr c table;
+  charToInt = c: builtins.getAttr c asciiTable;
 
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
@@ -354,6 +354,21 @@ rec {
 
   */
   escapeC = list: replaceStrings list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
+
+  /* Escape the string so it can be safely placed inside a URL
+     query.
+
+     Type: escapeURL :: string -> string
+
+     Example:
+       escapeURL "foo/bar baz"
+       => "foo%2Fbar%20baz"
+  */
+  escapeURL = let
+    unreserved = [ "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "-" "_" "." "~" ];
+    toEscape = builtins.removeAttrs asciiTable unreserved;
+  in
+    replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
   /* Quote string to be used safely within the Bourne shell.
 
