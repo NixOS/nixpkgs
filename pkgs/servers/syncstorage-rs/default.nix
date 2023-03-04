@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-eFrrZ/+8OsmIfCEoXPAKqVkZlgN8sfXueJQvQN8VCB0=";
   };
 
@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Mozilla Sync Storage built with Rust";
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
+    changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
     platforms = lib.platforms.linux;
