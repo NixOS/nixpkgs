@@ -206,6 +206,12 @@
     githubId = 22131756;
     name = "Aaqa Ishtyaq";
   };
+  aaronarinder = {
+    email = "aaronarinder@gmail.com";
+    github = "aaronArinder";
+    githubId = 26738844;
+    name = "Aaron Arinder";
+  };
   aaronjanse = {
     email = "aaron@ajanse.me";
     matrix = "@aaronjanse:matrix.org";
