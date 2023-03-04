@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "44.beta";
+  version = "44.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wMU9+fR/cV5VPZgUyVo/9RyhMOcKjSgJInAtpjy7kGM=";
+    sha256 = "sha256-n1tx0nqFC0c6sjzv+SHafeEIOqKyBwPZtM8bvE8dO3s=";
   };
 
   nativeBuildInputs = [
