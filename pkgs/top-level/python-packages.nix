@@ -1328,6 +1328,8 @@ self: super: with self; {
 
   blis = callPackage ../development/python-modules/blis { };
 
+  blobfile = callPackage ../development/python-modules/blobfile { };
+
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
