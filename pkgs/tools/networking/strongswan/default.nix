@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+    (fetchpatch {
+      # NB: this patch is included in version 5.9.10
+      name = "CVE-2023-26463.patch";
+      url = "https://download.strongswan.org/security/CVE-2023-26463/strongswan-5.9.8-5.9.9_tls_auth_bypass_exp_pointer.patch";
+      hash = "sha256-FrD7fXS8jRkdA99qhDhHo70AiBoAhuTJnw2a4WugeJg=";
+    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''
