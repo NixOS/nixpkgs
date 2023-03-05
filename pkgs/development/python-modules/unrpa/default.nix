@@ -6,14 +6,21 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
+  format = "setuptools";
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "0yl4qdwp3in170ks98qnldqz3r2iyzil5g1775ccg98qkh95s724";
   };
 
-  propagatedBuildInputs = [ uncompyle6 ];
+  passthru.optional-dependencies = {
+    ZiX = [ uncompyle6 ];
+  };
 
   pythonImportsCheck = [ "unrpa" ];
+
+  # upstream has no unit tests
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/Lattyware/unrpa";
