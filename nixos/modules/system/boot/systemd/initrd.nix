@@ -497,7 +497,7 @@ in {
               case $o in
                   init=*)
                       IFS== read -r -a initParam <<< "$o"
-                      closure="$(dirname "''${initParam[1]}")"
+                      closure="''${initParam[1]}"
                       ;;
               esac
           done
@@ -507,6 +507,13 @@ in {
             echo 'No init= parameter on the kernel command line' >&2
             exit 1
           fi
+
+          # Resolve symlinks in the init parameter. We need this for some boot loaders
+          # (e.g. boot.loader.generationsDir).
+          closure="$(chroot /sysroot ${pkgs.coreutils}/bin/realpath "$closure")"
+
+          # Assume the directory containing the init script is the closure.
+          closure="$(dirname "$closure")"
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
