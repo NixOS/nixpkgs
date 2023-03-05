@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
-  version = "1.7.15";
+  version = "1.7.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mpenning";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oGvwtaIgVvvW8Oq/dZN+Zj/PESpqWALFYPia9yeilco=";
+    hash = "sha256-jWInSqvMuwYJTPqHnrYWhMH/HvaQc2dFRqQu4RGFr28=";
   };
 
   postPatch = ''
