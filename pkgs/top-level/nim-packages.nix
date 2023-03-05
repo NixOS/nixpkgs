@@ -39,6 +39,8 @@ lib.makeScope newScope (self:
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
+    illwill = callPackage ../development/nim-packages/illwill { };
+
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
