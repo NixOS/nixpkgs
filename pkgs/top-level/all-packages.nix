@@ -5405,6 +5405,8 @@ with pkgs;
 
   ossutil = callPackage ../tools/admin/ossutil {};
 
+  ospd-openvas = callPackage ../tools/security/ospd-openvas {};
+
   osv-detector = callPackage ../tools/security/osv-detector {};
 
   osv-scanner = callPackage ../tools/security/osv-scanner {};
