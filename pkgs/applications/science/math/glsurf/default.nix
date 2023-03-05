@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   ] ++ (with ocamlPackages; [
     camlp4
     lablgl
-    camlimages_4_2_4
+    camlimages
+    num
   ]);
 
   postPatch = ''
