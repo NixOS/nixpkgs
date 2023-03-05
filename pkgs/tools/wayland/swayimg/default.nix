@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
