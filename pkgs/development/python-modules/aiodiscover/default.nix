@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-AZ6AqobhgMRCrCqtTuCfJjmKZjFlyIIxPqMtHHH9aBA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AZ6AqobhgMRCrCqtTuCfJjmKZjFlyIIxPqMtHHH9aBA=";
   };
 
   propagatedBuildInputs = [
@@ -35,8 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' "" \
-      --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
+      --replace '"pytest-runner>=5.2",' ""
   '';
 
   nativeCheckInputs = [
@@ -56,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
+    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
