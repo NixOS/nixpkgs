@@ -12250,6 +12250,12 @@
     githubId = 314564;
     name = "Ryan Lahfa";
   };
+  ralismark = {
+    email = "nixpkgs@ralismark.xyz";
+    github = "ralismark";
+    githubId = 13449732;
+    name = "Temmie";
+  };
   raphaelr = {
     email = "raphael-git@tapesoftware.net";
     matrix = "@raphi:tapesoftware.net";

@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     description = "2D action/rpg space game";
     homepage = "http://www.naev.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = with lib.maintainers; [ ralismark ];
     platforms = lib.platforms.linux;
   };
 }
