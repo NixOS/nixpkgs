@@ -13,6 +13,11 @@
 , enablePlugin
 , enableShared
 
+# GCC 4.6 started to default to -fno-omit-frame-pointer on -O1 and higher
+# Set enableFramePointer to true in order to disable passing
+# -fomit-frame-pointer by default
+, enableFramePointer ? false
+
 , langC
 , langCC
 , langD ? false
@@ -166,6 +171,8 @@ let
           )
       }"
     ]
+
+    ++ lib.optional enableFramePointer "--enable-frame-pointer"
 
     ++ (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]
