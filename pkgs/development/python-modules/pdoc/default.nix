@@ -46,10 +46,15 @@ buildPythonPackage rec {
     # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
     # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
     "html-demopackage_dir"
+    # snapshot tests mismatch with latest pygments version
+    "test_snapshots"
   ];
+
   pytestFlagsArray = [
     ''-m "not slow"'' # skip tests marked slow
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pdoc" ];
 
