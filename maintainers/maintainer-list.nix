@@ -13292,6 +13292,12 @@
     githubId = 5104601;
     name = "schnusch";
   };
+  schrottkatze = {
+    email = "contact-nixpkgs@schrottkatze.de";
+    github = "obsidianical";
+    matrix = "@obsidianical:matrix.org";
+    name = "Schrottkatze";
+  };
   sciencentistguy = {
     email = "jamie@quigley.xyz";
     name = "Jamie Quigley";
