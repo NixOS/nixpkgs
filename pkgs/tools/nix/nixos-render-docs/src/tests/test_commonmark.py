@@ -1,4 +1,4 @@
-import nixos_render_docs
+import nixos_render_docs as nrd
 
 from sample_md import sample1
 
@@ -6,8 +6,10 @@ from typing import Mapping, Optional
 
 import markdown_it
 
-class Converter(nixos_render_docs.md.Converter):
-    __renderer__ = nixos_render_docs.commonmark.CommonMarkRenderer
+class Converter(nrd.md.Converter[nrd.commonmark.CommonMarkRenderer]):
+    def __init__(self, manpage_urls: Mapping[str, str]):
+        super().__init__()
+        self._renderer = nrd.commonmark.CommonMarkRenderer(manpage_urls)
 
 # NOTE: in these tests we represent trailing spaces by ` ` and replace them with real space later,
 # since a number of editors will strip trailing whitespace on save and that would break the tests.

@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  version = "5.4.2";
+  version = "5.4.3";
 
   outputs = [
     "out"

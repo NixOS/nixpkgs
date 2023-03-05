@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
   version = "2.5.1";
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "cxx" "doc" "dev" ];
 
   src = fetchurl {
     url = "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-${version}.tar.gz";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
+
+  postInstall = ''
+    mkdir -p $cxx/lib
+    mv $out/lib/*c++* $cxx/lib
+
+    mkdir -p $dev/nix-support
+    echo -n $cxx >> $dev/nix-support/propagated-build-inputs
+  '';
 
   meta = {
     description = "Library for arbitrary precision decimal floating point arithmetic";
