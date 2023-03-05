@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
       --fish $out/share/doc/task/scripts/fish/task.fish
     rm -r $out/share/doc/task/scripts/bash
     rm -r $out/share/doc/task/scripts/fish
+    # Install vim and neovim plugin
+    mkdir -p $out/share/vim-plugins $out/share/nvim/site
+    mv $out/share/doc/task/scripts/vim $out/share/vim-plugins/task
+    ln -s $out/share/vim-plugins/task $out/share/nvim/site/task
   '';
 
   meta = with lib; {
