@@ -24,13 +24,13 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.0.20220523";
-    sha256 = "sha256-RyUZj+tpJSYhyoK+E98CTIoHwXwBdB1YHVnO5821exo=";
+    rev = "v0.1.0";
+    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  version = "0.0.3";
+  version = "0.1.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-ehWLC9PDDcD+muUPruzp8UvNddJBdrmW6gFxKVouY3c=";
+    hash = "sha256-7H5Ah4zo+wLKd0WoKoOgtIm7HcUSw8PTf/KzBlY75oc=";
     fetchSubmodules = true;
   };
 
