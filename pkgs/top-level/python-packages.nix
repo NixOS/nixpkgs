@@ -9841,6 +9841,8 @@ self: super: with self; {
     radicale = pkgs.radicale.override { python3 = python; };
   };
 
+  radian = callPackage ../development/python-modules/radian { };
+
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
   radios = callPackage ../development/python-modules/radios { };
