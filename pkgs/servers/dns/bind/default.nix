@@ -4,6 +4,7 @@
 , enablePython ? false, python3
 , enableGSSAPI ? true, libkrb5
 , buildPackages, nixosTests
+, cmocka, tzdata
 }:
 
 stdenv.mkDerivation rec {
@@ -59,8 +60,18 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  doCheck = false; # requires root and the net
   enableParallelBuilding = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
+  checkTarget = "unit";
+  checkInputs = [
+    cmocka
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    tzdata
+  ];
+  preCheck = lib.optionalString stdenv.hostPlatform.isMusl ''
+    # musl doesn't respect TZDIR, skip timezone-related tests
+    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  '';
 
   passthru.tests = {
     inherit (nixosTests) bind;
