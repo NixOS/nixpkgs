@@ -2,18 +2,14 @@
 
 (if stdenv.isDarwin then clang14Stdenv else stdenv).mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20230223-1";
+  version = "20230304-3";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    hash = "sha256-tBjMg+aYXmIhS2tw+D5NkBieWKiWwEVBWs6LA3rFaQQ=";
+    hash = "sha256-y6ApImUkS25kUPih/hl1ngLAkeBAX+MhJ6XuiVU9aZQ=";
   };
-
-  patches = [
-    ./fix-build-darwin-clang14.patch
-  ];
 
   postPatch = ''
     patchShebangs BUILDSCRIPT_MULTIPROC.bash44
