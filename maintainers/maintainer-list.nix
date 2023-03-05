@@ -9389,6 +9389,13 @@
     githubId = 1187050;
     name = "Maximilian Huber";
   };
+  maximiliangaedig = {
+    email = "mg@maximiliangaedig.com";
+    github = "MaximilianGaedig";
+    githubId = 38767445;
+    name = "Maximilian Gaedig";
+    matrix = "@mg:maximiliangaedig.com";
+  };
   maximsmol = {
     email = "maximsmol@gmail.com";
     github = "maximsmol";
