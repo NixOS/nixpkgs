@@ -1,18 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, unstableGitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "libutp";
-  version = "unstable-2017-01-02";
+  version = "unstable-2023-03-05";
 
   src = fetchFromGitHub {
-    # Use transmission fork from post-3.3-transmission branch
+    # Use transmission fork from post-3.4-transmission branch
     owner = "transmission";
-    repo = pname;
-    rev = "fda9f4b3db97ccb243fcbed2ce280eb4135d705b";
-    sha256 = "CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
+    repo = "libutp";
+    rev = "9cb9f9c4f0073d78b08d6542cebaea6564ecadfe";
+    sha256 = "dpbX1h/gpuVIAXC4hwwuRwQDJ0pwVVEsgemOVN0Dv9Q=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      branch = "post-3.4-transmission";
+    };
+  };
 
   meta = with lib; {
     description = "uTorrent Transport Protocol library";
