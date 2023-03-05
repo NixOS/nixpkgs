@@ -13034,7 +13034,7 @@ with pkgs;
 
   unrtf = callPackage ../tools/text/unrtf { };
 
-  unrpa = with python38Packages; toPythonApplication unrpa;
+  unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
