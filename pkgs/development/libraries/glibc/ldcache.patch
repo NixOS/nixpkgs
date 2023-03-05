@@ -1,8 +1,8 @@
 diff --git a/elf/dl-load.c b/elf/dl-load.c
-index 5b0ff41ee1..fc507542fb 100644
+index 5b0ff41ee1..f34758611d 100644
 --- a/elf/dl-load.c
 +++ b/elf/dl-load.c
-@@ -1999,6 +1999,80 @@ open_path (const char *name, size_t namelen, int mode,
+@@ -1999,6 +1999,62 @@ open_path (const char *name, size_t namelen, int mode,
    return -1;
  }
  
@@ -10,19 +10,11 @@ index 5b0ff41ee1..fc507542fb 100644
 +_dl_find_nixos_cache(struct link_map *loader)
 +{
 +  const ElfW(Phdr) *phdr = loader->l_phdr, *pend = phdr + loader->l_phnum;
-+  if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+    _dl_debug_printf("find nixos cache %lx -> %lx\n", (long) phdr, (long) pend);
-+  for (; phdr != pend; phdr++) {
-+    if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+      _dl_debug_printf("  try phdr %lx\n", (long) phdr);
++  for (; phdr != pend && loader->l_nixos_resolve_cache == NULL; phdr++) {
 +    if (phdr->p_type != PT_NOTE) continue;
 +    const ElfW(Nhdr) *nhdr = (const void *) (phdr->p_vaddr + loader->l_addr);
 +    size_t size = phdr->p_memsz;
-+    if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+      _dl_debug_printf("    found notes %lx size %lx\n", (long) nhdr, (long) size);
 +    while (size >= sizeof *nhdr) {
-+      if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+        _dl_debug_printf("      check note namesz %x descsz %x\n", nhdr->n_namesz, nhdr->n_descsz);
 +      const size_t noteSize = sizeof *nhdr + ALIGN_UP(nhdr->n_namesz, 4) + ALIGN_UP(nhdr->n_descsz, 4);
 +      if (size < noteSize) break;
 +      size -= noteSize;
@@ -34,73 +26,83 @@ index 5b0ff41ee1..fc507542fb 100644
 +          && nhdr->n_descsz > 2
 +          && desc[nhdr->n_descsz - 2] == '\0'
 +          && desc[nhdr->n_descsz - 1] == '\0') {
-+        if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+          _dl_debug_printf("      found!\n");
 +        return desc;
 +      }
 +      nhdr = (const void *) nhdr + noteSize;
 +    }
 +  }
 +
-+  return NULL;
++  return (void *) -1;
 +}
 +
 +static int
 +_dl_lookup_nixos_cache(struct link_map *loader, const char *name, char **realname)
 +{
-+  if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+    _dl_debug_printf("lookup from cache %s\n", name);
-+  const char *entries = _dl_find_nixos_cache(loader);
-+  if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+    _dl_debug_printf("  cache is %lx\n", (long) entries);
-+  if (entries == NULL)
++  if (loader->l_nixos_resolve_cache == NULL)
++    loader->l_nixos_resolve_cache = _dl_find_nixos_cache(loader);
++
++  if (loader->l_nixos_resolve_cache == (void *) -1)
 +    return 0;
 +
++  const char *entries = loader->l_nixos_resolve_cache;
 +  while (entries[0] != '\0') {
 +    const char *ename = entries;
 +    const char *epath = ename + strlen(ename) + 1;
 +    if (epath[0] == '\0') {
-+      if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+        _dl_debug_printf("    broken cache\n");
++      loader->l_nixos_resolve_cache = (void *) -1;
 +      return 0;
 +    }
-+    if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+      _dl_debug_printf("    match %s\n", ename);
 +    if (strcmp(name, ename) == 0) {
-+      if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+        _dl_debug_printf("    found: %s\n", epath);
 +      *realname = strdup(epath);
 +      return *realname != NULL;
 +    }
 +    entries = epath + strlen(epath) + 1;
 +  }
 +
-+  if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
-+    _dl_debug_printf("  not found\n");
 +  return 0;
 +}
 +
  /* Map in the shared object file NAME.  */
  
  struct link_map *
-@@ -2142,6 +2216,22 @@ _dl_map_object (struct link_map *loader, const char *name,
+@@ -2009,6 +2065,7 @@ _dl_map_object (struct link_map *loader, const char *name,
+   const char *origname = NULL;
+   char *realname;
+   char *name_copy;
++  char *rescache;
+   struct link_map *l;
+   struct filebuf fb;
+ 
+@@ -2142,6 +2199,34 @@ _dl_map_object (struct link_map *loader, const char *name,
  			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
  			LA_SER_LIBPATH, &found_other_class);
  
-+      /* look at nixos resolution cache notes, if available. we'll only
-+         check the loader itself (no fallbacks) because this is only a
-+         cache, and on some architectures (eg armv7) neither loader nor
-+         the GL(dl_ns)[x]._ns_loaded fallback are set during initial
-+         load when running ld.so explicitly. loader *is* set when running
-+         normally, so we'll always hit the cache if it exists. */
-+      if (loader != NULL
-+          && fd == -1
-+          && _dl_lookup_nixos_cache(loader, name, &realname)) {
-+        fd = open_verify (realname, fd, &fb, loader,
-+                          LA_SER_RUNPATH, mode, &found_other_class,
-+                          false);
-+        if (fd == -1)
-+          free(realname);
++      /* try the runpath resolution cache. */
++      if (fd == -1 && _dl_lookup_nixos_cache(loader, name, &rescache)) {
++	char* tmp = rescache, *iter;
++	while ((iter = strsep(&tmp, ":"))) {
++	  if (iter[0] == '?') {
++	    struct r_search_path_struct sp;
++	    if (decompose_rpath(&sp, iter + 1, loader, "RESCACHE")) {
++	      fd = open_path (name, namelen, mode,
++			      &sp, &realname, &fb, loader,
++			      LA_SER_RUNPATH, &found_other_class);
++	      if (sp.dirs != (void*) -1)
++		free(sp.dirs);
++	    }
++	  } else {
++	    realname = strdup(iter + 1);
++	    fd = open_verify (realname, fd,
++			      &fb, loader ?: GL(dl_ns)[nsid]._ns_loaded,
++			      LA_SER_RUNPATH, mode, &found_other_class,
++			      false);
++	    if (fd == -1)
++	      free(realname);
++	  }
++	  if (fd != -1)
++	    break;
++	}
++	free(rescache);
 +      }
 +
        /* Look at the RUNPATH information for this binary.  */
@@ -134,3 +136,16 @@ index 0735f6b579..7b9b74a4bc 100644
  /* Defined note types for GNU systems.  */
  
  /* ABI information.  The descriptor consists of words:
+diff --git a/include/link.h b/include/link.h
+index bef2820b40..b3dea3c5b1 100644
+--- a/include/link.h
++++ b/include/link.h
+@@ -349,6 +349,8 @@ struct link_map
+     size_t l_relro_size;
+ 
+     unsigned long long int l_serial;
++
++    const char *l_nixos_resolve_cache;
+   };
+ 
+ #include <dl-relocate-ld.h>

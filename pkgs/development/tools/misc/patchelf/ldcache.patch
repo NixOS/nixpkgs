@@ -28,7 +28,7 @@ index 702f2e6..75c9020 100644
  
  /* ABI information.  The descriptor consists of words:
 diff --git a/src/patchelf.cc b/src/patchelf.cc
-index 49accae..eca68bb 100644
+index 49accae..8d7ff52 100644
 --- a/src/patchelf.cc
 +++ b/src/patchelf.cc
 @@ -20,6 +20,7 @@
@@ -91,7 +91,7 @@ index 49accae..eca68bb 100644
      if (!noSort) {
          sortPhdrs();
      }
-@@ -1619,6 +1640,160 @@ void ElfFile<ElfFileParamNames>::addNeeded(const std::set<std::string> & libs)
+@@ -1619,6 +1640,166 @@ void ElfFile<ElfFileParamNames>::addNeeded(const std::set<std::string> & libs)
      this->rewriteSections();
  }
  
@@ -122,15 +122,21 @@ index 49accae..eca68bb 100644
 +    // TODO remove old phdr
 +    // TODO nuke/rebuild rescache when changing rpath
 +    for (const auto &dir : runpath) {
-+        // ignore directories with glibc-hwcaps subdirs. they're rare enough to
++        // treat everything that could be a variable as a raw path element for simplicity.
++        // this is correct in the vast majority of cases, in the others it just optimizes
++        // less.
++        const auto hasVar = dir.find("$") != std::string::npos;
++
++        // bail on directories with glibc-hwcaps subdirs. they're rare enough to
 +        // not be worth handling, and fussy enough to stay away from for good measure.
-+        if (access((dir + "/glibc-hwcaps").c_str(), F_OK) == 0)
-+            continue;
++        const auto hasHwcaps = access((dir + "/glibc-hwcaps").c_str(), F_OK) == 0;
++
 +        for (const auto &dep : needed) {
-+            if (cache.count(dep) > 0)
-+                continue;
-+            if (access((dir + "/" + dep).c_str(), R_OK) == 0) {
-+                cache.emplace(dep, dir + "/" + dep);
++            const auto dpath = dir + "/" + dep;
++            if (hasVar || hasHwcaps || access(dpath.c_str(), R_OK) == 0) {
++                auto& cpath = cache[dep];
++                if (!cpath.empty()) cpath += ':';
++                cpath += hasVar || hasHwcaps ? "?" + dir : "=" + dpath;
 +            }
 +        }
 +    }
@@ -252,7 +258,7 @@ index 49accae..eca68bb 100644
  template<ElfFileParams>
  void ElfFile<ElfFileParamNames>::printNeededLibs() // const
  {
-@@ -1749,6 +1924,7 @@ static bool removeRPath = false;
+@@ -1749,6 +1930,7 @@ static bool removeRPath = false;
  static bool setRPath = false;
  static bool addRPath = false;
  static bool addDebugTag = false;
@@ -260,7 +266,7 @@ index 49accae..eca68bb 100644
  static bool printRPath = false;
  static std::string newRPath;
  static std::set<std::string> neededLibsToRemove;
-@@ -1785,6 +1961,9 @@ static void patchElf2(ElfFile && elfFile, const FileContents & fileContents, con
+@@ -1785,6 +1967,9 @@ static void patchElf2(ElfFile && elfFile, const FileContents & fileContents, con
      else if (addRPath)
          elfFile.modifyRPath(elfFile.rpAdd, {}, newRPath);
  
@@ -270,7 +276,7 @@ index 49accae..eca68bb 100644
      if (printNeeded) elfFile.printNeededLibs();
  
      elfFile.removeNeeded(neededLibsToRemove);
-@@ -1817,9 +1996,9 @@ static void patchElf()
+@@ -1817,9 +2002,9 @@ static void patchElf()
          const std::string & outputFileName2 = outputFileName.empty() ? fileName : outputFileName;
  
          if (getElfType(fileContents).is32Bit)
@@ -282,7 +288,7 @@ index 49accae..eca68bb 100644
      }
  }
  
-@@ -1856,6 +2035,7 @@ void showHelp(const std::string & progName)
+@@ -1856,6 +2041,7 @@ void showHelp(const std::string & progName)
    [--no-sort]\t\tDo not sort program+section headers; useful for debugging patchelf.\n\
    [--clear-symbol-version SYMBOL]\n\
    [--add-debug-tag]\n\
@@ -290,7 +296,7 @@ index 49accae..eca68bb 100644
    [--output FILE]\n\
    [--debug]\n\
    [--version]\n\
-@@ -1970,6 +2150,9 @@ int mainWrapped(int argc, char * * argv)
+@@ -1970,6 +2156,9 @@ int mainWrapped(int argc, char * * argv)
          else if (arg == "--add-debug-tag") {
              addDebugTag = true;
          }
@@ -300,6 +306,15 @@ index 49accae..eca68bb 100644
          else if (arg == "--help" || arg == "-h" ) {
              showHelp(argv[0]);
              return 0;
+@@ -1984,6 +2173,8 @@ int mainWrapped(int argc, char * * argv)
+     }
+ 
+     if (fileNames.empty()) error("missing filename");
++    if (forceRPath && buildResolutionCache)
++        error("resolution cache not available for RPATH");
+ 
+     if (!outputFileName.empty() && fileNames.size() != 1)
+         error("--output option only allowed with single input file");
 diff --git a/src/patchelf.h b/src/patchelf.h
 index 33ecfc3..620297c 100644
 --- a/src/patchelf.h
