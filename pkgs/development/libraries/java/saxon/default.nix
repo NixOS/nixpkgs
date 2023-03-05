@@ -72,7 +72,7 @@ in {
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
   };
 
-  saxon-he = common {
+  saxon_9-he = common {
     pname = "saxon-he";
     version = "9.9.0.1";
     prog = "saxon-he";
@@ -80,6 +80,18 @@ in {
     src = fetchurl {
       url = "mirror://sourceforge/saxon/Saxon-HE/9.9/SaxonHE9-9-0-1J.zip";
       sha256 = "1inxd7ia7rl9fxfrw8dy9sb7rqv76ipblaki5262688wf2dscs60";
+    };
+    description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
+  };
+
+  saxon-he = common {
+    pname = "saxon-he";
+    version = "11.5";
+    prog = "saxon-he";
+    jar = "saxon-he-11.5";
+    src = fetchurl {
+      url = "https://github.com/Saxonica/Saxon-HE/raw/a6d11dec3853326b661e9aff283e30b43c02e163/11/Java/SaxonHE11-5J.zip";
+      sha256 = "2Nwh6dG3YAjc/OTr8DMOfbnRvdCWB0YsVP3ZLRbM9U0=";
     };
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
   };
