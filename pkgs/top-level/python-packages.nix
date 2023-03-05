@@ -5492,6 +5492,8 @@ self: super: with self; {
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
+  lineedit = callPackage ../development/python-modules/lineedit { };
+
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
   lingua = callPackage ../development/python-modules/lingua { };
