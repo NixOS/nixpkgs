@@ -1,14 +1,14 @@
-# Javascript {#language-javascript}
+# JavaScript {#language-javascript}
 
 ## Introduction {#javascript-introduction}
 
-This contains instructions on how to package javascript applications.
+This contains instructions on how to package JavaScript applications.
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 
 ## Getting unstuck / finding code examples
 
-If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
+If you find you are lacking inspiration for packing JavaScript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
 
 ### Github
 
@@ -80,7 +80,7 @@ Exceptions to this rule are:
 
 Each tool has an abstraction to just build the node_modules (dependencies) directory. You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command). The node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory.
 
-## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+## JavaScript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
 The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [NPM packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
@@ -105,7 +105,7 @@ After you have identified the correct system, you need to override your package 
     });
 ```
 
-### Adding and Updating Javascript packages in nixpkgs
+### Adding and Updating JavaScript packages in nixpkgs
 
 To add a package from NPM to nixpkgs:
 
