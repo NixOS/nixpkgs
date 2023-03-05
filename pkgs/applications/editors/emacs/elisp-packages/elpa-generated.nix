@@ -366,6 +366,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    beframe = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "beframe";
+        ename = "beframe";
+        version = "0.1.11";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/beframe-0.1.11.tar";
+          sha256 = "1r5wlg2xaih197fi3jk0qmnhpy7mc6xrwraxfnygsjwr63dxhnq2";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/beframe.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     bind-key = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "bind-key";
@@ -1659,16 +1674,16 @@
           license = lib.licenses.free;
         };
       }) {};
-    erc = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+    erc = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "erc";
         ename = "erc";
-        version = "5.4.1";
+        version = "5.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/erc-5.4.1.tar";
-          sha256 = "0hghqwqrx11f8qa1zhyhjqp99w01l686azsmd24z9w0l93fz598a";
+          url = "https://elpa.gnu.org/packages/erc-5.5.tar";
+          sha256 = "02649ijnpyalk0k1yq1dcinj92awhbnkia2x9sdb9xjk80xw1gqp";
         };
-        packageRequires = [ emacs ];
+        packageRequires = [ compat emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/erc.html";
           license = lib.licenses.free;
@@ -2612,10 +2627,10 @@
       elpaBuild {
         pname = "kind-icon";
         ename = "kind-icon";
-        version = "0.1.9";
+        version = "0.2.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/kind-icon-0.1.9.tar";
-          sha256 = "0phssrcpmcidzlwy1577f3f02qwjs6hpavb416302y0n8kkhwvli";
+          url = "https://elpa.gnu.org/packages/kind-icon-0.2.0.tar";
+          sha256 = "1vgwbd99vx793iy04albkxl24c7vq598s7bg0raqwmgx84abww6r";
         };
         packageRequires = [ emacs svg-lib ];
         meta = {
@@ -3047,10 +3062,10 @@
       elpaBuild {
         pname = "modus-themes";
         ename = "modus-themes";
-        version = "3.0.0";
+        version = "4.1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/modus-themes-3.0.0.tar";
-          sha256 = "1c3rls175nmc4n01hfzwqxv2nhyv8n6i8d4pv93k28z6c30n8lhs";
+          url = "https://elpa.gnu.org/packages/modus-themes-4.1.1.tar";
+          sha256 = "06lp7mpazby7iiwzw4naym983plg9r63ba9vmaszh3609d2gm0s9";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3731,10 +3746,10 @@
       elpaBuild {
         pname = "phps-mode";
         ename = "phps-mode";
-        version = "0.4.39";
+        version = "0.4.42";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/phps-mode-0.4.39.tar";
-          sha256 = "0wixalji4c4hjqb41n1yvxfy3qfl2ipfsjawbgk9wdwb7jkhjr1i";
+          url = "https://elpa.gnu.org/packages/phps-mode-0.4.42.tar";
+          sha256 = "040wrmz9wl0x86vdgzyfdwxdciscd94v9nfgfz0ir2ghwhw6j9x3";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3821,10 +3836,10 @@
       elpaBuild {
         pname = "posframe";
         ename = "posframe";
-        version = "1.3.3";
+        version = "1.4.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/posframe-1.3.3.tar";
-          sha256 = "07hgbhvhwj6zfhlg6znavwrj3gp7cv4c758chrhkvk33a3slhw6b";
+          url = "https://elpa.gnu.org/packages/posframe-1.4.0.tar";
+          sha256 = "0pqy7scdi3qxj518xm0bbr3979byfxqxxh64wny37xzhd4apsw5j";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4422,10 +4437,10 @@
       elpaBuild {
         pname = "shell-command-plus";
         ename = "shell-command+";
-        version = "2.4.1";
+        version = "2.4.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shell-command+-2.4.1.tar";
-          sha256 = "1pbv5g58647gq83vn5pg8c6kjhvjn3lj0wggz3iz3695yvl8aw4i";
+          url = "https://elpa.gnu.org/packages/shell-command+-2.4.2.tar";
+          sha256 = "1ldvil6hjs8c7wpdwx0jwaar867dil5qh6vy2k27i1alffr9nnqm";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4896,10 +4911,10 @@
       elpaBuild {
         pname = "taxy-magit-section";
         ename = "taxy-magit-section";
-        version = "0.12.1";
+        version = "0.12.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/taxy-magit-section-0.12.1.tar";
-          sha256 = "0bs00y8pl51dji23zx5w64h6la0y109q0jv2q1nggizk6q5bsxmg";
+          url = "https://elpa.gnu.org/packages/taxy-magit-section-0.12.2.tar";
+          sha256 = "1pf83zz5ibhqqlqgcxig0dsl1rnkk5r6v16s5ngvbc37q40vkwn1";
         };
         packageRequires = [ emacs magit-section taxy ];
         meta = {
@@ -5035,10 +5050,10 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
-        version = "2.6.0.1";
+        version = "2.6.0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-2.6.0.1.tar";
-          sha256 = "1mxkl8v40wdcyvsyjayw9yj7ghn5zrnzgaapwh1prxs42scw85x8";
+          url = "https://elpa.gnu.org/packages/tramp-2.6.0.2.tar";
+          sha256 = "0pfrsgci1rqrykkfyxm9wsn7f0l3rzc2vj1fas27w925l0k0lrci";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5140,10 +5155,10 @@
       elpaBuild {
         pname = "triples";
         ename = "triples";
-        version = "0.2.3";
+        version = "0.2.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/triples-0.2.3.tar";
-          sha256 = "1p6vijaab3a7h9lqlxxhyipwd9rkr15r3rm0iyxxanlcggi04a39";
+          url = "https://elpa.gnu.org/packages/triples-0.2.6.tar";
+          sha256 = "09vr8r78vpycpxglacbgy2fy01khmvhh42panilwz2n9nhjy6xzm";
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -5411,10 +5426,10 @@
       elpaBuild {
         pname = "vertico-posframe";
         ename = "vertico-posframe";
-        version = "0.7.1";
+        version = "0.7.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.1.tar";
-          sha256 = "18a65hnacavy375ry5qmfj454b10h2yg9p6wbx1wdx30fwpi247a";
+          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.2.tar";
+          sha256 = "1sbgg0syyk24phwzji40lyw5dmwxssgvwv2fs8mbmkhv0q44f9ny";
         };
         packageRequires = [ emacs posframe vertico ];
         meta = {

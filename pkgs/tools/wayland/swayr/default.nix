@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~tsdh/swayr";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ artturin ];
+    platforms = platforms.linux;
   };
 }

@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/milgra/sov";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ travisdavis-ops ];
+    platforms = platforms.linux;
   };
 }
