@@ -1,7 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
-, netdata-go-d-plugin
+, netdata-go-plugins
 , bash, curl, jemalloc, libuv, zlib
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
-    ln -s ${netdata-go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
-    ln -s ${netdata-go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
+    ln -s ${netdata-go-plugins}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${netdata-go-plugins}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
   '' + lib.optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \

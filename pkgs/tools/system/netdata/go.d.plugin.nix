@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, buildGo119Module }:
-buildGo119Module rec {
+{ lib, fetchFromGitHub, buildGoModule }:
+buildGoModule rec {
   pname = "netdata-go-plugins";
   version = "0.51.2";
 
