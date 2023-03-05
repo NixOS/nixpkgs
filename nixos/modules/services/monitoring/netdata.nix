@@ -28,9 +28,15 @@ let
   '';
 
   localConfig = {
-    global = {
-      "config directory" = "/etc/netdata/conf.d";
-      "plugins directory" = concatStringsSep " " plugins;
+    directories = {
+      "config" = "/etc/netdata/conf.d";
+      "plugins" = concatStringsSep " " plugins;
+    };
+    logs = {
+      # Output to journald
+      "debug" = "none";
+      "access" = "none";
+      "error" = "syslog";
     };
     web = {
       "web files owner" = "root";
