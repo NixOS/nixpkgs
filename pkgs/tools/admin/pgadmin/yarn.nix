@@ -9224,6 +9224,14 @@
       };
     }
     {
+      name = "react_resize_detector___react_resize_detector_8.0.3.tgz";
+      path = fetchurl {
+        name = "react_resize_detector___react_resize_detector_8.0.3.tgz";
+        url  = "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-8.0.3.tgz";
+        sha512 = "c3eqm5BVcluVhxHsBQnhyPO/5uYB3XHIHz6D1ZOHzU2WcnZF0Cr3KLl5OIozRC2RSsdQlu5vn1PHEqrvKRnIYA==";
+      };
+    }
+    {
       name = "react_rnd___react_rnd_10.3.7.tgz";
       path = fetchurl {
         name = "react_rnd___react_rnd_10.3.7.tgz";
@@ -10912,11 +10920,11 @@
       };
     }
     {
-      name = "ua_parser_js___ua_parser_js_0.7.32.tgz";
+      name = "ua_parser_js___ua_parser_js_0.7.33.tgz";
       path = fetchurl {
-        name = "ua_parser_js___ua_parser_js_0.7.32.tgz";
-        url  = "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.32.tgz";
-        sha512 = "f9BESNVhzlhEFf2CHMSj40NWOjYPl1YKYbrvIr/hFTDEmLq7SRbWvm7FcdcpCYT95zrOhC7gZSxjdnnTpBcwVw==";
+        name = "ua_parser_js___ua_parser_js_0.7.33.tgz";
+        url  = "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.33.tgz";
+        sha512 = "s8ax/CeZdK9R/56Sui0WM6y9OFREJarMRHqLB2EwkovemBxNQ+Bqu8GAsUnVcXKgphb++ghr/B2BZx4mahujPw==";
       };
     }
     {
@@ -11045,6 +11053,22 @@
         name = "update_browserslist_db___update_browserslist_db_1.0.10.tgz";
         url  = "https://registry.yarnpkg.com/update-browserslist-db/-/update-browserslist-db-1.0.10.tgz";
         sha512 = "OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==";
+      };
+    }
+    {
+      name = "uplot_react___uplot_react_1.1.4.tgz";
+      path = fetchurl {
+        name = "uplot_react___uplot_react_1.1.4.tgz";
+        url  = "https://registry.yarnpkg.com/uplot-react/-/uplot-react-1.1.4.tgz";
+        sha512 = "qO1UkQwjVKdj5vTm3O3yldvu1T6hwY4++rH4KznLhjqpnLdncq1zsRxq/zQz/HUHPVD0j7WBcEISbNM61JsuAQ==";
+      };
+    }
+    {
+      name = "uplot___uplot_1.6.24.tgz";
+      path = fetchurl {
+        name = "uplot___uplot_1.6.24.tgz";
+        url  = "https://registry.yarnpkg.com/uplot/-/uplot-1.6.24.tgz";
+        sha512 = "WpH2BsrFrqxkMu+4XBvc0eCDsRBhzoq9crttYeSI0bfxpzR5YoSVzZXOKFVWcVC7sp/aDXrdDPbDZGCtck2PVg==";
       };
     }
     {
