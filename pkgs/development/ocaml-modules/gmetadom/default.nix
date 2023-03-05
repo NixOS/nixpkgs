@@ -4,6 +4,9 @@ let
   pname = "gmetadom";
 in
 
+lib.throwIf (lib.versionAtLeast ocaml.version "4.14")
+  "${pname} is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "0.2.6";
