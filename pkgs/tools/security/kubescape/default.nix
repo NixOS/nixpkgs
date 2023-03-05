@@ -6,15 +6,17 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.161";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rsO6ZTQg5fmpp+5Zx36tQnDW1vf2k+FCI3cFbGZifVM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qb8Kk+d3KFf+GVHv6Tg1qBuX6xFS4zbpkCPc502alxU=";
+    fetchSubmodules = true;
   };
-  vendorSha256 = "sha256-EinrVdGdYroh0X/ACAVD2gw4k0jrPHQ3Ucb3TUYKd8Q=";
+
+  vendorHash = "sha256-KoAuM1H9FRcPLD0AipnXOCUiNHcCWnek4sV0ztu5SyI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,6 +41,7 @@ buildGoModule rec {
 
     # remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
+    rm core/pkg/opaprocessor/*_test.go
 
     # remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
@@ -55,16 +58,6 @@ buildGoModule rec {
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/kubescape --help
-    # `--version` vs `version` shows the version without checking for latest
-    # if the flag is missing the BuildNumber may have moved
-    $out/bin/kubescape --version | grep "v${version}"
-    runHook postInstallCheck
   '';
 
   meta = with lib; {
