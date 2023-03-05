@@ -1,5 +1,12 @@
 { lib }:
 
+let
+  inherit (lib.lists)
+    all
+    foldl'
+    ;
+in
+
 rec {
 
   /* Throw if pred is false, else return pred.
@@ -49,5 +56,37 @@ rec {
     "${name} must be one of ${
       lib.generators.toPretty {} xs}, but is: ${
         lib.generators.toPretty {} val}";
+
+  /*
+  Assert that a condition holds for all elements of a list. If it doesn't,
+  the first element violating the condition and its index will be given to
+  construct an error message.
+
+  Type:
+    assertAll :: (a -> Bool) -> [a] -> (Int -> a -> String) -> Bool
+
+  Example:
+    assert assertAll (n: n != 2) [ 1 3 5 ] (i: n: "Number ${toString n} at index ${toString i} is two!")
+    => true
+    assert assertAll (n: n != 2) [ 1 2 3 ] (i: n: "Number ${toString n} at index ${toString i} is two!")
+    => error: Number 2 at index 1 is two!
+  */
+  assertAll =
+    # The condition to check on the list elements
+    cond:
+    # The list whose elements to check the condition on
+    list:
+    # In case an element violates the condition, this function gets called
+    # with the element index and value, it should return an error message string
+    msg:
+    # Fast successful path
+    if all cond list
+    then true
+    # Slower unsuccessful path
+    else foldl' (i: elem:
+      if cond elem
+      then i + 1
+      else throw (msg i elem)
+    ) 0 list;
 
 }
