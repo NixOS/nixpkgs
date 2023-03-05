@@ -5,6 +5,12 @@
   # the test runner: `config: config.test`.
   callTest,
 
+  # Function that adds attributes to the intermediate attrsets that lead
+  # up to the actual tests, ie the intermediate nodes of the test tree,
+  # uninstantiated test matrix, etc.
+  exposeIntermediateAttrs ?
+    attrs: {},
+
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
@@ -45,18 +51,19 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
-        imports = [ arg ];
-      }).config.result;
+      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
+        imports = [ arg { inherit exposeIntermediateAttrs callTest; } ];
+      };
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
           mapAttrs
             (k: findTests)
             (builtins.removeAttrs tree ["recurseForDerivations"])
+          // exposeIntermediateAttrs tree
         else callTest tree;
 
-      runTest = arg: let r = doRunTest arg; in findTests r;
+      runTest = arg: let r = doRunTest arg; in r;
       runTestOn = systems: arg:
         if elem system systems then runTest arg
         else {};
@@ -85,8 +92,7 @@ in {
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
-  avahi = handleTest ./avahi.nix {};
-  avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
+  avahi = runTest ./avahi.nix;
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
@@ -117,9 +123,7 @@ in {
   cage = handleTest ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
   calibre-web = handleTest ./calibre-web.nix {};
-  cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
-  cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
-  cassandra_4 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_4; };
+  cassandra = runTest ./cassandra.nix;
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
   ceph-single-node-bluestore = handleTestOn ["x86_64-linux"] ./ceph-single-node-bluestore.nix {};
@@ -293,7 +297,7 @@ in {
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   hockeypuck = handleTest ./hockeypuck.nix { };
   home-assistant = handleTest ./home-assistant.nix {};
-  hostname = handleTest ./hostname.nix {};
+  hostname = runTest ./hostname.nix;
   hound = handleTest ./hound.nix {};
   hub = handleTest ./git/hub.nix {};
   hydra = handleTest ./hydra {};
@@ -445,8 +449,7 @@ in {
   netbird = handleTest ./netbird.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
-  networking.networkd = handleTest ./networking.nix { networkd = true; };
-  networking.scripted = handleTest ./networking.nix { networkd = false; };
+  networking = runTest ./networking.nix;
   netbox = handleTest ./web-apps/netbox.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};

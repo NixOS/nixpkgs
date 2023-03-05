@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, testPackage ? pkgs.cassandra, ... }:
+{ pkgs, lib, testPackage, ... }:
 let
   clusterName = "NixOS Automated-Test Cluster";
 
@@ -26,13 +26,11 @@ let
       listenAddress = ipAddress;
       rpcAddress = ipAddress;
       seedAddresses = [ "192.168.1.1" ];
-      package = testPackage;
       maxHeapSize = "${numMaxHeapSize}M";
       heapNewSize = "100M";
       inherit jmxPort;
     };
   nodeCfg = ipAddress: extra: {pkgs, config, ...}: rec {
-    environment.systemPackages = [ testPackage ];
     networking = {
       firewall.allowedTCPPorts = [ 7000 9042 services.cassandra.jmxPort ];
       useDHCP = false;
@@ -42,11 +40,24 @@ let
     };
     services.cassandra = cassandraCfg ipAddress // extra;
   };
+
 in
 {
   name = "cassandra-${testPackage.version}";
   meta = {
     maintainers = with lib.maintainers; [ johnazoidberg ];
+  };
+
+  matrix.version.choice = {
+    cassandra_2_1.extraConfig = { _module.args.testPackage = pkgs.cassandra_2_1; };
+    cassandra_2_2.extraConfig = { _module.args.testPackage = pkgs.cassandra_2_2; };
+    cassandra_3_0.extraConfig = { _module.args.testPackage = pkgs.cassandra_3_0; };
+    cassandra_3_11.extraConfig = { _module.args.testPackage = pkgs.cassandra_3_11; };
+  };
+
+  defaults = {
+    services.cassandra.package = testPackage;
+    environment.systemPackages = [ testPackage ];
   };
 
   nodes = {
@@ -129,4 +140,4 @@ in
   passthru = {
     inherit testPackage;
   };
-})
+}

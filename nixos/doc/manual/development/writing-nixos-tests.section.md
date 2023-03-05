@@ -22,7 +22,7 @@ A NixOS test is a module that has the following structure:
 ```
 
 We refer to the whole test above as a test module, whereas the values
-in [`nodes.<name>`](#test-opt-nodes) are NixOS modules themselves.
+in [`nodes.<name>`](#test-opt-nodes) are NixOS modules. (Each NixOS configuration is defined by a module.)
 
 The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more
@@ -49,7 +49,8 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
   hostname = runTest ./hostname.nix;
 ```
 
-Overrides can be added by defining an anonymous module in `all-tests.nix`.
+Overrides can be added by defining an anonymous module in `nixos/tests/all-tests.nix` and passing it to `runTest`..
+For the purpose of constructing a test matrix, use the [`matrix` options](#sec-nixos-test-matrix) instead.
 
 ```nix
   hostname = runTest {
@@ -80,7 +81,7 @@ nixos-lib.runTest {
 }
 ```
 
-`runTest` returns a derivation that runs the test.
+`runTest` returns a derivation that runs the test, or a tree of attribute sets containing such derivations.
 
 ## Configuring the nodes {#sec-nixos-test-nodes}
 
@@ -465,6 +466,189 @@ added using the parameter `extraPythonPackages`. For example, you could add
 ```
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Constructing a test matrix {#sec-nixos-test-matrix}
+
+You may want to run variations of your test, or perhaps split long tests into
+a few shorter, focused tests.
+
+While you could roll your own solution with `mapAttrs`, this is actually
+non-trivial because of the requirements imposed by `nix-build`, hydra and
+`passthru.tests`. So instead, we recommend to use the `matrix` test options that
+take care of this for you.
+
+These options work by duplicating the entire test module configuration below
+the `matrix.<decision>.choice.<choice>.extraConfig` options.
+Laziness makes this pattern efficient.
+
+The test framework ([`runTest`](#sec-calling-nixos-tests)) takes care of
+traversing the choices one by one, constructing a tree of attribute sets where
+each edge represents a choice.
+
+A parameterized test may look as follows:
+
+```nix
+{ lib, backend, ... }: {
+  name = "foo-${backend}";
+
+  matrix.backend.choice.smtp.extraConfig = {};
+  matrix.backend.choice.rest.extraConfig = {};
+
+  defaults.services.foo.backend = backend;
+
+  nodes = …;
+  testScript = ''
+    ${lib.optionalString (backend == "rest") ''
+      # extra setup for the rest backend
+    ''}
+    # …
+  '';
+}
+```
+
+`runTest` transforms this to:
+
+```nix
+{
+  backend-rest = «derivation /nix/store/…-foo-rest.drv»;
+  backend-smtp = «derivation /nix/store/…-foo-smtp.drv»;
+
+  # make `nix-build` traverse this attrset to evaluate nested tests
+  recurseForDerivations = true;
+  # …
+}
+```
+
+It has picked up on the `matrix` and only returns the derivations constructed for each choice.
+
+The arguments to the test module, which is called by `runTest` to create each configuration in the matrix, are built up as follows:
+ - `<decision>` in `matrix.<decision>` corresponds to the argument name to the test module.
+ - `<choice>` in `choice.<choice>` corresponds to the named argument's value as a string by default. A different value can be set with [`choice.<choice>.value`](#test-opt-matrix._name_.choice._name_.value) or by adding configuration via [`choice.<choice>.extraConfig`](#test-opt-matrix._name_.choice._name_.extraConfig).
+
+`runTest` works by invoking the module system to lazily produce all option values, and then extracts only specific values from it.
+This means that some options exist, but are never evaluated.
+For example, when `matrix` is set, `nodes.<name>` is ignored in favor of `matrix.<decision>.choice.<choice>.extraConfig.nodes.<name>`.
+
+Nonetheless, the definitions in `nodes.<name>` are useful, as they also contribute to `matrix.<decision>.choice.<choice>.extraConfig.nodes.<name>`.
+The `extraConfig` option always duplicates and extends the root of the test configuration.
+
+Some variations aren't simply parametric, but require specific configuration for some choices.
+These can be added in the `extraConfig` submodule.
+
+The following example shows how tests in a test matrix can be quite different, while sharing common configuration.
+
+```nix
+{ lib, setup, ... }: {
+  matrix.backend.choice.smtp.extraConfig = { lib, ... }: {
+    defaults.services.foo.backend = "smtp";
+    nodes.smtpserver = { … };
+    _module.args.setup = "";
+  };
+  matrix.backend.choice.rest.extraConfig = { lib, ... }: {
+    _module.args.setup = ''
+      # extra setup for the rest backend
+      # …
+    '';
+  };
+
+  nodes = …;
+  testScript = ''
+    ${setup}
+    # …
+  '';
+}
+```
+
+The example shows the solutions to the following problems:
+ - The test cases require different configuration. For example, the `smtp` test sets the backend to `"smtp"` for all nodes, instead of relying on the default value.
+ - One test case requires an extra VM. `nodes.smtpserver` is only defined for the `smtp` test.
+ - One test case needs extra setup to be done in the `testScript`. It uses an ad hoc module argument called `setup` to achieve this.
+
+You may notice that the test appears to pull a `setup` value out of thin air.
+Indeed this would fail if `runTest` had accessed `testScript` directly instead of looking inside the `matrix.<...>.extraConfig` options.
+In those `matrix.<...>.extraConfig` contexts, the definition of `testScript` is valid.
+Thanks to laziness, the invalid `testScript` is never accessed and never becomes a problem.
+
+You may also notice that there was no use of the `backend` module argument anymore, as all decisions' effects were defined in the `matrix.<...>.extraConfig` options. You could re-add the `backend` to the parameter list to combine both styles.
+
+If you have many test cases, but few non-empty `setup` values, you could define a default value for the module argument instead:
+
+```nix
+{ lib, setup, ... }: {
+  _module.args.setup = lib.mkDefault "";
+  matrix.backend.choice.smtp.extraConfig = { lib, ... }: {
+    defaults.services.foo.backend = "smtp";
+    nodes.smtpserver = { … };
+  };
+  # …
+}
+```
+
+If you are writing a reusable module, you may declare a regular option instead, using `lib.mkOption`. <!-- TODO refer to a "reusable modules" section in module system docs (to be written) -->
+
+### Multiple decisions {#sec-nixos-test-matrix-multiple-decisions}
+
+And finally, some tests truly form a matrix, as they have two (or more) parameters.
+The following example produces the 6 test derivations that form the Cartesian product of `backend` and `testsuite`.
+
+```nix
+{ backend, testsuite, ... }: {
+  matrix.backend.choice.smtp.extraConfig = { … };
+  matrix.backend.choice.rest.extraConfig = { … };
+
+  matrix.testsuite.choice = {
+    login-and-basics.extraConfig = {
+      testScript = …;
+    };
+    transactions.extraConfig = {
+      testScript = …;
+    };
+    advanced-use-cases.extraConfig = {
+      testScript = …;
+    };
+  };
+
+  name = "foo-${backend}-${testsuite}";
+
+  nodes.foo = …;
+}
+```
+
+### Using variables from the right scope {#sec-nixos-test-matrix-scope}
+
+The decision making process of the test framework works by evaluating multiple nodes of a decision tree whose edges are defined by the `matrix.<...>.extraConfig` option.
+
+This means that when you are defining values in `matrix.*` and you reference the module arguments, those module arguments come from a node of the decision tree where the decision has _not_ been made yet.
+
+For example, the following does not work:
+
+```nix
+{ foo, ... }: {
+  matrix.foo.choice.qux.extraConfig = {
+    config.testScript = foo;
+  };
+}
+```
+
+The reason is that `matrix.foo.choice.qux.extraConfig.something` refers to a module argument at the root, where `foo` is undecided. To fix this, reference the module argument at its own level of the decision tree:
+
+```nix
+{ ... }: {
+  matrix.foo.choice.qux.extraConfig =
+    { foo, ... }: {
+      config.testScript = foo;
+    };
+}
+```
+
+In this example, hardcoding the value of `foo`, `"qux"`, was also a valid solution.
+
+### Omitting combinations from the test matrix {#sec-nixos-test-matrix-ordering}
+
+The previous section described that it is possible to reference information from parent nodes of the "decision tree" constructed by `matrix.*` options.
+By referencing such partially decided scopes, we can construct a test matrix where some combinations are skipped.
+
+This is achieved with the [`matrix.<name>.choice.<name>.enable`](#test-opt-matrix._name_.enable) option.
 
 ## Test Options Reference {#sec-test-options-reference}
 

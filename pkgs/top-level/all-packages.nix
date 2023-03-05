@@ -146,13 +146,17 @@ with pkgs;
   nixosTests = import ../../nixos/tests/all-tests.nix {
     inherit pkgs;
     system = stdenv.hostPlatform.system;
-    callTest = config: config.test;
+    callTest = config: config.test // { inherit (config) extend; };
+    exposeIntermediateAttrs = config:
+      recurseIntoAttrs {} //
+      builtins.intersectAttrs { extend = null; } config;
   } // {
     # for typechecking of the scripts and evaluation of
     # the nodes, without running VMs.
     allDrivers = import ../../nixos/tests/all-tests.nix {
       inherit pkgs;
       system = stdenv.hostPlatform.system;
+      exposeIntermediateAttrs = config: recurseIntoAttrs {};
       callTest = config: config.test.driver;
     };
   };
