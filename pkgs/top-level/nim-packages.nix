@@ -69,6 +69,8 @@ lib.makeScope newScope (self:
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
+    parsetoml = callPackage ../development/nim-packages/parsetoml { };
+
     pixie = callPackage ../development/nim-packages/pixie { };
 
     redis = callPackage ../development/nim-packages/redis { };
