@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace "+camlp4" \
         "${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4"
     done
+
+    # Fatal error: exception Sys_error("Mutex.unlock: Operation not permitted")
+    sed -i "/gl_started/d" src/draw.ml* src/main.ml
   '';
 
   installPhase = ''
