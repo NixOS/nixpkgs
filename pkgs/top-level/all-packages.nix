@@ -19673,6 +19673,8 @@ with pkgs;
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
+  eigenmath = callPackage ../applications/science/math/eigenmath { };
+
   vapoursynth = callPackage ../development/libraries/vapoursynth {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
