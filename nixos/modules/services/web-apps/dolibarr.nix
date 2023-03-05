@@ -5,7 +5,7 @@ let
   package = pkgs.dolibarr.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
-  vhostCfg = lib.optionalAttr (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
+  vhostCfg = lib.optionalAttrs (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
 
   mkConfigFile = filename: settings:
     let
