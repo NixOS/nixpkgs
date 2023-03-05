@@ -19,6 +19,12 @@ let
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
   systemdDevices = forEach devices
     (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
+
+  consulCmdStr = if cfg.devMode then
+    "@${cfg.package}/bin/consul consul agent -dev"
+    else
+    "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
+      + concatMapStrings (n: " -config-file ${n}") configFiles;
 in
 {
   options = {
@@ -42,12 +48,19 @@ in
         '';
       };
 
-
       webUi = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
           Enables the web interface on the consul http port.
+        '';
+      };
+
+      devMode = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Run agent in development mode
         '';
       };
 
@@ -199,8 +212,7 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
-            + concatMapStrings (n: " -config-file ${n}") configFiles;
+          ExecStart = consulCmdStr;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           PermissionsStartOnly = true;
           User = if cfg.dropPrivileges then "consul" else null;
