@@ -34992,6 +34992,7 @@ with pkgs;
   transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission_3 = callPackage ../applications/networking/p2p/transmission/3.x.nix { };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
