@@ -46,10 +46,11 @@ buildPythonPackage rec {
     ${python.pythonForBuild.interpreter} -m bash_kernel.install --prefix $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ zimbatm ];
   };
 }
