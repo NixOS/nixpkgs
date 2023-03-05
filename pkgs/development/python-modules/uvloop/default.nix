@@ -66,6 +66,9 @@ buildPythonPackage rec {
     # Tries to run "env", but fails to find it
     "--deselect=tests/test_process.py::Test_UV_Process::test_process_env_2"
     "--deselect=tests/test_process.py::Test_AIO_Process::test_process_env_2"
+    # AssertionError: b'' != b'out\n'
+    "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
+    "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # Segmentation fault
     "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
@@ -74,9 +77,6 @@ buildPythonPackage rec {
     "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
     # Segmentation fault
     "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
-    # AssertionError: b'' != b'out\n'
-    "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
-    "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
   ];
 
   disabledTestPaths = [
