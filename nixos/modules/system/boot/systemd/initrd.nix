@@ -56,6 +56,7 @@ let
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
+    "systemd-growfs@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
