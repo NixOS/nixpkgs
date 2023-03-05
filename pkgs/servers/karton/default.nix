@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-MzRpLGHDtF1PumS0L1H26EH257PZnTPNw/8Fip3FTn4=";
 
   meta = with lib; {
-    description = "A lightweight pastebin application written in rust. Forked from MicroBin.";
+    description = "A lightweight pastebin application written in rust and a fork from microbin";
     homepage = "https://gitlab.com/obsidianical/microbin";
     license = licenses.bsd3;
     maintainers = with maintainers; [ schrottkatze ];
