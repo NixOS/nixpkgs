@@ -32,17 +32,16 @@
 , apparmorRulesFromClosure
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "transmission";
   version = "3.00";
 
-in stdenv.mkDerivation {
-  pname = "transmission";
-  inherit version;
+  outputs = [ "out" "apparmor" ];
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
@@ -55,7 +54,39 @@ in stdenv.mkDerivation {
     })
   ];
 
-  outputs = [ "out" "apparmor" ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ] ++ lib.optionals enableGTK3 [
+    wrapGAppsHook
+  ] ++ lib.optionals enableQt [
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    openssl
+    curl
+    libevent
+    zlib
+    pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
+  ] ++ lib.optionals enableQt [
+    qt5.qttools
+    qt5.qtbase
+  ] ++ lib.optionals enableGTK3 [
+    gtk3
+    xorg.libpthreadstubs
+  ] ++ lib.optionals enableSystemd [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    inotify-tools
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   cmakeFlags =
     let
@@ -70,57 +101,49 @@ in stdenv.mkDerivation {
       "-DINSTALL_LIB=${mkFlag installLib}"
     ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ]
-  ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
-  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
-  ;
+  postInstall =
+    let
+      rules =
+        apparmorRulesFromClosure
+          {
+            name = "transmission-daemon";
+          }
+          ([
+            curl
+            libevent
+            openssl
+            pcre
+            zlib
+            libnatpmp
+            miniupnpc
+          ] ++ lib.optionals enableSystemd [
+            systemd
+          ]
+          ++ lib.optionals stdenv.isLinux [
+            inotify-tools
+          ]);
+    in
+    ''
+      mkdir "$apparmor"
+      cat >"$apparmor/bin.transmission-daemon" <<EOF
+      include <tunables/global>
+      $out/bin/transmission-daemon {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${rules}"
+        r @{PROC}/sys/kernel/random/uuid,
+        r @{PROC}/sys/vm/overcommit_memory,
+        r @{PROC}/@{pid}/environ,
+        r @{PROC}/@{pid}/mounts,
+        rwk /tmp/tr_session_id_*,
 
-  buildInputs = [
-    openssl
-    curl
-    libevent
-    zlib
-    pcre
-    libb64
-    libutp
-    miniupnpc
-    dht
-    libnatpmp
-  ]
-  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
-  ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
-  ++ lib.optionals enableSystemd [ systemd ]
-  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+        r $out/share/transmission/web/**,
 
-  postInstall = ''
-    mkdir $apparmor
-    cat >$apparmor/bin.transmission-daemon <<EOF
-    include <tunables/global>
-    $out/bin/transmission-daemon {
-      include <abstractions/base>
-      include <abstractions/nameservice>
-      include <abstractions/ssl_certs>
-      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libnatpmp miniupnpc
-      ] ++ lib.optionals enableSystemd [ systemd ]
-        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-      )}"
-      r @{PROC}/sys/kernel/random/uuid,
-      r @{PROC}/sys/vm/overcommit_memory,
-      r @{PROC}/@{pid}/environ,
-      r @{PROC}/@{pid}/mounts,
-      rwk /tmp/tr_session_id_*,
-
-      r $out/share/transmission/web/**,
-
-      include <local/bin.transmission-daemon>
-    }
-    EOF
-  '';
+        include <local/bin.transmission-daemon>
+      }
+      EOF
+    '';
 
   passthru.tests = {
     apparmor = nixosTests.transmission; # starts the service with apparmor enabled
@@ -145,5 +168,4 @@ in stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
-
-}
+})
