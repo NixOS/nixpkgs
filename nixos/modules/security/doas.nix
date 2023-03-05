@@ -19,7 +19,7 @@ let
   ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
+    if (rule.args == null) then ""
     else if (length rule.args == 0) then "args"
     else "args ${concatStringsSep " " rule.args}";
 
@@ -27,9 +27,9 @@ let
     let
       opts = mkOpts rule;
 
-      as = optionalString (!isNull rule.runAs) "as ${rule.runAs}";
+      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
+      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in

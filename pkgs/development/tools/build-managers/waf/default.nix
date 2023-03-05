@@ -4,7 +4,7 @@
 }:
 let
   wafToolsArg = with lib.strings;
-    optionalString (!isNull withTools) " --tools=\"${concatStringsSep "," withTools}\"";
+    optionalString (withTools != null) " --tools=\"${concatStringsSep "," withTools}\"";
 in
 stdenv.mkDerivation rec {
   pname = "waf";

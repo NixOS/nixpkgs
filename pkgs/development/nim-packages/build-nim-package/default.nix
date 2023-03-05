@@ -9,7 +9,7 @@ stdenv.mkDerivation (attrs // {
   depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
   nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
 
-  configurePhase = if isNull configurePhase then ''
+  configurePhase = if (configurePhase == null) then ''
     runHook preConfigure
     export NIX_NIM_BUILD_INPUTS=''${pkgsHostTarget[@]} $NIX_NIM_BUILD_INPUTS
     nim_builder --phase:configure
@@ -17,21 +17,21 @@ stdenv.mkDerivation (attrs // {
   '' else
     configurePhase;
 
-  buildPhase = if isNull buildPhase then ''
+  buildPhase = if (buildPhase == null) then ''
     runHook preBuild
     nim_builder --phase:build
     runHook postBuild
   '' else
     buildPhase;
 
-  checkPhase = if isNull checkPhase then ''
+  checkPhase = if (checkPhase == null) then ''
     runHook preCheck
     nim_builder --phase:check
     runHook postCheck
   '' else
     checkPhase;
 
-  installPhase = if isNull installPhase then ''
+  installPhase = if (installPhase == null) then ''
     runHook preInstall
     nim_builder --phase:install
     runHook postInstall
