@@ -11,6 +11,8 @@ lib.makeScope newScope (self:
       };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    asciigraph = callPackage ../development/nim-packages/asciigraph { };
+
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
