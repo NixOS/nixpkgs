@@ -70,16 +70,17 @@ are supported by the Intel NEO OpenCL runtime that is provided by the
 intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
 the intel-ocl package, is an alternative for Gen7 GPUs.
 
-The intel-compute-runtime or intel-ocl package can be added to
-[](#opt-hardware.graphics.extraPackages)
-to enable OpenCL support. For example, for Gen8 and later GPUs, the following
-configuration can be used:
+Choose your runtime based on your Intel CPU/GPU generation:
+
+- `intel-compute-runtime`: Since `Broadwell` 5th gen, open source, runs on GPU
+- `intel-ocl`: Since `Ivy Bridge` 3rd gen, closed source, deprecated, runs on CPU
+- `beignet`:  Since `Ivy Bridge` 3rd gen, open source, deprecated, runs on GPU
+
+i.e.
 
 ```nix
 {
-  hardware.graphics.extraPackages = [
-    intel-compute-runtime
-  ];
+  hardware.intel.opencl.runtime = "intel-compute-runtime";
 }
 ```
 
