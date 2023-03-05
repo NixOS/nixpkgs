@@ -9887,6 +9887,8 @@ self: super: with self; {
 
   rbtools = callPackage ../development/python-modules/rbtools { };
 
+  rchitect = callPackage ../development/python-modules/rchitect { };
+
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
