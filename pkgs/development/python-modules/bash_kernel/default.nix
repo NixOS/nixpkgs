@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "bash_kernel";
-  version = "0.7.2";
+  version = "0.9.0";
   format = "flit";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w0nbr3iqqsgpk83rgd0f5b02462bkyj2n0h6i9dwyc1vpnq9350";
+    sha256 = "sha256-BCPwUS72+DplThQ5o2lxiJmjjyeUj+IbZlst8dvzp8c=";
   };
 
   patches = [
