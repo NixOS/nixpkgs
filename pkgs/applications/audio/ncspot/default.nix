@@ -3,6 +3,7 @@
 , withPulseAudio ? false, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? false, dbus
+, withShareClipboard ? false, xorg, python3
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,21 +19,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-gVXH2pFtyMfYkCqda9NrqOgczvmxiWHe0zArJfnnrgE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional withShareClipboard python3;
 
   buildInputs = [ ncurses ]
     ++ lib.optional stdenv.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withMPRIS dbus;
+    ++ lib.optional withMPRIS dbus
+    ++ lib.optional withShareClipboard xorg.libxcb;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "cursive/pancurses-backend" ]
     ++ lib.optional withALSA "alsa_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withMPRIS "mpris";
+    ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withShareClipboard "share_clipboard";
 
   doCheck = false;
 
