@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, uncompyle6, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, uncompyle6
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "unrpa";
   version = "2.3.0";
-
-  disabled = isPy27;
-
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Lattyware/unrpa";
+    changelog = "https://github.com/Lattyware/unrpa/releases/tag/${version}";
     description = "A program to extract files from the RPA archive format";
     license = licenses.gpl3;
     maintainers = with maintainers; [ leo60228 ];
