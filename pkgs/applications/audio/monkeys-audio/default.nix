@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     # it's not standard, see a quote of it:
     # https://github.com/NixOS/nixpkgs/pull/171682#issuecomment-1120260551
     license = licenses.free;
-    maintainers = [ ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }
