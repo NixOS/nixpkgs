@@ -20,7 +20,8 @@ buildPythonPackage rec {
   pname = "fastai";
   version = "2.7.11";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
