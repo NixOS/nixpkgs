@@ -13,8 +13,8 @@
 , pythonOlder
 , pyupgrade
 , typing-extensions
-# dependencies for building documentation.
-# docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
+  # dependencies for building documentation.
+  # docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
 , withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin && pythonAtLeast "3.10")
 , ansi2html
 , markdown-include
@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.4";
+  version = "1.10.5";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BFyv1uVq2pLcJeS5955G/pDA3ce9YTqZ6F7kAkwnuvY=";
+    sha256 = "sha256-hcjnFqHTQiCIJh7L9JfpHHTm8GEZ+Vac6HO59cbEpWM=";
   };
 
   postPatch = ''
@@ -83,7 +83,8 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # https://github.com/pydantic/pydantic/issues/4817
-    "-W" "ignore::pytest.PytestReturnNotNoneWarning"
+    "-W"
+    "ignore::pytest.PytestReturnNotNoneWarning"
   ];
 
   preCheck = ''
@@ -110,6 +111,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/samuelcolvin/pydantic";
     description = "Data validation and settings management using Python type hinting";
     license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    maintainers = with maintainers; [ wd15 realsnick ];
   };
 }
