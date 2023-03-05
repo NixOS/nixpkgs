@@ -223,7 +223,30 @@ let
         type = with types; nullOr str;
         description = lib.mdDoc ''
           Endpoint IP or hostname of the peer, followed by a colon,
-          and then a port number of the peer.
+          and then a port number of the peer. Mutually excludive with
+          "endpointFile".
+
+          Warning for endpoints with changing IPs:
+          The WireGuard kernel side cannot perform DNS resolution.
+          Thus DNS resolution is done once by the `wg` userspace
+          utility, when setting up WireGuard. Consequently, if the IP address
+          behind the name changes, WireGuard will not notice.
+          This is especially common for dynamic-DNS setups, but also applies to
+          any other DNS-based setup.
+          If you do not use IP endpoints, you likely want to set
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          to refresh the IPs periodically.
+        '';
+      };
+
+      endpointFile = mkOption {
+        default = null;
+        example = "/run/secrets/peer.address";
+        type = with types; nullOr str;
+        description = lib.mdDoc ''
+          File Containing the endpoint IP or hostname of the peer,
+          followed by a colon, and then a port number of the peer. Mutally exclusive
+          with "endpoint".
 
           Warning for endpoints with changing IPs:
           The WireGuard kernel side cannot perform DNS resolution.
@@ -379,6 +402,7 @@ let
             [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
             ++ optional (psk != null) ''preshared-key "${psk}"''
             ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
+            ++ optional (peer.endpointFile != null) ''endpoint "$(cat ${peer.endpointFile})"''
             ++ optional (peer.persistentKeepalive != null) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
             ++ optional (peer.allowedIPs != []) ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"''
           );
@@ -565,6 +589,10 @@ in
         ++ map ({ interfaceName, peer, ... }: {
           assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
           message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
+        }) all_peers
+        ++ map ({ interfaceName, peer, ... }: {
+          assertion = (peer.endpoint == null) || (peer.endpointFile == null);
+          message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both endpoint and endpointFile set, but only one can be used.";
         }) all_peers;
 
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
