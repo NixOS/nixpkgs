@@ -51,11 +51,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gupnp_1_6";

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "devdoc"
   ] ++ lib.optionals enableGlade [
     "glade"
+
   ];
   outputBin = "dev";
 
@@ -104,11 +105,6 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
 
     runHook postCheck
-  '';
-
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

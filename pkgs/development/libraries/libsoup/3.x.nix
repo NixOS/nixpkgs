@@ -87,11 +87,6 @@ stdenv.mkDerivation rec {
     patchShebangs libsoup/
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     propagatedUserEnvPackages = [
       glib-networking.out

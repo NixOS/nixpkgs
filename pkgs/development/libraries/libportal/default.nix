@@ -73,11 +73,6 @@ stdenv.mkDerivation rec {
     "-Ddocs=${if variant != "qt5" then "true" else "false"}" # requires introspection=true
   ];
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   # we don't have any binaries
   dontWrapQtApps = true;
 

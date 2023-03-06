@@ -150,11 +150,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput share/doc/libide "$devdoc"
-  '';
-
   passthru.updateScript = gnome.updateScript {
     packageName = pname;
   };

@@ -83,11 +83,6 @@ stdenv.mkDerivation rec {
       --replace "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

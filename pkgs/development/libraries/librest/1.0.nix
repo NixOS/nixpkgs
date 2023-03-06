@@ -74,11 +74,6 @@ stdenv.mkDerivation rec {
       --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver"
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   separateDebugInfo = true;
 
   passthru = {
