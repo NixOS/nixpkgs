@@ -4570,7 +4570,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_22;
+    electron = electron_23;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5944,6 +5944,8 @@ with pkgs;
   cdecl = callPackage ../development/tools/cdecl { };
 
   cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
+
+  cdist = python3Packages.callPackage ../tools/admin/cdist { };
 
   cdimgtools = callPackage ../tools/cd-dvd/cdimgtools { };
 
@@ -7430,6 +7432,8 @@ with pkgs;
 
   fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
 
+  fead = callPackage ../applications/misc/fead { };
+
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
   fbcat = callPackage ../tools/misc/fbcat { };
@@ -7746,6 +7750,8 @@ with pkgs;
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   forgejo = callPackage ../applications/version-management/forgejo {};
 
@@ -9294,6 +9300,8 @@ with pkgs;
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
+  # Exposed here so the bots can auto-upgrade it
+  netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix {};
 
   netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
   netsurf-browser = netsurf.browser;
@@ -12900,6 +12908,8 @@ with pkgs;
   };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
+  ttop = callPackage ../tools/system/ttop { };
+
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
   tty-share = callPackage ../applications/misc/tty-share { };
@@ -13030,7 +13040,7 @@ with pkgs;
 
   unrtf = callPackage ../tools/text/unrtf { };
 
-  unrpa = with python38Packages; toPythonApplication unrpa;
+  unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
@@ -15528,8 +15538,10 @@ with pkgs;
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  obliv-c = callPackage ../development/compilers/obliv-c
-    { stdenv = gcc10StdenvCompat; ocamlPackages = ocaml-ng.ocamlPackages_4_05; };
+  obliv-c = callPackage ../development/compilers/obliv-c {
+    stdenv = gcc10StdenvCompat;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
@@ -19813,7 +19825,11 @@ with pkgs;
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
-  fftwQuad = fftw.override { precision = "quad-precision"; };
+  # Need gcc >= 4.6.0 to build with FFTW with quad precision, but Darwin defaults to Clang
+  fftwQuad = fftw.override {
+    precision = "quad-precision";
+    stdenv = gccStdenv;
+  };
   fftwMpi = fftw.override { enableMpi = true; };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
@@ -20186,7 +20202,9 @@ with pkgs;
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
+      unsafeStringSupport = true;
+    });
   };
 
   glui = callPackage ../development/libraries/glui {};
@@ -30582,9 +30600,7 @@ with pkgs;
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari {
-    wlroots = wlroots_0_14;
-  };
+  hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;

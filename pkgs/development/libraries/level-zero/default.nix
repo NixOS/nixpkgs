@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.oneapi.io/";
     description = "oneAPI Level Zero Specification Headers and Loader";
+    homepage = "https://github.com/oneapi-src/level-zero";
     license = licenses.mit;
     maintainers = [ maintainers.ziguana ];
   };

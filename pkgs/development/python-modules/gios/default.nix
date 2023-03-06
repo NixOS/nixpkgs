@@ -36,13 +36,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
-
   disabledTests = [
     # Test requires network access
     "test_invalid_station_id"
