@@ -9156,6 +9156,11 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  MakiseKurisu = {
+    github = "MakiseKurisu";
+    githubId = 2321672;
+    name = "Makise Kurisu";
+  };
   malbarbo = {
     email = "malbarbo@gmail.com";
     github = "malbarbo";
