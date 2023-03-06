@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , unzip
+, runCommand
 , version ? "2.19.3"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
@@ -39,7 +40,7 @@
 assert version != null && version != "";
 assert sources != null && (builtins.isAttrs sources);
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
   inherit version;
 
@@ -56,9 +57,27 @@ stdenv.mkDerivation {
   '';
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-
   dontStrip = true;
+  passthru.tests = {
+    testCreate = runCommand "dart-test-create" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      PROJECTNAME="dart_test_project"
+      dart create --no-pub $PROJECTNAME
 
+      [[ -d $PROJECTNAME ]]
+      [[ -f $PROJECTNAME/bin/$PROJECTNAME.dart ]]
+      touch $out
+    '';
+
+    testCompile = runCommand "dart-test-compile" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      HELLO_MESSAGE="Hello, world!"
+      echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
+      dart compile exe hello.dart
+      PROGRAM_OUT=$(./hello.exe)
+
+      [[ "$PROGRAM_OUT" == "$HELLO_MESSAGE" ]]
+      touch $out
+    '';
+  };
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
     maintainers = with maintainers; [ grburst ];
@@ -72,4 +91,4 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };
-}
+})
