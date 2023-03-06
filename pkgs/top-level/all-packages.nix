@@ -16500,6 +16500,8 @@ with pkgs;
 
   inherit (beam.packages.erlangR21) lfe lfe_1_3;
 
+  funlisp = callPackage ../development/interpreters/funlisp { };
+
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
