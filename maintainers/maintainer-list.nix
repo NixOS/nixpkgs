@@ -13295,6 +13295,7 @@
   schrottkatze = {
     email = "contact-nixpkgs@schrottkatze.de";
     github = "obsidianical";
+    githubId = 68819302;
     matrix = "@obsidianical:matrix.org";
     name = "Schrottkatze";
   };
