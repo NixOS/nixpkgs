@@ -16,6 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-lg+lS+EinZb0MXgTPgsZXAAzkf3Ens22tptzdNtr5BY=";
   };
 
+  pythonImportsCheck = [
+    "yattag"
+  ];
+
   meta = with lib; {
     description = "Library to generate HTML or XML";
     homepage = "https://www.yattag.org/";
