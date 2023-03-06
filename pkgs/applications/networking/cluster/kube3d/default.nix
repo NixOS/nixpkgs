@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, k3sVersion ? null
+, k3sVersion ? "1.25.6-k3s1"
 }:
 
 let
@@ -15,15 +15,20 @@ let
 in
 buildGoModule rec {
   pname = "kube3d";
-  version = "5.4.4";
+  version = "5.4.8";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-3J25Aj/otKDCWJ+YqAsoJogU2vckZMy7fsS8XR2EMgE=";
+    sha256 = "sha256-AweoDdw1ZktRofQZgBfzsvwuA8lVS8SDbctk5HrUAyg=";
   };
-  vendorSha256 = null;
+  # the committed vendor dir is out of sync
+  # https://github.com/k3d-io/k3d/issues/1237
+  deleteVendor = true;
+  vendorSha256 = "sha256-Dwh1VsxRiX5Mrz4FboNTfz+ql0BQIXekk+W5XNrmZsU=";
+  # needs go workspaces to successfully compile due to docker/cli dependency
+  proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +38,7 @@ buildGoModule rec {
     let t = "github.com/k3d-io/k3d/v5/version"; in
     [ "-s" "-w" "-X ${t}.Version=v${version}" ] ++ lib.optionals k3sVersionSet [ "-X ${t}.K3sVersion=v${k3sVersion}" ];
 
-   preCheck = ''
+  preCheck = ''
     # skip test that uses networking
     substituteInPlace version/version_test.go \
       --replace "TestGetK3sVersion" "SkipGetK3sVersion"
