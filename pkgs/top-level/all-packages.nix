@@ -13700,7 +13700,7 @@ with pkgs;
   wvkbd = callPackage ../applications/accessibility/wvkbd { };
 
   wyrd = callPackage ../tools/misc/wyrd {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   x86info = callPackage ../os-specific/linux/x86info { };
