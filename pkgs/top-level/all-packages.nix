@@ -39463,4 +39463,6 @@ with pkgs;
   ali = callPackage ../tools/networking/ali { };
 
   udict = callPackage ../applications/misc/udict { };
+
+  duden = callPackage ../applications/misc/duden { };
 }
