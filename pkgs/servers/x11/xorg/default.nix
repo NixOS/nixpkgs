@@ -2732,11 +2732,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunleo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sunleo";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2";
-      sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
+      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.3.tar.xz";
+      sha256 = "1px670aiqyzddl1nz3xx1lmri39irajrqw6dskirs2a64jgp3dpc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

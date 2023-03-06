@@ -498,24 +498,6 @@ self: super:
 
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunleo/-/commit/f58ba53e6b6fe1b6e21d6aa3901a11e6130b95b0
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/leo.h b/src/leo.h
-      index a5bf41d34955d81b7ea14d4da6bc7f65191a3f98..c45c59b71be679333216d289d689a3c06c8dcbf7 100644
-      --- a/src/leo.h
-      +++ b/src/leo.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "leo_regs.h"
-       EOF
-    '';
   });
 
   xf86videotrident = super.xf86videotrident.overrideAttrs (attrs: {
