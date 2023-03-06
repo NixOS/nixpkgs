@@ -624,7 +624,8 @@ in
               '';
             };
             clientSecret = mkOption {
-              type = types.str;
+              type = with types; nullOr str;
+              default = null;
               description = lib.mdDoc ''
                 Specify the OAuth client secret.
               '';
