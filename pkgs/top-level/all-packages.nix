@@ -34353,6 +34353,8 @@ with pkgs;
     gtk = gtk2;
   };
 
+  xborders = callPackage ../tools/X11/xborders { };
+
   xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
