@@ -2318,8 +2318,6 @@ with pkgs;
     inherit (darwin) moltenvk;
     stdenv =
       if stdenv.isDarwin && stdenv.isAarch64 then llvmPackages_14.stdenv
-      # https://github.com/NixOS/nixpkgs/issues/201254
-      else if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv
       else stdenv;
   };
 
@@ -4984,13 +4982,9 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
-    stdenv = gcc12Stdenv;
-  };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
-    stdenv = gcc12Stdenv;
-  };
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -8814,12 +8808,7 @@ with pkgs;
   wrapKakoune = kakoune: attrs: callPackage ../applications/editors/kakoune/wrapper.nix (attrs // { inherit kakoune; });
   kakounePlugins = recurseIntoAttrs (callPackage ../applications/editors/kakoune/plugins { });
 
-  kakoune-unwrapped = callPackage ../applications/editors/kakoune {
-    # See comments on https://github.com/NixOS/nixpkgs/pull/198836
-    # Remove below when stdenv for linux-aarch64 become recent enough.
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
-  };
+  kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
   };
@@ -11716,8 +11705,6 @@ with pkgs;
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
     gperf = gperf_3_0;
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   rpm2targz = callPackage ../tools/archivers/rpm2targz { };
@@ -19269,11 +19256,7 @@ with pkgs;
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
 
-  bobcat = callPackage ../development/libraries/bobcat {
-    # C++20 is required, aarch64-linux has gcc 9 by default
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
-  };
+  bobcat = callPackage ../development/libraries/bobcat { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
@@ -22475,10 +22458,7 @@ with pkgs;
 
   mtpfs = callPackage ../tools/filesystems/mtpfs { };
 
-  mtxclient = callPackage ../development/libraries/mtxclient {
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
-  };
+  mtxclient = callPackage ../development/libraries/mtxclient { };
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
@@ -31173,8 +31153,7 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc12Stdenv;
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else stdenv;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -32192,10 +32171,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
 
-  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko {
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
-  };
+  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
@@ -37546,8 +37522,6 @@ with pkgs;
   root = callPackage ../applications/science/misc/root {
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
-    # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc12Stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
