@@ -5945,6 +5945,8 @@ with pkgs;
 
   cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
 
+  cdist = python3Packages.callPackage ../tools/admin/cdist { };
+
   cdimgtools = callPackage ../tools/cd-dvd/cdimgtools { };
 
   cdpr = callPackage ../tools/networking/cdpr { };
@@ -7430,6 +7432,8 @@ with pkgs;
 
   fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
 
+  fead = callPackage ../applications/misc/fead { };
+
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
   fbcat = callPackage ../tools/misc/fbcat { };
@@ -7746,6 +7750,8 @@ with pkgs;
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   forgejo = callPackage ../applications/version-management/forgejo {};
 
@@ -9294,6 +9300,8 @@ with pkgs;
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
+  # Exposed here so the bots can auto-upgrade it
+  netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix {};
 
   netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
   netsurf-browser = netsurf.browser;
@@ -12900,6 +12908,8 @@ with pkgs;
   };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
+  ttop = callPackage ../tools/system/ttop { };
+
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
   tty-share = callPackage ../applications/misc/tty-share { };
@@ -13030,7 +13040,7 @@ with pkgs;
 
   unrtf = callPackage ../tools/text/unrtf { };
 
-  unrpa = with python38Packages; toPythonApplication unrpa;
+  unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
@@ -30582,9 +30592,7 @@ with pkgs;
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari {
-    wlroots = wlroots_0_14;
-  };
+  hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;

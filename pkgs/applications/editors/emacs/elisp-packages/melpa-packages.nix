@@ -425,6 +425,18 @@ let
 
         rtags-xref = dontConfigure super.rtags;
 
+        rime = super.rime.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
+          preBuild = (old.preBuild or "") + ''
+            make lib
+            mkdir -p /build/rime-lib
+            cp *.so /build/rime-lib
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
+          '';
+        });
+
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.haskellPackages.structured-haskell-mode ];
         });
