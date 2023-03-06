@@ -1,18 +1,26 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , lib
+
+# propagated build inputs
 , packaging
-, pytestCheckHook
 , pytorch
+
+# check inputs
+, pytestCheckHook
+, opencv3
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "kornia";
   version = "0.6.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-f/V8kxVRoaFGWqrB+mhCoqrWUPUaD5v2zwsPfW5ftZw=";
+  src = fetchFromGitHub {
+    owner = "kornia";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-SWSVGwc6jet5p8Pm3Cz1DR70bhnZDMIwJzFAliOgjoA";
   };
 
   postPatch = ''
@@ -22,6 +30,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    opencv3
+    scipy
   ];
 
   propagatedBuildInputs = [
