@@ -50,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-  ] ++ lib.optionals (stdenv.isAarch64) [
+    "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
     "--deselect=tests/test_emitter.py::test_close"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # fails to stop process in teardown

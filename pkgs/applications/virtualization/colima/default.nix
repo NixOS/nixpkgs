@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, darwin
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -31,7 +32,8 @@ buildGoModule rec {
     '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
   vendorSha256 = "sha256-Iz1LYL25NpkztTM86zrLwehub8FzO1IlwZqCPW7wDN4=";
 
@@ -41,8 +43,6 @@ buildGoModule rec {
     ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
-
-  subPackages = [ "cmd/colima" ];
 
   postInstall = ''
     wrapProgram $out/bin/colima \
