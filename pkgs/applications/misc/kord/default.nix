@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kord";
-  version = "0.4.2";
+  version = "0.5.1";
 
   # kord depends on nightly features
   RUSTC_BOOTSTRAP = 1;
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-B/UwnbzXI3ER8IMOVtn0ErVqFrkZXKoL+l7ll1AlzDg=";
   };
 
-  cargoHash = "sha256-xhWSycTe72HW3E9meTo4wjOCHDcNq6fUPT6nqHoW9vE=";
+  cargoHash = "sha256-aemrdTEVP/VEF8CclruI7aIx/F2CfMFgPCzVwL9EYaM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib ];
