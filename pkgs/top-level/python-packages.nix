@@ -5793,6 +5793,8 @@ self: super: with self; {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  material-color-utilities = callPackage ../development/python-modules/material-color-utilities { };
+
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
 
   matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
