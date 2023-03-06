@@ -1591,6 +1591,12 @@
     githubId = 294444;
     name = "Vladimir Korolev";
   };
+  balodja = {
+    email = "balodja@gmail.com";
+    github = "balodja";
+    githubId = 294444;
+    name = "Vladimir Korolev";
+  };
   baloo = {
     email = "nixpkgs@superbaloo.net";
     github = "baloo";

@@ -6675,6 +6675,8 @@ self: super: with self; {
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
+  ompython = callPackage ../development/python-modules/ompython { };
+
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
