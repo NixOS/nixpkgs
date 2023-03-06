@@ -42,12 +42,14 @@ wget "$desktop_src/yarn.lock"
 desktop_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
-cat > pin.json << EOF
+cat > pin.nix << EOF
 {
-  "version": "$version",
-  "desktopSrcHash": "$desktop_src_hash",
-  "desktopYarnHash": "$desktop_yarn_hash",
-  "webSrcHash": "$web_src_hash",
-  "webYarnHash": "$web_yarn_hash"
+  "version" = "$version";
+  "hashes" = {
+    "desktopSrcHash" = "$desktop_src_hash";
+    "desktopYarnHash" = "$desktop_yarn_hash";
+    "webSrcHash" = "$web_src_hash";
+    "webYarnHash" = "$web_yarn_hash";
+  };
 }
 EOF
