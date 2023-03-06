@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, darwin
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -43,6 +44,11 @@ buildGoModule rec {
   '';
 
   subPackages = [ "cmd/colima" ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace util/util.go \
+      --replace 'sw_vers' "${darwin.DarwinTools}/bin/sw_vers"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
