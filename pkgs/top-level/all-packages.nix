@@ -290,6 +290,8 @@ with pkgs;
 
   ansi = callPackage ../development/tools/ansi { };
 
+  ares-rs = callPackage ../tools/security/ares-rs { };
+
   arti = callPackage ../tools/security/arti {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -6967,7 +6969,11 @@ with pkgs;
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  volk = callPackage ../development/libraries/volk { };
+  volk = if (stdenv.isDarwin && stdenv.isAarch64) then
+    (callPackage ../development/libraries/volk/2.5.0.nix { })
+  else
+    (callPackage ../development/libraries/volk { })
+  ;
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
 
@@ -31753,7 +31759,7 @@ with pkgs;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv-unwrapped = callPackage ../applications/video/mpv {
+  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
     inherit lua;
   };
 
@@ -34335,6 +34341,8 @@ with pkgs;
   xbindkeys-config = callPackage ../tools/X11/xbindkeys-config {
     gtk = gtk2;
   };
+
+  xborders = callPackage ../tools/X11/xborders { };
 
   xxh = callPackage ../tools/networking/xxh { };
 
