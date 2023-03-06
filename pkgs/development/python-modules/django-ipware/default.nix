@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "django-ipware";
   version = "5.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-T6VgfuheEu5eFYvHVp/x4TT7FXloGqH/Pw7QS+Ib4VM=";
+    hash = "sha256-T6VgfuheEu5eFYvHVp/x4TT7FXloGqH/Pw7QS+Ib4VM=";
   };
 
   propagatedBuildInputs = [ django ];
