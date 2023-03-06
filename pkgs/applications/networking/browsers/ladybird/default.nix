@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "ladybird";
-  version = "unstable-2023-01-17";
+  version = "unstable-2023-03-06";
 
   src = fetchFromGitHub {
     owner = "SerenityOS";
     repo = "serenity";
-    rev = "45e85d20b64862df119f643f24e2d500c76c58f3";
-    hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
+    rev = "2258fc273c9eb0db404a8020b8621fab31d1f7f7";
+    hash = "sha256-bwyk2RWXAPte+h0gGHuVN9raemHsKrYC/32wkZtYfYU=";
   };
 
   sourceRoot = "source/Ladybird";
