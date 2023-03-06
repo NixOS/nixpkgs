@@ -298,6 +298,7 @@
 , "stackdriver-statsd-backend"
 , "stf"
 , "stylelint"
+, "style-dictionary"
 , "surge"
 , "svelte-check"
 , "svelte-language-server"
