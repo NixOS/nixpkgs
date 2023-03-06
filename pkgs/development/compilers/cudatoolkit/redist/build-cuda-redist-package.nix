@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, backendStdenv
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
@@ -10,7 +10,8 @@ attrs:
 
 let
   arch = "linux-x86_64";
-in stdenv.mkDerivation {
+in
+backendStdenv.mkDerivation {
   inherit pname;
   inherit (attrs) version;
 
@@ -29,7 +30,11 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    # autoPatchelfHook will search for a libstdc++ and we're giving it a
+    # "compatible" libstdc++ from the same toolchain that NVCC uses.
+    #
+    # NB: We don't actually know if this is the right thing to do
+    backendStdenv.cc.cc.lib
   ];
 
   dontBuild = true;
@@ -42,6 +47,8 @@ in stdenv.mkDerivation {
     mv * $out
     runHook postInstall
   '';
+
+  passthru.stdenv = backendStdenv;
 
   meta = {
     description = attrs.name;
