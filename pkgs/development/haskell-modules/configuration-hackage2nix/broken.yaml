@@ -1129,7 +1129,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-gtk
   - diagrams-pdf
   - diagrams-qrcode
   - diagrams-rubiks-cube
