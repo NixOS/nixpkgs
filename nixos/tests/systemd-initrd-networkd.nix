@@ -2,7 +2,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "systemd-initrd-network";
   meta.maintainers = [ lib.maintainers.elvishjerricco ];
 
-  nodes = {
+  nodes = let
+    mkFlushTest = flush: script: { ... }: {
+      boot.initrd.systemd.enable = true;
+      boot.initrd.network = {
+        enable = true;
+        flushBeforeStage2 = flush;
+      };
+      systemd.services.check-flush = {
+        requiredBy = ["multi-user.target"];
+        before = ["network-pre.target" "multi-user.target"];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
+        inherit script;
+      };
+    };
+  in {
     basic = { ... }: {
       boot.initrd.network.enable = true;
 
@@ -29,11 +45,27 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           };
       };
     };
+
+    doFlush = mkFlushTest true ''
+      if ip addr | grep 10.0.2.15; then
+        echo "Network configuration survived switch-root; flushBeforeStage2 failed"
+        exit 1
+      fi
+    '';
+
+    dontFlush = mkFlushTest false ''
+      if ! (ip addr | grep 10.0.2.15); then
+        echo "Network configuration didn't survive switch-root"
+        exit 1
+      fi
+    '';
   };
 
   testScript = ''
     start_all()
     basic.wait_for_unit("multi-user.target")
+    doFlush.wait_for_unit("multi-user.target")
+    dontFlush.wait_for_unit("multi-user.target")
     # Make sure the systemd-network user was set correctly in initrd
     basic.succeed("[ $(stat -c '%U,%G' /run/systemd/netif/links) = systemd-network,systemd-network ]")
     basic.succeed("ip addr show >&2")
