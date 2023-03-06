@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Ps8J9JuLKcrowl9wgZ3Wm7JTXyiejQPDr4OV/IvDy+I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ps8J9JuLKcrowl9wgZ3Wm7JTXyiejQPDr4OV/IvDy+I=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
