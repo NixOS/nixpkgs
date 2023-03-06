@@ -32,7 +32,8 @@ buildGoModule rec {
     '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
   vendorSha256 = "sha256-Iz1LYL25NpkztTM86zrLwehub8FzO1IlwZqCPW7wDN4=";
 
@@ -41,11 +42,6 @@ buildGoModule rec {
   preConfigure = ''
     ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
-  '';
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace util/util.go \
-      --replace 'sw_vers' "${darwin.DarwinTools}/bin/sw_vers"
   '';
 
   postInstall = ''
