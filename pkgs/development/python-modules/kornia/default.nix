@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.6.7";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "kornia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SWSVGwc6jet5p8Pm3Cz1DR70bhnZDMIwJzFAliOgjoA";
+    sha256 = "sha256-4TE9GfcRMSpI18IEgAeuKjTroKGknc2dVlmXOdyiKuE";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytorch
   ];
 
-  # pytest.ini is not published to pypi
+  # tests are extremely slow
   doCheck = false;
 
   pythonImportsCheck = ["kornia"];
