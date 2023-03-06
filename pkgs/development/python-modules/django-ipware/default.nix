@@ -20,6 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
+    changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
