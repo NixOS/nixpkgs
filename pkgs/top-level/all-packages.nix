@@ -35904,8 +35904,6 @@ with pkgs;
 
   HentaiAtHome = callPackage ../applications/misc/HentaiAtHome { };
 
-  hmcl-bin = callPackage ../games/hmcl-bin { };
-
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
@@ -37357,4 +37355,6 @@ with pkgs;
   swaysettings = callPackage ../applications/misc/swaysettings { };
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
+  
+  ciel = callPackage ../tools/package-management/ciel {};
 }
