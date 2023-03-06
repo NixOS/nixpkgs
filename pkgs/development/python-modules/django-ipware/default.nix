@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "4.0.2";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "602a58325a4808bd19197fef2676a0b2da2df40d0ecf21be414b2ff48c72ad05";
+    sha256 = "sha256-T6VgfuheEu5eFYvHVp/x4TT7FXloGqH/Pw7QS+Ib4VM=";
   };
 
   propagatedBuildInputs = [ django ];
