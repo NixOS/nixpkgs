@@ -805,6 +805,8 @@ with pkgs;
 
   gomi = callPackage ../tools/misc/gomi { };
 
+  gradience = callPackage ../applications/misc/gradience { };
+
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   mangal = callPackage ../applications/misc/mangal { };
