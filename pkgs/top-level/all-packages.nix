@@ -4570,7 +4570,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_22;
+    electron = electron_23;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
