@@ -2700,11 +2700,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosuncg6 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-suncg6";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2";
-      sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
+      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.3.tar.xz";
+      sha256 = "16c3g5m0f5y9nx2x6w9jdzbs9yr6xhq31j37dcffxbsskmfxq57w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

@@ -490,24 +490,6 @@ self: super:
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-suncg6/-/commit/14392504de04841fa2cbb5cdf8d9c9c7c4eb2ed8
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/cg6.h b/src/cg6.h
-      index 9f176e69dc1f6fc5e35ca20c30a4d3b4faf52623..d6bc19e8767c6aee9e7174a43cf1d71a9f35af32 100644
-      --- a/src/cg6.h
-      +++ b/src/cg6.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "cg6_regs.h"
-       EOF
-    '';
   });
 
   xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
