@@ -437,7 +437,7 @@ let
 
           ${ipPreMove} link add dev "${name}" type wireguard
           ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-          ${optionalString (values.mtu != null) ''${ipPreMove} link set "${name}" mtu ${toString values.mtu}''}
+          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
 
           ${concatMapStringsSep "\n" (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''

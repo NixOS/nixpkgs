@@ -41,6 +41,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } : {
         preSetup = ''
           ip netns add ${interfaceNamespace}
         '';
+        mtu = 1280;
         inherit interfaceNamespace;
       };
     };
