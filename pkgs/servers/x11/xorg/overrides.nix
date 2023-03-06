@@ -494,24 +494,6 @@ self: super:
 
   xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunffb/-/commit/656dd83b489e7bdc72d6c1990025d20dea26dc22
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/ffb.h b/src/ffb.h
-      index 67a2d87afa607b6bea07e53f4be738c1ebb757ab..d87024033fb48a83c50c588866c90cd6eac0975c 100644
-      --- a/src/ffb.h
-      +++ b/src/ffb.h
-      @@ -30,7 +30,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #ifdef HAVE_XAA_H
-       #include "xaa.h"
-       #endif
-       EOF
-    '';
   });
 
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
