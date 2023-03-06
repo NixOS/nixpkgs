@@ -1780,10 +1780,7 @@ self: super: {
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  # Too strict version bounds on a bunch of libraries:
-  # https://github.com/smallhadroncollider/taskell/issues/100
-  # May be possible to remove at the next release (1.11.0)
-  taskell = (doJailbreak super.taskell).override {
+  taskell = super.taskell.override {
     # Does not support brick >= 1.0
     # https://github.com/smallhadroncollider/taskell/issues/125
     brick = self.brick_0_70_1;
