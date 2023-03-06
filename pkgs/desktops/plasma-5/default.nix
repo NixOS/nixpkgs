@@ -110,7 +110,7 @@ let
                 broken = meta.broken or broken;
               };
           in
-          (args.stdenv or qtStdenv).mkDerivation (args // {
+          qtStdenv.mkDerivation (args // {
             inherit pname version meta outputs setupHook src nativeBuildInputs;
           });
       };
