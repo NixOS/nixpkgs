@@ -972,6 +972,7 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
 
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
