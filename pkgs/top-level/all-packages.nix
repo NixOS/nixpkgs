@@ -39037,7 +39037,7 @@ with pkgs;
 
   spdlog = spdlog_1;
 
-  dart = callPackage ../development/interpreters/dart { };
+  dart = callPackage ../development/compilers/dart { };
 
   httrack = callPackage ../tools/backup/httrack { };
 
