@@ -20193,9 +20193,7 @@ with pkgs;
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
-      unsafeStringSupport = true;
-    });
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   glui = callPackage ../development/libraries/glui {};
@@ -31564,9 +31562,7 @@ with pkgs;
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
-      unsafeStringSupport = true;
-    });
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   mlvwm = callPackage ../applications/window-managers/mlvwm { };
@@ -37104,9 +37100,7 @@ with pkgs;
   drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
-    ocaml = ocaml-ng.ocamlPackages_4_14.ocaml.override {
-      unsafeStringSupport = true;
-    };
+    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
   eprover = callPackage ../applications/science/logic/eprover { };
