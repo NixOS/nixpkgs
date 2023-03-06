@@ -31622,7 +31622,7 @@ with pkgs;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   monitor = callPackage ../applications/system/monitor {
