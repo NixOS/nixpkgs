@@ -34610,6 +34610,10 @@ with pkgs;
 
   youtube-music = callPackage ../applications/audio/youtube-music { };
 
+  youtube-tui = callPackage ../applications/video/youtube-tui {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+  };
+
   youki = callPackage ../applications/virtualization/youki { };
 
   yt-dlp = with python3Packages; toPythonApplication yt-dlp;
