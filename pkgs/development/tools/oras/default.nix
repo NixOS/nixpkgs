@@ -1,17 +1,17 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, testers, oras }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, oras }:
 
 buildGoModule rec {
   pname = "oras";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
-    hash = "sha256-7fmrWkJ2f9LPaBB0vqLqPCCLpkdsS1gVfJ1xn6K/M3E=";
+    hash = "sha256-NGkpmObFY3Z8sKBbgIwFAnIyVEFE0sRxgrX+3oXEVo0=";
   };
 
-  vendorHash = "sha256-BLjGu1xk5OCNILc2es5Q0fEIqoexq/lHnJtHz72w6iI=";
+  vendorHash = "sha256-l2UuYrkFdZYaqQUW57y0OZyu1gPO22C+AwNdIYymV9k=";
 
   nativeBuildInputs = [ installShellFiles ];
 
