@@ -42258,6 +42258,8 @@ with pkgs;
 
   gitrs = callPackage ../tools/misc/gitrs { };
 
+  dict-cc-py = callPackage ../applications/misc/dict-cc-py { };
+
   wttrbar = callPackage ../applications/misc/wttrbar { };
 
   wpm = callPackage ../applications/misc/wpm { };
