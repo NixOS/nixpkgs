@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "44.beta";
+  version = "44.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nqXYLZ84eqBd0dBR7DS1OyT79k+cnNhCLt/sK+U27II=";
+    sha256 = "GyBy6IHZgquSv4eVh/ZuUjfKyReCxgpmYO139CtJuSY=";
   };
 
   patches = [
