@@ -5209,7 +5209,6 @@ broken-packages:
   - tamarin-prover-utils
   - Tape
   - tapioca
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-autocollect
