@@ -168,6 +168,15 @@ stdenvNoCC.mkDerivation (args // {
           if runtimeId != null
           then [ runtimeId ]
           else map (system: dotnetCorePackages.systemToDotnetRid system) platforms;
+        defaultDepsFile =
+          # Wire in the nugetDeps file such that running the script with no args
+          # runs it agains the correct deps file by default.
+          # Note that toString is necessary here as it results in the path at
+          # eval time (i.e. to the file in your local Nixpkgs checkout) rather
+          # than the Nix store path of the path after it's been imported.
+          if lib.isPath nugetDeps && !lib.hasPrefix "/nix/store/" (toString nugetDeps)
+          then toString nugetDeps
+          else ''$(mktemp -t "${pname}-deps-XXXXXX.nix")'';
       in
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
@@ -238,7 +247,8 @@ stdenvNoCC.mkDerivation (args // {
         export DOTNET_NOLOGO=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-        depsFile=$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")
+        depsFile=$(realpath "''${1:-${defaultDepsFile}}")
+        echo Will write lockfile to "$depsFile"
         mkdir -p "$tmp/nuget_pkgs"
 
         storeSrc="${srcOnly args}"
