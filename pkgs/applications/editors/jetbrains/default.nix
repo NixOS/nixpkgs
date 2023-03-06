@@ -54,7 +54,7 @@ let
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
         (
-          cd $out/clion
+          cd $out/${pname}
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
@@ -69,7 +69,7 @@ let
 
           autoPatchelf $PWD/bin
 
-          wrapProgram $out/bin/clion \
+          wrapProgram $out/bin/${pname} \
             --set CL_JDK "${jdk}"
         )
       '';
@@ -305,6 +305,19 @@ in
     update-channel = products.clion.update-channel;
   };
 
+  clion-eap = buildClion rec {
+    pname = "clion-eap";
+    version = products.clion-eap.version;
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.clion-eap.url;
+      sha256 = products.clion-eap.sha256;
+    };
+    wmClass = "jetbrains-clion-eap";
+    update-channel = products.clion-eap.update-channel;
+  };
+
   datagrip = buildDataGrip rec {
     pname = "datagrip";
     version = products.datagrip.version;
@@ -439,6 +452,19 @@ in
     };
     wmClass = "jetbrains-rider";
     update-channel = products.rider.update-channel;
+  };
+
+  rider-eap = buildRider rec {
+    pname = "rider-eap";
+    version = products.rider-eap.version;
+    description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.rider-eap.url;
+      sha256 = products.rider-eap.sha256;
+    };
+    wmClass = "jetbrains-rider-eap";
+    update-channel = products.rider-eap.update-channel;
   };
 
   ruby-mine = buildRubyMine rec {
