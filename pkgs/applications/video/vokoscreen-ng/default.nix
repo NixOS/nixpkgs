@@ -18,8 +18,8 @@
 , wayland
 , wrapQtAppsHook
 }:
-mkDerivation rec {
 
+mkDerivation rec {
   pname = "vokoscreen-ng";
   version = "3.5.0";
 
