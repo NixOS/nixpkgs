@@ -66,7 +66,7 @@
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
 , speexSupport       ? true,           speex
-, swiftSupport       ? false,          swift
+, swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
 , theoraSupport      ? true,           libtheora
 , vaapiSupport       ? stdenv.isLinux, libva
 , vapoursynthSupport ? false,          vapoursynth
@@ -78,7 +78,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
+  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in stdenv.mkDerivation (self: {
   pname = "mpv";
@@ -98,6 +98,11 @@ in stdenv.mkDerivation (self: {
   '';
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
+
+  preConfigure = lib.optionalString swiftSupport ''
+    # Ensure we reference 'lib' (not 'out') of Swift.
+    export SWIFT_LIB_DYNAMIC=${lib.getLib swift.swift}/lib/swift/macosx
+  '';
 
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
@@ -167,7 +172,8 @@ in stdenv.mkDerivation (self: {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ]
+    ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
