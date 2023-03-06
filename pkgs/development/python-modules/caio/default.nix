@@ -25,11 +25,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # fixture 'loop' not found
-    "test_operations_cancel_cleanly"
-  ];
-
   pythonImportsCheck = [
     "caio"
   ];

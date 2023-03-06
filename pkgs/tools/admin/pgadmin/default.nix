@@ -3,10 +3,8 @@
 , fetchurl
 , zlib
 , mkYarnModules
-, sphinx
 , nixosTests
 , pkgs
-, fetchPypi
 , postgresqlTestHook
 , postgresql
 , server-mode ? true
@@ -36,15 +34,26 @@ let
     # flask-security-too 4.1.5 is incompatible with flask-babel 3.x
     flask-babel = prev.flask-babel.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.0";
-      src = fetchPypi {
+      src = prev.fetchPypi {
         inherit pname version;
         hash = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
       };
       nativeBuildInputs = [ ];
       format = "setuptools";
       outputs = [ "out" ];
+      patches = [ ];
     });
-    # flask 2.2 is incompatible with pgadmin 6.18
+    # flask-babel 2.0.0 is incompatible with babel > 2.11.0
+    babel = prev.babel.overridePythonAttrs (oldAttrs: rec {
+      version = "2.11.0";
+      src = prev.fetchPypi {
+        pname = "Babel";
+        inherit version;
+        hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+      };
+      propagatedBuildInputs = [ prev.pytz ];
+    });
+    # pgadmin 6.20 is incompatible with flask 2.2
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
@@ -62,7 +71,23 @@ let
         hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
       };
     });
-    # pgadmin 6.19 is incompatible with the major flask-security-too update to 5.0.x
+    # flask-sqlalchemy 2.5.1 is incompatible with sqlalchemy > 1.4.45
+    sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      version = "1.4.45";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-/WmFCGAJOj9p/v4KtW0EHt/f4YUQtT2aLq7LovFfp5U=";
+      };
+    });
+    # flask-security-too 4.1.5 is incompatible with flask-wtf > 1.0.1
+    flask-wtf = prev.flask-wtf.overridePythonAttrs (oldAttrs: rec {
+      version = "1.0.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-NP5cb+4PabUOMPgaO36haqFJKncf6a0JdNFkYQwJpsk=";
+      };
+    });
+    # pgadmin 6.20 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
@@ -106,6 +131,8 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
+    # fix extra_require error with "*" in match
+    sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req"
     ${lib.optionalString (!server-mode) ''
