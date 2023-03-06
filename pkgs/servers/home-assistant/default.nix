@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.0";
+  hassVersion = "2023.3.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JxTvAUKZj59jL1czTBzPD7+6x1K7xGGGwZAO8f8dkzg=";
+    hash = "sha256-FvdMNtiLJ6p9I6aEeICukx9mykGGMoONGNdM/I4u/eY=";
   };
 
   # Secondary source is git for tests
@@ -287,7 +287,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-azH9CnHIY0iOLaF3Iqy+uJ6TuftUs1j4RcpXyRQrQws=";
+    hash = "sha256-2usXU1a/QKEIaeg8JFBf/4ID2nzZLoGsfK7KXreKEBE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

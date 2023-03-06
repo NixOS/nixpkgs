@@ -3167,6 +3167,8 @@ self: super: with self; {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
+  evaluate = callPackage ../development/python-modules/evaluate { };
+
   ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
 
   evdev = callPackage ../development/python-modules/evdev { };

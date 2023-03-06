@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sr.ht/~kennylevinsen/wlsunset/";
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

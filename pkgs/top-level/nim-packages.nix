@@ -11,6 +11,8 @@ lib.makeScope newScope (self:
       };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    asciigraph = callPackage ../development/nim-packages/asciigraph { };
+
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
@@ -39,6 +41,8 @@ lib.makeScope newScope (self:
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
+    illwill = callPackage ../development/nim-packages/illwill { };
+
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
@@ -64,6 +68,8 @@ lib.makeScope newScope (self:
     npeg = callPackage ../development/nim-packages/npeg { };
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
+
+    parsetoml = callPackage ../development/nim-packages/parsetoml { };
 
     pixie = callPackage ../development/nim-packages/pixie { };
 

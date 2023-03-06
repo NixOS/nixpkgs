@@ -492,9 +492,7 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dtv-scan-tables_linuxtv = callPackage ../data/misc/dtv-scan-tables/linuxtv.nix { };
-  dtv-scan-tables_tvheadend = callPackage ../data/misc/dtv-scan-tables/tvheadend.nix { };
-  dtv-scan-tables = dtv-scan-tables_linuxtv;
+  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
   dufs = callPackage ../servers/http/dufs {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5947,6 +5945,8 @@ with pkgs;
 
   cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
 
+  cdist = python3Packages.callPackage ../tools/admin/cdist { };
+
   cdimgtools = callPackage ../tools/cd-dvd/cdimgtools { };
 
   cdpr = callPackage ../tools/networking/cdpr { };
@@ -7429,6 +7429,8 @@ with pkgs;
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
   fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
+
+  fead = callPackage ../applications/misc/fead { };
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
@@ -9294,6 +9296,8 @@ with pkgs;
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
+  # Exposed here so the bots can auto-upgrade it
+  netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix {};
 
   netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
   netsurf-browser = netsurf.browser;
@@ -12900,6 +12904,8 @@ with pkgs;
   };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
+  ttop = callPackage ../tools/system/ttop { };
+
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
   tty-share = callPackage ../applications/misc/tty-share { };
@@ -13030,7 +13036,7 @@ with pkgs;
 
   unrtf = callPackage ../tools/text/unrtf { };
 
-  unrpa = with python38Packages; toPythonApplication unrpa;
+  unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
@@ -19672,6 +19678,8 @@ with pkgs;
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
+
+  eigenmath = callPackage ../applications/science/math/eigenmath { };
 
   vapoursynth = callPackage ../development/libraries/vapoursynth {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -38685,9 +38693,7 @@ with pkgs;
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
-  tvheadend = callPackage ../servers/tvheadend {
-    dtv-scan-tables = dtv-scan-tables_tvheadend;
-  };
+  tvheadend = callPackage ../servers/tvheadend { };
 
   twiggy = callPackage ../development/tools/twiggy { };
 

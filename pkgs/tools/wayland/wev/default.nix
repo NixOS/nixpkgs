@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+
   };
 }
