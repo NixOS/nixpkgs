@@ -2572,11 +2572,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoqxl = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-qxl";
-    version = "0.1.5";
+    version = "0.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2";
-      sha256 = "14jc24znnahhmz4kqalafmllsg8awlz0y6gpgdpk5ih38ph851mi";
+      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.6.tar.xz";
+      sha256 = "0pwncx60r1xxk8kpp9a46ga5h7k7hjqf14726v0gra27vdc9blra";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
