@@ -755,7 +755,7 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
       commonPropagatedBuildInputs = [
         dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
         libxshmfence pixman xorgproto zlib
@@ -791,7 +791,7 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm libxcvt mesa ];
+        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
