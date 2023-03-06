@@ -37215,7 +37215,7 @@ with pkgs;
   };
 
   statverif = callPackage ../applications/science/logic/statverif {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
   tptp = callPackage ../applications/science/logic/tptp {};
