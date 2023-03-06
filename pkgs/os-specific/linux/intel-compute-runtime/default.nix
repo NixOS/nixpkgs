@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "22.43.24595.41";
+  version = "22.49.25018.24";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-AdAQX8wurZjXHf3z8IPxnW57CDOwwYlgJ09dNNDhUYQ=";
+    sha256 = "sha256-/onHHIG5jWFObC8pSjpFMadjwaAN6vMNjAsj8/D3qNw=";
   };
 
   patches = [

@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , poetry-core
 , home-assistant
+, python
 }:
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2023.2.5";
+  version = "2023.3.1";
   format = "pyproject";
+
+  disabled = python.version != home-assistant.python.version;
 
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-MQYk4DWvmqtPl00L1c00JclKkTZe9EYMrm/LucUHBE0=";
+    hash = "sha256-WMuQgoWwri4nfKkZ8cW5o6S6G3PbHqlUxC9wyJSZhxQ=";
   };
 
   nativeBuildInputs = [

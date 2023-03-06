@@ -1,19 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, callPackage }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, callPackage
+}:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2023.2.1";
+  version = "2023.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    rev = version;
-    hash = "sha256-vhcz/uk1sBt7XytXQYcPreoPfNz7fdPVE+j+FTH7tPc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LEK809MswDVwPJ6CuC13Fxb7fvliugixS/NOKBajqKM=";
   };
 
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs"
+  ];
 
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
@@ -52,11 +62,6 @@ buildGoModule rec {
     substituteInPlace "ingress/icmp_posix_test.go" \
       --replace "TestReuseFunnel" "SkipReuseFunnel"
 
-    # Workaround for: supervisor_test.go:49:
-    #   Expected nil, but got: Could not lookup srv records on _us-v2-origintunneld._tcp.argotunnel.com: lookup _us-v2-origintunneld._tcp.argotunnel.com on [::1]:53: read udp [::1]:49342->[::1]:53: read: connection refused
-    substituteInPlace "supervisor/supervisor_test.go" \
-      --replace "Test_Initialize_Same_Protocol" "Skip_Initialize_Same_Protocol"
-
     # Workaround for: manager_test.go:197:
     #   Should be false
     substituteInPlace "datagramsession/manager_test.go" \
@@ -70,6 +75,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";
     homepage = "https://www.cloudflare.com/products/tunnel";
+    changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe ];

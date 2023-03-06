@@ -206,6 +206,12 @@
     githubId = 22131756;
     name = "Aaqa Ishtyaq";
   };
+  aaronarinder = {
+    email = "aaronarinder@gmail.com";
+    github = "aaronArinder";
+    githubId = 26738844;
+    name = "Aaron Arinder";
+  };
   aaronjanse = {
     email = "aaron@ajanse.me";
     matrix = "@aaronjanse:matrix.org";
@@ -3600,6 +3606,13 @@
     github = "demyanrogozhin";
     githubId = 62989;
     name = "Demyan Rogozhin";
+  };
+  dennajort = {
+    email = "gosselinjb@gmail.com";
+    matrix = "@dennajort:matrix.org";
+    github = "dennajort";
+    githubId = 1536838;
+    name = "Jean-Baptiste Gosselin";
   };
   derchris = {
     email = "derchris@me.com";
@@ -8949,6 +8962,9 @@
     github = "Ma27";
     githubId = 6025220;
     name = "Maximilian Bosch";
+    keys = [{
+      fingerprint = "62B9 9C26 F046 721E 26B0  04F6 D006 A998 C6AB FDF1";
+    }];
   };
   ma9e = {
     email = "sean@lfo.team";
@@ -11938,6 +11954,12 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  PowerUser64 = {
+    email = "blakelysnorth@gmail.com";
+    github = "PowerUser64";
+    githubId = 24578572;
+    name = "Blake North";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
@@ -12285,6 +12307,12 @@
     github = "RaitoBezarius";
     githubId = 314564;
     name = "Ryan Lahfa";
+  };
+  ralismark = {
+    email = "nixpkgs@ralismark.xyz";
+    github = "ralismark";
+    githubId = 13449732;
+    name = "Temmie";
   };
   raphaelr = {
     email = "raphael-git@tapesoftware.net";
@@ -12883,6 +12911,7 @@
     email = "rrbutani+nix@gmail.com";
     github = "rrbutani";
     githubId = 7833358;
+    matrix = "@rbutani:matrix.org";
     keys = [{
       fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273";
     }];
@@ -12977,6 +13006,12 @@
     github = "rvolosatovs";
     githubId = 12877905;
     name = "Roman Volosatovs";
+  };
+  rxiao = {
+    email = "ben.xiao@me.com";
+    github = "benxiao";
+    githubId = 10908495;
+    name = "Ran Xiao";
   };
   ryanartecona = {
     email = "ryanartecona@gmail.com";
@@ -15968,6 +16003,15 @@
     githubId = 1215623;
     keys = [{
       fingerprint = "DA03 D6C6 3F58 E796 AD26  E99B 366A 2940 479A 06FC";
+    }];
+  };
+  williamvds = {
+    email = "nixpkgs@williamvds.me";
+    github = "williamvds";
+    githubId = 26379999;
+    name = "William Vigolo";
+    keys = [{
+      fingerprint = "9848 B216 BCBE 29BB 1C6A  E0D5 7A4D F5A8 CDBD 49C7";
     }];
   };
   willibutz = {

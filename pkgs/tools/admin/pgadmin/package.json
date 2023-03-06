@@ -150,6 +150,7 @@
     "react-draggable": "^4.4.4",
     "react-dropzone": "^14.2.1",
     "react-leaflet": "^3.2.2",
+    "react-resize-detector": "^8.0.3",
     "react-rnd": "^10.3.5",
     "react-router-dom": "^6.2.2",
     "react-select": "^4.2.1",
@@ -164,6 +165,8 @@
     "styled-components": "^5.2.1",
     "tempusdominus-bootstrap-4": "^5.1.2",
     "tempusdominus-core": "^5.19.3",
+    "uplot": "^1.6.24",
+    "uplot-react": "^1.1.4",
     "valid-filename": "^2.0.1",
     "webcabin-docker": "git+https://github.com/pgadmin-org/wcdocker/#3df8aac825ee2892f4d824de273b779cc6dbcad8",
     "wkx": "^0.5.0",
@@ -188,7 +191,7 @@
     "pep8": "pycodestyle --config=../.pycodestyle ../docs && pycodestyle --config=../.pycodestyle ../pkg && pycodestyle --config=../.pycodestyle ../tools && pycodestyle --config=../.pycodestyle ../web",
     "auditjs-html": "yarn audit --json | yarn run yarn-audit-html --output ../auditjs.html",
     "auditjs": "yarn audit --groups dependencies",
-    "auditpy": "safety check --full-report -i 40493 -i 51668",
+    "auditpy": "safety check --full-report -i 51668 -i 52495",
     "audit": "yarn run auditjs && yarn run auditpy"
   }
 }

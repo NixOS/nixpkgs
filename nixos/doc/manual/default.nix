@@ -135,28 +135,32 @@ let
     }
   '';
 
+  prepareManualFromMD = ''
+    cp -r --no-preserve=all $inputs/* .
+
+    substituteInPlace ./manual.md \
+      --replace '@NIXOS_VERSION@' "${version}"
+    substituteInPlace ./configuration/configuration.md \
+      --replace \
+          '@MODULE_CHAPTERS@' \
+          ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+    substituteInPlace ./nixos-options.md \
+      --replace \
+        '@NIXOS_OPTIONS_JSON@' \
+        ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
+    substituteInPlace ./development/writing-nixos-tests.section.md \
+      --replace \
+        '@NIXOS_TEST_OPTIONS_JSON@' \
+        ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
+  '';
+
   manual-combined = runCommand "nixos-manual-combined"
     { inputs = lib.sourceFilesBySuffices ./. [ ".xml" ".md" ];
       nativeBuildInputs = [ pkgs.nixos-render-docs pkgs.libxml2.bin pkgs.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
-      cp -r --no-preserve=all $inputs/* .
-
-      substituteInPlace ./manual.md \
-        --replace '@NIXOS_VERSION@' "${version}"
-      substituteInPlace ./configuration/configuration.md \
-        --replace \
-            '@MODULE_CHAPTERS@' \
-            ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
-      substituteInPlace ./nixos-options.md \
-        --replace \
-          '@NIXOS_OPTIONS_JSON@' \
-          ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
-      substituteInPlace ./development/writing-nixos-tests.section.md \
-        --replace \
-          '@NIXOS_TEST_OPTIONS_JSON@' \
-          ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
+      ${prepareManualFromMD}
 
       nixos-render-docs -j $NIX_BUILD_CORES manual docbook \
         --manpage-urls ${manpageUrls} \
@@ -193,7 +197,14 @@ in rec {
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
-    { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    { nativeBuildInputs =
+        if allowDocBook then [
+          buildPackages.libxml2.bin
+          buildPackages.libxslt.bin
+        ] else [
+          buildPackages.nixos-render-docs
+        ];
+      inputs = lib.optionals (! allowDocBook) (lib.sourceFilesBySuffices ./. [ ".md" ]);
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -201,22 +212,43 @@ in rec {
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
       mkdir -p $dst
-      xsltproc \
-        ${manualXsltprocOptions} \
-        --stringparam id.warnings "1" \
-        --nonet --output $dst/ \
-        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
-        ${manual-combined}/manual-combined.xml \
-        |& tee xsltproc.out
-      grep "^ID recommended on" xsltproc.out &>/dev/null && echo "error: some IDs are missing" && false
-      rm xsltproc.out
-
-      mkdir -p $dst/images/callouts
-      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
       cp ${../../../doc/style.css} $dst/style.css
       cp ${../../../doc/overrides.css} $dst/overrides.css
       cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
+
+      ${if allowDocBook then ''
+          xsltproc \
+            ${manualXsltprocOptions} \
+            --stringparam id.warnings "1" \
+            --nonet --output $dst/ \
+            ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+            ${manual-combined}/manual-combined.xml \
+            |& tee xsltproc.out
+          grep "^ID recommended on" xsltproc.out &>/dev/null && echo "error: some IDs are missing" && false
+          rm xsltproc.out
+
+          mkdir -p $dst/images/callouts
+          cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
+        '' else ''
+          ${prepareManualFromMD}
+
+          # TODO generator is set like this because the docbook/md manual compare workflow will
+          # trigger if it's different
+          nixos-render-docs -j $NIX_BUILD_CORES manual html \
+            --manpage-urls ${manpageUrls} \
+            --revision ${lib.escapeShellArg revision} \
+            --generator "DocBook XSL Stylesheets V${docbook_xsl_ns.version}" \
+            --stylesheet style.css \
+            --stylesheet overrides.css \
+            --stylesheet highlightjs/mono-blue.css \
+            --script ./highlightjs/highlight.pack.js \
+            --script ./highlightjs/loader.js \
+            --toc-depth 1 \
+            --chunk-toc-depth 1 \
+            ./manual.md \
+            $dst/index.html
+        ''}
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products

@@ -26,6 +26,7 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE DataKinds #-}
 
 import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
@@ -54,17 +55,22 @@ import Data.Time (defaultTimeLocale, formatTime, getCurrentTime)
 import Data.Time.Clock (UTCTime)
 import GHC.Generics (Generic)
 import Network.HTTP.Req (
-   GET (GET),
-   NoReqBody (NoReqBody),
-   defaultHttpConfig,
-   header,
-   https,
-   jsonResponse,
-   req,
-   responseBody,
-   responseTimeout,
-   runReq,
-   (/:),
+    GET (GET),
+    HttpResponse (HttpResponseBody),
+    NoReqBody (NoReqBody),
+    Option,
+    Req,
+    Scheme (Https),
+    bsResponse,
+    defaultHttpConfig,
+    header,
+    https,
+    jsonResponse,
+    req,
+    responseBody,
+    responseTimeout,
+    runReq,
+    (/:),
  )
 import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
@@ -76,6 +82,10 @@ import Control.Exception (evaluate)
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Bifunctor (second)
+import Data.Data (Proxy)
+import Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
+import Distribution.Simple.Utils (safeLast, fromUTF8BS)
 
 newtype JobsetEvals = JobsetEvals
    { evals :: Seq Eval
@@ -123,17 +133,31 @@ showT = Text.pack . show
 
 getBuildReports :: IO ()
 getBuildReports = runReq defaultHttpConfig do
-   evalMay <- Seq.lookup 0 . evals <$> myReq (https "hydra.nixos.org" /: "jobset" /: "nixpkgs" /: "haskell-updates" /: "evals") mempty
+   evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
    eval@Eval{id} <- maybe (liftIO $ fail "No Evalution found") pure evalMay
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports :: Seq Build <- myReq (https "hydra.nixos.org" /: "eval" /: showT id /: "builds") (responseTimeout 600000000)
+   buildReports :: Seq Build <- hydraJSONQuery (responseTimeout 600000000) ["eval", showT id, "builds"]
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
-  where
-   myReq query option = responseBody <$> req GET query NoReqBody jsonResponse (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)" <> option)
+
+hydraQuery :: HttpResponse a => Proxy a -> Option 'Https -> [Text] -> Req (HttpResponseBody a)
+hydraQuery responseType option query =
+   responseBody
+      <$> req
+         GET
+         (foldl' (/:) (https "hydra.nixos.org") query)
+         NoReqBody
+         responseType
+         (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)" <> option)
+
+hydraJSONQuery :: FromJSON a => Option 'Https -> [Text] -> Req a
+hydraJSONQuery = hydraQuery jsonResponse
+
+hydraPlainQuery :: [Text] -> Req ByteString
+hydraPlainQuery = hydraQuery bsResponse mempty
 
 hydraEvalCommand :: FilePath
 hydraEvalCommand = "hydra-eval-jobs"
@@ -326,23 +350,24 @@ instance Functor (Table row col) where
 instance Foldable (Table row col) where
    foldMap f (Table a) = foldMap f a
 
+getBuildState :: Build -> BuildState
+getBuildState Build{finished, buildstatus} = case (finished, buildstatus) of
+   (0, _) -> Unfinished
+   (_, Just 0) -> Success
+   (_, Just 1) -> Failed
+   (_, Just 2) -> DependencyFailed
+   (_, Just 3) -> HydraFailure
+   (_, Just 4) -> Canceled
+   (_, Just 7) -> TimedOut
+   (_, Just 11) -> OutputLimitExceeded
+   (_, i) -> Unknown i
+
 buildSummary :: MaintainerMap -> ReverseDependencyMap -> Seq Build -> StatusSummary
 buildSummary maintainerMap reverseDependencyMap = foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
   where
    unionSummary (SummaryEntry (Table lb) lm lr lu) (SummaryEntry (Table rb) rm rr ru) = SummaryEntry (Table $ Map.union lb rb) (lm <> rm) (max lr rr) (max lu ru)
-   toSummary Build{finished, buildstatus, job, id, system} = Map.singleton name (SummaryEntry (Table (Map.singleton (set, Platform system) (BuildResult state id))) maintainers reverseDeps unbrokenReverseDeps)
+   toSummary build@Build{job, id, system} = Map.singleton name (SummaryEntry (Table (Map.singleton (set, Platform system) (BuildResult (getBuildState build) id))) maintainers reverseDeps unbrokenReverseDeps)
      where
-      state :: BuildState
-      state = case (finished, buildstatus) of
-         (0, _) -> Unfinished
-         (_, Just 0) -> Success
-         (_, Just 1) -> Failed
-         (_, Just 2) -> DependencyFailed
-         (_, Just 3) -> HydraFailure
-         (_, Just 4) -> Canceled
-         (_, Just 7) -> TimedOut
-         (_, Just 11) -> OutputLimitExceeded
-         (_, i) -> Unknown i
       packageName = fromMaybe job (Text.stripSuffix ("." <> system) job)
       splitted = nonEmpty $ Text.splitOn "." packageName
       name = maybe packageName NonEmpty.last splitted
@@ -486,8 +511,23 @@ printMaintainerPing = do
 
 printMarkBrokenList :: IO ()
 printMarkBrokenList = do
-   (_, _, buildReport) <- readBuildReports
-   forM_ buildReport \Build{buildstatus, job} ->
-      case (buildstatus, Text.splitOn "." job) of
-         (Just 1, ["haskellPackages", name, "x86_64-linux"]) -> putStrLn $ "  - " <> Text.unpack name
+   (_, fetchTime, buildReport) <- readBuildReports
+   runReq defaultHttpConfig $ forM_ buildReport \build@Build{job, id} ->
+      case (getBuildState build, Text.splitOn "." job) of
+         (Failed, ["haskellPackages", name, "x86_64-linux"]) -> do
+            -- Fetch build log from hydra to figure out the cause of the error.
+            build_log <- ByteString.lines <$> hydraPlainQuery ["build", showT id, "nixlog", "1", "raw"]
+            -- We use the last probable error cause found in the build log file.
+            let error_message = fromMaybe " failure " $ safeLast $ mapMaybe probableErrorCause build_log
+            liftIO $ putStrLn $ "  - " <> Text.unpack name <> " # " <> error_message <> " in job https://hydra.nixos.org/build/" <> show id <> " at " <> formatTime defaultTimeLocale "%Y-%m-%d" fetchTime
          _ -> pure ()
+
+{- | This function receives a line from a Nix Haskell builder build log and returns a possible error cause.
+ | We might need to add other causes in the future if errors happen in unusual parts of the builder.
+-}
+probableErrorCause :: ByteString -> Maybe String
+probableErrorCause "Setup: Encountered missing or private dependencies:" = Just "dependency missing"
+probableErrorCause "running tests" = Just "test failure"
+probableErrorCause build_line | ByteString.isPrefixOf "Building" build_line = Just ("failure building " <> fromUTF8BS (fst $ ByteString.breakSubstring " for" $ ByteString.drop 9 build_line))
+probableErrorCause build_line | ByteString.isSuffixOf "Phase" build_line = Just ("failure in " <> fromUTF8BS build_line)
+probableErrorCause _ = Nothing

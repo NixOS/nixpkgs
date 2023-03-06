@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kluctl";
-  version = "2.19.0";
+  version = "2.19.2";
 
   src = fetchFromGitHub {
     owner = "kluctl";
     repo = "kluctl";
     rev = "v${version}";
-    hash = "sha256-2nAgJj/cMDiE5rw/YixNYQNCWnuC/8EX4BrnXN4Npao=";
+    hash = "sha256-7+hXjYaCqInhP3O8IS8IwkUTGhnmcIWRR1qqvA6UQoc=";
   };
 
   vendorHash = "sha256-xBUrY8v4yHtWGaaRXHxQRGdZHzMGoJX2hFLL+0Vb1QY=";
