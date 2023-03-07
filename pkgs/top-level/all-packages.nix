@@ -14363,8 +14363,8 @@ with pkgs;
   rocmClangStdenv = llvmPackages_rocm.rocmClangStdenv;
 
   clasp-common-lisp = callPackage ../development/compilers/clasp {
-    llvmPackages = llvmPackages_6;
-    stdenv = llvmPackages_6.stdenv;
+    llvmPackages = llvmPackages_15;
+    stdenv = llvmPackages_15.stdenv;
   };
 
   clean = callPackage ../development/compilers/clean { };
