@@ -205,6 +205,8 @@ in
         config.environment.etc."netdata/netdata.conf".source
         config.environment.etc."netdata/conf.d".source
       ];
+      # It's ok to keep running during system activation
+      stopIfChanged = false;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
