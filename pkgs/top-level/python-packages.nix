@@ -3171,6 +3171,8 @@ self: super: with self; {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
+  eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
+
   evaluate = callPackage ../development/python-modules/evaluate { };
 
   ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
