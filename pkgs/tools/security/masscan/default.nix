@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , makeWrapper
 , libpcap
@@ -8,14 +9,23 @@
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "144c527ed55275ee9fbb80bb14fbb5e3fcff3b7e";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-pWrqldvdlPbA4dE9o+O8S+nhY1w7vVLkL95j9RFwAy0=";
+    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
+
+  patches = [
+    # Patches the missing "--resume" functionality 
+    (fetchpatch {
+      name = "resume.patch";
+      url = "https://github.com/robertdavidgraham/masscan/commit/90791550bbdfac8905917a109ed74024161f14b3.patch";
+      sha256 = "sha256-A7Fk3MBNxaad69MrUYg7fdMG77wba5iESDTIRigYslw=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Fix broken install command
