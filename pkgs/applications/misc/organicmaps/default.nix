@@ -15,17 +15,18 @@
 , zlib
 , icu
 , freetype
+, pugixml
 }:
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.01.25-3";
+  version = "2023.03.05-5";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-4nlD/GFOoBOCXVWtC7i6SUquEbob5++GyagZOTznygU=";
+    sha256 = "sha256-PfudozmrL8jNS/99nxSn0B3E53W34m4/ZN0y2ucB2WI=";
     fetchSubmodules = true;
   };
 
@@ -55,6 +56,7 @@ mkDerivation rec {
     zlib
     icu
     freetype
+    pugixml
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
