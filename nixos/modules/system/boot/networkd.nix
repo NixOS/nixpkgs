@@ -3155,6 +3155,9 @@ let
 
       systemd.package = pkgs.systemdStage1Network;
 
+      # For networkctl
+      systemd.dbus.enable = mkDefault true;
+
       systemd.additionalUpstreamUnits = [
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
