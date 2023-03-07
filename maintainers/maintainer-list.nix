@@ -7924,6 +7924,12 @@
     githubId = 804677;
     name = "Kirill Kazakov";
   };
+  kirillrdy = {
+    email = "kirillrdy@gmail.com";
+    github = "kirillrdy";
+    githubId = 12160;
+    name = "Kirill Radzikhovskyy";
+  };
   kisonecat = {
     email = "kisonecat@gmail.com";
     github = "kisonecat";
