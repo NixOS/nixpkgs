@@ -6,16 +6,16 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.1.3";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
+    rev = version;
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-CST51mTFytCAubx69nie6Vu99DRIVUEW6uTPa4APcTE=";
+    hash = "sha256-v1z6caEMJNXqbcbTmFXoy3KQewHiz6qK4vhNU6Qbukk=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
