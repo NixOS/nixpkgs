@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Patches the missing "--resume" functionality 
+    # Patches the missing "--resume" functionality
     (fetchpatch {
       name = "resume.patch";
       url = "https://github.com/robertdavidgraham/masscan/commit/90791550bbdfac8905917a109ed74024161f14b3.patch";
