@@ -14,12 +14,12 @@
 #
 {
   busybox = import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-linux/mips64el/97d9c84e1df4397b43ecb39359f1bd003cd44585/busybox";
+    url = "http://tarballs.nixos.org/stdenv-linux/mips64el-n32/97d9c84e1df4397b43ecb39359f1bd003cd44585/busybox";
     sha256 = "sha256-4N3G1qYA7vitjhsIW17pR6UixIuzrq4vZXa8F0/X4iI=";
     executable = true;
   };
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-linux/mips64el/97d9c84e1df4397b43ecb39359f1bd003cd44585/bootstrap-tools.tar.xz";
+    url = "http://tarballs.nixos.org/stdenv-linux/mips64el-n32/97d9c84e1df4397b43ecb39359f1bd003cd44585/bootstrap-tools.tar.xz";
     sha256 = "sha256-LWrpN6su2yNVurUyhZP34OiZyzgh7MfN13fIIbou8KI=";
   };
 }
