@@ -2998,6 +2998,13 @@
     githubId = 40290417;
     name = "Seb Blair";
   };
+  connorbaker = {
+    email = "connor.baker@tweag.io";
+    matrix = "@connorbaker:matrix.org";
+    github = "connorbaker";
+    name = "Connor Baker";
+    githubId = 3880346;
+  };
   considerate = {
     email = "viktor.kronvall@gmail.com";
     github = "considerate";
