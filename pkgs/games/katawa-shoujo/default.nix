@@ -2,7 +2,9 @@
 , lib
 , fetchurl
 , autoPatchelfHook
+, copyDesktopItems
 , freetype
+, makeDesktopItem
 , makeWrapper
 , libGL
 , libGLU
@@ -21,6 +23,7 @@
 , SDL_image
 , SDL_ttf
 , undmg
+, unrpa
 , zlib
 }:
 
@@ -52,6 +55,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+    copyDesktopItems
+    unrpa
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
     undmg
@@ -72,6 +77,15 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
   ];
+
+  desktopItems = [(makeDesktopItem rec {
+    name = "katawa-shoujo";
+    desktopName = "Katawa Shoujo";
+    comment = meta.description;
+    exec = name;
+    icon = name;
+    categories = [ "Game" ];
+  })];
 
   dontConfigure = true;
   dontBuild = true;
@@ -103,11 +117,15 @@ stdenv.mkDerivation rec {
     exec \$RENPY_GDB ${libDir}/'Katawa Shoujo' \$RENPY_PYARGS -EO ${dataDir}/'Katawa Shoujo'.py "\$@"
     EOF
 
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     # No autoPatchelfHook on Darwin
     wrapProgram ${bin} \
       --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs}
-  '' + ''
+  '' else ''
+    # Extract icon for xdg desktop file
+    unrpa ${dataDir}/game/data.rpa
+    install -Dm644 ui/icon.png $out/share/icons/hicolor/512x512/apps/katawa-shoujo.png
+  '') + ''
 
     # Delete binaries for wrong arch, autoPatchelfHook gets confused by them & less to keep in the store
     find "$(dirname ${libDir})" -mindepth 1 -maxdepth 1 \
