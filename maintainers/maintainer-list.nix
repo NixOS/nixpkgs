@@ -2285,6 +2285,12 @@
     githubId = 15320726;
     name = "Car Cdr";
   };
+  caarlos0 = {
+    name = "Carlos A Becker";
+    email = "carlos@becker.software";
+    github = "caarlos0";
+    githubId = 245435;
+  };
   cab404 = {
     email = "cab404@mailbox.org";
     github = "cab404";
