@@ -8267,6 +8267,10 @@ with pkgs;
     llvmPackages = llvmPackages_14;
   };
 
+  halide_15 = callPackage ../development/compilers/halide/halide_15.nix {
+    llvmPackages = llvmPackages_15;
+  };
+
   harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
 
   ham = pkgs.perlPackages.ham;
