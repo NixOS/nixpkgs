@@ -3033,6 +3033,8 @@ with pkgs;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
+  calcure = callPackage ../applications/misc/calcure { };
+
   callaudiod = callPackage ../applications/audio/callaudiod { };
 
   calls = callPackage ../applications/networking/calls { };
