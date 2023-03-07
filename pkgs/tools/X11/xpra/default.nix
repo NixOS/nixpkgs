@@ -20,6 +20,7 @@
 , librsvg
 , libvpx
 , libwebp
+, lz4
 , nv-codec-headers-10
 , nvidia_x11 ? null
 , pam
@@ -68,11 +69,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.3.3";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-J6zzkho0A1faCVzS/0wDlbgLtJmyPrnBkEcR7kDld7A=";
+    hash = "sha256-j7tHT486ylyWAmR34BBWw9+HbDPnYMvHU88HV+Cs1w8=";
   };
 
   patches = [
@@ -122,6 +123,7 @@ in buildPythonApplication rec {
     librsvg
     libvpx
     libwebp
+    lz4
     pam
     pango
     x264

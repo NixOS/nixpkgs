@@ -290,6 +290,8 @@ with pkgs;
 
   ansi = callPackage ../development/tools/ansi { };
 
+  ares-rs = callPackage ../tools/security/ares-rs { };
+
   arti = callPackage ../tools/security/arti {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -4570,7 +4572,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_22;
+    electron = electron_23;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5402,6 +5404,8 @@ with pkgs;
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil {};
+
+  ospd-openvas = callPackage ../tools/security/ospd-openvas {};
 
   osv-detector = callPackage ../tools/security/osv-detector {};
 
@@ -6971,7 +6975,11 @@ with pkgs;
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  volk = callPackage ../development/libraries/volk { };
+  volk = if (stdenv.isDarwin && stdenv.isAarch64) then
+    (callPackage ../development/libraries/volk/2.5.0.nix { })
+  else
+    (callPackage ../development/libraries/volk { })
+  ;
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
 
@@ -7748,6 +7756,8 @@ with pkgs;
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   forgejo = callPackage ../applications/version-management/forgejo {};
 
@@ -13241,7 +13251,7 @@ with pkgs;
 
   wakapi = callPackage ../tools/misc/wakapi { };
 
-  wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
+  wakatime = callPackage ../tools/misc/wakatime { };
 
   wambo = callPackage ../development/tools/wambo { };
 
@@ -15535,8 +15545,10 @@ with pkgs;
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  obliv-c = callPackage ../development/compilers/obliv-c
-    { stdenv = gcc10StdenvCompat; ocamlPackages = ocaml-ng.ocamlPackages_4_05; };
+  obliv-c = callPackage ../development/compilers/obliv-c {
+    stdenv = gcc10StdenvCompat;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
@@ -19814,7 +19826,11 @@ with pkgs;
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
-  fftwQuad = fftw.override { precision = "quad-precision"; };
+  # Need gcc >= 4.6.0 to build with FFTW with quad precision, but Darwin defaults to Clang
+  fftwQuad = fftw.override {
+    precision = "quad-precision";
+    stdenv = gccStdenv;
+  };
   fftwMpi = fftw.override { enableMpi = true; };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
@@ -20177,7 +20193,9 @@ with pkgs;
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
+      unsafeStringSupport = true;
+    });
   };
 
   glui = callPackage ../development/libraries/glui {};
@@ -29739,6 +29757,7 @@ with pkgs;
     dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
     greetd = callPackage ../applications/display-managers/greetd { };
     gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
+    regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };
     tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
     wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
   };
@@ -30577,9 +30596,7 @@ with pkgs;
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari {
-    wlroots = wlroots_0_14;
-  };
+  hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -31279,7 +31296,7 @@ with pkgs;
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   llpp = callPackage ../applications/misc/llpp {
-    inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
+    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
   lls = callPackage ../applications/networking/lls { };
@@ -31547,7 +31564,7 @@ with pkgs;
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_13.ocaml.override {
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
       unsafeStringSupport = true;
     });
   };
@@ -31753,7 +31770,7 @@ with pkgs;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv-unwrapped = callPackage ../applications/video/mpv {
+  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
     inherit lua;
   };
 
@@ -34338,6 +34355,8 @@ with pkgs;
   xbindkeys-config = callPackage ../tools/X11/xbindkeys-config {
     gtk = gtk2;
   };
+
+  xborders = callPackage ../tools/X11/xborders { };
 
   xxh = callPackage ../tools/networking/xxh { };
 
@@ -39442,4 +39461,8 @@ with pkgs;
   gnss-share = callPackage ../servers/gnss-share { };
 
   ali = callPackage ../tools/networking/ali { };
+
+  udict = callPackage ../applications/misc/udict { };
+
+  duden = callPackage ../applications/misc/duden { };
 }

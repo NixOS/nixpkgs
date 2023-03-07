@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
      (if stdenv.targetPlatform.isMusl
       then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
+  # This patch fixes a bug in 2.40 on MinGW, which breaks DXVK when cross-building from Darwin.
+  # See https://sourceware.org/bugzilla/show_bug.cgi?id=30079
+  ++ lib.optional stdenv.targetPlatform.isMinGW ./mingw-abort-fix.patch
   ;
 
   outputs = [ "out" "info" "man" "dev" ]
