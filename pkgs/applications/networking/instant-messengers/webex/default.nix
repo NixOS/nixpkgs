@@ -141,11 +141,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  wrapper = ''
+    if [[ -v WAYLAND_DISPLAY ]]; then
+      export QT_QPA_PLATFORM=xcb
+      export QT_XCB_GL_INTEGRATION=none
+    fi
+    $out/opt/Webex/bin/CiscoCollabHost
+  '';
+
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/applications"
     cp -r opt "$out"
 
-    ln -s "$out/opt/Webex/bin/CiscoCollabHost" "$out/bin/webex"
+    echo "${wrapper}" > "$out/bin/webex"
     chmod +x $out/bin/webex
 
     mv "$out/opt/Webex/bin/webex.desktop" "$out/share/applications/webex.desktop"
