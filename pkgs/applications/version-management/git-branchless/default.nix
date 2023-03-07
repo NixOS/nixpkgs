@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-Rf7ai+s2Fp/RFA4on9YBoTjFpvzSZtAHf0rytfZf0rc=";
+    sha256 = "sha256-t3nzElicRbOTI+1nD+CGQk9u83FUUNgJ0OpylPZdlOs=";
   };
 
-  cargoSha256 = "sha256-GVo0t2dJ6R+1UJf/NlKd5QLIQfDdFEHa+FSeW/Hk/4c=";
+  cargoHash = "sha256-RfZnPQN+BSJ2YmCEMCPWY477sJue/L++3aL+U15C1Ro=";
 
   nativeBuildInputs = [ pkg-config ];
 

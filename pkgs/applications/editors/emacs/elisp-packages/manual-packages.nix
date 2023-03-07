@@ -2,7 +2,7 @@
 
 self:
 let
-  inherit (pkgs) callPackage;
+  inherit (self) callPackage;
 in
 {
   agda-input = callPackage ./manual-packages/agda-input { };
