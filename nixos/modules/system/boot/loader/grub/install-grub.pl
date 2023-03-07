@@ -75,6 +75,7 @@ my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
+my $timeoutStyle = get("timeoutStyle");
 my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
@@ -319,6 +320,7 @@ $conf .= "
       set default=$defaultEntryText
       set timeout=$timeout
     fi
+    set timeout_style=$timeoutStyle
 
     function savedefault {
         if [ -z \"\${boot_once}\"]; then
