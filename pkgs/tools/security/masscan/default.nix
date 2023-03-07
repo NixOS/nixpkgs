@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "1.3.2";
+  version = "144c527ed55275ee9fbb80bb14fbb5e3fcff3b7e";
 
   src = fetchFromGitHub {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
+    sha256 = "sha256-pWrqldvdlPbA4dE9o+O8S+nhY1w7vVLkL95j9RFwAy0=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
