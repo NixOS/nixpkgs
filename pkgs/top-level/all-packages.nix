@@ -5399,6 +5399,8 @@ with pkgs;
 
   ossutil = callPackage ../tools/admin/ossutil {};
 
+  ospd-openvas = callPackage ../tools/security/ospd-openvas {};
+
   osv-detector = callPackage ../tools/security/osv-detector {};
 
   osv-scanner = callPackage ../tools/security/osv-scanner {};
@@ -13238,7 +13240,7 @@ with pkgs;
 
   wakapi = callPackage ../tools/misc/wakapi { };
 
-  wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
+  wakatime = callPackage ../tools/misc/wakatime { };
 
   wambo = callPackage ../development/tools/wambo { };
 
@@ -31286,7 +31288,7 @@ with pkgs;
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   llpp = callPackage ../applications/misc/llpp {
-    inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
+    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
   lls = callPackage ../applications/networking/lls { };
@@ -31554,7 +31556,7 @@ with pkgs;
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_13.ocaml.override {
+    ocamlPackages = ocaml-ng.mkOcamlPackages (ocaml-ng.ocamlPackages_4_14.ocaml.override {
       unsafeStringSupport = true;
     });
   };
@@ -39446,4 +39448,8 @@ with pkgs;
   gnss-share = callPackage ../servers/gnss-share { };
 
   ali = callPackage ../tools/networking/ali { };
+
+  udict = callPackage ../applications/misc/udict { };
+
+  duden = callPackage ../applications/misc/duden { };
 }

@@ -490,104 +490,14 @@ self: super:
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-suncg6/-/commit/14392504de04841fa2cbb5cdf8d9c9c7c4eb2ed8
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/cg6.h b/src/cg6.h
-      index 9f176e69dc1f6fc5e35ca20c30a4d3b4faf52623..d6bc19e8767c6aee9e7174a43cf1d71a9f35af32 100644
-      --- a/src/cg6.h
-      +++ b/src/cg6.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "cg6_regs.h"
-       EOF
-    '';
   });
 
   xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunffb/-/commit/656dd83b489e7bdc72d6c1990025d20dea26dc22
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/ffb.h b/src/ffb.h
-      index 67a2d87afa607b6bea07e53f4be738c1ebb757ab..d87024033fb48a83c50c588866c90cd6eac0975c 100644
-      --- a/src/ffb.h
-      +++ b/src/ffb.h
-      @@ -30,7 +30,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #ifdef HAVE_XAA_H
-       #include "xaa.h"
-       #endif
-       EOF
-    '';
   });
 
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunleo/-/commit/f58ba53e6b6fe1b6e21d6aa3901a11e6130b95b0
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/leo.h b/src/leo.h
-      index a5bf41d34955d81b7ea14d4da6bc7f65191a3f98..c45c59b71be679333216d289d689a3c06c8dcbf7 100644
-      --- a/src/leo.h
-      +++ b/src/leo.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "leo_regs.h"
-       EOF
-    '';
-  });
-
-  xf86videotrident = super.xf86videotrident.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/commit/07a5c4732f1c28ffcb873ee04500e3cb813c50b4
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/trident.h b/src/trident.h
-      index 5cadf52d3be13f03e94a8f443f1c8a04358296e8..c82de4c7debf3ee42e3b7965b738a6bd6ae9147d 100644
-      --- a/src/trident.h
-      +++ b/src/trident.h
-      @@ -38,7 +38,6 @@
-       #include "xaa.h"
-       #endif
-       #include "xf86fbman.h"
-      -#include "xf86RamDac.h"
-       #include "compiler.h"
-       #include "vgaHW.h"
-       #include "xf86i2c.h"
-      @@ -103,7 +102,6 @@ typedef struct {
-           int			useEXA;
-           int			Chipset;
-           int			DACtype;
-      -    int			RamDac;
-           int                 ChipRev;
-           int			HwBpp;
-           int			BppShift;
-      @@ -169,7 +167,6 @@ typedef struct {
-           CARD32		BltScanDirection;
-           CARD32		DrawFlag;
-           CARD16		LinePattern;
-      -    RamDacRecPtr	RamDacRec;
-           int			CursorOffset;
-           xf86CursorInfoPtr	CursorInfoRec;
-           xf86Int10InfoPtr	Int10;
-       EOF
-    '';
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -599,16 +509,6 @@ self: super:
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
-    postPatch = ''
-      patch -p1 <<EOF
-      --- a/src/qxl_option_helpers.c
-      +++ b/src/qxl_option_helpers.c
-      @@ -37 +37 @@
-      -        return options[option_index].value.bool;
-      +        return options[option_index].value.boolean;
-      EOF
-    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
@@ -755,7 +655,7 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
       commonPropagatedBuildInputs = [
         dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
         libxshmfence pixman xorgproto zlib
@@ -791,7 +691,7 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm libxcvt mesa ];
+        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
@@ -972,6 +872,7 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
 
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];

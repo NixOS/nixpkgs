@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-dZgs+G2vJQIKnN9xHcNeNViG7mOIdKb+Ms2AKE+FC4M=";
   };
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Framework for vulnerability scanners which support OSP";
     homepage = "https://github.com/greenbone/ospd";
+    changelog = "https://github.com/greenbone/ospd/releases/tag/v${version}";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
