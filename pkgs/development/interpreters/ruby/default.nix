@@ -281,6 +281,7 @@ let
             ruby = self;
           };
 
+          inherit rubygems;
           inherit (import ../../ruby-modules/with-packages {
             inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
