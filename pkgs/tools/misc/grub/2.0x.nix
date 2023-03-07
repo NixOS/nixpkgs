@@ -81,6 +81,30 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=000b5cd04fd228f9741f5dca0491636bc0b89eb8";
       sha256 = "sha256-Mex3qQ0lW7ZCv7ZI7MSSqbylJXZ5RTbR4Pv1+CJ0ciM=";
     })
+
+    # Upstreamed patches for flicker-free boot
+    # Remove these patches once a new release is cut
+    (fetchpatch {
+      # term/efi/console: Do not set colorstate until the first text output
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9381dbe045b39bd9395c9ab4276d95b4041ec9fb";
+      sha256 = "sha256-ZFq/PdCYo6aRySZRAfZARO8BmXwGgqeXz+9uNgNJEO8=";
+    })
+    (fetchpatch {
+      # term/efi/console: Do not set cursor until the first text output
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7c316e18301e101e4dcd8abe88c0bed0b1b78857";
+      sha256 = "sha256-WJiK7MqmdStzq77vIDsO60Fu7i9LE/jDYzF4E9FXb7c=";
+    })
+    (fetchpatch {
+      # normal/menu: Don't show "Booting `%s'" msg when auto-booting with TIMEOUT_STYLE_HIDDEN
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=5bb4f2b7d665c84bde402d1a528b652a61753380";
+      sha256 = "sha256-lwJPPyq6yj7X1C2RuHfxnwKKstFkWGxcMXuSQqd9Z4I=";
+    })
+    (fetchpatch {
+      # kern/main: Suppress the "Welcome to GRUB!" message in EFI builds
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=3e4cbbeca0ef35097301a1086f85fd0d119e64aa";
+      sha256 = "sha256-cQX4x9V5Y7SU9WACn5FzDjukL2/StAUMMoHY/DRHq+g=";
+    })
+
     (fetchpatch {
       name = "CVE-2021-3981.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=0adec29674561034771c13e446069b41ef41e4d4";
