@@ -426,14 +426,15 @@ stdenv.mkDerivation rec {
     cd build
   '';
 
+  # Long build, high RAM requirement
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description =
       "A Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ raskin phossil OPNA2608 ];
-    platforms = lib.platforms.linux;
-    # Long build, high RAM requirement
-    requiredSystemFeatures = [ "big-parallel" ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ raskin phossil OPNA2608 ];
+    platforms = platforms.linux;
     homepage = "https://clasp-developers.github.io/";
   };
 }
