@@ -1019,13 +1019,14 @@
       bluetooth-data-tools
       dbus-fast
       esphome-dashboard-api
+      eufylife-ble-client
       fnvhash
       ifaddr
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: eufylife_ble_client
+    ];
     "everlights" = ps: with ps; [
       pyeverlights
     ];
@@ -4485,6 +4486,7 @@
     "epson"
     "escea"
     "esphome"
+    "eufylife_ble"
     "everlights"
     "evil_genius_labs"
     "ezviz"
