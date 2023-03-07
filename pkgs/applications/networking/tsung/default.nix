@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tsung";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://tsung.erlang-projects.org/dist/tsung-${version}.tar.gz";
-    sha256 = "6394445860ef34faedf8c46da95a3cb206bc17301145bc920151107ffa2ce52a";
+    sha256 = "sha256-kehkMCYBfj0AiKZxD7EcT2F0d+gm6+TF/lhqpjFH/JI=";
   };
 
   nativeBuildInputs = [
