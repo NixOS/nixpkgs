@@ -1,8 +1,22 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ipaddr, macaddr, logs, lwt, duration
-, mirage-time, mirage-protocols, mirage-profile
-, alcotest, ethernet, fmt, mirage-vnetif, mirage-random
-, mirage-random-test, mirage-clock-unix, mirage-time-unix
+{ lib
+, buildDunePackage
+, fetchurl
+, cstruct
+, duration
+, ethernet
+, ipaddr
+, logs
+, lwt
+, macaddr
+, mirage-profile
+, mirage-time
+, alcotest
+, mirage-clock-unix
+, mirage-flow
+, mirage-random
+, mirage-random-test
+, mirage-time-unix
+, mirage-vnetif
 , bisect_ppx
 }:
 
@@ -31,7 +45,6 @@ buildDunePackage rec {
     lwt
     macaddr
     mirage-profile
-    mirage-protocols
     mirage-time
   ];
 
@@ -39,7 +52,7 @@ buildDunePackage rec {
   checkInputs = [
     alcotest
     mirage-clock-unix
-    mirage-profile
+    mirage-flow
     mirage-random
     mirage-random-test
     mirage-time-unix

@@ -44,7 +44,7 @@ buildPythonPackage rec {
     cp ../../README.md .
     substituteInPlace setup.py \
       --replace "3.0.0" "${version}" \
-      --replace "grpcio==1.50" "grpcio"
+      --replace "grpcio==1.51.3" "grpcio"
   '';
 
   # Allow local networking in tests on Darwin

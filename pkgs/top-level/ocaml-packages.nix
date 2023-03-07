@@ -1692,4 +1692,10 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_5_0;
 
   ocamlPackages = ocamlPackages_4_14;
+
+  # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
+  # Below are aliases for porting them to the latest versions of the OCaml 4 series.
+  ocamlPackages_4_14_unsafe_string = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix {
+    unsafeStringSupport = true;
+  });
 }

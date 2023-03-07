@@ -3,14 +3,14 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "acr";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
-    rev = version;
+    rev = self.version;
     hash = "sha256-ma4KhwGFlLCfRQvQ11OdyovgGbKQUBo6qVRrE7V2pNo=";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     chmod +x ./autogen.sh && ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/radareorg/acr/";
     description = "Pure shell autoconf replacement";
     longDescription = ''
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       'configure' script (runtime flags). But using shell-script instead of
       m4. This means that ACR is faster, smaller and easy to use.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})
