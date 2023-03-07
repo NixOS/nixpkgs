@@ -11,6 +11,7 @@
 , openssl
 , boost
 , libpqxx
+, git
 , clang-tools
 , catch2
 , python3
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     openssl
     boost
     libpqxx
+    git
   ];
 
   # emulate the process of pulling catch down
