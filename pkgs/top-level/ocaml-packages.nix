@@ -144,8 +144,6 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
-    camlimages_4_2_4 = callPackage ../development/ocaml-modules/camlimages/4.2.4.nix { };
-
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
