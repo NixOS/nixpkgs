@@ -64,6 +64,9 @@ buildPythonPackage rec {
     # Tries to run "env", but fails to find it
     "--deselect=tests/test_process.py::Test_UV_Process::test_process_env_2"
     "--deselect=tests/test_process.py::Test_AIO_Process::test_process_env_2"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Segmentation fault
+    "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Flaky test: https://github.com/MagicStack/uvloop/issues/412
     "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
