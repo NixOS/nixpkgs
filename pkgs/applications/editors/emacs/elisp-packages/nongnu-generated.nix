@@ -2131,10 +2131,10 @@
       elpaBuild {
         pname = "org-tree-slide";
         ename = "org-tree-slide";
-        version = "2.8.18";
+        version = "2.8.19";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/org-tree-slide-2.8.18.tar";
-          sha256 = "0xx8svbh6ks5112rac4chms0f8drhiwxnc3knrzaj8i1zb89l0n3";
+          url = "https://elpa.nongnu.org/nongnu/org-tree-slide-2.8.19.tar";
+          sha256 = "0sdffwbzmf7fn2k0x9z88s48nq5wg7s9fqgazbr179v9kic1s4gr";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3182,10 +3182,10 @@
       elpaBuild {
         pname = "xah-fly-keys";
         ename = "xah-fly-keys";
-        version = "22.12.20230301220803";
+        version = "22.12.20230305005921";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-22.12.20230301220803.tar";
-          sha256 = "0m1wyhxqsih7777hchjk4v742ar16frdjvxyspa72az881yinv5g";
+          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-22.12.20230305005921.tar";
+          sha256 = "1zq7vdzjc31mwi3mgf9ncqdx84wpplf3dwy084xjzwqyx5skjr8w";
         };
         packageRequires = [ emacs ];
         meta = {
