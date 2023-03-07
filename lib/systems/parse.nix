@@ -182,23 +182,12 @@ rec {
     (b == armv7l && isCompatible a armv7a)
     (b == armv7l && isCompatible a armv7r)
     (b == armv7l && isCompatible a armv7m)
-    (b == armv7a && isCompatible a armv8a)
-    (b == armv7r && isCompatible a armv8a)
-    (b == armv7m && isCompatible a armv8a)
-    (b == armv7a && isCompatible a armv8r)
-    (b == armv7r && isCompatible a armv8r)
-    (b == armv7m && isCompatible a armv8r)
-    (b == armv7a && isCompatible a armv8m)
-    (b == armv7r && isCompatible a armv8m)
-    (b == armv7m && isCompatible a armv8m)
 
     # ARMv8
-    (b == armv8r && isCompatible a armv8a)
-    (b == armv8m && isCompatible a armv8a)
-
-    # XXX: not always true! Some arm64 cpus don’t support arm32 mode.
     (b == aarch64 && a == armv8a)
     (b == armv8a && isCompatible a aarch64)
+    (b == armv8r && isCompatible a armv8a)
+    (b == armv8m && isCompatible a armv8a)
 
     # PowerPC
     (b == powerpc && isCompatible a powerpc64)
