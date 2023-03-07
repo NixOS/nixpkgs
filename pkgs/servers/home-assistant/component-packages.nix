@@ -843,7 +843,8 @@
       aioeafm
     ];
     "easyenergy" = ps: with ps; [
-    ]; # missing inputs: easyenergy
+      easyenergy
+    ];
     "ebox" = ps: with ps; [
     ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [
@@ -4462,6 +4463,7 @@
     "dunehd"
     "dynalite"
     "eafm"
+    "easyenergy"
     "ecobee"
     "econet"
     "ecowitt"
