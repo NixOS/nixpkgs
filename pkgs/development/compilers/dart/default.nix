@@ -3,16 +3,16 @@
 , fetchurl
 , unzip
 , runCommand
+# we need a way to build other dart versions
+# than the latest, because flutter might want
+# another version
 , version ? "2.19.3"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
     i686 = "ia32";
     aarch64 = "arm64";
-    # Make sure that if the user overrides version parameter they're
-    # also need to override sources, to avoid mistakes
-    version = "2.19.3";
-  in
+in
   {
     "${version}-aarch64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${aarch64}-release.zip";
