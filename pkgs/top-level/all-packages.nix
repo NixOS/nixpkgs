@@ -15606,8 +15606,8 @@ with pkgs;
   picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    # Upstream pony has dropped support for versions compiled with gcc.
-    stdenv = llvmPackages_9.stdenv;
+    # Upstream pony no longer supports GCC
+    stdenv = llvmPackages.stdenv;
   };
 
   blaze = callPackage ../development/libraries/blaze { };
