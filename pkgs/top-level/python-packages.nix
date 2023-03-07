@@ -1346,6 +1346,8 @@ self: super: with self; {
 
   blis = callPackage ../development/python-modules/blis { };
 
+  blobfile = callPackage ../development/python-modules/blobfile { };
+
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -7138,6 +7140,8 @@ self: super: with self; {
 
   openai = callPackage ../development/python-modules/openai { };
 
+  openaiauth = callPackage ../development/python-modules/openaiauth { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
   overly = callPackage ../development/python-modules/overly { };
@@ -10133,6 +10137,8 @@ self: super: with self; {
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 
+  revchatgpt = callPackage ../development/python-modules/revchatgpt {  };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
@@ -11582,6 +11588,8 @@ self: super: with self; {
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
+  
+  tiktoken = callPackage ../development/python-modules/tiktoken { };
 
   tika = callPackage ../development/python-modules/tika { };
 

@@ -232,6 +232,8 @@ with pkgs;
 
   aether = callPackage ../applications/networking/aether { };
 
+  aishell = python3Packages.callPackage ../tools/misc/aishell { };
+
   alda = callPackage ../development/interpreters/alda { };
 
   align = callPackage ../tools/text/align { };
