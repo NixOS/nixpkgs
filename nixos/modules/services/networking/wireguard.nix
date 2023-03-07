@@ -223,7 +223,7 @@ let
         type = with types; nullOr str;
         description = lib.mdDoc ''
           Endpoint IP or hostname of the peer, followed by a colon,
-          and then a port number of the peer. Mutually excludive with
+          and then a port number of the peer. Mutually exclusive with
           "endpointFile".
 
           Warning for endpoints with changing IPs:
@@ -244,7 +244,7 @@ let
         example = "/run/secrets/peer.address";
         type = with types; nullOr str;
         description = lib.mdDoc ''
-          File Containing the endpoint IP or hostname of the peer,
+          File containing the endpoint IP or hostname of the peer,
           followed by a colon, and then a port number of the peer. Mutally exclusive
           with "endpoint".
 
