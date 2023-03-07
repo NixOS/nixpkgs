@@ -12,9 +12,7 @@ let
   # 1. Needs ocaml >= 4.04 and <= 4.11 (patched against 4.14)
   # 2. ocaml 4.10 defaults to safe (immutable) strings so we need a version with
   #    that disabled as weidu is strongly dependent on mutable strings
-  ocaml' = ocaml-ng.ocamlPackages_4_14.ocaml.override {
-    unsafeStringSupport = true;
-  };
+  ocaml' = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
 
 in
 stdenv.mkDerivation rec {
