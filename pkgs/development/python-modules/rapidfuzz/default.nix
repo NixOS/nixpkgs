@@ -19,10 +19,9 @@
 buildPythonPackage rec {
   pname = "rapidfuzz";
   version = "2.13.7";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
@@ -68,6 +67,11 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # segfaults
+    "test_cdist"
   ];
 
   pythonImportsCheck = [
