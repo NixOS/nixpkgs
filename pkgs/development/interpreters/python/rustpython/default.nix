@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , SystemConfiguration
 , python3
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +19,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-PYSsv/dZ3dxferTDbRLF9T8GGj9kZ3ixWNglQKtA3pE=";
+
+  patches = [
+    # Fix aarch64 compatibility for sqlite. Remove with the next release. https://github.com/RustPython/RustPython/pull/4499
+    (fetchpatch {
+      url = "https://github.com/RustPython/RustPython/commit/9cac89347e2276fcb309f108561e99f4be5baff2.patch";
+      hash = "sha256-vUPQI/5ec6/36Vdtt7/B2unPDsVrGh5iEiSMBRatxWU=";
+    })
+  ];
 
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
