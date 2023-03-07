@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc addOpenGLRunpath.driverLink ]}"
       ''${gappsWrapperArgs[@]}
     )
   '';
