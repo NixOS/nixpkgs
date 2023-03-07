@@ -7,21 +7,19 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2023.301.0";
+  version = "2023.305.0";
   name = "${pname}-${version}";
 
   file = {
     aarch64-darwin = "osu.app.Apple.Silicon.zip";
     x86_64-darwin = "osu.app.Intel.zip";
-    aarch64-linux = "osu.AppImage";
     x86_64-linux = "osu.AppImage";
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   fileHash = {
-    aarch64-darwin = "sha256-INZEL78JusTjTHaK0LugfQlA+HRfkpLE/LhJUU++Hsc=";
-    x86_64-darwin = "sha256-eM0aIxbxKgbNiWfKwP70UeFJHi1GN6uu58NoL57p6hU";
-    aarch64-linux = "sha256-0c74bGOY9f2K52xE7CZy/i3OfyCC+a6XGI30c6hI7jM=";
-    x86_64-linux = "sha256-0c74bGOY9f2K52xE7CZy/i3OfyCC+a6XGI30c6hI7jM=";
+    aarch64-darwin = "sha256-vfDEEU+InD5uIc1QKceM2SN1GlWV93DySn3ik1MSYf4=";
+    x86_64-darwin = "sha256-dK+qqwBzuPXHqQk8U3TpWQBWEz+8S9GHShVwTTq2BBQ=";
+    x86_64-linux = "sha256-W3XJ7HtJM5iFI8OOTTu8IBHMerZSCETHMemkoTislK8=";
   }.${stdenv.system};
 
   linux = appimageTools.wrapType2 rec {
@@ -78,7 +76,7 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ delan stepbrobd ];
     mainProgram = "osu!";
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
   };
 in
 if stdenv.isDarwin
