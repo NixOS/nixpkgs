@@ -12,6 +12,7 @@ buildNodejs {
   version = "18.14.2";
   sha256 = "sha256-+8Nk3SX+4srMDyAz2y2GEV/AdXUxDqDmRAi4Fw0JxoU=";
   patches = [
+    ./revert-arm64-pointer-auth.patch
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
   ];
