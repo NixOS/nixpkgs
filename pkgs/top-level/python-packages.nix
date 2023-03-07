@@ -9463,6 +9463,8 @@ self: super: with self; {
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
 
+  python-musicpd = callPackage ../development/python-modules/python-musicpd { };
+
   python-mystrom = callPackage ../development/python-modules/python-mystrom { };
 
   python-nest = callPackage ../development/python-modules/python-nest { };
