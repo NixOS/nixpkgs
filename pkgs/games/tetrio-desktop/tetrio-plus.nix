@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tetrio-plus";
-  version = "0.25.2";
+  version = "0.25.3";
 
   src = fetchzip {
-    url = "https://gitlab.com/UniQMG/tetrio-plus/uploads/5c720489d2bcd35629b4f8a1f36d28b1/tetrio-plus_0.25.2_app.asar.zip";
-    sha256 = "sha256-8Xc2wftRYIMZ2ee67IJEIGGrAAS02CL0XzDqQ/luYVE=";
+    url = "https://gitlab.com/UniQMG/tetrio-plus/uploads/684477053451cd0819e2c84e145966eb/tetrio-plus_0.25.3_app.asar.zip";
+    sha256 = "sha256-GQgt4GZNeKx/uzmVsuKppW2zg8AAiGqsk2JYJIkqfVE=";
   };
 
   installPhase = ''
