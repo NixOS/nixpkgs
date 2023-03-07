@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://tsung.erlang-projects.org/dist/tsung-${version}.tar.gz";
-    sha256 = "sha256-kehkMCYBfj0AiKZxD7EcT2F0d+gm6+TF/lhqpjFH/JI=";
+    hash = "sha256-kehkMCYBfj0AiKZxD7EcT2F0d+gm6+TF/lhqpjFH/JI=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://tsung.erlang-projects.org/";
+    changelog = "https://github.com/processone/tsung/blob/v${version}/CHANGELOG.md";
     description = "A high-performance benchmark framework for various protocols including HTTP, XMPP, LDAP, etc";
     longDescription = ''
       Tsung is a distributed load testing tool. It is protocol-independent and
