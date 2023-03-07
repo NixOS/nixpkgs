@@ -265,10 +265,10 @@
       elpaBuild {
         pname = "auctex";
         ename = "auctex";
-        version = "13.1.9";
+        version = "13.1.10";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-13.1.9.tar";
-          sha256 = "0dvf7ajfpi68823qv9vav3r1k04gc9bfq2ys3g1rhga2glxn7q9r";
+          url = "https://elpa.gnu.org/packages/auctex-13.1.10.tar";
+          sha256 = "0vxf3aw7j73d0cbfh8d5fp5gyi7vxq9vb7fqxmxxs24pvdnlym15";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -787,10 +787,10 @@
       elpaBuild {
         pname = "compat";
         ename = "compat";
-        version = "29.1.3.4";
+        version = "29.1.4.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/compat-29.1.3.4.tar";
-          sha256 = "16j7b18iwsdynb2w4x2hficz0g060r52lsg5ly9kb20zfrq2yvw0";
+          url = "https://elpa.gnu.org/packages/compat-29.1.4.0.tar";
+          sha256 = "1y1x50r4ai4k8sa5qi5zbjz8216lpk9vjd0k681l1ha2aqn8l3pr";
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -2563,6 +2563,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    jit-spell = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "jit-spell";
+        ename = "jit-spell";
+        version = "0.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/jit-spell-0.1.tar";
+          sha256 = "1q6c9vb97c8jmb7wvnp8i7zk157ay1a4gngy7hx2y26f4lcjh0rl";
+        };
+        packageRequires = [ compat emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/jit-spell.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     js2-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "js2-mode";
@@ -3746,10 +3761,10 @@
       elpaBuild {
         pname = "phps-mode";
         ename = "phps-mode";
-        version = "0.4.42";
+        version = "0.4.43";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/phps-mode-0.4.42.tar";
-          sha256 = "040wrmz9wl0x86vdgzyfdwxdciscd94v9nfgfz0ir2ghwhw6j9x3";
+          url = "https://elpa.gnu.org/packages/phps-mode-0.4.43.tar";
+          sha256 = "0z43d97gwfz1m4zq0z4d7if9qxc5lpwysxc49rfdk7kmrkpfz17z";
         };
         packageRequires = [ emacs ];
         meta = {
