@@ -13594,6 +13594,10 @@ with pkgs;
 
   veryfasttree = callPackage ../applications/science/biology/veryfasttree { };
 
+  viceroy = callPackage ../development/tools/viceroy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
