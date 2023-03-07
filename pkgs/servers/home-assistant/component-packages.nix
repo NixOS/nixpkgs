@@ -935,7 +935,8 @@
       sqlalchemy
     ];
     "energyzero" = ps: with ps; [
-    ]; # missing inputs: energyzero
+      energyzero
+    ];
     "enigma2" = ps: with ps; [
       openwebifpy
     ];
@@ -4477,6 +4478,7 @@
     "emulated_kasa"
     "emulated_roku"
     "energy"
+    "energyzero"
     "enocean"
     "enphase_envoy"
     "environment_canada"
