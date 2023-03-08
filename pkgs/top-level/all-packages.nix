@@ -11662,6 +11662,8 @@ with pkgs;
     inherit (python3Packages) sphinx;
   };
 
+  rmw = callPackage ../tools/misc/rmw { };
+
   rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
@@ -31026,6 +31028,8 @@ with pkgs;
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix {};
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
+
+  krabby = callPackage ../applications/misc/krabby { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
 
