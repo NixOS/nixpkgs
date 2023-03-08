@@ -1354,6 +1354,8 @@ self: super: with self; {
 
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
+  blosc2 = callPackage ../development/python-modules/blosc2 { };
+
   blspy = callPackage ../development/python-modules/blspy { };
 
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
