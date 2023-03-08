@@ -16,7 +16,7 @@
 , systemd
 , voms
 , zlib
-, enableTests ? stdenv.isLinux
+, enableTestRunner ? true
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "man" ];
 
-  passthru.tests = lib.optionalAttrs enableTests {
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     test-runner = callPackage ./test-runner.nix { };
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     systemd
     voms
   ]
-  ++ lib.optionals enableTests [
+  ++ lib.optionals enableTestRunner [
     cppunit
   ];
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
   '';
 
-  cmakeFlags = lib.optionals enableTests [
+  cmakeFlags = lib.optionals enableTestRunner [
     "-DENABLE_TESTS=TRUE"
   ];
 
