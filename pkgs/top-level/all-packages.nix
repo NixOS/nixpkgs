@@ -26622,6 +26622,8 @@ with pkgs;
 
   gotestsum = callPackage ../development/tools/gotestsum { };
 
+  gqlgenc = callPackage ../development/tools/gqlgenc { };
+
   impl = callPackage ../development/tools/impl { };
 
   moq = callPackage ../development/tools/moq { };
