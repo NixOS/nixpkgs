@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
-  dontWrapQtApps = true;
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
     chown -R $USER: source/libraries/libnbtplusplus
   '';
 
-  postInstall =
+  qtWrapperArgs =
     let
       libpath = with xorg;
         lib.makeLibraryPath [
@@ -81,13 +80,12 @@ stdenv.mkDerivation rec {
           stdenv.cc.cc.lib
         ];
     in
-    ''
+    [
+      "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath}"
+      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
       # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      wrapQtApp $out/bin/prismlauncher \
-        --set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
-        --prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks} \
-        --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
-    '';
+      "--prefix PATH : ${lib.makeBinPath [xorg.xrandr]}"
+    ];
 
   meta = with lib; {
     homepage = "https://prismlauncher.org/";
