@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx extension to generate unique OpenGraph metadata";
     homepage = "https://github.com/wpilibsuite/sphinxext-opengraph";
+    changelog = "https://github.com/wpilibsuite/sphinxext-opengraph/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];
   };
