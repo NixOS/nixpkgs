@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
   };
+  
+  outputs = [ "out" "dev" ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
