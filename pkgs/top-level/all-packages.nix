@@ -5311,6 +5311,8 @@ with pkgs;
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
+  nexttrace = callPackage ../tools/networking/nexttrace { };
+
   ngadmin = callPackage ../applications/networking/ngadmin { };
 
   nfdump = callPackage ../tools/networking/nfdump { };

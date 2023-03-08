@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
-, setuptools
 
 # propagates
 , importlib-resources
@@ -25,6 +25,8 @@ buildPythonPackage rec {
   version = "0.5.5";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
@@ -35,16 +37,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    setuptools
   ];
 
   propagatedBuildInputs = [
-    importlib-resources
     jsonschema
     jsonschema-spec
     lazy-object-proxy
     openapi-schema-validator
-    pyyaml
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   passthru.optional-dependencies.requests = [

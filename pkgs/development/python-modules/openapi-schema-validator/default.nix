@@ -5,10 +5,7 @@
 , pytestCheckHook
 , isodate
 , jsonschema
-, pytest-cov
 , rfc3339-validator
-, six
-, strict-rfc3339
 }:
 
 buildPythonPackage rec {
@@ -23,13 +20,23 @@ buildPythonPackage rec {
     hash = "sha256-rp0Oq5WWPpna5rHrq/lfRNxjK5/FLgPZ5uzVfDT/YiI=";
   };
 
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
+  propagatedBuildInputs = [
+    jsonschema
+    rfc3339-validator
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = with lib; {
