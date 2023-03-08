@@ -35095,6 +35095,8 @@ with pkgs;
 
   jumpnbump = callPackage ../games/jumpnbump { };
 
+  katawa-shoujo = callPackage ../games/katawa-shoujo { };
+
   keeperrl = callPackage ../games/keeperrl { };
 
   ### GAMES/LGAMES
