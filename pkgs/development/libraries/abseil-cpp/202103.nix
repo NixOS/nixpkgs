@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-fcxPhuI2eL/fnd6nT11p8DpUNwGNaXZmd03yOiZcOT0=";
   };
+  
+  outputs = [ "out" "dev" ];
 
   patches = [
     # Use CMAKE_INSTALL_FULL_{LIBDIR,INCLUDEDIR}
