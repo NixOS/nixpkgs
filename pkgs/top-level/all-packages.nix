@@ -18457,6 +18457,10 @@ with pkgs;
 
   openai = with python3Packages; toPythonApplication openai;
 
+  openai-full = with python3Packages; toPythonApplication (openai.override {
+   withOptionalDependencies = true;
+  });
+
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
   openai-whisper-cpp = callPackage ../tools/audio/openai-whisper-cpp {
