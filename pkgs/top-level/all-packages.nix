@@ -2187,6 +2187,8 @@ with pkgs;
 
   maiko = callPackage ../applications/emulators/maiko { };
 
+  mainsail = callPackage ../applications/misc/mainsail { };
+
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
   mame-tools = lib.addMetaAttrs {
