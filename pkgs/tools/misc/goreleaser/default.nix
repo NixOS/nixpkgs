@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin techknowlogick ];
+    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin techknowlogick developer-guy caarlos0 ];
     license = licenses.mit;
   };
 }
