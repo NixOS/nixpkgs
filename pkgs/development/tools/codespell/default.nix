@@ -6,18 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.2";
+  version = "2.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-zXHqaZzGIS7BOFc/kPzA4sgpoEmXuaKHdOcKpMWWeOI=";
+    sha256 = "sha256-hyTy6zAH5WrW5Jn/g0irH9xGZErnXJMSUYZaNxMvq2Y=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--cov=codespell_lib" "" \
       --replace "--cov-report=" ""
   '';
