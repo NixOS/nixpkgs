@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, lxml
 , pyproj
 , pytestCheckHook
 , python-dateutil
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    lxml
     pyproj
     python-dateutil
     pytz
