@@ -96,6 +96,8 @@ buildPythonPackage rec {
     "tests/transport/test__custom_tls_signer.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Google Auth Python Library";
     longDescription = ''
