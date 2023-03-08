@@ -3,6 +3,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchpatch
+, fetchzip
 , cmake
 , lz4
 , bzip2
@@ -39,7 +40,7 @@ let
     pname = "libccp4";
     version = "8.0.0";
     src = fetchurl {
-      url = "http://ftp.ccp4.ac.uk/opensource/${pname}-${version}.tar.gz";
+      url = "https://ftp.ccp4.ac.uk/opensource/${pname}-${version}.tar.gz";
       hash = "sha256-y4E66GYSoIZjKd6rfO6W6sVz2BvlskA0HUD5rVMi/y0=";
     };
     nativeBuildInputs = [ meson ninja ];
@@ -53,10 +54,19 @@ let
     env.NIX_CFLAGS_COMPILE = "-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/ccp4/syminfo.lib\"";
 
     patches = [
-      # This circumvents the original autoconf/CMake based build and uses meson instead
-      ./add-meson-build.patch
       ./libccp4-use-hardcoded-syminfo-lib.patch
     ];
+
+    postPatch =
+      let
+        mesonPatch = fetchzip {
+          url = "https://wrapdb.mesonbuild.com/v2/libccp4c_8.0.0-1/get_patch#somefile.zip";
+          hash = "sha256-ohskfKh+972Pl56KtwAeWwHtAaAFNpCzz5vZBAI/vdU=";
+        };
+      in
+      ''
+        cp ${mesonPatch}/meson.build .
+      '';
   };
   # This is the statically-linked, pre-built binary of mosflm. Compiling it ourselves turns out to be very difficult
   # since the build process is very hard-coded for a specific machine, architecture, and libraries.
@@ -137,11 +147,18 @@ let
     pname = "HDF5-External-Filter-Plugins";
     version = "0.1.0";
     src = fetchFromGitHub {
-      owner = "spanezz";
+      owner = "nexusformat";
       repo = pname;
       rev = "master";
-      hash = "sha256-Lkhhfhs0dIEplTAod1VBeO4vWH5/MIdfRvhAI3bCgD4=";
+      hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/spanezz/HDF5-External-Filter-Plugins/commit/6b337fe36da97a3ef72354393687ce3386c0709d.patch";
+        hash = "sha256-wnBEdL/MjEyRHPwaVtuhzY+DW1AFeaUQUmIXh+JaRHo=";
+      })
+    ];
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ hdf5 lz4 bzip2 ];
@@ -219,7 +236,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://www.desy.de/~twhite/crystfel/download.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    platforms = platforms.unix;
   };
 
 }
