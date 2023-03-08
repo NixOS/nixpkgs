@@ -16096,6 +16096,7 @@ with pkgs;
   };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-profiler = callPackage ../development/tools/rust/cargo-profiler { };
+  cargo-prebuilt = callPackage ../development/tools/rust/cargo-prebuilt { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
