@@ -725,9 +725,8 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
-    if ($canTouchEfiVariables eq "true") {
-        push @command, "--bootloader-id=$bootloaderId";
-    } else {
+    push @command, "--bootloader-id=$bootloaderId";
+    if ($canTouchEfiVariables ne "true") {
         push @command, "--no-nvram";
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }
