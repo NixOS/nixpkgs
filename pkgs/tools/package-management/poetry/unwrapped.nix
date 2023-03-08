@@ -14,6 +14,7 @@
 , installer
 , jsonschema
 , keyring
+, lockfile
 , packaging
 , pexpect
 , pkginfo
@@ -26,11 +27,11 @@
 , shellingham
 , tomlkit
 , trove-classifiers
+, urllib3
 , virtualenv
 , xattr
 , tomli
 , importlib-metadata
-, backports-cached-property
 , cachy
 , deepdiff
 , flatdict
@@ -70,6 +71,7 @@ buildPythonPackage rec {
     installer
     jsonschema
     keyring
+    lockfile
     packaging
     pexpect
     pkginfo
@@ -82,6 +84,7 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     trove-classifiers
+    urllib3
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -89,8 +92,6 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    backports-cached-property
   ] ++ cachecontrol.optional-dependencies.filecache;
 
   postInstall = ''

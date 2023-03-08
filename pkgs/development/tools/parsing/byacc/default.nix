@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation (self: {
   pname = "byacc";
-  version = "20221229";
+  version = "20230219";
 
   src = fetchurl {
     urls = let
@@ -14,7 +14,7 @@ stdenv.mkDerivation (self: {
       "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
       "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
     ];
-    hash = "sha256-ExbG95D6+maIQn8f+RJnth2LeHO0Q8Yg7vaabv8FA7w=";
+    hash = "sha256-NrlyptSul1hN0YaSX7vDl9JssgYyp2wvUqx2U80IG1g=";
   };
 
   configureFlags = [

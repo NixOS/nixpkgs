@@ -5295,6 +5295,8 @@ with pkgs;
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
+  mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
+
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
 
   mq-cli = callPackage ../tools/system/mq-cli { };
@@ -17994,6 +17996,8 @@ with pkgs;
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
+
+  re-flex = callPackage ../development/tools/parsing/re-flex { };
 
   flexibee = callPackage ../applications/office/flexibee { };
 
