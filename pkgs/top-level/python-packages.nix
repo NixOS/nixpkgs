@@ -2379,6 +2379,8 @@ self: super: with self; {
 
   defusedxml = callPackage ../development/python-modules/defusedxml { };
 
+  deid = callPackage ../development/python-modules/deid { };
+
   delegator-py = callPackage ../development/python-modules/delegator-py { };
 
   delorean = callPackage ../development/python-modules/delorean { };
