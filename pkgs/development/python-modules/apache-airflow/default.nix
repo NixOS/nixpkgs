@@ -223,6 +223,10 @@ buildPythonPackage rec {
   # above
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
+  patches = [
+    ./2.4.3-CVE-2023-22884.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
