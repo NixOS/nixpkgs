@@ -5311,6 +5311,8 @@ with pkgs;
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
+  nexttrace = callPackage ../tools/networking/nexttrace { };
+
   ngadmin = callPackage ../applications/networking/ngadmin { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
@@ -37255,7 +37257,7 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+    inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
   tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {};
 
