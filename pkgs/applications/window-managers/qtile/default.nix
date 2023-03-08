@@ -11,6 +11,7 @@
 , wayland
 , wlroots
 , xcbutilcursor
+, pulseaudio
 }:
 
 let
@@ -60,6 +61,7 @@ let
       pywayland
       pywlroots
       xkbcommon
+      pulseaudio
     ];
 
     buildInputs = [
