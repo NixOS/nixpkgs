@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to control Squeezebox players";
     homepage = "https://github.com/home-assistant-libs/aioslimproto";
+    changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
