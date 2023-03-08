@@ -5,6 +5,7 @@
 , buildEnv, bundler, bundix
 , makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
+, linuxPackages, libsystemtap
 } @ args:
 
 let
@@ -34,6 +35,7 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , jemalloc, jemallocSupport ? false
+      , linuxPackages, systemtap ? linuxPackages.systemtap, libsystemtap, dtraceSupport ? false
       # By default, ruby has 3 observed references to stdenv.cc:
       #
       # - If you run:
@@ -71,6 +73,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
+          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
@@ -141,6 +144,7 @@ let
           (lib.enableFeature true "pthread")
           (lib.withFeatureAs true "soname" "ruby-${version}")
           (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+          (lib.enableFeature dtraceSupport "dtrace")
           (lib.enableFeature jitSupport "jit-support")
           (lib.enableFeature docSupport "install-doc")
           (lib.withFeature jemallocSupport "jemalloc")
