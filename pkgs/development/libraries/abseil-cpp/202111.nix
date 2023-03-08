@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-sSXT6D4JSrk3dA7kVaxfKkzOMBpqXQb0WbMYWG+nGwk=";
   };
-  
+
   outputs = [ "out" "dev" ];
 
   cmakeFlags = [
