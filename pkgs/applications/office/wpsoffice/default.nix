@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.11664";
+  version = "11.1.0.11691";
 
   src = if useChineseVersion then fetchurl {
     url = "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitString "." version)}/wps-office_${version}_amd64.deb";
-    sha256 = "sha256-D2LhxBMHmQjVExa/63DHdws0V+EmOSlJzGq91jbuJHs=";
+    sha256 = "sha256-ubFYACnsMObde9TGp1tyHtG0n5NxYMFtEbY9KXj62No=";
   } else fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitString "." version)}/wps-office_${version}.XA_amd64.deb";
-    sha256 = "sha256-9qZGqs4nsB9mWCJTi2x+vWmMF0sEoUYgEzLI//hijfU=";
+    url = "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitString "." version)}/wps-office_${version}.XA_amd64.deb";
+    sha256 = "sha256-F1foPaDd4YiAcCePleKsABjFzsb2Uv+Lkja+58pnquI=";
   };
 
   unpackCmd = "dpkg -x $src .";

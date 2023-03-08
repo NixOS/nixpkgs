@@ -14,8 +14,8 @@ let
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "0b7a543554622600bc0a42b57a22f291a4fbd86c";
-    hash = "sha256-kaBOBTpfR3XyuF4PW5NQKca/UhXXxJJcXVsErFU1VYY=";
+    rev = "9f05362a5c33ed11dab37d2dedf74206d59d8f6d";
+    hash = "sha256-UfPPbwLJcI6+8EYLKRcBhxashEkCTJ2Gj1JOtFayot8=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
@@ -41,9 +41,9 @@ let
     '';
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zeek-broker";
-  version = "2.4.2";
+  version = "unstable-2023-02-01";
   outputs = [ "out" "py" ];
 
   strictDeps = true;
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "v${version}";
-    hash = "sha256-y07fJEVPDGPv5VThE45SwM342VS6LnEtMvazZHadM/k=";
+    rev = "bc0205ce1fc06ddb91abb6744cb79c7eb846c23e";
+    hash = "sha256-bmyitJg3kRyIXm09IupLwZXbiGZfikkHcRcIexkS4/g=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty

@@ -1096,6 +1096,12 @@
     githubId = 1078530;
     name = "Alexandre Peyroux";
   };
+  apfelkuchen6 = {
+    email = "apfelkuchen6@hrnz.li";
+    github = "apfelkuchen6";
+    githubId = 73002165;
+    name = "apfelkuchen6";
+  };
   applePrincess = {
     email = "appleprincess@appleprincess.io";
     github = "applePrincess";
@@ -2285,6 +2291,12 @@
     githubId = 15320726;
     name = "Car Cdr";
   };
+  caarlos0 = {
+    name = "Carlos A Becker";
+    email = "carlos@becker.software";
+    github = "caarlos0";
+    githubId = 245435;
+  };
   cab404 = {
     email = "cab404@mailbox.org";
     github = "cab404";
@@ -2991,6 +3003,13 @@
     github = "CompEng0001";
     githubId = 40290417;
     name = "Seb Blair";
+  };
+  connorbaker = {
+    email = "connor.baker@tweag.io";
+    matrix = "@connorbaker:matrix.org";
+    github = "connorbaker";
+    name = "Connor Baker";
+    githubId = 3880346;
   };
   considerate = {
     email = "viktor.kronvall@gmail.com";
@@ -7924,6 +7943,12 @@
     githubId = 804677;
     name = "Kirill Kazakov";
   };
+  kirillrdy = {
+    email = "kirillrdy@gmail.com";
+    github = "kirillrdy";
+    githubId = 12160;
+    name = "Kirill Radzikhovskyy";
+  };
   kisonecat = {
     email = "kisonecat@gmail.com";
     github = "kisonecat";
@@ -12074,6 +12099,15 @@
     githubId = 4633847;
     name = "Ben Hamlin";
   };
+  prrlvr = {
+    email = "po@prrlvr.fr";
+    github = "prrlvr";
+    githubId = 33699501;
+    name = "Pierre-Olivier Rey";
+    keys = [{
+      fingerprint = "40A0 78FD 297B 0AC1 E6D8  A119 4D38 49D9 9555 1307";
+    }];
+  };
   prusnak = {
     email = "pavol@rusnak.io";
     github = "prusnak";
@@ -12952,6 +12986,12 @@
     email = "perhaps-you-know@what-is.ml";
     github = "rubyowo";
     githubId = 105302757;
+  };
+  Ruixi-rebirth = {
+    name = "Ruixi-rebirth";
+    email = "ruixirebirth@gmail.com";
+    github = "Ruixi-rebirth";
+    githubId = 75824585;
   };
   rumpelsepp = {
     name = "Stefan Tatschner";
@@ -14801,6 +14841,15 @@
     githubId = 35778371;
     keys = [{
       fingerprint = "38A0 29B0 4A7E 4C13 A4BB  86C8 7D51 0786 6B1C 6752";
+    }];
+  };
+  thekostins = {
+    name = "Konstantin";
+    email = "anisimovkosta19@gmail.com";
+    github = "TheKostins";
+    githubId = 39405421;
+    keys = [{
+      fingerprint = "B216 7B33 E248 097F D82A  991D C94D 589A 4D0D CDD2";
     }];
   };
   thelegy = {

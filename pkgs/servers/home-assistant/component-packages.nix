@@ -843,7 +843,8 @@
       aioeafm
     ];
     "easyenergy" = ps: with ps; [
-    ]; # missing inputs: easyenergy
+      easyenergy
+    ];
     "ebox" = ps: with ps; [
     ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [
@@ -934,7 +935,8 @@
       sqlalchemy
     ];
     "energyzero" = ps: with ps; [
-    ]; # missing inputs: energyzero
+      energyzero
+    ];
     "enigma2" = ps: with ps; [
       openwebifpy
     ];
@@ -1017,13 +1019,14 @@
       bluetooth-data-tools
       dbus-fast
       esphome-dashboard-api
+      eufylife-ble-client
       fnvhash
       ifaddr
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: eufylife_ble_client
+    ];
     "everlights" = ps: with ps; [
       pyeverlights
     ];
@@ -4462,6 +4465,7 @@
     "dunehd"
     "dynalite"
     "eafm"
+    "easyenergy"
     "ecobee"
     "econet"
     "ecowitt"
@@ -4475,12 +4479,14 @@
     "emulated_kasa"
     "emulated_roku"
     "energy"
+    "energyzero"
     "enocean"
     "enphase_envoy"
     "environment_canada"
     "epson"
     "escea"
     "esphome"
+    "eufylife_ble"
     "everlights"
     "evil_genius_labs"
     "ezviz"
