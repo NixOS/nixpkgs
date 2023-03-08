@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     longDescription = ''
       In order for this to work, you either need to run `rustup component add llvm-
       tools-preview` or install the `llvm-tools-preview` component using your Nix
-      library (e.g. nixpkgs-mozilla, or rust-overlay)
+      library (e.g. fenix or rust-overlay)
     '';
     license = with lib.licenses; [ asl20 /* or */ mit ];
     maintainers = with lib.maintainers; [ wucke13 ];

@@ -11662,6 +11662,8 @@ with pkgs;
     inherit (python3Packages) sphinx;
   };
 
+  rmw = callPackage ../tools/misc/rmw { };
+
   rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
@@ -15569,7 +15571,7 @@ with pkgs;
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -18449,6 +18451,10 @@ with pkgs;
   omniorb = callPackage ../development/tools/omniorb { };
 
   openai = with python3Packages; toPythonApplication openai;
+
+  openai-full = with python3Packages; toPythonApplication (openai.override {
+   withOptionalDependencies = true;
+  });
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
@@ -26615,6 +26621,8 @@ with pkgs;
 
   gotestsum = callPackage ../development/tools/gotestsum { };
 
+  gqlgenc = callPackage ../development/tools/gqlgenc { };
+
   impl = callPackage ../development/tools/impl { };
 
   moq = callPackage ../development/tools/moq { };
@@ -30112,6 +30120,8 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
+
   deadd-notification-center = callPackage ../applications/misc/deadd-notification-center { };
 
   lollypop = callPackage ../applications/audio/lollypop { };
@@ -31018,6 +31028,8 @@ with pkgs;
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix {};
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
+
+  krabby = callPackage ../applications/misc/krabby { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
 
@@ -35081,6 +35093,8 @@ with pkgs;
   julius = callPackage ../games/julius { };
 
   jumpnbump = callPackage ../games/jumpnbump { };
+
+  katawa-shoujo = callPackage ../games/katawa-shoujo { };
 
   keeperrl = callPackage ../games/keeperrl { };
 
