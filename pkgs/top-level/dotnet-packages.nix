@@ -148,6 +148,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
         mkdir $vimdir/ftdetect
         echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+        mkdir -p $out/share/nvim
+        ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
     '';
 
     postFixup = ''
