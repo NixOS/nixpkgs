@@ -1,5 +1,6 @@
 {
   fetchFromSourcehut,
+  installShellFiles,
   less,
   lib,
   makeWrapper,
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-sxX4/7jbNbLwHVfE1lDtjr/luby5zAf6Hy1RcwXZLBA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = otherDependencies ++ pythonDependencies;
 
   installPhase = ''
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set PYTHONPATH "$PYTHONPATH" \
         --set PATH ${lib.makeBinPath otherDependencies}
 
+   installManPage man/*.1
    runHook postInstall
   '';
 
