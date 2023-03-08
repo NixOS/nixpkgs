@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-sSXT6D4JSrk3dA7kVaxfKkzOMBpqXQb0WbMYWG+nGwk=";
   };
+  
+  outputs = [ "out" "dev" ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
