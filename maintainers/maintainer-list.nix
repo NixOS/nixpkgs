@@ -5256,6 +5256,12 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
+  GabrielDougherty = {
+    email = "contact@gabrieldougherty.com";
+    github = "GabrielDougherty";
+    githubId = 10541219;
+    name = "Gabriel Dougherty";
+  };
   garaiza-93 = {
     email = "araizagustavo93@gmail.com";
     github = "garaiza-93";
