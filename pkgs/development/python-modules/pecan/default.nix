@@ -51,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = lib.versionAtLeast sqlalchemy.version "2.0";
     changelog = "https://pecan.readthedocs.io/en/latest/changes.html";
     description = "WSGI object-dispatching web framework";
     homepage = "https://www.pecanpy.org/";
