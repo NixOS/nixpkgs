@@ -719,7 +719,7 @@ let
             session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug
           '' +
           optionalString (cfg.enableKwallet) ''
-            session optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
+            session optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5 force_run
           '' +
           optionalString (cfg.enableGnomeKeyring) ''
             session optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
