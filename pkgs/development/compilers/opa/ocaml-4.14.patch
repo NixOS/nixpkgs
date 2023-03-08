@@ -1,0 +1,63 @@
+diff --git a/compiler/compilerlib/objectFiles.ml b/compiler/compilerlib/objectFiles.ml
+index d0e7223..5fee601 100644
+--- a/compiler/compilerlib/objectFiles.ml
++++ b/compiler/compilerlib/objectFiles.ml
+@@ -339,8 +339,9 @@ let dirname (package:package_name) : filename = Filename.concat !opxdir (unprefi
+ let unprefixed_dirname_plugin (package:package_name) : filename = package ^ "." ^ Name.plugin_ext
+ let dirname_plugin (package:package_name) : filename = Filename.concat !opxdir (unprefixed_dirname_plugin package)
+ let dirname_from_package ((package_name,_):package) = dirname package_name
+-let undirname filename : package_name = Filename.chop_suffix (Filename.basename filename) ("."^Name.object_ext)
+-let undirname_plugin filename : package_name = Filename.chop_suffix (Filename.basename filename) ("."^Name.plugin_ext)
++let chop_suffix name suff = try Filename.chop_suffix name suff with _ -> name
++let undirname filename : package_name = chop_suffix (Filename.basename filename) ("."^Name.object_ext)
++let undirname_plugin filename : package_name = chop_suffix (Filename.basename filename) ("."^Name.plugin_ext)
+ let filename_from_dir dir pass = Filename.concat dir pass
+ let filename_from_package package pass = filename_from_dir (dirname_from_package package) pass
+ 
+diff --git a/ocamllib/libbase/baseHashtbl.ml b/ocamllib/libbase/baseHashtbl.ml
+index 439d76c..7be6cf9 100644
+--- a/ocamllib/libbase/baseHashtbl.ml
++++ b/ocamllib/libbase/baseHashtbl.ml
+@@ -29,7 +29,6 @@ let iter = Hashtbl.iter
+ let fold = Hashtbl.fold
+ let length = Hashtbl.length
+ let hash = Hashtbl.hash
+-external hash_param : int -> int -> 'a -> int = "caml_hash_univ_param" "noalloc"
+ module type HashedType = Hashtbl.HashedType
+ 
+ (* could be done (with magic) more efficiently
+diff --git a/ocamllib/libbase/baseHashtbl.mli b/ocamllib/libbase/baseHashtbl.mli
+index 1a2b146..10e448b 100644
+--- a/ocamllib/libbase/baseHashtbl.mli
++++ b/ocamllib/libbase/baseHashtbl.mli
+@@ -41,7 +41,6 @@ end
+ module Make (H : HashedType) : S with type key = H.t
+ 
+ val hash : 'a -> int
+-external hash_param : int -> int -> 'a -> int = "caml_hash_univ_param" "noalloc"
+ 
+ (**
+    additional functions
+diff --git a/ocamllib/libbase/baseObj.mli b/ocamllib/libbase/baseObj.mli
+index da2d973..5eb77b5 100644
+--- a/ocamllib/libbase/baseObj.mli
++++ b/ocamllib/libbase/baseObj.mli
+@@ -23,7 +23,7 @@ external obj : t -> 'a = "%identity"
+ external magic : 'a -> 'b = "%identity"
+ external is_block : t -> bool = "caml_obj_is_block"
+ external is_int : t -> bool = "%obj_is_int"
+-external tag : t -> int = "caml_obj_tag"
++external tag : t -> int = "caml_obj_tag" [@@noalloc]
+ external set_tag : t -> int -> unit = "caml_obj_set_tag"
+ external size : t -> int = "%obj_size"
+ external truncate : t -> int -> unit = "caml_obj_truncate"
+@@ -49,9 +49,6 @@ val int_tag : int
+ val out_of_heap_tag : int
+ val unaligned_tag : int
+ 
+-val marshal : t -> string
+-val unmarshal : string -> int -> t * int
+-
+ (** Additional functions *)
+ 
+ val dump : ?custom:(Obj.t -> (Buffer.t -> Obj.t -> unit) option) -> ?depth:int -> 'a -> string

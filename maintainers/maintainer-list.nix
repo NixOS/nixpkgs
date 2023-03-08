@@ -5256,6 +5256,12 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
+  GabrielDougherty = {
+    email = "contact@gabrieldougherty.com";
+    github = "GabrielDougherty";
+    githubId = 10541219;
+    name = "Gabriel Dougherty";
+  };
   garaiza-93 = {
     email = "araizagustavo93@gmail.com";
     github = "garaiza-93";
@@ -8074,6 +8080,13 @@
     githubId = 15692230;
     name = "Muhammad Herdiansyah";
   };
+  konradmalik = {
+    email = "konrad.malik@gmail.com";
+    matrix = "@konradmalik:matrix.org";
+    name = "Konrad Malik";
+    github = "konradmalik";
+    githubId = 13033392;
+  };
   koozz = {
     email = "koozz@linux.com";
     github = "koozz";
@@ -9847,6 +9860,12 @@
     github = "milogert";
     githubId = 5378535;
     name = "Milo Gertjejansen";
+  };
+  milran = {
+    email = "milranmike@protonmail.com";
+    github = "milran";
+    githubId = 93639059;
+    name = "Milran Mike";
   };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
