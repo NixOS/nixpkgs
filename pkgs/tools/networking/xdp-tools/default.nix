@@ -33,12 +33,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  depsBuildBuild = [
+    emacs-nox # to generate man pages from .org
+  ];
   nativeBuildInputs = [
     llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
-    emacs-nox # to generate man pages from .org
     nukeReferences
   ];
   nativeCheckInputs = [
