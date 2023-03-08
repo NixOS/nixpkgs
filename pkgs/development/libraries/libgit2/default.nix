@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "sha256-XmGlh0iehQIufAPpndSkYy4EQ8vG0I6MGB+jQQpCe9k=";
+    hash = "sha256-XmGlh0iehQIufAPpndSkYy4EQ8vG0I6MGB+jQQpCe9k=";
   };
 
   cmakeFlags = [
