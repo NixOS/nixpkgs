@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
-    owner = "armosec";
+    owner = "kubescape";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qb8Kk+d3KFf+GVHv6Tg1qBuX6xFS4zbpkCPc502alxU=";
+    hash = "sha256-poLPG8C0YbjEFjqWMKO+9plArenkVmR5lGvflgxc3Iw=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/v2/core/cautils.BuildNumber=v${version}"
+    "-X github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
   subPackages = [ "." ];
@@ -60,10 +60,19 @@ buildGoModule rec {
       --zsh <($out/bin/kubescape completion zsh)
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    $out/bin/kubescape version | grep "v${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
-    homepage = "https://github.com/armosec/kubescape";
-    changelog = "https://github.com/armosec/kubescape/releases/tag/v${version}";
+    homepage = "https://github.com/kubescape/kubescape";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized
