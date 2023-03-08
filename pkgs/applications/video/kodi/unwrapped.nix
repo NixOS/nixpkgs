@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -114,6 +114,11 @@ in stdenv.mkDerivation {
     # to it.
     patches = [
       ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/8c2aafb6d4987833803e037c923aaf83f9ff41e1.patch";
+        name = "CVE-2023-23082.patch";
+        sha256 = "sha256-px2eWzH8N3LVCQ3CpK5mQ3eDJQ3SEHZbgN4WPmxFODw=";
+      })
     ];
 
     buildInputs = [
