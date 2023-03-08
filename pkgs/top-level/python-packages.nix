@@ -6347,6 +6347,8 @@ self: super: with self; {
 
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
+  ndindex = callPackage ../development/python-modules/ndindex { };
+
   ndjson = callPackage ../development/python-modules/ndjson { };
 
   ndms2-client = callPackage ../development/python-modules/ndms2-client { };
