@@ -49,6 +49,10 @@ buildPythonPackage rec {
     "lightning_utilities.core.imports.RequirementCache"
     "lightning_utilities.core.imports.compare_version"
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
+    # weird doctests fail on imports, but providing the dependency
+    # fails another test
+    "lightning_utilities.core.imports.ModuleAvailableCache"
+    "lightning_utilities.core.imports.requires"
   ];
 
   disabledTestPaths = [
