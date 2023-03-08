@@ -63,6 +63,8 @@ buildPythonPackage rec {
     # segfaults
     "--deselect=tests/test_delayed_queue.py::test_delayed_get"
     "--deselect=tests/test_emitter.py::test_delete"
+    # AttributeError: '_thread.RLock' object has no attribute 'key'"
+    "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # segfaults
     "--deselect=tests/test_delayed_queue.py::test_delayed_get"
