@@ -8,7 +8,8 @@ let
   cmdArgs =
     [ "--port" cfg.port ]
     ++ optionals (cfg.salt != null) [ "--salt" cfg.salt ]
-    ++ optionals (cfg.certDir != null) [ "--tls" cfg.certDir ];
+    ++ optionals (cfg.certDir != null) [ "--tls" cfg.certDir ]
+    ++ cfg.extraArgs;
 
 in
 {
@@ -58,6 +59,14 @@ in
         description = lib.mdDoc ''
           TLS certificates directory to use for encryption. See
           <https://github.com/Syncplay/syncplay/wiki/TLS-support>.
+        '';
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = lib.mdDoc ''
+          Additional arguments to be passed to the service.
         '';
       };
 
