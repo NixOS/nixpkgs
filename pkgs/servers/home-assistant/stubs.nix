@@ -25,6 +25,14 @@ buildPythonPackage rec {
     home-assistant
   ];
 
+  postPatch = ''
+    # Relax constraint to year and month
+    substituteInPlace pyproject.toml --replace \
+      'homeassistant = "${version}"' \
+      'homeassistant = "~${lib.versions.majorMinor home-assistant.version}"'
+    cat pyproject.toml
+  '';
+
   pythonImportsCheck = [
     "homeassistant-stubs"
   ];
