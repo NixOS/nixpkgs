@@ -1275,6 +1275,17 @@ let
       '';
     });
 
+    sparklyr = old.sparklyr.overrideAttrs (attrs: {
+      # Pyspark's spark is full featured and better maintained than pkgs.spark
+      preConfigure = ''
+        substituteInPlace R/zzz.R \
+          --replace ".onLoad <- function(...) {" \
+            ".onLoad <- function(...) {
+          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/lib/${pkgs.python3Packages.python.libPrefix}/site-packages/pyspark\"))
+          Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
+      '';
+    });
+
     proj4 = old.proj4.overrideAttrs (attrs: {
       preConfigure = ''
         substituteInPlace configure \
