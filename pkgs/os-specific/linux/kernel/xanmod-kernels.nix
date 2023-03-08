@@ -33,11 +33,6 @@ let
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
 
-      # Multigenerational LRU framework
-      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
-      LRU_GEN = yes;
-      LRU_GEN_ENABLED = yes;
-
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
