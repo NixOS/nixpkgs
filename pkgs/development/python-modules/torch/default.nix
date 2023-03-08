@@ -9,7 +9,7 @@
 
   # Build inputs
   numactl,
-  CoreServices, libobjc,
+  Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
   numpy, pyyaml, cffi, click, typing-extensions,
@@ -275,7 +275,7 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
 
   propagatedBuildInputs = [
     cffi
