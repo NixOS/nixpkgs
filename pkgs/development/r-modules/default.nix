@@ -68,9 +68,9 @@ let
     hydraPlatforms = [];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
+    mkHomepage = {name, snapshot, ...}: "https://cran.r-project.org/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [
-      "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz"
+      "https://packagemanager.rstudio.com/cran/${snapshot}/src/contrib/${name}_${version}.tar.gz"
     ];
   };
 
