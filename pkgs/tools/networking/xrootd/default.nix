@@ -22,14 +22,14 @@
 , externalEtc ? "/etc"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
   version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-2zVCOcjL8TUbo38Dx7W8431ziouzuAdCfogsIMSOOmQ=";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "man" ];
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    test-runner = callPackage ./test-runner.nix { };
+    test-runner = callPackage ./test-runner.nix { xrootd = finalAttrs.finalPackage; };
   };
 
   nativeBuildInputs = [
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
   };
-}
+})
