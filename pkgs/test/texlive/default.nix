@@ -1,6 +1,26 @@
 { lib, runCommand, fetchurl, file, texlive, writeShellScript }:
 
 {
+
+  luaotfload-fonts = runCommand "texlive-test-lualatex" {
+    nativeBuildInputs = [
+      (with texlive; combine { inherit scheme-medium libertinus-fonts; })
+    ];
+    input = builtins.toFile "lualatex-testfile.tex" ''
+      \documentclass{article}
+      \usepackage{fontspec}
+      \setmainfont{Libertinus Serif}
+      \begin{document}
+        \LaTeX{} is great
+      \end{document}
+    '';
+  }
+  ''
+    export HOME="$(mktemp -d)"
+    lualatex -halt-on-error "$input"
+    echo success > $out
+  '';
+
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
       (with texlive; combine { inherit scheme-infraonly chktex; })
