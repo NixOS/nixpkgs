@@ -6,6 +6,7 @@
 , jdk
 , libsecret
 , webkitgtk
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
+    wrapGAppsHook
   ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase =
