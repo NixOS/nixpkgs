@@ -5902,6 +5902,14 @@
       fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
     }];
   };
+  harmless-tech = {
+    github = "harmless-tech";
+    githubId = 28830529;
+    name = "harmless-tech";
+    keys = [{
+      fingerprint = "0F64 E474 875A F995 5B51  8EE0 3908 020F 1065 DB04";
+    }];
+  };
   harrisonthorne = {
     email = "harrisonthorne@proton.me";
     github = "muni-corn";
