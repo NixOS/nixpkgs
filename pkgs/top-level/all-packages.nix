@@ -25789,6 +25789,8 @@ with pkgs;
     libtool = darwin.cctools;
   };
 
+  rhasspy = callPackage ../servers/rhasspy { };
+
   # Fails to compile with boost <= 1.72
   rippled = callPackage ../servers/rippled {
     boost = boost172;
