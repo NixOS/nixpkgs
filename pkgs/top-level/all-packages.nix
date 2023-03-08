@@ -31030,6 +31030,8 @@ with pkgs;
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
+  krabby = callPackage ../applications/misc/krabby { };
+
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
