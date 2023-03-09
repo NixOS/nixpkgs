@@ -32,6 +32,10 @@
 
 let
   debugSymbols = debug || developerBuild;
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -228,6 +232,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-device ${qtPlatformCross stdenv.hostPlatform}"
+    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
   ++ lib.optional debugSymbols "-debug"
   ++ lib.optionals developerBuild [
