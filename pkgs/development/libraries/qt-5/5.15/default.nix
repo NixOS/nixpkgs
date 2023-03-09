@@ -7,7 +7,7 @@ Check for any minor version changes.
 
 */
 
-{ newScope
+{ makeScopeWithSplicing, generateSplicesForMkScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
@@ -119,6 +119,9 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
+      # remove before 23.11
+      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+
       inherit callPackage qtCompatVersion qtModule srcs;
 
       mkDerivationWith =
@@ -225,4 +228,4 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-in lib.makeScope newScope addPackages
+in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
