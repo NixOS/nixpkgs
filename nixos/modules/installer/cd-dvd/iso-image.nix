@@ -545,7 +545,7 @@ in
     isoImage.makeEfiBootable = mkOption {
       default = false;
       description = lib.mdDoc ''
-        Whether the ISO image should be an efi-bootable volume.
+        Whether the ISO image should be an EFI-bootable volume.
       '';
     };
 
