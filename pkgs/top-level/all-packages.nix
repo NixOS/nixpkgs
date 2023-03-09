@@ -2990,6 +2990,8 @@ with pkgs;
     electron = electron_13;
   };
 
+  biscuit-cli = callPackage ../tools/security/biscuit-cli { };
+
   bitwarden = callPackage ../tools/security/bitwarden { };
 
   inherit (nodePackages) bitwarden-cli;
