@@ -270,7 +270,22 @@ rec {
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
      provided by `newScope` and the set provides a `newScope` attribute
-     which can form the parent scope for later package sets. */
+     which can form the parent scope for later package sets.
+
+     Type: CallPackageFunction ->                           # newScope
+           (CallPackageFunction -> CallPackageFunction) ->  # f
+           PackageSet                                       # result
+       where
+         CallPackageFunction = PackageDef -> PackageArgs -> Derivation
+         PackageDef = File | Derivation | (PackageArgs -> Derivation)
+         PackageSet = AttrSet of Derivation
+
+     Example of how to create a completely fresh scope:
+
+     lib.makeScope lib.callPackageWith (self: {
+       hello = self.callPackage <nixpkgs/pkgs/applications/misc/hello> { };
+     })
+  */
   makeScope = newScope: f:
     let self = f self // {
           newScope = scope: newScope (self // scope);
