@@ -757,6 +757,8 @@ let
 
     letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
 
+    letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
+
     lilv = callPackage ../development/ocaml-modules/lilv {
       inherit (pkgs) lilv;
     };
