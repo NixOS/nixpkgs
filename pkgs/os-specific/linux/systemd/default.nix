@@ -82,8 +82,10 @@
 , bpftools
 , libbpf
 
+, withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
+, withAudit ? true
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -94,15 +96,18 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
+, withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+, withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
+, withPam ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -129,6 +134,7 @@
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
+assert withHomed -> withPam;
 
 let
   wantCurl = withRemote || withImportd;
@@ -278,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
           # Systemd does this decision during configure time and uses ifdef's to
           # enable specific branches. We can safely ignore (nuke) the libidn "v1"
           # libraries.
-          { name = "libidn2.so.0"; pkg = libidn2; }
+          { name = "libidn2.so.0"; pkg = opt withLibidn2 libidn2; }
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
@@ -376,29 +382,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      acl
-      audit
-      kmod
       libxcrypt
       libcap
-      libidn2
       libuuid
       linuxHeaders
-      pam
       bashInteractive # for patch shebangs
     ]
 
     ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
+    ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withAudit audit
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
+    ++ lib.optional withKmod kmod
+    ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
@@ -424,6 +430,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpam=${lib.boolToString withPam}"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
@@ -435,7 +442,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Daudit=${lib.boolToString withAudit}"
     "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
@@ -461,7 +470,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsplit-usr=false"
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
-    "-Dlibidn2=true"
+    "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -488,7 +497,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
     "-Dumount-path=${util-linux}/bin/umount"
@@ -522,6 +530,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
     "-Didn=false"
+  ] ++ lib.optionals withKmod [
+    "-Dkmod=true"
+    "-Dkmod-path=${kmod}/bin/kmod"
   ];
   preConfigure =
     let
@@ -556,7 +567,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "${coreutils}/bin/cat";
           where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
@@ -590,6 +600,8 @@ stdenv.mkDerivation (finalAttrs: {
             "src/import/pull-tar.c"
           ];
         }
+      ] ++ lib.optionals withKmod [
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
       ];
 
       # { replacement, search, where } -> List[str]
@@ -661,7 +673,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/example/systemd
-    mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+    mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
@@ -677,6 +689,8 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
+  '' + lib.optionalString withKmod ''
+    mv $out/lib/modules-load.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -711,7 +725,7 @@ stdenv.mkDerivation (finalAttrs: {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
