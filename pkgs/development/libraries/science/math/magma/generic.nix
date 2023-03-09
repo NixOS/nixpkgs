@@ -95,7 +95,10 @@ let
       cuda_cudart # cuda_runtime.h
       libcublas
       libcusparse
+    ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
       cuda_nvprof # <cuda_profiler_api.h>
+    ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
     ];
   };
 in
