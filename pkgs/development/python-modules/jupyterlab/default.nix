@@ -1,10 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, ipython
+, packaging
+, tornado
+, jupyter-core
 , jupyterlab_server
+, jupyter-server
+, jupyter-server-ydoc
 , notebook
+, jinja2
+, tomli
 , pythonOlder
 , jupyter-packaging
+, pythonRelaxDepsHook
 , nbclassic
 }:
 
@@ -22,12 +31,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     jupyter-packaging
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "jupyter-ydoc"
+    "jupyter-server-ydoc"
   ];
 
   propagatedBuildInputs = [
+    ipython
+    packaging
+    tornado
+    jupyter-core
     jupyterlab_server
-    notebook
+    jupyter-server
+    jupyter-server-ydoc
     nbclassic
+    notebook
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   makeWrapperArgs = [
