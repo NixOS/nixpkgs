@@ -31,6 +31,11 @@ buildPythonPackage rec {
     xorg.xorgserver
   ];
 
+  preCheck = ''
+    # import from $out
+    rm -r xcffib
+  '';
+
   pythonImportsCheck = [ "xcffib" ];
 
   meta = with lib; {
