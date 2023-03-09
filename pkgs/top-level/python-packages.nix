@@ -9214,6 +9214,8 @@ self: super: with self; {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
+
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
   pytest-quickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
