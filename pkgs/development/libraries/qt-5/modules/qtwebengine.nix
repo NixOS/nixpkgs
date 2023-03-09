@@ -1,7 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, flex, git, gperf, ninja, pkg-config, python, which
+, bison, flex, git, gperf, ninja, pkg-config, python, python3, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
@@ -32,7 +32,7 @@ qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config python which gn nodejs
+    bison flex git gperf ninja pkg-config python3 which gn nodejs perl
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
