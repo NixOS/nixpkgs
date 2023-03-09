@@ -7,6 +7,7 @@ buildDunePackage rec {
   pname = "mirage-crypto-rng-mirage";
 
   inherit (mirage-crypto-rng) version src;
+  duneVersion = "3";
 
   doCheck = true;
   checkInputs = [ mirage-unix mirage-clock-unix mirage-time-unix ];
