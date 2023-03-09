@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.3.3";
+  version = "1.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zbqgwCukTmvCIXpAvaKQl7voOI4ATqsT9NPUyRhw2EE=";
+    hash = "sha256-P/5kCXmUWQ/2yvzu/Pr0XBY8zm3fMMyoapGmdtRmxXo=";
   };
 
   nativeBuildInputs = [
