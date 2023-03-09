@@ -5095,6 +5095,8 @@ self: super: with self; {
 
   jupyter-server = callPackage ../development/python-modules/jupyter-server { };
 
+  jupyter-server-fileid = callPackage ../development/python-modules/jupyter-server-fileid { };
+
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
