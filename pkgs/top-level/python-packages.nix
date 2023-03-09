@@ -12763,6 +12763,8 @@ self: super: with self; {
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 
+  ypy-websocket = callPackage ../development/python-modules/ypy-websocket { };
+
   yq = callPackage ../development/python-modules/yq {
     inherit (pkgs) jq;
   };
