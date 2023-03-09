@@ -3,6 +3,7 @@
 , fetchPypi
 , nose
 , numpy
+, setuptools
 , setuptools-scm
 , six
 , glibcLocales
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyfaidx";
   version = "0.7.2.1";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
