@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "matrix-sdk-crypto-nodejs";
-  version = "0.1.0-beta.2";
+  version = "0.1.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk";
     rev = "${pname}-v${version}";
-    hash = "sha256-E++0tm/2d8/3zAXwovJ71uF2sxDORWyJNnA3e1Q3NLA=";
+    hash = "sha256-0p+1cMn9PU+Jk2JW7G+sdzxhMaI3gEAk5w2nm05oBSU=";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}";
-    hash = "sha256-G2Um7vHinOuOx9U2BH14LAx+s/0Sxtlc9Nz6nPJfmU8=";
+    hash = "sha256-ZvoWdcutMnotwapFRZlvZQaebpEKarzCR2Fh5xOGluw=";
   };
 
   nativeBuildInputs = [
