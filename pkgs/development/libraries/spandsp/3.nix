@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, audiofile, libtiff, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, audiofile, libtiff, autoreconfHook
+, fetchpatch
+, buildPackages }:
 stdenv.mkDerivation rec {
   version = "3.0.0";
   pname = "spandsp";
@@ -9,10 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "03w0s99y3zibi5fnvn8lk92dggfgrr0mz5255745jfbz28b2d5y7";
   };
 
+  patches = [
+    # submitted upstream: https://github.com/freeswitch/spandsp/pull/47
+    (fetchpatch {
+      url = "https://github.com/freeswitch/spandsp/commit/1f810894804d3fa61ab3fc2f3feb0599145a3436.patch";
+      hash = "sha256-Cf8aaoriAvchh5cMb75yP2gsZbZaOLha/j5mq3xlkVA=";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ audiofile libtiff ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
+  ];
 
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";

@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, audiofile, libtiff, buildPackages }:
+{ lib, stdenv, fetchurl, audiofile, libtiff, buildPackages
+, fetchpatch
+, autoreconfHook }:
+
 stdenv.mkDerivation rec {
   version = "0.0.6";
   pname = "spandsp";
+
+  patches = [
+    # submitted upstream: https://github.com/freeswitch/spandsp/pull/47
+    (fetchpatch {
+      url = "https://github.com/freeswitch/spandsp/commit/1f810894804d3fa61ab3fc2f3feb0599145a3436.patch";
+      hash = "sha256-Cf8aaoriAvchh5cMb75yP2gsZbZaOLha/j5mq3xlkVA=";
+    })
+  ];
+
   src=fetchurl {
     url = "https://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
@@ -21,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
