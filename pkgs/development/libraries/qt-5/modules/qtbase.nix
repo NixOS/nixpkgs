@@ -159,6 +159,13 @@ stdenv.mkDerivation (finalAttrs: {
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
     ./bin/syncqt.pl -version $version
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+    export PKG_CONFIG_SYSROOT_DIR=/
+    export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
+    echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
   '';
 
   postConfigure = ''
