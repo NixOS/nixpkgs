@@ -11516,6 +11516,8 @@ self: super: with self; {
 
   testpath = callPackage ../development/python-modules/testpath { };
 
+  testrail-api = callPackage ../development/python-modules/testrail-api { };
+
   testrepository = callPackage ../development/python-modules/testrepository { };
 
   testresources = callPackage ../development/python-modules/testresources { };
