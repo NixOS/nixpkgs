@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, makeBinaryWrapper
-, alsaLib, libX11, libXext, libGL, libGLU
+{ lib
+, stdenv
+, alsa-lib
+, fetchFromGitHub
+, libGL
+, libGLU
+, libX11
+, libXext
+, makeBinaryWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
     rev =  version;
-    sha256 = "i0Z1UKApX+elHmFgujwjiF7k6OmtFF37HJim464OMfU=";
+    hash = "sha256-qIK7QnXZ9FmfarMZaHktZCHhvR8cctyKVpFS8PeOpLs=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.isLinux [ alsaLib libX11 libXext ];
+  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.isLinux [ alsa-lib libX11 libXext ];
 
   enableParallelBuilding = true;
 
