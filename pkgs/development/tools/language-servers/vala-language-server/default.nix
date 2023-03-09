@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     scdoc
+  ] ++ lib.optionals stdenv.isLinux [
     # GNOME Builder Plugin
     gnome-builder
   ];
@@ -61,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vala-lang/vala-language-server";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ andreasfelix ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
