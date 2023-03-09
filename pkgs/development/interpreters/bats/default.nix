@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-Kitlx26cK2RiAC+PdRIdDLF5crorg6UB6uSzbKCrDHE=";
+    sha256 = "sha256-nKBNbqJYRd/3tO85E6KrOh32yOaNKpLXxz5gQ5Uvmcc=";
   };
 
   patchPhase = ''
@@ -91,6 +91,8 @@ resholve.mkDerivation rec {
         "$pre_command" = true;
         "$BATS_TEST_NAME" = true;
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
+        "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
+        "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
       };
       execer = [
         /*
