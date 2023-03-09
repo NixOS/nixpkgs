@@ -63,6 +63,7 @@
 , xorg
 , mysofaSupport ? true
 , libmysofa
+, tinycompress
 }:
 
 let
@@ -132,6 +133,7 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
+      tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
@@ -180,6 +182,7 @@ let
       "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
       "-Drlimits-install=false" # installs to /etc, we won't use this anyway
+      "-Dcompress-offload=enabled"
     ];
 
     # Fontconfig error: Cannot load default config file
