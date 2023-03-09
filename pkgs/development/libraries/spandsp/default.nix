@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+  enableParallelBuilding = true;
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
