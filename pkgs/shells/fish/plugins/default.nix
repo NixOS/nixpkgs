@@ -5,6 +5,8 @@ lib.makeScope newScope (self: with self; {
 
   bobthefish = callPackage ./bobthefish.nix { };
 
+  bobthefisher = callPackage ./bobthefisher.nix { };
+
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
   colored-man-pages = callPackage ./colored-man-pages.nix { };
