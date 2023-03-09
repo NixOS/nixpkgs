@@ -27072,7 +27072,6 @@ with pkgs;
     withCryptsetup = true;
     withFido2 = true;
     withKmod = true;
-    withPam = true;
     withTpm2Tss = true;
   };
   systemdStage1Network = systemdStage1.override {
