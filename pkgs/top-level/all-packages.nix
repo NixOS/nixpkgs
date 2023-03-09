@@ -12747,6 +12747,8 @@ with pkgs;
 
   tinycbor = callPackage ../development/libraries/tinycbor { };
 
+  tinycompress = callPackage ../development/libraries/tinycompress { };
+
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
   tinygltf = callPackage ../development/libraries/tinygltf { };
