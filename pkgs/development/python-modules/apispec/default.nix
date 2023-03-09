@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.1.0";
+  version = "6.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iB07kL//3tZZvApL8J6t7t+iVs0nFyaxVV11r54Kmmk=";
+    hash = "sha256-GpSaYLtMQr7leqr11DwYTfPi6W2WWORC513UQ1z2CWE=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     validation = [
       openapi-spec-validator
       prance
-    ];
+    ] ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [

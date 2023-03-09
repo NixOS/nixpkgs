@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
   };
 
+  strictDeps = true;
   # for scdoc
   depsBuildBuild = [
     pkg-config

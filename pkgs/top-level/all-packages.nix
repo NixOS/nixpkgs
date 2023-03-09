@@ -5317,6 +5317,8 @@ with pkgs;
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
+  nexttrace = callPackage ../tools/networking/nexttrace { };
+
   ngadmin = callPackage ../applications/networking/ngadmin { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
@@ -11669,6 +11671,8 @@ with pkgs;
     inherit (python3Packages) sphinx;
   };
 
+  rmw = callPackage ../tools/misc/rmw { };
+
   rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
@@ -13593,6 +13597,10 @@ with pkgs;
   };
 
   veryfasttree = callPackage ../applications/science/biology/veryfasttree { };
+
+  viceroy = callPackage ../development/tools/viceroy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   vlan = callPackage ../tools/networking/vlan { };
 
@@ -15579,7 +15587,7 @@ with pkgs;
   ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
@@ -18058,6 +18066,8 @@ with pkgs;
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
 
+  go-licenses = callPackage ../development/tools/misc/go-licenses  { };
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -18454,6 +18464,10 @@ with pkgs;
   omniorb = callPackage ../development/tools/omniorb { };
 
   openai = with python3Packages; toPythonApplication openai;
+
+  openai-full = with python3Packages; toPythonApplication (openai.override {
+   withOptionalDependencies = true;
+  });
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
@@ -21862,6 +21876,8 @@ with pkgs;
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
+
+  librclone = callPackage ../development/libraries/librclone { };
 
   libroxml = callPackage ../development/libraries/libroxml { };
 
@@ -26620,6 +26636,8 @@ with pkgs;
 
   gotestsum = callPackage ../development/tools/gotestsum { };
 
+  gqlgenc = callPackage ../development/tools/gqlgenc { };
+
   impl = callPackage ../development/tools/impl { };
 
   moq = callPackage ../development/tools/moq { };
@@ -28877,6 +28895,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  celeste = callPackage ../applications/networking/sync/celeste { };
+
   cyan = callPackage ../applications/graphics/cyan {};
 
   cyanrip = callPackage ../applications/audio/cyanrip { };
@@ -30117,6 +30137,8 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
+
   deadd-notification-center = callPackage ../applications/misc/deadd-notification-center { };
 
   lollypop = callPackage ../applications/audio/lollypop { };
@@ -31024,6 +31046,8 @@ with pkgs;
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
+  krabby = callPackage ../applications/misc/krabby { };
+
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
@@ -31792,6 +31816,7 @@ with pkgs;
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
+    uosc = callPackage ../applications/video/mpv/scripts/uosc.nix { };
     vr-reversal = callPackage ../applications/video/mpv/scripts/vr-reversal.nix {};
     webtorrent-mpv-hook = callPackage ../applications/video/mpv/scripts/webtorrent-mpv-hook.nix { };
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
@@ -35091,6 +35116,8 @@ with pkgs;
 
   jumpnbump = callPackage ../games/jumpnbump { };
 
+  katawa-shoujo = callPackage ../games/katawa-shoujo { };
+
   keeperrl = callPackage ../games/keeperrl { };
 
   ### GAMES/LGAMES
@@ -37266,7 +37293,7 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
-    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+    inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
   tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {};
 

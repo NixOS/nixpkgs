@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 library(data.table)
+library(jsonlite)
 library(parallel)
 library(BiocManager)
 cl <- makeCluster(10)
@@ -11,12 +12,13 @@ if ("release" %in% biocVersion$BiocStatus) {
 } else {
   biocVersion <-  max(as.numeric(as.character(biocVersion$Bioc)))
 }
-snapshotDate <- Sys.Date()-1
+dates <- stream_in(url("https://packagemanager.rstudio.com/__api__/repos/2/transaction-dates"), verbose = FALSE)
+snapshotDate <- as.Date(dates[nrow(dates), "alias"])
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
                   , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
                   , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
-                  , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
+                  , cran=paste0("https://packagemanager.rstudio.com/cran/", snapshotDate, "/src/contrib/")
                   )
 
 mirrorType <- commandArgs(trailingOnly=TRUE)[1]

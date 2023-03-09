@@ -276,7 +276,9 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ] ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
+      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
+        ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
       dependencies = map lib.getLib dependencies_;
       buildDependencies = map lib.getLib buildDependencies_;

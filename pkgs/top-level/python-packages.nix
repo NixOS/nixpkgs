@@ -1631,6 +1631,8 @@ self: super: with self; {
 
   cement = callPackage ../development/python-modules/cement { };
 
+  cemm = callPackage ../development/python-modules/cemm { };
+
   censys = callPackage ../development/python-modules/censys { };
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
@@ -2378,6 +2380,8 @@ self: super: with self; {
   deform = callPackage ../development/python-modules/deform { };
 
   defusedxml = callPackage ../development/python-modules/defusedxml { };
+
+  deid = callPackage ../development/python-modules/deid { };
 
   delegator-py = callPackage ../development/python-modules/delegator-py { };
 
@@ -9881,6 +9885,8 @@ self: super: with self; {
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
+
+  qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 

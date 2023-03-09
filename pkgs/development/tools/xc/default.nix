@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "xc";
-  version = "0.0.159";
+  version = "0.0.175";
 
   src = fetchFromGitHub {
     owner = "joerdav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5Vw/UStMtP5CHbSCOzeD4LMJccPG34Rxw9VHc9Ut3oM=";
+    sha256 = "sha256-Uc9MTxl32xQ7u6N0mocDAoD9tgv/YOPCzhonsavX9Vo=";
   };
 
-  vendorHash = "sha256-XDJdCh6P8ScSvxY55ExKgkgFQqmBaM9fMAjAioEQ0+s=";
+  vendorHash = "sha256-cySflcTuAzbFZbtXmzZ98nfY8HUq1UedONTtKP4EICs=";
 
   meta = with lib; {
     homepage = "https://xcfile.dev/";

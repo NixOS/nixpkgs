@@ -15,6 +15,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
+    environment.systemPackages = [ pkgs.xdotool ];
   };
 
   enableOCR = true;
@@ -29,6 +30,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_text("${user.description}")
         # OCR was struggling with this one.
         # machine.wait_for_text("${bob.description}")
+        # Ensure the password box is focused by clicking it.
+        # Workaround for https://github.com/NixOS/nixpkgs/issues/211366.
+        machine.succeed("XAUTHORITY=/var/lib/lightdm/.Xauthority DISPLAY=:0 xdotool mousemove 512 505 click 1")
+        machine.sleep(2)
         machine.screenshot("elementary_greeter_lightdm")
 
     with subtest("Login with elementary-greeter"):
