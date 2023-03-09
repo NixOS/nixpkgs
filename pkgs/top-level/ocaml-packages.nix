@@ -569,6 +569,8 @@ let
 
     hpack = callPackage ../development/ocaml-modules/hpack { };
 
+    http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
