@@ -11,14 +11,14 @@ let
         version = "2.0.3";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
+          hash = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
         };
       });
       flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
         src = old.src.override {
           inherit version;
-          sha256 = "ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc";
+          hash = "sha256-/xdxhfiRMC3CU0N/5jCB56RqTpmsph3+CG+yPlT/8tw=";
         };
         disabledTests = [
           "test_outside_request"
@@ -33,7 +33,7 @@ let
         version = "2.0.3";
         src = old.src.override {
           inherit version;
-          sha256 = "b863f8ff057c522164b6067c9e28b041161b4be5ba4d0daceeaa50a163822d3c";
+          hash = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
         };
       });
     };
@@ -44,7 +44,7 @@ in python.pkgs.buildPythonApplication rec {
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "a4e2ee83932755d29ac39c1e74005ec289880fd2d4d2164f09fe2464a294d720";
+    hash = "sha256-pOLug5MnVdKaw5wedABewomID9LU0hZPCf4kZKKU1yA=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
