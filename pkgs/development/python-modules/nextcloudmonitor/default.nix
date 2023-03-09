@@ -6,13 +6,15 @@
 
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
-  version = "1.2.0";
+  version = "1.3.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "meichthys";
     repo = "nextcloud_monitor";
     rev = "v${version}";
-    sha256 = "0b0c7gzx1d5kgbsfj1lbrqsirc5g5br6v8w2njaj1ys03kj669cx";
+    hash = "sha256-Ivo5dqKcvE1e+1crZNzKHydprtMXkZdzDl4MsZviLQQ=";
   };
 
   propagatedBuildInputs = [
