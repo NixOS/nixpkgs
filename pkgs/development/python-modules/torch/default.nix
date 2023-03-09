@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   cudaSupport ? false, cudaPackages, magma,
-  mklDnnSupport ? true, useSystemNccl ? true,
+  useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -16,6 +16,10 @@
 
   # Unit tests
   hypothesis, psutil,
+
+  # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
+  # this is also what official pytorch build does
+  mklDnnSupport ? !(stdenv.isDarwin && stdenv.isAarch64),
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
