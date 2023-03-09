@@ -54,8 +54,9 @@
       ],
       "actions": {
         "update-props": {
+          "node.always-process": false,
           "node.pause-on-idle": false,
-          "node.passive": true
+          "node.passive": "out"
         }
       }
     },
