@@ -80,26 +80,33 @@ let
   cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
   minArch =
     let
-      minArch' = builtins.head (builtins.sort builtins.lessThan cudaArchitectures);
+      minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
-    # If this fails some day, something must've changed and we should re-validate our assumptions
-    assert builtins.stringLength minArch' == 2;
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
     "${minArch'}0";
 
+  cuda-common-redist = with cudaPackages; [
+    libcublas # cublas_v2.h
+    libcusparse # cusparse.h
+  ];
 
-  cuda_joined = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
+  # Build-time dependencies
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
     paths = with cudaPackages; [
-      cuda_nvcc
       cuda_cudart # cuda_runtime.h
-      libcublas
-      libcusparse
+      cuda_nvcc
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
       cuda_nvprof # <cuda_profiler_api.h>
     ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
       cuda_profiler_api # <cuda_profiler_api.h>
-    ];
+    ] ++ cuda-common-redist;
+  };
+
+  # Run-time dependencies
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
   };
 in
 
@@ -119,6 +126,8 @@ stdenv.mkDerivation {
     cmake
     ninja
     gfortran
+  ] ++ lists.optionals cudaSupport [
+    cuda-native-redist
   ];
 
   buildInputs = [
@@ -126,7 +135,7 @@ stdenv.mkDerivation {
     lapack
     blas
   ] ++ lists.optionals cudaSupport [
-    cuda_joined
+    cuda-redist
   ] ++ lists.optionals rocmSupport [
     hip
     hipblas
@@ -147,13 +156,6 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
     "-DMAGMA_ENABLE_HIP=ON"
   ];
-
-  # NOTE: The stdenv's CXX is used when compiling the CMake test to determine the version of
-  #   CUDA available. This isn't necessarily the same as cudatoolkit.cc, so we must set
-  #   CUDAHOSTCXX.
-  preConfigure = strings.optionalString cudaSupport ''
-    export CUDAHOSTCXX=${cudatoolkit.cc}/bin/c++
-  '';
 
   buildFlags = [
     "magma"
