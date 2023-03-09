@@ -3,6 +3,8 @@
 lib.makeScope newScope (self: with self; {
   autopair = callPackage ./autopair.nix { };
 
+  bobthefish = callPackage ./bobthefish.nix { };
+
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
   colored-man-pages = callPackage ./colored-man-pages.nix { };
