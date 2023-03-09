@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vaultwarden-webvault";
-  version = "2022.10.0";
+  version = "2022.12.0";
 
   src = fetchurl {
     url = "https://github.com/dani-garcia/bw_web_builds/releases/download/v${version}/bw_web_v${version}.tar.gz";
-    hash = "sha256-Sf1YnOikjZmloTQvdrFH/UAevQqKQEkNNrCRUhvNZfA=";
+    hash = "sha256-QC3/aqIF2NdJPHmwUbvJR62wsUGBrgsHJCyqBJ/0gMc=";
   };
 
   buildCommand = ''
