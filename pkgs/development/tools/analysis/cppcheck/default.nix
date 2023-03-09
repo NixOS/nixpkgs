@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
     rev = version;
-    hash = "sha256-tN7MYMRBakdL++ZeY2u9s2B2wyAU7iaOB/hsv2GXI6s=";
+    hash = "sha256-wr2O9EqDvHaMQwnjFLLtP1XxfUwFa/P6gGqYNNPVyaA=";
   };
 
   buildInputs = [ pcre (python3.withPackages (ps: [ps.pygments])) ];
