@@ -3,6 +3,7 @@
 
 , bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, qtbase, perl
+, buildPackages
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
@@ -28,11 +29,29 @@
 , postPatch ? ""
 }:
 
+let
+  # qtwebengine expects to find an executable in $PATH which runs on
+  # the build platform yet knows about the host `.pc` files.  Most
+  # configury allows setting $PKG_CONFIG to point to an
+  # arbitrarily-named script which serves this purpose; however QT
+  # insists that it is named `pkg-config` with no target prefix.  So
+  # we re-wrap the host platform's pkg-config.
+  pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
+    name = "pkg-config-wrapper-without-target-prefix";
+    dontUnpack = true;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/bin
+      ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
+    '';
+  };
+in
+
 qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config python which gn nodejs
+    bison flex git gperf ninja pkg-config python pkg-config-wrapped-without-prefix which gn nodejs perl
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -119,6 +138,8 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export PKG_CONFIG_EXECUTABLE='${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config'
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
