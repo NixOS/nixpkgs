@@ -25,6 +25,8 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 , testers
+
+, buildPackages
 }:
 
 let
@@ -77,7 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.isDarwin [ xcbuild ]
+    # `qtbase` expects to find `cc` (with no prefix) in the
+    # `$PATH`, so the following is needed even if
+    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
 
   propagatedNativeBuildInputs = [ lndir ];
 
