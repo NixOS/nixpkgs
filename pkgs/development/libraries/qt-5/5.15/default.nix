@@ -127,6 +127,9 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
+      # remove before 23.11
+      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+
       inherit callPackage qtCompatVersion qtModule srcs;
 
       mkDerivationWith =
