@@ -23058,12 +23058,11 @@ with pkgs;
 
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
-      inherit newScope;
-      inherit lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3 python3;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit darwin;
-      inherit buildPackages;
+      inherit (__splicedPackages)
+        makeScopeWithSplicing generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
+        bison cups dconf harfbuzz libGL perl gtk3 python3
+        darwin buildPackages;
+      inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
       stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     });
 
