@@ -4187,6 +4187,8 @@ with pkgs;
 
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
+  swww = callPackage ../tools/wayland/swww { };
+
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
@@ -9405,6 +9407,8 @@ with pkgs;
   lazycli = callPackage ../tools/misc/lazycli { };
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
+
+  ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
 
@@ -30677,9 +30681,7 @@ with pkgs;
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
-  waybox = callPackage ../applications/window-managers/waybox {
-    wlroots = wlroots_0_14;
-  };
+  waybox = callPackage ../applications/window-managers/waybox { };
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
