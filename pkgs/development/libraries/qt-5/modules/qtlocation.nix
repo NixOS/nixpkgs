@@ -1,8 +1,11 @@
-{ lib, stdenv, qtModule, qtbase, qtmultimedia }:
+{ lib, stdenv, qtModule, qtbase, qtmultimedia
+, perl
+}:
 
 qtModule {
   pname = "qtlocation";
   qtInputs = [ qtbase qtmultimedia ];
+  nativeBuildInputs = [ perl ];
   outputs = [ "bin" "out" "dev" ];
   qmakeFlags = lib.optionals stdenv.isDarwin [
      # boost uses std::auto_ptr which has been disabled in clang with libcxx

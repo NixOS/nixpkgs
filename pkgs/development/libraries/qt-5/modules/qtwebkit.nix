@@ -17,7 +17,7 @@ let
     postPatch = ''
       patchShebangs tests
     '';
-    buildInputs = [ perl ];
+    nativeBuildInputs = [ perl ];
   };
 in
 qtModule {

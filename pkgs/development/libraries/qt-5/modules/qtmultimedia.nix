@@ -9,12 +9,13 @@
 , gst-plugins-base
 , libpulseaudio
 , wayland
+, perl
 }:
 
 qtModule {
   pname = "qtmultimedia";
   qtInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ gstreamer gst-plugins-base ]
     # https://github.com/NixOS/nixpkgs/pull/169336 regarding libpulseaudio
     ++ lib.optionals stdenv.isLinux [ libpulseaudio alsa-lib ]
