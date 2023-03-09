@@ -442,6 +442,7 @@ in python.pkgs.buildPythonApplication rec {
       python
       supportedComponentsWithTests;
     pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;
