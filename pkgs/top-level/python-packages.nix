@@ -11134,6 +11134,8 @@ self: super: with self; {
 
   sqltrie = callPackage ../development/python-modules/sqltrie { };
 
+  squarify = callPackage ../development/python-modules/squarify { };
+
   srp = callPackage ../development/python-modules/srp { };
 
   srpenergy = callPackage ../development/python-modules/srpenergy { };
