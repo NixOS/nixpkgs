@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , build
 , git
@@ -26,6 +28,20 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-h3d0h+WCrrNlfPOlUx6Rj0aG6untD6MiunqvPj4yT+0=";
   };
+
+  # revert update of vendored dependencies to unbreak e.g. zeroconf on x86_64-darwin
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry-core/commit/80d7dcdc722dee0e09e5f3303b663003d794832c.patch";
+      revert = true;
+      hash = "sha256-CPjkNCmuAiowp/kyKqnEfUQNmXK95RMJOIa24nG6xi8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry-core/commit/43fd7fe62676421b3661c96844b5d7cf49b87c07.patch";
+      revert = true;
+      hash = "sha256-fXq8L23qjLraLeMzB1bwW1jU0eGd236/GHIoYKwOuL0=";
+    })
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
