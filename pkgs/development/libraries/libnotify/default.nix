@@ -44,10 +44,6 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = lib.optionals withIntrospection [
-    gobject-introspection
-  ];
-
   propagatedBuildInputs = [
     gdk-pixbuf
     glib

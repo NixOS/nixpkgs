@@ -14,21 +14,21 @@
 }:
 
 let
-  version = "1.17.1";
+  version = "1.17.3";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "sha256-B4SQiwf5/Icweg+VgQW34tN/XxDA7xoSgIVOfXwGsfM=";
+    sha256 = "1cd633bfb381faa4f22ab57f6b75053c1b18997c223ed7988896c8c15cd1bee0";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "sha256-DVcrG5N9lydct11xoUKz1VVCiuvVOmQWGlAP2nrnZv4=";
+    sha256 = "16be3ee29c1dd3d5292f793e9f5efbcd30a59bf035de79586e9afbfa98a6a4cb";
   };
 
 in mkDerivation {
@@ -55,7 +55,7 @@ in mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr ../makemkv-bin-${version}/bin/amd64/makemkvcon
+    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr out/mmgplsrv ../makemkv-bin-${version}/bin/amd64/makemkvcon
     install -D     -t $out/lib                              out/lib{driveio,makemkv,mmbd}.so.*
     install -D     -t $out/share/MakeMKV                    ../makemkv-bin-${version}/src/share/*
     install -Dm444 -t $out/share/applications               ../makemkv-oss-${version}/makemkvgui/share/makemkv.desktop

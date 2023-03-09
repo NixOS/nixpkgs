@@ -2,6 +2,7 @@
 , callPackage
 , recurseIntoAttrs
 , nixosTests
+, config
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -15,7 +16,6 @@ let
       srht = self.callPackage ./core.nix { inherit fetchNodeModules; };
 
       buildsrht = self.callPackage ./builds.nix { };
-      dispatchsrht = self.callPackage ./dispatch.nix { };
       gitsrht = self.callPackage ./git.nix { };
       hgsrht = self.callPackage ./hg.nix { };
       hubsrht = self.callPackage ./hub.nix { };
@@ -29,11 +29,10 @@ let
     };
   };
 in
-with python.pkgs; recurseIntoAttrs {
+with python.pkgs; recurseIntoAttrs ({
   inherit python;
   coresrht = toPythonApplication srht;
   buildsrht = toPythonApplication buildsrht;
-  dispatchsrht = toPythonApplication dispatchsrht;
   gitsrht = toPythonApplication gitsrht;
   hgsrht = toPythonApplication hgsrht;
   hubsrht = toPythonApplication hubsrht;
@@ -46,4 +45,7 @@ with python.pkgs; recurseIntoAttrs {
   passthru.tests = {
     nixos-sourcehut = nixosTests.sourcehut;
   };
-}
+} // lib.optionalAttrs config.allowAliases {
+  # Added 2022-10-29
+  dispatchsrht = throw "dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/ for more information.";
+})

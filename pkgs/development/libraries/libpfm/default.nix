@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
     "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "Helper library to program the performance monitoring events";

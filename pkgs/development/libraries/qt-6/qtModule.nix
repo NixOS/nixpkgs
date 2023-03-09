@@ -33,7 +33,7 @@ stdenv.mkDerivation (args // {
   postInstall = ''
     if [ ! -z "$dev" ]; then
       mkdir "$dev"
-      for dir in bin libexec mkspecs
+      for dir in libexec mkspecs
       do
         moveToOutput "$dir" "$dev"
       done
@@ -83,6 +83,6 @@ stdenv.mkDerivation (args // {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   } // (args.meta or { });
 })

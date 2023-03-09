@@ -1,72 +1,50 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , gnome
 , libgtop
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , pcre2
-, vte
-, appstream-glib
+, vte-gtk4
 , desktop-file-utils
-, git
 , meson
 , ninja
 , pkg-config
-, python3
-, sassc
-, wrapGAppsHook
+, wrapGAppsHook4
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  # Do not upgrade until https://gitlab.gnome.org/GNOME/vte/-/issues/2584 is resolved!
-  version = "42.2";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "fSbmwYdExXWnhykyY/YM7/YwEHCY6eWKd2WwCsdDcEk=";
+    sha256 = "uWQkhaN6cOgswQVTsOJoF1a6Nh/15MvzGC8VAjH+qZ4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-clang-build-issues.patch";
-      url = "https://gitlab.gnome.org/GNOME/console/-/commit/0e29a417d52e27da62f5cac461400be6a764dc65.patch";
-      sha256 = "sha256-5ORNZOxjC5dMk9VKaBcJu5OV1SEZo9SNUbN4Ob5hVJs=";
-    })
-  ];
-
-  buildInputs = [
-    gettext
-    libgtop
-    gtk3
-    libhandy
-    pcre2
-    vte
-  ];
-
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
-    git
+    gettext
     meson
     ninja
     pkg-config
-    python3
-    sassc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
-  mesonFlags = [
-    "-Dnautilus=disabled"
+  buildInputs = [
+    libgtop
+    gtk4
+    libadwaita
+    pcre2
+    vte-gtk4
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-console";
     };
   };
 

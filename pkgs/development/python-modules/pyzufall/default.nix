@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # https://github.com/nose-devs/nose/issues/1037
   doCheck = false;
 
-  checkInputs = [ nose coverage ];
+  nativeCheckInputs = [ nose coverage ];
   propagatedBuildInputs = [ future ];
 
   checkPhase = ''

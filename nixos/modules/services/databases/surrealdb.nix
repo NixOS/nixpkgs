@@ -10,6 +10,15 @@ in {
     services.surrealdb = {
       enable = mkEnableOption (lib.mdDoc "A scalable, distributed, collaborative, document-graph database, for the realtime web ");
 
+      package = mkOption {
+        default = pkgs.surrealdb;
+        defaultText = literalExpression "pkgs.surrealdb";
+        type = types.package;
+        description = lib.mdDoc ''
+          Which surrealdb derivation to use.
+        '';
+      };
+
       dbPath = mkOption {
         type = types.str;
         description = lib.mdDoc ''
@@ -37,21 +46,46 @@ in {
         default = 8000;
         example = 8000;
       };
+
+      userNamePath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the username from.
+        '';
+      };
+
+      passwordPath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the password from.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
 
     # Used to connect to the running service
-    environment.systemPackages = [ pkgs.surrealdb ] ;
+    environment.systemPackages = [ cfg.package ] ;
 
     systemd.services.surrealdb = {
       description = "A scalable, distributed, collaborative, document-graph database, for the realtime web ";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      script = ''
+        ${cfg.package}/bin/surreal start \
+          --user $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_USERNAME) \
+          --pass $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_PASSWORD) \
+          --bind ${cfg.host}:${toString cfg.port} \
+          -- ${cfg.dbPath}
+      '';
       serviceConfig = {
-        ExecStart = "${pkgs.surrealdb}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${optionalString (cfg.dbPath != null) "-- ${cfg.dbPath}"}";
+        LoadCredential = [
+          "SURREALDB_USERNAME:${cfg.userNamePath}"
+          "SURREALDB_PASSWORD:${cfg.passwordPath}"
+        ];
+
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";

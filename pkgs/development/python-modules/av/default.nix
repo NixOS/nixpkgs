@@ -46,7 +46,7 @@ buildPythonPackage rec {
     rm -r av
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pillow
     pytestCheckHook

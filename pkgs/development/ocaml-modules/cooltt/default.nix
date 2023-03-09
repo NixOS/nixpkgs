@@ -13,6 +13,8 @@
 , uuseg
 , uutf
 , yuujinchou
+, ounit2
+, qcheck
 }:
 
 let
@@ -70,12 +72,13 @@ buildDunePackage {
   };
 
   nativeBuildInputs = [
-    cmdliner
     menhir
-    ppxlib
   ];
 
-  buildInputs = [ containers ];
+  buildInputs = [
+    cmdliner
+    ppxlib
+  ];
 
   propagatedBuildInputs = [
     bantorra
@@ -87,6 +90,12 @@ buildDunePackage {
     uuseg
     uutf
     yuujinchou
+    containers
+  ];
+
+  checkInputs = [
+    ounit2
+    qcheck
   ];
 
   meta = with lib; {

@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
 
 
 let
@@ -877,5 +877,29 @@ rec {
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
     license = with lib.licenses; [ gpl2Only ];
+  };
+
+  /* TOKI PONA */
+
+  tok = mkDict rec {
+    pname = "hunspell-dict-tok";
+    version = "20220829";
+    dictFileName = "tok";
+    readmeFile = "README.en.adoc";
+
+    src = fetchzip {
+      url = "https://github.com/somasis/hunspell-tok/releases/download/${version}/hunspell-tok-${version}.tar.gz";
+      sha256 = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
+    };
+
+    dontBuild = true;
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Toki Pona";
+      homepage = "https://github.com/somasis/hunspell-tok";
+      license = with lib.licenses; [ cc0 publicDomain cc-by-sa-30 cc-by-sa-40 ];
+      maintainers = with maintainers; [ somasis ];
+      platforms = platforms.all;
+    };
   };
 }

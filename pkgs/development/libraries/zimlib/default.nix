@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [  "-Dtest_data_dir=${testData}" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

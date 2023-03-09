@@ -94,7 +94,7 @@ rec {
       obfs4
     ];
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
     ];
 

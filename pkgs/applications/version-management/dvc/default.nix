@@ -97,6 +97,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai fab anthonyroussel ];
+    maintainers = with maintainers; [ cmcdragonkai fab ];
   };
 }

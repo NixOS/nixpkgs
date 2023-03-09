@@ -25,19 +25,18 @@ let
 in
 stdenv.mkDerivation {
   pname = "kaldi";
-  version = "2021-12-03";
+  version = "unstable-2022-09-26";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";
     repo = "kaldi";
-    rev = "2b016ab8cb018e031ab3bf01ec36cc2950c7e509";
-    sha256 = "sha256-R8CrY7cwU5XfeGEgeFuZ0ApsEcEmWN/lrZaCjz85tyk=";
+    rev = "f6f4ccaf213f0fe8b26e633a7dc0c802150626a0";
+    sha256 = "sha256-ybW2J4lWf6YaQGZZvxEVDUMAg84DC17W+yX6ZsuBDac=";
   };
 
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"
     "-DBUILD_SHARED_LIBS=on"
-  ] ++ lib.optionals stdenv.isDarwin [
     "-DBLAS_LIBRARIES=-lblas"
     "-DLAPACK_LIBRARIES=-llapack"
   ];
@@ -70,6 +69,8 @@ stdenv.mkDerivation {
     chmod +x bin/git
     export PATH=$(pwd)/bin:$PATH
   '';
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = [
     openblas

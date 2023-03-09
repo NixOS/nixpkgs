@@ -1,12 +1,16 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, libxml2, bzip2, openssl, dbus-glib
-, glib, gamin, cdparanoia, intltool, GConf, gnome_mime_data, avahi, acl }:
+, glib, gamin, cdparanoia, intltool, GConf, gnome_mime_data, avahi, acl
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-vfs";
   version = "2.24.4";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-vfs/${lib.versions.majorMinor version}/gnome-vfs-${version}.tar.bz2";
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
+    url = "mirror://gnome/sources/gnome-vfs/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "1ajg8jb8k3snxc7rrgczlh8daxkjidmcv3zr9w809sq4p2sn9pk2";
   };
 
@@ -35,4 +39,10 @@ stdenv.mkDerivation rec {
   postPatch = "find . -name Makefile.in | xargs sed 's/-DG_DISABLE_DEPRECATED//g' -i ";
 
   doCheck = false; # needs dbus daemon
-}
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
+    pkgConfigModules = [ "gnome-vfs-2.0" "gnome-vfs-module-2.0" ];
+  };
+})

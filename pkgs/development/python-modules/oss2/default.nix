@@ -41,7 +41,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aliyun-python-sdk-sts
     mock
     pytestCheckHook

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyvips/__init__.py \

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nng";
-  version = "1.5.2";
+  version = "1.6.0-prerelease";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
-    rev = "v${version}";
-    sha256 = "sha256-qbjMLpPk5FxH710Mf8AIraY0mERbaxVVhTT94W0EV+k=";
+    rev = "539e559e65cd8f227c45e4b046ac41c0edcf6c32";
+    sha256 = "sha256-86+f0um25Ywn78S2JrV54K7k3O6ots0q2dCco1aK0xM=";
   };
 
   nativeBuildInputs = [ cmake ninja ]

@@ -12,7 +12,7 @@
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
 , curl, jansson, libxml2, withNistBeacon ? false
 , libp11, opensc, withPkcs11 ? true
-, librtlsdr, withRtlsdr ? true
+, rtl-sdr, withRtlsdr ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
     ++ lib.optionals withJitterEntropy [ jitterentropy ]
     ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
-    ++ lib.optionals withPkcs11        [ libp11 openssl ]
-    ++ lib.optionals withRtlsdr        [ librtlsdr ];
+    ++ lib.optionals withPkcs11        [ libp11 libp11.passthru.openssl ]
+    ++ lib.optionals withRtlsdr        [ rtl-sdr ];
 
   enableParallelBuilding = true;
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";
-  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
+  nativeCheckInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;
   installCheckPhase = ''

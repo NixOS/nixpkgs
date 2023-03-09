@@ -49,7 +49,7 @@ deployAndroidPackage {
     done
 
     # Patch executables
-    if [ -d prebuild/linux-x86_64 ]; then
+    if [ -d prebuilt/linux-x86_64 ]; then
         autoPatchelf prebuilt/linux-x86_64
     fi
 

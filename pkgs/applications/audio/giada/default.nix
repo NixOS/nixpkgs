@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-w"
     "-Wno-error"
   ];

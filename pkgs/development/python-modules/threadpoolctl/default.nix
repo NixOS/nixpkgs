@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     numpy
     scipy

@@ -10,23 +10,17 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.40.3";
+  version = "0.42.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kV4BWQ4XfB2QjXY5b46+pxt3rhyo1glKRYO2mMJNhJM=";
+    hash = "sha256-TEB2UtXH73CCJhbuQjnABcG3XLHB6VybDwjhixnpt0w=";
   };
-
-  propagatedBuildInputs = [
-    paho-mqtt
-    python-dateutil
-    weconnect
-  ] ++ weconnect.optional-dependencies.Images;
 
   postPatch = ''
     substituteInPlace weconnect_mqtt/__version.py \
@@ -36,7 +30,13 @@ buildPythonPackage rec {
       --replace "pytest-cov" ""
   '';
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    paho-mqtt
+    python-dateutil
+    weconnect
+  ] ++ weconnect.optional-dependencies.Images;
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client that publishes data from Volkswagen WeConnect";
     homepage = "https://github.com/tillsteinbach/WeConnect-mqtt";
+    changelog = "https://github.com/tillsteinbach/WeConnect-mqtt/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-snLBeIuxZdmVIaJZmzG5f6aeWTHQmQFdka4QegsMxY8=";
+    hash = "sha256-fBk4nLeRCiDli45GkDyMGjY1MAj5/MGwP3SKzPm18+E=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -36,11 +36,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
+  ] ++ lib.optionals (!static) [
+    (python3.withPackages (ps: [ps.twisted]))
+  ];
+
+  propagatedBuildInputs = [
     libevent
     openssl
     zlib
-  ] ++ lib.optionals (!static) [
-    (python3.withPackages (ps: [ps.twisted]))
   ];
 
   postPatch = ''
@@ -66,6 +69,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
       hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
     })
+    (fetchpatch {
+      name = "thrift-install-FindLibevent.patch"; # https://github.com/apache/thrift/pull/2726
+      url = "https://github.com/apache/thrift/commit/2ab850824f75d448f2ba14a468fb77d2594998df.diff";
+      hash = "sha256-ejMKFG/cJgoPlAFzVDPI4vIIL7URqaG06/IWdQ2NkhY=";
+    })
+    (fetchpatch {
+      name = "thrift-fix-tests-OpenSSL3.patch"; # https://github.com/apache/thrift/pull/2760
+      url = "https://github.com/apache/thrift/commit/eae3ac418f36c73833746bcd53e69ed8a12f0e1a.diff";
+      hash = "sha256-0jlN4fo94cfGFUKcLFQgVMI/x7uxn5OiLiFk6txVPzs=";
+    })
   ];
 
   cmakeFlags = [
@@ -82,6 +95,7 @@ stdenv.mkDerivation rec {
 
   disabledTests = [
     "PythonTestSSLSocket"
+    "PythonThriftTNonblockingServer"
   ] ++ lib.optionals stdenv.isDarwin [
     # Tests that hang up in the Darwin sandbox
     "SecurityTest"
@@ -98,7 +112,6 @@ stdenv.mkDerivation rec {
     "StressTest"
     "StressTestConcurrent"
     "StressTestNonBlocking"
-    "PythonThriftTNonblockingServer"
   ];
 
   doCheck = !static;

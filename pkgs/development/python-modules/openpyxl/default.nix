@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-5HgFYnrrz4YO207feYexMJwbNjLzdQU47ZYrvMO9dEk=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ jdcal et_xmlfile lxml ];
 
   postPatch = ''

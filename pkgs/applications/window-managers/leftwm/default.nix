@@ -6,16 +6,20 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
     rev = version;
-    sha256 = "sha256-4f9YOVkOXn7+TzTUZS2Lultgj9WhiOPUa/fHUeyLBUU=";
+    sha256 = "sha256-ZAlX8Vu4JAwQlwBOHT435Bz3g3qqK5ePm9v0cDqP8Q4=";
   };
 
-  cargoSha256 = "sha256-D00IFTELRlqeKQ7zheJKTvu5FBgYQXsZ+OnPnVzweC4=";
+  cargoSha256 = "sha256-nn/P9ZZNf1Zts4JiJ2kXWAAG/HT1GnlYHXcPijYiBlU=";
+
+  cargoPatches = [
+    ./0001-patch-version.patch
+  ];
 
   buildInputs = rpathLibs;
 
@@ -33,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ yanganto ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
   };
 }

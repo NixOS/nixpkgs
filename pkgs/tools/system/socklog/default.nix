@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "socklog";
   version = "2.1.0";
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin;
     description = "System and kernel logging services";
     homepage = "http://smarden.org/socklog/";

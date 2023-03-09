@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, wxGTK32, coreutils, SDL2, openal, alsa-lib, pkg-config
+{ stdenv, lib, fetchzip, wxGTK32, coreutils, SDL2, openal, alsa-lib, pkg-config, gtk3, wrapGAppsHook
 , autoreconfHook, withNetworking ? true, withALSA ? true }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ wxGTK32 coreutils SDL2 openal ]
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  buildInputs = [ wxGTK32 coreutils SDL2 openal gtk3 ]
     ++ lib.optional withALSA alsa-lib;
 
   configureFlags = [ "--enable-release-build" ]

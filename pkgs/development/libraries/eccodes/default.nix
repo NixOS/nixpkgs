@@ -4,6 +4,7 @@
 , cmake
 , netcdf
 , openjpeg
+, libaec
 , libpng
 , gfortran
 , perl
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.24.2";
+  version = "2.28.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "sha256-xgrQ/YnhGRis4NhMAUifISIrEdbK0/90lYVqCt1hBAM=";
+    sha256 = "sha256-KDE0exUXr569cN08rYiugYqESNTmyGcapyhhfnNDHNU=";
   };
 
   postPatch = ''
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     netcdf
     openjpeg
+    libaec
     libpng
   ];
 
@@ -60,14 +62,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = lib.optionalString (stdenv.isDarwin) ''
-    substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
-  '' + ''
+  checkPhase = ''
     ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];

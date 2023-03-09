@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "unstable-2022-09-30";
+  version = "20230124";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "60132ade70e00b843d93542fcb37b58c0d8bf9e7";
-    hash = "sha256-4mhlCvewA0bVo5bq2sbSEKHq99TQ6jUauiCUkdRSdas=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+3fs/EXK5NGlISuMTk7r2ZZ4tNFKbNFNkVS2LmHBvwk=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

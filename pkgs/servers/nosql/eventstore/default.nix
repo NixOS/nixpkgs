@@ -11,29 +11,37 @@
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "22.6.0";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "sha256-+s/FjHKBpcpxFecuPrc26fA6WW20Uurxx1RunRY3JWI=";
+    sha256 = "sha256-gw9t+g0Y/Mrrw4nQagBzQZf9aB1hILvm2nKyUqirZH0=";
     leaveDotGit = true;
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   nativeBuildInputs = [ git glibcLocales bintools ];
 
   runtimeDeps = [ mono ];
 
+  executables = [ "EventStore.ClusterNode" ];
+
+  # This test has a problem running on macOS
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V2,String>.should_receive_expected_endpoints"
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
+  ];
+
   nugetBinariesToPatch = lib.optionals stdenv.isLinux [
-    "grpc.tools/2.41.0/tools/linux_x64/protoc"
-    "grpc.tools/2.41.0/tools/linux_x64/grpc_csharp_plugin"
+    "grpc.tools/2.49.1/tools/linux_x64/protoc"
+    "grpc.tools/2.49.1/tools/linux_x64/grpc_csharp_plugin"
   ];
 
   postConfigure = ''

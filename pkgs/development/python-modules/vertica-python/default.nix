@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "1.1.1";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3t9W12tnZztNV6E/f5br3FeznqZQuT6/DAXrbR0sDAU=";
+    hash = "sha256-Ju7talF2Tyz6P51XfVea22eKM/wDUP3ugcAWj2tB4CA=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     parameterized
     pytestCheckHook
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Native Python client for Vertica database";
     homepage = "https://github.com/vertica/vertica-python";
+    changelog = "https://github.com/vertica/vertica-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ arnoldfarkas ];
   };

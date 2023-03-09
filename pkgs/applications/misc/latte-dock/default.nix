@@ -22,7 +22,7 @@ mkDerivation rec {
     ./0001-Disable-autostart.patch
   ];
 
-  fixupPhase = ''
+  postInstall = ''
     mkdir -p $out/etc/xdg/autostart
     cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
   '';

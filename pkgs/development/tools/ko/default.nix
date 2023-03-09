@@ -24,7 +24,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we
@@ -60,6 +60,6 @@ buildGoModule rec {
       ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao jk vdemeester ];
+    maintainers = with maintainers; [ nickcao jk vdemeester developer-guy ];
   };
 }

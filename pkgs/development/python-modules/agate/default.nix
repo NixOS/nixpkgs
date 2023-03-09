@@ -9,7 +9,7 @@
 , lxml
 , nose
 , parsedatetime
-, PyICU
+, pyicu
 , python-slugify
 , pytimeparse
 , pythonOlder
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     glibcLocales
     lxml
     nose
-    PyICU
+    pyicu
     pytz
   ];
 

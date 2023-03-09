@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, boehmgc, zlib, sqlite, pcre, cmake, pkg-config
-, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
+, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls_2, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config git ];
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
-      libmysqlclient mbedtls openssl libpthreadstubs ]
+      libmysqlclient mbedtls_2 openssl libpthreadstubs ]
       ++ lib.optional stdenv.isLinux gtk2
       ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];

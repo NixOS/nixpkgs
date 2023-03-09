@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , logical-unification
+, py
 , pytestCheckHook
 , pytest-html
 }:
@@ -21,7 +22,8 @@ buildPythonPackage rec {
     logical-unification
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-html
   ];

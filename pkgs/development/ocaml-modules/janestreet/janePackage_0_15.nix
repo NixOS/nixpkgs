@@ -6,12 +6,11 @@
 , minimumOCamlVersion ? "4.11"
 , doCheck ? true
 , buildInputs ? []
-, strictDeps ? true
 , ...}@args:
 
 buildDunePackage (args // {
   useDune2 = true;
-  inherit version buildInputs strictDeps;
+  inherit version buildInputs;
 
   inherit minimumOCamlVersion;
 

@@ -1,24 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
+stdenvNoCC.mkDerivation rec {
   pname = "b612";
   version = "1.008";
 
-  owner = "polarsys";
-  repo = "b612";
-  rev = version;
+  src = fetchFromGitHub {
+    owner = "polarsys";
+    repo = "b612";
+    rev = version;
+    hash = "sha256-uyBC8UNOwztCHXhR9XZuWDwrty0eClbo0E+gI1PmjEg=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
+    mv fonts/ttf/*.ttf $out/share/fonts/truetype
 
-    mv $out/fonts/ttf/*.ttf $out/share/fonts/truetype
-
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+    runHook postInstall
   '';
-
-  hash = "sha256-aJ3XzWQauPsWwEDAHT2rD9a8RvLv1kqU3krFXprmypk=";
 
   meta = with lib; {
     homepage = "https://b612-font.com/";
@@ -36,8 +36,8 @@ fetchFromGitHub rec {
       variants of the font. This one, baptized B612 in reference to the
       imaginary asteroid of the aviator Saint‑Exupéry, benefited from a complete
       hinting on all the characters.
-      '';
-    license = with licenses; [ ofl epl10 bsd3 ] ;
+    '';
+    license = with licenses; [ ofl epl10 bsd3 ];
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };

@@ -39,9 +39,7 @@ let
       attrs:
         if lib.isDerivation attrs
         then [ attrs ]
-        else if lib.isAttrs attrs
-        then accumulateDerivations (lib.attrValues attrs)
-        else []
+        else lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
     ) jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
@@ -54,8 +52,9 @@ let
     ghc902
     ghc924
     ghc925
-    ghc942
-    ghc943
+    ghc926
+    ghc927
+    ghc944
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -207,7 +206,6 @@ let
         # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
         # hyper-haskell-server-with-packages # hyper-haskell-server is broken
         icepeak
-        idris
         ihaskell
         jacinda
         jl
@@ -219,7 +217,6 @@ let
         matterhorn
         mueval
         naproche
-        neuron-notes
         niv
         nix-delegate
         nix-deploy
@@ -336,8 +333,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc924 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc924)
+            haskell.packages.native-bignum.ghc926 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc926)
                 hello
                 lens
                 random
@@ -347,6 +344,24 @@ let
                 xhtml # isn't bundled for cross
               ;
             };
+          };
+
+      # TODO(@sternenseemann): when GHC 9.6 comes out we need separate jobs for
+      # default GHC and ghcHEAD.
+      pkgsCross.ghcjs.haskellPackages =
+        removePlatforms
+          [
+            # Still unexplained build failure: https://github.com/NixOS/nixpkgs/issues/217127
+            "x86_64-darwin"
+
+            # Hydra output size of 3GB is exceeded
+            "aarch64-linux"
+          ]
+          {
+            inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+              ghc
+              hello
+            ;
           };
     })
     (versionedCompilerJobs {
@@ -362,16 +377,9 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = released;
+      haskell-language-server = builtins.filter (x: x != compilerNames.ghc884) released;
       hoogle = released;
-      hlint = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        # https://github.com/ndmitchell/hlint/issues/1413
-      ];
+      hlint = released;
       hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
@@ -390,24 +398,22 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      spectacle = [
+      ghc-tags = [
         compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc927
+        compilerNames.ghc944
       ];
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc924
         compilerNames.ghc925
-      ];
-      purescript = [
-        compilerNames.ghc924
-        compilerNames.ghc925
-      ];
-      purescript-cst = [
-        compilerNames.ghc8107
-      ];
-      purescript-ast = [
-        compilerNames.ghc8107
+        compilerNames.ghc926
+        compilerNames.ghc927
       ];
     })
     {
@@ -477,11 +483,15 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc902
           jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
+          jobs.pkgsMusl.haskell.compiler.ghc926
+          jobs.pkgsMusl.haskell.compiler.ghc927
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -497,7 +507,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc924
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc926
         ];
       };
     }

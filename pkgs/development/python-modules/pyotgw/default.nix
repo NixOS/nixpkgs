@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.1.2";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "mvn23";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qUwpW9C9VqsbDNa9zqa/BZtMuzmPU21Au/q0iGRkBNY=";
+    hash = "sha256-XIwBGjvIulKLmYZIorKIJwoHTNOIYYX8US2Na8MZ2LA=";
   };
 
   propagatedBuildInputs = [
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

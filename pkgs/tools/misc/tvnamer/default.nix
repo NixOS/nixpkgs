@@ -4,15 +4,19 @@
 
 let
   python' = python3.override {
-    packageOverrides = self: super: rec {
+    packageOverrides = final: prev: rec {
       # tvdb_api v3.1.0 has a hard requirement on requests-cache < 0.6
-      requests-cache = super.requests-cache.overridePythonAttrs (super: rec {
+      requests-cache = prev.requests-cache.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.2";
-        src = self.fetchPypi {
-          inherit (super) pname;
+        src = final.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           sha256 = "sha256-gTAjJpaGBF+OAeIonMHn6a5asi3dHihJqQk6s6tycOs=";
         };
+
+        nativeBuildInputs = with final; [
+          setuptools
+        ];
 
         # too many changes have been made to requests-cache based on version 0.6 so
         # simply disable tests

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

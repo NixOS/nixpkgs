@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # TODO Remove when bumping past rev22
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   buildPhase = optionalString enableSDL ''
     cd sdl2

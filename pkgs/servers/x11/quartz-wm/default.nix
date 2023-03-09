@@ -12,6 +12,7 @@ in stdenv.mkDerivation {
     ./no_title_crash.patch
     ./extern-patch.patch
   ];
+  configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libXinerama

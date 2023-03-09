@@ -28,5 +28,5 @@ stdenv.mkDerivation rec {
   buildInputs = [ xercesc ];
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 }

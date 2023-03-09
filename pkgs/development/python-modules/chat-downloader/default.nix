@@ -1,34 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , requests
 , isodate
 , docstring-parser
 , colorlog
 , websocket-client
 , pytestCheckHook
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "chat-downloader";
-  version = "0.2.0";
+  version = "0.2.4";
+  format = "setuptools";
 
-  # PyPI tarball is missing files
-  src = fetchFromGitHub {
-    owner = "xenova";
-    repo = "chat-downloader";
-    rev = "v${version}";
-    sha256 = "sha256-SVZyDTma6qAgmOz+QsPnudPrX1Eswtc0IKFRx1HnWLY=";
+  src = fetchPypi {
+    inherit version pname;
+    sha256 = "beeaedbe7d28e22f8a2c635fc6432f9e9af84e3c2a6ecff101f4453de1abb385";
   };
-
-  patches = [
-    # Remove argparse from dependencies. https://github.com/xenova/chat-downloader/pull/167
-    (fetchpatch {
-      url = "https://github.com/xenova/chat-downloader/commit/cdaca5e3a334c8db1b37bebe191d181ebdfa576c.patch";
-      sha256 = "sha256-AgH305dJmNRZy23lAf1h40klDE67RSwEL8o2gxX0VGA=";
-    })
-  ];
 
   propagatedBuildInputs = [
     requests
@@ -41,13 +30,14 @@ buildPythonPackage rec {
   # Tests try to access the network.
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "chat_downloader" ];
 
   meta = with lib; {
     description = "A simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
     homepage = "https://github.com/xenova/chat-downloader";
+    changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for

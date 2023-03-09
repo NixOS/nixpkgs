@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.4.1";
+  version = "3.4.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "6p1BqfucK0KtgPwsgjJ7XHE9WUyWmwnhpJvmP7dPT64=";
+    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
   };
 
   postPatch = ''
@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     libxml2
     sqlite
@@ -117,7 +116,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test \
         --timeout-multiplier 2 \
         --print-errorlogs

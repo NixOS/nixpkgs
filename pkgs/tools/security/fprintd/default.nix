@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libfprint
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     gobject-introspection # for setup hook
     python-dbusmock
     dbus-python

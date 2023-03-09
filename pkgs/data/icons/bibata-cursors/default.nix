@@ -3,45 +3,35 @@
 , fetchFromGitHub
 , fetchurl
 , clickgen
-, unzip
+, attrs
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors";
-  version = "1.1.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "Bibata_Cursor";
     rev = "v${version}";
-    sha256 = "1q2wdbrmdnr9mwiilm5cc9im3zwbl7yaj1zpy5wwn44ypq3hcngy";
+    sha256 = "zCk7qgPeae0BfzhxxU2Dk1SOWJQOxiWyJuzH/ri+Gq4=";
   };
 
-  bitmaps = fetchurl {
-    url = "https://github.com/ful1e5/Bibata_Cursor/releases/download/v${version}/bitmaps.zip";
-    sha256 = "1pcn6par0f0syyhzpzmqr3c6b9ri4lprkdd2ncwzdas01p2d9v1i";
-  };
-
-  nativeBuildInputs = [ unzip ];
-
-  buildInputs = [ clickgen ];
+  buildInputs = [ clickgen attrs ];
 
   buildPhase = ''
-    mkdir bitmaps
-    unzip $bitmaps -d bitmaps
-    rm -rf themes
-    cd builder && make build_unix
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Amber' -n 'Bibata-Modern-Amber' -c 'Yellowish and rounded edge bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Classic' -n 'Bibata-Modern-Classic' -c 'Black and rounded edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Ice' -n 'Bibata-Modern-Ice' -c 'White and rounded edge Bibata cursors.'
+
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Amber' -n 'Bibata-Original-Amber' -c 'Yellowish and sharp edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Classic' -n 'Bibata-Original-Classic' -c 'Black and sharp edge Bibata cursors.'
+    ctgen build.toml -p x11 -d 'bitmaps/Bibata-Original-Ice' -n 'Bibata-Original-Ice' -c 'White and sharp edge Bibata cursors.'
   '';
 
   installPhase = ''
     install -dm 0755 $out/share/icons
-    cd ../
     cp -rf themes/* $out/share/icons/
-  '';
-
-  postPatch = ''
-    substituteInPlace "builder/Makefile" \
-      --replace "/bin/bash" "bash"
   '';
 
   meta = with lib; {

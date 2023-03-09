@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-s" "test" ];
 

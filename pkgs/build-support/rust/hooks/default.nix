@@ -1,6 +1,7 @@
 { buildPackages
 , callPackage
 , cargo
+, cargo-nextest
 , clang
 , lib
 , makeSetupHook
@@ -30,7 +31,7 @@ in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
@@ -40,7 +41,7 @@ in {
   cargoCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-check-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit rustTargetPlatformSpec;
       };
@@ -49,16 +50,25 @@ in {
   cargoInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-install-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         inherit shortTarget;
       };
     } ./cargo-install-hook.sh) {};
 
+  cargoNextestHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-nextest-hook.sh";
+      propagatedBuildInputs = [ cargo cargo-nextest ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-nextest-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         defaultConfig = ../fetchcargo-default-config.toml;
 
@@ -98,13 +108,16 @@ in {
           host-config = true
           target-applies-to-host = true
         '';
+
+        # https://github.com/NixOS/nixpkgs/issues/201254
+        aarch64LinuxGccWorkaround = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
       };
     } ./cargo-setup-hook.sh) {};
 
   maturinBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
-      deps = [ cargo maturin rustc ];
+      propagatedBuildInputs = [ cargo maturin rustc ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;

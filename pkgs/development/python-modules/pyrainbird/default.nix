@@ -1,9 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
+, ical
 , parameterized
 , pycryptodome
+, pydantic
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-golden
+, pytest-mock
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
 , pyyaml
 , requests
@@ -13,31 +21,42 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "0.6.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "jbarrancos";
+    owner = "allenporter";
     repo = pname;
-    rev = version;
-    hash = "sha256-MikJDW5Fo2DNpn9/Hyc1ecIIMEwE8GD5LKpka2t7aCk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fQHWamtGA1Cz/9Hbxbns5lDd08Q01nIvaMXp9PWrelM=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--cov=pyrainbird --cov-report=term-missing" ""
+
+    substituteInPlace setup.cfg \
+      --replace "pycryptodome>=3.16.0" "pycryptodome"
   '';
 
   propagatedBuildInputs = [
+    ical
     pycryptodome
+    pydantic
+    python-dateutil
     pyyaml
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     parameterized
+    pytest-aiohttp
+    pytest-asyncio
+    pytest-golden
+    pytest-mock
     pytestCheckHook
     requests-mock
     responses
@@ -49,7 +68,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Rainbird controllers";
-    homepage = "https://github.com/jbarrancos/pyrainbird/";
+    homepage = "https://github.com/allenporter/pyrainbird";
+    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

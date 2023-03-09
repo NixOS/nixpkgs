@@ -1,23 +1,36 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qttools, qtbase }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qttools
+, qtbase
+}:
 
 mkDerivation rec {
   pname = "heimer";
-  version = "3.6.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "juzzlin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NAjl7eRmMkRrVhlza87ErllEa1QfPZ8GRI1aljY6itI=";
+    hash = "sha256-tcA7+3gp/CFpapCL4yt3xG12sm+LcnRIoB/caJlKF8A=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qttools qtbase ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    qttools
+    qtbase
+  ];
 
   meta = with lib; {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
     homepage = "https://github.com/juzzlin/Heimer";
-    license = licenses.gpl3;
+    changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
+    license = licenses.gpl3Plus;
     maintainers  = with maintainers; [ dtzWill ];
     platforms = platforms.linux;
   };

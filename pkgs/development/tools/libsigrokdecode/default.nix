@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib python3 libxcrypt ];
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
   doCheck = true;
 
   meta = with lib; {

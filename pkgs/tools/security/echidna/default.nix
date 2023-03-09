@@ -1,39 +1,32 @@
 { lib
 , fetchFromGitHub
 # Haskell deps
-, mkDerivation, aeson, ansi-terminal, base, base16-bytestring, binary, brick
-, bytestring, cborg, containers, data-dword, data-has, deepseq, directory
-, exceptions, filepath, hashable, hevm, hpack, lens, lens-aeson, megaparsec
-, MonadRandom, mtl, optparse-applicative, process, random, stm, tasty
-, tasty-hunit, tasty-quickcheck, temporary, text, transformers , unix, unliftio
-, unliftio-core, unordered-containers, vector, vector-instances, vty
-, wl-pprint-annotated, word8, yaml, extra, ListLike, semver
+, mkDerivation, aeson, base, base16-bytestring, binary, brick, bytestring
+, containers, data-dword, data-has, directory, exceptions, extra, filepath
+, hashable, hevm, hpack, html-entities, lens, ListLike, MonadRandom, mtl
+, optparse-applicative, process, random, semver, tasty, tasty-hunit
+, tasty-quickcheck, text, transformers, unix, unliftio, unordered-containers
+, vector, vector-instances, vty, yaml
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-ZLk3K00O6aERf+G5SagDVUk1/ba9U+9n9dqCImkczJs=";
+    sha256 = "sha256-8bChe+qA4DowfuwsR5wLckb56fXi102g8vL2gAH/kYE=";
   };
-
-  # NOTE: echidna is behind with aeson because of hevm, this patch updates
-  # the code to work with the major aeson update that broke the build
-  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
-  patches = [ ./echidna-update-aeson.patch ];
 
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson ansi-terminal base base16-bytestring binary brick bytestring cborg
-    containers data-dword data-has deepseq directory exceptions filepath
-    hashable hevm lens lens-aeson megaparsec MonadRandom mtl
-    optparse-applicative process random stm temporary text transformers unix
-    unliftio unliftio-core unordered-containers vector vector-instances vty
-    wl-pprint-annotated word8 yaml extra ListLike semver
+    aeson base base16-bytestring binary brick bytestring containers data-dword
+    data-has directory exceptions extra filepath hashable hevm html-entities
+    lens ListLike MonadRandom mtl optparse-applicative process random semver
+    text transformers unix unliftio unordered-containers vector vector-instances
+    vty yaml
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = libraryHaskellDepends;

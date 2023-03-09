@@ -1,9 +1,7 @@
-{ buildFHSUserEnv, callPackage, lib, openssl }:
+{ buildFHSUserEnv, callPackage, lib }:
 let
 
-  shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix {
-    inherit openssl;
-  };
+  shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { };
 
 in buildFHSUserEnv {
   name = "shticker_book_unwritten";

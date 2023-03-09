@@ -2,24 +2,33 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "prefixed";
-  version = "0.4.2";
+  version = "0.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gfTjvBUEbncnE6uA8IaQ5hxSzOsgFBQldU6rWwCxMMk=";
+    hash = "sha256-C1TRXmAuuK9Kwxsdsho36pXOWJDgdBuw3Z3tSTzvu+k=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "prefixed" ];
+  pythonImportsCheck = [
+    "prefixed"
+  ];
 
   meta = with lib; {
     description = "Prefixed alternative numeric library";
     homepage = "https://github.com/Rockhopper-Technologies/prefixed";
+    changelog = "https://github.com/Rockhopper-Technologies/prefixed/releases/tag/${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

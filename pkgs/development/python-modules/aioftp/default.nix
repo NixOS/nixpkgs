@@ -26,7 +26,7 @@ buildPythonPackage rec {
     siosocks
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytest-asyncio
     pytestCheckHook

@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ecdsa
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     behave
     nose
   ];

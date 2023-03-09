@@ -47,7 +47,7 @@ with python3.pkgs; buildPythonApplication rec {
     urwidtrees
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     future
     gawk
     gnupg

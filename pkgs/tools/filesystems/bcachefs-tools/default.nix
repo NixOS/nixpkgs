@@ -13,22 +13,25 @@
 , zstd
 , lz4
 , python3Packages
+, util-linux
 , udev
 , valgrind
 , nixosTests
+, makeWrapper
+, getopt
 , fuse3
 , fuseSupport ? false
 }:
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2022-09-28";
+  version = "unstable-2023-01-31";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "99caca2c70f312c4a2504a7e7a9c92a91426d885";
-    sha256 = "sha256-9bFTBFkQq8SvhYa9K4+MH2zvKZviNaq0sFWoeGgch7g=";
+    rev = "3c39b422acd3346321185be0ce263809e2a9a23f";
+    hash = "sha256-2ci/m4JfodLiPoWfP+QCEqlk0k48zq3mKb8Pdrtln0o=";
   };
 
   postPatch = ''
@@ -39,7 +42,9 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkg-config docutils python3Packages.python ];
+  nativeBuildInputs = [
+    pkg-config docutils python3Packages.python makeWrapper
+  ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
@@ -48,10 +53,17 @@ stdenv.mkDerivation {
 
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-  checkInputs = [ valgrind ];
+  nativeCheckInputs = [ valgrind ];
 
   preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
+  '';
+
+  # this symlink is needed for mount -t bcachefs to work
+  postFixup = ''
+    ln -s $out/bin/mount.bcachefs.sh $out/bin/mount.bcachefs
+    wrapProgram $out/bin/mount.bcachefs.sh \
+      --prefix PATH : ${lib.makeBinPath [ getopt util-linux ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];

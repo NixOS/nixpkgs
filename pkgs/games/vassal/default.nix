@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib
+, stdenv
+, fetchzip
+, glib
+, jre
+, makeWrapper
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
-  version = "3.6.7";
+  version = "3.6.13";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "sha256-WTYMbVtAciscnBzR4uHmVVXpuge53e32uLmUF8/w6I0=";
+    sha256 = "sha256-5YswOh2jnOafctp7q8INtIqQwx1ugGm0QP9vDfal7t0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    glib
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,5 +51,6 @@ stdenv.mkDerivation rec {
       license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
       platforms = platforms.unix;
+      mainProgram = "vassal";
   };
 }

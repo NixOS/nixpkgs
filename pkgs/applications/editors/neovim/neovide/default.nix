@@ -1,40 +1,34 @@
-{ rustPlatform
-, runCommand
-, lib
+{ lib
+, rustPlatform
+, clangStdenv
 , fetchFromGitHub
+, linkFarm
 , fetchgit
-, fetchurl
+, runCommand
+, gn
+, ninja
 , makeWrapper
 , pkg-config
-, python2
 , python3
-, openssl
+, removeReferencesTo
+, xcbuild
 , SDL2
 , fontconfig
-, freetype
-, ninja
-, gn
-, llvmPackages
-, makeFontsConf
+, xorg
+, stdenv
+, darwin
 , libglvnd
 , libxkbcommon
-, stdenv
 , enableWayland ? stdenv.isLinux
 , wayland
-, xorg
-, xcbuild
-, Security
-, ApplicationServices
-, AppKit
-, Carbon
-, removeReferencesTo
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
   version = "0.10.3";
 
   src = fetchFromGitHub {
-    owner = "Kethku";
+    owner = "neovide";
     repo = "neovide";
     rev = version;
     sha256 = "sha256-CcBiCcfOJzuq0DnokTUHpMdo7Ry29ugQ+N7Hk0R+cQE=";
@@ -52,35 +46,24 @@ rustPlatform.buildRustPackage rec {
         sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
       };
       # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);
+      externals = linkFarm "skia-externals" (lib.mapAttrsToList
+        (name: value: { inherit name; path = fetchgit value; })
+        (lib.importJSON ./skia-externals.json));
     in
-      runCommand "source" {} (
-        ''
-          cp -R ${repo} $out
-          chmod -R +w $out
+    runCommand "source" { } ''
+      cp -R ${repo} $out
+      chmod -R +w $out
+      ln -s ${externals} $out/third_party/externals
+    ''
+  ;
 
-          mkdir -p $out/third_party/externals
-          cd $out/third_party/externals
-        '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
-      );
-
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
   SKIA_GN_COMMAND = "${gn}/bin/gn";
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
-  preConfigure = ''
-    unset CC CXX
-  '';
-
-  # test needs a valid fontconfig file
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
-    python2 # skia-bindings
-    python3 # rust-xcb
-    llvmPackages.clang # skia
+    pkg-config
+    python3 # skia
     removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
@@ -91,21 +74,12 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    openssl
     SDL2
-    (fontconfig.overrideAttrs (old: {
-      propagatedBuildInputs = [
-        # skia is not compatible with freetype 2.11.0
-        (freetype.overrideAttrs (old: rec {
-          version = "2.10.4";
-          src = fetchurl {
-            url = "mirror://savannah/${old.pname}/${old.pname}-${version}.tar.xz";
-            sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
-          };
-        }))
-      ];
-    }))
-  ] ++ lib.optionals stdenv.isDarwin [ Security ApplicationServices Carbon AppKit ];
+    fontconfig
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+  ];
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -138,10 +112,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
-    homepage = "https://github.com/Kethku/neovide";
+    homepage = "https://github.com/neovide/neovide";
+    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.all;
-    mainProgram = "neovide";
   };
 }

@@ -7,28 +7,16 @@
 
 buildGoModule rec {
   pname = "esbuild";
-  version = "0.13.6";
+  version = "0.14.39";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "esbuild";
-    rev = "v${version}";
-    sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
+    rev = "5faa7ad54c99a953d05c06819298d2b6f8c82d80";
+    sha256 = "pYiwGjgFMclPYTW0Qml7Pr/knT1gywUAGANra5aojYM=";
   };
 
-  vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-
-  patches = [
-    # Both upstream patches update the same dependency "x/sys". It's required for darwin compatibility.
-    (fetchpatch {
-      url = "https://github.com/evanw/esbuild/commit/2567e099fcc6959e630f100b2c737ca80e88ba82.patch";
-      hash = "sha256-KdX/Ru9TBX0mSDaS1ijxgzDI+2AoCvt6Wilhpca3VC0=";
-    })
-    (fetchpatch {
-      url = "https://github.com/evanw/esbuild/commit/fd13718c6195afb9e63682476a774fa6d4483be0.patch";
-      hash = "sha256-va/bXRBQf9qgE9LZXcKKAa0ZpMt/QG7BFClJ8bPWG1Y=";
-    })
-  ];
+  vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
 
   passthru = {
     tests = {

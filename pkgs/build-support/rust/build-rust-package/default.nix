@@ -4,12 +4,14 @@
 , rust
 , stdenv
 , callPackage
-, cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
+, cargoNextestHook
 , cargoSetupHook
+, cargo
+, cargo-auditable
+, cargo-auditable-cargo-wrapper
 , rustc
 , libiconv
 , windows
@@ -40,6 +42,9 @@
 , checkNoDefaultFeatures ? buildNoDefaultFeatures
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
+, useNextest ? false
+, auditable ? false # TODO: change to true
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -113,17 +118,20 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
-    cacert
-    git
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (cargo-auditable-cargo-wrapper.override {
+      inherit cargo cargo-auditable;
+    })
+  ] ++ [
     cargoBuildHook
-    cargoCheckHook
+    (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
     cargoSetupHook
     rustc
   ];
 
   buildInputs = buildInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
@@ -145,8 +153,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   doCheck = args.doCheck or true;
 
   strictDeps = true;
-
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
 
   meta = {
     # default to Rust's platforms

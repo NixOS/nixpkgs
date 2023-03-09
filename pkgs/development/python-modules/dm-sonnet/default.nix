@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     docutils
     tensorflow-datasets
   ];

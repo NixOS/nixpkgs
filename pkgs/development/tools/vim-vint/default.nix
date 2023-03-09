@@ -14,7 +14,7 @@ buildPythonApplication rec {
   # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
   disabled = ! pythonAtLeast "3.5";
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
   propagatedBuildInputs = [ ansicolor chardet pyyaml setuptools ];
 
   # Unpin test dependency versions. This is fixed in master but not yet released.

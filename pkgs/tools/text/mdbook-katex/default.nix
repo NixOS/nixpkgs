@@ -1,22 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchCrate, rustPlatform, openssl, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.2.10";
+  version = "0.3.9";
 
-  src = fetchFromGitHub {
-    owner = "lzanini";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5PzXX7icRxcHpzjp3x/9ssn2o0444uHrzBn1Ds1DEPM=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-FsKHGw/6n/8eCJh1XatNsw3iCzD+siHdJ3i0dNKD5Go=";
   };
 
-  cargoPatches = [
-    # Remove when https://github.com/lzanini/mdbook-katex/pull/35 is in a new release.
-    ./update-mdbook-for-rust-1.64.patch
-  ];
+  cargoHash = "sha256-nyLWbwruzQeyPGkVuMiRCTHtFE+E9nQ57ZMXxqIcLxE=";
 
-  cargoHash = "sha256-lrEirKkGf9/8yLyLSON54UaeQ3Xtl7g7ezUc7e1KVHw=";
+  OPENSSL_DIR = "${lib.getDev openssl}";
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

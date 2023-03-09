@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     curl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     check
   ];

@@ -1,8 +1,35 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
-, python, twisted, jinja2, msgpack, zope_interface, sqlalchemy, alembic
-, python-dateutil, txaio, autobahn, pyjwt, pyyaml, treq, txrequests, pypugjs
-, boto3, moto, mock, lz4, setuptoolsTrial
-, buildbot-worker, buildbot-pkg, buildbot-plugins, parameterized, git, openssh
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, makeWrapper
+, pythonOlder
+, python
+, twisted
+, jinja2
+, msgpack
+, zope_interface
+, sqlalchemy
+, alembic
+, python-dateutil
+, txaio
+, autobahn
+, pyjwt
+, pyyaml
+, treq
+, txrequests
+, pypugjs
+, boto3
+, moto
+, mock
+, lz4
+, setuptoolsTrial
+, buildbot-worker
+, buildbot-pkg
+, buildbot-plugins
+, parameterized
+, git
+, openssh
 , glibcLocales
 , nixosTests
 }:
@@ -17,7 +44,10 @@ let
     dontBuild = true;
     doCheck = false;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      makeWrapper
+    ];
+
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
     installPhase = ''
@@ -33,11 +63,14 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.6.1";
+    version = "3.7.0";
+    format = "setuptools";
+
+    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-ByJPkI0AHis+Ey1lSuMly4M6W4s/xes4eG0gPPJ3fZA=";
+      hash = "sha256-YMLT1SP6NenJIUVTvr58GVrtNXHw+bhfgMpZu3revG4=";
     };
 
     propagatedBuildInputs = [
@@ -57,7 +90,7 @@ let
       # tls
       ++ twisted.optional-dependencies.tls;
 
-    checkInputs = [
+    nativeCheckInputs = [
       treq
       txrequests
       pypugjs
@@ -85,6 +118,9 @@ let
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
 
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 
@@ -94,9 +130,9 @@ let
 
       # remove testfile which is missing configuration file from sdist
       rm buildbot/test/integration/test_graphql.py
+      # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
+      rm buildbot/test/integration/test_try_client.py
     '';
-
-    disabled = !isPy3k;
 
     passthru = {
       inherit withPlugins;
@@ -105,11 +141,12 @@ let
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
-      homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
+      homepage = "https://buildbot.net/";
+      changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
       maintainers = with maintainers; [ ryansydnor lopsided98 ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
+      broken = stdenv.isDarwin;
     };
   };
 in package

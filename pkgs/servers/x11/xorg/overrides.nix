@@ -1,8 +1,10 @@
 { abiCompat ? null,
+  callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool,
+  automake, autoconf, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
-  libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
+  libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
+  ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
@@ -11,7 +13,6 @@
 
 let
   inherit (stdenv) isDarwin;
-  inherit (lib) overrideDerivation;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -23,23 +24,26 @@ let
 in
 self: super:
 {
+  wrapWithXFileSearchPathHook = callPackage ({ makeBinaryWrapper, makeSetupHook, writeScript }: makeSetupHook {
+      name = "wrapWithXFileSearchPathHook";
+      propagatedBuildInputs = [ makeBinaryWrapper ];
+    } (writeScript "wrapWithXFileSearchPathHook.sh" ''
+      wrapWithXFileSearchPath() {
+        paths=(
+          "$out/share/X11/%T/%N"
+          "$out/include/X11/%T/%N"
+          "${xorg.xbitmaps}/include/X11/%T/%N"
+        )
+        for exe in $out/bin/*; do
+          wrapProgram "$exe" \
+            --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+        done
+      }
+      postInstallHooks+=(wrapWithXFileSearchPath)
+  '')) {};
+
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
-  bitmap = super.bitmap.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
-    postInstall = ''
-      paths=(
-        "$out/share/X11/%T/%N"
-        "$out/include/X11/%T/%N"
-        "${xorg.xbitmaps}/include/X11/%T/%N"
-      )
-      wrapProgram "$out/bin/bitmap" \
-        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
-        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
-    '';
   });
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -67,6 +71,8 @@ self: super:
     CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
+
+    configureFlags = attrs.configureFlags or [] ++ [ "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp" ];
 
     inherit tradcpp;
   });
@@ -139,6 +145,14 @@ self: super:
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
+  libFS = super.libFS.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
@@ -151,6 +165,11 @@ self: super:
 
   xdm = super.xdm.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
+    configureFlags = attrs.configureFlags or [] ++ [
+      "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+      # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
+      [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
   });
 
   # Propagate some build inputs because of header file dependencies.
@@ -165,6 +184,7 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
   });
 
@@ -295,6 +315,7 @@ self: super:
   libXpm = super.libXpm.overrideAttrs (attrs: {
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
+    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
@@ -306,16 +327,17 @@ self: super:
   });
 
   libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
-    name = "libxshmfence-1.3";
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
-      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
-    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    meta = attrs.meta // { platforms = lib.platforms.linux; };
+    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+
+    meta = attrs.meta // {
+      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
+      platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
+        [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+    };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
@@ -436,7 +458,7 @@ self: super:
   xf86videowsfb    = super.xf86videowsfb.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
 
   xf86videoomap    = super.xf86videoomap.overrideAttrs (attrs: {
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
   });
 
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
@@ -468,124 +490,25 @@ self: super:
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-suncg6/-/commit/14392504de04841fa2cbb5cdf8d9c9c7c4eb2ed8
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/cg6.h b/src/cg6.h
-      index 9f176e69dc1f6fc5e35ca20c30a4d3b4faf52623..d6bc19e8767c6aee9e7174a43cf1d71a9f35af32 100644
-      --- a/src/cg6.h
-      +++ b/src/cg6.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "cg6_regs.h"
-       EOF
-    '';
   });
 
   xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunffb/-/commit/656dd83b489e7bdc72d6c1990025d20dea26dc22
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/ffb.h b/src/ffb.h
-      index 67a2d87afa607b6bea07e53f4be738c1ebb757ab..d87024033fb48a83c50c588866c90cd6eac0975c 100644
-      --- a/src/ffb.h
-      +++ b/src/ffb.h
-      @@ -30,7 +30,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #ifdef HAVE_XAA_H
-       #include "xaa.h"
-       #endif
-       EOF
-    '';
   });
 
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
     meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunleo/-/commit/f58ba53e6b6fe1b6e21d6aa3901a11e6130b95b0
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/leo.h b/src/leo.h
-      index a5bf41d34955d81b7ea14d4da6bc7f65191a3f98..c45c59b71be679333216d289d689a3c06c8dcbf7 100644
-      --- a/src/leo.h
-      +++ b/src/leo.h
-      @@ -26,7 +26,7 @@
-
-       #include "xf86.h"
-       #include "xf86_OSproc.h"
-      -#include "xf86RamDac.h"
-      +#include "xf86Cursor.h"
-       #include <X11/Xmd.h>
-       #include "gcstruct.h"
-       #include "leo_regs.h"
-       EOF
-    '';
-  });
-
-  xf86videotrident = super.xf86videotrident.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/commit/07a5c4732f1c28ffcb873ee04500e3cb813c50b4
-    postPatch = ''
-      patch -p1 <<EOF
-      diff --git a/src/trident.h b/src/trident.h
-      index 5cadf52d3be13f03e94a8f443f1c8a04358296e8..c82de4c7debf3ee42e3b7965b738a6bd6ae9147d 100644
-      --- a/src/trident.h
-      +++ b/src/trident.h
-      @@ -38,7 +38,6 @@
-       #include "xaa.h"
-       #endif
-       #include "xf86fbman.h"
-      -#include "xf86RamDac.h"
-       #include "compiler.h"
-       #include "vgaHW.h"
-       #include "xf86i2c.h"
-      @@ -103,7 +102,6 @@ typedef struct {
-           int			useEXA;
-           int			Chipset;
-           int			DACtype;
-      -    int			RamDac;
-           int                 ChipRev;
-           int			HwBpp;
-           int			BppShift;
-      @@ -169,7 +167,6 @@ typedef struct {
-           CARD32		BltScanDirection;
-           CARD32		DrawFlag;
-           CARD16		LinePattern;
-      -    RamDacRecPtr	RamDacRec;
-           int			CursorOffset;
-           xf86CursorInfoPtr	CursorInfoRec;
-           xf86Int10InfoPtr	Int10;
-       EOF
-    '';
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
-    postPatch = ''
-      patch -p1 <<EOF
-      --- a/src/qxl_option_helpers.c
-      +++ b/src/qxl_option_helpers.c
-      @@ -37 +37 @@
-      -        return options[option_index].value.bool;
-      +        return options[option_index].value.boolean;
-      EOF
-    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
@@ -699,10 +622,6 @@ self: super:
       postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
     });
 
-  xload = super.xload.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
-  });
-
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
     meta = attrs.meta // { license = lib.licenses.mit; };
   });
@@ -722,39 +641,28 @@ self: super:
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
-            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; postPatch = ''
-            for i in dri3/*.c
-            do
-              sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
-            done
-          '';}
-        else if (abiCompat == "1.18") then {
-            name = "xorg-server-1.18.4";
-            builder = ./builder.sh;
-            src = fetchurl {
-              url = "mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2";
-              sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
-            };
-            nativeBuildInputs = [ pkg-config ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-            postPatch = lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
-            meta.platforms = lib.platforms.unix;
-            meta.broken = stdenv.isDarwin;
-        } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
+            buildInputs = attrs_passed.buildInputs ++
+              lib.optional (libdrm != null) libdrm.dev;
+            postPatch = ''
+              for i in dri3/*.c
+              do
+                sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
+              done
+            '';
+          }
+        else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
 
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
       commonPropagatedBuildInputs = [
-        zlib libGL libGLU dbus
-        xorgproto
-        libXext pixman libXfont libxshmfence libunwind
-        libXfont2
+        dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
+        libxshmfence pixman xorgproto zlib
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
+      darwinOtherX = xorgserver.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -782,34 +690,9 @@ self: super:
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
-
-          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
-          # TODO: remove with xorgserver >= 1.21
-          (fetchpatch {
-            name = "stdbool.patch";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
-            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
-          })
-        ]
-        # TODO: remove with xorgserver >= 21.1.4; https://lists.x.org/archives/xorg/2022-July/061035.html
-        ++ [
-          (fetchpatch {
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/f1070c01d616c5f21f939d5ebc533738779451ac.diff";
-            sha256 = "5hcreV3ND8Lklvo7QMpB0VWQ2tifIamRlCr6J82qXt8=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-2319.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/6907b6ea2b4ce949cb07271f5b678d5966d9df42.diff";
-            sha256 = "gWXCalWj2SF4U7wSFGIgK396B0Fs3EtA/EL+34m3FWY=";
-          })
-          (fetchpatch {
-            name = "CVE-2022-2320.diff";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd8caf39e9e15d8f302e54045dd08d8ebf1025dc.diff";
-            sha256 = "rBiiXQRreMvexW9vOKblcfCYzul+9La01EAhir4FND8=";
-          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -832,6 +715,11 @@ self: super:
           "--disable-tls"
         ];
 
+        env.NIX_CFLAGS_COMPILE = toString [
+          # Needed with GCC 12
+          "-Wno-error=array-bounds"
+        ];
+
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
@@ -843,7 +731,7 @@ self: super:
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.fontutil ];
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook bootstrap_cmds xorg.utilmacros xorg.fontutil ];
         buildInputs = commonBuildInputs ++ [
           bootstrap_cmds automake autoconf
           Xplugin Carbon Cocoa
@@ -879,6 +767,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"
           "--with-apple-applications-dir=\${out}/Applications"
@@ -939,7 +828,7 @@ self: super:
   xinit = (super.xinit.override {
     stdenv = if isDarwin then clangStdenv else stdenv;
   }).overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ lib.optional isDarwin bootstrap_cmds;
+    nativeBuildInputs = attrs.nativeBuildInputs ++ lib.optional isDarwin bootstrap_cmds;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     configureFlags = [
       "--with-xserver=${xorg.xorgserver.out}/bin/X"
@@ -963,7 +852,9 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xauth ]
                          ++ lib.optionals isDarwin [ xorg.libX11 xorg.xorgproto ];
     postFixup = ''
-      substituteInPlace $out/bin/startx --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc
+      substituteInPlace $out/bin/startx \
+        --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
+        --replace $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
     '';
   });
 
@@ -978,9 +869,10 @@ self: super:
       rev = "31486f40f8e8f8923ca0799aea84b58799754564";
       sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXfixes xorg.libXv xorg.pixman xorg.utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
 
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
@@ -1021,6 +913,13 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
+    patches = [
+      (fetchpatch {
+        name = "add-aarch64-darwin-support.patch";
+        url = "https://gitlab.freedesktop.org/xorg/util/cf/-/commit/8d88c559b177e832b581c8ac0aa383b6cf79e0d0.patch";
+        sha256 = "sha256-wCijdmlUtVgOh9Rp/LJrg1ObYm4OPTke5Xwu0xC0ap4=";
+      })
+    ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
@@ -1043,17 +942,6 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
-    '';
-  });
-
-  xcalc = super.xcalc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [] ++ [
-      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/bin/xcalc \
-        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 

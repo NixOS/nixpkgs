@@ -26,7 +26,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
   LC_ALL="en_US.UTF-8";
 
   meta = with lib; {

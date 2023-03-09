@@ -23,7 +23,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PUSHBULLET_API_KEY=""
   '';
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTests = [
     "test_auth_fail"
     "test_auth_success"

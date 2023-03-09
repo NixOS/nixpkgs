@@ -1,20 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  rev = "69132c99873894746c9710707aaeb2cea2609709";
-in
-fetchzip {
+stdenvNoCC.mkDerivation {
   pname = "sitelen-seli-kiwen";
   version = "unstable-2022-06-28";
 
-  url = "https://raw.githubusercontent.com/kreativekorp/sitelen-seli-kiwen/${rev}/sitelenselikiwen.zip";
-  hash = "sha256-63sl/Ha2QAe8pVKCpLNs//DB0kjLdW01u6tVMrGquIU=";
-  stripRoot = false;
+  src = fetchzip {
+    url = "https://raw.githubusercontent.com/kreativekorp/sitelen-seli-kiwen/69132c99873894746c9710707aaeb2cea2609709/sitelenselikiwen.zip";
+    stripRoot = false;
+    hash = "sha256-viOLAj9Rn60bcQkkDHVuKHCE8KPnIz/L0hIJhum1SSQ=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/{opentype,truetype}
-    mv $out/*.eot $out/share/fonts/opentype/
-    mv $out/*.ttf $out/share/fonts/truetype/
+    mv *.eot $out/share/fonts/opentype/
+    mv *.ttf $out/share/fonts/truetype/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

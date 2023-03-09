@@ -1,76 +1,53 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
+args@{ callPackage
+, lib
+, ...
+}:
+
+# Type aliases
+# Release = {
+#  version: String
+#  hash: String
+#  supportedGpuTargets: List String
+# }
 
 let
-  inherit (cudaPackages) cudatoolkit;
+  inherit (lib) lists strings trivial;
+
+  computeName = version: "magma_${strings.replaceStrings [ "." ] [ "_" ] version}";
+
+  # buildMagmaPackage :: Release -> Derivation
+  buildMagmaPackage = magmaRelease: callPackage ./generic.nix (
+    (builtins.removeAttrs args [ "callPackage" ]) // {
+      inherit magmaRelease;
+    }
+  );
+
+  # Reverse the list to have the latest release first
+  # magmaReleases :: List Release
+  magmaReleases = lists.reverseList (builtins.import ./releases.nix);
+
+  # The latest release is the first element of the list and will be our default choice
+  # latestReleaseName :: String
+  latestReleaseName = computeName (builtins.head magmaReleases).version;
+
+  # Function to transform our releases into build attributes
+  # toBuildAttrs :: Release -> { name: String, value: Derivation }
+  toBuildAttrs = release: {
+    name = computeName release.version;
+    value = buildMagmaPackage release;
+  };
+
+  # Add all supported builds as attributes
+  # allBuilds :: AttrSet String Derivation
+  allBuilds = builtins.listToAttrs (lists.map toBuildAttrs magmaReleases);
+
+  # The latest release will be our default build
+  # defaultBuild :: AttrSet String Derivation
+  defaultBuild.magma = allBuilds.${latestReleaseName};
+
+  # builds :: AttrSet String Derivation
+  builds = allBuilds // defaultBuild;
 in
 
-assert let majorIs = lib.versions.major cudatoolkit.version;
-       in majorIs == "9" || majorIs == "10" || majorIs == "11";
+builds
 
-let
-  version = "2.6.2";
-
-  # We define a specific set of CUDA compute capabilities here,
-  # because CUDA 11 does not support compute capability 3.0. Also,
-  # we use it to enable newer capabilities that are not enabled
-  # by magma by default. The list of supported architectures
-  # can be found in magma's top-level CMakeLists.txt.
-  cudaCapabilities = rec {
-    cuda9 = [
-      "Kepler"  # 3.0, 3.5
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-    ];
-
-    cuda10 = [
-      "Turing"  # 7.5
-    ] ++ cuda9;
-
-    cuda11 = [
-      "sm_35"   # sm_30 is not supported by CUDA 11
-      "Maxwell" # 5.0
-      "Pascal"  # 6.0
-      "Volta"   # 7.0
-      "Turing"  # 7.5
-      "Ampere"  # 8.0
-    ];
-  };
-
-  capabilityString = lib.strings.concatStringsSep ","
-    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
-
-in stdenv.mkDerivation {
-  pname = "magma";
-  inherit version;
-  src = fetchurl {
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
-    name = "magma-${version}.tar.gz";
-  };
-
-  nativeBuildInputs = [ gfortran cmake ninja ];
-
-  buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
-
-  cmakeFlags = [ "-DGPU_TARGET=${capabilityString}" ];
-
-  doCheck = false;
-
-  preConfigure = ''
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
-  '';
-
-  enableParallelBuilding=true;
-  buildFlags = [ "magma" "magma_sparse" ];
-
-  meta = with lib; {
-    description = "Matrix Algebra on GPU and Multicore Architectures";
-    license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tbenst ];
-  };
-
-  passthru.cudatoolkit = cudatoolkit;
-}

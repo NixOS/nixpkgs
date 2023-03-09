@@ -294,8 +294,9 @@ def update_plugins():
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
         {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
-        {'name': 'discourse-prometheus'},
         {'name': 'discourse-openid-connect'},
+        {'name': 'discourse-prometheus'},
+        {'name': 'discourse-reactions'},
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
@@ -406,7 +407,9 @@ def update_plugins():
         gemfile = rubyenv_dir / "Gemfile"
         version_file_regex = re.compile(r'.*File\.expand_path\("\.\./(.*)", __FILE__\)')
         gemfile_text = ''
-        for line in repo.get_file('plugin.rb', rev).splitlines():
+        plugin_file = repo.get_file('plugin.rb', rev)
+        plugin_file = plugin_file.replace(",\n", ", ") # fix split lines
+        for line in plugin_file.splitlines():
             if 'gem ' in line:
                 line = ','.join(filter(lambda x: ":require_name" not in x, line.split(',')))
                 gemfile_text = gemfile_text + line + os.linesep

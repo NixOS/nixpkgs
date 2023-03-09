@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   #   ld: ../common/ipp.o:(.bss+0x0): multiple definition of `lpath'; tglobals.o:(.bss+0x30): first defined here
   # TODO: remove the workaround once upstream releases version past:
   #   https://sourceforge.net/p/unicon/unicon/ci/b1a65230233f3825d055aee913b4fdcf178a0eaf/
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configurePhase = ''
     case "$(uname -a | sed 's/ /_/g')" in

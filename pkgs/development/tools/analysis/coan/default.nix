@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       respect to a specified configuration. Dead code removal is an
       application of this sort.
     '';
-    homepage = "http://coan2.sourceforge.net/";
+    homepage = "https://coan2.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

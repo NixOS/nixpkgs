@@ -137,7 +137,7 @@ in
 
       package = mkOption {
         default = pkgs.lighttpd;
-        defaultText = "pkgs.lighttpd";
+        defaultText = lib.literalExpression "pkgs.lighttpd";
         type = types.package;
         description = lib.mdDoc ''
           lighttpd package to use.

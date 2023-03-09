@@ -1,4 +1,6 @@
-{ lib, python3Packages }:
+{ lib
+, python3Packages
+}:
 
 with python3Packages;
 
@@ -22,7 +24,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     click
-    GitPython
+    gitpython
     pony
     whoosh
     natsort

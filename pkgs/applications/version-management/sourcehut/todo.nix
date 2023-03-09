@@ -52,7 +52,7 @@ buildPythonPackage rec {
   '';
 
   # pytest tests fail
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     factory_boy
   ];

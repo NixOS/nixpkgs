@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.2.0";
+  version = "1.2.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
+    hash = "sha256-m69TpXCs6QpVrN+6auig71ik+HvVprHi0OnlyDwTL7U=";
   };
 
   depsBuildBuild = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnome.adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;

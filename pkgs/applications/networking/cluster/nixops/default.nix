@@ -82,6 +82,7 @@ let
     ps.nixops-hetzner
     ps.nixopsvbox
     ps.nixops-virtd
+    ps.nixops-hetznercloud
   ]) // rec {
     # Workaround for https://github.com/NixOS/nixpkgs/issues/119407
     # TODO after #1199407: Use .overrideAttrs(pkg: old: { passthru.tests = .....; })

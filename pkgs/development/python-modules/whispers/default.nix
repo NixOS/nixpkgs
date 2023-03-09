@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

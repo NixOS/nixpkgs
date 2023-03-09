@@ -5,7 +5,7 @@ let
   pname = "NetworkManager-iodine";
   version = "unstable-2019-11-05";
 in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ intltool autoreconfHook pkg-config ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   preConfigure = "intltoolize";
   configureFlags = [

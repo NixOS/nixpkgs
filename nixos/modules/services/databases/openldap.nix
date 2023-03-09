@@ -16,7 +16,7 @@ let
       # systemd/systemd#19604
       description = ''
         LDAP value - either a string, or an attrset containing
-        <literal>path</literal> or <literal>base64</literal> for included
+        `path` or `base64` for included
         values or base-64 encoded values respectively.
       '';
       check = x: lib.isString x || (lib.isAttrs x && (x ? path || x ? base64));

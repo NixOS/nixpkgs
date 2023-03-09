@@ -17,6 +17,9 @@ end
 
 # Returns a system image URL for a given system image name.
 def image_url value, dir
+  if dir == "default"
+    dir = "android"
+  end
   if value && value.start_with?('http')
     value
   elsif value
@@ -24,6 +27,49 @@ def image_url value, dir
   else
     nil
   end
+end
+
+# Returns a JSON with the data and structure of the input XML
+def to_json_collector doc
+  json = {}
+  index = 0
+  doc.element_children.each { |node|
+    if node.children.length == 1 and node.children.first.text?
+      json["#{node.name}:#{index}"] ||= node.content
+      index += 1
+      next
+    end
+    json["#{node.name}:#{index}"] ||= to_json_collector node
+    index += 1
+  }
+  element_attributes = {}
+  doc.attribute_nodes.each do |attr|
+    if attr.name == "type"
+      type = attr.value.split(':', 2).last
+      case attr.value
+      when 'generic:genericDetailsType'
+        element_attributes["xsi:type"] ||= "ns5:#{type}"
+      when 'addon:extraDetailsType'
+        element_attributes["xsi:type"] ||= "ns8:#{type}"
+      when 'addon:mavenType'
+        element_attributes["xsi:type"] ||= "ns8:#{type}"
+      when 'sdk:platformDetailsType'
+        element_attributes["xsi:type"] ||= "ns11:#{type}"
+      when 'sdk:sourceDetailsType'
+        element_attributes["xsi:type"] ||= "ns11:#{type}"
+      when 'sys-img:sysImgDetailsType'
+        element_attributes["xsi:type"] ||= "ns12:#{type}"
+      when 'addon:addonDetailsType' then
+        element_attributes["xsi:type"] ||= "ns8:#{type}"
+      end
+    else
+      element_attributes[attr.name] ||= attr.value
+    end
+  end
+  if !element_attributes.empty?
+    json['element-attributes'] ||= element_attributes
+  end
+  json
 end
 
 # Returns a tuple of [type, revision, revision components] for a package node.
@@ -145,7 +191,7 @@ def fixup value
     else
       [k, v]
     end
-  end.sort {|(k1, v1), (k2, v2)| k1 <=> k2}]
+  end.sort {|(k1, v1), (k2, v2)| k1 <=> k2 }]
 end
 
 # Normalize the specified license text.
@@ -154,6 +200,7 @@ def normalize_license license
   license = license.dup
   license.gsub!(/([^\n])\n([^\n])/m, '\1 \2')
   license.gsub!(/ +/, ' ')
+  license.strip!
   license
 end
 
@@ -185,7 +232,12 @@ def parse_package_xml doc
     display_name = text package.at_css('> display-name')
     uses_license = package.at_css('> uses-license')
     uses_license &&= uses_license['ref']
+    obsolete ||= package['obsolete']
+    type_details = to_json_collector package.at_css('> type-details')
+    revision_details = to_json_collector package.at_css('> revision')
     archives = package_archives(package) {|url| repo_url url}
+    dependencies_xml = package.at_css('> dependencies')
+    dependencies = to_json_collector dependencies_xml if dependencies_xml
 
     target = (packages[name] ||= {})
     target = (target[revision] ||= {})
@@ -195,6 +247,10 @@ def parse_package_xml doc
     target['revision'] ||= revision
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
+    target['obsolete'] ||= obsolete if obsolete == 'true'
+    target['type-details'] ||= type_details
+    target['revision-details'] ||= revision_details
+    target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
   end
@@ -214,11 +270,17 @@ def parse_image_xml doc
     display_name = text package.at_css('> display-name')
     uses_license = package.at_css('> uses-license')
     uses_license &&= uses_license['ref']
+    obsolete &&= package['obsolete']
+    type_details = to_json_collector package.at_css('> type-details')
+    revision_details = to_json_collector package.at_css('> revision')
     archives = package_archives(package) {|url| image_url url, components[-2]}
+    dependencies_xml = package.at_css('> dependencies')
+    dependencies = to_json_collector dependencies_xml if dependencies_xml
 
     target = images
     components.each do |component|
-      target = (target[component] ||= {})
+      target[component] ||= {}
+      target = target[component]
     end
 
     target['name'] ||= "system-image-#{revision}"
@@ -226,6 +288,10 @@ def parse_image_xml doc
     target['revision'] ||= revision
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
+    target['obsolete'] ||= obsolete if obsolete
+    target['type-details'] ||= type_details
+    target['revision-details'] ||= revision_details
+    target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
   end
@@ -245,7 +311,12 @@ def parse_addon_xml doc
     display_name = text package.at_css('> display-name')
     uses_license = package.at_css('> uses-license')
     uses_license &&= uses_license['ref']
+    obsolete &&= package['obsolete']
+    type_details = to_json_collector package.at_css('> type-details')
+    revision_details = to_json_collector package.at_css('> revision')
     archives = package_archives(package) {|url| repo_url url}
+    dependencies_xml = package.at_css('> dependencies')
+    dependencies = to_json_collector dependencies_xml if dependencies_xml
 
     case type
     when 'addon:addonDetailsType'
@@ -274,6 +345,10 @@ def parse_addon_xml doc
     target['revision'] ||= revision
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
+    target['obsolete'] ||= obsolete if obsolete
+    target['type-details'] ||= type_details
+    target['revision-details'] ||= revision_details
+    target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
   end
@@ -281,8 +356,18 @@ def parse_addon_xml doc
   [licenses, addons, extras]
 end
 
+def merge_recursively a, b
+  a.merge!(b) {|key, a_item, b_item|
+    if a_item.is_a?(Hash) && b_item.is_a?(Hash)
+      merge_recursively(a_item, b_item)
+    else
+      a[key] = b_item
+    end
+  }
+end
+
 def merge dest, src
-  dest.merge! src
+  merge_recursively dest, src
 end
 
 opts = Slop.parse do |o|
@@ -300,19 +385,19 @@ result = {
 }
 
 opts[:packages].each do |filename|
-  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)))
+  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:packages], packages
 end
 
 opts[:images].each do |filename|
-  licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)))
+  licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:images], images
 end
 
 opts[:addons].each do |filename|
-  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)))
+  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result[:licenses], licenses
   merge result[:addons], addons
   merge result[:extras], extras

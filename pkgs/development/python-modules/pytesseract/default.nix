@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/pytesseract/";

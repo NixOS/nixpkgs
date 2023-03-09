@@ -31,7 +31,7 @@ buildPythonPackage rec {
     oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "west";
-  version = "0.14.0";
+  version = "1.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mlKnhWX9TWnGS3XFSfYbExiSsbbSbBzBYs3q0aPPS48=";
+    hash = "sha256-ZvhwIhkoES71jyv8Xv0dd44Z7tFAZzmE2XsiH7wFJfQ=";
   };
 
   propagatedBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
       (https://docs.zephyrproject.org/latest/guides/west/repo-tool.html).
     '';
     homepage = "https://github.com/zephyrproject-rtos/west";
+    changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ siriobalmelli ];
   };

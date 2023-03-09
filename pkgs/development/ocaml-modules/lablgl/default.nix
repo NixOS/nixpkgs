@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:141kc816iv59z96738i3vn9m9iw9g2zhi45hk4cchpwd99ar5l6k";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ ocaml findlib ];
   buildInputs = [ freeglut ];
   propagatedBuildInputs = [ libGLU libGL ];

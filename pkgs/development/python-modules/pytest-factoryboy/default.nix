@@ -28,7 +28,7 @@ buildPythonPackage rec {
     inflection
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytestcache

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     twine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

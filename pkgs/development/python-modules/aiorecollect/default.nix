@@ -32,7 +32,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-asyncio

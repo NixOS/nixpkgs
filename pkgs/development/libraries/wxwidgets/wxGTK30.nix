@@ -3,8 +3,6 @@
 , expat
 , fetchFromGitHub
 , gst_all_1
-, withGtk2 ? true
-, gtk2
 , gtk3
 , libGL
 , libGLU
@@ -34,11 +32,6 @@
 , WebKit
 }:
 
-assert withGtk2 -> (!withWebKit);
-
-let
-  gtk = if withGtk2 then gtk2 else gtk3;
-in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
   version = "3.0.5.1";
@@ -60,7 +53,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    gtk
+    gtk3
     libSM
     libXinerama
     libXxf86vm
@@ -148,7 +141,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit gtk;
     inherit compat26 compat28 unicode;
   };
 }

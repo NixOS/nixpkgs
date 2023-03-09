@@ -84,7 +84,7 @@ in {
         "-addr" "${cfg.bindIP}:${toString cfg.port}"
         "-theme" "${cfg.theme}"
         "imaps://${cfg.imaps.host}:${toString cfg.imaps.port}"
-        "smpts://${cfg.smtps.host}:${toString cfg.smtps.port}"
+        "smtps://${cfg.smtps.host}:${toString cfg.smtps.port}"
       ];
     };
   };
@@ -98,11 +98,11 @@ in {
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/alps ${escapeShellArgs cfg.args}";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
         DynamicUser = true;
-        ## This is desirable but would restrict bindIP to 127.0.0.1
-        #IPAddressAllow = "localhost";
-        #IPAddressDeny = "any";
         LockPersonality = true;
+        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateIPC = true;
@@ -122,8 +122,10 @@ in {
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        SocketBindAllow = cfg.port;
+        SocketBindDeny = "any";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service @resources" "~@privileged @obsolete" ];
+        SystemCallFilter = [ "@system-service" "~@privileged @obsolete" ];
       };
     };
   };

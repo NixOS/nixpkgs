@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "LOCALSTATEDIR=/var"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preInstall = "mkdir -p $out/etc/sysconfig";
 

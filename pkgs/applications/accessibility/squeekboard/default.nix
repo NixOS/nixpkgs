@@ -10,17 +10,19 @@
 , gtk3
 , wayland
 , wayland-protocols
+, libbsd
 , libxml2
 , libxkbcommon
 , rustPlatform
 , feedbackd
 , wrapGAppsHook
 , fetchpatch
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wx3fKRX/SPYGAFuR9u03JAvVRhtYIPUvW8mAsCdx83I=";
+    hash = "sha256-Mn0E+R/UzBLHPvarQHlEN4JBpf4VAaXdKdWLsFEyQE4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
       cp Cargo.lock.newer Cargo.lock
     '';
     name = "${pname}-${version}";
-    sha256 = "sha256-BbNkapqnqEW/NglrCse10Tm80SXYVQWWrOC5dTN6oi0=";
+    hash = "sha256-F2mef0HvD9WZRx05DEpQ1AO1skMwcchHZzJa74AHmsM=";
   };
 
   mesonFlags = [
@@ -63,10 +65,13 @@ stdenv.mkDerivation rec {
     gnome-desktop
     wayland
     wayland-protocols
+    libbsd
     libxml2
     libxkbcommon
     feedbackd
   ];
+
+  passthru.tests.phosh = nixosTests.phosh;
 
   meta = with lib; {
     description = "A virtual keyboard supporting Wayland";

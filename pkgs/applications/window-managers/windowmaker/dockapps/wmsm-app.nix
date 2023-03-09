@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     export sourceRoot=$(echo */${pname}/wmsm)
   '';
 
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   postPatch = ''
     substituteInPlace Makefile \

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  NIX_CFLAGS_COMPILE= [ "-Wno-error=implicit-fallthrough" "-Wno-error=maybe-uninitialized" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" "-Wno-error=maybe-uninitialized" ];
 
   meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";

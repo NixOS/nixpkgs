@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n4xiic8lqnv3mqi7wpdv866gyyakax71gffv3n9427rmcld465i";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+  env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   nativeBuildInputs = [
     cmake

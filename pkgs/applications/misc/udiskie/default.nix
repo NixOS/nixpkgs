@@ -43,7 +43,6 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libappindicator-gtk3
     libnotify
@@ -70,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

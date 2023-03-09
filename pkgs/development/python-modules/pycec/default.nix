@@ -24,7 +24,7 @@ buildPythonPackage rec {
     libcec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

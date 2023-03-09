@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   # error: 'regparm' is not valid on this platform
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
     "-D__STRICT_ANSI__";
 
   meta = with lib; {

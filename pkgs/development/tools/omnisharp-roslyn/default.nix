@@ -13,13 +13,13 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.2";
+  version = "1.39.4";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "/MxBdMjPpq3Gwhi/93+JCAI+BuiiWu0n9QThQi+s/kE=";
+    sha256 = "rX0FeURw6WMbcJOomqHFcZ9tpKO1td60/HbbVClV324=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -30,7 +30,7 @@ let finalPackage = buildDotnetModule rec {
   ];
 
   dotnetInstallFlags = [ "--framework net6.0" ];
-  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
   dotnetFlags = [
     # These flags are set by the cake build.
     "-property:PackageVersion=${version}"

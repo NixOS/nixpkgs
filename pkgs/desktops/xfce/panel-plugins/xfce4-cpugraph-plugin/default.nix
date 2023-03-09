@@ -13,10 +13,10 @@
 mkXfceDerivation rec {
   category = "panel-plugins";
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.2.6";
+  version = "1.2.7";
   rev-prefix = "xfce4-cpugraph-plugin-";
   odd-unstable = false;
-  sha256 = "sha256-Elm10ZGN93R+1XZ4vJJZZIJ6OcaHpsrH0nQRMMuFnLY=";
+  sha256 = "sha256-IgxljHJAg9Bp/OFFZiQ6QwE5vtAtQ0WmYHs78NVsmCw=";
 
   buildInputs = [
     exo

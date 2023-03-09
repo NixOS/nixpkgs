@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation {
   pname = "cinelerra-cv";
-  version = "unstable-2021-02-14";
+  version = "unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "cinelerra-cv-team";
     repo = "cinelerra-cv";
-    rev = "7d0e8ede557d0cdf3606e0a8d97166a22f88d89e";
-    sha256 = "0n84y2wp47y89drc48cm1609gads5c6saw6c6bqcf5c5wcg1yfbj";
+    rev = "bb00ac6b70fcf3cf419348b56f9b264bc01c1a89";
+    sha256 = "11965kb3d7xcvlcf8p7jlzk9swk5i78x7wja4s3043wlzmqmwv0q";
   };
 
   preConfigure = ''

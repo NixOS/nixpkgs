@@ -1,20 +1,40 @@
-{ lib, rust, stdenv, rustPlatform, fetchCrate, nasm, cargo-c, libiconv }:
+{ lib
+, rust
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, cargo-c
+, libgit2
+, nasm
+, zlib
+, libiconv
+, Security
+}:
 
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.5.1";
+  version = "0.6.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-v2i/dMWos+nB3cRDOkROSOPb1ONRosbmp9RDZI2DLeI=";
+    sha256 = "sha256-XaxxakVwogJlqyZGL275jGSZDLoRLl8SAAg8V+X4cmQ=";
   };
 
-  cargoSha256 = "sha256-V9QbztkFj3t5yBV+yySysDy3Q6IUY4gNzBL8h23aEg4=";
+  cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
 
-  nativeBuildInputs = [ nasm cargo-c ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  auditable = true; # TODO: remove when this is the default
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ cargo-c libgit2 nasm zlib ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   checkType = "debug";
 

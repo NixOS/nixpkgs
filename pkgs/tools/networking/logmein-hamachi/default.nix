@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl }:
 
-with lib;
-
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"

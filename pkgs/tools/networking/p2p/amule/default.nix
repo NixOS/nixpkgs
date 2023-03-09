@@ -7,7 +7,7 @@
 , lib
 , cmake
 , zlib
-, wxGTK30-gtk3 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
+, wxGTK30 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
 , perl
 , cryptopp
 , libupnp
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zlib
-    wxGTK30-gtk3
+    wxGTK30
     perl
     cryptopp.dev
     libupnp

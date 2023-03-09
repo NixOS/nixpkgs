@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six archspec ];
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
 
   disabledTests = [
     # tests require git

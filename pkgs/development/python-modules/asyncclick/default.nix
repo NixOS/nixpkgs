@@ -31,9 +31,13 @@ buildPythonPackage rec {
     anyio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     trio
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "envconsul";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "envconsul";
     rev = "v${version}";
-    sha256 = "sha256-Zt4jCqHfDTxSrAIASQgUqtYgcHU9xUs025YOxGXhTAg=";
+    sha256 = "sha256-9X0mSEMaLGdchf9g5EyRUsn7z6cvbG4QBPoaris7RwQ=";
   };
 
-  vendorSha256 = "sha256-qxt2LNPDxdiszkjSjgzP7PG26BsZYq1itiyQfy9uaVI=";
+  vendorSha256 = "sha256-Vunq3lsM1aSXNIr3ZMqE03f0jEI5BpWwMYhZ41tiB9M=";
 
   ldflags = [
     "-s"

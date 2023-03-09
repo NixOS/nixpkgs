@@ -71,16 +71,27 @@ let
 
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
+
+  bootstrapCompiler = stdenv.mkDerivation {
+    pname = "nim-bootstrap";
+    inherit (nim-unwrapped) version src preBuild;
+    enableParallelBuilding = true;
+    installPhase = ''
+      runHook preInstall
+      install -Dt $out/bin bin/nim
+      runHook postInstall
+    '';
+  };
 in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.8";
+    version = "1.6.10";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-D1tlzbYPeK9BywdcI4mDaJoeH34lyBnxeYYsGKSEz1c=";
+      hash = "sha256-E9dwL4tXCHur6M0FHBO8VqMXFBi6hntJxrvQmynST+o=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -95,6 +106,7 @@ in {
 
     configurePhase = ''
       runHook preConfigure
+      cp ${bootstrapCompiler}/bin/nim bin/
       echo 'define:nixbuild' >> config/nim.cfg
       runHook postConfigure
     '';
@@ -106,13 +118,14 @@ in {
       "-d:useGnuReadline"
     ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
 
+    preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      substituteInPlace makefile \
+        --replace "aarch64" "arm64"
+    '';
+
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
-    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-      sed -i "s/aarch64/arm64/g" makefile
-    '' + ''
-      make -j$NIX_BUILD_CORES
       ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
@@ -249,7 +262,7 @@ in {
           runHook postBuild
         '';
 
-      wrapperArgs = [
+      wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
         "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
           placeholder "out"
         }/bin"

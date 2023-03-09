@@ -23,16 +23,17 @@
   # TODO investigate adding "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "api" "api-client" "sinks" "sources" "transforms" "vrl-cli" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.25.1";
+  version = "0.28.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -41,10 +42,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
+    sha256 = "sha256-hBEw5sAxex4o/b1nr60dEwZs7nosXU7pUChT1VoI25k=";
   };
 
-  cargoHash = "sha256-EqK6r/pFFKmnpPPUhqdC3bztYQZ+2w7u7V8Rj+9oWII=";
+  cargoSha256 = "sha256-F47ZIxFsp23sPe1nc3UwLZEXJ5lzKiuSIujBxf4fEBo=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -102,7 +103,10 @@ rustPlatform.buildRustPackage {
     ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";

@@ -87,7 +87,7 @@ in
         };
       };
     })
-    # this is seperate so it can be enabled on mirrored hosts
+    # this is separate so it can be enabled on mirrored hosts
     (mkIf (cfg.nginx.enable) {
       # https://github.com/Avature/lxd-image-server/blob/master/resources/nginx/includes/lxd-image-server.pkg.conf
       services.nginx.virtualHosts = {

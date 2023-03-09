@@ -34,7 +34,7 @@ buildPythonPackage rec {
     dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  nativeCheckInputs = [ dcm2niix pytest mock ];
 
   # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
   # and these aren't in Nixpkgs

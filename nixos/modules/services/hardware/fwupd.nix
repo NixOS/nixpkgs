@@ -7,19 +7,16 @@ with lib;
 let
   cfg = config.services.fwupd;
 
+  format = pkgs.formats.ini {
+    listToValue = l: lib.concatStringsSep ";" (map (s: generators.mkValueStringDefault {} s) l);
+    mkKeyValue = generators.mkKeyValueDefault {} "=";
+  };
+
   customEtc = {
     "fwupd/daemon.conf" = {
-      source = pkgs.writeText "daemon.conf" ''
-        [fwupd]
-        DisabledDevices=${lib.concatStringsSep ";" cfg.disabledDevices}
-        DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
-      '';
-    };
-    "fwupd/uefi_capsule.conf" = {
-      source = pkgs.writeText "uefi_capsule.conf" ''
-        [uefi_capsule]
-        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-      '';
+      source = format.generate "daemon.conf" {
+        fwupd = cfg.daemonSettings;
+      };
     };
   };
 
@@ -67,24 +64,6 @@ in {
         '';
       };
 
-      disabledDevices = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
-        description = lib.mdDoc ''
-          Allow disabling specific devices by their GUID
-        '';
-      };
-
-      disabledPlugins = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = [ "udev" ];
-        description = lib.mdDoc ''
-          Allow disabling specific plugins
-        '';
-      };
-
       extraTrustedKeys = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -120,18 +99,62 @@ in {
           Which fwupd package to use.
         '';
       };
+
+      daemonSettings = mkOption {
+        type = types.submodule {
+          freeformType = format.type.nestedTypes.elemType;
+          options = {
+            DisabledDevices = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
+              description = lib.mdDoc ''
+                List of device GUIDs to be disabled.
+              '';
+            };
+
+            DisabledPlugins = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "udev" ];
+              description = lib.mdDoc ''
+                List of plugins to be disabled.
+              '';
+            };
+
+            EspLocation = mkOption {
+              type = types.path;
+              default = config.boot.loader.efi.efiSysMountPoint;
+              defaultText = lib.literalExpression "config.boot.loader.efi.efiSysMountPoint";
+              description = lib.mdDoc ''
+                The EFI system partition (ESP) path used if UDisks is not available
+                or if this partition is not mounted at /boot/efi, /boot, or /efi
+              '';
+            };
+          };
+        };
+        default = {};
+        description = lib.mdDoc ''
+          Configurations for the fwupd daemon.
+        '';
+      };
     };
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "disabledDevices" ])
-    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "disabledPlugins" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "daemonSettings" "DisabledDevices" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "daemonSettings" "DisabledPlugins" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "disabledDevices" ] [ "services" "fwupd" "daemonSettings" "DisabledDevices" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "disabledPlugins" ] [ "services" "fwupd" "daemonSettings" "DisabledPlugins" ])
   ];
 
   ###### implementation
   config = mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
-    services.fwupd.disabledPlugins = cfg.package.defaultDisabledPlugins;
+    services.fwupd.daemonSettings = {
+      DisabledPlugins = cfg.package.defaultDisabledPlugins;
+      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -141,6 +164,9 @@ in {
     services.dbus.packages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
+
+    # required to update the firmware of disks
+    services.udisks2.enable = true;
 
     systemd.packages = [ cfg.package ];
 

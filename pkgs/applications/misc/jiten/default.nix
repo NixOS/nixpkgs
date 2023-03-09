@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pcre sqlite ];
   propagatedBuildInputs = with python3.pkgs; [ click flask kanjidraw ];
-  checkInputs = [ nodejs ];
+  nativeCheckInputs = [ nodejs ];
 
   preBuild = ''
     export JITEN_VERSION=${version}   # override `git describe`

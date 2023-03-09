@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-storage
     mypy
     psutil

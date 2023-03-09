@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     # running libical-glib tests
     (python3.pythonForBuild.withPackages (pkgs: with pkgs; [
       pygobject3
@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
-    gobject-introspection
   ];
 
   cmakeFlags = [

@@ -6,17 +6,22 @@
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
-  version = "1.9.5";
+  version = "1.9.10";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-voCFr5rb9VBSG926SeE2cMuk1gJskoaqjvkRY/9TZFU=";
+    sha256 = "sha256-hDXCH5B4bc0SKv/qzk92bPm366LmdYWTuVVn8KI0avo=";
   };
-  vendorSha256 = "sha256-f0HrQzHK1JDWmRrnqG/N4X8TG0DP/IRWd6b7QR/vyzo=";
+  vendorHash = "sha256-myjHRZXTjsLXD8kibcdf1/Nhvx50fDsFtmZd63DpiiI=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  ldflags = [
+    "-X main.Version=${version}"
+    "-X main.Tag=nixpkgs"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/aws-sso \

@@ -1,9 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github
 
-# FIXME should fix itself on the next release -> remove the warning if that's the case
-echo "WARNING: on the last update, the yarn.lock had to be patched. Please be careful when updating the hashes!"
-
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the element packages."
   echo "Usage: $0 [git release tag]"

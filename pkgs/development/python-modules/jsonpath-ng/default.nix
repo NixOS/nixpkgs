@@ -25,7 +25,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Exclude tests that require oslotest

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gitMinimal
     util-linux # `rev` is needed in tests/test_process.py
   ];

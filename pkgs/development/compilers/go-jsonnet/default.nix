@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-FgQYnas0qkIedRAA8ApZXLzEylg6PS6+8zzl7j+yOeI=";
   };
 
-  vendorSha256 = "sha256-j1fTOUpLx34TgzW94A/BctLrg9XoTtb3cBizhVJoEEI=";
+  vendorHash = "sha256-j1fTOUpLx34TgzW94A/BctLrg9XoTtb3cBizhVJoEEI=";
 
   patches = [
     # See https://github.com/google/go-jsonnet/issues/653.

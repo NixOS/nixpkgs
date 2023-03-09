@@ -20,7 +20,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.12.1";
+  version = "1.13.1";
 in buildPythonPackage {
   inherit version;
 
@@ -29,7 +29,7 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
+  disabled = !(isPy38 || isPy39 || isPy310);
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -76,7 +76,7 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
     hydraPlatforms = []; # output size 3.2G on 1.11.0
     maintainers = with maintainers; [ junjihashimoto ];
   };

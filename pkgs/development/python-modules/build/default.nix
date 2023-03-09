@@ -42,7 +42,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     filelock
     toml
     pytest-mock
@@ -55,6 +55,8 @@ buildPythonPackage rec {
     "-W"
     "ignore::DeprecationWarning"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # Tests often fail with StopIteration

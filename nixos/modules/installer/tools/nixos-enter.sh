@@ -100,8 +100,9 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
     # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
     LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" IN_NIXOS_ENTER=1 chroot "$mountPoint" "$system/activate" 1>&2 || true
 
-    # Create /tmp
-    chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
+    # Create /tmp. This is needed for nix-build and the NixOS activation script to work.
+    # Hide the unhelpful "failed to replace specifiers" errors caused by missing /etc/machine-id.
+    chroot "$mountPoint" "$system/sw/bin/systemd-tmpfiles" --create --remove -E 2> /dev/null || true
 )
 
 unset TMPDIR

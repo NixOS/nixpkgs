@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, ...}: let
 in {
   name = "phosh";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ zhaofengli ];
+    maintainers = [ tomfitzhenry zhaofengli ];
   };
 
   nodes = {
@@ -61,5 +61,10 @@ in {
 
         phone.wait_for_text("All Apps")
         phone.screenshot("03launcher")
+
+    with subtest("Check the on-screen keyboard shows"):
+        phone.send_chars("setting", delay=0.2)
+        phone.wait_for_text("123") # A button on the OSK
+        phone.screenshot("04osk")
   '';
 })

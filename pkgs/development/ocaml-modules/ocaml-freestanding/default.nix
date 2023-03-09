@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     ./configurable-binding.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     ocaml
     pkg-config
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true; # Not compatible with solo5 ≥ 0.7
     description = "Freestanding OCaml runtime";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];

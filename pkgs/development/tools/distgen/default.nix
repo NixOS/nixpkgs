@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
   };
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest
     mock
   ];

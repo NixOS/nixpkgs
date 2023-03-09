@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hackrf";
-  version = "2022.09.1";
+  version = "2023.01.1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "hackrf";
     rev = "v${version}";
-    sha256 = "sha256-c+9DEMxioIbEDNTdLSOnxX1zpFk07K9rlGP9goEJMlU=";
+    sha256 = "sha256-zvSSCNtqHOZVlrBggjgxEyUTqTiAIAhdzUkm4Pm9b3k=";
   };
 
   nativeBuildInputs = [

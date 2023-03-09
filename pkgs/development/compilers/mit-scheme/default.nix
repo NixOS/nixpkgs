@@ -1,6 +1,17 @@
-{ fetchurl, lib, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
-  autoconf, libtool, ghostscript, ncurses,
-  enableX11 ? false, xlibsWrapper }:
+{ fetchurl
+, lib
+, stdenv
+, makeWrapper
+, gnum4
+, texinfo
+, texLive
+, automake
+, autoconf
+, libtool
+, ghostscript
+, ncurses
+, enableX11 ? false, libX11
+}:
 
 let
   version = "11.2";
@@ -29,7 +40,7 @@ stdenv.mkDerivation {
       sha256 = "17822hs9y07vcviv2af17p3va7qh79dird49nj50bwi9rz64ia3w";
     };
 
-  buildInputs = [ ncurses ] ++ lib.optional enableX11 xlibsWrapper;
+  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
 
   configurePhase = ''
     runHook preConfigure
@@ -37,6 +48,12 @@ stdenv.mkDerivation {
     (cd doc && ./configure)
     runHook postConfigure
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-parameter"
+    "-Wno-error=use-after-free"
+  ];
 
   buildPhase = ''
     runHook preBuild

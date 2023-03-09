@@ -40,7 +40,7 @@ in buildPythonPackage rec {
       --replace "setuptools<60" "setuptools"
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = lib.optionals cudaSupport [
     addOpenGLRunpath

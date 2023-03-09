@@ -51,7 +51,7 @@ in {
               type = types.bool;
               default = false;
               description = lib.mdDoc ''
-                Explictly disables syncing of deposit logs from the execution node.
+                Explicitly disables syncing of deposit logs from the execution node.
                 This overrides any previous option that depends on it.
                 Useful if you intend to run a non-validating beacon node.
               '';
@@ -247,6 +247,7 @@ in {
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "lighthouse-beacon";
+        ReadWritePaths = [ cfg.beacon.dataDir ];
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectHome = true;
@@ -279,7 +280,7 @@ in {
         ${pkgs.lighthouse}/bin/lighthouse validator_client \
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
-          --datadir ${cfg.validator.dataDir}/${cfg.network}
+          --datadir ${cfg.validator.dataDir}/${cfg.network} \
           ${optionalString cfg.validator.metrics.enable ''--metrics --metrics-address ${cfg.validator.metrics.address} --metrics-port ${toString cfg.validator.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.validator.extraArgs}
       '';
@@ -287,6 +288,7 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         StateDirectory = "lighthouse-validator";
+        ReadWritePaths = [ cfg.validator.dataDir ];
         CapabilityBoundingSet = "";
         DynamicUser = true;
         NoNewPrivileges = true;

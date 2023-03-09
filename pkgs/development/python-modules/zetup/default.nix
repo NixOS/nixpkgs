@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     path
     nbconvert
     pytestCheckHook

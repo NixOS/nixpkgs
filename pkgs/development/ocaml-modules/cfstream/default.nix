@@ -1,28 +1,27 @@
-{ lib, buildDunePackage, fetchFromGitHub, m4, core_kernel, ounit }:
+{ lib, buildDunePackage, fetchFromGitHub, m4, camlp-streams, core_kernel, ounit }:
 
 buildDunePackage rec {
   pname = "cfstream";
-  version = "1.3.1";
+  version = "1.3.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.04.1";
+  minimalOCamlVersion = "4.04.1";
 
   src = fetchFromGitHub {
     owner = "biocaml";
     repo   = pname;
     rev    = version;
-    sha256 = "0qnxfp6y294gjsccx7ksvwn9x5q20hi8sg24rjypzsdkmlphgdnd";
+    hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
   patches = [ ./git_commit.patch ];
 
-  # This currently fails with dune
-  strictDeps = false;
+  strictDeps = true;
 
   nativeBuildInputs = [ m4 ];
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ core_kernel ];
+  propagatedBuildInputs = [ camlp-streams core_kernel ];
 
   doCheck = true;
 

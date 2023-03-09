@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "powerstat";
-  version = "0.02.27";
+  version = "0.03.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-P6DhsHnB+ak35JpUfD8Q8XbgMhI1QKKe31B8uMT2ZcY=";
+    hash = "sha256-+3b6yH5CuFdtjjTmW2mwuvNyhO8/8N7vv6st+ttztBQ=";
   };
 
   installFlags = [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [ dj-database-url ];
+  nativeCheckInputs = [ dj-database-url ];
 
   checkPhase = ''
     ${python.interpreter} runtests.py

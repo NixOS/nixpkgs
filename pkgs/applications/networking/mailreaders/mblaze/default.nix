@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ruby ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libiconv ruby ];
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";

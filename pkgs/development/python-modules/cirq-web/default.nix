@@ -13,7 +13,7 @@ buildPythonPackage rec {
     cirq-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

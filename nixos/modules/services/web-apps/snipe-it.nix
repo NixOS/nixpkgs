@@ -381,7 +381,7 @@ in {
     };
 
     systemd.services.snipe-it-setup = {
-      description = "Preperation tasks for snipe-it";
+      description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -454,8 +454,9 @@ in {
 
           # A placeholder file for invalid barcodes
           invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"
-          [ ! -e "$invalid_barcode_location" ] \
-              && cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          if [ ! -e "$invalid_barcode_location" ]; then
+              cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          fi
         '';
     };
 

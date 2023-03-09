@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl }:
 
-with lib;
-
 let versions = lib.importJSON ./versions.json;
     arch = if stdenv.isi686 then "386"
            else if stdenv.isx86_64 then "amd64"
@@ -37,10 +35,10 @@ stdenv.mkDerivation {
   # Stripping causes SEGFAULT on x86_64-darwin
   dontStrip = true;
 
-  meta = {
+  meta = with lib; {
     description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ bobvanderlinden brodes ];

@@ -10,14 +10,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.4";
+  version = "2.4.0";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0xue5XDvK9U64+rka8GRNv2lX62zcrYA1Tz7DrsA0ts=";
+    hash = "sha256-h/eSa2wCPvnX29wdtDHNQh8r1No1/YGinZNYU2MnsTM=";
   };
 
   buildInputs =
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
     + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);

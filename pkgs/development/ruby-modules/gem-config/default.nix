@@ -14,7 +14,7 @@
 #   gems that don't behave correctly, fixes are already provided in the form of
 #   derivations.
 #
-# This seperates "what to build" (the exact gem versions) from "how to build"
+# This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 }@args:
 
 let
@@ -203,7 +203,12 @@ in
   };
 
   eventmachine = attrs: {
+    dontBuild = false;
     buildInputs = [ openssl ];
+    postPatch = ''
+      substituteInPlace ext/em.cpp \
+        --replace 'if (bind (' 'if (::bind ('
+    '';
   };
 
   exif = attrs: {
@@ -216,6 +221,10 @@ in
     buildInputs = [ libffi ];
   };
 
+  fiddle = attrs: {
+    buildInputs = [ libffi ];
+  };
+
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -224,6 +233,7 @@ in
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
+    nativeBuildInputs = [ pkg-config ];
     buildFlags = [ "--use-system-libraries" ];
   };
 
@@ -318,7 +328,7 @@ in
     nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=stringop-overflow"
       "-Wno-error=implicit-fallthrough"
       "-Wno-error=sizeof-pointer-memaccess"
@@ -384,6 +394,9 @@ in
         --replace "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
+    meta.broken = true; # At 2023-01-20, errors as:
+                        #   "Failed to build gem native extension."
+                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -394,6 +407,9 @@ in
     buildFlags = [
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "--with-iconv-dir=${libiconv}"
+      "--with-opt-include=${libiconv}/include"
     ];
   };
 
@@ -539,6 +555,10 @@ in
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  psych = attrs: {
+    buildInputs = [ libyaml ];
   };
 
   puma = attrs: {

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   preCheck = "cd test"; # Tests require the `test/resources` folder to be accessible
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTests = [ # asserts related to file deletions fail
     "test_docx2python.py"
     "test_docx_context.py"

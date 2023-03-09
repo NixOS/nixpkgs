@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, libtool
-, xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
+, xbitmaps, libXext, libXft, libXrender, libXmu, libXt
 , expat, libjpeg, libpng, libiconv
 , flex
 , libXp, libXau
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    xlibsWrapper xbitmaps libXrender libXmu libXt
+    xbitmaps libXext libXft libXrender libXmu libXt
     expat libjpeg libpng libiconv
   ];
 

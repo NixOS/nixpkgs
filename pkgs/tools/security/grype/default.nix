@@ -2,19 +2,18 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-
 , openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.53.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-um+uyY8kPkouF/9Kms0xZYhgYeZC/pE6w+JCVcKWdpI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TAoF67Fxl0OUiQd48h786+lIsdEuk4C/zdeEO/DRX/k=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,14 +25,21 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
   proxyVendor = true;
-  vendorSha256 = "sha256-BP5Tvv5s74uxjVcEC0QPaw2tGPmkOjZmyCrPwwoz7o4=";
+
+  vendorHash = "sha256-kRxKa3HUO2yvMai03voVvsprg/Kd01OtJQHJn3ECk58=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
+  nativeCheckInputs = [
+    openssl
+  ];
+
   subPackages = [ "." ];
+
   excludedPackages = "test/integration";
 
   ldflags = [
@@ -53,7 +59,6 @@ buildGoModule rec {
     ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  checkInputs = [ openssl ];
   preCheck = ''
     # test all dirs (except excluded)
     unset subPackages
@@ -68,14 +73,6 @@ buildGoModule rec {
       --replace "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
       --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
-    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/cyclonedxvex/presenter_test.go \
-      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
-    substituteInPlace grype/presenter/sarif/presenter_test.go \
-      --replace "Test_imageToSarifReport" "Skip_imageToSarifReport" \
-      --replace "TestSarifPresenterImage" "SkipSarifPresenterImage"
-
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
       --replace "TestDBValidations" "SkipDBValidations"

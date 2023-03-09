@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , cmake
 , ninja
@@ -21,27 +22,36 @@
 , gnused
 , coreutils
 , jq
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.1.6";
+  version = "3.2.1";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "gmic";
-    rev = "326ea9b7dc320b3624fe660d7b7d81669ca12e6d";
-    sha256 = "RRCzYMN/IXViiUNnacJV3DNpku3hIHQkHbIrtixExT0=";
+    rev = "v.${version}";
+    hash = "sha256-oEH4GlSV+642TGSJJhV4yzydh1hAQZfzwaiPAZFNQtI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gmic-3.2.1-fix-system-gmic.patch";
+      url = "https://github.com/GreycLab/gmic/commit/9db3f6a39d9ed67b4279654da88993a8057575ff.patch";
+      hash = "sha256-JznKCs56t6cJ4HLqlhMZjSOupEB8cdkn3j6RgZpcpzo=";
+    })
+  ];
 
   # TODO: build this from source
   # https://github.com/dtschump/gmic/blob/b36b2428db5926af5eea5454f822f369c2d9907e/src/Makefile#L675-L729
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    sha256 = "adObp8s+2TWaS+X/bQSphWRK6o85h+DGwlIDol6XN/4=";
+    hash = "sha256-f8d9jTVnHwSoyMuiM+Qv86e/BYX9SSx9cl3borihxnc=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +91,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      # Needs to update in lockstep.
+      inherit gmic-qt;
+    };
+
     updateScript = writeShellScript "${pname}-update-script" ''
       set -o errexit
       PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
@@ -95,7 +110,7 @@ stdenv.mkDerivation rec {
       for component in src gmic_stdlib; do
           # The script will not perform an update when the version attribute is up to date from previous platform run
           # We need to clear it before each run
-          update-source-version "--source-key=$component" "gmic" 0 "$(printf '0%.0s' {1..64})"
+          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
           update-source-version "--source-key=$component" "gmic" $latestVersion
       done
     '';

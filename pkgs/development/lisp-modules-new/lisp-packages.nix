@@ -40,6 +40,7 @@ let
     removeSuffix
     hasInfix
     optionalString
+    makeBinPath
     makeLibraryPath
     makeSearchPath
     recurseIntoAttrs
@@ -249,6 +250,12 @@ let
             then pkgs.applyPatches { inherit (args) src patches; }
             else args.src;
       patches = [];
+
+      # make sure that propagated build-inputs from lispLibs are propagated
+      propagatedBuildInputs = lib.unique
+        (builtins.concatLists
+          (lib.catAttrs "propagatedBuildInputs"
+            (builtins.concatLists [[args] lispLibs nativeLibs javaLibs])));
     })));
 
   # Build the set of lisp packages using `lisp`
@@ -353,7 +360,9 @@ let
           --prefix LD_LIBRARY_PATH : "${o.LD_LIBRARY_PATH}" \
           --prefix LD_LIBRARY_PATH : "${makeLibraryPath o.nativeLibs}" \
           --prefix CLASSPATH : "${o.CLASSPATH}" \
-          --prefix CLASSPATH : "${makeSearchPath "share/java/*" o.javaLibs}"
+          --prefix CLASSPATH : "${makeSearchPath "share/java/*" o.javaLibs}" \
+          --prefix PATH : "${makeBinPath (o.buildInputs or [])}" \
+          --prefix PATH : "${makeBinPath (o.propagatedBuildInputs or [])}"
       '';
     });
 

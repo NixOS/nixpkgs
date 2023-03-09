@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gopass-jsonapi";
-  version = "1.14.9";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass-jsonapi";
     rev = "v${version}";
-    hash = "sha256-dyscOIlJjZ8P6sEMC9YqhAAI6ewruyztnxOawLfYUWE=";
+    hash = "sha256-gizUFoe+oAmEKHMlua/zsR+fUltGw2cp98XAgXzCm0U=";
   };
 
-  vendorHash = "sha256-AAicxPFPYiEB8L33lp4hVaM0bCU1sshdPBV1P55eI/4=";
+  vendorHash = "sha256-vMrP6rC0uPsRyFZdU2E9mPp031eob+36NcGueNP1Y7o=";
 
   subPackages = [ "." ];
 

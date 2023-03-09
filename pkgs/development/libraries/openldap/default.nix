@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
     db
     libsodium
     libtool
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 
   makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -92,8 +94,6 @@ stdenv.mkDerivation rec {
   preCheck = ''
     substituteInPlace tests/scripts/all \
       --replace "/bin/rm" "rm"
-    # fails saying "SASL(-1): generic failure: internal error: failed to init cipher 'rc4'"
-    rm tests/scripts/test076-authid-rewrite
   '';
 
   doCheck = true;

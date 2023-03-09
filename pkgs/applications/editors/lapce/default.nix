@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , rustPlatform
 , cmake
 , pkg-config
@@ -23,16 +24,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "unstable-2022-09-21";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
-    rev = "c5a924ef34250e9117e2b57c19c1f29f6b9b3ea7";
-    sha256 = "sha256-0nAUbtokDgSxPcJCa9xGM8Rpbu282o7OHAQtAfdNmJU=";
+    rev = "v${version}";
+    sha256 = "sha256-WFFn1l7d70x5v6jo5m+Thq1WoZjY7f8Lvr3U473xx48=";
   };
 
-  cargoSha256 = "sha256-uIFC5x8TzsvTGylQ0AttIRAUWU0k0P7UeF96vUc7cKw=";
+  cargoSha256 = "sha256-9e0pUztrIL5HGHrS2pHA1hkH2v24AEQ2RiogLRAxyeo=";
 
   nativeBuildInputs = [
     cmake
@@ -74,6 +75,8 @@ rustPlatform.buildRustPackage rec {
     genericName = "Code Editor";
     categories = [ "Development" "Utility" "TextEditor" ];
   }) ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightning-fast and Powerful Code Editor written in Rust";

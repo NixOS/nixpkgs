@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
   propagatedBuildInputs = [ pillow python-magic ];
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   # tests not included with pypi release
   doCheck = false;

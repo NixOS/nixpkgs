@@ -2,6 +2,7 @@
 , lib
 , Security
 , openssl
+, git
 , pkg-config
 , protobuf
 , rustPlatform
@@ -13,21 +14,21 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "4.6.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-tgU/QI6YwWeFPXh6VVPV3iLUGVwoxdG7YQwHBVobXH8=";
+    sha256 = "sha256-VAVrXSz75rPdBOz9Jg75rpA3VBvw4WO+hFvk+A4f6Mc=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-LeE9biQDQ+aj0kKBrkIy3aGt5rgOu6O7w7xI/CjBUMA=";
+  cargoSha256 = "sha256-BB6MB5+H+L2GAYeVXPYBu/xgfZ0DwfoZfYBWc0IQb80=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [
     openssl

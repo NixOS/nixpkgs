@@ -4,7 +4,7 @@
 , lib
 , pkg-config
 , stdenv
-, ffmpeg
+, ffmpeg-headless
 , taglib
 , zlib
 , makeWrapper
@@ -14,13 +14,13 @@
 
 let
 
-  version = "0.48.0";
+  version = "0.49.3";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-FO2Vl3LeajvZ8CLtnsOSLXr//gaOWPbMthj70RHxp+Q=";
+    hash = "sha256-JBvY+0QAouEc0im62aVSJ27GAB7jt0qVnYtc6VN2qTA=";
   };
 
   ui = callPackage ./ui {
@@ -35,7 +35,7 @@ buildGoModule {
 
   inherit src version;
 
-  vendorSha256 = "sha256-LPoM5RFHfTTWZtlxc59hly12zzrY8wjXGZ6xW2teOFM=";
+  vendorSha256 = "sha256-C8w/qCts8VqNDTQVXtykjmSbo5uDrvS9NOu3SHpAlDE=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
@@ -54,7 +54,7 @@ buildGoModule {
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   passthru = {
@@ -70,5 +70,7 @@ buildGoModule {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aciceri squalus ];
+    # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
+    broken = stdenv.isDarwin;
   };
 }

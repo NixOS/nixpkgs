@@ -10,6 +10,7 @@
 buildDunePackage rec {
   pname = "gen_js_api";
   version = "1.1.1";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
@@ -21,7 +22,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.11";
 
   propagatedBuildInputs = [ ojs ppxlib ];
-  checkInputs = [ js_of_ocaml-compiler nodejs ];
+  nativeCheckInputs = [ js_of_ocaml-compiler nodejs ];
   doCheck = true;
 
   meta = {

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ]
   ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     betamax
     betamax-matchers

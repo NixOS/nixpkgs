@@ -16,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.13.1";
+  version = "0.14.1";
 in buildPythonPackage {
   inherit version;
 
@@ -61,7 +61,7 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

@@ -1,18 +1,9 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , espeak-ng
 }:
-
-# USAGE:
-# $ tts-server --list_models
-# # pick your favorite vocoder/tts model
-# $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
-#
-# If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
-#
-# For now, for deployment check the systemd unit in the pull request:
-#   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 let
   python = python3.override {
@@ -24,7 +15,7 @@ let
         src = super.fetchPypi {
           pname = "librosa";
           inherit version;
-          sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
+          hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
         };
       });
     };
@@ -32,14 +23,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.9.0";
+  version = "0.11.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
-    rev = "v${version}";
-    sha256 = "sha256-p4I583Rs/4eig7cnOcJjri2ugOLAeF2nvPIvMZrN1Ss=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EVFFETiGbrouUsrIhMFZEex3UGCCWTI3CC4yFAcERyw=";
   };
 
   postPatch = let
@@ -51,7 +42,6 @@ python.pkgs.buildPythonApplication rec {
       "mecab-python3"
       "numba"
       "numpy"
-      "umap-learn"
       "unidic-lite"
     ];
   in ''
@@ -60,10 +50,13 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+    # only used for notebooks and visualization
+    sed -r -i -e '/umap-learn/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
     cython
+    packaging
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -82,6 +75,7 @@ python.pkgs.buildPythonApplication rec {
     mecab-python3
     nltk
     numba
+    packaging
     pandas
     pypinyin
     pysbd
@@ -92,7 +86,6 @@ python.pkgs.buildPythonApplication rec {
     torchaudio-bin
     tqdm
     trainer
-    umap-learn
     unidic-lite
     webrtcvad
   ];
@@ -102,11 +95,11 @@ python.pkgs.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/utils/monotonic_align
-      ${python.interpreter} setup.py install --prefix=$out
+      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     espeak-ng
     pytestCheckHook
   ];
@@ -133,7 +126,10 @@ python.pkgs.buildPythonApplication rec {
     "test_models_offset_2_step_3"
     "test_run_all_models"
     "test_synthesize"
+    "test_voice_cloning"
     "test_voice_conversion"
+    "test_multi_speaker_multi_lingual_model"
+    "test_single_speaker_model"
     # Mismatch between phonemes
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
@@ -148,9 +144,13 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_align_tts_train.py"
     "tests/tts_tests/test_fast_pitch_speaker_emb_train.py"
     "tests/tts_tests/test_fast_pitch_train.py"
+    "tests/tts_tests/test_fastspeech_2_speaker_emb_train.py"
+    "tests/tts_tests/test_fastspeech_2_train.py"
     "tests/tts_tests/test_glow_tts_d-vectors_train.py"
     "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
     "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests/test_neuralhmm_tts_train.py"
+    "tests/tts_tests/test_overflow_train.py"
     "tests/tts_tests/test_speedy_speech_train.py"
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"

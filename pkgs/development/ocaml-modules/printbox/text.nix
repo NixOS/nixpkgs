@@ -6,7 +6,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [ printbox uucp uutf ];
 
-  checkInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.bin ];
 
   meta = printbox.meta // {
     description = "Text renderer for printbox, using unicode edges";

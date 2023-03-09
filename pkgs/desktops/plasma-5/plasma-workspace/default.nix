@@ -162,7 +162,7 @@ mkDerivation {
     ln -sf $out/bin/kcminit $out/bin/kcminit_startup
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''

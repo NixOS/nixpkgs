@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll, python3,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll, python3,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
@@ -35,6 +35,11 @@ stdenv.mkDerivation (rec {
         rev = "release-1.10.0";
         sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
       };
+    })
+    (fetchpatch {
+      name = "remove-decnet-header.patch";
+      url = "https://github.com/ponylang/ponyc/commit/e5b9b5daec5b19415d519b09954cbd3cf5f34220.patch";
+      hash = "sha256-60cOhBBwQxWLwEx+svtFtJ7POQkHzJo2LDPRJ5L/bNk=";
     })
   ];
 
@@ -73,7 +78,7 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
   installPhase = "make config=release prefix=$out "
     + lib.optionalString stdenv.isDarwin "bits=64 "
@@ -93,6 +98,6 @@ stdenv.mkDerivation (rec {
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 })

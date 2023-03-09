@@ -8,14 +8,10 @@ buildDunePackage rec {
     owner = "ACoquereau";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
+    hash = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
   };
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.03";
-
-  strictDeps = true;
+  minimalOCamlVersion = "4.03";
 
   nativeBuildInputs = [ menhir ];
 

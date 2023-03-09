@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Require network access
   doCheck = false;
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Asynchronous Python HTTP for Humans.";

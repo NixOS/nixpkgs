@@ -1,16 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "ultimate-oldschool-pc-font-pack";
   version = "2.2";
-in
-fetchzip {
-  name = "ultimate-oldschool-pc-font-pack-${version}";
-  url = "https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v${version}_linux.zip";
-  sha256 = "sha256-BOA2fMa2KT3Bkpvj/0DzrzuZbl3RARvNn4qbI/+dApU=";
 
-  postFetch= ''
+  src = fetchzip {
+    url = "https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v${version}_linux.zip";
+    stripRoot = false;
+    hash = "sha256-54U8tZzvivTSOgmGesj9QbIgkSTm9w4quMhsuEc0Xy4=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    cp */*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

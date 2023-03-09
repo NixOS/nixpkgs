@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ] ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     magic-wormhole-transit-relay
     magic-wormhole-mailbox-server

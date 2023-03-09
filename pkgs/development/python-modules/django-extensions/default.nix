@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory_boy
     mock
     pygments # not explicitly declared in setup.py, but some tests require it

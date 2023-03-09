@@ -8,7 +8,7 @@ It means that if you have SSH access to a machine, no additional setup is needed
 
 ## Interactive mounting {#sec-sshfs-interactive}
 
-In NixOS, SSHFS is packaged as <package>sshfs</package>.
+In NixOS, SSHFS is packaged as `sshfs`.
 Once installed, mounting a directory interactively is simple as running:
 ```ShellSession
 $ sshfs my-user@example.com:/my-dir /mnt/my-dir

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ujson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-vcr
     pytestCheckHook
     vcrpy

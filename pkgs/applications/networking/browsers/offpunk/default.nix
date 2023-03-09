@@ -1,5 +1,6 @@
 {
-  fetchFromGitea,
+  fetchFromSourcehut,
+  installShellFiles,
   less,
   lib,
   makeWrapper,
@@ -31,17 +32,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
-  version = "1.6";
+  version = "1.9";
 
-  src = fetchFromGitea {
-    domain = "notabug.org";
-    owner = "ploum";
+  src = fetchFromSourcehut {
+    owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    sha256 = "1pfafb96xk7vis26zhfq254waz1ic9p0zdkxwpqs84p3vsmny775";
+    sha256 = "sha256-sxX4/7jbNbLwHVfE1lDtjr/luby5zAf6Hy1RcwXZLBA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = otherDependencies ++ pythonDependencies;
 
   installPhase = ''
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set PYTHONPATH "$PYTHONPATH" \
         --set PATH ${lib.makeBinPath otherDependencies}
 
+   installManPage man/*.1
    runHook postInstall
   '';
 
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";
-    homepage = "https://notabug.org/ploum/offpunk";
+    homepage = finalAttrs.src.meta.homepage;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
     license = licenses.bsd2;

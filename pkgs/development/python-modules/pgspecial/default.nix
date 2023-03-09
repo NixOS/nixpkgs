@@ -23,7 +23,7 @@ buildPythonPackage rec {
     psycopg
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     configobj
     pytestCheckHook
   ];

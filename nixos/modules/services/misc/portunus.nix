@@ -29,7 +29,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.portunus;
-      defaultText = "pkgs.portunus";
+      defaultText = lib.literalExpression "pkgs.portunus";
       description = lib.mdDoc "The Portunus package to use.";
     };
 
@@ -108,7 +108,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.openldap;
-        defaultText = "pkgs.openldap";
+        defaultText = lib.literalExpression "pkgs.openldap";
         description = lib.mdDoc "The OpenLDAP package to use.";
       };
 
@@ -135,7 +135,7 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Wether to enable LDAPS protocol.
+          Whether to enable LDAPS protocol.
           This also adds two entries to the `/etc/hosts` file to point [](#opt-services.portunus.domain) to localhost,
           so that CLIs and programs can use ldaps protocol and verify the certificate without opening the firewall port for the protocol.
 

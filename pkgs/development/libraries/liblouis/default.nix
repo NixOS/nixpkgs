@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblouis";
-  version = "3.23.0";
+  version = "3.24.0";
 
   outputs = [ "out" "dev" "info" "doc" ]
     # configure: WARNING: cannot generate manual pages while cross compiling
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "sha256-jXNhHzydWaMhFbEKoFHyZ77GCvAqxyT3P0xIAgFlTzY=";
+    sha256 = "sha256-QSrCQhP3t+WPyBQPLJbZEaDCjXD8Lo6IAGKHsbL2S1o=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source braille translator and back-translator";
-    homepage = "http://liblouis.org/";
+    homepage = "https://liblouis.org/";
     license = with licenses; [
       lgpl21Plus # library
       gpl3Plus # tools

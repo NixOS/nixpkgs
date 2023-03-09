@@ -1,5 +1,7 @@
-{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, python2, pkg-config
-, dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus }:
+{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, python3, pkg-config
+, dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-logger";
@@ -10,12 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "1bjx85k7jyfi5pvl765fzc7q2iz9va51anrc2djv7caksqsdbjlg";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/archlinux/svntogit-packages/raw/2b5bdbb4739d3517f5e7300edc8dab775743b96d/trunk/0001-tools-Fix-the-build-with-Python-3.patch";
+      hash = "sha256-o1lfdZIIqaxn7ntQZnoOMqquc6efTHgSIxB5dpFWRgg=";
+    })
+  ];
+
   nativeBuildInputs = [
     makeWrapper pkg-config intltool libxslt gobject-introspection
+    python3
   ];
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
-    dbus python2
+    dbus
   ];
 
   configureFlags = [ "--enable-call" ];

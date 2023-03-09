@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "113jjhi1qkcggbsmbw8fa9ln8vs7vy2r288szks7rn0jjn0wxmbw";
   };
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
 
   patchPhase = "patch -p1 < ${pf-patch}";
   buildPhase = "./build";

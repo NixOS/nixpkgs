@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     secretstorage
   ];
 
-  checkInputs =
+  nativeCheckInputs =
     let
       ps = python3.pkgs;
     in
@@ -71,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/mdellweg/pass_secret_service/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
+    mainProgram = "pass_secret_service";
     maintainers = with lib.maintainers; [ jluttine aidalgol ];
   };
 }

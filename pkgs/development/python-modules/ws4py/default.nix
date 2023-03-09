@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483";
   };
 
-  checkInputs = [ pytest mock git ];
+  nativeCheckInputs = [ pytest mock git ];
   propagatedBuildInputs = [ cherrypy gevent tornado ];
 
   checkPhase = ''

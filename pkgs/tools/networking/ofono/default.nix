@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
     sha256 = "sha256-T8rfReruvHGQCN9IDGIrFCoNjFKKMnUGPKzxo2HTZFQ=";
   };

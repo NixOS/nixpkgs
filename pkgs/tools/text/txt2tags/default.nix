@@ -1,35 +1,38 @@
-{ lib, stdenv, fetchurl, python2 }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.6";
+python3.pkgs.buildPythonApplication rec {
   pname = "txt2tags";
+  version = "3.8";
 
-  dontBuild = true;
+  format = "setuptools";
 
-  # Python script, needs the interpreter
-  propagatedBuildInputs = [ python2 ];
-
-  installPhase = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/share/doc"
-    mkdir -p "$out/share/man/man1/"
-    sed '1s|/usr/bin/env python|${python2}/bin/python|' < txt2tags > "$out/bin/txt2tags"
-    chmod +x "$out/bin/txt2tags"
-    gzip - < doc/manpage.man > "$out/share/man/man1/txt2tags.1.gz"
-    cp doc/userguide.pdf "$out/share/doc"
-    cp -r extras/ samples/ test/ "$out/share"
-  '';
-
-  src = fetchurl {
-    url = "http://txt2tags.googlecode.com/files/${pname}-${version}.tgz";
-    sha256 = "0p5hql559pk8v5dlzgm75yrcxwvz4z30f1q590yzng0ghvbnf530";
+  src = fetchFromGitHub {
+    owner = "txt2tags";
+    repo = "txt2tags";
+    rev = "refs/tags/${version}";
+    hash = "sha256-urLsA2oeQM0WcKNDgaxKJOgBPGohJT6Zq6y6bEYMTxk=";
   };
 
+  postPatch = ''
+    substituteInPlace test/lib.py \
+      --replace 'TXT2TAGS = os.path.join(TEST_DIR, "..", "txt2tags.py")' \
+                'TXT2TAGS = "${placeholder "out"}/bin/txt2tags"' \
+      --replace "[PYTHON] + TXT2TAGS" "TXT2TAGS"
+  '';
+
+  checkPhase = ''
+    ${python3.interpreter} test/run.py
+  '';
+
   meta = {
+    changelog = "https://github.com/txt2tags/txt2tags/blob/${src.rev}/CHANGELOG.md";
+    description = "Convert between markup languages";
     homepage = "https://txt2tags.org/";
-    description = "A KISS markup language";
-    license  = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ kovirobi ];
-    platforms = with lib.platforms; unix;
+    license  = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda kovirobi ];
   };
 }

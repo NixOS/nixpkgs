@@ -20,7 +20,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
   pname = "NetworkManager-l2tp";
   version = "1.20.4";
 

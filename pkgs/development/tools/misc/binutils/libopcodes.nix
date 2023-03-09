@@ -1,38 +1,22 @@
-{ lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libbfd
+{ lib, stdenv
+, binutils-unwrapped-all-targets
 }:
 
 stdenv.mkDerivation {
   pname = "libopcodes";
-  inherit (binutils-unwrapped) version src;
+  inherit (binutils-unwrapped-all-targets) version;
 
-  outputs = [ "out" "dev" ];
-
-  patches = binutils-unwrapped.patches ++ [
-    ./build-components-separately.patch
+  dontUnpack = true;
+  dontBuild = true;
+  dontInstall = true;
+  propagatedBuildInputs = [
+    binutils-unwrapped-all-targets.dev
+    binutils-unwrapped-all-targets.lib
   ];
 
-  # We just want to build libopcodes
-  postPatch = ''
-    cd opcodes
-    find . ../include/opcode -type f -exec sed {} -i -e 's/"bfd.h"/<bfd.h>/' \;
-  '';
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty ];
-  # dis-asm.h includes bfd.h
-  propagatedBuildInputs = [ libbfd ];
-
-  configurePlatforms = [ "build" "host" ];
-  configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
-    "--enable-install-libbfd"
-    "--enable-shared"
-  ];
-
-  enableParallelBuilding = true;
+  passthru = {
+    inherit (binutils-unwrapped-all-targets) dev hasPluginAPI;
+  };
 
   meta = with lib; {
     description = "A library from binutils for manipulating machine code";

@@ -33,7 +33,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook

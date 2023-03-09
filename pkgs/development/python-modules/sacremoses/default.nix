@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click six tqdm joblib ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   # ignore tests which call to remote host
   checkPhase = ''
     pytest -k 'not truecase'

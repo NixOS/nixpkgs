@@ -10,7 +10,7 @@ in
   options.services.xserver.windowManager.qtile = {
     enable = mkEnableOption (lib.mdDoc "qtile");
 
-    package = mkPackageOption pkgs "qtile" { };
+    package = mkPackageOptionMD pkgs "qtile" { };
   };
 
   config = mkIf cfg.enable {

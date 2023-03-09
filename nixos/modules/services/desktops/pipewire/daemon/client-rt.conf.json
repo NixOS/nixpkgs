@@ -35,5 +35,20 @@
     }
   ],
   "filter.properties": {},
-  "stream.properties": {}
+  "stream.properties": {},
+  "alsa.properties": {},
+  "alsa.rules": [
+    {
+      "matches": [
+        {
+          "application.process.binary": "resolve"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "alsa.buffer-bytes": 131072
+        }
+      }
+    }
+  ]
 }

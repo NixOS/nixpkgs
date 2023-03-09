@@ -9,12 +9,15 @@
 , dconf
 , callPackage
 , wrapGAppsHook
-, writeTextFile
+, targetPackages
 }:
 
 makeSetupHook {
   name = "wrap-gapps-hook";
-  deps = lib.optionals (!stdenv.isDarwin) [
+  propagatedBuildInputs = [
+    # We use the wrapProgram function.
+    makeWrapper
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # It is highly probable that a program will use GSettings,
     # at minimum through GTK file chooser dialogue.
     # Let’s add a GIO module for “dconf” GSettings backend
@@ -23,19 +26,22 @@ makeSetupHook {
     # Unfortunately, it also requires the user to have dconf
     # D-Bus service enabled globally (e.g. through a NixOS module).
     dconf.lib
+
   ] ++ lib.optionals isGraphical [
     # TODO: remove this, packages should depend on GTK explicitly.
     gtk3
 
+    librsvg
+  ];
+
+  # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook is placed into nativeBuildInputs
+  # the librsvg above should be removed but kept to not break anything that implicitly depended on its binaries
+  depsTargetTargetPropagated = assert (lib.assertMsg (!targetPackages ? raw) "wrapGAppsHook must be in nativeBuildInputs"); lib.optionals isGraphical [
     # librsvg provides a module for gdk-pixbuf to allow rendering
     # SVG icons. Most icon themes are SVG-based and so are some
     # graphics in GTK (e.g. cross for closing window in window title bar)
     # so it is pretty much required for applications using GTK.
     librsvg
-  ] ++ [
-
-    # We use the wrapProgram function.
-    makeWrapper
   ];
   passthru = {
     tests = let
@@ -62,6 +68,15 @@ makeSetupHook {
         testLib.skip stdenv.isDarwin ''
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
+        ''
+      );
+
+      basic-contains-gdk-pixbuf = let
+        tested = basic;
+      in testLib.runTest "basic-contains-gdk-pixbuf" (
+        testLib.skip stdenv.isDarwin ''
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${lib.getLib librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"}
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${lib.getLib librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"}
         ''
       );
 

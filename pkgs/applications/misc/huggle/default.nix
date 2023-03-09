@@ -8,7 +8,7 @@
 , unzip
 , wrapQtAppsHook
 , qtwebengine
-, libyamlcpp
+, yaml-cpp
 , libirc
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     which
     cmake
   ];
-  buildInputs = [ ncurses libyamlcpp qtwebengine libirc ];
+  buildInputs = [ ncurses yaml-cpp qtwebengine libirc ];
 
   patches = [ ./00-remove-third-party.patch ./01-extensions.patch ];
   postPatch = ''

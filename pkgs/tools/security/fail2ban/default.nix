@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , python3
 , fetchpatch
+, installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,6 +14,10 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "q4U9iWCa1zg8sA+6pPNejt6v/41WGIKN5wITJCrCqQE=";
   };
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   pythonPath = with python3.pkgs;
     lib.optionals stdenv.isLinux [
@@ -71,6 +76,8 @@ python3.pkgs.buildPythonApplication rec {
     ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/etc"
+
+      installManPage man/*.[1-9]
     '' + lib.optionalString stdenv.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/usr"

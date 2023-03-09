@@ -16,6 +16,7 @@
 , jdk
 , usev110Api ? false
 , threadsafe ? false
+, python3
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -25,7 +26,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.2";
+  version = "1.14.0";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-Goi742ITos6gyDlyAaRZZD5xVcnckeBiZ1s/sH7jiv4=";
+    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
   };
 
   passthru = {
@@ -89,6 +90,10 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5fc' "''${!outputDev}"
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) h5py;
+  };
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";

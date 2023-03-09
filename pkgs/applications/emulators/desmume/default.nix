@@ -1,10 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , agg
 , alsa-lib
 , desktop-file-utils
+, wrapGAppsHook
 , gtk3
 , intltool
 , libGLU
@@ -28,11 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TASVideos";
     repo = "desmume";
-    rev = "release_${lib.replaceChars ["."] ["_"] finalAttrs.version}";
+    rev = "release_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
 
+  patches = [
+    # Fix compiling on GCC for AArch64
+    (fetchpatch {
+      url = "https://github.com/TASEmulators/desmume/commit/24eb5ed95c6cbdaba8b3c63a99e95e899e8a5061.patch";
+      hash = "sha256-J3ZRU1tPTl+4/jg0DBo6ro6DTUZkpQCey+QGF2EugCQ=";
+    })
+  ];
+
   nativeBuildInputs = [
+    wrapGAppsHook
     desktop-file-utils
     intltool
     libtool
@@ -81,8 +92,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64 && stdenv.isLinux; # ofborg failed
   };
 })
-# TODO: investigate the patches
-# TODO: investigate other platforms

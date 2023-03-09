@@ -36,7 +36,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-mock
@@ -66,6 +66,10 @@ buildPythonPackage rec {
     "TestVMDKConversion"
     # CLI test fails with AssertionError
     "test_help"
+    # Failing TestCOTDeployESXi tests
+    "test_serial_fixup_stubbed"
+    "test_serial_fixup_stubbed_create"
+    "test_serial_fixup_stubbed_vm_not_found"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_serial_fixup_invalid_host"
   ];

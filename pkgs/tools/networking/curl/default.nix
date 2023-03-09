@@ -33,6 +33,7 @@
 , phpExtensions
 , python3
 , tests
+, testers
 , fetchpatch
 }:
 
@@ -47,18 +48,19 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.86.0";
+  version = "7.88.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    sha256 = "sha256-9cpp2wPuoX+ocFvfsan1jXakbJAQUYEJuzjzExN+Cig=";
+    hash = "sha256-yB9DntAkQvapuVg237OpjgxHdhDKey9NWqH8MpVD0z8=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+    ./7.88.0-http2-breakage.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -178,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Additional checking with support http3 protocol.
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -189,5 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    pkgConfigModules = [ "libcurl" ];
   };
 })

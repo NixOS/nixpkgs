@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "FUSE-based HTTP filesystem for Linux";
 
-    homepage = "http://httpfs.sourceforge.net/";
+    homepage = "https://httpfs.sourceforge.net/";
 
     license = lib.licenses.gpl2Plus;
 

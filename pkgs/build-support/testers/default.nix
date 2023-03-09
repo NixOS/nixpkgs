@@ -121,4 +121,7 @@
         in
           nixosTesting.simpleTest calledTest;
 
+  hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
+
+  testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }

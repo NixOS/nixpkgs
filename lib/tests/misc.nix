@@ -153,6 +153,11 @@ runTests {
     expected = "a,b,c";
   };
 
+  testConcatLines = {
+    expr = concatLines ["a" "b" "c"];
+    expected = "a\nb\nc\n";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -210,6 +215,21 @@ runTests {
   testSplitVersionTriple = {
     expr = versions.splitVersion "1.2.3";
     expected = [ "1" "2" "3" ];
+  };
+
+  testPadVersionLess = {
+    expr = versions.pad 3 "1.2";
+    expected = "1.2.0";
+  };
+
+  testPadVersionLessExtra = {
+    expr = versions.pad 3 "1.3-rc1";
+    expected = "1.3.0-rc1";
+  };
+
+  testPadVersionMore = {
+    expr = versions.pad 3 "1.2.3.4";
+    expected = "1.2.3";
   };
 
   testIsStorePath =  {
@@ -327,6 +347,15 @@ runTests {
     expected = "Hello\\x20World";
   };
 
+  testEscapeURL = testAllTrue [
+    ("" == strings.escapeURL "")
+    ("Hello" == strings.escapeURL "Hello")
+    ("Hello%20World" == strings.escapeURL "Hello World")
+    ("Hello%2FWorld" == strings.escapeURL "Hello/World")
+    ("42%25" == strings.escapeURL "42%")
+    ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
+  ];
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
@@ -339,6 +368,8 @@ runTests {
     (0 == toInt " 0")
     (0 == toInt "0 ")
     (0 == toInt " 0 ")
+    (-1 == toInt "-1")
+    (-1 == toInt " -1 ")
   ];
 
   testToIntFails = testAllTrue [
@@ -383,6 +414,8 @@ runTests {
     (0 == toIntBase10 " 000000")
     (0 == toIntBase10 "000000 ")
     (0 == toIntBase10 " 000000 ")
+    (-1 == toIntBase10 "-1")
+    (-1 == toIntBase10 " -1 ")
   ];
 
   testToIntBase10Fails = testAllTrue [
@@ -453,6 +486,11 @@ runTests {
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
+  };
+
+  testReplicate = {
+    expr = replicate 3 "a";
+    expected = ["a" "a" "a"];
   };
 
   testToIntShouldConvertStringToInt = {
@@ -727,7 +765,7 @@ runTests {
       float = 0.1337;
       bool = true;
       emptystring = "";
-      string = ''fno"rd'';
+      string = "fn\${o}\"r\\d";
       newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
@@ -735,16 +773,16 @@ runTests {
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       emptylist = [];
-      attrs = { foo = null; "foo bar" = "baz"; };
+      attrs = { foo = null; "foo b/ar" = "baz"; };
       emptyattrs = {};
       drv = deriv;
     };
     expected = rec {
       int = "42";
-      float = "~0.133700";
+      float = "0.1337";
       bool = "true";
       emptystring = ''""'';
-      string = ''"fno\"rd"'';
+      string = ''"fn\''${o}\"r\\d"'';
       newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
@@ -752,9 +790,9 @@ runTests {
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
       emptyattrs = "{ }";
-      drv = "<derivation ${deriv.drvPath}>";
+      drv = "<derivation ${deriv.name}>";
     };
   };
 
@@ -799,8 +837,8 @@ runTests {
       newlinestring = "\n";
       multilinestring = ''
         hello
-        there
-        test
+        ''${there}
+        te'''st
       '';
       multilinestring' = ''
         hello
@@ -827,8 +865,8 @@ runTests {
       multilinestring = ''
         '''
           hello
-          there
-          test
+          '''''${there}
+          te''''st
         ''''';
       multilinestring' = ''
         '''

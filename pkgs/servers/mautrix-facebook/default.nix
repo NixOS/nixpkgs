@@ -1,9 +1,9 @@
-{ enableSystemd ? stdenv.isLinux
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, lib
 , python3
-, stdenv
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -58,7 +58,6 @@ python3.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/mautrix/facebook/releases/tag/v${version}";
     description = "A Matrix-Facebook Messenger puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kevincox ];
   };
 }

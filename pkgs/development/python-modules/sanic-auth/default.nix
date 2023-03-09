@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sanic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sanic-testing
   ];

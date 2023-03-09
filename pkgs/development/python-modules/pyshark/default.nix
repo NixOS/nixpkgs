@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   # `stripLen` does not seem to work here
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
 
   sourceRoot = "${src.name}/src";
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [ pytestCheckHook wireshark-cli ];
+  nativeCheckInputs = [ py pytestCheckHook wireshark-cli ];
 
   pythonImportsCheck = [ "pyshark" ];
 

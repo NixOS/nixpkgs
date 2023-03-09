@@ -3,6 +3,7 @@
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
 # than the default LLVM verion's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
@@ -33,7 +34,7 @@ let
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
+    maintainers = lib.teams.llvm.members;
     platforms   = lib.platforms.all;
   };
 
@@ -67,13 +68,13 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     # disabled until recommonmark supports sphinx 3
     #Llvm-manpages = lowPrio (tools.libllvm.override {
@@ -112,7 +113,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -153,7 +154,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -163,7 +164,7 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false) ''
+      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags
@@ -267,7 +268,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
 

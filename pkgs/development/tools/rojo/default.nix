@@ -4,8 +4,12 @@
 , rustPlatform
 , pkg-config
 , openssl
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices;
+in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
   version = "7.2.1";
@@ -26,7 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
   ];
+
+  # tests flaky on darwin on hydra
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Project management tool for Roblox";

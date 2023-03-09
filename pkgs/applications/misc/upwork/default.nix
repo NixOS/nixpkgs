@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, wrapGAppsHook, autoPatchelfHook
+{ lib, stdenv, requireFile, dpkg, wrapGAppsHook, autoPatchelfHook
 , alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11, libxcb
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
@@ -6,11 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.6.10.13";
+  version = "5.8.0.24";
 
-  src = fetchurl {
-    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_10_13_3c485d1dd2af4f61/${pname}_${version}_amd64.deb";
-    sha256 = "c3e1ecf14c99596f434edf93a2e08f031fbaa167025d1280cf19f68b829d6b79";
+  src = requireFile {
+    name = "${pname}_${version}_amd64.deb";
+    url = "https://www.upwork.com/ab/downloads/os/linux/";
+    sha256 = "sha256-9X1U/ImI8GfCiYLpLD+jICYAYsAr1NJLlOMvecXK7hc=";
   };
 
   nativeBuildInputs = [

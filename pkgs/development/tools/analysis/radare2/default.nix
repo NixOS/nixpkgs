@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , pkg-config
 , meson
@@ -30,38 +31,39 @@
 
 let
   # FIXME: Compare revision with
-  # https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L26-L27
+  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35/Makefile#L26-L27
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "c9e7242972837ac11fc94db05fabcb801a8269c9";
-    hash = "sha256-HFQj23GlLAyyzMGnPq40XaPv5qPDHdDlQOo0Hprc9Cs=";
+    rev = "55d73c6bbb94448a5c615933179e73ac618cf876";
+    hash = "sha256-pZxxp5xDg8mgkGEx7LaBSoKxNPyggFYA4um9YaO20LU=";
   };
   armv7 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-armv7";
-    rev = "dde39f69ffea19fc37e681874b12cb4707bc4f30";
-
-    hash = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
+    rev = "f270a6cc99644cb8e76055b6fa632b25abd26024";
+    hash = "sha256-YhfgJ7M8ys53jh1clOzj0I2yfJshXQm5zP0L9kMYsmk=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.7.8";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    hash = "sha256-+/9SeILuDCUaYwPhhN6z3vQFicd1Bh8N/yicZTybR5o=";
+    hash = "sha256-jwr3QPgJ6vKSk8yGxndQ69AickP8PorNDuGyJzHMpV4=";
   };
 
   preBuild = ''
-    cp -r ${arm64} ../libr/asm/arch/arm/v35arm64/arch-arm64
-    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-arm64
+    pushd ../libr/arch/p/arm/v35
+    cp -r ${arm64} arch-arm64
+    chmod -R +w arch-arm64
 
-    cp -r ${armv7} ../libr/asm/arch/arm/v35arm64/arch-armv7
-    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-armv7
+    cp -r ${armv7} arch-armv7
+    chmod -R +w arch-armv7
+    popd
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''

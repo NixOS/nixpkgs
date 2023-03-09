@@ -22,7 +22,7 @@ writeScript "update-navidrome" ''
   tempDir=$(mktemp -d)
   cp $src/ui/package.json $src/ui/package-lock.json $tempDir
   cd $tempDir
-  node2nix -l package-lock.json -c node-composition.nix
+  node2nix -d -l package-lock.json -c node-composition.nix
   cp *.nix $uiDir
   rm -rf $tempDir
 ''

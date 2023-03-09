@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     # Without patched plugin shebangs, some tests like t/rst.t fail
     # (with docutilsSupport enabled)
     patchShebangs plugins/*
+
+    # Creating shared git repo fails when running tests in Nix sandbox.
+    # The error is: "fatal: Could not make /tmp/ikiwiki-test-git.2043/repo/branches/ writable by group".
+    # Hopefully, not many people use `ikiwiki-makerepo` to create locally shared repositories these days.
+    substituteInPlace ikiwiki-makerepo --replace "git --bare init --shared" "git --bare init"
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";

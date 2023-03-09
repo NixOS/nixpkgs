@@ -17,7 +17,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [ pytest glibcLocales ];
+  nativeCheckInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
     LC_ALL=en_US.utf-8 pytest tests

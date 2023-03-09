@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.63.2";
+  version = "0.64.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VDmh2Q/ab5xaNbj0APuQ9pkZ+GHoNXW2crrJXi556Fk=";
+    sha256 = "sha256-EXYAiXqEfQVDTwc4MFTroLPEaTZ3QYTlUsuNQ72oHpA=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     beautifulsoup4
     pytest-asyncio

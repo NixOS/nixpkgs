@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "colorama" ];
 

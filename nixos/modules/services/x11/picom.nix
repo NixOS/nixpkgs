@@ -41,7 +41,7 @@ let
 in {
 
   imports = [
-    (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+    (mkAliasOptionModuleMD [ "services" "compton" ] [ "services" "picom" ])
     (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
       This option corresponds to `refresh-rate`, which has been unused
       since picom v6 and was subsequently removed by upstream.
@@ -199,10 +199,10 @@ in {
     };
 
     backend = mkOption {
-      type = types.enum [ "glx" "xrender" "xr_glx_hybrid" ];
+      type = types.enum [ "egl" "glx" "xrender" "xr_glx_hybrid" ];
       default = "xrender";
       description = lib.mdDoc ''
-        Backend to use: `glx`, `xrender` or `xr_glx_hybrid`.
+        Backend to use: `egl`, `glx`, `xrender` or `xr_glx_hybrid`.
       '';
     };
 

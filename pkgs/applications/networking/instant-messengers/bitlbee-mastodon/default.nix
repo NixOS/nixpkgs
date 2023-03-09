@@ -1,6 +1,5 @@
 { lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkg-config, glib }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
   version = "1.4.5";
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     export BITLBEE_DATADIR=$out/share/bitlbee
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bitlbee plugin for Mastodon";
     homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
     license = licenses.gpl2Plus;

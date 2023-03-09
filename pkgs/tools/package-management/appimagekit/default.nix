@@ -40,7 +40,7 @@ let
     # Workaround build failure on -fno-common toolchains:
     #   ld: libsquashfuse_ll.a(libfuseprivate_la-fuseprivate.o):(.bss+0x8):
     #     multiple definition of `have_libloaded'; runtime.4.o:(.bss.have_libloaded+0x0): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
 
     preConfigure = ''
       sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
       --unset SOURCE_DATE_EPOCH
   '';
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   # for debugging
   passthru = {

@@ -1,4 +1,4 @@
-{ lib, pkgs, fetchFromGitHub, nodejs, stdenv, ArchiSteamFarm, ... }:
+{ lib, pkgs, fetchFromGitHub, nodejs, nodePackages, stdenv, ArchiSteamFarm }:
 
 let
   nodePackages = import ./node-composition.nix {
@@ -11,8 +11,8 @@ let
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = "855ca01e6ec94947404ce728c447baf805c9a655";
-    sha256 = "1s16i7hrp61nbq8wgwa3mxcsjqh0kkw91jiikdqysxrk2dgbaz77";
+    rev = "22692a1f115e8ca86f83fa17be55d9b20985570f";
+    sha256 = "0k0msk1r7ih092cwjngy1824bxkbjwz0d5p3k2r2l67r2p9b3lab";
   };
 
 in

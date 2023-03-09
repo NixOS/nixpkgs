@@ -122,7 +122,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb pcre perl polkit x264 zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ binding for the gtkspell library";
-    homepage = "http://gtkspell.sourceforge.net/";
+    homepage = "https://gtkspell.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

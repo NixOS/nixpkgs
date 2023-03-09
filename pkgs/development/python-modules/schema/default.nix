@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
-, contextlib2
 , fetchPypi
 , mock
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -19,11 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-8GcXESxhiVyrxHB3UriHFuhCCogZ1xQEUB4RT5EEMZc=";
   };
 
-  propagatedBuildInputs = [
-    contextlib2
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
-  checkInputs = [
+  pythonRemoveDeps = [
+    "contextlib2"
+  ];
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

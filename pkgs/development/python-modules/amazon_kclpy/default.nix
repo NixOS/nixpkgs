@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =  [ mock boto ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     ${python.interpreter} -m pytest

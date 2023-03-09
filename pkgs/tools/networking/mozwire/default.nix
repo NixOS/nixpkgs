@@ -2,23 +2,27 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, CoreServices
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "MozWire";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "NilsIrl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vC8HmwJCHMKQUsYBwRmr88tmZxPKNvI6hxlcjG2AV3Q=";
+    hash = "sha256-2i8C1XgfI3MXnwXZzY6n8tIcw45G9h3vZqRlFaVoLH0=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+  ];
 
-  cargoHash = "sha256-9qXoMugmL6B9vC/yrMJxZ5p792ZJmrTzk/khRVTkHf4=";
+  cargoHash = "sha256-YXVH7kx5CiurTeXiphjDgcYxxovKtTF3Q9y/XOyVPUA=";
 
   meta = with lib; {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";

@@ -6,6 +6,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? (!stdenv.isDarwin && !stdenv.targetPlatform.isWasi)
 , libbfd
 , libpfm
 , libxml2
@@ -57,7 +58,7 @@ in stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   patches = [
     ./gnu-install-dirs.patch
@@ -151,7 +152,7 @@ in stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (!isDarwin) [
+  ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"

@@ -1,10 +1,10 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   inherit version;
   pname = "coqhammer";
   owner = "lukaszcz";
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = "8.15"; out = "1.3.2-coq8.15"; }
     { case = "8.14"; out = "1.3.2-coq8.14"; }
     { case = "8.13"; out = "1.3.2-coq8.13"; }
@@ -42,7 +42,7 @@ with lib; mkCoqDerivation {
   release."1.3-coq8.10".version  = "1.3";
   release."1.1.1-coq8.9".version = "1.1.1";
   release."1.1-coq8.9".version   = "1.1";
-  releaseRev = v: "v${v}";
+  releaseRev = v: "refs/tags/v${v}";
 
   postPatch = ''
     substituteInPlace Makefile.coq.local --replace \
@@ -57,7 +57,7 @@ with lib; mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://cl-informatik.uibk.ac.at/cek/coqhammer/";
     description = "Automation for Dependent Type Theory";
     license = licenses.lgpl21;

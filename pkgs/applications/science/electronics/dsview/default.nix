@@ -6,13 +6,13 @@
 mkDerivation rec {
   pname = "dsview";
 
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
       owner = "DreamSourceLab";
       repo = "DSView";
       rev = "v${version}";
-      sha256 = "sha256-TE2yfzv2h77GLMkmoVGXmzs7J0l/N+n1eYxyrtnrnGU=";
+      sha256 = "sha256-QaCVu/n9PDbAiJgPDVN6SJMILeUO/KRkKcHYAstm86Q=";
   };
 
   patches = [

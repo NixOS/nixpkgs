@@ -23,7 +23,7 @@ buildPythonApplication rec {
     python.pkgs.pyqt5
     python.pkgs.qtpy
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     python.pkgs.mock
     xvfb-run
   ];

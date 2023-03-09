@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchurl
-, withShishi ? !stdenv.isDarwin, shishi
+{ lib
+, stdenv
+, fetchurl
+, withShishi ? !stdenv.isDarwin
+, shishi
 }:
 
 stdenv.mkDerivation rec {
   pname = "gss";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchurl {
     url = "mirror://gnu/gss/gss-${version}.tar.gz";
-    sha256 = "1syyvh3k659xf1hdv9pilnnhbbhs6vfapayp4xgdcc8mfgf9v4gz";
+    hash = "sha256-7M6r3vTK4/znIYsuy4PrQifbpEtTthuMKy6IrgJBnHM=";
   };
 
   buildInputs = lib.optional withShishi shishi;
+
+  # ./stdint.h:89:5: error: expected value in expression
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export GNULIBHEADERS_OVERRIDE_WINT_T=0
+  '';
 
   configureFlags = [
     "--${if withShishi then "enable" else "disable"}-kerberos5"

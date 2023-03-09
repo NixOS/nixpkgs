@@ -34,6 +34,7 @@
 , pango
 , pipewire
 , systemd
+, wayland
 , xdg-utils
 , xorg
 }:
@@ -44,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.28.182";
-  x86_64-darwin-sha256 = "0x0zc45k0jh0hivgjymcxnnwc2lwyfq68rw39lbxp4i1ir2sbnxg";
+  x86_64-darwin-version = "4.29.149";
+  x86_64-darwin-sha256 = "sha256-E0YnOPnaWFe17gCpFywxu5uHs1pEktA1tUu4QqvKhYw=";
 
-  x86_64-linux-version = "4.28.184";
-  x86_64-linux-sha256 = "sha256-qAc9rHJbM7lmqNxOcOSnqnuib5zJ0Ry3hAGri8DKIlo=";
+  x86_64-linux-version = "4.29.149";
+  x86_64-linux-sha256 = "sha256-ulXIGLp2ql47ZS6IeaMuqye39deDtukOB1dxy5BNCwI=";
 
-  aarch64-darwin-version = "4.28.182";
-  aarch64-darwin-sha256 = "0bc8lhmpm0310gh1w9xkb8i1cpldchm4b4mzsr9h0mhvljxmvlyf";
+  aarch64-darwin-version = "4.29.149";
+  aarch64-darwin-sha256 = "sha256-Nn+dFD3H/By+aBPLDxnPneNXuFl+tHdLhxJXeYBMORg=";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -121,6 +122,7 @@ let
       pipewire
       stdenv.cc.cc
       systemd
+      wayland
       xorg.libX11
       xorg.libXScrnSaver
       xorg.libXcomposite
@@ -170,12 +172,14 @@ let
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
         --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${WAYLAND_DISPLAY:+--enable-features=WebRTCPipeWireCapturer}"
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
-        --replace /usr/share/ $out/share/
+        --replace /usr/share/ $out/share/ \
+        --replace bin/slack "bin/slack -s"
 
       runHook postInstall
     '';

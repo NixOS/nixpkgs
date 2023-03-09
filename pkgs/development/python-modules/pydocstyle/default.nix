@@ -24,7 +24,7 @@ buildPythonPackage rec {
     snowballstemmer
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

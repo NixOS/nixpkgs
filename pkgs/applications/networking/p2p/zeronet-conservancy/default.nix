@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet-conservancy";
-  version = "0.7.7";
+  version = "0.7.8.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
     rev = "v${version}";
-    sha256 = "sha256-6qBdq6DoIKZUUGflz7kWu3S3pMJB4vkGUytpU5EatP0=";
+    sha256 = "sha256-+wZiwUy5bmW8+3h4SuvNN8I6mCIPOlOeFmiXlMu12OU=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildPhase = ''
-    ${python3Packages.python.interpreter} -O -m compileall .
+    ${python3Packages.python.pythonForBuild.interpreter} -O -m compileall .
   '';
 
   installPhase = ''

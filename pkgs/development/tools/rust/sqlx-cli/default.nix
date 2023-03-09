@@ -1,4 +1,17 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration, CoreFoundation, Security, libiconv, testers, sqlx-cli }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, openssl
+, SystemConfiguration
+, CoreFoundation
+, Security
+, libiconv
+, testers
+, sqlx-cli
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
@@ -10,6 +23,15 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-pQlrKjhOJfjNEmLxqnFmmBY1naheZUsaq2tGdLKGxjg=";
   };
+
+  patches = [
+    # https://github.com/launchbadge/sqlx/pull/2228
+    (fetchpatch {
+      name = "fix-rust-1.65-compile.patch";
+      url = "https://github.com/launchbadge/sqlx/commit/2fdf85b212332647dc4ac47e087df946151feedf.patch";
+      hash = "sha256-5BCuIwmECe9qQrdYll7T+UOGwuTBolWEhKNE7GcZqJw=";
+    })
+  ];
 
   cargoSha256 = "sha256-AbA8L7rkyZfKW0vvjyrcW5eU6jGD+zAqIcEUOJmeqJs=";
 

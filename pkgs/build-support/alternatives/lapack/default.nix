@@ -54,10 +54,10 @@ stdenv.mkDerivation {
   cp -L "$liblapack" $out/lib/liblapack${canonicalExtension}
   chmod +w $out/lib/liblapack${canonicalExtension}
 
-'' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
+'' + (lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") ''
   patchelf --set-soname liblapack${canonicalExtension} $out/lib/liblapack${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapack${canonicalExtension}):${lapackProvider'}/lib" $out/lib/liblapack${canonicalExtension}
-'' else "") + ''
+'') + ''
 
   if [ "$out/lib/liblapack${canonicalExtension}" != "$out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
     ln -s $out/lib/liblapack${canonicalExtension} "$out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
@@ -83,10 +83,10 @@ EOF
   cp -L "$liblapacke" $out/lib/liblapacke${canonicalExtension}
   chmod +w $out/lib/liblapacke${canonicalExtension}
 
-'' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
+'' + (lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") ''
   patchelf --set-soname liblapacke${canonicalExtension} $out/lib/liblapacke${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapacke${canonicalExtension}):${lib.getLib lapackProvider'}/lib" $out/lib/liblapacke${canonicalExtension}
-'' else "") + ''
+'') + ''
 
   if [ -f "$out/lib/liblapacke.so.3" ]; then
     ln -s $out/lib/liblapacke.so.3 $out/lib/liblapacke.so

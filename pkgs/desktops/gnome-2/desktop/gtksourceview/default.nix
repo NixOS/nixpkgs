@@ -1,19 +1,21 @@
 {lib, stdenv, fetchpatch, fetchurl, autoreconfHook, pkg-config, atk, cairo, glib
 , gnome-common, gtk2, pango
-, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2 }:
+, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2
+, testers
+}:
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "2.10.5";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceview/2.10/${pname}-${version}.tar.bz2";
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e";
   };
 
-  patches = optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     (fetchpatch {
       name = "change-igemacintegration-to-gtkosxapplication.patch";
       url = "https://gitlab.gnome.org/GNOME/gtksourceview/commit/e88357c5f210a8796104505c090fb6a04c213902.patch";
@@ -31,13 +33,19 @@ stdenv.mkDerivation rec {
     atk cairo glib gtk2
     pango libxml2Python perl
     gettext
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     gnome-common gtk-mac-integration-gtk2
   ];
 
-  preConfigure = optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     intltoolize --force
   '';
 
   doCheck = false; # requires X11 daemon
-}
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
+    pkgConfigModules = [ "gtksourceview-2.0" ];
+  };
+})

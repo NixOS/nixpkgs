@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.32.0";
+  version = "5.33.0";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-EHcFLUxOhIrEfRT5s3dU1GQZrsvoyaB+H4ackU+vMhY=";
+    sha256 = "sha256-Gs6InAGDRzqdcBYN9lM7tuEzjcE1T1koUHgD4eKoY7U=";
   };
 
   nativeBuildInputs = [ bison flex ];

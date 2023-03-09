@@ -18,14 +18,13 @@
 , for_HP_laptop ? false
 }:
 
-with lib;
 let
   pcSystems = {
     i686-linux.target = "i386";
     x86_64-linux.target = "i386";
   };
 
-  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) pcSystems);
 
   version = if for_HP_laptop then "1.2.1" else "1.2.0";
 
@@ -59,11 +58,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autogen flex bison python2 autoconf automake ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 ]
-    ++ optional doCheck qemu;
+    ++ lib.optional doCheck qemu;
 
   hardeningDisable = [ "stackprotector" "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
+  env.NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -104,10 +103,7 @@ stdenv.mkDerivation rec {
   ];
 
   # save target that grub is compiled for
-  grubTarget =
-    if inPCSystems
-    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-    else "";
+  grubTarget = lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
   doCheck = false;
   # On -j16 races with early header creation:

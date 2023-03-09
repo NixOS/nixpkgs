@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "03w2zz3crblj1p6i8nq17946hbn3zqp9z7cfnifw47hi4a4fww12";
   };
 
-  checkInputs = [ pytest pytest-cov mock cmdline ];
+  nativeCheckInputs = [ pytest pytest-cov mock cmdline ];
   propagatedBuildInputs = [ pytest-fixture-config pytest-shutil virtualenv ];
   checkPhase = "py.test tests/unit ";
 

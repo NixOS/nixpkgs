@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensc";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "sha256-0IFpiG1SJq4cpS5z6kwpWSPVWjO0q0SHs+doD2vbUKs=";
+    sha256 = "sha256-Yo8dwk7+d6q+hi7DmJ0GJM6/pmiDOiyEm/tEBSbCU8k=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin Carbon
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   configureFlags = [
     "--enable-zlib"

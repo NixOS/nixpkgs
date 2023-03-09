@@ -28,7 +28,7 @@ buildPythonPackage rec {
     construct
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "construct_classes" ];
 

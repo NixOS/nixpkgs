@@ -1,6 +1,52 @@
 # this test creates a simple GNU image with docker tools and sees if it executes
 
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }:
+let
+  # nixpkgs#214434: dockerTools.buildImage fails to unpack base images
+  # containing duplicate layers when those duplicate tarballs
+  # appear under the manifest's 'Layers'. Docker can generate images
+  # like this even though dockerTools does not.
+  repeatedLayerTestImage =
+    let
+      # Rootfs diffs for layers 1 and 2 are identical (and empty)
+      layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
+      layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
+      repeatedRootfsDiffs = pkgs.runCommandNoCC "image-with-links.tar" {
+        nativeBuildInputs = [pkgs.jq];
+      } ''
+        mkdir contents
+        tar -xf "${layer2}" -C contents
+        cd contents
+        first_rootfs=$(jq -r '.[0].Layers[0]' manifest.json)
+        second_rootfs=$(jq -r '.[0].Layers[1]' manifest.json)
+        target_rootfs=$(sha256sum "$first_rootfs" | cut -d' ' -f 1).tar
+
+        # Replace duplicated rootfs diffs with symlinks to one tarball
+        chmod -R ug+w .
+        mv "$first_rootfs" "$target_rootfs"
+        rm "$second_rootfs"
+        ln -s "../$target_rootfs" "$first_rootfs"
+        ln -s "../$target_rootfs" "$second_rootfs"
+
+        # Update manifest's layers to use the symlinks' target
+        cat manifest.json | \
+        jq ".[0].Layers[0] = \"$target_rootfs\"" |
+        jq ".[0].Layers[1] = \"$target_rootfs\"" > manifest.json.new
+        mv manifest.json.new manifest.json
+
+        tar --sort=name --hard-dereference -cf $out .
+        '';
+    in pkgs.dockerTools.buildImage {
+      fromImage = repeatedRootfsDiffs;
+      name = "repeated-layer-test";
+      tag = "latest";
+      copyToRoot = pkgs.bash;
+      # A runAsRoot script is required to force previous layers to be unpacked
+      runAsRoot = ''
+        echo 'runAsRoot has run.'
+      '';
+    };
+in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 roberth ];
@@ -221,6 +267,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layersUnpackOrder.imageName} cat /layer-order"
         )
 
+    with subtest("Ensure repeated base layers handled by buildImage"):
+        docker.succeed(
+            "docker load --input='${repeatedLayerTestImage}'",
+            "docker run --rm ${repeatedLayerTestImage.imageName} /bin/bash -c 'exit 0'"
+        )
+
     with subtest("Ensure environment variables are correctly inherited"):
         docker.succeed(
             "docker load --input='${examples.environmentVariables}'"
@@ -419,6 +471,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi layered-image-with-path",
         )
 
+    with subtest("Ensure correct architecture is present in manifests."):
+        docker.succeed("""
+            docker load --input='${examples.build-image-with-architecture}'
+            docker inspect build-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi build-image-with-architecture
+        """)
+        docker.succeed("""
+            ${examples.layered-image-with-architecture} | docker load
+            docker inspect layered-image-with-architecture \
+              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+            docker rmi layered-image-with-architecture
+        """)
+
     with subtest("etc"):
         docker.succeed("${examples.etc} | docker load")
         docker.succeed("docker run --rm etc | grep localhost")
@@ -431,5 +497,58 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
         docker.succeed("docker image rm image-with-certs:latest")
 
+    with subtest("buildNixShellImage: Can build a basic derivation"):
+        docker.succeed(
+            "${examples.nix-shell-basic} | docker load",
+            "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
+        )
+
+    with subtest("buildNixShellImage: Runs the shell hook"):
+        docker.succeed(
+            "${examples.nix-shell-hook} | docker load",
+            "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
+        )
+
+    with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
+        docker.succeed(
+            "${examples.nix-shell-inputs} | docker load",
+            "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
+        )
+
+    with subtest("buildNixShellImage: passAsFile works"):
+        docker.succeed(
+            "${examples.nix-shell-pass-as-file} | docker load",
+            "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
+        )
+
+    with subtest("buildNixShellImage: run argument works"):
+        docker.succeed(
+            "${examples.nix-shell-run} | docker load",
+            "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
+        )
+
+    with subtest("buildNixShellImage: command argument works"):
+        docker.succeed(
+            "${examples.nix-shell-command} | docker load",
+            "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
+        )
+
+    with subtest("buildNixShellImage: home directory is writable by default"):
+        docker.succeed(
+            "${examples.nix-shell-writable-home} | docker load",
+            "docker run --rm -it nix-shell-writable-home"
+        )
+
+    with subtest("buildNixShellImage: home directory can be made non-existent"):
+        docker.succeed(
+            "${examples.nix-shell-nonexistent-home} | docker load",
+            "docker run --rm -it nix-shell-nonexistent-home"
+        )
+
+    with subtest("buildNixShellImage: can build derivations"):
+        docker.succeed(
+            "${examples.nix-shell-build-derivation} | docker load",
+            "docker run --rm -it nix-shell-build-derivation"
+        )
   '';
 })

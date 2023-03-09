@@ -34,7 +34,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ]
   ++ lib.flatten (lib.attrValues passthru.optional-dependencies);

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
-  version = "2022.10.0";
+  version = "2023.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = version;
-    hash = "sha256-h/xcqb7G4uj4WNVE8is/s2LQ2NfzP1negh15G8B9YCs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-eSfdRiIr8xJEoLMs2114NX0CsBMlku9qjUXA23D5qgY=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Filesystem interface to Azure-Datalake Gen1 and Gen2 Storage";
     homepage = "https://github.com/fsspec/adlfs";
+    changelog = "https://github.com/fsspec/adlfs/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

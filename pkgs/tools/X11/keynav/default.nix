@@ -14,7 +14,7 @@
 , xdotool
 }:
 
-let release = "20180821"; in
+let release = "20220825"; in
 stdenv.mkDerivation {
   pname = "keynav";
   version = "0.${release}.0";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "keynav";
-    rev = "78f9e076a5618aba43b030fbb9344c415c30c1e5";
-    sha256 = "0hmc14fj612z5h7gjgk95zyqab3p35c4a99snnblzxfg0p3x2f1d";
+    rev = "28a1ba9a045c62a9d2bc5c3474a66d96c8bf5c32";
+    hash = "sha256-y4ONq6fDBFhVGASvz28zlJRXfkCE/j8GDcbq/j8xvUY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

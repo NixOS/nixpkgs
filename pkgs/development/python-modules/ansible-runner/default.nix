@@ -44,7 +44,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ansible-core # required to place ansible CLI onto the PATH in tests
     glibcLocales
     pytestCheckHook

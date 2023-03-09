@@ -15,13 +15,13 @@ buildGoModule rec {
     # The fs-repo-migrations code itself is the same between
     # the two versions but the migration code, which is built
     # into separate binaries, is not.
-    rev = "fs-repo-11-to-12/v1.0.2";
-    sha256 = "sha256-CG4utwH+/+Igw+SP3imhl39wijlB53UGtkJG5Mwh+Ik=";
+    rev = "fs-repo-12-to-13/v1.0.0";
+    hash = "sha256-QQone7E2Be+jVfnrwqQ1Ny4jo6mSDHhaY3ErkNdn2f8=";
   };
 
   sourceRoot = "source/fs-repo-migrations";
 
-  vendorSha256 = "sha256-/DqkBBtR/nU8gk3TFqNKY5zQU6BFMc3N8Ti+38mi/jk=";
+  vendorHash = "sha256-/DqkBBtR/nU8gk3TFqNKY5zQU6BFMc3N8Ti+38mi/jk=";
 
   doCheck = false;
 

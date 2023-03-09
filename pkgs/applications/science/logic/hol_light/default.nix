@@ -38,7 +38,9 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ ocaml camlp5 ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml camlp5 ];
   propagatedBuildInputs = [ num ];
 
   installPhase = ''

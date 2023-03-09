@@ -69,6 +69,8 @@ vscode-utils.buildVscodeExtension {
   name = "${pname}-${version}";
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
+  vscodeExtPublisher = publisher;
+  vscodeExtName = pname;
 
   nativeBuildInputs = lib.optionals setDefaultServerPath [ jq moreutils ];
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage =  "https://github.com/ralphbean/taskw";

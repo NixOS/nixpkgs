@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lexend";
-  version = "0.pre+date=2022-01-27";
+  version = "0.pre+date=2022-09-22";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = pname;
-    rev = "57e6c14e2a9b457e8376044a31525c2100297e9c";
-    sha256 = "sha256-+tPggQIO50a8kOSnOVN/MR9ZwX5xZqYVNZO79eog9QA=";
+    rev = "cd26b9c2538d758138c20c3d2f10362ed613854b";
+    sha256 = "ZKogntyJ/44GBZmFwbtw5Ujw5Gnvv0tVB59ciKqR4c8=";
   };
 
   installPhase = ''
@@ -19,8 +19,8 @@ stdenvNoCC.mkDerivation rec {
 
     cd fonts
     for f in *; do
-      mkdir -p $out/share/fonts/truetype/lexend/$f
-      install $f/ttf/* $out/share/fonts/truetype/lexend/$f/
+      install -D -t $out/share/fonts/truetype/lexend/$f $f/ttf/*
+      install -D -t $out/share/fonts/variable/lexend/$f $f/variable/*
     done
 
     runHook postInstall
