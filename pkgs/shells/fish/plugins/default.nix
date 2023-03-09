@@ -43,6 +43,8 @@ lib.makeScope newScope (self: with self; {
   sponge = callPackage ./sponge.nix { };
 
   tide = callPackage ./tide.nix { };
+
+  z = callPackage ./z.nix { };
 } // lib.optionalAttrs config.allowAliases {
   autopair-fish = self.autopair; # Added 2023-03-10
 })
