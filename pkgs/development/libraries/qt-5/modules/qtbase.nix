@@ -209,6 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
+  # do not pass --host and --build to configureFlags as QT's configure script doesn't understand them
+  configurePlatforms = [ ];
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
     "-plugindir $(out)/$(qtPluginPrefix)"
