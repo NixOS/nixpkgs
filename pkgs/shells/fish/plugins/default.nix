@@ -22,6 +22,8 @@ lib.makeScope newScope (self: with self; {
 
   forgit = callPackage ./forgit.nix { };
 
+  fzf = callPackage ./fzf.nix { };
+
   fzf-fish = callPackage ./fzf-fish.nix { };
 
   grc = callPackage ./grc.nix { };
