@@ -68,7 +68,6 @@ buildPythonPackage {
   + lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/cc
     export CXX=${cudatoolkit.cc}/bin/c++
-    export CUDAHOSTCXX=${cudatoolkit.cc}/bin/c++
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export FORCE_CUDA=1
   '';
