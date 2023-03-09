@@ -28,6 +28,8 @@ lib.makeScope newScope (self: with self; {
 
   grc = callPackage ./grc.nix { };
 
+  humantime-fish = callPackage ./humantime-fish.nix { };
+
   hydro = callPackage ./hydro.nix { };
 
   pisces = callPackage ./pisces.nix { };
