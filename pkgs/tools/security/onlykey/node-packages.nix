@@ -5956,14 +5956,14 @@ let
   };
 in
 {
-  "onlykey-git+https://github.com/trustcrypto/OnlyKey-App.git#v5.3.4" = nodeEnv.buildNodePackage {
+  "onlykey-git+https://github.com/trustcrypto/OnlyKey-App.git#v5.3.6" = nodeEnv.buildNodePackage {
     name = "OnlyKey";
     packageName = "OnlyKey";
-    version = "5.3.4";
+    version = "5.3.6";
     src = fetchgit {
       url = "https://github.com/trustcrypto/OnlyKey-App.git";
-      rev = "da67e5088514c919a3a0a885ed68ca19a904da13";
-      sha256 = "9e3f434932483a8709227ce6b51a746f38a647b53ef6b1ee5b85b68855c412a7";
+      rev = "14bb83ff780608adc8e4f9a5b4867378e1d66a84";
+      sha256 = "sha256-aq7IrqT73L9uUdEqA7kUEby5fxHr8Mcwe29skE2M/GQ=";
     };
     dependencies = [
       sources."@babel/code-frame-7.16.7"
