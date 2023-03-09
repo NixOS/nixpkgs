@@ -1,46 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , mock
 , pyopenssl
 , pytestCheckHook
+, pythonOlder
 , service-identity
+, six
 , twisted
+, txi2p-tahoe
+, txtorcon
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "21.7.0";
+  version = "23.3.0";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
+    hash = "sha256-Vu7oXC1brsgBwr2q59TAgx8j1AFRbi5mjRNIWZTbkUU=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-tests-with-twisted-22.10.0.patch";
-      url = "https://github.com/warner/foolscap/commit/c04202eb5d4cf052e650ec2985ea6037605fd79e.patch";
-      hash = "sha256-RldDc18n3WYHdYg0ZmM8PBffIuiGa1NIfdoHs3mEEfc=";
-    })
-  ];
-
   propagatedBuildInputs = [
-    mock
+    six
     twisted
     pyopenssl
-    service-identity
-  ];
+  ] ++ twisted.optional-dependencies.tls;
+
+  passthru.optional-dependencies = {
+    i2p = [ txi2p-tahoe ];
+    tor = [ txtorcon ];
+  };
 
   nativeCheckInputs = [
+    mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # Not all dependencies are present
-    "src/foolscap/test/test_connection.py"
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "foolscap" ];
 
