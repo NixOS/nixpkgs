@@ -3,32 +3,47 @@
 
 mkDerivation rec {
   pname = "cura";
-  version = "4.13.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
+    sha256 = "01qjxjdzp4n8rs5phwi3kdkf222w4qwcfnb7mvfawyd2yakqim6h";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "4.13.2";
-    sha256 = "sha256-7y4OcbeQHv+loJ4cMgPU0e818Zsv90EwARdztNWS8zM=";
+    rev = "5.2.0";
+    sha256 = "0xn6mdn3kwabssad8rpmnmx3kgzh9ldy0kgb6qr2bcd6cklg4anp";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
+    keyring
+    # libsavitar # TODO? Alpine apparently currently ignores it, see: https://git.alpinelinux.org/aports/tree/testing/cura/APKBUILD?id=2474a2fc7f819a7c8a31ccc561b95955dec5101f
+    numpy-stl
+    pynest2d
+    pyqt6
+    pyserial
+    requests
+    sentry-sdk
+    trimesh
+    uranium
+    zeroconf
   ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
     "-DCURA_VERSION=${version}"
+    # The upstream code checks for an exact python version and errors out
+    # if we don't have that and do not pass `Python_VERSION` explicitly.
+    "-DPython_VERSION=${python3.pythonVersion}"
+    # Set install location to not be the global Python install dir
+    # (which is read-only in the nix store); see:
+    "-DPython_SITELIB_LOCAL=${placeholder "out"}/${python3.sitePackages}"
   ];
 
   makeWrapperArgs = [
@@ -52,7 +67,11 @@ mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
-    wrapQtApp $out/bin/cura
+
+    # find $out/bin
+    # exit 1
+
+    wrapQtApp $out/bin/cura_app.py
   '';
 
   meta = with lib; {
