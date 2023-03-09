@@ -24,6 +24,7 @@
 , pytestCheckHook
 , cherrypy
 , importlib-resources
+, pyparsing
 , requests-mock
 }:
 
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     pytestCheckHook
     cherrypy
     importlib-resources
+    pyparsing
     requests-mock
   ];
 

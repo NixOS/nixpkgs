@@ -5,7 +5,7 @@
 , html5lib
 , pillow
 , pyhanko
-, pypdf3
+, pypdf
 , pytestCheckHook
 , python-bidi
 , pythonOlder
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     html5lib
     pillow
     pyhanko
-    pypdf3
+    pypdf
     python-bidi
     reportlab
     svglib

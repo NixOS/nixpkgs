@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flit-core
 , iocapture
 , mock
 , pytestCheckHook
@@ -10,11 +11,16 @@
 buildPythonPackage rec {
   pname = "argh";
   version = "0.28.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-sgkwhvDoCaPswktkohRTCe6PVtA0k2zVnlfFWKNXMp0=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   nativeCheckInputs = [
     iocapture
