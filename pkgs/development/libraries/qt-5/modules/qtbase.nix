@@ -214,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   # TODO Remove obsolete and useless flags once the build will be totally mastered
+  configurePlatforms = [ ];
   configureFlags = [
     "-plugindir $(out)/$(qtPluginPrefix)"
     "-qmldir $(out)/$(qtQmlPrefix)"
