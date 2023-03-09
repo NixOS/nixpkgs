@@ -9415,6 +9415,8 @@ with pkgs;
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
+  ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
+
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
 
   ldapnomnom = callPackage ../tools/security/ldapnomnom { };
