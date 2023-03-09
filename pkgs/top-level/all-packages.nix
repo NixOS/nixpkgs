@@ -1527,6 +1527,8 @@ with pkgs;
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
+  kstart = callPackage ../tools/security/kstart { };
+
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
   license-generator = callPackage ../tools/misc/license-generator { };
