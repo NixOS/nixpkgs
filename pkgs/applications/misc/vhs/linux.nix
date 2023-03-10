@@ -1,4 +1,4 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, chromium, makeWrapper, pname, version, meta, src, vendorHash }:
+{ lib, buildGoModule, installShellFiles, fetchFromGitHub, ffmpeg, ttyd, chromium, makeWrapper, pname, version, meta, src, vendorHash, callPackage }:
 
 buildGoModule rec {
   inherit pname version meta src vendorHash;
@@ -16,5 +16,9 @@ buildGoModule rec {
       --fish <($out/bin/vhs completion fish) \
       --zsh <($out/bin/vhs completion zsh)
   '';
+
+  passthru.Tests = {
+    simple-execution = callPackage ./test.nix { };
+  };
 
 }
