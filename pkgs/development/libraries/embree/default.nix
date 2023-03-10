@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "-DEMBREE_RAY_MASK=ON"
     "-DTBB_ROOT=${tbb}"
     "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    "-DEMBREE_ARM=ON"
   ];
 
 
