@@ -1,7 +1,7 @@
 { buildDunePackage
 , happy-eyeballs
 , duration
-, dns-client
+, dns-client-mirage
 , domain-name
 , ipaddr
 , fmt
@@ -32,7 +32,7 @@ buildDunePackage {
   ];
 
   propagatedBuildInputs = [
-    dns-client
+    dns-client-mirage
     happy-eyeballs
     logs
     lwt

@@ -7,18 +7,31 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.18.0";
+  version = "0.19.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
     rev = "v${version}";
-    sha256 = "sha256-MmXzrooN+C9MUaAz4+IEGkGJWHbgvPMSLHgssM0wyN8=";
+    sha256 = "sha256-w4v6mcjCX0V3Mj1K23ErpXdyEKQcA4vykns7UwNBEZ4=";
   };
+
+  patches = [
+    # otherwise hatch tries to run git to collect some metadata about the build
+    ./dont-try-to-use-git.diff
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # Upstream splitted the project into gitlint and gitlint-core to
   # simplify the dependency handling
   sourceRoot = "source/gitlint-core";
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow
@@ -30,12 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     gitMinimal
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # We don't need gitlint-core
-    substituteInPlace setup.py \
-      --replace "'gitlint-core[trusted-deps]==' + version," ""
-  '';
 
   pythonImportsCheck = [
     "gitlint"

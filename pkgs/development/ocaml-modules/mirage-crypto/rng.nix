@@ -10,7 +10,7 @@ buildDunePackage rec {
   checkInputs = [ ounit2 randomconv ];
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ocaml_lwt ];
+  propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ];
 
   strictDeps = true;
 

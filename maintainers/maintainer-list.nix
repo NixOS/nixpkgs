@@ -8948,7 +8948,8 @@
     githubId = 13547699;
     name = "Corin Hoad";
     keys = [{
-      fingerprint = "BA3A 5886 AE6D 526E 20B4  57D6 6A37 DF94 8318 8492";
+      # fingerprint = "BA3A 5886 AE6D 526E 20B4  57D6 6A37 DF94 8318 8492"; # old key, superseded
+      fingerprint = "6E69 6A19 4BD8 BFAE 7362  ACDB 6437 4619 95CA 7F16";
     }];
   };
   lux = {
@@ -9269,6 +9270,12 @@
     github = "matejc";
     githubId = 854770;
     name = "Matej Cotman";
+  };
+  mateodd25 = {
+    email = "mateodd@icloud.com";
+    github = "mateodd25";
+    githubId = 854770;
+    name = "Mateo Diaz";
   };
   mathnerd314 = {
     email = "mathnerd314.gph+hs@gmail.com";
@@ -10721,12 +10728,6 @@
     keys = [{
       fingerprint = "7BC1 77D9 C222 B1DC FB2F  0484 C061 089E FEBF 7A35";
     }];
-  };
-  nichtsfrei = {
-    email = "philipp.eder@posteo.net";
-    github = "nichtsfrei";
-    githubId = 1665818;
-    name = "Philipp Eder";
   };
   nickcao = {
     name = "Nick Cao";

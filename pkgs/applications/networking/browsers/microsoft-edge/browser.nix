@@ -3,6 +3,7 @@
 { stdenv
 , fetchurl
 , lib
+, makeWrapper
 
 , binutils-unwrapped
 , xz
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
     inherit sha256;
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   unpackCmd = "${binutils-unwrapped}/bin/ar p $src data.tar.xz | ${xz}/bin/xz -dc | ${gnutar}/bin/tar -xf -";
   sourceRoot = ".";
@@ -170,7 +175,7 @@ stdenv.mkDerivation rec {
       --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-mime \
-      --replace "''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
       --replace "xdg_system_dirs=/usr/local/share/:/usr/share/" "xdg_system_dirs=/run/current-system/sw/share/" \
       --replace /usr/bin/file ${file}/bin/file
 
@@ -178,8 +183,13 @@ stdenv.mkDerivation rec {
       --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-settings \
-      --replace "''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "''${XDG_CONFIG_DIRS:-/etc/xdg}" "''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
+      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/${longName}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}"
   '';
 
   meta = with lib; {

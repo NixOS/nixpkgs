@@ -312,6 +312,10 @@ let
 
     dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
 
+    dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
+
+    dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
+
     dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
 
     dns-resolver = callPackage ../development/ocaml-modules/dns/resolver.nix { };
@@ -906,6 +910,8 @@ let
 
     mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
 
+    mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
+
     mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
 
     mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
@@ -1293,6 +1299,8 @@ let
     tls = callPackage ../development/ocaml-modules/tls { };
 
     tls-async = callPackage ../development/ocaml-modules/tls/async.nix { };
+
+    tls-lwt = callPackage ../development/ocaml-modules/tls/lwt.nix { };
 
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
