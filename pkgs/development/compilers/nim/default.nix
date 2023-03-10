@@ -86,12 +86,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.10";
+    version = "1.6.12";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-E9dwL4tXCHur6M0FHBO8VqMXFBi6hntJxrvQmynST+o=";
+      hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -153,14 +153,14 @@ in {
 
   nimble-unwrapped = stdenv.mkDerivation rec {
     pname = "nimble-unwrapped";
-    version = "0.13.1";
+    version = "0.14.2";
     strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
       rev = "v${version}";
-      sha256 = "1idb4r0kjbqv16r6bgmxlr13w2vgq5332hmnc8pjbxiyfwm075x8";
+      hash = "sha256-8b5yKvEl7c7wA/8cpdaN2CSvawQJzuRce6mULj3z/mI=";
     };
 
     depsBuildBuild = [ nim-unwrapped ];
