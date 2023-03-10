@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "azlux";
     repo = "pymumble";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-NMp1yZ+R9vmne7old7z9UvcxSi6C044g68ZQsofT0gA=";
+    hash = "sha256-NMp1yZ+R9vmne7old7z9UvcxSi6C044g68ZQsofT0gA=";
   };
 
   postPatch = ''
@@ -42,8 +42,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
+    description = "Library to create mumble bots";
     homepage = "https://github.com/azlux/pymumble";
+    changelog = "https://github.com/azlux/pymumble/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thelegy infinisil ];
   };
