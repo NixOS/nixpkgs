@@ -139,9 +139,9 @@ moveToOutput() {
 
             # remove empty directories, printing iff at least one gets removed
             local srcParent="$(readlink -m "$srcPath/..")"
-            if rmdir "$srcParent"; then
+            if [ -n "$(find "$srcParent" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
-                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
+                rmdir -p --ignore-fail-on-non-empty "$srcParent" \
                     2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done
