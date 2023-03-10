@@ -41,6 +41,7 @@
     );
 
     binRustcOpts = lib.concatStringsSep " " (
+      [ "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ] ++
       baseRustcOpts
     );
 
