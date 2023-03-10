@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.2";
+  hassVersion = "2023.3.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -279,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I6NSVoMS3xbUqh/7BxJj/Evkk7+g3N0dZVJjEbr2pCs=";
+    hash = "sha256-AJJ0w66a8D3kiLHhnoFmnGRWyDJ4OCebwwKTGdprGa0=";
   };
 
   # Secondary source is git for tests
@@ -287,7 +287,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qd++/73c9VDNe4AMdiDIVJXxh4qFx2x4HDkY1An2VjE=";
+    hash = "sha256-KTmMA8P0MhYAiwp073Q3s60budFKHrsBnAJSqYC7zis=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -442,6 +442,7 @@ in python.pkgs.buildPythonApplication rec {
       python
       supportedComponentsWithTests;
     pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;
