@@ -1408,7 +1408,7 @@ let
       '';
 
       action =
-        mkDefOpt (types.enum [ "replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
+        mkDefOpt (types.enum [ "replace" "lowercase" "uppercase" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
           Action to perform based on regex matching.
         '';
     };
