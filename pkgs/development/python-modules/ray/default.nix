@@ -68,7 +68,7 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}";
+      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or {};
     in
     fetchPypi ({
       inherit pname version format;
