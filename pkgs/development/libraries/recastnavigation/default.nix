@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Expects SDL2.framework in specific location, which we don't have
+    # Change where SDL2 headers are searched for to match what we do have
+    substituteInPlace RecastDemo/CMakeLists.txt \
+      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
   '';
 
   doCheck = true;
@@ -29,7 +34,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL SDL2 libGLU ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     license = licenses.zlib;
