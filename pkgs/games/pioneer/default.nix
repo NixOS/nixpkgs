@@ -7,11 +7,14 @@
 , curl
 , freetype
 #, glew
+, libdeflate
 , libGL
 , libGLU
 , libpng
 , libsigcxx
+, libtiff
 , libvorbis
+, libwebp
 , lua5_2
 , mesa
 , SDL2
@@ -20,14 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20220203";
+  version = "20230203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    hash = "sha256-HNVg8Lq6k6gQDmgOdpnBwJ57WSEnn5XwtqzmkDU1WGI=";
+    hash = "sha256-AUz+rcbuxw6RgFbugxhWFCBdHdbYNPgIKsx933STqok=";
   };
+
+  patches = [ ./5526.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -40,11 +45,14 @@ stdenv.mkDerivation rec {
     assimp
     curl
     freetype
+    libdeflate
     libGL
     libGLU
     libpng
     libsigcxx
+    libtiff
     libvorbis
+    libwebp
     lua5_2
     mesa
     SDL2

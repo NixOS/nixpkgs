@@ -1,0 +1,23 @@
+From 058bb753ccddee110ed2fb76908cb25b5a656635 Mon Sep 17 00:00:00 2001
+From: Dmitry Marakasov <amdmi3@amdmi3.ru>
+Date: Fri, 3 Feb 2023 16:26:46 +0300
+Subject: [PATCH] Fix path to lua.h
+
+Fixes build with USE_SYSTEM_LIBLUA. Fixes #5525.
+---
+ src/lua/LuaShip.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lua/LuaShip.cpp b/src/lua/LuaShip.cpp
+index 1cf96d9cc4..102140a327 100644
+--- a/src/lua/LuaShip.cpp
++++ b/src/lua/LuaShip.cpp
+@@ -19,7 +19,7 @@
+ #include "SpaceStation.h"
+ #include "ship/PlayerShipController.h"
+ #include "ship/PrecalcPath.h"
+-#include "src/lua.h"
++#include "lua.h"
+ 
+ /*
+  * Class: Ship
