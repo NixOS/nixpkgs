@@ -1,17 +1,20 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, lib
 , opuslib
 , protobuf
 , pytestCheckHook
 , pycrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymumble";
   version = "1.7";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "azlux";
