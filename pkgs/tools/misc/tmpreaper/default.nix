@@ -9,9 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "1ca94d156eb68160ec9b6ed8b97d70fbee996de21437f0cf7d0c3b46709fecbc";
   };
 
-  homepage = "https://packages.debian.org/sid/tmpreaper";
-  license = "GPL-2.0-only";
-
   dependsBuild = [ autoreconfHook ];
   dependsRun = [ e2fsprogs ];
 
