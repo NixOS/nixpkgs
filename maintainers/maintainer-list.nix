@@ -1832,6 +1832,12 @@
     githubId = 442623;
     name = "Ben Pye";
   };
+  benwbooth = {
+    email = "benwboooth@gmail.com";
+    github = "benwbooth";
+    githubId = 75972;
+    name = "Ben Booth";
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
