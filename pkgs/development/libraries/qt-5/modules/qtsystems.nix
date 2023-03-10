@@ -7,6 +7,7 @@
 , pkg-config
 , qtbase
 , udev
+, wrapQtAppsHook
 }:
 
 qtModule {
@@ -15,6 +16,7 @@ qtModule {
   outputs = [
     "out"
     "dev"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "bin"
   ];
 
@@ -24,6 +26,7 @@ qtModule {
 
   nativeBuildInputs = [
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -40,6 +43,10 @@ qtModule {
     "CONFIG+=udisks"
     "CONFIG+=upower"
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapQtApp $bin/bin/servicefw
+  '';
 
   meta = {
     maintainers = with lib.maintainers; [ OPNA2608 ];
