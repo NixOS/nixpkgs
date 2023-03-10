@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = [ maintainers.michalrus ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "geekbench5";
   };
 }
